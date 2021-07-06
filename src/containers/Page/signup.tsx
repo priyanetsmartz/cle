@@ -39,13 +39,12 @@ function RegistrationForm(props) {
             <br />
             <FacebookLogin
                 appId="1088597931155576"
-                autoLoad={true}
+                autoLoad={false}
                 fields="name,email,picture"
                 onClick={componentClicked}
                 callback={responseFacebook} />
             <br />
             <br />
-            <p>adasd</p>
             <FacebookShareButton
                 url={'https://www.npmjs.com/package/react-share'}
                 quote={'Sample text to share'}>
