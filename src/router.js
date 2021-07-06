@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import Home from './containers/Page/home';
 import SignUp from './containers/Page/signup';
 import NotFound from './containers/Page/404';
+import Magazine from './containers/Page/magazine'
 
 import PrivateRoute from "./components/private-route/PrivateRoute";
 
@@ -14,10 +15,15 @@ const PublicRoutes = ({ history }) => {
       <div>
         <Switch>
           <PrivateRoute exact path="/" component={Home} />
-        
+
           <Route exact path="/signup">
             <SignUp />
           </Route>
+
+          <Route exact path="/magazine">
+            <Magazine />
+          </Route>
+
           <Route component={NotFound} />
           {/* <RestrictedRoute+
           path="/dashboard"
