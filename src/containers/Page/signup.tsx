@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { FacebookShareButton, TwitterShareButton } from "react-share";
 import { Button } from 'antd';
+import AppleSigninButton from '../AppleSigninButton';
 
 function RegistrationForm(props) {
 
@@ -29,22 +30,28 @@ function RegistrationForm(props) {
         };
     }
 
+    const [authOptions, setAuthOptions] = useState({
+        clientId: 'com.example.web',
+        scope: 'email name',
+        redirectURI: 'https://example.com',
+        state: '',
+        nonce: 'nonce',
+        usePopup: true,
+        onSuccess: '',
+        onError: '',
+        iconProps: ''
+    });
+    const [extraProps, setExtraProps] = useState({
+        uiType: 'dark',
+        className: 'apple-auth-btn',
+        noDefaultStyle: false,
+        buttonExtraChildren: 'Continue with Apple',
+    });
+    const [codeString, setCodeString] = useState('');
+
     return (
         <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
-            <GoogleLogin
-                clientId="788786912619-k4tb19vgofvmn97q1vsti1u8fnf8j6pa.apps.googleusercontent.com"
-                buttonText="Login with Google"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle} ></GoogleLogin>
-            <br />
-            <FacebookLogin
-                appId="1088597931155576"
-                autoLoad={true}
-                fields="name,email,picture"
-                onClick={componentClicked}
-                callback={responseFacebook} />
-            <br />
-            <br />
+
             <p>adasd</p>
             <FacebookShareButton
                 url={'https://www.npmjs.com/package/react-share'}
@@ -94,6 +101,21 @@ function RegistrationForm(props) {
                     Register
                 </button>
             </form>
+            <GoogleLogin
+                clientId="788786912619-k4tb19vgofvmn97q1vsti1u8fnf8j6pa.apps.googleusercontent.com"
+                buttonText="Login with Google"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle} ></GoogleLogin>
+            <br />
+            <FacebookLogin
+                appId="1088597931155576"
+                autoLoad={true}
+                fields="name,email,picture"
+                onClick={componentClicked}
+                callback={responseFacebook} />
+            <br />
+            <AppleSigninButton />
+            <br />
         </div>
     )
 }

@@ -1,5 +1,6 @@
+const apiUrl = '';
 export default {
-  apiUrl: '',
+  apiUrl
 };
 const siteConfig = {
   siteName: 'CLE',

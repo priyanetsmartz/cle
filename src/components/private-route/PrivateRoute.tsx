@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 import Header from '../../containers/partials/header';
 import Sidebar from '../../containers/partials/sidebar';
