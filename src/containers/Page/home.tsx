@@ -5,6 +5,7 @@ import { Pages } from '../../redux/pages/pages';
 function Home() {
 
     useEffect(() => {
+        console.log('ggg');
         async function fetchMyAPI() {
             let result = Pages("about-us");
             console.log(result);

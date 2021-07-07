@@ -1,3 +1,6 @@
+const userInfo ={
+  
+}
 const actions = {
   CHECK_AUTHORIZATION: "CHECK_AUTHORIZATION",
   LOGIN_REQUEST: "LOGIN_REQUEST",
@@ -13,4 +16,6 @@ const actions = {
     type: actions.LOGOUT
   })
 };
+
+
 export default actions;

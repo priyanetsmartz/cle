@@ -7,6 +7,39 @@ import AppleSigninButton from '../AppleSigninButton';
 
 function RegistrationForm(props) {
 
+    const [state, setState] = useState({
+        email: "",
+        password: "",
+        confirmPassword: ""
+    })
+    const handleChange = (e) => {
+        const { id, value } = e.target
+        setState(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
+    }
+    const handleSubmitClick = (e) => {
+        e.preventDefault();
+        if (state.password === state.confirmPassword) {
+            sendDetailsToServer()
+        } else {
+            props.showError('Passwords do not match');
+        }
+    }
+
+    const sendDetailsToServer = () => {
+        if (state.email.length && state.password.length) {
+            props.showError(null);
+            const payload = {
+                "email": state.email,
+                "password": state.password,
+            }
+        } else {
+            props.showError('Please enter valid username and password')
+        }
+
+    }
     const responseGoogle = (response) => {
         console.log(response);
     }
@@ -53,6 +86,7 @@ function RegistrationForm(props) {
         <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
 
             <p>adasd</p>
+            <br />
             <FacebookShareButton
                 url={'https://www.npmjs.com/package/react-share'}
                 quote={'Sample text to share'}>
@@ -76,7 +110,6 @@ function RegistrationForm(props) {
                         aria-describedby="emailHelp"
                         placeholder="Enter email"
                     />
-                    <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <div className="form-group text-left">
                     <label htmlFor="exampleInputPassword1">Password</label>
@@ -97,6 +130,7 @@ function RegistrationForm(props) {
                 <button
                     type="submit"
                     className="btn btn-primary"
+                    onClick={handleSubmitClick}
                 >
                     Register
                 </button>
@@ -109,7 +143,7 @@ function RegistrationForm(props) {
             <br />
             <FacebookLogin
                 appId="1088597931155576"
-                autoLoad={true}
+                autoLoad={false}
                 fields="name,email,picture"
                 onClick={componentClicked}
                 callback={responseFacebook} />

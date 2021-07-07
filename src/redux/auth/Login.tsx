@@ -3,12 +3,12 @@ const Api = new API();
 
 class Login {
   //Login
-  login(email:string, password:string, type:string) {
+  login(email: string, password: string, type: string) {
+    console.log("herer");
     var payload = {
       email: email,
       password: password,
-      type: type,
-      portal: 'admin'
+      type: type
     };
     return Api.request("Contact/login", payload, "POST", "");
   }

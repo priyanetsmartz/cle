@@ -7,7 +7,7 @@ import AppLocale from "./languageProvider";
 import config, {
   getCurrentLanguage
 } from "./containers/LanguageSwitcher/config";
-import PublicRoutes from "./router";
+import PublicRoutes from "./router.tsx";
 
 function App() {
   const currentAppLocale =
