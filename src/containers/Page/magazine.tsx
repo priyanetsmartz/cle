@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { MagazineList } from '../../redux/pages/magazineList';
 
 function Magazine() {
 
     const [items, setItems] = useState([]);
 
-    const apiUrl = "https://jsonplaceholder.typicode.com/posts";
-    const apiUrl1 = "https://picsum.photos/v2/list";
-
     useEffect(() => {
-        fetch(apiUrl1)
-            .then(res => res.json())
-            .then(res => {
-                setItems(res);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    });
+        async function getData() {
+            let result = MagazineList("magazine-list");
+            console.log(result);
+        }
+        getData()
+
+    }, [])
 
     const Tr = ({ item }) => {
         return (
