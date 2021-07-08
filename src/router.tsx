@@ -6,6 +6,7 @@ import Home from './containers/Page/home';
 import SignUp from './containers/Page/signup';
 import NotFound from './containers/Page/404';
 import SignIn from './containers/Page/signin';
+import Magazine from './containers/Page/magazine'
 
 import PrivateRoute from "./components/private-route/PrivateRoute";
 
@@ -23,6 +24,10 @@ const PublicRoutes = ({ history }) => {
           <Route exact path="/signin">
             <SignIn />
           </Route>
+          <Route exact path="/magazine">
+            <Magazine />
+          </Route>
+
           <Route component={NotFound} />
           {/* <RestrictedRoute+
           path="/dashboard"
