@@ -12,16 +12,12 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
     {...rest}
     render={props =>
       auth === undefined ? (
-        <div className="sb-nav-fixed">
+        <>
           <Header />
-          <div id="layoutSidenav">
-            <Sidebar />
-            <div id="layoutSidenav_content">
-              <Component {...props} />
-              <Footer />
-            </div>
-          </div>
-        </div>
+          {/* <Sidebar /> */}
+          <Component {...props} />
+
+        </>
       ) : (
         <Redirect to="/" />
       )

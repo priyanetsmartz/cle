@@ -1,0 +1,79 @@
+html{width:100%;height:100%;}
+body{width:100%;height:100%; overflow:hidden;}
+.homescreen-bg{width:100%;height:100%;overflow:hidden;transition: all 0.5s;position:relative;}
+.homescreen-bg img {
+    position: relative;
+	animation: MoveBg ease 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes MoveBg{
+            0% {
+                top:0%;
+				width: 120%;
+				right: 0%;
+            }
+            100% {
+                top: -19%;
+				width: 110%;
+				right: 10%;
+            }
+				}
+.header-logo-menu {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+	z-index: 11111;
+}
+.hamburger{width:48px;float:right; text-align:right;}
+.hamburger a{height:24px;display: block;width:48px;}
+.hamburger a span {
+    float: right;
+    background: #2e2baa;
+    height: 4px;
+    display: block;
+	transition: width 0.5s;
+}
+.hamburger a span.hb-first{width:48px;}
+.hamburger a span.hb-second{width:32px; margin:6px 0;}
+.hamburger a span.hb-third{width:40px;}
+.hamburger a:hover span.hb-first{width:40px;}
+.hamburger a:hover span.hb-second{width:48px;}
+.hamburger a:hover span.hb-third{width:32px;}
+.home-inner-text{animation: MoveInnerText ease 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;}
+@keyframes MoveInnerText{
+            0% {
+                top:70% !important;opacity: 0;
+            }
+            100% {
+                top: 50% !important;opacity:1;
+            }
+				}
+.home-inner-text figure.time-is-now {
+    width: max-content;
+    float: right;
+    margin-right: 3%;
+	position: relative;
+z-index: 15;
+}
+.home-inner-text figure.play-video-now {
+    width: max-content;
+    float: right;
+    margin-right: -4%;margin-top: -2.5%;
+    z-index: 11;
+    position: relative;
+}
+.sign-up-btn{
+    width: 286px;
+    right: -20%;
+    left: 0;
+    bottom: -27%;
+    margin: auto;
+    text-align: center;
+	
+}
+.sign-up-btn a{background:transparent;width:100%;padding:17px 0; color:#2e2baa; border:1px solid #2e2baa; font-size:18px;text-decoration: none;display: block;}
+.sign-up-btn a:hover{background:#2e2baa;color:#fff; border:1px solid #2e2baa;}

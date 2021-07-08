@@ -23,6 +23,7 @@
     "react-intl": "^5.20.4",
     "react-redux": "^7.2.4",
     "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-share": "^4.4.0",
     "redux-saga": "^1.1.3",

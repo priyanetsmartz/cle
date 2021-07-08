@@ -7,9 +7,12 @@ const { login } = authAction;
 function SignIn(props) {
   const [state, setState] = useState({
     email: "",
-    password: "",
-    confirmPassword: ""
+    password: ""
   })
+  const [errors, setError] = useState({
+    errors: {}
+  });
+
   const handleChange = (e) => {
     const { id, value } = e.target
     setState(prevState => ({
@@ -20,7 +23,7 @@ function SignIn(props) {
   const handleSubmitClick = (e) => {
     e.preventDefault();
     const { login } = props;
-    if (state.email.length && state.password.length) {
+    if (handleValidation()) {
       const userInfo = {
         "type": "user",
         "email": state.email,
@@ -32,6 +35,36 @@ function SignIn(props) {
     }
   }
 
+
+  const handleValidation = () => {
+    let error = {};
+    let formIsValid = true;
+
+    //Email   
+    if (typeof state["email"] !== "undefined") {
+      let lastAtPos = state["email"].lastIndexOf('@');
+      let lastDotPos = state["email"].lastIndexOf('.');
+
+      if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') == -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
+        formIsValid = false;
+        error["email"] = "Email is not valid";
+      }
+    }
+    if (!state["email"]) {
+      formIsValid = false;
+      error["email"] = "Email is required";
+    }
+
+    //email
+    if (!state["password"]) {
+      formIsValid = false;
+      error["password"] = 'Password is required';
+    }
+    setError({ errors: error });
+    return formIsValid;
+  }
+
+  
   return (
     <div>
       <IntlMessages id="title" />
@@ -46,6 +79,7 @@ function SignIn(props) {
             value={state.email}
             onChange={handleChange}
           />
+          <span className="error">{errors.errors["email"]}</span>
         </div>
         <div className="form-group text-left">
           <label htmlFor="exampleInputPassword1">Password</label>
@@ -56,21 +90,23 @@ function SignIn(props) {
             value={state.password}
             onChange={handleChange}
           />
+          <span className="error">{errors.errors["password"]}</span>
         </div>
         <button
           type="submit"
           className="btn btn-primary"
           onClick={handleSubmitClick}
         >
-          Register
+          login
         </button>
       </form>
     </div>
   );
 }
+
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors,
+  // errors: state.errors,
   // loginerror:state.errors.loginerror
 });
 export default connect(
