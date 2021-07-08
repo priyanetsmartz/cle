@@ -8,7 +8,7 @@ import NotFound from './containers/Page/404';
 import SignIn from './containers/Page/signin';
 import Magazine from './containers/Page/magazine';
 import ForgottenPassword from './containers/Page/forgotPassword';
-import PostComment from './containers/Page/postComments.'
+import PostComment from './containers/Page/postComments'
 
 import PrivateRoute from "./components/private-route/PrivateRoute";
 
