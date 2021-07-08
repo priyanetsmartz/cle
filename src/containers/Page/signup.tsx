@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from "react-redux";
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { FacebookShareButton, TwitterShareButton } from "react-share";
 import { Button } from 'antd';
 import AppleSigninButton from '../AppleSigninButton';
+import authAction from "../../redux/auth/actions";
+const { register } = authAction;
 
 function RegistrationForm(props) {
 
@@ -12,6 +15,49 @@ function RegistrationForm(props) {
         password: "",
         confirmPassword: ""
     })
+    const [errors, setError] = useState({
+        errors: {}
+    });
+
+    const handleValidation = () => {
+        let error = {};
+        let formIsValid = true;
+
+        //Email   
+        if (typeof state["email"] !== "undefined") {
+            let lastAtPos = state["email"].lastIndexOf('@');
+            let lastDotPos = state["email"].lastIndexOf('.');
+
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') == -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
+                formIsValid = false;
+                error["email"] = "Email is not valid";
+            }
+        }
+        if (!state["email"]) {
+            formIsValid = false;
+            error["email"] = "Email is required";
+        }
+
+        if (state["confirmPassword"] !== error["password"]) {
+            formIsValid = false;
+            error["confirmPassword"] = 'confirm password not matched';
+        }
+
+        //password
+        if (!state["password"]) {
+            formIsValid = false;
+            error["password"] = 'Password is required';
+        }
+
+        if (!state["confirmPassword"]) {
+            formIsValid = false;
+            error["confirmPassword"] = 'Confirm Password is required';
+        }
+
+
+        setError({ errors: error });
+        return formIsValid;
+    }
     const handleChange = (e) => {
         const { id, value } = e.target
         setState(prevState => ({
@@ -19,26 +65,19 @@ function RegistrationForm(props) {
             [id]: value
         }))
     }
+
     const handleSubmitClick = (e) => {
         e.preventDefault();
-        if (state.password === state.confirmPassword) {
-            sendDetailsToServer()
-        } else {
-            props.showError('Passwords do not match');
-        }
-    }
-
-    const sendDetailsToServer = () => {
-        if (state.email.length && state.password.length) {
-            props.showError(null);
-            const payload = {
+        const { register } = props;
+        if (handleValidation()) {
+            const userInfo = {
                 "email": state.email,
                 "password": state.password,
             }
+            register({ userInfo });
         } else {
-            props.showError('Please enter valid username and password')
+            console.log('Passwords do not match');
         }
-
     }
     const responseGoogle = (response) => {
         console.log(response);
@@ -102,38 +141,49 @@ function RegistrationForm(props) {
             <br />
             <br />
             <form>
-                <div className="form-group text-left">
-                    <label htmlFor="exampleInputEmail1">Email address</label>
-                    <input type="email"
-                        className="form-control"
-                        id="email"
-                        aria-describedby="emailHelp"
-                        placeholder="Enter email"
-                    />
-                </div>
-                <div className="form-group text-left">
-                    <label htmlFor="exampleInputPassword1">Password</label>
-                    <input type="password"
-                        className="form-control"
-                        id="password"
-                        placeholder="Password"
-                    />
-                </div>
-                <div className="form-group text-left">
-                    <label htmlFor="exampleInputPassword1">Confirm Password</label>
-                    <input type="password"
-                        className="form-control"
-                        id="confirmPassword"
-                        placeholder="Confirm Password"
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onClick={handleSubmitClick}
-                >
-                    Register
-                </button>
+                <form>
+                    <div className="form-group text-left">
+                        <label htmlFor="exampleInputEmail1">Email address</label>
+                        <input type="email"
+                            className="form-control"
+                            id="email"
+                            aria-describedby="emailHelp"
+                            placeholder="Enter email"
+                            value={state.email}
+                            onChange={handleChange}
+                        />
+                        <span className="error">{errors.errors["email"]}</span>
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="exampleInputPassword1">Password</label>
+                        <input type="password"
+                            className="form-control"
+                            id="password"
+                            placeholder="Password"
+                            value={state.password}
+                            onChange={handleChange}
+                        />
+                        <span className="error">{errors.errors["password"]}</span>
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                        <input type="password"
+                            className="form-control"
+                            id="confirmPassword"
+                            placeholder="Confirm Password"
+                            value={state.confirmPassword}
+                            onChange={handleChange}
+                        />
+                        <span className="error">{errors.errors["confirmPassword"]}</span>
+                    </div>
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                        onClick={handleSubmitClick}
+                    >
+                        Register
+                    </button>
+                </form>
             </form>
             <GoogleLogin
                 clientId="788786912619-k4tb19vgofvmn97q1vsti1u8fnf8j6pa.apps.googleusercontent.com"
@@ -154,4 +204,15 @@ function RegistrationForm(props) {
     )
 }
 
-export default RegistrationForm;
+
+
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors,
+    // loginerror:state.errors.loginerror
+});
+
+export default connect(
+    mapStateToProps,
+    { register }
+)(RegistrationForm);

@@ -5,8 +5,17 @@ function Footer() {
 
 
     return (
-        <div>
-            This is footer
+        <div className="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        >
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+
+                    <div className="modal-body">
+
+                    </div>
+
+                </div>
+            </div>
         </div>
     );
 }

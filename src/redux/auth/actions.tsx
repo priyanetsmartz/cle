@@ -1,6 +1,11 @@
-const userInfo ={
-  
+export interface Payload {
+  type: string;
+  userInfo: {
+    email: string;
+    password: string;
+  }
 }
+
 const actions = {
   CHECK_AUTHORIZATION: "CHECK_AUTHORIZATION",
   LOGIN_REQUEST: "LOGIN_REQUEST",
@@ -8,8 +13,9 @@ const actions = {
   LOGIN_SUCCESS: "LOGIN_SUCCESS",
   LOGIN_ERROR: "LOGIN_ERROR",
   FORGOT_PASSWORD: "FORGOT_PASSWORD",
+  REGISTER_REQUEST:"REGISTER_REQUEST",
   checkAuthorization: () => ({ type: actions.CHECK_AUTHORIZATION }),
-  login: payload => ({
+  login: (payload: Payload) => ({
     type: actions.LOGIN_REQUEST,
     payload
   }),
@@ -20,6 +26,10 @@ const actions = {
     type: actions.FORGOT_PASSWORD,
     payload
   }),
+  register: (payload: Payload) => ({
+    type: actions.REGISTER_REQUEST,
+    payload
+  })
 };
 
 
