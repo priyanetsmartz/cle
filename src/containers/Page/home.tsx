@@ -3,8 +3,8 @@ import IntlMessages from "../../components/utility/intlMessages";
 import { Pages } from '../../redux/pages/pages';
 import homeBg from "../../image/home-watch-bg.png";
 import { Link } from "react-router-dom";
-function Home() {
 
+function Home() {
     useEffect(() => {
         console.log('ggg');
         async function fetchMyAPI() {

@@ -8,10 +8,13 @@ import config, {
   getCurrentLanguage
 } from "./containers/LanguageSwitcher/config";
 import PublicRoutes from "./router.tsx";
+import { getCookie } from "./helpers/session";
 
 function App() {
+  const setlanguage = getCookie('currentLanguage');
+  const lang = setlanguage ? setlanguage : config.defaultLanguage;
   const currentAppLocale =
-    AppLocale[getCurrentLanguage(config.defaultLanguage || "english").locale];
+    AppLocale[getCurrentLanguage(lang || "english").locale];
   return (
     <ConfigProvider locale={currentAppLocale.antd}>
       <IntlProvider

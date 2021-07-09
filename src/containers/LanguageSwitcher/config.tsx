@@ -8,23 +8,23 @@ const config = {
     {
       languageId: "english",
       locale: "en",
-      text: "English",
+      text: "En",
       icon: englishLang
     },
     {
       languageId: "arabic",
       locale: "ar",
-      text: "Arabic",
+      text: "عربى",
       icon: englishLang
     }
   ]
 };
 
-export function getCurrentLanguage(lang) {
+export function getCurrentLanguage(lang:string) {
   let selecetedLanguage = config.options[0];
-  config.options.forEach(language => {
-    if (language.languageId === lang) {
-      selecetedLanguage = language;
+  config.options.forEach(langge => {
+    if (langge.languageId === lang) {
+      selecetedLanguage = langge;
     }
   });
   return selecetedLanguage;
