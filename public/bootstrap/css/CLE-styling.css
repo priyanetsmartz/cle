@@ -24,7 +24,7 @@ body{width:100%;height:100%; overflow:hidden;}
     width: 100%;
     top: 0;
     left: 0;
-	z-index: 11111;
+	z-index:1;
 }
 .hamburger{width:48px;float:right; text-align:right;}
 .hamburger a{height:24px;display: block;width:48px;}
@@ -77,3 +77,103 @@ z-index: 15;
 }
 .sign-up-btn a{background:transparent;width:100%;padding:17px 0; color:#2e2baa; border:1px solid #2e2baa; font-size:18px;text-decoration: none;display: block;}
 .sign-up-btn a:hover{background:#2e2baa;color:#fff; border:1px solid #2e2baa;}
+
+/** menu **/
+.menu-section{position: absolute;
+    width: 100%;
+	height:100%;
+    top: 0;
+    left: 0;
+	z-index:10;
+	background:#f7f7f7;
+	}
+.hamburger-close a svg{transition: all 0.5s;}
+.hamburger-close a:hover svg{transform: rotate(90deg);}
+.left-menu-content {
+    list-style-type: none;
+    padding:40px 70px 40px 0;
+    margin: 0;
+    border-right: 4px solid #2e2baa;
+	text-align:right;
+}
+.left-menu-content li {
+    margin-bottom: 10px;
+    height: 65px;
+	font-family: 'Monument Extended';font-size: 14px;
+	
+}
+.left-menu-content a.main-menu {
+    font-size: 36px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #000;
+	font-family: 'Monument Extended';
+	font-weight: normal;
+	transition: all 0.5s;
+	display:block;
+}
+.left-menu-content li a.main-menu:hover{color:#2e2baa;padding-top:10px;}
+.left-menu-content a.menu-btn{font-size: 12px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #fff;
+	font-family: 'Monument Extended';
+	font-weight: 500;
+	transition: all 0.5s;
+	background:#2e2baa;
+	padding:15px 15px;
+	border:1px solid #2e2baa;
+	display: inline-block;
+	}
+.left-menu-content a.menu-btn:hover{background:transparent;color:#2e2baa; border:1px solid #2e2baa;}
+.left-menu-content a.create-account{font-family: 'Monument Extended';font-size: 14px;}
+
+.right-menu-content{
+    list-style-type: none;
+    padding:40px 0px 40px 70px;
+    margin: 0;
+}
+.right-menu-content li {
+    margin-bottom: 10px;
+    min-height: 48px;
+	font-family: 'Monument Extended';font-size:20px;
+	
+}
+.right-menu-content a.main-menu {
+    font-size: 20px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #000;
+	font-family: 'Monument Extended';
+	font-weight: normal;
+	transition: all 0.5s;
+	display:block;
+}
+.right-menu-content li a.main-menu:hover{color:#2e2baa;padding-top:10px;}
+.right-menu-content li.lang-sec{font-family: 'Monument Extended';font-size:14px;padding-top: 30px;}
+.right-menu-content li.lang-sec a{font-family: 'Monument Extended';font-size:14px;text-transform: uppercase;
+    text-decoration: none;
+    color: #000;
+	margin-right:10px; 
+	}
+	.right-menu-content li.lang-sec a:first-child{border-right: 2px solid #000;padding-right: 15px;}
+	.right-menu-content li.lang-sec a svg{margin-top: -11px;}
+	.right-menu-content li svg{transition: all 0.5s;}
+	.right-menu-content li svg:hover{padding-top:10px;}
+
+.CLE-loading{position: absolute;
+    width: 100%;
+	height:100%;
+    top: 0;
+    left: 0;
+	z-index:10;
+	background:#fff;
+	}
+.loading-gif{position: absolute;
+	height:100%;
+    top: 0;
+    left: 0;
+	bottom:0;
+	right:0;
+	margin:auto;
+	}

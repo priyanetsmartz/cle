@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from "react-redux";
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';

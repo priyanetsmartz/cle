@@ -1,3 +1,13 @@
 {
-  "title": "CLE English"
+  "title": "CLE English",
+  "menu_Aboutus": "About CLé",
+  "menu_Magazine": "Magazine",
+  "menu_Partnership": "Partnership",
+  "menu_Sign_in": "Sign in",
+  "menu_SignUp": "Create Account",
+  "menu_Help_Us": "Help Us",
+  "menu_checkus": "Check Us Out",
+  "menu_contact": "Contact",
+  "menu_findus": "Find Us",
+  "menu_newhere":"New here?"
 }
