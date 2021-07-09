@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { FacebookShareButton, TwitterShareButton } from "react-share";
+import IntlMessages from "../../components/utility/intlMessages";
 import { Button } from 'antd';
 import AppleSigninButton from '../AppleSigninButton';
 import authAction from "../../redux/auth/actions";
@@ -124,7 +125,6 @@ function RegistrationForm(props) {
     return (
         <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
 
-            <p>adasd</p>
             <br />
             <FacebookShareButton
                 url={'https://www.npmjs.com/package/react-share'}
@@ -143,7 +143,7 @@ function RegistrationForm(props) {
             <form>
                 <form>
                     <div className="form-group text-left">
-                        <label htmlFor="exampleInputEmail1">Email address</label>
+                        <label htmlFor="exampleInputEmail1"><IntlMessages id="email_address" /></label>
                         <input type="email"
                             className="form-control"
                             id="email"
@@ -155,7 +155,7 @@ function RegistrationForm(props) {
                         <span className="error">{errors.errors["email"]}</span>
                     </div>
                     <div className="form-group text-left">
-                        <label htmlFor="exampleInputPassword1">Password</label>
+                        <label htmlFor="exampleInputPassword1"><IntlMessages id="password" /></label>
                         <input type="password"
                             className="form-control"
                             id="password"
@@ -166,7 +166,7 @@ function RegistrationForm(props) {
                         <span className="error">{errors.errors["password"]}</span>
                     </div>
                     <div className="form-group text-left">
-                        <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                        <label htmlFor="exampleInputPassword1"><IntlMessages id="confirm_password" /></label>
                         <input type="password"
                             className="form-control"
                             id="confirmPassword"
@@ -181,7 +181,7 @@ function RegistrationForm(props) {
                         className="btn btn-primary"
                         onClick={handleSubmitClick}
                     >
-                        Register
+                        <IntlMessages id="register" />
                     </button>
                 </form>
             </form>

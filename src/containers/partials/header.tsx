@@ -68,7 +68,7 @@ function Header() {
                                     <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
                                     <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     <li><Link  to={"/signin"} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
-                                    <li>New here? <Link  to={"/signup"} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
+                                    <li><IntlMessages id="menu_newhere" /> <Link  to={"/signup"} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
                                 </ul>
                             </div>
                             <div className="col-md-4">
@@ -77,7 +77,7 @@ function Header() {
                                     <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_checkus" /></Link></li>
                                     <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_contact" /></Link></li>
                                     <li>
-                                        <div>Find Us</div>
+                                        <div><IntlMessages id="menu_findus" /></div>
                                         <div>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="21.42" height="21.419" viewBox="0 0 21.42 21.419">
                                                 <path id="facebook"

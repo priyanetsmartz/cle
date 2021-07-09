@@ -9,5 +9,18 @@
   "menu_checkus": "Check Us Out",
   "menu_contact": "Contact",
   "menu_findus": "Find Us",
-  "menu_newhere":"New here?"
+  "menu_newhere":"New here?",
+  "forgot_pass":"Forgot Password",
+  "email_address":"Email Address",
+  "retrieve_password":"Retrieve Password",
+  "magazine_page":"Magazine Page",
+  "post_comments":"Post Comments",
+  "full_name":"Full Name",
+  "comment":"Comment",
+  "submit":"Submit",
+  "password":"Password",
+  "login":"Login",
+  "confirm_password":"Confirm Password",
+  "register":"Register",
+  "sign_up_now":"Sign Up Now"
 }

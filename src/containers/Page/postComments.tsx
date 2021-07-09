@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from "react-redux";
 import authAction from "../../redux/auth/actions";
+import IntlMessages from "../../components/utility/intlMessages";
 const { postComment } = authAction;
 
 function PostComment(props) {
@@ -35,11 +36,11 @@ function PostComment(props) {
 
     return (
         <div>
-            <p>Post Commetns</p>
+            <p><IntlMessages id="post_comments" /></p>
             <br />
             <form>
                 <div className="form-group text-left">
-                    <label htmlFor="exampleInputEmail1">Full Name</label>
+                    <label htmlFor="exampleInputEmail1"><IntlMessages id="full_name" /></label>
                     <input type="text"
                         className="form-control"
                         id="name"
@@ -49,7 +50,7 @@ function PostComment(props) {
                     />
                 </div>
                 <div className="form-group text-left">
-                    <label htmlFor="exampleInputEmail1">Email address</label>
+                    <label htmlFor="exampleInputEmail1"><IntlMessages id="email_address" /></label>
                     <input type="email"
                         className="form-control"
                         id="email"
@@ -60,7 +61,7 @@ function PostComment(props) {
                     />
                 </div>
                 <div className="form-group text-left">
-                    <label htmlFor="exampleInputEmail1">Comment</label>
+                    <label htmlFor="exampleInputEmail1"><IntlMessages id="comment" /></label>
                     <input type="text"
                         className="form-control"
                         id="comment"
@@ -74,7 +75,7 @@ function PostComment(props) {
                     className="btn btn-primary"
                     onClick={handleSubmitClick}
                 >
-                    Submit
+                    <IntlMessages id="submit" />
                 </button>
             </form>
         </div>

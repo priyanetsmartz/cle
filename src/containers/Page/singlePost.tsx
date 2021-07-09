@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PostData } from '../../redux/pages/magazineList';
+import IntlMessages from "../../components/utility/intlMessages";
 
 function SinglePost() {
 

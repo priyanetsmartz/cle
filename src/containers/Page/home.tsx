@@ -124,7 +124,7 @@ function Home() {
 
                 </figure>
                 <div className="position-absolute mx-auto sign-up-btn">
-                    <Link className="" to="/signup" role="button">Sign up now</Link>
+                    <Link className="" to="/signup" role="button"><IntlMessages id="sign_up_now" /></Link>
                 </div>
             </div>
         </div>

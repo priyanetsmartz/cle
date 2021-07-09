@@ -70,7 +70,7 @@ function SignIn(props) {
       <IntlMessages id="title" />
       <form>
         <div className="form-group text-left">
-          <label htmlFor="exampleInputEmail1">Email address</label>
+          <label htmlFor="exampleInputEmail1"><IntlMessages id="email_address" /></label>
           <input type="email"
             className="form-control"
             id="email"
@@ -82,7 +82,7 @@ function SignIn(props) {
           <span className="error">{errors.errors["email"]}</span>
         </div>
         <div className="form-group text-left">
-          <label htmlFor="exampleInputPassword1">Password</label>
+          <label htmlFor="exampleInputPassword1"><IntlMessages id="password" /></label>
           <input type="password"
             className="form-control"
             id="password"
@@ -97,7 +97,7 @@ function SignIn(props) {
           className="btn btn-primary"
           onClick={handleSubmitClick}
         >
-          login
+          <IntlMessages id="login" />
         </button>
       </form>
     </div>

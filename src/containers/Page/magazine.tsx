@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import IntlMessages from "../../components/utility/intlMessages";
+import { useHistory } from "react-router-dom";
+
 import { MagazineList } from '../../redux/pages/magazineList';
 
 function Magazine() {
-
+    const history = useHistory();
     const [items, setItems] = useState([]);
 
     useEffect(() => {
         async function getData() {
             let result = MagazineList("magazine-list");
             console.log(result);
+            // history.push("/signup");
         }
         getData()
 
@@ -28,7 +32,7 @@ function Magazine() {
 
     return (
         <div>
-            <h2>Magazine page</h2>
+            <h2><IntlMessages id="magazine_page" /></h2>
             <h3>Calling Api</h3>
             <table id='data'>
                 <thead>
