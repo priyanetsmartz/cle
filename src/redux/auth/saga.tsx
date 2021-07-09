@@ -46,7 +46,7 @@ export function* registerRequest() {
       var password = payload.payload.userInfo.password;
       // var rememberMe = payload.payload.userInfo.rememberMe;
       //API call to login request
-      const response = yield call(loginApi.login, email, password, type);
+      const response = yield call(loginApi.register, email, password, type);
       if (response.data.userId != "") {
         yield put({
           type: actions.LOGIN_SUCCESS,

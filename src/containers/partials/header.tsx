@@ -3,6 +3,8 @@ import IntlMessages from "../../components/utility/intlMessages";
 import logo from "../../image/CLE-LOGO.svg";
 import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import { Link } from "react-router-dom";
+import LanguageSwitcher from '../../containers/LanguageSwitcher';
+
 function Header() {
     const [isLoaded, setIsLoaded] = useState(true);
     const [menuLoaded, setMenuLoaded] = useState(false);
@@ -34,7 +36,7 @@ function Header() {
                     <div className="mt-5">
                         <img src={logo} />
                         <div className="hamburger">
-                            <Link  to={"#"} className="open-menu" onClick={handleMenuOpen}>
+                            <Link to={"#"} className="open-menu" onClick={handleMenuOpen}>
                                 <span className="hb-first"></span>
                                 <span className="hb-second"></span>
                                 <span className="hb-third"></span>
@@ -64,20 +66,20 @@ function Header() {
                         <div className="row">
                             <div className="col-md-5 offset-md-1">
                                 <ul className="left-menu-content">
-                                    <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
-                                    <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
-                                    <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
-                                    <li><Link  to={"/signin"} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
-                                    <li>New here? <Link  to={"/signup"} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
+                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
+                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
+                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
+                                    <li><Link to={"/signin"} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
+                                    <li><IntlMessages id="menu_newhere" /> <Link to={"/signup"} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
                                 </ul>
                             </div>
                             <div className="col-md-4">
                                 <ul className="right-menu-content">
-                                    <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
-                                    <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_checkus" /></Link></li>
-                                    <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_contact" /></Link></li>
+                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
+                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_checkus" /></Link></li>
+                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_contact" /></Link></li>
                                     <li>
-                                        <div>Find Us</div>
+                                        <div><IntlMessages id="menu_findus" /></div>
                                         <div>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="21.42" height="21.419" viewBox="0 0 21.42 21.419">
                                                 <path id="facebook"
@@ -120,18 +122,19 @@ function Header() {
                                             </svg>
                                         </div>
                                     </li>
-                                    <li className="lang-sec"><Link  to={"#"}>En</Link>
+                                    <LanguageSwitcher />
+                                    {/* <li className="lang-sec"><Link  to={"#"}>En</Link>
                                         <Link  to={"#"}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="31" height="19" viewBox="0 0 31 19">
                                                 <g id="Component_82_1" data-name="Component 82 – 1" transform="translate(0 2)">
-                                                    <text id="عربى" transform="translate(0 13)" font-size="14" font-family="SegoeUI-Bold, Segoe UI"
-                                                        font-weight="700" opacity="0.497">
+                                                    <text id="عربى" transform="translate(0 13)" fontSize="14" fontFamily="SegoeUI-Bold, Segoe UI"
+                                                        fontWeight="700" opacity="0.497">
                                                         <tspan x="0" y="0">عربى</tspan>
                                                     </text>
                                                 </g>
                                             </svg>
                                         </Link>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                         </div>

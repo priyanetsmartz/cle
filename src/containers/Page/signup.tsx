@@ -38,7 +38,7 @@ function RegistrationForm(props) {
             error["email"] = "Email is required";
         }
 
-        if (state["confirmPassword"] !== error["password"]) {
+        if (state["confirmPassword"] !== state["password"]) {
             formIsValid = false;
             error["confirmPassword"] = 'confirm password not matched';
         }
@@ -69,6 +69,7 @@ function RegistrationForm(props) {
     const handleSubmitClick = (e) => {
         e.preventDefault();
         const { register } = props;
+        console.log(handleValidation())
         if (handleValidation()) {
             const userInfo = {
                 "email": state.email,
