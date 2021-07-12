@@ -39,7 +39,10 @@ class API {
           method: method,
           url: url,
           data: postData,
-          headers: { "Content-Type": "application/json" }
+          headers: { 
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${getCookie("token")}`
+           }
         })
         .then(async response => {
           if (processResponse) {
