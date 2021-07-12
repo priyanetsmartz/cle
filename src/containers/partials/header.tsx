@@ -66,19 +66,11 @@ function Header() {
                         <div className="row">
                             <div className="col-md-5 offset-md-1">
                                 <ul className="left-menu-content">
-<<<<<<< HEAD
-                                    <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
-                                    <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
-                                    <li><Link  to={"#"} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
-                                    <li><Link  to={"/signin"} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
-                                    <li><IntlMessages id="menu_newhere" /> <Link  to={"/signup"} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
-=======
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     <li><Link to={"/signin"} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
                                     <li><IntlMessages id="menu_newhere" /> <Link to={"/signup"} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
->>>>>>> 5a0764d8af127324f09ef709893143d80d2d975f
                                 </ul>
                             </div>
                             <div className="col-md-4">
