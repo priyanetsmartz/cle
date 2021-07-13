@@ -106,7 +106,7 @@ function RegistrationForm(props) {
                 "password": state.password,
                 "type": state.type
             }
-            console.log(userInfo);
+           // console.log(userInfo);
             register({ userInfo });
         } else {
             notification("warning", "", "Please enter required values");

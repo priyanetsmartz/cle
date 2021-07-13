@@ -14,8 +14,12 @@ export default function authReducer(state = initState, action) {
       return initState;
     case actions.REGISTER_REQUEST:
       return { ...state, loading: true };
+    case actions.REGISTER_SUCCESS:
+      return { ...state, loading: false };
     case actions.REGISTER_ERROR:
       return { ...state, loading: false };
+    case actions.GET_GLOBALAUTH:
+      return { ...state, globalAuth: action.token, loading: false };
     default:
       return state;
   }

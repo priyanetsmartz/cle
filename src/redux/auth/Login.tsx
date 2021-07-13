@@ -2,6 +2,14 @@ import API from "../../restApi/Api";
 const Api = new API();
 
 class Login {
+
+  getAdminToken() {
+    var payload = {
+      username: 'monikat',
+      password: 'monika@123'
+    };
+    return Api.request("rest/V1/integration/admin/token", payload, "POST", "");
+  }
   //Login
   login(email: string, password: string, type: string) {
     var payload = {
@@ -35,6 +43,7 @@ class Login {
   //   return Api.request("rest/V1/customers", payload, "POST", "");
   // }
   register(email: string, password: string, type: number) {
+    console.log('www')
     var payload = {
       "customer": {
         "email": email,

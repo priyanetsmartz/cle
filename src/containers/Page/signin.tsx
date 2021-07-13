@@ -147,6 +147,7 @@ function SignIn(props) {
         </button>
 
         <Link
+          to={"/"}
           className="isoDropdownLink"
           onClick={logout}       >
           <IntlMessages id="logout" />
