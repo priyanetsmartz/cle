@@ -66,7 +66,7 @@ function Header() {
                         <div className="row">
                             <div className="col-md-5 offset-md-1">
                                 <ul className="left-menu-content">
-                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
+                                    <li onClick={handleMenuClose}><Link to={"about-us"} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     <li><Link to={"/signin"} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
