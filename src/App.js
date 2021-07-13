@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Provider } from 'react-redux'
 import { store, history } from "./redux/store";
 import { ConfigProvider } from 'antd';
@@ -9,24 +9,29 @@ import config, {
 } from "./containers/LanguageSwitcher/config";
 import PublicRoutes from "./router.tsx";
 import { getCookie } from "./helpers/session";
+import { LanguageContext } from './languageContext';
+
 
 function App() {
-  const setlanguage = getCookie('currentLanguage');
-  const lang = setlanguage ? setlanguage : config.defaultLanguage;
+  const language = getCookie('currentLanguage');
+  const defaultLang = language ? language : config.defaultLanguage;
+  const [value, setValue] = useState(defaultLang);
   const currentAppLocale =
-    AppLocale[getCurrentLanguage(lang || "english").locale];
+    AppLocale[getCurrentLanguage(value).locale];
+
   return (
-    <ConfigProvider locale={currentAppLocale.antd}>
-      <IntlProvider
-        locale={currentAppLocale.locale}
-        messages={currentAppLocale.messages}
-      >
-        <Provider store={store}>
-          <PublicRoutes history={history} />
-          {/* <LanguageSwitcher /> */}
-        </Provider>
-      </IntlProvider>
-    </ConfigProvider>
+    <LanguageContext.Provider value={{ value, setValue }}>
+      <ConfigProvider locale={currentAppLocale.antd}>
+        <IntlProvider
+          locale={currentAppLocale.locale}
+          messages={currentAppLocale.messages}
+        >
+          <Provider store={store}>
+            <PublicRoutes history={history} />
+          </Provider>
+        </IntlProvider>
+      </ConfigProvider>
+    </LanguageContext.Provider>
   );
 }
 

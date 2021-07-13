@@ -9,5 +9,14 @@
   "menu_checkus": "Check Us Out",
   "menu_contact": "Contact",
   "menu_findus": "Find Us",
-  "menu_newhere":"New here?"
+  "menu_newhere": "New here?",
+  "login.email": "Username",
+  "login.password": "Password",
+  "login.button": "Signin",
+  "login.RememberMe": "Remember Me",
+  "register.email": "Email",
+  "register.password": "Password",
+  "register.confirmPassword": "Confirm Password",
+  "register.button": "Signup",
+  "logout": "Logout"
 }

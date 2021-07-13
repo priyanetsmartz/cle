@@ -123,18 +123,6 @@ function Header() {
                                         </div>
                                     </li>
                                     <LanguageSwitcher />
-                                    {/* <li className="lang-sec"><Link  to={"#"}>En</Link>
-                                        <Link  to={"#"}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="19" viewBox="0 0 31 19">
-                                                <g id="Component_82_1" data-name="Component 82 – 1" transform="translate(0 2)">
-                                                    <text id="عربى" transform="translate(0 13)" fontSize="14" fontFamily="SegoeUI-Bold, Segoe UI"
-                                                        fontWeight="700" opacity="0.497">
-                                                        <tspan x="0" y="0">عربى</tspan>
-                                                    </text>
-                                                </g>
-                                            </svg>
-                                        </Link>
-                                    </li> */}
                                 </ul>
                             </div>
                         </div>

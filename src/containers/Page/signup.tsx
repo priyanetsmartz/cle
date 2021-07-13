@@ -1,24 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { FacebookShareButton, TwitterShareButton } from "react-share";
-import { Button } from 'antd';
+import IntlMessages from "../../components/utility/intlMessages";
+import { Button, Select } from 'antd';
 import AppleSigninButton from '../AppleSigninButton';
 import authAction from "../../redux/auth/actions";
+import notification from '../../components/notification';
+import Login from "../../redux/auth/Login";
 const { register } = authAction;
+const loginApi = new Login();
 
 function RegistrationForm(props) {
 
     const [state, setState] = useState({
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
+        type: -1
     })
     const [errors, setError] = useState({
         errors: {}
     });
+    const [types, SetTypes] = useState([])
+    interface customerType {
+        items?: {
+            code?: string
+            id?: number
+            tax_class_id?: number
+            tax_class_name?: string
+        }
+    }
 
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    async function loadData(value = "") {
+        const results: any = await loginApi.getCustomerType();
+        var jsonData = results.data.items;
+        SetTypes(jsonData);
+    }
     const handleValidation = () => {
         let error = {};
         let formIsValid = true;
@@ -66,18 +89,27 @@ function RegistrationForm(props) {
         }))
     }
 
+    const selectType = (e) => {
+        const value = e.target.value;
+        console.log(value);
+        setState(prevState => ({
+            ...prevState,
+            ['type']: value
+        }))
+    }
     const handleSubmitClick = (e) => {
         e.preventDefault();
         const { register } = props;
-        console.log(handleValidation())
         if (handleValidation()) {
             const userInfo = {
                 "email": state.email,
                 "password": state.password,
+                "type": state.type
             }
+            console.log(userInfo);
             register({ userInfo });
         } else {
-            console.log('Passwords do not match');
+            notification("warning", "", "Please enter required values");
         }
     }
     const responseGoogle = (response) => {
@@ -92,35 +124,35 @@ function RegistrationForm(props) {
         console.log(response);
     }
 
-    const signup = (res) => {
-        console.log(res);
-        const googleresponse = {
-            Name: res.profileObj.name,
-            email: res.profileObj.email,
-            token: res.googleId,
-            Image: res.profileObj.imageUrl,
-            ProviderId: 'Google'
-        };
-    }
+    // const signup = (res) => {
+    //    // console.log(res);
+    //     const googleresponse = {
+    //         Name: res.profileObj.name,
+    //         email: res.profileObj.email,
+    //         token: res.googleId,
+    //         Image: res.profileObj.imageUrl,
+    //         ProviderId: 'Google'
+    //     };
+    // }
 
-    const [authOptions, setAuthOptions] = useState({
-        clientId: 'com.example.web',
-        scope: 'email name',
-        redirectURI: 'https://example.com',
-        state: '',
-        nonce: 'nonce',
-        usePopup: true,
-        onSuccess: '',
-        onError: '',
-        iconProps: ''
-    });
-    const [extraProps, setExtraProps] = useState({
-        uiType: 'dark',
-        className: 'apple-auth-btn',
-        noDefaultStyle: false,
-        buttonExtraChildren: 'Continue with Apple',
-    });
-    const [codeString, setCodeString] = useState('');
+    // const [authOptions, setAuthOptions] = useState({
+    //     clientId: 'com.example.web',
+    //     scope: 'email name',
+    //     redirectURI: 'https://example.com',
+    //     state: '',
+    //     nonce: 'nonce',
+    //     usePopup: true,
+    //     onSuccess: '',
+    //     onError: '',
+    //     iconProps: ''
+    // });
+    // const [extraProps, setExtraProps] = useState({
+    //     uiType: 'dark',
+    //     className: 'apple-auth-btn',
+    //     noDefaultStyle: false,
+    //     buttonExtraChildren: 'Continue with Apple',
+    // });
+    // const [codeString, setCodeString] = useState('');
 
     return (
         <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
@@ -144,7 +176,7 @@ function RegistrationForm(props) {
             <form>
                 <form>
                     <div className="form-group text-left">
-                        <label htmlFor="exampleInputEmail1">Email address</label>
+                        <label htmlFor="exampleInputEmail1"><IntlMessages id="register.email" /></label>
                         <input type="email"
                             className="form-control"
                             id="email"
@@ -156,7 +188,7 @@ function RegistrationForm(props) {
                         <span className="error">{errors.errors["email"]}</span>
                     </div>
                     <div className="form-group text-left">
-                        <label htmlFor="exampleInputPassword1">Password</label>
+                        <label htmlFor="exampleInputPassword1"><IntlMessages id="register.password" /></label>
                         <input type="password"
                             className="form-control"
                             id="password"
@@ -167,7 +199,7 @@ function RegistrationForm(props) {
                         <span className="error">{errors.errors["password"]}</span>
                     </div>
                     <div className="form-group text-left">
-                        <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                        <label htmlFor="exampleInputPassword1"><IntlMessages id="register.confirmPassword" /></label>
                         <input type="password"
                             className="form-control"
                             id="confirmPassword"
@@ -177,12 +209,22 @@ function RegistrationForm(props) {
                         />
                         <span className="error">{errors.errors["confirmPassword"]}</span>
                     </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="exampleInputPassword1"><IntlMessages id="register.confirmPassword" /></label>
+                        <select value={state.type} onChange={selectType}>
+                            <option key="-1" value="--">---</option>
+                            {types.map(item => {
+                                return (<option key={item.id} value={item.id}>{item.code}</option>);
+                            })}
+                        </select>
+                        <span className="error">{errors.errors["confirmPassword"]}</span>
+                    </div>
                     <button
                         type="submit"
                         className="btn btn-primary"
                         onClick={handleSubmitClick}
                     >
-                        Register
+                        <IntlMessages id="register.button" />
                     </button>
                 </form>
             </form>

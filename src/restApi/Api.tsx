@@ -3,7 +3,7 @@ import Notification from "../components/notification";
 import CommonFunctions from "../commonFunctions/CommonFunctions";
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
-const qs = require("qs");
+//const qs = require("qs");
 const axios = require("axios");
 const processResponse = true;
 
@@ -25,10 +25,14 @@ class API {
     }
     //Get token value from cookie
     const id_token = getCookie("id_token");
+    let authtoken = '';
     //Check if token is not defined and attach to query string
     if (id_token !== undefined) {
-      queryString = queryString + "&access_token=" + id_token;
+      const token = 'kt7wj9b4eu4115rnjg5kx9ide0smd8w7';
+      authtoken = `Bearer ${token}`;
     }
+    const token = 'kt7wj9b4eu4115rnjg5kx9ide0smd8w7';
+    authtoken = `Bearer ${token}`;
     return new Promise(function (resolve, reject) {
       var url = baseUrl + name + "?" + queryString;
       if (method === undefined) {
@@ -39,7 +43,7 @@ class API {
           method: method,
           url: url,
           data: postData,
-          headers: { "Content-Type": "application/json" }
+          headers: { "Content-Type": "application/json", 'Authorization': authtoken }
         })
         .then(async response => {
           if (processResponse) {

@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 // import PropTypes from "prop-types";
 
 import Header from '../../containers/partials/header';
-import Sidebar from '../../containers/partials/sidebar';
-import Footer from '../../containers/partials/footer';
+// import Sidebar from '../../containers/partials/sidebar';
+// import Footer from '../../containers/partials/footer';
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
   <Route

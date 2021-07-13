@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { connect } from "react-redux";
-// import IntlMessages from "../../components/utility/intlMessages";
 import actions from "../../redux/languageSwitcher/actions";
-// import config from "./config";
 import { Link } from "react-router-dom";
 import { setCookie } from "../../helpers/session";
+import { LanguageContext } from "../../languageContext";
 const { changeLanguage } = actions;
+
 function LanguageSwitcher(props) {
-  const { language, changeLanguage } = props;
-  // console.log(language)
-  useEffect(() => {
-    if (language) {
-      setCookie("currentLanguage", language)
-    } else {
-      setCookie("currentLanguage", 'english')
-    }
-  }, [language]);
+  const { setValue } = useContext(LanguageContext)
+  const handleChange = (lang: string) => {
+    setCookie("currentLanguage", lang)
+    setValue(lang);
+  }
   return (
     <li className="lang-sec"><Link to={"#"} onClick={() => {
-      changeLanguage('english');
+      handleChange('english');
     }} >En</Link>
       <Link to={"#"} onClick={() => {
-        changeLanguage('arabic');
+        handleChange('arabic');
       }}>
         <svg xmlns="http://www.w3.org/2000/svg" width="31" height="19" viewBox="0 0 31 19">
           <g id="Component_82_1" data-name="Component 82 – 1" transform="translate(0 2)">
@@ -36,14 +32,7 @@ function LanguageSwitcher(props) {
   );
 }
 
-
-
-// const mapStateToProps = state => ({
-//   console.log(state)
-//   ...state.current
-// });
 function mapStateToProps(state) {
-  // console.log(state.LanguageSwitcher.language);
   return state.LanguageSwitcher
 
 }

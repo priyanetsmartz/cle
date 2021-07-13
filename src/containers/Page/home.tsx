@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-import { Pages } from '../../redux/pages/pages';
+import { Pages,Pages1 } from '../../redux/pages/pages';
 import homeBg from "../../image/home-watch-bg.png";
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,8 @@ function Home() {
         console.log('ggg');
         async function fetchMyAPI() {
             let result = Pages("about-us");
-            console.log(result);
+           // let result1 = Pages1("about-us");
+           // console.log(result);
         }
         fetchMyAPI()
 

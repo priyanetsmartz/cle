@@ -1,7 +1,7 @@
 import actions from './actions';
-
+import config from '../../containers/LanguageSwitcher/config';
 const initState = {
-    language: 'english'
+    language: config.defaultLanguage
 };
 export default function LanguageReducer(state = initState, action) {
     switch (action.type) {

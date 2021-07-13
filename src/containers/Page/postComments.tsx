@@ -19,7 +19,7 @@ function PostComment(props) {
     const handleSubmitClick = (e) => {
         e.preventDefault();
         const { postComment } = props;
-        if (state.name != '' || state.email != '' || state.comment != '') {
+        if (state.name !== '' || state.email !== '' || state.comment !== '') {
 
             const userInfo = {
                 "name": state.name,

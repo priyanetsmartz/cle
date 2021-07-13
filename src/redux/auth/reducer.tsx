@@ -14,6 +14,8 @@ export default function authReducer(state = initState, action) {
       return initState;
     case actions.REGISTER_REQUEST:
       return { ...state, loading: true };
+    case actions.REGISTER_ERROR:
+      return { ...state, loading: false };
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 {
   "title": "كلي اللغة الإنجليزية",
-  "menu_Aboutus":"حول CLé",
-  "menu_Magazine":"مجلة",
+  "menu_Aboutus": "حول CLé",
+  "menu_Magazine": "مجلة",
   "menu_Partnership": "شراكة",
   "menu_Sign_in": "تسجيل الدخول",
   "menu_SignUp": "إنشاء حساب",
@@ -9,6 +9,14 @@
   "menu_checkus": "تحقق من لنا",
   "menu_contact": "اتصال",
   "menu_findus": "تجدنا",
-  "menu_newhere":"جديد هنا؟"
-  
+  "menu_newhere": "جديد هنا؟",
+  "login.email": "اسم المستخدم",
+  "login.password": "كلمه السر",
+  "login.button": "تسجيل الدخول",
+  "register.email": "بريد إلكتروني",
+  "login.RememberMe": "تذكرنى",
+  "register.password": "كلمه السر",
+  "register.confirmPassword": "تأكيد كلمة المرور",
+  "register.button": "اشتراك",
+  "logout": "تسجيل خروج"
 }
