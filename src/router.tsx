@@ -8,7 +8,8 @@ import NotFound from './containers/Page/404';
 import SignIn from './containers/Page/signin';
 import Magazine from './containers/Page/magazine';
 import ForgottenPassword from './containers/Page/forgotPassword';
-import PostComment from './containers/Page/postComments'
+import PostComment from './containers/Page/postComments';
+import AboutUs from './containers/Page/aboutUs';
 
 import PrivateRoute from "./components/private-route/PrivateRoute";
 
@@ -35,6 +36,8 @@ const PublicRoutes = ({ history }) => {
           <Route exact path="/post-comment">
             <PostComment />
           </Route>
+          
+          <PrivateRoute exact path="/about-us" component={AboutUs} />
 
           <Route component={NotFound} />
           {/* <RestrictedRoute+

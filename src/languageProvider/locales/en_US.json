@@ -18,5 +18,13 @@
   "register.password": "Password",
   "register.confirmPassword": "Confirm Password",
   "register.button": "Signup",
-  "logout": "Logout"
+  "logout": "Logout",
+  "forgot_pass": "Forgot Password",
+  "email_address": "Email Address",
+  "retrieve_password": "Retrieve Password",
+  "magazine_page": "Magazine Page",
+  "post_comments": "Post Comments",
+  "full_name": "Full Name",
+  "comment": "Comment",
+  "submit": "Submit"
 }

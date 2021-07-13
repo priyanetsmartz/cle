@@ -18,5 +18,13 @@
   "register.password": "كلمه السر",
   "register.confirmPassword": "تأكيد كلمة المرور",
   "register.button": "اشتراك",
-  "logout": "تسجيل خروج"
+  "logout": "تسجيل خروج",
+  "forgot_pass":"هل نسيت كلمة السر",
+  "email_address":"عنوان البريد الإلكتروني",
+  "retrieve_password":"استرجاع كلمة المرور",
+  "magazine_page":"صفحة المجلة",
+  "post_comments":"اكتب تعليقا",
+  "full_name":"الاسم بالكامل",
+  "comment":"تعليق",
+  "submit":"إرسال"  
 }
