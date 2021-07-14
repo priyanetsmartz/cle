@@ -26,5 +26,19 @@
   "post_comments":"اكتب تعليقا",
   "full_name":"الاسم بالكامل",
   "comment":"تعليق",
-  "submit":"إرسال"  
+  "submit":"إرسال",
+  "signup.sign_up":"اشتراك",
+  "signup.be_the_first_one":"وكن أول من يعرف عن إطلاقنا",
+  "signup.type":"يكتب",
+  "signup.or":"أو",
+  "signup.continue_google":"تواصل مع Google ",
+  "signup.continue_facebook":"تواصل مع Facebook",
+  "signup.continue_apple":"تواصل مع Apple",
+  "signup.by_registering_you_agree":"بالتسجيل فإنك توافق على",
+  "signup.terms_conditions":"البنود و الظروف",
+  "signup.and":"و",
+  "signup.privacy_policy":"سياسة الخصوصية",
+  "signup.member_sign_in":"عضو تسجيل الدخول",
+  "signup.become_partner":"كن شريكا"  ,
+  "aboutus.sign_up_now":"أفتح حساب الأن"
 }

@@ -4,8 +4,12 @@ import { Pages } from '../../redux/pages/pages';
 import aboutUs from "../../image/about-Picture.png";
 import CleLogoBlack from "../../image/CLE-logo-black.svg";
 import SignUp from './signup';
+import { connect } from "react-redux";
+import authAction from "../../redux/auth/actions";
 
-function AboutUs() {
+const { closeSignUp } = authAction;
+
+function AboutUs(props) {
 
     const [isModel, setISModel] = useState(false);
 
@@ -17,6 +21,11 @@ function AboutUs() {
         }
         // fetchMyAPI()
     }, [])
+
+    useEffect(() => {
+        // console.log(props.data.Auth.signUpModelOpen);
+        // setISModel(props.data.Auth.signUpModelOpen);
+    });
 
     const modelOpen = (e) => {
         e.preventDefault();
@@ -51,12 +60,12 @@ function AboutUs() {
                         </div>
                         <div className="col-md-4 offset-md-1">
                             <div className="about-content">
-                                <h3>About CLé</h3>
+                                <h3><IntlMessages id="menu_Aboutus" /></h3>
                                 <p>Discover the CLé fashion point of view with our edit of over 650+ established and innovative designers,
                                     from Prada, Gucci and Balenciaga to Saint Laurent, Halpern and Wales Bonner. We aim to be the most personal
                                     luxury shopping experience in the world – whether you join us online, via our app or at our pioneering
                                     retail and broadcasting destination.</p>
-                                <a className="signup-btn" onClick={modelOpen}>Sign up Now</a>
+                                <a className="signup-btn" onClick={modelOpen}><IntlMessages id="aboutus.sign_up_now" /></a>
                             </div>
                         </div>
                     </div>
@@ -73,4 +82,11 @@ function AboutUs() {
     );
 }
 
-export default AboutUs;
+const mapStateToProps = state => ({
+    data: state,
+});
+
+export default connect(
+    mapStateToProps,
+    { closeSignUp }
+)(AboutUs);

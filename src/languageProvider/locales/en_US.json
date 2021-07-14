@@ -26,5 +26,19 @@
   "post_comments": "Post Comments",
   "full_name": "Full Name",
   "comment": "Comment",
-  "submit": "Submit"
+  "submit": "Submit",
+  "signup.sign_up":"Sign Up",
+  "signup.be_the_first_one":"& be the first one to know about our launch",
+  "signup.type":"Type",
+  "signup.or":"Or",
+  "signup.continue_google":"Continue with Google",
+  "signup.continue_facebook":"Continue with Facebook",
+  "signup.continue_apple":"Continue with Apple",
+  "signup.by_registering_you_agree":"By registering you agree with our",
+  "signup.terms_conditions":"Terms & Conditions",
+  "signup.and":"and",
+  "signup.privacy_policy":"Privacy Policy",
+  "signup.member_sign_in":"Member Sign In",
+  "signup.become_partner":"Become Partner",
+  "aboutus.sign_up_now":"Sign up Now"
 }

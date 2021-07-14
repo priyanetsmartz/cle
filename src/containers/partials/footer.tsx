@@ -10,10 +10,7 @@ function Footer(props) {
     const [isModel, setISModel] = useState(false);
 
     useEffect(() => {
-        console.log('FOOTER : ', props.data.Auth.signUpModelOpen);
-        if(props.data.Auth.signUpModelOpen){
-            setISModel(true);
-        }
+        setISModel(props.data.Auth.signUpModelOpen);
     });
 
 

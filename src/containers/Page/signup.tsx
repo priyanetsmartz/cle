@@ -25,6 +25,8 @@ function RegistrationForm(props) {
         errors: {}
     });
     const [types, SetTypes] = useState([])
+    const [isPass, setIsPass] = useState(false);
+    const [isConfirmPass, setIsConfirmPass] = useState(false);
     interface customerType {
         items?: {
             code?: string
@@ -128,7 +130,17 @@ function RegistrationForm(props) {
     const closePopUp = (e) => {
         e.preventDefault();
         const { closeSignUp } = props;
-        closeSignUp({val:false})
+        closeSignUp({ val: false });
+    }
+
+    const togglePassField = (type:boolean) => {
+        setIsPass(type);
+        document.getElementById('password').attributes["type"].value = type ? "text" : "password";
+    }
+
+    const toggleConfirmPassField = (type:boolean) => {
+        setIsConfirmPass(type);
+        document.getElementById('confirmPassword').attributes["type"].value =  type ? "text" : "password";
     }
 
     // const signup = (res) => {
@@ -169,8 +181,8 @@ function RegistrationForm(props) {
                     <button type="button" className="btn-close" onClick={closePopUp} aria-label="Close" ></button>
                 </div>
                 <div className="modal-body signup_inner">
-                    <h2>Sign Up</h2>
-                    <p>& be the first one to know about our launch</p>
+                    <h2><IntlMessages id="signup.sign_up" /></h2>
+                    <p><IntlMessages id="signup.be_the_first_one" /></p>
                     <div className="row g-3">
                         <div className="col-sm-12">
                             <input type="text" className="form-control" placeholder="Email Address*" aria-label="Email" id="email"
@@ -186,11 +198,13 @@ function RegistrationForm(props) {
                                 onChange={handleChange} />
                             {/* <span className="error">{errors.errors["password"]}</span> */}
                             <span className="input-group-text" id="basic-addon2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22.869" height="18.296" viewBox="0 0 22.869 18.296">
+                            {isPass && <svg onClick={() => togglePassField(false)} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z"/></svg>}
+                                {!isPass && <svg onClick={() => togglePassField(true)} xmlns="http://www.w3.org/2000/svg" width="22.869" height="18.296" viewBox="0 0 22.869 18.296">
                                     <path id="eye"
                                         d="M11.436,14.29A5.126,5.126,0,0,1,6.33,9.534l-3.748-2.9A11.91,11.91,0,0,0,1.269,8.623a1.156,1.156,0,0,0,0,1.043,11.461,11.461,0,0,0,10.167,6.339,11.1,11.1,0,0,0,2.783-.374L12.365,14.2a5.151,5.151,0,0,1-.929.093ZM22.65,16.366,18.7,13.313a11.837,11.837,0,0,0,2.9-3.647,1.156,1.156,0,0,0,0-1.043A11.461,11.461,0,0,0,11.436,2.284,11.011,11.011,0,0,0,6.172,3.631L1.626.117a.572.572,0,0,0-.8.1l-.7.9a.572.572,0,0,0,.1.8L21.246,18.172a.572.572,0,0,0,.8-.1l.7-.9A.572.572,0,0,0,22.65,16.366Zm-6.565-5.074-1.4-1.086a3.386,3.386,0,0,0-4.149-4.357,1.7,1.7,0,0,1,.333,1.008,1.667,1.667,0,0,1-.055.357L8.179,5.182A5.085,5.085,0,0,1,11.436,4a5.143,5.143,0,0,1,5.146,5.146,5.024,5.024,0,0,1-.5,2.148Z"
                                         transform="translate(-0.001 0.003)" opacity="0.33" />
-                                </svg>
+                                </svg>}
                             </span>
                         </div>
                         <div className="input-group col-sm-12">
@@ -200,15 +214,16 @@ function RegistrationForm(props) {
                                 onChange={handleChange} />
                             {/* <span className="error">{errors.errors["confirmPassword"]}</span> */}
                             <span className="input-group-text" id="basic-addon2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22.869" height="18.296" viewBox="0 0 22.869 18.296">
+                                {isConfirmPass && <svg onClick={() => toggleConfirmPassField(false)} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z"/></svg>}
+                                {!isConfirmPass && <svg onClick={() => toggleConfirmPassField(true)} xmlns="http://www.w3.org/2000/svg" width="22.869" height="18.296" viewBox="0 0 22.869 18.296">
                                     <path id="eye"
                                         d="M11.436,14.29A5.126,5.126,0,0,1,6.33,9.534l-3.748-2.9A11.91,11.91,0,0,0,1.269,8.623a1.156,1.156,0,0,0,0,1.043,11.461,11.461,0,0,0,10.167,6.339,11.1,11.1,0,0,0,2.783-.374L12.365,14.2a5.151,5.151,0,0,1-.929.093ZM22.65,16.366,18.7,13.313a11.837,11.837,0,0,0,2.9-3.647,1.156,1.156,0,0,0,0-1.043A11.461,11.461,0,0,0,11.436,2.284,11.011,11.011,0,0,0,6.172,3.631L1.626.117a.572.572,0,0,0-.8.1l-.7.9a.572.572,0,0,0,.1.8L21.246,18.172a.572.572,0,0,0,.8-.1l.7-.9A.572.572,0,0,0,22.65,16.366Zm-6.565-5.074-1.4-1.086a3.386,3.386,0,0,0-4.149-4.357,1.7,1.7,0,0,1,.333,1.008,1.667,1.667,0,0,1-.055.357L8.179,5.182A5.085,5.085,0,0,1,11.436,4a5.143,5.143,0,0,1,5.146,5.146,5.024,5.024,0,0,1-.5,2.148Z"
                                         transform="translate(-0.001 0.003)" opacity="0.33" />
-                                </svg>
+                                </svg>}
                             </span>
                         </div>
                         <div className="col-sm-12">
-                            <label htmlFor="type">Type</label>
+                            <label htmlFor="type"><IntlMessages id="signup.type" /></label>
                             <select value={state.type} onChange={selectType}>
                                 <option key="-1" value="--">---</option>
                                 {types.map(item => {
@@ -219,11 +234,11 @@ function RegistrationForm(props) {
                         </div>
 
                         <div className="d-grid gap-2">
-                            <a className="signup-btn" onClick={handleSubmitClick}>Sign up</a>
+                            <a className="signup-btn" onClick={handleSubmitClick}><IntlMessages id="signup.sign_up" /></a>
                         </div>
                     </div>
                     <div className="or-bg">
-                        <div className="or-text">Or</div>
+                        <div className="or-text"><IntlMessages id="signup.sign_up" /></div>
                     </div>
                     <div className="social-login">
                         <GoogleLogin
@@ -245,7 +260,7 @@ function RegistrationForm(props) {
                                             d="M22.412,3.673a5.265,5.265,0,0,1,3.673,1.414L28.766,2.47A9.127,9.127,0,0,0,22.412,0a9.493,9.493,0,0,0-8.487,5.236L17,7.621a5.743,5.743,0,0,1,5.415-3.948"
                                             transform="translate(-12.912)" fill="#EB4335" />
                                     </svg>
-                                    Continue with Google</a>
+                                    <IntlMessages id="signup.continue_google" /></a>
                             )}
                             buttonText="Login"
                             onSuccess={responseGoogle}
@@ -266,15 +281,15 @@ function RegistrationForm(props) {
                                             d="M16.883,7.758a9.415,9.415,0,0,1,4.8,1.3,9.6,9.6,0,0,1,2.4,14.494,9.68,9.68,0,0,1-5.361,3.2V19.929h1.863L21,17.245H18.181V15.488a1.528,1.528,0,0,1,.325-1.009,1.486,1.486,0,0,1,1.192-.453h1.7V11.674q-.037-.012-.7-.093a13.83,13.83,0,0,0-1.5-.093,3.75,3.75,0,0,0-2.694.961A3.714,3.714,0,0,0,15.5,15.206v2.039H13.35v2.684H15.5v6.829a9.447,9.447,0,0,1-5.81-3.2,9.585,9.585,0,0,1,2.4-14.494,9.418,9.418,0,0,1,4.8-1.3Z"
                                             transform="translate(-7.383 -7.758)" fill="#3B5998" fillRule="evenodd" />
                                     </svg>
-                                    Continue with Facebook</a>
+                                    <IntlMessages id="signup.continue_facebook" /></a>
                             )}
                         />
                     </div>
-                    <p className="signup-policy-links">By registering you agree with our <a href="">Terms & Conditions</a> and <a
-                        href="">Privacy Policy</a>.</p>
+                    <p className="signup-policy-links"><IntlMessages id="signup.by_registering_you_agree" /> <a href=""><IntlMessages id="signup.terms_conditions" /></a> <IntlMessages id="signup.and" /> <a
+                        href=""><IntlMessages id="signup.privacy_policy" /></a>.</p>
                 </div>
                 <div className="modal-footer signup_footer">
-                    <a href="" className="sign-in-M">Member Sign In</a><a href="" className="B-partner">Become Partner</a>
+                    <a href="" className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></a><a href="" className="B-partner"><IntlMessages id="signup.become_partner" /></a>
                 </div>
             </div>
         </div>
@@ -291,5 +306,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { register }
+    { register,closeSignUp }
 )(RegistrationForm);
