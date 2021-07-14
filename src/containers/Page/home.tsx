@@ -130,9 +130,9 @@ function Home(props) {
                     </svg>
 
                 </figure>
-                {/* <div className="position-absolute mx-auto sign-up-btn">
+                <div className="position-absolute mx-auto sign-up-btn">
                     <Link className="" to={"#"} onClick={() => { handleClick(); }} role="button"><IntlMessages id="sign_up_now" /></Link>
-                </div> */}
+                </div>
             </div>
         </div>
     );

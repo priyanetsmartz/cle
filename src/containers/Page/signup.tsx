@@ -10,7 +10,7 @@ import authAction from "../../redux/auth/actions";
 import notification from '../../components/notification';
 import Login from "../../redux/auth/Login";
 import CleLogoBlack from "../../image/CLE-logo-black.svg";
-const { register } = authAction;
+const { register, closeSignUp } = authAction;
 const loginApi = new Login();
 
 function RegistrationForm(props) {
@@ -125,6 +125,12 @@ function RegistrationForm(props) {
         console.log(response);
     }
 
+    const closePopUp = (e) => {
+        e.preventDefault();
+        const { closeSignUp } = props;
+        closeSignUp({val:false})
+    }
+
     // const signup = (res) => {
     //    // console.log(res);
     //     const googleresponse = {
@@ -156,67 +162,50 @@ function RegistrationForm(props) {
     // const [codeString, setCodeString] = useState('');
 
     return (
-        <div className="modal-1 signup-Modal" id="signUpModal" tabIndex={-1} aria-labelledby="signUpModalLabel"
-            aria-hidden="true">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <img src={CleLogoBlack} />
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-                    </div>
-                    <div className="modal-body signup_inner">
-                        <h2>Sign Up</h2>
-                        <p>& be the first one to know about our launch</p>
-                        <div className="row g-3">
-                            <div className="col-sm-12">
-                                <input type="text" className="form-control" placeholder="Email Address*" aria-label="Email" id="email"
-                                    aria-describedby="emailHelp"
-                                    value={state.email}
-                                    onChange={handleChange} />
-                                <span className="error">{errors.errors["email"]}</span>
-                            </div>
-                            <div className="input-group col-sm-12">
-                                <input type="password" className="form-control" placeholder="Create Password* (Min 6 Character)"
-                                    aria-label="Create Password" aria-describedby="basic-addon2" id="password"
-                                    value={state.password}
-                                    onChange={handleChange} />
-                                <span className="error">{errors.errors["password"]}</span>
-                                <span className="input-group-text" id="basic-addon2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22.869" height="18.296" viewBox="0 0 22.869 18.296">
-                                        <path id="eye"
-                                            d="M11.436,14.29A5.126,5.126,0,0,1,6.33,9.534l-3.748-2.9A11.91,11.91,0,0,0,1.269,8.623a1.156,1.156,0,0,0,0,1.043,11.461,11.461,0,0,0,10.167,6.339,11.1,11.1,0,0,0,2.783-.374L12.365,14.2a5.151,5.151,0,0,1-.929.093ZM22.65,16.366,18.7,13.313a11.837,11.837,0,0,0,2.9-3.647,1.156,1.156,0,0,0,0-1.043A11.461,11.461,0,0,0,11.436,2.284,11.011,11.011,0,0,0,6.172,3.631L1.626.117a.572.572,0,0,0-.8.1l-.7.9a.572.572,0,0,0,.1.8L21.246,18.172a.572.572,0,0,0,.8-.1l.7-.9A.572.572,0,0,0,22.65,16.366Zm-6.565-5.074-1.4-1.086a3.386,3.386,0,0,0-4.149-4.357,1.7,1.7,0,0,1,.333,1.008,1.667,1.667,0,0,1-.055.357L8.179,5.182A5.085,5.085,0,0,1,11.436,4a5.143,5.143,0,0,1,5.146,5.146,5.024,5.024,0,0,1-.5,2.148Z"
-                                            transform="translate(-0.001 0.003)" opacity="0.33" />
-                                    </svg>
-                                </span>
-                            </div>
-                            <div className="input-group col-sm-12">
-                                <input type="password" className="form-control" placeholder="Confirm Password* (Min 6 Character)"
-                                    aria-label="Confirm Password" aria-describedby="basic-addon2" id="confirmPassword"
-                                    value={state.confirmPassword}
-                                    onChange={handleChange} />
-                                <span className="error">{errors.errors["confirmPassword"]}</span>
-                                <span className="input-group-text" id="basic-addon2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22.869" height="18.296" viewBox="0 0 22.869 18.296">
-                                        <path id="eye"
-                                            d="M11.436,14.29A5.126,5.126,0,0,1,6.33,9.534l-3.748-2.9A11.91,11.91,0,0,0,1.269,8.623a1.156,1.156,0,0,0,0,1.043,11.461,11.461,0,0,0,10.167,6.339,11.1,11.1,0,0,0,2.783-.374L12.365,14.2a5.151,5.151,0,0,1-.929.093ZM22.65,16.366,18.7,13.313a11.837,11.837,0,0,0,2.9-3.647,1.156,1.156,0,0,0,0-1.043A11.461,11.461,0,0,0,11.436,2.284,11.011,11.011,0,0,0,6.172,3.631L1.626.117a.572.572,0,0,0-.8.1l-.7.9a.572.572,0,0,0,.1.8L21.246,18.172a.572.572,0,0,0,.8-.1l.7-.9A.572.572,0,0,0,22.65,16.366Zm-6.565-5.074-1.4-1.086a3.386,3.386,0,0,0-4.149-4.357,1.7,1.7,0,0,1,.333,1.008,1.667,1.667,0,0,1-.055.357L8.179,5.182A5.085,5.085,0,0,1,11.436,4a5.143,5.143,0,0,1,5.146,5.146,5.024,5.024,0,0,1-.5,2.148Z"
-                                            transform="translate(-0.001 0.003)" opacity="0.33" />
-                                    </svg>
-                                </span>
-                            </div>
-                            <div className="col-sm-12">
-                                <label htmlFor="type">Type</label>
-                                <select value={state.type} onChange={selectType}>
-                                    <option key="-1" value="--">---</option>
-                                    {types.map(item => {
-                                        return (<option key={item.id} value={item.id}>{item.code}</option>);
-                                    })}
-                                </select>
-                                <span className="error">{errors.errors["type"]}</span>
-                            </div>
-
-                            <div className="d-grid gap-2">
-                                <a className="signup-btn" onClick={handleSubmitClick}>Sign up</a>
-                            </div>
+        <div className="modal-dialog">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <img src={CleLogoBlack} />
+                    <button type="button" className="btn-close" onClick={closePopUp} aria-label="Close" ></button>
+                </div>
+                <div className="modal-body signup_inner">
+                    <h2>Sign Up</h2>
+                    <p>& be the first one to know about our launch</p>
+                    <div className="row g-3">
+                        <div className="col-sm-12">
+                            <input type="text" className="form-control" placeholder="Email Address*" aria-label="Email" id="email"
+                                aria-describedby="emailHelp"
+                                value={state.email}
+                                onChange={handleChange} />
+                            {/* <span className="error">{errors.errors["email"]}</span> */}
+                        </div>
+                        <div className="input-group col-sm-12">
+                            <input type="password" className="form-control" placeholder="Create Password* (Min 6 Character)"
+                                aria-label="Create Password" aria-describedby="basic-addon2" id="password"
+                                value={state.password}
+                                onChange={handleChange} />
+                            {/* <span className="error">{errors.errors["password"]}</span> */}
+                            <span className="input-group-text" id="basic-addon2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22.869" height="18.296" viewBox="0 0 22.869 18.296">
+                                    <path id="eye"
+                                        d="M11.436,14.29A5.126,5.126,0,0,1,6.33,9.534l-3.748-2.9A11.91,11.91,0,0,0,1.269,8.623a1.156,1.156,0,0,0,0,1.043,11.461,11.461,0,0,0,10.167,6.339,11.1,11.1,0,0,0,2.783-.374L12.365,14.2a5.151,5.151,0,0,1-.929.093ZM22.65,16.366,18.7,13.313a11.837,11.837,0,0,0,2.9-3.647,1.156,1.156,0,0,0,0-1.043A11.461,11.461,0,0,0,11.436,2.284,11.011,11.011,0,0,0,6.172,3.631L1.626.117a.572.572,0,0,0-.8.1l-.7.9a.572.572,0,0,0,.1.8L21.246,18.172a.572.572,0,0,0,.8-.1l.7-.9A.572.572,0,0,0,22.65,16.366Zm-6.565-5.074-1.4-1.086a3.386,3.386,0,0,0-4.149-4.357,1.7,1.7,0,0,1,.333,1.008,1.667,1.667,0,0,1-.055.357L8.179,5.182A5.085,5.085,0,0,1,11.436,4a5.143,5.143,0,0,1,5.146,5.146,5.024,5.024,0,0,1-.5,2.148Z"
+                                        transform="translate(-0.001 0.003)" opacity="0.33" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div className="input-group col-sm-12">
+                            <input type="password" className="form-control" placeholder="Confirm Password* (Min 6 Character)"
+                                aria-label="Confirm Password" aria-describedby="basic-addon2" id="confirmPassword"
+                                value={state.confirmPassword}
+                                onChange={handleChange} />
+                            {/* <span className="error">{errors.errors["confirmPassword"]}</span> */}
+                            <span className="input-group-text" id="basic-addon2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22.869" height="18.296" viewBox="0 0 22.869 18.296">
+                                    <path id="eye"
+                                        d="M11.436,14.29A5.126,5.126,0,0,1,6.33,9.534l-3.748-2.9A11.91,11.91,0,0,0,1.269,8.623a1.156,1.156,0,0,0,0,1.043,11.461,11.461,0,0,0,10.167,6.339,11.1,11.1,0,0,0,2.783-.374L12.365,14.2a5.151,5.151,0,0,1-.929.093ZM22.65,16.366,18.7,13.313a11.837,11.837,0,0,0,2.9-3.647,1.156,1.156,0,0,0,0-1.043A11.461,11.461,0,0,0,11.436,2.284,11.011,11.011,0,0,0,6.172,3.631L1.626.117a.572.572,0,0,0-.8.1l-.7.9a.572.572,0,0,0,.1.8L21.246,18.172a.572.572,0,0,0,.8-.1l.7-.9A.572.572,0,0,0,22.65,16.366Zm-6.565-5.074-1.4-1.086a3.386,3.386,0,0,0-4.149-4.357,1.7,1.7,0,0,1,.333,1.008,1.667,1.667,0,0,1-.055.357L8.179,5.182A5.085,5.085,0,0,1,11.436,4a5.143,5.143,0,0,1,5.146,5.146,5.024,5.024,0,0,1-.5,2.148Z"
+                                        transform="translate(-0.001 0.003)" opacity="0.33" />
+                                </svg>
+                            </span>
                         </div>
                         <div className="or-bg">
                             <div className="or-text">Or</div>

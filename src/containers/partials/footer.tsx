@@ -10,8 +10,9 @@ import { getCookie } from '../../helpers/session';
 import { Link } from "react-router-dom";
 import history from '../Page/history';
 import { Checkbox } from 'antd';
+import SignUp from '../Page/signup';
 
-const { login, logout } = authAction;
+const { login, logout, closeSignUp } = authAction;
 function Footer(props) {
     const [state, setState] = useState({
         email: "",
@@ -20,13 +21,28 @@ function Footer(props) {
     const [errors, setError] = useState({
         errors: {}
     });
-
+    const [isModel, setISModel] = useState(false);
+    const [passwordShown, setPasswordShown] = useState(false);
+    const { closeSignUp } = authAction;
     const [rememberMe, setRememberMe] = useState(false);
+
+
+    const handleSignUpClose = (e) => {
+        e.preventDefault();
+        const { closeSignUp } = props;
+        setISModel(false);
+        closeSignUp({ val: false })
+    }
+
+
 
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         setIsLoaded(props.showLogin)
+        if (props && props.data && props.data.Auth.signUpModelOpen) {
+            setISModel(true);
+        }
     })
 
     useEffect(() => {
@@ -91,7 +107,7 @@ function Footer(props) {
         // }
         if (!state["email"]) {
             formIsValid = false;
-            error["email"] = "Username is required";
+            error["email"] = "Email Address is required";
         }
 
         //email
@@ -103,8 +119,12 @@ function Footer(props) {
         return formIsValid;
     }
 
-    const hideModal = () => {      
+    const hideModal = () => {
         setIsLoaded(false);
+    };
+
+    const togglePasswordVisiblity = () => {
+        setPasswordShown(passwordShown ? false : true);
     };
 
     return (
@@ -128,15 +148,16 @@ function Footer(props) {
                             <span className="error">{errors.errors["email"]}</span>
                         </div>
                         <div className="input-group col-sm-12">
-                            <input type="password"
+                            <input type={passwordShown ? "text" : "password"}
                                 className="form-control"
                                 id="password"
                                 placeholder="Create Password* (Min 6 Character)"
                                 value={state.password}
                                 onChange={handleChange}
+                                aria-describedby="basic-addon2"
                             />
                             {/* <input type="text" className="form-control" placeholder="Create Password* (Min 6 Character)" aria-label="Create Password" aria-describedby="basic-addon2" /> */}
-                            <span className="input-group-text" id="basic-addon2">
+                            <span className="input-group-text" id="basic-addon2" onClick={togglePasswordVisiblity}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22.869" height="18.296" viewBox="0 0 22.869 18.296">
                                     <path id="eye" d="M11.436,14.29A5.126,5.126,0,0,1,6.33,9.534l-3.748-2.9A11.91,11.91,0,0,0,1.269,8.623a1.156,1.156,0,0,0,0,1.043,11.461,11.461,0,0,0,10.167,6.339,11.1,11.1,0,0,0,2.783-.374L12.365,14.2a5.151,5.151,0,0,1-.929.093ZM22.65,16.366,18.7,13.313a11.837,11.837,0,0,0,2.9-3.647,1.156,1.156,0,0,0,0-1.043A11.461,11.461,0,0,0,11.436,2.284,11.011,11.011,0,0,0,6.172,3.631L1.626.117a.572.572,0,0,0-.8.1l-.7.9a.572.572,0,0,0,.1.8L21.246,18.172a.572.572,0,0,0,.8-.1l.7-.9A.572.572,0,0,0,22.65,16.366Zm-6.565-5.074-1.4-1.086a3.386,3.386,0,0,0-4.149-4.357,1.7,1.7,0,0,1,.333,1.008,1.667,1.667,0,0,1-.055.357L8.179,5.182A5.085,5.085,0,0,1,11.436,4a5.143,5.143,0,0,1,5.146,5.146,5.024,5.024,0,0,1-.5,2.148Z" transform="translate(-0.001 0.003)" opacity="0.33" />
                                 </svg>
@@ -183,6 +204,11 @@ function Footer(props) {
                     <p className="signup-policy-links">By registering you agree with our <a href="">Terms & Conditions</a> and <a href="">Privacy Policy</a>.</p></Modal.Body>
                 <Modal.Footer> <a href="" className="sign-in-M">Member Sign In</a><a href="" className="B-partner">Become Partner</a></Modal.Footer>
             </Modal>
+
+            {isModel && (<div className="modal-1 signup-Modal" id="signUpModal" tabIndex={-1} aria-labelledby="signUpModalLabel"
+                aria-hidden="true">
+                <SignUp />
+            </div>)}
         </>
     );
 }
@@ -192,12 +218,11 @@ function mapStateToProps(state) {
     if (state && state.App) {
         showLogin = state.App.showLogin
     }
-    console.log(showLogin);
     return {
         showLogin: showLogin
     }
 };
 export default connect(
     mapStateToProps,
-    { login }
+    { login, closeSignUp }
 )(Footer);
