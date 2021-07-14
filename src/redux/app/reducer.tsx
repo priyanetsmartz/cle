@@ -9,7 +9,7 @@ const initState = {
   height: window.innerHeight,
   openDrawer: false,
   // openKeys: preKeys,
-  // current: preKeys
+  showLogin: false
 };
 export default function appReducer(state = initState, action) {
   switch (action.type) {
@@ -34,6 +34,8 @@ export default function appReducer(state = initState, action) {
       return { ...state, current: action.current };
     case actions.CLOSE_ALL:
       return { ...state, current: [], openKeys: [] };
+    case actions.SHOW_SIGHNIN:
+      return { ...state, showLogin: action.showLogin };
     default:
       return state;
   }

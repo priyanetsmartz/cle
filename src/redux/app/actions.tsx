@@ -14,6 +14,7 @@ const actions = {
   TOGGLE_ALL: 'TOGGLE_ALL',
   CHANGE_CURRENT: 'CHANGE_CURRENT',
   CLOSE_ALL: 'CLOSE_ALL',
+  SHOW_SIGHNIN: 'SHOW_SIGHNIN',
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
   }),
@@ -38,6 +39,10 @@ const actions = {
     type: actions.CHANGE_CURRENT,
     current
   }),
-  closeAll: () => ({ type: actions.CLOSE_ALL })
+  closeAll: () => ({ type: actions.CLOSE_ALL }),
+  showSignin: showLogin => ({
+    type: actions.SHOW_SIGHNIN,
+    showLogin
+  }),
 };
 export default actions;

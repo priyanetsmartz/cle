@@ -5,10 +5,13 @@ import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import { Link } from "react-router-dom";
 import LanguageSwitcher from '../../containers/LanguageSwitcher';
 import authAction from "../../redux/auth/actions";
+import appAction from "../../redux/app/actions";
 import { siteConfig } from '../../settings/';
 import Login from "../../redux/auth/Login";
 import { connect } from 'react-redux';
 const { getglobalauth } = authAction;
+const { showSignin } = appAction;
+
 const loginApi = new Login();
 
 
@@ -44,6 +47,12 @@ function Header(props) {
         e.preventDefault();
         setMenuLoaded(false)
     }
+    const handlesigninClick = () => {
+        const { showSignin } = props;      
+        showSignin(true);
+        setMenuLoaded(false)
+    }
+
     const handleClick = (popupState) => {
         setMenuLoaded(false)
         setIsLoaded(true)
@@ -99,9 +108,7 @@ function Header(props) {
                                     <li><Link to={"/"} onClick={() => {
                                         handleClick(setMenuLoaded);
                                     }} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
-                                    <li><Link to={"/signin"} onClick={() => {
-                                        handleClick(setMenuLoaded);
-                                    }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
+                                    <li><Link to={"#"} onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
                                     <li><IntlMessages id="menu_newhere" /> <Link to={"/signup"} onClick={() => {
                                         handleClick(setMenuLoaded);
                                     }} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
@@ -181,6 +188,6 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getglobalauth }
+    { getglobalauth, showSignin }
 )(Header);
 
