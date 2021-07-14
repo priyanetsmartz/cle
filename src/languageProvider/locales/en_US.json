@@ -14,6 +14,8 @@
   "login.password": "Create Password* (Min 6 Character)",
   "login.button": "Sign in",
   "login.RememberMe": "Remember Me",
+  "login.title":"Sign In",
+  "login.subtitle":"& be the first one to know about our launch",
   "register.email": "Email",
   "register.password": "Password",
   "register.confirmPassword": "Confirm Password",

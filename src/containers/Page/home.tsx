@@ -5,7 +5,7 @@ import appAction from "../../redux/app/actions";
 import homeBg from "../../image/home-watch-bg.png";
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
-const { showSignin } = appAction;
+const { openSignUp } = appAction;
 
 function Home(props) {
     useEffect(() => {
@@ -19,8 +19,8 @@ function Home(props) {
 
     }, [])
     const handleClick = () => {
-        const { showSignin } = props;
-        showSignin(true);
+        const { openSignUp } = props;
+        openSignUp(true);
     }
 
     return (
@@ -138,17 +138,16 @@ function Home(props) {
     );
 }
 function mapStateToProps(state) {
-    let login = '';
+    let signupModel = '';
     if (state && state.App) {
-        login = state.App.showLogin
+        signupModel = state.App.showSignUp
     }
-    // console.log(login);
     return {
-        login: login
+        signupModel: signupModel
     };
 };
 export default connect(
     mapStateToProps,
-    { showSignin }
+    { openSignUp }
 )(Home);
 
