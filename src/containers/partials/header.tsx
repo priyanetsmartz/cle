@@ -4,8 +4,12 @@ import logo from "../../image/CLE-LOGO.svg";
 import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import { Link } from "react-router-dom";
 import LanguageSwitcher from '../../containers/LanguageSwitcher';
+import authAction from "../../redux/auth/actions";
+import { connect } from "react-redux";
 
-function Header() {
+const { openSignUp } = authAction;
+
+function Header(props) {
     const [isLoaded, setIsLoaded] = useState(true);
     const [menuLoaded, setMenuLoaded] = useState(false);
 
@@ -24,6 +28,16 @@ function Header() {
         e.preventDefault();
         setMenuLoaded(false)
     }
+
+    const handleSignUp = (e) => {
+        e.preventDefault();
+        const { openSignUp } = props;
+        setMenuLoaded(false);
+        openSignUp({val:true});
+
+    }
+
+
     return (
         <>
             {isLoaded && (
@@ -70,7 +84,7 @@ function Header() {
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     <li><Link to={"/signin"} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
-                                    <li><IntlMessages id="menu_newhere" /> <Link to={"/signup"} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
+                                    <li><IntlMessages id="menu_newhere" /> <Link to={"#"} className="create-account" onClick={handleSignUp}><IntlMessages id="menu_SignUp" /></Link></li>
                                 </ul>
                             </div>
                             <div className="col-md-4">
@@ -134,4 +148,11 @@ function Header() {
     );
 }
 
-export default Header;
+
+const mapStateToProps = state => ({
+    data: state
+});
+export default connect(
+    mapStateToProps,
+    { openSignUp }
+)(Header);

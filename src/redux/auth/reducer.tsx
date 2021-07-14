@@ -16,6 +16,10 @@ export default function authReducer(state = initState, action) {
       return { ...state, loading: true };
     case actions.REGISTER_ERROR:
       return { ...state, loading: false };
+    case actions.OPEN_SIGN_UP:
+      return { signUpModelOpen: action.payload.val, };
+    case actions.OPEN_SIGN_UP:
+      return { signUpModelOpen: action.payload.val, };
     default:
       return state;
   }

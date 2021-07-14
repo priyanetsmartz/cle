@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import Header from '../../containers/partials/header';
 // import Sidebar from '../../containers/partials/sidebar';
-// import Footer from '../../containers/partials/footer';
+import Footer from '../../containers/partials/footer';
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
   <Route
@@ -16,6 +16,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
           <Header />
           {/* <Sidebar /> */}
           <Component {...props} />
+          <Footer/>
 
         </>
       ) : (

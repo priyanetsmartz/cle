@@ -10,7 +10,7 @@ import authAction from "../../redux/auth/actions";
 import notification from '../../components/notification';
 import Login from "../../redux/auth/Login";
 import CleLogoBlack from "../../image/CLE-logo-black.svg";
-const { register } = authAction;
+const { register, closeSignUp } = authAction;
 const loginApi = new Login();
 
 function RegistrationForm(props) {
@@ -125,6 +125,12 @@ function RegistrationForm(props) {
         console.log(response);
     }
 
+    const closePopUp = (e) => {
+        e.preventDefault();
+        const { closeSignUp } = props;
+        closeSignUp({val:false})
+    }
+
     // const signup = (res) => {
     //    // console.log(res);
     //     const googleresponse = {
@@ -160,7 +166,7 @@ function RegistrationForm(props) {
             <div className="modal-content">
                 <div className="modal-header">
                     <img src={CleLogoBlack} />
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                    <button type="button" className="btn-close" onClick={closePopUp} aria-label="Close" ></button>
                 </div>
                 <div className="modal-body signup_inner">
                     <h2>Sign Up</h2>
