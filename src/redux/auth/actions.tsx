@@ -16,8 +16,8 @@ const actions = {
   POST_COMMENTS: "POST_COMMENTS",
   REGISTER_REQUEST: "REGISTER_REQUEST",
   REGISTER_ERROR: "REGISTER_ERROR",
-  OPEN_SIGN_UP: "OPEN_SIGN_UP",
-  CLOSE_SIGN_UP: "CLOSE_SIGN_UP",
+  REGISTER_SUCCESS: "REGISTER_SUCCESS",
+  GET_GLOBALAUTH :"GET_GLOBALAUTH",
 
   checkAuthorization: () => ({ type: actions.CHECK_AUTHORIZATION }),
   login: (payload: Payload) => ({
@@ -39,13 +39,9 @@ const actions = {
     type: actions.REGISTER_REQUEST,
     payload
   }),
-  openSignUp: (payload) => ({
-    type: actions.OPEN_SIGN_UP,
-    payload:payload
-  }),
-  closeSignUp: (payload) => ({
-    type: actions.CLOSE_SIGN_UP,
-    payload:payload
+  getglobalauth: (payload: Payload) => ({
+    type: actions.GET_GLOBALAUTH,
+    payload
   })
 };
 

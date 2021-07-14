@@ -1,52 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import IntlMessages from "../../components/utility/intlMessages";
-import authAction from "../../redux/auth/actions";
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
+import "bootstrap/dist/css/bootstrap.min.css";
 import SignUp from '../Page/signup';
-
-const { closeSignUp } = authAction;
+import SignIn from '../Page/signin';
+// const { login, logout, } = authAction;
 
 function Footer(props) {
-    const [isModel, setISModel] = useState(false);
 
-    useEffect(() => {
-        setISModel(props.data.Auth.signUpModelOpen);
-    });
-
-
-    const handleSignUpClose = (e) => {
-        e.preventDefault();
-        const { closeSignUp } = props;
-        setISModel(false);
-        closeSignUp({val:false})
-    }
+    // const logout = () => {
+    //     // Clear access token and ID token from local storage
+    //     localStorage.removeItem('id_token');
+    //     localStorage.removeItem('expires_at');
+    //     // navigate to the home route
+    //     history.replace('/');
+    // }
 
 
     return (
         <>
-        <div className="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel">
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">
-                    <div className="modal-body">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {/* sign up modal */}
-        {isModel && (<div className="modal-1 signup-Modal" id="signUpModal" tabIndex={-1} aria-labelledby="signUpModalLabel"
-                aria-hidden="true">
-                <SignUp />
-            </div>)}
+            <SignIn showLogin={props.showLogin} />
+            <SignUp signupModel={props.signupModel} />
         </>
     );
 }
 
-const mapStateToProps = state => ({
-    data: state,
-});
-
+function mapStateToProps(state) {
+    let showLogin = '', signupModel = '';   
+    if (state && state.App) {
+        showLogin = state.App.showLogin;
+        signupModel = state.App.showSignUp
+    }
+    return {
+        showLogin: showLogin,
+        signupModel: signupModel
+    }
+};
 export default connect(
     mapStateToProps,
-    { closeSignUp }
+    {}
 )(Footer);

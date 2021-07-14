@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Pages } from '../../redux/pages/pages';
 import aboutUs from "../../image/about-Picture.png";
-import CleLogoBlack from "../../image/CLE-logo-black.svg";
-import SignUp from './signup';
 import { connect } from "react-redux";
-import authAction from "../../redux/auth/actions";
-
-const { closeSignUp } = authAction;
+import appAction from "../../redux/app/actions";
+import { Link } from "react-router-dom";
+const { openSignUp } = appAction;
 
 function AboutUs(props) {
 
@@ -22,68 +20,52 @@ function AboutUs(props) {
         // fetchMyAPI()
     }, [])
 
-    useEffect(() => {
-        // console.log(props.data.Auth.signUpModelOpen);
-        // setISModel(props.data.Auth.signUpModelOpen);
-    });
 
-    const modelOpen = (e) => {
-        e.preventDefault();
-        setISModel(true)
+    const handleClick = () => {
+        const { openSignUp } = props;
+        openSignUp(true);
     }
-
-    const modelClose = (e) => {
-        e.preventDefault();
-        setISModel(false)
-    }
-
 
     return (
-        <div style={{marginTop:'5rem'}}>
-                {/* About Us page structure  */}
-                <div className="container about-inner">
-                    <figure className="text-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
-                            <text id="About_CLé" data-name="About CLé" transform="translate(425 108)" fill="none" stroke="#2E2BAA"
-                                strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">
-                                <tspan x="-423.555" y="0">About CLÉ</tspan>
-                            </text>
-                        </svg>
-                    </figure>
-                    <div className="row my-3">
-                        <div className="col-md-5 offset-md-1">
-                            <div className="blue-back-image">
-                                <div className="about-inner-pic">
-                                    <img src={aboutUs} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-4 offset-md-1">
-                            <div className="about-content">
-                                <h3><IntlMessages id="menu_Aboutus" /></h3>
-                                <p><IntlMessages id="aboutus_para" /></p>
-                                <a className="signup-btn" onClick={modelOpen}><IntlMessages id="aboutus.sign_up_now" /></a>
-                            </div>
+        <div className="container about-inner">
+            <figure className="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
+                    <text id="About_CLé" data-name="About CLé" transform="translate(425 108)" fill="none" stroke="#2E2BAA"
+                        strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">
+                        <tspan x="-423.555" y="0">About CLÉ</tspan>
+                    </text>
+                </svg>
+            </figure>
+            <div className="row my-3">
+                <div className="col-md-5 offset-md-1">
+                    <div className="blue-back-image">
+                        <div className="about-inner-pic">
+                            <img src={aboutUs} />
                         </div>
                     </div>
                 </div>
-
-                {/* sign up modal */}
-                {isModel && (<div className="modal-1 signup-Modal" id="signUpModal" tabIndex={-1} aria-labelledby="signUpModalLabel"
-                    aria-hidden="true">
-                    <SignUp/>
-                </div>)}
-
+                <div className="col-md-4 offset-md-1">
+                    <div className="about-content">
+                        <h3><IntlMessages id="menu_Aboutus" /></h3>
+                        <p><IntlMessages id="aboutus.aboutus_para" /></p>
+                        <Link to={"#"} className="signup-btn" onClick={() => { handleClick(); }}><IntlMessages id="aboutus.sign_up_now" /></Link>
+                    </div>
+                </div>
+            </div>
         </div>
-
     );
 }
 
-const mapStateToProps = state => ({
-    data: state,
-});
-
+function mapStateToProps(state) {
+    let signupModel = '';
+    if (state && state.App) {
+        signupModel = state.App.showSignUp
+    }
+    return {
+        signupModel: signupModel
+    };
+};
 export default connect(
     mapStateToProps,
-    { closeSignUp }
+    { openSignUp }
 )(AboutUs);

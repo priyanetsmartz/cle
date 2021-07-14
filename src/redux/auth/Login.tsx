@@ -1,7 +1,18 @@
 import API from "../../restApi/Api";
+import ADMINAPI from "../../restApi/AdminApi";
+
 const Api = new API();
+const AdminApi = new ADMINAPI();
 
 class Login {
+
+  getAdminToken() {
+    var payload = {
+      username: 'monikat',
+      password: 'monika@123'
+    };
+    return Api.request("rest/V1/integration/admin/token", payload, "POST", "");
+  }
   //Login
   login(email: string, password: string, type: string) {
     var payload = {
@@ -14,7 +25,7 @@ class Login {
 
   getCustomerType() {
     var payload = {};
-    return Api.request("/rest/V1/customerGroups/search/?searchCriteria[filterGroups][0][filters][0][field]=id&searchCriteria[filterGroups][0][filters][0][value]=3&searchCriteria[filterGroups][0][filters][0][condition_type]=gt", payload, "GET", "");
+    return AdminApi.request("/rest/V1/customerGroups/search/?searchCriteria[filterGroups][0][filters][0][field]=id&searchCriteria[filterGroups][0][filters][0][value]=3&searchCriteria[filterGroups][0][filters][0][condition_type]=gt", payload, "GET", "");
   }
 
   // register(email: string, password: string, type: string) {
@@ -35,6 +46,7 @@ class Login {
   //   return Api.request("rest/V1/customers", payload, "POST", "");
   // }
   register(email: string, password: string, type: number) {
+    console.log('www')
     var payload = {
       "customer": {
         "email": email,

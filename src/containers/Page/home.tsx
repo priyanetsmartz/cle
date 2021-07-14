@@ -1,21 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-import { Pages,Pages1 } from '../../redux/pages/pages';
+// import { Pages, Pages1 } from '../../redux/pages/pages';
+import appAction from "../../redux/app/actions";
 import homeBg from "../../image/home-watch-bg.png";
 import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
+const { openSignUp } = appAction;
 
-function Home() {
+function Home(props) {
     useEffect(() => {
-        console.log('ggg');
-        async function fetchMyAPI() {
-            let result = Pages("about-us");
-           // let result1 = Pages1("about-us");
-           // console.log(result);
-        }
-        fetchMyAPI()
+        // console.log('ggg');
+        // async function fetchMyAPI() {
+        //     let result = Pages("about-us");
+        //    // let result1 = Pages1("about-us");
+        //    // console.log(result);
+        // }
+        // fetchMyAPI()
 
     }, [])
-
+    const handleClick = () => {
+        const { openSignUp } = props;
+        openSignUp(true);
+    }
 
     return (
         <div className="homescreen-bg">
@@ -125,11 +131,23 @@ function Home() {
 
                 </figure>
                 <div className="position-absolute mx-auto sign-up-btn">
-                    <Link className="" to="/signup" role="button"><IntlMessages id="sign_up_now" /></Link>
+                    <Link className="" to={"#"} onClick={() => { handleClick(); }} role="button"><IntlMessages id="sign_up_now" /></Link>
                 </div>
             </div>
         </div>
     );
 }
+function mapStateToProps(state) {
+    let signupModel = '';
+    if (state && state.App) {
+        signupModel = state.App.showSignUp
+    }
+    return {
+        signupModel: signupModel
+    };
+};
+export default connect(
+    mapStateToProps,
+    { openSignUp }
+)(Home);
 
-export default Home;

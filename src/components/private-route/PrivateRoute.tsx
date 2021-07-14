@@ -16,8 +16,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
           <Header />
           {/* <Sidebar /> */}
           <Component {...props} />
-          <Footer/>
-
+          <Footer />
         </>
       ) : (
         <Redirect to="/" />
