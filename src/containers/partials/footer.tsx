@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import "bootstrap/dist/css/bootstrap.min.css";
-import authAction from "../../redux/auth/actions";
 import SignUp from '../Page/signup';
 import SignIn from '../Page/signin';
 // const { login, logout, } = authAction;

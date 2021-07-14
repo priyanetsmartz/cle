@@ -33,7 +33,12 @@ function SignIn(props) {
     }
   }, []);
   useEffect(() => {
-    setIsLoaded(props.showLogin)
+    if (!props.auth) {
+      setIsLoaded(props.showLogin)
+    } else {
+      setIsLoaded(false)
+    }
+
   })
 
 
@@ -169,7 +174,7 @@ function SignIn(props) {
           </div>
         </div>
         <div className="or-bg">
-          <div className="or-text">Or</div>
+          <div className="or-text"><IntlMessages id="signup.or" /></div>
         </div>
         <div className="social-login">
           <a href="">
@@ -179,29 +184,31 @@ function SignIn(props) {
               <path id="Path_301" data-name="Path 301" d="M4.1,77.5a5.848,5.848,0,0,1-.317-1.879,6.146,6.146,0,0,1,.306-1.879l-.005-.126L1.11,71.312l-.1.046a9.48,9.48,0,0,0,0,8.529L4.1,77.5" transform="translate(0 -66.123)" fill="#FBBC05" />
               <path id="Path_302" data-name="Path 302" d="M22.412,3.673a5.265,5.265,0,0,1,3.673,1.414L28.766,2.47A9.127,9.127,0,0,0,22.412,0a9.493,9.493,0,0,0-8.487,5.236L17,7.621a5.743,5.743,0,0,1,5.415-3.948" transform="translate(-12.912)" fill="#EB4335" />
             </svg>
-            Continue with Google</a>
+            <IntlMessages id="signup.continue_google" /></a>
           <a href="">
             <svg xmlns="http://www.w3.org/2000/svg" width="15.966" height="19" viewBox="0 0 15.966 19">
               <path id="apple-brands" d="M17.349,42.04a3.96,3.96,0,0,1,2.121-3.6,4.558,4.558,0,0,0-3.593-1.892c-1.506-.119-3.152.878-3.754.878-.636,0-2.1-.836-3.241-.836C6.515,36.632,4,38.482,4,42.244a10.572,10.572,0,0,0,.611,3.444c.543,1.557,2.5,5.374,4.547,5.311,1.069-.025,1.824-.759,3.215-.759,1.349,0,2.049.759,3.241.759,2.062-.03,3.835-3.5,4.352-5.061a4.2,4.2,0,0,1-2.617-3.9Zm-2.4-6.965A4,4,0,0,0,15.966,32a4.5,4.5,0,0,0-2.88,1.48A4.058,4.058,0,0,0,12,36.53,3.563,3.563,0,0,0,14.948,35.075Z" transform="translate(-4 -32)" />
             </svg>
-            Continue with Apple</a>
+            <IntlMessages id="signup.continue_apple" /></a>
           <a href="">
             <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19">
               <path id="facebook" d="M16.883,7.758a9.415,9.415,0,0,1,4.8,1.3,9.6,9.6,0,0,1,2.4,14.494,9.68,9.68,0,0,1-5.361,3.2V19.929h1.863L21,17.245H18.181V15.488a1.528,1.528,0,0,1,.325-1.009,1.486,1.486,0,0,1,1.192-.453h1.7V11.674q-.037-.012-.7-.093a13.83,13.83,0,0,0-1.5-.093,3.75,3.75,0,0,0-2.694.961A3.714,3.714,0,0,0,15.5,15.206v2.039H13.35v2.684H15.5v6.829a9.447,9.447,0,0,1-5.81-3.2,9.585,9.585,0,0,1,2.4-14.494,9.418,9.418,0,0,1,4.8-1.3Z" transform="translate(-7.383 -7.758)" fill="#3B5998" fillRule="evenodd" />
             </svg>
-            Continue with Facebook</a>
+            <IntlMessages id="signup.continue_facebook" /></a>
         </div>
-        <p className="signup-policy-links">By registering you agree with our <a href="">Terms & Conditions</a> and <a href="">Privacy Policy</a>.</p></Modal.Body>
-      <Modal.Footer> <a href="" className="sign-in-M">Member Sign In</a><a href="" className="B-partner">Become Partner</a></Modal.Footer>
+        <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <a href=""><IntlMessages id="signup.terms_conditions" /></a>  <IntlMessages id="signup.and" /> <a href=""><IntlMessages id="signup.privacy_policy" /></a>.</p></Modal.Body>
+      <Modal.Footer> <a href="" className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></a><a href="" className="B-partner"><IntlMessages id="signup.become_partner" /></a></Modal.Footer>
     </Modal>
   );
 }
 
-const mapStateToProps = state => ({
-  auth: state.auth,
-  // errors: state.errors,
-  // loginerror:state.errors.loginerror
-});
+function mapStateToProps(state) {
+//  console.log(state);
+  return {
+    auth: state.Auth.idToken
+  }
+}
+
 export default connect(
   mapStateToProps,
   { login, logout, showSignin }

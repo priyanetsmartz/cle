@@ -1,5 +1,8 @@
 import API from "../../restApi/Api";
+import ADMINAPI from "../../restApi/AdminApi";
+
 const Api = new API();
+const AdminApi = new ADMINAPI();
 
 class Login {
 
@@ -22,7 +25,7 @@ class Login {
 
   getCustomerType() {
     var payload = {};
-    return Api.request("/rest/V1/customerGroups/search/?searchCriteria[filterGroups][0][filters][0][field]=id&searchCriteria[filterGroups][0][filters][0][value]=3&searchCriteria[filterGroups][0][filters][0][condition_type]=gt", payload, "GET", "");
+    return AdminApi.request("/rest/V1/customerGroups/search/?searchCriteria[filterGroups][0][filters][0][field]=id&searchCriteria[filterGroups][0][filters][0][value]=3&searchCriteria[filterGroups][0][filters][0][condition_type]=gt", payload, "GET", "");
   }
 
   // register(email: string, password: string, type: string) {

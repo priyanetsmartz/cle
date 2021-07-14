@@ -27,11 +27,12 @@ class AdminApi {
         const id_token = getCookie("id_token");
         let authtoken = '';
         //Check if token is not defined and attach to query string
-        if (id_token !== undefined) {
-            const token = 'kt7wj9b4eu4115rnjg5kx9ide0smd8w7';
-            authtoken = `Bearer ${token}`;
-        }
-        const token = 'kt7wj9b4eu4115rnjg5kx9ide0smd8w7';
+        // if (id_token !== undefined) {
+        //     const token = 'ozsckxit39n72f5cixy8tty0psfculym';
+        //     authtoken = `Bearer ${token}`;
+        // }
+
+        const token = 'ozsckxit39n72f5cixy8tty0psfculym';
         authtoken = `Bearer ${token}`;
         return new Promise(function (resolve, reject) {
             var url = baseUrl + name + "?" + queryString;

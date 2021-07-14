@@ -71,10 +71,10 @@ export function* registerRequest() {
       //API call to login request
       const response = yield call(loginApi.register, email, password, type);    
       if (response.data.id != "") {
-        yield put(push("/signin"));
+        yield put(push("/"));
         yield put({ type: actions.REGISTER_SUCCESS });
       } else {
-        notification("error", "", "Invalid email or password.");
+        notification("error", "", "Invalid email or password." );
         yield put({ type: actions.REGISTER_ERROR });
       }
     } catch (e) {

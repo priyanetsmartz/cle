@@ -243,6 +243,9 @@ p.signup-policy-links a{color:#000; font-size:12px;}
     outline: 0;
 }
 
+.ant-notification{
+    z-index: 99999 !important;
+}
 
 
 
