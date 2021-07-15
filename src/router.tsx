@@ -19,14 +19,14 @@ const PublicRoutes = ({ history }) => {
       <div>
         <Switch>
           <PrivateRoute exact path="/" component={Home} />
-
+{/* 
           <Route exact path="/signup">
             <SignUp />
           </Route>
 
           <Route exact path="/signin">
             <SignIn />
-          </Route>
+          </Route> */}
           <Route exact path="/forgot-password">
             <ForgottenPassword />
           </Route>
