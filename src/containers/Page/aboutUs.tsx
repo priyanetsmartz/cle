@@ -47,10 +47,7 @@ function AboutUs(props) {
                 <div className="col-md-4 offset-md-1">
                     <div className="about-content">
                         <h3><IntlMessages id="menu_Aboutus" /></h3>
-                        <p>Discover the CLé fashion point of view with our edit of over 650+ established and innovative designers,
-                            from Prada, Gucci and Balenciaga to Saint Laurent, Halpern and Wales Bonner. We aim to be the most personal
-                            luxury shopping experience in the world – whether you join us online, via our app or at our pioneering
-                            retail and broadcasting destination.</p>
+                        <p><IntlMessages id="aboutus.aboutus_para" /></p>
                         <Link to={"#"} className="signup-btn" onClick={() => { handleClick(); }}><IntlMessages id="aboutus.sign_up_now" /></Link>
                     </div>
                 </div>
