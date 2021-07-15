@@ -28,10 +28,10 @@ class API {
     let authtoken = '';
     //Check if token is not defined and attach to query string
     if (id_token !== undefined) {
-      const token = 'kt7wj9b4eu4115rnjg5kx9ide0smd8w7';
+      const token = 'hcy0yuocc3geyjhoqd3esopkmjiky8tv';
       authtoken = `Bearer ${token}`;
     }
-    const token = 'kt7wj9b4eu4115rnjg5kx9ide0smd8w7';
+    const token = 'hcy0yuocc3geyjhoqd3esopkmjiky8tv';
     authtoken = `Bearer ${token}`;
     return new Promise(function (resolve, reject) {
       var url = baseUrl + name + "?" + queryString;

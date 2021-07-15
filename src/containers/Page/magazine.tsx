@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import postImg from "../../image/section-1-pic.png";
 
 import { MagazineList } from '../../redux/pages/magazineList';
 
@@ -10,7 +12,8 @@ function Magazine() {
 
     useEffect(() => {
         async function getData() {
-            let result = MagazineList("magazine-list");
+            let result: any = await MagazineList();
+            setItems(result.data)
             console.log(result);
             // history.push("/signup");
         }
@@ -18,37 +21,39 @@ function Magazine() {
 
     }, [])
 
-    const Tr = ({ item }) => {
-        return (
-            <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.author}</td>
-                <td>{item.url}</td>
-                <td>{item.download_url}</td>
-            </tr>
-        )
-    }
-
 
     return (
-        <div>
-            <h2><IntlMessages id="magazine_page" /></h2>
-            <h3>Calling Api</h3>
-            <table id='data'>
-                <thead>
-                    <th>ID</th>
-                    <th>Author</th>
-                    <th>Url</th>
-                    <th>Download Url</th>
-                </thead>
-
-                <tbody>
-                    {items.map((i, id) => {
-                        return <Tr key={id} item={i} />
+        <>
+            <div className="container magazine-inner">
+                <figure className="offset-md-1 ps-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="770" height="134" viewBox="0 0 770 134">
+                        <text id="Magazine" transform="translate(385 98)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="110"
+                            fontFamily="Monument Extended Book">
+                            <tspan x="-383.515" y="0">Magazine</tspan>
+                        </text> </svg>
+                </figure>
+                <div className="row my-3 mag-first-sec">
+                    {items.map((item, i) => {
+                        return (
+                            <div className={"col-md-5 " + (((i % 2) == 0) ? 'offset-md-1' : 'mt-5')} key={i}>
+                                <div className="blog-sec-main">
+                                    <div className="mag-blog-pic"><img src={postImg} /></div>
+                                    <h3 className="mag-blog-title mt-5 mb-3">{item.title}</h3>
+                                    <p className="mag-blog-desc d-none">{item.short_content}...</p>
+                                    <Link to={"/magazine/"+item.url_key} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                </div>
+                            </div>
+                        );
                     })}
-                </tbody>
-            </table>
-        </div>
+                </div>
+                <div className="row mt-5">
+                    <div className="col-12 text-center">
+                        <a className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></a>
+                    </div>
+                </div>
+
+            </div>
+        </>
     );
 }
 

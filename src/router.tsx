@@ -7,6 +7,7 @@ import SignUp from './containers/Page/signup';
 import NotFound from './containers/Page/404';
 import SignIn from './containers/Page/signin';
 import Magazine from './containers/Page/magazine';
+import SinglePost from './containers/Page/singlePost';
 import ForgottenPassword from './containers/Page/forgotPassword';
 import PostComment from './containers/Page/postComments';
 import AboutUs from './containers/Page/aboutUs';
@@ -30,14 +31,13 @@ const PublicRoutes = ({ history }) => {
           <Route exact path="/forgot-password">
             <ForgottenPassword />
           </Route>
-          <Route exact path="/magazine">
-            <Magazine />
-          </Route>
           <Route exact path="/post-comment">
             <PostComment />
           </Route>
           
           <PrivateRoute exact path="/about-us" component={AboutUs} />
+          <PrivateRoute exact path="/magazine" component={Magazine} />
+          <PrivateRoute exact path="/magazine/:slug" component={SinglePost} />
 
           <Route component={NotFound} />
           {/* <RestrictedRoute+
