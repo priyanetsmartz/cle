@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 // import { Pages, Pages1 } from '../../redux/pages/pages';
 import appAction from "../../redux/app/actions";
@@ -25,7 +25,7 @@ function Home(props) {
 
     return (
         <div className="homescreen-bg">
-            <img src={homeBg} />
+            <img src={homeBg} alt="homepage" />
             <div className="position-absolute container top-50 start-50 translate-middle home-inner-text">
                 <figure className="time-is-now">
                     <svg xmlns="http://www.w3.org/2000/svg" width="488" height="307.5" viewBox="0 0 488 307.5">
@@ -142,6 +142,7 @@ function mapStateToProps(state) {
     if (state && state.App) {
         signupModel = state.App.showSignUp
     }
+    console.log(signupModel);
     return {
         signupModel: signupModel
     };

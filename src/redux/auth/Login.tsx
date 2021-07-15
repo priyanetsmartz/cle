@@ -63,6 +63,11 @@ class Login {
     }
     return Api.request("rest/V1/customers", payload, "POST", "");
   }
+
+  getPages() {
+    var payload = {};
+    return Api.request("rest/V1/cmsPage/search?searchCriteria[filterGroups][0][filters][0][field]=identifier&searchCriteria[filterGroups][0][filters][0][value]=partnership", "", "GET", "");
+  }
 }
 
 export default Login;

@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { useHistory } from "react-router-dom";
 
 import { MagazineList } from '../../redux/pages/magazineList';
 
 function Magazine() {
-    const history = useHistory();
     const [items, setItems] = useState([]);
 
     useEffect(() => {

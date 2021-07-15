@@ -7,12 +7,11 @@ import LanguageSwitcher from '../../containers/LanguageSwitcher';
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import { siteConfig } from '../../settings/';
-import Login from "../../redux/auth/Login";
+import { getFooterMenu } from "../../redux/pages/pages";
 import { connect } from 'react-redux';
 const { getglobalauth } = authAction;
 const { showSignin, openSignUp } = appAction;
 
-const loginApi = new Login();
 
 function Header(props) {
     const [isLoaded, setIsLoaded] = useState(true);
@@ -25,17 +24,25 @@ function Header(props) {
     }); // here
 
     useEffect(() => {
-        getAdminTokenfn()
+        //getAdminTokenfn()
+        getMenuFn()
     }, []);
 
-    async function getAdminTokenfn() {
-        // const { getglobalauth } = props;
-        // let results = getglobalauth();
-        // console.log(results)
-        let results: any = await loginApi.getAdminToken()
-        localStorage.setItem('globalauth', results.data);
-    }
+    // incase we need to call admin taken api to get toekn.
+    // async function getAdminTokenfn() {
+    //     // const { getglobalauth } = props;
+    //     // let results = getglobalauth();
+    //     // console.log(results)
+    //     let results: any = await loginApi.getAdminToken()
+    //     localStorage.setItem('globalauth', results.data);
+    // }
 
+    async function getMenuFn() {
+        console.log('here');
+        let results: any = await getFooterMenu()
+        console.log(results);
+        //     localStorage.setItem('globalauth', results.data); 
+    }
     // menu screen will be open 
     const handleMenuOpen = (e) => {
         e.preventDefault();
@@ -60,7 +67,7 @@ function Header(props) {
     const handleSignUp = (e) => {
         e.preventDefault();
         setMenuLoaded(false);
-        props.openSignUp({ val: true });
+        props.openSignUp(true);
 
     }
 
