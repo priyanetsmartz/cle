@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import  {useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-// import { Pages, Pages1 } from '../../redux/pages/pages';
+import { Pages } from '../../redux/pages/allPages';
 import appAction from "../../redux/app/actions";
 import homeBg from "../../image/home-watch-bg.png";
 import { Link } from "react-router-dom";
@@ -8,16 +8,17 @@ import { connect } from 'react-redux';
 const { openSignUp } = appAction;
 
 function Home(props) {
+    const [pagesData, SetPagesData] = useState({ title: '', content: '' })
     useEffect(() => {
-        // console.log('ggg');
-        // async function fetchMyAPI() {
-        //     let result = Pages("about-us");
-        //    // let result1 = Pages1("about-us");
-        //    // console.log(result);
-        // }
-        // fetchMyAPI()
+        let pageIdentifier = 'home';
+        async function fetchMyAPI() {
+            let result: any = await Pages(pageIdentifier);
+            var jsonData = result.data.items[0];
+            SetPagesData(jsonData);
+        }
+        fetchMyAPI()
+    }, [props.match.params.id])
 
-    }, [])
     const handleClick = () => {
         const { openSignUp } = props;
         openSignUp(true);

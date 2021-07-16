@@ -13,7 +13,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
     render={props =>
       auth === undefined ? (
         <>
-          <Header />
+          <Header  {...props}/>
           {/* <Sidebar /> */}
           <Component {...props} />
           <Footer />

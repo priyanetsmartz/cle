@@ -45,12 +45,11 @@ class Login {
   //   }`;
   //   return Api.request("rest/V1/customers", payload, "POST", "");
   // }
-  register(email: string, password: string, type: number) {
-    console.log('www')
+  register(firstname: string, email: string, password: string, type: number) {
     var payload = {
       "customer": {
         "email": email,
-        "firstname": "Prasad",
+        "firstname": firstname,
         "lastname": "Reddy",
         "storeId": 1,
         "websiteId": 1,

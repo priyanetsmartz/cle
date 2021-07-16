@@ -12,6 +12,7 @@ import logo from "../../image/CLE-logo-black.svg";
 import FacebookLoginButton from '../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../socialMediaLogin/Google';
 import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
+import { Link } from "react-router-dom";
 const { register } = authAction;
 const { openSignUp } = appAction;
 const loginApi = new Login();
@@ -47,6 +48,7 @@ function RegistrationForm(props) {
     useEffect(() => {
         setIsLoaded(props.signupModel)
     }, [props.signupModel])
+
     async function loadData(value = "") {
         const results: any = await loginApi.getCustomerType();
         var jsonData = results.data.items;
@@ -112,6 +114,7 @@ function RegistrationForm(props) {
         const { register } = props;
         if (handleValidation()) {
             const userInfo = {
+                "name": "",
                 "email": state.email,
                 "password": state.password,
                 "type": state.type
@@ -224,7 +227,7 @@ function RegistrationForm(props) {
                         <span className="error">{errors.errors["confirmPassword"]}</span>
                     </div>
                     <div className="col-sm-12">
-                        <label htmlFor="type">Type</label>
+                        <label htmlFor="type"><IntlMessages id="signup.type" /></label>
                         <select value={state.type} onChange={selectType}>
                             <option key="-1" value="--">---</option>
                             {types.map(item => {
@@ -234,7 +237,7 @@ function RegistrationForm(props) {
                         {/* <span className="error">{errors.errors["type"]}</span> */}
                     </div>
                     <div className="d-grid gap-2">
-                        <a className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="login.button" /></a>
+                        <Link to={"#"} className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="signup.sign_up" /></Link>
                     </div>
                 </div>
                 <div className="or-bg">
@@ -245,8 +248,8 @@ function RegistrationForm(props) {
                     <AppleSigninButton />
                     <FacebookLoginButton />
                 </div>
-                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <a href=""><IntlMessages id="signup.terms_conditions" /></a>  <IntlMessages id="signup.and" /> <a href=""><IntlMessages id="signup.privacy_policy" /></a>.</p></Modal.Body>
-            <Modal.Footer> <a href="" className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></a><a href="" className="B-partner"><IntlMessages id="signup.become_partner" /></a></Modal.Footer>
+                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to={"/"} ><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+            <Modal.Footer> <Link to={"#"} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to={"#"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
         </Modal>
     )
 }

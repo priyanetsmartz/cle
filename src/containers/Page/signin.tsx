@@ -5,7 +5,7 @@ import notification from '../../components/notification';
 import IntlMessages from "../../components/utility/intlMessages";
 import { getCookie } from '../../helpers/session';
 import authAction from "../../redux/auth/actions";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import appAction from "../../redux/app/actions";
 import history from './history';
 import Modal from "react-bootstrap/Modal";
@@ -36,14 +36,18 @@ function SignIn(props) {
       setState({ email: getCookie("username"), password: getCookie("password") })
     }
   }, []);
-  useEffect(() => {
-    if (!props.auth) {
-      setIsLoaded(props.showLogin)
-    } else {
-      setIsLoaded(false)
-    }
 
-  },[props.auth])
+  // useEffect(() => {
+  //   if (!props.auth) {
+  //     setIsLoaded(props.showLogin)
+  //   } else {
+  //     setIsLoaded(false)
+  //   }
+  // }, [props.auth])
+
+  useEffect(() => {
+    setIsLoaded(props.showLogin)
+  }, [props.showLogin])
 
 
   const handleChange = (e) => {
@@ -129,7 +133,7 @@ function SignIn(props) {
 
   return (
     <Modal show={isLoaded} onHide={hideModal}>
-      <Modal.Header> <img src={logo} alt="logo"/>
+      <Modal.Header> <img src={logo} alt="logo" />
         <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
       <Modal.Body><h2><IntlMessages id="login.title" /></h2>
         <p><IntlMessages id="login.subtitle" /></p>
@@ -174,7 +178,7 @@ function SignIn(props) {
             </div>
           </div>
           <div className="d-grid gap-2">
-            <a className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="login.button" /></a>
+            <Link to={"#"} className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="login.button" /></Link>
           </div>
         </div>
         <div className="or-bg">
@@ -185,8 +189,8 @@ function SignIn(props) {
           <AppleSigninButton />
           <FacebookLoginButton />
         </div>
-        <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <a href=""><IntlMessages id="signup.terms_conditions" /></a>  <IntlMessages id="signup.and" /> <a href=""><IntlMessages id="signup.privacy_policy" /></a>.</p></Modal.Body>
-      <Modal.Footer> <a href="" className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></a><a href="" className="B-partner"><IntlMessages id="signup.become_partner" /></a></Modal.Footer>
+        <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"#"}><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"#"}><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+      <Modal.Footer><Link to={"#"} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to={"#"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
     </Modal>
   );
 }
