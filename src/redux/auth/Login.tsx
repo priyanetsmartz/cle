@@ -45,12 +45,11 @@ class Login {
   //   }`;
   //   return Api.request("rest/V1/customers", payload, "POST", "");
   // }
-  register(email: string, password: string, type: number) {
-    console.log('www')
+  register(firstname: string, email: string, password: string, type: number) {
     var payload = {
       "customer": {
         "email": email,
-        "firstname": "Prasad",
+        "firstname": firstname,
         "lastname": "Reddy",
         "storeId": 1,
         "websiteId": 1,
@@ -62,6 +61,11 @@ class Login {
       }
     }
     return Api.request("rest/V1/customers", payload, "POST", "");
+  }
+
+  getPages() {
+    var payload = {};
+    return Api.request("rest/V1/cmsPage/search?searchCriteria[filterGroups][0][filters][0][field]=identifier&searchCriteria[filterGroups][0][filters][0][value]=partnership", "", "GET", "");
   }
 }
 

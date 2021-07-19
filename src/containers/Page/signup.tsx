@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-import { FacebookShareButton, TwitterShareButton } from "react-share";
+// import { FacebookShareButton, TwitterShareButton } from "react-share";
 import IntlMessages from "../../components/utility/intlMessages";
-import { Button, Checkbox, Select } from 'antd';
-import AppleSigninButton from '../AppleSigninButton';
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import notification from '../../components/notification';
@@ -13,11 +9,16 @@ import Login from "../../redux/auth/Login";
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../image/CLE-logo-black.svg";
+import FacebookLoginButton from '../socialMediaLogin/FaceBook';
+import GoogleLoginButton from '../socialMediaLogin/Google';
+import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
+import { Link } from "react-router-dom";
 const { register } = authAction;
 const { openSignUp } = appAction;
 const loginApi = new Login();
 
 function RegistrationForm(props) {
+
     const [state, setState] = useState({
         email: "",
         password: "",
@@ -31,16 +32,14 @@ function RegistrationForm(props) {
         errors: {}
     });
     const [types, SetTypes] = useState([])
-    const [isPass, setIsPass] = useState(false);
-    const [isConfirmPass, setIsConfirmPass] = useState(false);
-    interface customerType {
-        items?: {
-            code?: string
-            id?: number
-            tax_class_id?: number
-            tax_class_name?: string
-        }
-    }
+    // interface customerType {
+    //     items?: {
+    //         code?: string
+    //         id?: number
+    //         tax_class_id?: number
+    //         tax_class_name?: string
+    //     }
+    // }
 
     useEffect(() => {
         loadData();
@@ -48,7 +47,8 @@ function RegistrationForm(props) {
 
     useEffect(() => {
         setIsLoaded(props.signupModel)
-    })
+    }, [props.signupModel])
+
     async function loadData(value = "") {
         const results: any = await loginApi.getCustomerType();
         var jsonData = results.data.items;
@@ -63,7 +63,7 @@ function RegistrationForm(props) {
             let lastAtPos = state["email"].lastIndexOf('@');
             let lastDotPos = state["email"].lastIndexOf('.');
 
-            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') == -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') === -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
                 formIsValid = false;
                 error["email"] = "Email is not valid";
             }
@@ -114,6 +114,7 @@ function RegistrationForm(props) {
         const { register } = props;
         if (handleValidation()) {
             const userInfo = {
+                "name": "",
                 "email": state.email,
                 "password": state.password,
                 "type": state.type
@@ -123,13 +124,6 @@ function RegistrationForm(props) {
         } else {
             notification("warning", "", "Please enter required values");
         }
-    }
-    const responseGoogle = (response) => {
-        console.log(response);
-    }
-
-    const responseFacebook = (response) => {
-        console.log(response);
     }
 
     const componentClicked = (response) => {
@@ -180,7 +174,7 @@ function RegistrationForm(props) {
     };
     return (
         <Modal show={isLoaded} onHide={hideModal}>
-            <Modal.Header> <img src={logo} />
+            <Modal.Header> <img src={logo} alt="logo" />
                 <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
             <Modal.Body><h2><IntlMessages id="signup.sign_up" /></h2>
                 <p><IntlMessages id="signup.be_the_first_one" /></p>
@@ -233,7 +227,7 @@ function RegistrationForm(props) {
                         <span className="error">{errors.errors["confirmPassword"]}</span>
                     </div>
                     <div className="col-sm-12">
-                        <label htmlFor="type">Type</label>
+                        <label htmlFor="type"><IntlMessages id="signup.type" /></label>
                         <select value={state.type} onChange={selectType}>
                             <option key="-1" value="--">---</option>
                             {types.map(item => {
@@ -243,59 +237,19 @@ function RegistrationForm(props) {
                         {/* <span className="error">{errors.errors["type"]}</span> */}
                     </div>
                     <div className="d-grid gap-2">
-                        <a className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="login.button" /></a>
+                        <Link to={"#"} className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="signup.sign_up" /></Link>
                     </div>
                 </div>
                 <div className="or-bg">
                     <div className="or-text"> <IntlMessages id="signup.or" /></div>
                 </div>
                 <div className="social-login">
-                    <GoogleLogin
-                        clientId="689827699770-td6pl7fsnumdih9it94otpuajtrkclql.apps.googleusercontent.com"
-                        render={renderProps => (
-                            <a onClick={renderProps.onClick}>
-                                <svg id="google-icon" xmlns="http://www.w3.org/2000/svg" width="18.62" height="19"
-                                    viewBox="0 0 18.62 19">
-                                    <path id="Path_299" data-name="Path 299"
-                                        d="M139.67,108.7a8.141,8.141,0,0,0-.2-1.942H130.55v3.526h5.236a4.643,4.643,0,0,1-1.942,3.082l-.018.118,2.82,2.185.2.02a9.289,9.289,0,0,0,2.829-6.988"
-                                        transform="translate(-121.05 -98.992)" fill="#4285F4" />
-                                    <path id="Path_300" data-name="Path 300"
-                                        d="M22.412,163.991a9.055,9.055,0,0,0,6.291-2.3l-3-2.322a5.623,5.623,0,0,1-3.293.95,5.719,5.719,0,0,1-5.4-3.948l-.111.009-2.932,2.269-.038.107a9.493,9.493,0,0,0,8.487,5.236"
-                                        transform="translate(-12.912 -144.991)" fill="#34A853" />
-                                    <path id="Path_301" data-name="Path 301"
-                                        d="M4.1,77.5a5.848,5.848,0,0,1-.317-1.879,6.146,6.146,0,0,1,.306-1.879l-.005-.126L1.11,71.312l-.1.046a9.48,9.48,0,0,0,0,8.529L4.1,77.5"
-                                        transform="translate(0 -66.123)" fill="#FBBC05" />
-                                    <path id="Path_302" data-name="Path 302"
-                                        d="M22.412,3.673a5.265,5.265,0,0,1,3.673,1.414L28.766,2.47A9.127,9.127,0,0,0,22.412,0a9.493,9.493,0,0,0-8.487,5.236L17,7.621a5.743,5.743,0,0,1,5.415-3.948"
-                                        transform="translate(-12.912)" fill="#EB4335" />
-                                </svg>
-                                Continue with Google</a>
-                        )}
-                        buttonText="Login"
-                        onSuccess={responseGoogle}
-                        onFailure={responseGoogle}
-                        cookiePolicy={'single_host_origin'}
-                    />
-
+                    <GoogleLoginButton />
                     <AppleSigninButton />
-
-                    <FacebookLogin
-                        appId="1088597931155576"
-                        autoLoad={false}
-                        callback={responseFacebook}
-                        render={renderProps => (
-                            <a onClick={renderProps.onClick}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19">
-                                    <path id="facebook"
-                                        d="M16.883,7.758a9.415,9.415,0,0,1,4.8,1.3,9.6,9.6,0,0,1,2.4,14.494,9.68,9.68,0,0,1-5.361,3.2V19.929h1.863L21,17.245H18.181V15.488a1.528,1.528,0,0,1,.325-1.009,1.486,1.486,0,0,1,1.192-.453h1.7V11.674q-.037-.012-.7-.093a13.83,13.83,0,0,0-1.5-.093,3.75,3.75,0,0,0-2.694.961A3.714,3.714,0,0,0,15.5,15.206v2.039H13.35v2.684H15.5v6.829a9.447,9.447,0,0,1-5.81-3.2,9.585,9.585,0,0,1,2.4-14.494,9.418,9.418,0,0,1,4.8-1.3Z"
-                                        transform="translate(-7.383 -7.758)" fill="#3B5998" fillRule="evenodd" />
-                                </svg>
-                                Continue with Facebook</a>
-                        )}
-                    />
+                    <FacebookLoginButton />
                 </div>
-                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <a href=""><IntlMessages id="signup.terms_conditions" /></a>  <IntlMessages id="signup.and" /> <a href=""><IntlMessages id="signup.privacy_policy" /></a>.</p></Modal.Body>
-            <Modal.Footer> <a href="" className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></a><a href="" className="B-partner"><IntlMessages id="signup.become_partner" /></a></Modal.Footer>
+                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to={"/"} ><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+            <Modal.Footer> <Link to={"#"} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to={"#"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
         </Modal>
     )
 }

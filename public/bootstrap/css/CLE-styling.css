@@ -115,7 +115,6 @@ z-index: 15;
 }
 .left-menu-content li a.main-menu:hover{color:#2e2baa;padding-top:10px;}
 .left-menu-content a.menu-btn{font-size: 12px;
-    text-transform: uppercase;
     text-decoration: none;
     color: #fff;
 	font-family: 'Monument Extended';
@@ -143,7 +142,6 @@ z-index: 15;
 .right-menu-content li:nth-child(4){min-height:70px;}
 .right-menu-content a.main-menu {
     font-size: 20px;
-    text-transform: uppercase;
     text-decoration: none;
     color: #000;
 	font-family: 'Monument Extended';
@@ -196,7 +194,6 @@ z-index: 15;
 .about-content h3{font-family: 'Monument Extended';font-size:36px;text-transform: uppercase;color: #000;}
 .about-content p{font-size:18px;color: #000;line-height:27px;}
 .signup-btn{font-size:12px;
-    text-transform: uppercase;
     text-decoration: none;
     color: #fff;
 	font-family: 'Monument Extended';
@@ -242,7 +239,23 @@ p.signup-policy-links a{color:#000; font-size:12px;}
 .blog-sec-main:hover .mag-blog-pic img {top: -28px;}
 .blog-sec-main:hover .mag-blog-pic{height: 280px;}
 .mag-first-sec{position: relative;top: -52px;}
-
+.partner-main-div {
+    background: #2e2baa;
+    width: 604px;
+    height: 545px;
+    margin-top: 70px;
+    padding: 70px;
+}
+.partner-main-div h1{font-family: 'Monument Extended';font-size:36px; line-height:46px; color:#fff; width:60%;}
+.see-more-sec{margin-top: 35px;}
+.see-more-sec .squares{float: left;}
+.see-more-sec .see-more-text{font-size:18px; line-height:24px; color:#fff; width:35%;float: left;}
+.partner-pic{position:absolute; top:-10px; right:20px;}
+.partner-pic img{width:87%;}
+.join-cle-bottom{position:absolute; bottom:-10px; right:20px; cursor:pointer;}
+.join-cle-logo{position:absolute; bottom:0; right:0;top:0;left:0;width:min-content;margin:auto;height:min-content;}
+.join-cle-bottom figure.join-cle-text{margin-bottom:0;transition: all 0.2s;}
+.join-cle-bottom:hover .join-cle-text{transform: rotate(90deg);}
 .ant-notification{
     z-index: 99999 !important;
 }

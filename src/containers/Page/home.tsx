@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import  {useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-// import { Pages, Pages1 } from '../../redux/pages/pages';
+import { Pages } from '../../redux/pages/allPages';
 import appAction from "../../redux/app/actions";
 import homeBg from "../../image/home-watch-bg.png";
 import { Link } from "react-router-dom";
@@ -8,16 +8,17 @@ import { connect } from 'react-redux';
 const { openSignUp } = appAction;
 
 function Home(props) {
+    const [pagesData, SetPagesData] = useState({ title: '', content: '' })
     useEffect(() => {
-        // console.log('ggg');
-        // async function fetchMyAPI() {
-        //     let result = Pages("about-us");
-        //    // let result1 = Pages1("about-us");
-        //    // console.log(result);
-        // }
-        // fetchMyAPI()
+        let pageIdentifier = 'home';
+        async function fetchMyAPI() {
+            let result: any = await Pages(pageIdentifier);
+            var jsonData = result.data.items[0];
+            SetPagesData(jsonData);
+        }
+        fetchMyAPI()
+    }, [props.match.params.id])
 
-    }, [])
     const handleClick = () => {
         const { openSignUp } = props;
         openSignUp(true);
@@ -25,7 +26,7 @@ function Home(props) {
 
     return (
         <div className="homescreen-bg">
-            <img src={homeBg} />
+            <img src={homeBg} alt="homepage" />
             <div className="position-absolute container top-50 start-50 translate-middle home-inner-text">
                 <figure className="time-is-now">
                     <svg xmlns="http://www.w3.org/2000/svg" width="488" height="307.5" viewBox="0 0 488 307.5">
@@ -142,6 +143,7 @@ function mapStateToProps(state) {
     if (state && state.App) {
         signupModel = state.App.showSignUp
     }
+    console.log(signupModel);
     return {
         signupModel: signupModel
     };

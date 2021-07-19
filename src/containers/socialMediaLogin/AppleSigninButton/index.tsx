@@ -1,5 +1,5 @@
 import AppleSignin from 'react-apple-signin-auth';
-import IntlMessages from "../../components/utility/intlMessages";
+import IntlMessages from "../../../components/utility/intlMessages";
 
 /** Apple Signin button */
 const MyAppleSigninButton = () => (
@@ -35,7 +35,7 @@ onError = {(error) => console.error(error)} // default = undefined
 /** Skips loading the apple script if true */
 skipScript = { false} // default = undefined
 /** Apple image props */
-iconProp = {{ style: { marginTop: '10px' } }} // default = undefined
+iconprop = {{ style: { marginTop: '10px' } }} // default = undefined
 /** render function - called with all props - can be used to fully customize the UI by rendering your own component  */
 render = {(props) => <a {...props}>
 <svg xmlns="http://www.w3.org/2000/svg" width="15.966" height="19" viewBox="0 0 15.966 19">

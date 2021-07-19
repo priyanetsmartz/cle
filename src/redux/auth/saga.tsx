@@ -4,7 +4,7 @@ import actions from "./actions";
 import Login from "./Login";
 import notification from "../../components/notification";
 
-import { setCookie, removeCookie, getCookie } from "../../helpers/session";
+import { setCookie, removeCookie } from "../../helpers/session";
 const loginApi = new Login();
 
 export function* loginRequest() {
@@ -19,7 +19,7 @@ export function* loginRequest() {
       var userInfo = payload.payload.userInfo;
       //API call to login request
       const response = yield call(loginApi.login, email, password, type);
-      if (response.data != "") {
+      if (response.data !== "") {
         yield put({
           type: actions.LOGIN_SUCCESS,
           token: response.data,
@@ -64,17 +64,18 @@ export function* registerRequest() {
   yield takeEvery("REGISTER_REQUEST", function* (payload: any) {
     try {
       //user details
+      var firstname = payload.payload.userInfo.firstname ? payload.payload.userInfo.firstname : "magento";
       var type = payload.payload.userInfo.type;
       var email = payload.payload.userInfo.email;
       var password = payload.payload.userInfo.password;
       // var rememberMe = payload.payload.userInfo.rememberMe;
       //API call to login request
-      const response = yield call(loginApi.register, email, password, type);    
-      if (response.data.id != "") {
+      const response = yield call(loginApi.register, firstname, email, password, type);
+      if (response.data.id !== "") {
         yield put(push("/"));
         yield put({ type: actions.REGISTER_SUCCESS });
       } else {
-        notification("error", "", "Invalid email or password." );
+        notification("error", "", "Invalid email or password.");
         yield put({ type: actions.REGISTER_ERROR });
       }
     } catch (e) {
@@ -94,31 +95,7 @@ export function* registerSuccess() {
   yield takeEvery(actions.REGISTER_SUCCESS, function* () { });
 }
 
-export function* getglobalauth() {
-  yield takeEvery("GET_GLOBALAUTH", function* (payload: any) {
-    try {
-      //user details
-      var type = payload.payload.userInfo.type;
-      var email = payload.payload.userInfo.email;
-      var password = payload.payload.userInfo.password;
-      // var rememberMe = payload.payload.userInfo.rememberMe;
-      //API call to login request
-      const response = yield call(loginApi.register, email, password, type);    
-      if (response.data.id != "") {
-        yield put(push("/signin"));
-        yield put({ type: actions.REGISTER_SUCCESS });
-      } else {
-        notification("error", "", "Invalid email or password.");
-        yield put({ type: actions.REGISTER_ERROR });
-      }
-    } catch (e) {
-      if (e && e.data.message) {
-        notification("error", "", e.data.message);
-      }
-      yield put({ type: actions.REGISTER_ERROR });
-    }
-  });
-}
+
 
 export default function* rootSaga() {
   yield all([

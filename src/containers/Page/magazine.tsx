@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -7,7 +7,6 @@ import notification from '../../components/notification';
 import { MagazineList } from '../../redux/pages/magazineList';
 
 function Magazine() {
-    const history = useHistory();
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -52,7 +51,7 @@ function Magazine() {
                 </div>
                 <div className="row mt-5">
                     <div className="col-12 text-center">
-                        <a className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></a>
+                        <Link to={"#"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
                     </div>
                 </div>
 

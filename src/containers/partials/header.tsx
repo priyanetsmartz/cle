@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import logo from "../../image/CLE-LOGO.svg";
+import blackLogo from "../../image/CLE-logo-black.svg"
 import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import { Link } from "react-router-dom";
 import LanguageSwitcher from '../../containers/LanguageSwitcher';
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import { siteConfig } from '../../settings/';
-import Login from "../../redux/auth/Login";
+import { getFooterMenu } from "../../redux/pages/allPages";
 import { connect } from 'react-redux';
 const { getglobalauth } = authAction;
 const { showSignin, openSignUp } = appAction;
 
-const loginApi = new Login();
 
 function Header(props) {
     const [isLoaded, setIsLoaded] = useState(true);
     const [menuLoaded, setMenuLoaded] = useState(false);
-
+    const [classState, setClassState] = useState('');
+    const [logoState, setlogoState] = useState(logo);
     useEffect(() => {
         setTimeout(() => {
             setIsLoaded(false);
@@ -25,17 +26,21 @@ function Header(props) {
     }); // here
 
     useEffect(() => {
-        getAdminTokenfn()
-    }, []);
+        const classValue = props.match.params.id ? 'inner_pages_body' : 'dummy';
+        const classValueLogo = props.match.params.id ? 'header-logo-menu-2' : 'header-logo-menu';
+        const logoReal = props.match.params.id ? blackLogo : logo;
+        setClassState(classValueLogo);
+        setlogoState(logoReal);
+        document.body.classList.add(classValue);
+    }, [props.match.params.id]);
 
-    async function getAdminTokenfn() {
-        // const { getglobalauth } = props;
-        // let results = getglobalauth();
-        // console.log(results)
-        let results: any = await loginApi.getAdminToken()
-        localStorage.setItem('globalauth', results.data);
+
+    async function getMenuFn() {
+        //console.log('here');
+        let results: any = await getFooterMenu()
+        console.log(results);
+        //     localStorage.setItem('globalauth', results.data); 
     }
-
     // menu screen will be open 
     const handleMenuOpen = (e) => {
         e.preventDefault();
@@ -60,7 +65,7 @@ function Header(props) {
     const handleSignUp = (e) => {
         e.preventDefault();
         setMenuLoaded(false);
-        props.openSignUp({ val: true });
+        props.openSignUp(true);
 
     }
 
@@ -73,10 +78,10 @@ function Header(props) {
                     <img className="loading-gif" src={loading} />
                 </div>
             )}
-            <div className="header-logo-menu">
+            <div className={classState}>
                 <div className="container">
                     <div className="mt-5">
-                        <img src={logo} />
+                        <Link to={"/"}><img src={logoState} /></Link>
                         <div className="hamburger">
                             <Link to={"#"} className="open-menu" onClick={handleMenuOpen}>
                                 <span className="hb-first"></span>
@@ -114,7 +119,7 @@ function Header(props) {
                                     <li><Link to={"/magazine"} onClick={() => {
                                         handleClick(setMenuLoaded);
                                     }} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
-                                    <li><Link to={"/"} onClick={() => {
+                                    <li><Link to={"/partnership"} onClick={() => {
                                         handleClick(setMenuLoaded);
                                     }} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     <li><Link to={"#"} onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
