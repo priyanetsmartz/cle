@@ -51,7 +51,7 @@ function Magazine() {
                 </div>
                 <div className="row mt-5">
                     <div className="col-12 text-center">
-                        <Link to={"#"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
+                        <Link to={"/magazine/see-all"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
                     </div>
                 </div>
 

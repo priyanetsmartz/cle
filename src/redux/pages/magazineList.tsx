@@ -22,6 +22,10 @@ export function MagazineList() {
     return Api.request("rest/V1/blog/list", "", "GET", "");
 }
 
+export function PostList() {
+    return Api.request("rest/V1/post/list", "", "GET", "");
+}
+
 
 export function PostData(url_key: string) {
     return Api.request(`rest/V1/blog/detail?postId=${url_key}`, "", "GET", "");
