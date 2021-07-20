@@ -28,7 +28,7 @@ export function PostList() {
 
 
 export function PostData(url_key: string) {
-    return Api.request(`rest/V1/blog/detail?postId=${url_key}`, "", "GET", "");
+    return Api.request(`rest/V1/blog/detail?postId=${url_key}&store_id=3`, "", "GET", "");
 }
 
 export function AddComment(payload: any) {

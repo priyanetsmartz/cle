@@ -12,6 +12,7 @@ import PartnerShip from './containers/Page/partnerShip';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import AllPosts from './containers/Page/magazineList';
+import HelpUs from './containers/Page/helpUs';
 
 const PublicRoutes = ({ history }) => {
   return (
@@ -20,6 +21,7 @@ const PublicRoutes = ({ history }) => {
         <Switch>
           <MainRoute exact path="/" component={Home} />
           <MainRoute exact path="/partnership" component={PartnerShip} />
+          <MainRoute exact path="/help-us" component={HelpUs} />
           <MainRoute exact path="/magazine" component={Magazine} />
           <MainRoute exact path="/magazine/see-all" component={AllPosts} />
           <MainRoute exact path="/magazine/:slug" component={SinglePost} />

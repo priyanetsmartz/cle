@@ -34,7 +34,7 @@ function Header(props) {
     }, [props.match.params.id]);
 
 
-   
+
     // menu screen will be open 
     const handleMenuOpen = (e) => {
         e.preventDefault();
@@ -122,7 +122,9 @@ function Header(props) {
                             </div>
                             <div className="col-md-4">
                                 <ul className="right-menu-content">
-                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
+                                    <li><Link to={"/help-us"} onClick={() => {
+                                        handleClick(setMenuLoaded)
+                                    }} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_checkus" /></Link></li>
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_contact" /></Link></li>
                                     <li>
