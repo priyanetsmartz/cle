@@ -28,7 +28,7 @@ const PublicRoutes = ({ history }) => {
           <Route exact path="/post-comment">
             <PostComment />
           </Route>
-          <Route component={NotFound} />
+          <Route exact path="/page-not-found" component={NotFound} />
         </Switch>
       </div>
     </ConnectedRouter >

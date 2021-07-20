@@ -1,15 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { connect } from "react-redux";
 import actions from "../../redux/languageSwitcher/actions";
 import { Link } from "react-router-dom";
 import { setCookie } from "../../helpers/session";
 import { LanguageContext } from "../../languageContext";
+// import config from "../../containers/LanguageSwitcher/config";
 const { changeLanguage } = actions;
 
 function LanguageSwitcher(props) {
   const { setValue } = useContext(LanguageContext)
   const handleChange = (lang: string) => {
     setCookie("currentLanguage", lang)
+    props.changeLanguage(lang)
     setValue(lang);
   }
   return (

@@ -10,5 +10,5 @@ export default function LanguageReducer(state = initState, action) {
         default:
             return state;
     }
-    return state;
+   // return state;
 }

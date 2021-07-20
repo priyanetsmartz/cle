@@ -38,6 +38,7 @@
     "env-cmd": "^10.1.0"
   },
   "scripts": {
+    "homepage": "https://domain.com/",
     "start": "react-scripts start",
     "start:prod": "env-cmd -f .env.production react-scripts start",
     "build": "react-scripts build",

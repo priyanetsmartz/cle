@@ -12,13 +12,13 @@ function AboutUs(props) {
     useEffect(() => {
         let pageIdentifier = props.match.params.id;
         async function fetchMyAPI() {
-            let result: any = await Pages('partnership');
+            let result: any = await Pages('partnership', props.languages);
             console.log(result)
             var jsonData = result.data.items[0];
             SetPagesData(jsonData);
         }
         fetchMyAPI()
-    }, [props.match.params.id])
+    }, [props.match.params.id, props.languages])
 
     const handleClick = () => {
         const { openSignUp } = props;
@@ -119,13 +119,19 @@ function AboutUs(props) {
 }
 
 function mapStateToProps(state) {
-    let signupModel = '';
+    let signupModel = '', languages = '';
     if (state && state.App) {
         signupModel = state.App.showSignUp
     }
     // console.log(signupModel)
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+    // console.log(state.LanguageSwitcher)
     return {
-        signupModel: signupModel
+        signupModel: signupModel,
+        languages: languages
+
     };
 };
 export default connect(

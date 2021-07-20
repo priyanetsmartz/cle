@@ -9,7 +9,7 @@ const { register } = authAction;
 function FacebookLoginButton(props) {
 
     const responseFacebook = (response) => {
-        console.log(response);
+       // console.log(response);
         const { register } = props;
         if (response.accessToken) {
             const userInfo = {

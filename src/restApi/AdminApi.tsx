@@ -1,4 +1,3 @@
-import { getCookie } from "../helpers/session";
 import Notification from "../components/notification";
 import CommonFunctions from "../commonFunctions/CommonFunctions";
 import { apiConfig } from '../settings';
@@ -23,14 +22,13 @@ class AdminApi {
         if (queryString === undefined) {
             queryString = "";
         }
-        //Get token value from cookie
-        const id_token = getCookie("id_token");
+
         let authtoken = '';
 
         const token = apiConfig.adminToken;
         authtoken = `Bearer ${token}`;
         return new Promise(function (resolve, reject) {
-            var url = baseUrl + name 
+            var url = baseUrl + name
             if (method === undefined) {
                 method = "post";
             }

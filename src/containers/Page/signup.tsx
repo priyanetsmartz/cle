@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-// import { FacebookShareButton, TwitterShareButton } from "react-share";
 import IntlMessages from "../../components/utility/intlMessages";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
@@ -32,15 +31,6 @@ function RegistrationForm(props) {
         errors: {}
     });
     const [types, SetTypes] = useState([])
-    // interface customerType {
-    //     items?: {
-    //         code?: string
-    //         id?: number
-    //         tax_class_id?: number
-    //         tax_class_name?: string
-    //     }
-    // }
-
     useEffect(() => {
         loadData();
     }, []);
@@ -103,7 +93,6 @@ function RegistrationForm(props) {
 
     const selectType = (e) => {
         const value = e.target.value;
-        //  console.log(value);
         setState(prevState => ({
             ...prevState,
             ['type']: value
@@ -119,47 +108,11 @@ function RegistrationForm(props) {
                 "password": state.password,
                 "type": state.type
             }
-            // console.log(userInfo);
             register({ userInfo });
         } else {
             notification("warning", "", "Please enter required values");
         }
     }
-
-    const componentClicked = (response) => {
-        console.log(response);
-    }
-
-
-    // const signup = (res) => {
-    //    // console.log(res);
-    //     const googleresponse = {
-    //         Name: res.profileObj.name,
-    //         email: res.profileObj.email,
-    //         token: res.googleId,
-    //         Image: res.profileObj.imageUrl,
-    //         ProviderId: 'Google'
-    //     };
-    // }
-
-    // const [authOptions, setAuthOptions] = useState({
-    //     clientId: 'com.example.web',
-    //     scope: 'email name',
-    //     redirectURI: 'https://example.com',
-    //     state: '',
-    //     nonce: 'nonce',
-    //     usePopup: true,
-    //     onSuccess: '',
-    //     onError: '',
-    //     iconProps: ''
-    // });
-    // const [extraProps, setExtraProps] = useState({
-    //     uiType: 'dark',
-    //     className: 'apple-auth-btn',
-    //     noDefaultStyle: false,
-    //     buttonExtraChildren: 'Continue with Apple',
-    // });
-    // const [codeString, setCodeString] = useState('');
 
     const hideModal = () => {
         const { openSignUp } = props;
@@ -185,7 +138,7 @@ function RegistrationForm(props) {
                             className="form-control"
                             id="email"
                             aria-describedby="emailHelp"
-                            placeholder="Email Address*"
+                            placeholder="Email Address*"                            
                             value={state.email}
                             onChange={handleChange}
                         />

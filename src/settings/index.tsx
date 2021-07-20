@@ -15,7 +15,7 @@ const apiConfig = {
   secretKey: 'secretKey',
   adminToken: 'hcy0yuocc3geyjhoqd3esopkmjiky8tv',
   facebookKey: '236629564954102',
-  googleClientId:'689827699770-td6pl7fsnumdih9it94otpuajtrkclql.apps.googleusercontent.com'
+  googleClientId:'693205144964-fnh5afe5ihk2jmr6as9dmbqti52aq8a7.apps.googleusercontent.com'
 };
 
 const language = 'english';

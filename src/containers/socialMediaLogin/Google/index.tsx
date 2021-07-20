@@ -3,11 +3,24 @@ import GoogleLogin from 'react-google-login';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { apiConfig } from '../../../settings';
 import { Link } from "react-router-dom";
+import authAction from "../../../redux/auth/actions";
+import { connect } from 'react-redux';
+const { register } = authAction;
 /** Apple Signin button */
 function GoogleLoginButton(props) {
 
     const responseGoogle = (response) => {
-        console.log(response);
+        const { register } = props;
+        if (response.accessToken) {
+            const userInfo = {
+                "firstname": response.profileObj.name,
+                "email": response.profileObj.email,
+                "accessToken": response.accessToken,
+                "type": 3,
+            }
+            // console.log(userInfo);
+            register({ userInfo });
+        }
     }
 
 
@@ -36,9 +49,17 @@ function GoogleLoginButton(props) {
             buttonText="Login"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
-            cookiePolicy={'single_host_origin'}
+           // cookiePolicy={'single_host_origin'}
         />
     )
 }
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors,
+    // loginerror:state.errors.loginerror
+});
 
-export default GoogleLoginButton;
+export default connect(
+    mapStateToProps,
+    { register }
+)(GoogleLoginButton);

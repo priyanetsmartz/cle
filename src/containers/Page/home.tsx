@@ -1,4 +1,4 @@
-import  {useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Pages } from '../../redux/pages/allPages';
 import appAction from "../../redux/app/actions";
@@ -12,12 +12,12 @@ function Home(props) {
     useEffect(() => {
         let pageIdentifier = 'home';
         async function fetchMyAPI() {
-            let result: any = await Pages(pageIdentifier);
+            let result: any = await Pages(pageIdentifier, props.languages);
             var jsonData = result.data.items[0];
             SetPagesData(jsonData);
         }
         fetchMyAPI()
-    }, [props.match.params.id])
+    }, [props.match.params.id, props.languages])
 
     const handleClick = () => {
         const { openSignUp } = props;
@@ -139,15 +139,20 @@ function Home(props) {
     );
 }
 function mapStateToProps(state) {
-    let signupModel = '';
+    let signupModel = '', languages = '';
     if (state && state.App) {
         signupModel = state.App.showSignUp
     }
-    console.log(signupModel);
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+    // console.log(state.LanguageSwitcher)
     return {
-        signupModel: signupModel
+        signupModel: signupModel,
+        languages: languages
+
     };
-};
+}
 export default connect(
     mapStateToProps,
     { openSignUp }

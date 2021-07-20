@@ -8,7 +8,6 @@ import LanguageSwitcher from '../../containers/LanguageSwitcher';
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import { siteConfig } from '../../settings/';
-import { getFooterMenu } from "../../redux/pages/allPages";
 import { connect } from 'react-redux';
 const { getglobalauth } = authAction;
 const { showSignin, openSignUp } = appAction;
@@ -35,12 +34,7 @@ function Header(props) {
     }, [props.match.params.id]);
 
 
-    async function getMenuFn() {
-        //console.log('here');
-        let results: any = await getFooterMenu()
-        console.log(results);
-        //     localStorage.setItem('globalauth', results.data); 
-    }
+   
     // menu screen will be open 
     const handleMenuOpen = (e) => {
         e.preventDefault();
