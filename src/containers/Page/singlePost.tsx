@@ -18,7 +18,8 @@ function SinglePost() {
     useEffect(() => {
         async function getData() {
             let result: any = await PostData(slug);
-            setPost(result.data);
+            console.log(result)
+            setPost(result.data[0]);
             getPostComments(result.data.post_id);
         }
         getData()

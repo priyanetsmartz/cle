@@ -19,7 +19,7 @@ export function MagazineList() {
     //     `
 
     // }
-    return Api.request("rest/V1/blog/list", "", "GET", "");
+    return Api.request("rest/V1/blog/list", "", "GET", "store_id=3&page_no=1");
 }
 
 export function PostList() {
