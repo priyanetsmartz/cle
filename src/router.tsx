@@ -11,6 +11,7 @@ import PostComment from './containers/Page/postComments';
 import PartnerShip from './containers/Page/partnerShip';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
+import AllPosts from './containers/Page/magazineList';
 
 const PublicRoutes = ({ history }) => {
   return (
@@ -20,6 +21,7 @@ const PublicRoutes = ({ history }) => {
           <MainRoute exact path="/" component={Home} />
           <MainRoute exact path="/partnership" component={PartnerShip} />
           <MainRoute exact path="/magazine" component={Magazine} />
+          <MainRoute exact path="/magazine/see-all" component={AllPosts} />
           <MainRoute exact path="/magazine/:slug" component={SinglePost} />
           <MainRoute path="/:id" component={Pages} />
           <Route exact path="/forgot-password">

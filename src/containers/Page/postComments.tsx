@@ -36,6 +36,9 @@ function PostComment(props) {
             // postComment(state);
             let result: any = await AddComment(state);
             console.log(result);
+            if(result){
+                notification("success", "", "Comment added!");
+            }
         } else {
             notification("warning", "", "Please enter required values");
         }

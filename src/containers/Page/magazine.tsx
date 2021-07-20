@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-import postImg from "../../image/section-1-pic.png";
+import notification from '../../components/notification';
 
 import { MagazineList } from '../../redux/pages/magazineList';
 
@@ -12,7 +12,12 @@ function Magazine() {
     useEffect(() => {
         async function getData() {
             let result: any = await MagazineList();
-            setItems(result.data)
+            if(result.data.length > 0) {
+                setItems(result.data);
+            }else{
+                notification("error", "", "No data found!");
+            }
+            console.log(result);
             // history.push("/signup");
         }
         getData()
@@ -35,10 +40,10 @@ function Magazine() {
                         return (
                             <div className={"col-md-5 " + (((i % 2) == 0) ? 'offset-md-1' : 'mt-5')} key={i}>
                                 <div className="blog-sec-main">
-                                    <div className="mag-blog-pic"><img src={postImg} /></div>
+                                    <div className="mag-blog-pic"><img src={item.list_thumbnail} /></div>
                                     <h3 className="mag-blog-title mt-5 mb-3">{item.title}</h3>
                                     <p className="mag-blog-desc d-none">{item.short_content}...</p>
-                                    <Link to={"/magazine/"+item.url_key} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                    <Link to={"/magazine/"+item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                 </div>
                             </div>
                         );
@@ -46,7 +51,7 @@ function Magazine() {
                 </div>
                 <div className="row mt-5">
                     <div className="col-12 text-center">
-                        <Link to={"#"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
+                        <Link to={"/magazine/see-all"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
                     </div>
                 </div>
 

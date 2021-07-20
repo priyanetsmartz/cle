@@ -21,7 +21,7 @@ class API {
       return false;
     }
     if (queryString === undefined) {
-      queryString = "";
+      queryString = '';
     }
     //Get token value from cookie
     const id_token = getCookie("id_token");
@@ -34,7 +34,7 @@ class API {
     const token = 'hcy0yuocc3geyjhoqd3esopkmjiky8tv';
     authtoken = `Bearer ${token}`;
     return new Promise(function (resolve, reject) {
-      var url = baseUrl + name + "?" + queryString;
+      var url = queryString == '' ? baseUrl + name : baseUrl + name + "?" + queryString;
       if (method === undefined) {
         method = "post";
       }
