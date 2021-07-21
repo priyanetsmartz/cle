@@ -1,6 +1,7 @@
 import { all, takeEvery, put, fork, call } from "redux-saga/effects";
 import { push } from "react-router-redux";
 import actions from "./actions";
+import appAction from "../app/actions"
 import Login from "./Login";
 import notification from "../../components/notification";
 
@@ -43,6 +44,10 @@ export function* loginRequest() {
         }
         //     yield setCookie("id_token", response.data);
         localStorage.setItem('id_token', response.data);
+        yield put({
+          type: appAction.SHOW_SIGHNIN,
+          showLogin: false
+        });
         yield put(push("/"));
       } else {
         notification("error", "", "Invalid Username or password.");
@@ -73,18 +78,21 @@ export function* registerRequest() {
       const response = yield call(loginApi.register, firstname, email, password, type);
       if (response.data.id !== "") {
         //  yield put(push("/"));
-        notification("success", "", "Account registered successfully");
-        yield put({ type: actions.REGISTER_SUCCESS, token: response.data.id });
-        localStorage.setItem('id_token', response.data.id);
+        notification("success", "", "Account registered");
+        // yield put({ type: actions.REGISTER_SUCCESS, token: response.data.id });
+        yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
+        //  localStorage.setItem('id_token', response.data.id);
         yield put(push("/"));
       } else {
         notification("error", "", "Invalid email or password.");
         yield put({ type: actions.REGISTER_ERROR });
+        yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
       }
     } catch (e) {
       if (e && e.data.message) {
         notification("error", "", e.data.message);
       }
+      yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
       yield put({ type: actions.REGISTER_ERROR });
     }
   });

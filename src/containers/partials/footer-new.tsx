@@ -1,62 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { PostData, GetComments } from '../../redux/pages/magazineList';
-import { useParams } from "react-router-dom";
-import moment from 'moment';
-const readingTime = require('reading-time');
+import { connect } from 'react-redux';
+import "bootstrap/dist/css/bootstrap.min.css";
+import blackLogo from "../../image/CLE-logo-black.svg";
+import { Link } from "react-router-dom";
+import { siteConfig } from '../../settings/';
 
-function SinglePost() {
+function FooterExtra(props) {
 
-    const [post, setPost] = useState({
-        title: "",
-        post_thumbnail: "",
-        full_content: "",
-        published_at: ""
-    });
-    const [comments, setComments] = useState([]);
-    const { slug } = useParams();
 
-    useEffect(() => {
-        async function getData() {
-            let result: any = await PostData(slug);
-            console.log(result.data[0]);
-            setPost(result.data[0]);
-            getPostComments(result.data.post_id);
-        }
-        getData()
-    }, [])
-
-    const getPostComments = async (postId) => {
-        let result: any = await GetComments(postId);
-        setComments(result.data)
-    }
-    const stats = readingTime(post.full_content);
-    //  console.log(stats);
     return (
         <>
 
-            <div>
-                <img src={post.post_thumbnail} />
-            </div>
-
-            <div className="detail-page mt-5">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-12 text-center">
-                            <ul className="newReleaseTitle">
-                                <li className="border-right">New Release</li>
-                                <li>{stats.text}</li>
-                            </ul>
-                        </div>
-                        <div className="col-md-10 offset-md-1">
-                            <h1 className="detail-page-title my-4 text-center">{post.title}</h1>
-                        </div>
-                        <div className="col-md-10 offset-md-1 text-center">
-                            <ul className="date-social-link">
-                                <li>{moment(post.published_at).format('LL')}</li>
-                                <li>
+            <footer className="cle-footer container">
+                <div className="row my-4">
+                    <div className="col-md-2">
+                        <ul className="footer-links">
+                            <li className="fl-title">My Account</li>
+                            <li><Link to={"/"}>My Profile</Link></li>
+                        </ul>
+                    </div>
+                    <div className="col-md-2">
+                        <ul className="footer-links">
+                            <li className="fl-title">Sell</li>
+                            <li><Link to={"/partnetship"}>Partnership</Link></li>
+                        </ul>
+                    </div>
+                    <div className="col-md-2">
+                        <ul className="footer-links">
+                            <li className="fl-title">Useful Links</li>
+                            <li><Link to={"/"}>Help Center</Link></li>
+                            <li><Link to={"/"}>Customer Support</Link></li>
+                            <li><Link to={"/magazine"}>Magazine</Link></li>
+                        </ul>
+                    </div>
+                    <div className="col-md-2">
+                        <ul className="footer-links">
+                            <li className="fl-title">Discover CLE</li>
+                            <li><Link to={"/"}>Our Story</Link></li>
+                            <li><Link to={"/"}>Join Us</Link></li>
+                        </ul>
+                    </div>
+                    <div className="col-md-1"></div>
+                    <div className="col-md-3">
+                        <ul className="footer-address">
+                            <li><img src={blackLogo} /></li>
+                            <li>Istanbul St, As Sulay<br />
+                                Riyadh 14322, Kingdom of Saudi Arabia<br />
+                                (+966) 920 002 470</li>
+                            <li>
+                                <Link to={{ pathname: siteConfig.facebookLink }} target="_blank" >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="21.42" height="21.419" viewBox="0 0 21.42 21.419">
                                         <path id="facebook" d="M18.093,7.758A10.614,10.614,0,0,1,23.5,9.229,10.818,10.818,0,0,1,26.2,25.568a10.912,10.912,0,0,1-6.043,3.609v-7.7h2.1l.475-3.025h-3.18V16.472a1.722,1.722,0,0,1,.366-1.138,1.675,1.675,0,0,1,1.344-.511h1.921v-2.65q-.041-.013-.784-.105a15.591,15.591,0,0,0-1.692-.105,4.228,4.228,0,0,0-3.038,1.083,4.187,4.187,0,0,0-1.141,3.108v2.3H14.11v3.025h2.42v7.7a10.65,10.65,0,0,1-6.549-3.609,10.805,10.805,0,0,1,2.706-16.34,10.617,10.617,0,0,1,5.406-1.471Z" transform="translate(-7.383 -7.758)" fill="#2E2BAA" fillRule="evenodd" />
                                     </svg>
+                                </Link>
+                                <Link to={{ pathname: siteConfig.instagram }} target="_blank" >
                                     <svg id="instagram" xmlns="http://www.w3.org/2000/svg" width="21.419" height="21.419" viewBox="0 0 21.419 21.419">
                                         <g id="Group_34" data-name="Group 34">
                                             <g id="Group_33" data-name="Group 33" transform="translate(0)">
@@ -74,20 +70,38 @@ function SinglePost() {
                                             </g>
                                         </g>
                                     </svg>
+                                </Link>
+                                <Link to={{ pathname: siteConfig.linkedin }} target="_blank" >
                                     <svg id="_x31_0.Linkedin" xmlns="http://www.w3.org/2000/svg" width="21.472" height="21.472" viewBox="0 0 21.472 21.472">
                                         <path id="Path_17" data-name="Path 17" d="M52.176,49.981V42.117c0-3.865-.832-6.817-5.341-6.817a4.66,4.66,0,0,0-4.214,2.308h-.054V35.649H38.3V49.981h4.455V42.869c0-1.879.349-3.677,2.657-3.677,2.281,0,2.308,2.12,2.308,3.784v6.978h4.455Z" transform="translate(-30.704 -28.51)" fill="#2E2BAA" />
                                         <path id="Path_18" data-name="Path 18" d="M11.3,36.6h4.455V50.932H11.3Z" transform="translate(-10.951 -29.461)" fill="#2E2BAA" />
                                         <path id="Path_19" data-name="Path 19" d="M12.577,10a2.59,2.59,0,1,0,2.577,2.577A2.577,2.577,0,0,0,12.577,10Z" transform="translate(-10 -10)" fill="#2E2BAA" />
                                     </svg>
-                                </li>
-                            </ul>
-                        </div>
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
-                    <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
+                    <div className="col-md-12 footer-last-links mb-3">
+                        <Link to={"/"}>Terms & Conditions</Link>&nbsp;&nbsp;&nbsp;&nbsp;<Link to={"/"}>Privacy Policy</Link>
+                    </div>
                 </div>
-            </div>
+            </footer>
         </>
     );
 }
 
-export default SinglePost;
+function mapStateToProps(state) {
+    let showLogin = '', signupModel = '';
+    if (state && state.App) {
+        showLogin = state.App.showLogin;
+        signupModel = state.App.showSignUp
+    }
+    return {
+        showLogin: showLogin,
+        signupModel: signupModel
+    }
+};
+export default connect(
+    mapStateToProps,
+    {}
+)(FooterExtra);

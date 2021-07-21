@@ -36,13 +36,8 @@ function RegistrationForm(props) {
     useEffect(() => {
         loadData();
     }, []);
-    useEffect(() => {
-        if (!props.auth && props.loading) {
-            setIsLoaded(props.signupModel)
-        } else {
-            setIsLoaded(false)
-        }
-    }, [props.auth])
+
+
     useEffect(() => {
         setIsLoaded(props.signupModel)
     }, [props.signupModel])

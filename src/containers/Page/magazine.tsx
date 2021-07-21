@@ -17,8 +17,6 @@ function Magazine() {
             }else{
                 notification("error", "", "No data found!");
             }
-            // console.log(result);
-            // history.push("/signup");
         }
         getData()
 

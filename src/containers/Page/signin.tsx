@@ -37,13 +37,13 @@ function SignIn(props) {
     }
   }, []);
 
-  useEffect(() => {
-    if (!props.auth && props.loading) {
-      setIsLoaded(props.showLogin)
-    } else {
-      setIsLoaded(false)
-    }
-  }, [props.auth])
+  // useEffect(() => {
+  //   if (!props.auth && props.loading) {
+  //     setIsLoaded(props.showLogin)
+  //   } else {
+  //     setIsLoaded(false)
+  //   }
+  // }, [props.auth])
 
   useEffect(() => {
     setIsLoaded(props.showLogin)
@@ -112,15 +112,7 @@ function SignIn(props) {
     setError({ errors: error });
     return formIsValid;
   }
-
-  // const logout = () => {
-  //   // Clear access token and ID token from local storage
-  //   localStorage.removeItem('id_token');
-  //   localStorage.removeItem('expires_at');
-  //   // navigate to the home route
-  //   history.replace('/');
-  // }
-
+  
   const hideModal = () => {
     const { showSignin } = props;
     showSignin(false);

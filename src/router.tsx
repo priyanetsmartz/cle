@@ -11,7 +11,9 @@ import PostComment from './containers/Page/postComments';
 import PartnerShip from './containers/Page/partnerShip';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
-import AllPosts from './containers/Page/magazineList';
+import WithFooter from "./components/all-route/withFooter";
+import AllPosts from './containers/Page/magazineCategory';
+import newHome from './containers/Page/anewpage';
 import HelpUs from './containers/Page/helpUs';
 
 const PublicRoutes = ({ history }) => {
@@ -20,11 +22,12 @@ const PublicRoutes = ({ history }) => {
       <div>
         <Switch>
           <MainRoute exact path="/" component={Home} />
-          <MainRoute exact path="/partnership" component={PartnerShip} />
+          <WithFooter exact path="/home" component={newHome} />
+          {/* <MainRoute exact path="/partnership" component={PartnerShip} /> */}
           <MainRoute exact path="/help-us" component={HelpUs} />
           <MainRoute exact path="/magazine" component={Magazine} />
-          <MainRoute exact path="/magazine/see-all" component={AllPosts} />
-          <MainRoute exact path="/magazine/:slug" component={SinglePost} />
+          <WithFooter exact path="/magazine/see-all" component={AllPosts} />
+          <WithFooter exact path="/magazine/:slug" component={SinglePost} />
           <MainRoute path="/:id" component={Pages} />
           <Route exact path="/forgot-password">
             <ForgottenPassword />

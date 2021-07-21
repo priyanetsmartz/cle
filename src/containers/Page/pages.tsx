@@ -13,12 +13,8 @@ function AllPages(props) {
         let pageIdentifier = props.match.params.id;
         async function fetchMyAPI() {
             let result: any = await Pages(pageIdentifier, props.languages);
-            if (result.data.items.length > 0) {
-                var jsonData = result.data.items[0];
-                SetPagesData(jsonData);
-            } else {
-                history.replace('/');
-            }
+            var jsonData = result.data.items[0];
+            SetPagesData(jsonData)
 
         }
         fetchMyAPI()
@@ -59,7 +55,7 @@ function mapStateToProps(state) {
     // console.log(state.LanguageSwitcher)
     return {
         signupModel: signupModel,
-        languages : languages
+        languages: languages
 
     };
 };

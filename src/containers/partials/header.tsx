@@ -26,14 +26,14 @@ function Header(props) {
     }); // here
 
     useEffect(() => {
-        console.log(props.App);
-        const classValue = props.match.params.id ? 'inner_pages_body' : 'dummy';
-        const classValueLogo = props.match.params.id ? 'header-logo-menu-2' : 'header-logo-menu';
+        console.log(props);
+        const classValue = 'inner_pages_body';
+        const classValueLogo = 'header-logo-menu';
         const logoReal = props.match.params.id ? blackLogo : logo;
         setClassState(classValueLogo);
         setlogoState(logoReal);
         document.body.classList.add(classValue);
-    }, [props.match.params.id]);
+    });
 
 
 
