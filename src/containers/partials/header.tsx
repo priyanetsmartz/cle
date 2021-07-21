@@ -137,7 +137,9 @@ function Header(props) {
                             </div>
                             <div className="col-md-4">
                                 <ul className="right-menu-content">
-                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
+                                    <li><Link to={"/help-us"} onClick={() => {
+                                        handleClick(setMenuLoaded)
+                                    }} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_checkus" /></Link></li>
                                     <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_contact" /></Link></li>
                                     <li>
