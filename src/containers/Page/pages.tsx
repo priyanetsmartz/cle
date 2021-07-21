@@ -17,7 +17,7 @@ function AllPages(props) {
                 var jsonData = result.data.items[0];
                 SetPagesData(jsonData);
             } else {
-                history.replace('/');
+                // history.replace('/');
             }
 
         }

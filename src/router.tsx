@@ -13,6 +13,9 @@ import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import AllPosts from './containers/Page/magazineList';
 import HelpUs from './containers/Page/helpUs';
+import ThankYou from './containers/Page/ThankYou';
+import ResetPassword from './containers/Page/ResetPassoword';
+import SocialCheckout from './containers/Page/SocialCheckout';
 
 const PublicRoutes = ({ history }) => {
   return (
@@ -22,13 +25,18 @@ const PublicRoutes = ({ history }) => {
           <MainRoute exact path="/" component={Home} />
           <MainRoute exact path="/partnership" component={PartnerShip} />
           <MainRoute exact path="/help-us" component={HelpUs} />
+          <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
           <MainRoute exact path="/magazine" component={Magazine} />
+          <MainRoute exact path="/checkout-us" component={SocialCheckout} />
           <MainRoute exact path="/magazine/see-all" component={AllPosts} />
           <MainRoute exact path="/magazine/:slug" component={SinglePost} />
-          <MainRoute path="/:id" component={Pages} />
           <Route exact path="/forgot-password">
             <ForgottenPassword />
           </Route>
+          <Route exact path="/reset-password">
+            <ResetPassword />
+          </Route>
+          <MainRoute path="/:id" component={Pages} />
           <Route exact path="/post-comment">
             <PostComment />
           </Route>

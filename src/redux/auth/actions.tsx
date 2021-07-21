@@ -13,6 +13,7 @@ const actions = {
   LOGIN_SUCCESS: "LOGIN_SUCCESS",
   LOGIN_ERROR: "LOGIN_ERROR",
   FORGOT_PASSWORD: "FORGOT_PASSWORD",
+  RESET_PASSWORD: "RESET_PASSWORD",
   POST_COMMENTS: "POST_COMMENTS",
   REGISTER_REQUEST: "REGISTER_REQUEST",
   REGISTER_ERROR: "REGISTER_ERROR",
@@ -29,6 +30,10 @@ const actions = {
   }),
   forgotPassowd: payload => ({
     type: actions.FORGOT_PASSWORD,
+    payload
+  }),
+  resetPassword: payload => ({
+    type: actions.RESET_PASSWORD,
     payload
   }),
   postComment: payload => ({

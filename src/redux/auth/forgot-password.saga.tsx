@@ -13,9 +13,22 @@ export function* forgotPasswordRequest() {
   });
 }
 
+export function* resetPasswordRequest() {
+
+  yield takeEvery("RESET_PASSWORD", function* (payload) {
+    try {
+      console.log('SAGA',payload);
+      
+    } catch (e) {
+      console.log(e.data);
+    }
+  });
+}
+
 
 export default function* rootSaga() {
   yield all([
-    fork(forgotPasswordRequest)
+    fork(forgotPasswordRequest),
+    fork(resetPasswordRequest)
   ]);
 }
