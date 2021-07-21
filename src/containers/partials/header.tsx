@@ -9,8 +9,9 @@ import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import { siteConfig } from '../../settings/';
 import { connect } from 'react-redux';
-const { getglobalauth } = authAction;
-const { showSignin, openSignUp } = appAction;
+import history from '../Page/history';
+const { logout } = authAction;
+const { showSignin, openSignUp, logoClass } = appAction;
 
 
 function Header(props) {
@@ -25,6 +26,7 @@ function Header(props) {
     }); // here
 
     useEffect(() => {
+        console.log(props.App);
         const classValue = props.match.params.id ? 'inner_pages_body' : 'dummy';
         const classValueLogo = props.match.params.id ? 'header-logo-menu-2' : 'header-logo-menu';
         const logoReal = props.match.params.id ? blackLogo : logo;
@@ -34,7 +36,7 @@ function Header(props) {
     }, [props.match.params.id]);
 
 
-   
+
     // menu screen will be open 
     const handleMenuOpen = (e) => {
         e.preventDefault();
@@ -54,16 +56,24 @@ function Header(props) {
     const handleClick = (popupState) => {
         setMenuLoaded(false)
         setIsLoaded(true)
+        props.logoClass(true);
+
     }
     // handle signup link click
     const handleSignUp = (e) => {
         e.preventDefault();
         setMenuLoaded(false);
         props.openSignUp(true);
-
     }
 
-
+    const logout = () => {
+        // Clear access token and ID token from local storage
+        setMenuLoaded(false)
+        localStorage.removeItem('id_token');
+        props.logout();
+        // navigate to the home route
+        history.replace('/');
+    }
     return (
         <>
             {/* universal screen loading */}
@@ -116,7 +126,12 @@ function Header(props) {
                                     <li><Link to={"/partnership"} onClick={() => {
                                         handleClick(setMenuLoaded);
                                     }} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
-                                    <li><Link to={"#"} onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
+                                    {!localStorage.getItem('id_token') && (
+                                        <li><Link to={"#"} onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
+                                    )}
+                                    {localStorage.getItem('id_token') && (
+                                        <li><Link to={"#"} onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
+                                    )}
                                     <li><IntlMessages id="menu_newhere" /> <Link to={"#"} onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
                                 </ul>
                             </div>
@@ -188,11 +203,12 @@ function Header(props) {
     );
 }
 
-const mapStateToProps = state => ({
-    data: state
-});
+function mapStateToProps(state) {
+    // console.log(state);
+    return state;
+}
 
 export default connect(
     mapStateToProps,
-    { getglobalauth, showSignin, openSignUp }
+    { logout, showSignin, openSignUp, logoClass }
 )(Header);

@@ -72,8 +72,11 @@ export function* registerRequest() {
       //API call to login request
       const response = yield call(loginApi.register, firstname, email, password, type);
       if (response.data.id !== "") {
+        //  yield put(push("/"));
+        notification("success", "", "Account registered successfully");
+        yield put({ type: actions.REGISTER_SUCCESS, token: response.data.id });
+        localStorage.setItem('id_token', response.data.id);
         yield put(push("/"));
-        yield put({ type: actions.REGISTER_SUCCESS });
       } else {
         notification("error", "", "Invalid email or password.");
         yield put({ type: actions.REGISTER_ERROR });

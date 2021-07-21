@@ -20,8 +20,8 @@ function App() {
     AppLocale[getCurrentLanguage(value).locale];
 
   return (
-    <LanguageContext.Provider value={{ value, setValue }}>
-      <ConfigProvider locale={currentAppLocale.antd}>
+    <LanguageContext.Provider value={{ value, setValue }} >
+      <ConfigProvider locale={currentAppLocale.antd} >
         <IntlProvider
           locale={currentAppLocale.locale}
           messages={currentAppLocale.messages}

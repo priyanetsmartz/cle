@@ -10,7 +10,8 @@ const initState = {
   openDrawer: false,
   // openKeys: preKeys,
   showLogin: false,
-  showSignUp: false
+  showSignUp: false,
+  logoClass: 'normal'
 };
 export default function appReducer(state = initState, action) {
   switch (action.type) {
@@ -39,6 +40,8 @@ export default function appReducer(state = initState, action) {
       return { ...state, showLogin: action.showLogin };
     case actions.OPEN_SIGN_UP:
       return { ...state, showSignUp: action.showSignUp };
+    case actions.LOGO_CLASS:
+      return { ...state, logoClass: action.logoClass };
     default:
       return state;
   }

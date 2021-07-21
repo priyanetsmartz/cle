@@ -2,7 +2,7 @@ import Notification from "../components/notification";
 import CommonFunctions from "../commonFunctions/CommonFunctions";
 import { apiConfig } from '../settings';
 const commonFunctions = new CommonFunctions();
-const baseUrl = commonFunctions.getBaseUrl();
+const baseUrl = 'https://4a83875b65.nxcli.net/';
 const axios = require("axios");
 const processResponse = true;
 

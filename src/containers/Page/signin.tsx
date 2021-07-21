@@ -14,7 +14,7 @@ import logo from "../../image/CLE-logo-black.svg";
 import FacebookLoginButton from '../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../socialMediaLogin/Google';
 import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
-
+import { useIntl } from 'react-intl';
 const { showSignin } = appAction;
 const { login, logout } = authAction;
 
@@ -37,13 +37,13 @@ function SignIn(props) {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (!props.auth) {
-  //     setIsLoaded(props.showLogin)
-  //   } else {
-  //     setIsLoaded(false)
-  //   }
-  // }, [props.auth])
+  useEffect(() => {
+    if (!props.auth && props.loading) {
+      setIsLoaded(props.showLogin)
+    } else {
+      setIsLoaded(false)
+    }
+  }, [props.auth])
 
   useEffect(() => {
     setIsLoaded(props.showLogin)
@@ -101,7 +101,7 @@ function SignIn(props) {
     // }
     if (!state["email"]) {
       formIsValid = false;
-      error["email"] = "Username is required";
+      error["email"] = "Email is required";
     }
 
     //email
@@ -129,7 +129,7 @@ function SignIn(props) {
   const togglePasswordVisiblity = () => {
     setPasswordShown(passwordShown ? false : true);
   };
-
+  const intl = useIntl();
 
   return (
     <Modal show={isLoaded} onHide={hideModal}>
@@ -144,7 +144,7 @@ function SignIn(props) {
               className="form-control"
               id="email"
               aria-describedby="emailHelp"
-              placeholder="Email Address*"
+              placeholder={intl.formatMessage({ id: "login.email" })}
               value={state.email}
               onChange={handleChange}
             />
@@ -154,7 +154,7 @@ function SignIn(props) {
             <input type={passwordShown ? "text" : "password"}
               className="form-control"
               id="password"
-              placeholder="Create Password* (Min 6 Character)"
+              placeholder={intl.formatMessage({ id: "login.password" })}
               value={state.password}
               onChange={handleChange}
               aria-describedby="basic-addon2"
@@ -189,16 +189,17 @@ function SignIn(props) {
           <AppleSigninButton />
           <FacebookLoginButton />
         </div>
-        <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"#"}><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"#"}><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+        <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"/terms-and-conditions"}><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"}><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
       <Modal.Footer><Link to={"#"} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to={"#"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
     </Modal>
   );
 }
 
 function mapStateToProps(state) {
-  //  console.log(state);
+ // console.log(state);
   return {
-    auth: state.Auth.idToken
+    auth: state.Auth.idToken,
+    loading: state.Auth.loading
   }
 }
 

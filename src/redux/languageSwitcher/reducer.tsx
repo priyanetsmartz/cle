@@ -1,7 +1,8 @@
 import actions from './actions';
 import config from '../../containers/LanguageSwitcher/config';
+import { getCookie } from "../../helpers/session";
 const initState = {
-    language: config.defaultLanguage
+    language: getCookie('currentLanguage') ? getCookie('currentLanguage') : config.defaultLanguage
 };
 export default function LanguageReducer(state = initState, action) {
     switch (action.type) {
@@ -10,5 +11,5 @@ export default function LanguageReducer(state = initState, action) {
         default:
             return state;
     }
-   // return state;
+    // return state;
 }

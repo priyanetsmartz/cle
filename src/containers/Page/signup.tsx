@@ -11,13 +11,15 @@ import logo from "../../image/CLE-logo-black.svg";
 import FacebookLoginButton from '../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../socialMediaLogin/Google';
 import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
+import { useIntl } from 'react-intl';
 import { Link } from "react-router-dom";
 const { register } = authAction;
 const { openSignUp } = appAction;
 const loginApi = new Login();
 
-function RegistrationForm(props) {
 
+function RegistrationForm(props) {
+    const intl = useIntl();
     const [state, setState] = useState({
         email: "",
         password: "",
@@ -34,7 +36,13 @@ function RegistrationForm(props) {
     useEffect(() => {
         loadData();
     }, []);
-
+    useEffect(() => {
+        if (!props.auth && props.loading) {
+            setIsLoaded(props.signupModel)
+        } else {
+            setIsLoaded(false)
+        }
+    }, [props.auth])
     useEffect(() => {
         setIsLoaded(props.signupModel)
     }, [props.signupModel])
@@ -138,7 +146,7 @@ function RegistrationForm(props) {
                             className="form-control"
                             id="email"
                             aria-describedby="emailHelp"
-                            placeholder="Email Address*"                            
+                            placeholder={intl.formatMessage({ id: 'register.email' })}
                             value={state.email}
                             onChange={handleChange}
                         />
@@ -148,7 +156,7 @@ function RegistrationForm(props) {
                         <input type={passwordShown ? "text" : "password"}
                             className="form-control"
                             id="password"
-                            placeholder="Create Password* (Min 6 Character)"
+                            placeholder={intl.formatMessage({ id: 'register.password' })}
                             value={state.password}
                             onChange={handleChange}
                             aria-describedby="basic-addon2"
@@ -164,7 +172,7 @@ function RegistrationForm(props) {
                     <div className="input-group col-sm-12">
                         <input type={confirmPasswordShown ? "text" : "password"}
                             className="form-control"
-                            placeholder="Confirm Password* (Min 6 Character)"
+                            placeholder={intl.formatMessage({ id: 'register.confirmPassword' })}
                             aria-label="Confirm Password"
                             aria-describedby="basic-addon2"
                             id="confirmPassword"
@@ -210,8 +218,9 @@ function RegistrationForm(props) {
 
 
 const mapStateToProps = state => ({
-    auth: state.auth,
+    auth: state.Auth.idToken,
     errors: state.errors,
+    loading: state.Auth.loading
     // loginerror:state.errors.loginerror
 });
 

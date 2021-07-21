@@ -37,6 +37,7 @@ export function Pages1(value: string) {
 }
 // rest api 
 export function Pages(value: string, language: string) {
+    //console.log(language);
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
     return AdminApi.request("rest/V1/cmsPage/search?searchCriteria[filterGroups][0][filters][0][field]=store_id&searchCriteria[filterGroups][0][filters][0][value]=" + storeId + "&searchCriteria[filterGroups][0][filters][0][condition_type]==&searchCriteria[filterGroups][1][filters][0][field]=identifier&searchCriteria[filterGroups][1][filters][0][value]=" + value + "&searchCriteria[filterGroups][1][filters][0][condition_type]==", payload, "GET", "");

@@ -18,6 +18,7 @@ const actions = {
   SHOW_SIGHNIN: 'SHOW_SIGHNIN',
   OPEN_SIGN_UP: "OPEN_SIGN_UP",
   CLOSE_SIGN_UP: "CLOSE_SIGN_UP",
+  LOGO_CLASS: "LOGO_CLASS",
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
   }),
@@ -54,6 +55,10 @@ const actions = {
   closeSignUp: (payload) => ({
     type: actions.CLOSE_SIGN_UP,
     payload: payload
-  })
+  }),
+  logoClass: logo => ({
+    type: actions.LOGO_CLASS,
+    logo
+  }),
 };
 export default actions;

@@ -7,7 +7,7 @@ export default function authReducer(state = initState, action) {
     case actions.LOGIN_REQUEST:
       return { ...state, loading: true };
     case actions.LOGIN_SUCCESS:
-      return { ...state, idToken: action.token, loading: false };
+      return { ...state, idToken: action.token, loading: true };
     case actions.LOGIN_ERROR:
       return { ...state, loading: false };
     case actions.LOGOUT:
@@ -15,11 +15,11 @@ export default function authReducer(state = initState, action) {
     case actions.REGISTER_REQUEST:
       return { ...state, loading: true };
     case actions.REGISTER_SUCCESS:
-      return { ...state, loading: false };
+      return { ...state, idToken: action.token, loading: true };
     case actions.REGISTER_ERROR:
       return { ...state, loading: false };
     case actions.GET_GLOBALAUTH:
-      return { ...state, globalAuth: action.token, loading: false };  
+      return { ...state, globalAuth: action.token, loading: false };
     default:
       return state;
   }
