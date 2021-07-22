@@ -32,7 +32,7 @@ export function GetComments(postId: number) {
     return Api.request(`rest/V1/blog/comments?postId=${postId}`, "", "GET", "");
 }
 
-export function SendNewsletter(payload) {
-    console.log(payload);
-
+export function SendNewsletter(payload, language = 'english') {
+    const data = { storeId: language === 'english' ? 3 : 2, email: payload.userInfo.email }
+    return Api.request(`rest/all/V1/newsletter/subscriber`, data, "POST", "");
 }

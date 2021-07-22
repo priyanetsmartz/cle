@@ -33,18 +33,18 @@ const PublicRoutes = ({ history }) => {
           <MainRoute exact path="/magazine" component={Magazine} />
           <WithFooter exact path="/magazine/see-all" component={AllPosts} />
           <WithFooter exact path="/magazine/:slug" component={SinglePost} />
-          <MainRoute path="/:id" component={Pages} />
           <MainRoute exact path="/checkout-us" component={SocialCheckout} />
           <Route exact path="/forgot-password">
             <ForgottenPassword />
           </Route>
-          <Route exact path="/reset-password">
+          <Route exact path="/reset-password/:token">
             <ResetPassword />
           </Route>
-          <MainRoute path="/:id" component={Pages} />
           <Route exact path="/post-comment">
             <PostComment />
           </Route>
+          <MainRoute path="/:id" component={Pages} />
+         
           {/* <Route exact path="/page-not-found" component={NotFound} /> */}
         </Switch>
       </div>

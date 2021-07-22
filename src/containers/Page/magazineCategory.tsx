@@ -61,14 +61,23 @@ function MagazineCategory(props) {
         setError({ errors: error });
         return formIsValid;
     }
-    const handleSubmitClick = (e) => {
+    const handleSubmitClick = async (e) => {
         e.preventDefault();
         if (handleValidation()) {
             const userInfo = {
                 "email": state.email,
                 "type": radio
             }
-            SendNewsletter({ userInfo });
+            const result:any = await SendNewsletter({ userInfo });
+            if(result.data[0].success == 1){
+                notification("success", "", result.data[0].message);
+                setState(prevState => ({
+                    ...prevState,
+                    email: ""
+                }))
+            }else{
+                notification("error", "", result.data[0].message);
+            }
         } else {
             notification("warning", "", "Please enter required values");
         }
