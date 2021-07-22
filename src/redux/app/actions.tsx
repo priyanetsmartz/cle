@@ -1,3 +1,4 @@
+
 export function getView(width) {
   let newView = 'MobileView';
   if (width > 1220) {
@@ -19,6 +20,7 @@ const actions = {
   OPEN_SIGN_UP: "OPEN_SIGN_UP",
   CLOSE_SIGN_UP: "CLOSE_SIGN_UP",
   LOGO_CLASS: "LOGO_CLASS",
+  SET_TYPE: "SET_TYPE",
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
   }),
@@ -60,5 +62,9 @@ const actions = {
     type: actions.LOGO_CLASS,
     logo
   }),
+  userType: userType => ({
+    type: actions.SET_TYPE,
+    userType
+  })
 };
 export default actions;

@@ -24,7 +24,7 @@ function RegistrationForm(props) {
         email: "",
         password: "",
         confirmPassword: "",
-        type: -1
+        type: 1
     })
     const [isLoaded, setIsLoaded] = useState(false);
     const [passwordShown, setPasswordShown] = useState(false);
@@ -34,17 +34,20 @@ function RegistrationForm(props) {
     });
     const [types, SetTypes] = useState([])
     useEffect(() => {
+        console.log(props)
         loadData();
     }, []);
 
 
     useEffect(() => {
         setIsLoaded(props.signupModel)
+
     }, [props.signupModel])
 
     async function loadData(value = "") {
         const results: any = await loginApi.getCustomerType();
         var jsonData = results.data.items;
+        // console.log(jsonData);
         SetTypes(jsonData);
     }
     const handleValidation = () => {
@@ -94,13 +97,13 @@ function RegistrationForm(props) {
         }))
     }
 
-    const selectType = (e) => {
-        const value = e.target.value;
-        setState(prevState => ({
-            ...prevState,
-            ['type']: value
-        }))
-    }
+    // const selectType = (e) => {
+    //     const value = e.target.value;
+    //     setState(prevState => ({
+    //         ...prevState,
+    //         ['type']: value
+    //     }))
+    // }
     const handleSubmitClick = (e) => {
         e.preventDefault();
         const { register } = props;
@@ -109,7 +112,7 @@ function RegistrationForm(props) {
                 "name": "",
                 "email": state.email,
                 "password": state.password,
-                "type": state.type
+                "type": props.userSetype
             }
             register({ userInfo });
         } else {
@@ -182,18 +185,17 @@ function RegistrationForm(props) {
                         </span>
                         <span className="error">{errors.errors["confirmPassword"]}</span>
                     </div>
-                    <div className="col-sm-12">
+                    {/* <div className="col-sm-12">
                         <label htmlFor="type"><IntlMessages id="signup.type" /></label>
                         <select value={state.type} onChange={selectType}>
                             <option key="-1" value="--">---</option>
                             {types.map(item => {
                                 return (<option key={item.id} value={item.id}>{item.code}</option>);
                             })}
-                        </select>
-                        {/* <span className="error">{errors.errors["type"]}</span> */}
-                    </div>
+                        </select>                        
+                    </div> */}
                     <div className="d-grid gap-2">
-                        <Link to={"#"} className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="signup.sign_up" /></Link>
+                        <Link to="/" className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="signup.sign_up" /></Link>
                     </div>
                 </div>
                 <div className="or-bg">
@@ -204,8 +206,8 @@ function RegistrationForm(props) {
                     <AppleSigninButton />
                     <FacebookLoginButton />
                 </div>
-                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to={"/"} ><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
-            <Modal.Footer> <Link to={"#"} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to={"#"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
+                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/" ><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+            <Modal.Footer> <Link to="/" className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to="/" className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
         </Modal>
     )
 }
@@ -215,7 +217,8 @@ function RegistrationForm(props) {
 const mapStateToProps = state => ({
     auth: state.Auth.idToken,
     errors: state.errors,
-    loading: state.Auth.loading
+    loading: state.Auth.loading,
+    userSetype: state.App.userType
     // loginerror:state.errors.loginerror
 });
 

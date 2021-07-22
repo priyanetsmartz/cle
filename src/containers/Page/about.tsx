@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import IntlMessages from "../../components/utility/intlMessages";
 import { Pages } from '../../redux/pages/allPages';
 import { connect } from "react-redux";
-import appAction from "../../redux/app/actions";
 import { Link } from "react-router-dom";
-import partnershipImage from "../../image/partnership-page-pic.png";
+import appAction from "../../redux/app/actions";
+import IntlMessages from "../../components/utility/intlMessages";
 const { openSignUp } = appAction;
 
-function Partnership(props) {
+function AboutUs(props) {
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
     useEffect(() => {
-        //   let pageIdentifier = 'partnership';
         async function fetchMyAPI() {
-            let result: any = await Pages('partnership', props.languages);
-          //  console.log(result)
+            let result: any = await Pages('about-us', props.languages);
+            //console.log(result)
             var jsonData = result.data.items[0];
             SetPagesData(jsonData);
         }
@@ -36,6 +34,8 @@ function Partnership(props) {
                 </svg>
             </figure>
             <div dangerouslySetInnerHTML={{ __html: pagesData.content }} />
+            <div><Link to="/" className="signup-btn" onClick={() => { handleClick(); }}><IntlMessages id="aboutus.sign_up_now" /></Link></div>
+
         </div>
     );
 }
@@ -59,4 +59,4 @@ function mapStateToProps(state) {
 export default connect(
     mapStateToProps,
     { openSignUp }
-)(Partnership);
+)(AboutUs);

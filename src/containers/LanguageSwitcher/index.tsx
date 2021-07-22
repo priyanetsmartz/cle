@@ -15,10 +15,10 @@ function LanguageSwitcher(props) {
     setValue(lang);
   }
   return (
-    <li className="lang-sec"><Link to={"#"} onClick={() => {
+    <li className="lang-sec"><Link to="/" onClick={() => {
       handleChange('english');
     }} >En</Link>
-      <Link to={"#"} onClick={() => {
+      <Link to="/" onClick={() => {
         handleChange('arabic');
       }}>
         <svg xmlns="http://www.w3.org/2000/svg" width="31" height="19" viewBox="0 0 31 19">

@@ -170,7 +170,7 @@ function SignIn(props) {
             </div>
           </div>
           <div className="d-grid gap-2">
-            <Link to={"#"} className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="login.button" /></Link>
+            <Link to={"/test"} className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="login.button" /></Link>
           </div>
         </div>
         <div className="or-bg">
@@ -182,7 +182,7 @@ function SignIn(props) {
           <FacebookLoginButton />
         </div>
         <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"/terms-and-conditions"}><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"}><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
-      <Modal.Footer><Link to={"#"} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to={"#"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
+      <Modal.Footer><Link to={"/test"} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to={"/test"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
     </Modal>
   );
 }

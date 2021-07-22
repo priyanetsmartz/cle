@@ -3,48 +3,56 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import blackLogo from "../../image/CLE-logo-black.svg";
 import { Link } from "react-router-dom";
 import { siteConfig } from '../../settings/';
+import { useState } from 'react';
+import SignUp from '../Page/signup';
+import SignIn from '../Page/signin';
+import IntlMessages from "../../components/utility/intlMessages";
 
 function FooterExtra(props) {
-
-
+    const [menuLoaded, setMenuLoaded] = useState(false);
+    const handleMenuOpen = (e) => {
+        e.preventDefault();
+        setMenuLoaded(true)
+    }
     return (
         <>
-
+            <SignIn showLogin={props.showLogin} />
+            <SignUp signupModel={props.signupModel} />
             <footer className="cle-footer container">
                 <div className="row my-4">
                     <div className="col-md-2">
                         <ul className="footer-links">
-                            <li className="fl-title">My Account</li>
-                            <li><Link to={"/"}>My Profile</Link></li>
+                            <li className="fl-title"><IntlMessages id="footer.about" /></li>
+                            <li><Link to="/"><IntlMessages id="footer.profile" /></Link></li>
                         </ul>
                     </div>
                     <div className="col-md-2">
                         <ul className="footer-links">
-                            <li className="fl-title">Sell</li>
-                            <li><Link to={"/partnetship"}>Partnership</Link></li>
+                            <li className="fl-title"><IntlMessages id="footer.sell" /></li>
+                            <li><Link to={"/partnetship"}><IntlMessages id="footer.Partnership" /></Link></li>
                         </ul>
                     </div>
                     <div className="col-md-2">
                         <ul className="footer-links">
-                            <li className="fl-title">Useful Links</li>
-                            <li><Link to={"/"}>Help Center</Link></li>
-                            <li><Link to={"/"}>Customer Support</Link></li>
-                            <li><Link to={"/magazine"}>Magazine</Link></li>
+                            <li className="fl-title"><IntlMessages id="footer.useful" /></li>
+                            <li><Link to="/"><IntlMessages id="footer.help" /></Link></li>
+                            <li><Link to="/"><IntlMessages id="footer.customer" /></Link></li>
+                            <li><Link to={"/magazine"}><IntlMessages id="footer.magazine" /></Link></li>
                         </ul>
                     </div>
                     <div className="col-md-2">
                         <ul className="footer-links">
-                            <li className="fl-title">Discover CLE</li>
-                            <li><Link to={"/"}>Our Story</Link></li>
-                            <li><Link to={"/"}>Join Us</Link></li>
+                            <li className="fl-title"><IntlMessages id="footer.discover" /></li>
+                            <li><Link to="/"><IntlMessages id="footer.story" /></Link></li>
+                            <li><Link to="/"><IntlMessages id="footer.joinus" /></Link></li>
                         </ul>
                     </div>
                     <div className="col-md-1"></div>
                     <div className="col-md-3">
                         <ul className="footer-address">
                             <li><img src={blackLogo} /></li>
-                            <li>Istanbul St, As Sulay<br />
-                                Riyadh 14322, Kingdom of Saudi Arabia<br />
+                            <li><IntlMessages id="footer.address" /><br />
+                            <IntlMessages id="footer.address2" /><br />
                                 (+966) 920 002 470</li>
                             <li>
                                 <Link to={{ pathname: siteConfig.facebookLink }} target="_blank" >
@@ -82,7 +90,7 @@ function FooterExtra(props) {
                         </ul>
                     </div>
                     <div className="col-md-12 footer-last-links mb-3">
-                        <Link to={"/"}>Terms & Conditions</Link>&nbsp;&nbsp;&nbsp;&nbsp;<Link to={"/"}>Privacy Policy</Link>
+                        <Link to="/"><IntlMessages id="signup.terms_conditions" /></Link>&nbsp;&nbsp;&nbsp;&nbsp;<Link to="/"><IntlMessages id="signup.privacy_policy" /></Link>
                     </div>
                 </div>
             </footer>
@@ -95,7 +103,7 @@ function mapStateToProps(state) {
     if (state && state.App) {
         showLogin = state.App.showLogin;
         signupModel = state.App.showSignUp
-    }
+    }    
     return {
         showLogin: showLogin,
         signupModel: signupModel

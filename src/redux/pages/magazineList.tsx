@@ -1,8 +1,10 @@
 import API from "../../restApi/AdminApi";
 const Api = new API();
 
-export function MagazineList() {
-    return Api.request("rest/V1/blog/list?store_id=3&page_no=1", "", "GET", "");
+export function MagazineList(language: string) {
+    var storeId = language === 'english' ? 3 : 2;
+    var payload = {};
+    return Api.request("rest/V1/blog/list?store_id=" + storeId + "&page_no=1", payload, "GET", "");
 }
 
 export function PostList() {
