@@ -15,7 +15,10 @@ import WithFooter from "./components/all-route/withFooter";
 import AllPosts from './containers/Page/magazineCategory';
 import newHome from './containers/Page/anewpage';
 import HelpUs from './containers/Page/helpUs';
-
+import ThankYou from './containers/Page/ThankYou';
+import ResetPassword from './containers/Page/ResetPassoword';
+import SocialCheckout from './containers/Page/SocialCheckout';
+import newpage from './containers/Page/new-home';
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -23,15 +26,22 @@ const PublicRoutes = ({ history }) => {
         <Switch>
           <MainRoute exact path="/" component={Home} />
           <WithFooter exact path="/home" component={newHome} />
+          <WithFooter exact path="/new-home" component={newpage} />
           {/* <MainRoute exact path="/partnership" component={PartnerShip} /> */}
           <MainRoute exact path="/help-us" component={HelpUs} />
+          <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
           <MainRoute exact path="/magazine" component={Magazine} />
           <WithFooter exact path="/magazine/see-all" component={AllPosts} />
           <WithFooter exact path="/magazine/:slug" component={SinglePost} />
           <MainRoute path="/:id" component={Pages} />
+          <MainRoute exact path="/checkout-us" component={SocialCheckout} />
           <Route exact path="/forgot-password">
             <ForgottenPassword />
           </Route>
+          <Route exact path="/reset-password">
+            <ResetPassword />
+          </Route>
+          <MainRoute path="/:id" component={Pages} />
           <Route exact path="/post-comment">
             <PostComment />
           </Route>

@@ -17,7 +17,7 @@ function Home(props) {
             SetPagesData(jsonData);
         }
         fetchMyAPI()
-    }, [props.match.params.id, props.languages])
+    }, [props.languages])
 
     const handleClick = () => {
         const { openSignUp } = props;

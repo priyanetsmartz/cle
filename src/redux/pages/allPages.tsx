@@ -44,7 +44,11 @@ export function Pages(value: string, language: string) {
 }
 
 export function GetHelpUsForm() {
-    return AdminApi.request("rest/all/V1/customform/form?storeId=2&form_code=help-us", "", "GET", "");
+    return AdminApi.request("rest/all/V1/customform/form?storeId=3&form_code=help-us", "", "GET", "");
+}
+
+export function SaveAnswers(data) {
+    return AdminApi.request("rest/all/V1/amasty_customform/answer", data, "POST", "");
 }
 
 
