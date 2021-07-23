@@ -34,12 +34,8 @@ const PublicRoutes = ({ history }) => {
           <WithFooter exact path="/magazine/see-all" component={AllPosts} />
           <WithFooter exact path="/magazine/:slug" component={SinglePost} />
           <MainRoute exact path="/checkout-us" component={SocialCheckout} />
-          <Route exact path="/forgot-password">
-            <ForgottenPassword />
-          </Route>
-          <Route exact path="/reset-password/:token">
-            <ResetPassword />
-          </Route>
+          <WithFooter exact path="/forgot-password" component={ForgottenPassword} />
+          <WithFooter exact path="/reset-password" component={ResetPassword} />
           <Route exact path="/post-comment">
             <PostComment />
           </Route>

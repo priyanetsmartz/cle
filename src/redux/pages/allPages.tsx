@@ -55,12 +55,12 @@ export function SendMailForgotPass(data) {
     return AdminApi.request("rest/V1/customers/password", data, "PUT", "");
 }
 
-export function ValidateToken(token: string, customerId: number) {
+export function ValidateToken(token: string, customerId: string) {
     return AdminApi.request(`rest/V1/customers/${customerId}/password/resetLinkToken/${token}`, "", "GET", "");
 }
 
-export function SAveNewPass(data) {
-    return AdminApi.request("rest/all/V1/amasty_customform/answer", data, "POST", "");
+export function SaveNewPass(data) {
+    return AdminApi.request("rest/V1/customers/resetPassword", data, "POST", "");
 }
 
 
