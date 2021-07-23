@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { connect } from "react-redux";
 import authAction from "../../redux/auth/actions";
 import IntlMessages from "../../components/utility/intlMessages";
-const { forgotPassowd } = authAction;
+import { SendMailForgotPass } from "../../redux/pages/allPages";
+import notification from '../../components/notification';
+
 
 function ForgottenPassword(props) {
   const [state, setState] = useState({
@@ -20,17 +22,17 @@ function ForgottenPassword(props) {
     }))
   }
 
-  const handleSubmitClick = (e) => {
+  const handleSubmitClick = async (e) => {
     e.preventDefault();
-    const { forgotPassowd } = props;
     if (handleValidation()) {
-      const userInfo = {
-        "type": "user",
-        "email": state.email
+      let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email, websiteId: 1 });
+      if (result) {
+        notification("success", "", "mail sent");
+      } else {
+        notification("error", "", "No data found!");
       }
-      forgotPassowd({ userInfo });
     } else {
-      console.log("Please enter valid email");
+      notification("error", "", "Please enter valid email");
     }
   }
 
@@ -87,13 +89,6 @@ function ForgottenPassword(props) {
     </div>
   );
 }
-const mapStateToProps = state => ({
-  auth: state.auth,
-  errors: state.errors,
-  // loginerror:state.errors.loginerror
-});
-export default connect(
-  mapStateToProps,
-  { forgotPassowd }
-)(ForgottenPassword);
+
+export default ForgottenPassword
 

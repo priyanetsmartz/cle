@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { connect } from "react-redux";
-import authAction from "../../redux/auth/actions";
+import React, { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-const { resetPassword } = authAction;
+import { useParams } from "react-router";
+import { ValidateToken } from "../../redux/pages/allPages";
+import notification from '../../components/notification';
+let { token, customerId } = useParams();
 
 function ResetPassword(props) {
     const [state, setState] = useState({
@@ -12,6 +13,19 @@ function ResetPassword(props) {
     const [errors, setError] = useState({
         errors: {}
     });
+
+    useEffect(() => {
+        async function getData() {
+            let result: any = await ValidateToken(token, customerId);
+            if(result.data.length > 0) {
+                
+            }else{
+                notification("error", "", "No data found!");
+            }
+        }
+        getData()
+
+    }, [])
 
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -23,13 +37,11 @@ function ResetPassword(props) {
 
     const handleSubmitClick = (e) => {
         e.preventDefault();
-        const { resetPassword } = props;
         if (handleValidation()) {
             const userInfo = {
                 "type": "user",
                 "password": state.password
             }
-            resetPassword({ userInfo });
         } else {
             console.log("Please enter valid password");
         }
@@ -99,13 +111,6 @@ function ResetPassword(props) {
         </div>
     );
 }
-const mapStateToProps = state => ({
-    auth: state.auth,
-    errors: state.errors,
-    // loginerror:state.errors.loginerror
-});
-export default connect(
-    mapStateToProps,
-    { resetPassword }
-)(ResetPassword);
+
+export default ResetPassword;
 
