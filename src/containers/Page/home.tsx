@@ -19,7 +19,8 @@ function Home(props) {
         fetchMyAPI()
     }, [props.languages])
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        e.preventDefault()
         const { openSignUp } = props;
         openSignUp(true);
     }
@@ -33,19 +34,19 @@ function Home(props) {
                         <g id="Group_793" data-name="Group 793" transform="translate(-703 -190.5)">
                             <text id="Time" transform="translate(704 350.5)" fill="none" stroke="#2e2baa" strokeWidth="1"
                                 fontSize="147" fontFamily="SegoeUI-Bold, Segoe UI" fontWeight="700">
-                                <tspan x="0" y="0">TIME</tspan>
+                                <tspan x="0" y="0"><IntlMessages id="home.time" /></tspan>
                             </text>
-                            <text id="NOW_" data-name="NOW!" transform="translate(862 458)" fill="#2e2baa" fontSize="114"
+                            <text id="NOW_" data-name={<IntlMessages id="home.now" />} transform="translate(862 458)" fill="#2e2baa" fontSize="114"
                                 fontFamily="SegoeUI-Bold, Segoe UI" fontWeight="700">
-                                <tspan x="0" y="0">NOW!</tspan>
+                                <tspan x="0" y="0"><IntlMessages id="home.now" /></tspan>
                             </text>
                             <text id="Is" transform="translate(788 412)" fill="#2e2baa" stroke="#2e2baa" strokeWidth="1" fontSize="48"
                                 fontFamily="SegoeUI, Segoe UI">
-                                <tspan x="0" y="0">IS</tspan>
+                                <tspan x="0" y="0"><IntlMessages id="home.is" /></tspan>
                             </text>
-                            <text id="New_luxury_marketplace" data-name="New luxury marketplace" transform="translate(867 493)"
+                            <text id="New_luxury_marketplace" data-name={<IntlMessages id="home.slogan" />} transform="translate(867 493)"
                                 fill="#2e2baa" fontSize="20" fontFamily="SegoeUI, Segoe UI">
-                                <tspan x="0" y="0">New luxury marketplace</tspan>
+                                <tspan x="0" y="0"><IntlMessages id="home.slogan" /></tspan>
                             </text>
                         </g>
                     </svg>
@@ -132,7 +133,7 @@ function Home(props) {
 
                 </figure>
                 <div className="position-absolute mx-auto sign-up-btn">
-                    <Link className="" to={"#"} onClick={() => { handleClick(); }} role="button"><IntlMessages id="sign_up_now" /></Link>
+                    <Link className="" to="/" onClick={(e) => { handleClick(e); }} role="button"><IntlMessages id="sign_up_now" /></Link>
                 </div>
             </div>
         </div>

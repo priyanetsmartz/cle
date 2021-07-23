@@ -1,74 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import logo from "../../image/CLE-LOGO.svg";
-import blackLogo from "../../image/CLE-logo-black.svg"
 import loading from "../../image/CLE_LogoMotionGraphics.gif";
-import { Link } from "react-router-dom";
 import LanguageSwitcher from '../../containers/LanguageSwitcher';
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import { siteConfig } from '../../settings/';
 import { connect } from 'react-redux';
 import history from '../Page/history';
+import Hamburger from './hamburger';
+import { Link, animateScroll as scroll, scroller, Scroll } from 'react-scroll'
+
 const { logout } = authAction;
-const { showSignin, openSignUp, logoClass } = appAction;
+const { showSignin, openSignUp, logoClass, toggleOpenDrawer, userType } = appAction;
 
 
 function Header(props) {
     const [isLoaded, setIsLoaded] = useState(true);
     const [menuLoaded, setMenuLoaded] = useState(false);
-    const [classState, setClassState] = useState('');
-    const [logoState, setlogoState] = useState(logo);
+
+
     useEffect(() => {
         setTimeout(() => {
             setIsLoaded(false);
         }, 3000);
-    }); // here
+
+        if (props && props.match && props.match.params.signup === 'true' && props && props.match && props.match.params.member === 'prive') {
+            props.openSignUp(true);
+            props.userType(4);
+        }
+    }, [props.match.params.signup, props.match.params.member]); // here
 
     useEffect(() => {
-        console.log(props);
-        const classValue = 'inner_pages_body';
-        const classValueLogo = 'header-logo-menu';
-        const logoReal = props.match.params.id ? blackLogo : logo;
-        setClassState(classValueLogo);
-        setlogoState(logoReal);
-        document.body.classList.add(classValue);
+        setMenuLoaded(props.openMenu)
     });
 
 
 
-    // menu screen will be open 
-    const handleMenuOpen = (e) => {
-        e.preventDefault();
-        setMenuLoaded(true)
-    }
     // it will close menu screen
     const handleMenuClose = (e) => {
-        e.preventDefault();
-        setMenuLoaded(false)
+        props.toggleOpenDrawer(false);
     }
     // handle sigin click
     const handlesigninClick = () => {
         props.showSignin(true);
-        setMenuLoaded(false)
+        props.toggleOpenDrawer(false);
     }
     // handle menu click
     const handleClick = (popupState) => {
-        setMenuLoaded(false)
-        setIsLoaded(true)
-        props.logoClass(true);
-
+        props.toggleOpenDrawer(false);
+    }
+    const magazinehandleClick = () => {
+        props.toggleOpenDrawer(false);
+        scroller.scrollTo('magazine', {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuart'
+        })
     }
     // handle signup link click
     const handleSignUp = (e) => {
-        e.preventDefault();
-        setMenuLoaded(false);
+        //  e.preventDefault();
+        props.toggleOpenDrawer(false);
         props.openSignUp(true);
     }
 
     const logout = () => {
         // Clear access token and ID token from local storage
-        setMenuLoaded(false)
+        props.toggleOpenDrawer(false);
         localStorage.removeItem('id_token');
         props.logout();
         // navigate to the home route
@@ -82,28 +81,15 @@ function Header(props) {
                     <img className="loading-gif" src={loading} />
                 </div>
             )}
-            <div className={classState}>
-                <div className="container">
-                    <div className="mt-5">
-                        <Link to={"/"}><img src={logoState} /></Link>
-                        <div className="hamburger">
-                            <Link to={"#"} className="open-menu" onClick={handleMenuOpen}>
-                                <span className="hb-first"></span>
-                                <span className="hb-second"></span>
-                                <span className="hb-third"></span>
-                            </Link>
-                        </div>
-                        <div className="clearfix"></div>
-                    </div>
-                </div>
-            </div>
+            {/* hamnurger section */}
+            <Hamburger />
             {/** menu section starts */}
             {menuLoaded && (
                 <div className="menu-section">
                     <div className="container">
                         <div className="mt-5">
                             <div className="hamburger-close float-end">
-                                <Link to={"#"} className="open-menu">
+                                <Link to="/" className="open-menu">
                                     <svg id="Close" onClick={handleMenuClose} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
                                         <rect id="Rectangle_498" data-name="Rectangle 498" width="52.217" height="4.351"
                                             transform="translate(3.077 0) rotate(45)" fill="#2e2baa" />
@@ -117,32 +103,34 @@ function Header(props) {
                         <div className="row">
                             <div className="col-md-5 offset-md-1">
                                 <ul className="left-menu-content">
-                                    <li><Link to={"/about-us"} onClick={() => {
-                                        handleClick(setMenuLoaded);
+                                    
+                                    <li><Link to="/" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
+                                        handleClick('about-us');
                                     }} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
-                                    <li><Link to={"/magazine"} onClick={() => {
-                                        handleClick(setMenuLoaded);
+                                    <li><Link to="/" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
+                                        magazinehandleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
-                                    <li><Link to={"/partnership"} onClick={() => {
+                                    <li><Link to="partnership" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
                                         handleClick(setMenuLoaded);
                                     }} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     {!localStorage.getItem('id_token') && (
-                                        <li><Link to={"#"} onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
+                                        <li><Link to="/" onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
                                     )}
                                     {localStorage.getItem('id_token') && (
-                                        <li><Link to={"#"} onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
+                                        <li><Link to="/" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
                                     )}
-                                    <li><IntlMessages id="menu_newhere" /> <Link to={"#"} onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
+                                    <li><IntlMessages id="menu_newhere" /> <Link to="/" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
                                 </ul>
                             </div>
                             <div className="col-md-4">
                                 <ul className="right-menu-content">
-                                    <li><Link to={"/help-us"} onClick={() => {
-                                        handleClick(setMenuLoaded)
+                                    <li><Link to="helpus" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
+                                        handleClick(setMenuLoaded);
                                     }} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
-                                    <li><Link to={"/checkout-us"} onClick={() => {
-                                        handleClick(setMenuLoaded);}} className="main-menu"><IntlMessages id="menu_checkus" /></Link></li>
-                                    <li><Link to={"#"} className="main-menu"><IntlMessages id="menu_contact" /></Link></li>
+                                    <li><Link to="checkus-out" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
+                                        handleClick(setMenuLoaded);
+                                    }} className="main-menu"><IntlMessages id="menu_checkus" /></Link></li>
+                                    <li><Link to="/" className="main-menu"><IntlMessages id="menu_contact" /></Link></li>
                                     <li>
                                         <div><IntlMessages id="menu_findus" /></div>
                                         <div>
@@ -207,11 +195,17 @@ function Header(props) {
 }
 
 function mapStateToProps(state) {
-    // console.log(state);
-    return state;
+    let openMenu = '';
+    console.log(state);
+    if (state.App && state.App.openDrawer) {
+        openMenu = state.App.openDrawer;
+    }
+    return {
+        openMenu: openMenu
+    };
 }
 
 export default connect(
     mapStateToProps,
-    { logout, showSignin, openSignUp, logoClass }
+    { logout, showSignin, openSignUp, logoClass, toggleOpenDrawer, userType }
 )(Header);

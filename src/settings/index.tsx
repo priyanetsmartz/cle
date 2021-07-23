@@ -8,7 +8,8 @@ const siteConfig = {
   footerText: 'CLE ©' + (new Date()).getFullYear(),
   facebookLink: 'https://www.facebook.com/',
   instagram: 'https://www.instagram.com/',
-  linkedin: 'https://www.linkedin.com/'
+  linkedin: 'https://www.linkedin.com/',
+  twitter : 'https://www.twitter.com/'
 };
 const apiConfig = {
   fetchUrl: '',

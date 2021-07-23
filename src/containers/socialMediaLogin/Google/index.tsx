@@ -28,7 +28,7 @@ function GoogleLoginButton(props) {
         <GoogleLogin
             clientId={apiConfig.googleClientId}
             render={renderProps => (
-                <Link to={"#"} onClick={renderProps.onClick}>
+                <Link to={"/test"} onClick={renderProps.onClick}>
                     <svg id="google-icon" xmlns="http://www.w3.org/2000/svg" width="18.62" height="19"
                         viewBox="0 0 18.62 19">
                         <path id="Path_299" data-name="Path 299"

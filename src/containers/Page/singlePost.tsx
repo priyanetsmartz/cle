@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { PostData, GetComments } from '../../redux/pages/magazineList';
+import { PostData, GetComments, RelatedList } from '../../redux/pages/magazineList';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { FacebookShareButton, LinkedinShareButton } from "react-share";
 import { Button } from 'react-bootstrap';
-
+import IntlMessages from "../../components/utility/intlMessages";
+import { Link } from "react-router-dom";
 const readingTime = require('reading-time');
 
-function SinglePost() {
+function SinglePost(props) {
 
     const [post, setPost] = useState({
         title: "",
@@ -18,11 +19,15 @@ function SinglePost() {
     const [comments, setComments] = useState([]);
     const [shareUrl, setShareUrl] = useState('');
     const { slug } = useParams();
+    const [related, setRelated] = useState([]);
 
     useEffect(() => {
         setShareUrl(window.location.href);
         async function getData() {
             let result: any = await PostData(slug);
+            let featuredResult: any = await RelatedList(props.languages, slug);
+            console.log(featuredResult.data);
+            setRelated(featuredResult.data);
             setPost(result.data[0]);
             getPostComments(result.data[0].post_id);
         }
@@ -42,7 +47,7 @@ function SinglePost() {
                 <img src={post.post_thumbnail} />
             </div>
 
-            <div className="detail-page mt-5">
+            <div className="detail-page mt-5 ">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12 text-center">
@@ -95,13 +100,45 @@ function SinglePost() {
                                 </li>
                             </ul>
                         </div>
-                        <div className="col-md-10 offset-md-1 text-center" style={{ height: "35px" }}>
-
+                        <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="mt-5 py-5">
+                                    <h2 className="pb-3 text-center">You may also want to read </h2>
+                                    {related.length > 0 && (
+                                        <div className="container">
+                                            <div className="row my-3">
+                                                {related.map((item, i) => {
+                                                    console.log(typeof (item.category))
+                                                    return (
+                                                        <div className="col-md-4" key={i}>
+                                                            <div className="blog-sec-main">
+                                                                <div className="mag-blog-pic-2"><img src={item.list_thumbnail} /></div>
+                                                                <div className="cate-name">Trends</div>
+                                                                <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
+                                                                <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
+                                                                <p className="mag-blog-desc d-none">{item.short_content}</p>
+                                                                <Link to={"/magazine/" + item.post_id} className="signup-btn mx-auto "><IntlMessages id="magazine.read_more" /></Link>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {!related.length && (
+                                        <div className="container">
+                                            No Data Available
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
                 </div>
+
             </div>
+
         </>
     );
 }

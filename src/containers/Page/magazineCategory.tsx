@@ -100,11 +100,11 @@ function MagazineCategory(props) {
                 </div>
                 <div className="row">
                     <div className="col-md-12 back-home mb-2">
-                        <a href="">
+                        <Link to="/">
                             <svg className="me-2" xmlns="http://www.w3.org/2000/svg" width="6.08" height="9.743" viewBox="0 0 6.08 9.743">
                                 <path id="Path_13" data-name="Path 13" d="M0,5,4.5,0,9,5" transform="translate(0.747 9.372) rotate(-90)" fill="none" stroke="#2E2BAA" strokeWidth="1" />
                             </svg> Back to Home
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -195,13 +195,13 @@ function MagazineCategory(props) {
                                 <nav aria-label="Page navigation example">
                                     <ul className="pagination justify-content-center">
                                         <li className="page-item disabled">
-                                            <a className="page-link" href="#" aria-disabled="true">Previous</a>
+                                            <a className="page-link" href="/test" aria-disabled="true">Previous</a>
                                         </li>
-                                        <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">3</a></li>
+                                        <li className="page-item"><a className="page-link" href="/test">1</a></li>
+                                        <li className="page-item"><a className="page-link" href="/test">2</a></li>
+                                        <li className="page-item"><a className="page-link" href="/test">3</a></li>
                                         <li className="page-item">
-                                            <a className="page-link" href="#">Next</a>
+                                            <a className="page-link" href="/test">Next</a>
                                         </li>
                                     </ul>
                                 </nav>

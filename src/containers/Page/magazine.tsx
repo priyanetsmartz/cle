@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import notification from '../../components/notification';
 
 import { MagazineList } from '../../redux/pages/magazineList';
 
-function Magazine() {
+function Magazine(props) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
         async function getData() {
-            let result: any = await MagazineList();
-            if(result.data.length > 0) {
+            let result: any = await MagazineList(props.languages);
+            if (result.data.length > 0) {
                 setItems(result.data);
-            }else{
+            } else {
                 notification("error", "", "No data found!");
             }
         }
         getData()
 
-    }, [])
+    }, [props.languages])
 
 
     return (
@@ -41,7 +41,7 @@ function Magazine() {
                                     <div className="mag-blog-pic"><img src={item.list_thumbnail} /></div>
                                     <h3 className="mag-blog-title mt-5 mb-3">{item.title}</h3>
                                     <p className="mag-blog-desc d-none">{item.short_content}...</p>
-                                    <Link to={"/magazine/"+item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                    <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                 </div>
                             </div>
                         );
@@ -58,4 +58,18 @@ function Magazine() {
     );
 }
 
-export default Magazine;
+function mapStateToProps(state) {
+    let languages = '';
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+    // console.log(state.LanguageSwitcher)
+    return {
+        languages: languages
+
+    };
+};
+export default connect(
+    mapStateToProps,
+    {}
+)(Magazine);

@@ -11,7 +11,8 @@ const initState = {
   // openKeys: preKeys,
   showLogin: false,
   showSignUp: false,
-  logoClass: 'normal'
+  logoClass: 'normal',
+  userType: 1
 };
 export default function appReducer(state = initState, action) {
   switch (action.type) {
@@ -42,6 +43,8 @@ export default function appReducer(state = initState, action) {
       return { ...state, showSignUp: action.showSignUp };
     case actions.LOGO_CLASS:
       return { ...state, logoClass: action.logoClass };
+    case actions.SET_TYPE:
+      return { ...state, userType: action.userType };
     default:
       return state;
   }

@@ -1,11 +1,9 @@
 import React from "react";
 import { Route, Redirect } from "react-router";
 import { connect } from "react-redux";
-// import PropTypes from "prop-types";
 
 import Header from '../../containers/partials/header';
-// import Sidebar from '../../containers/partials/sidebar';
-import Footer from '../../containers/partials/footer';
+import Footer from '../../containers/partials/footer-new';
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
   <Route
@@ -13,7 +11,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
     render={props =>
       auth === undefined ? (
         <>
-          <Header  {...props}/>
+          <Header  {...props} />
           {/* <Sidebar /> */}
           <Component {...props} />
           <Footer />
@@ -24,9 +22,6 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
     }
   />
 );
-// PrivateRoute.propTypes = {
-//   auth: PropTypes.object.isRequired
-// };
 
 function mapStateToProps(state) {
   return {
