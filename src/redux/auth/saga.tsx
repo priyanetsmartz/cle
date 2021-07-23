@@ -12,7 +12,7 @@ export function* loginRequest() {
 
   yield takeEvery("LOGIN_REQUEST", function* (payload: any) {
     try {
-      console.log(payload.payload.userInfo);
+      //   console.log(payload.payload.userInfo);
       //user details
       var type = payload.payload.userInfo.type;
       var email = payload.payload.userInfo.email;
@@ -77,12 +77,19 @@ export function* registerRequest() {
       //API call to login request
       const response = yield call(loginApi.register, firstname, email, password, type);
       if (response.data.id !== "") {
-        //  yield put(push("/"));
-        notification("success", "", "Account registered");
-        // yield put({ type: actions.REGISTER_SUCCESS, token: response.data.id });
-        yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
-        //  localStorage.setItem('id_token', response.data.id);
-        yield put(push("/"));
+        const token = yield call(loginApi.getAuthRegister, email);
+        console.log(token[0])
+        if (token[0].new_token) {
+          notification("success", "", "Account registered");
+          localStorage.setItem('id_token', token.data.new_token);
+          yield setCookie("username", token.data.email);
+          //   yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
+          //  yield put(push("/"));
+        } else {
+          yield put({ type: actions.REGISTER_ERROR });
+          yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
+        }
+
       } else {
         notification("error", "", "Invalid email or password.");
         yield put({ type: actions.REGISTER_ERROR });

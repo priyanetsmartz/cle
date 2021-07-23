@@ -3,7 +3,7 @@ import { PostData, GetComments, RelatedList } from '../../redux/pages/magazineLi
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { FacebookShareButton, LinkedinShareButton } from "react-share";
-import { Button } from 'react-bootstrap';
+// import { Button } from 'react-bootstrap';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 const readingTime = require('reading-time');

@@ -15,7 +15,7 @@ import { useIntl } from 'react-intl';
 import { Link } from "react-router-dom";
 const { register } = authAction;
 const { openSignUp } = appAction;
-const loginApi = new Login();
+// const loginApi = new Login();
 
 
 function RegistrationForm(props) {
@@ -32,7 +32,7 @@ function RegistrationForm(props) {
     const [errors, setError] = useState({
         errors: {}
     });
-    const [types, SetTypes] = useState([])
+    //const [types, SetTypes] = useState([])
     // useEffect(() => {
     //     console.log(props)
     //     loadData();

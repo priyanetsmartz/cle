@@ -94,25 +94,25 @@ function SocailCheckout() {
             <div className="social-icon-list">
                 <div className="social-icon-scroll">
                     <div className="social-pic-icon">
-                        <img src={social1} />
+                        <img src={social1} alt="social1" />
                     </div>
                     <div className="social-pic-icon">
-                        <img src={social4} />
+                        <img src={social4} alt="social1" />
                     </div>
                     <div className="social-pic-icon">
-                        <img src={social2} />
+                        <img src={social2} alt="social1" />
                     </div>
                     <div className="social-pic-icon">
-                        <img src={social3} />
+                        <img src={social3} alt="social1" />
                     </div>
                     <div className="social-pic-icon">
-                        <img src={social5} />
+                        <img src={social5} alt="social1" />
                     </div>
                     <div className="social-pic-icon">
-                        <img src={social6} />
+                        <img src={social6} alt="social1" />
                     </div>
                     <div className="social-pic-icon">
-                        <img src={social7} />
+                        <img src={social7} alt="social1" />
                     </div>
                 </div>
                 <div className="social-icon-blue-bg"></div>

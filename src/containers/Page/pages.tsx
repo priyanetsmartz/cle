@@ -4,7 +4,7 @@ import { Pages } from '../../redux/pages/allPages';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
 import { Link } from "react-router-dom";
-import history from './history';
+//import history from './history';
 const { openSignUp } = appAction;
 
 function AllPages(props) {

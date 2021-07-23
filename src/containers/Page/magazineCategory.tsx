@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FeaturedList, GetCategoryData, SendNewsletter } from '../../redux/pages/magazineList';
 import moment from 'moment';
 import notification from '../../components/notification';
@@ -16,6 +16,11 @@ function MagazineCategory(props) {
         errors: {}
     });
     const [latest, setlatestItem] = useState({ title: '', published_at: '', short_content: '', post_id: '', list_thumbnail: '' });
+
+    const location = useLocation()
+    useEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+    }, [location,])
     useEffect(() => {
         async function getData() {
             let result: any = await GetCategoryData();
@@ -68,14 +73,14 @@ function MagazineCategory(props) {
                 "email": state.email,
                 "type": radio
             }
-            const result:any = await SendNewsletter({ userInfo });
-            if(result.data[0].success == 1){
+            const result: any = await SendNewsletter({ userInfo });
+            if (result.data[0].success == 1) {
                 notification("success", "", result.data[0].message);
                 setState(prevState => ({
                     ...prevState,
                     email: ""
                 }))
-            }else{
+            } else {
                 notification("error", "", result.data[0].message);
             }
         } else {
@@ -90,11 +95,11 @@ function MagazineCategory(props) {
                     <div className="col-md-6 offset-md-3 text-center">
                         <h3>Magazine</h3>
                         <ul>
-                            <li><a href="" className="active-menu">Latest</a></li>
-                            <li><a href="">Fashion</a></li>
-                            <li><a href="">Watches</a></li>
-                            <li><a href="">Lifestyle</a></li>
-                            <li><a href="">Trends</a></li>
+                            <li><Link to="/" className="active-menu">Latest</Link></li>
+                            <li><Link to="/">Fashion</Link></li>
+                            <li><Link to="/">Watches</Link></li>
+                            <li><Link to="/">Lifestyle</Link></li>
+                            <li><Link to="/">Trends</Link></li>
                         </ul>
                     </div>
                 </div>
@@ -125,7 +130,7 @@ function MagazineCategory(props) {
                     <div className="container">
                         <div className="row my-3">
                             {featured.map((item, i) => {
-                                console.log(typeof (item.category))
+                             //   console.log(typeof (item.category))
                                 return (
                                     <div className="col-md-4" key={i}>
                                         <div className="blog-sec-main">
@@ -195,13 +200,13 @@ function MagazineCategory(props) {
                                 <nav aria-label="Page navigation example">
                                     <ul className="pagination justify-content-center">
                                         <li className="page-item disabled">
-                                            <a className="page-link" href="/test" aria-disabled="true">Previous</a>
+                                            <Link className="page-link" to="/test" aria-disabled="true">Previous</Link>
                                         </li>
-                                        <li className="page-item"><a className="page-link" href="/test">1</a></li>
-                                        <li className="page-item"><a className="page-link" href="/test">2</a></li>
-                                        <li className="page-item"><a className="page-link" href="/test">3</a></li>
+                                        <li className="page-item"><Link className="page-link" to="/test">1</Link></li>
+                                        <li className="page-item"><Link className="page-link" to="/test">2</Link></li>
+                                        <li className="page-item"><Link className="page-link" to="/test">3</Link></li>
                                         <li className="page-item">
-                                            <a className="page-link" href="/test">Next</a>
+                                            <Link className="page-link" to="/test">Next</Link>
                                         </li>
                                     </ul>
                                 </nav>

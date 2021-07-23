@@ -3,9 +3,10 @@ import IntlMessages from "../../components/utility/intlMessages";
 import { useParams } from "react-router";
 import { ValidateToken } from "../../redux/pages/allPages";
 import notification from '../../components/notification';
-let { token, customerId } = useParams();
+
 
 function ResetPassword(props) {
+    let { token, customerId } = useParams();
     const [state, setState] = useState({
         password: "",
         confirmPassword: ""
@@ -17,9 +18,9 @@ function ResetPassword(props) {
     useEffect(() => {
         async function getData() {
             let result: any = await ValidateToken(token, customerId);
-            if(result.data.length > 0) {
-                
-            }else{
+            if (result.data.length > 0) {
+
+            } else {
                 notification("error", "", "No data found!");
             }
         }

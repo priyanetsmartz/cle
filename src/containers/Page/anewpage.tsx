@@ -6,38 +6,49 @@ import AboutUs from './about';
 import Magazine from './magazine';
 import HelpUs from './helpUs';
 import SocailCheckout from './SocialCheckout';
-import { DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 const { openSignUp } = appAction;
 
 function Home(props) {
-
+    const location = useLocation()
+    useEffect(() => {
+        if (location.hash) {
+            let elem = document.getElementById(location.hash.slice(1))
+            if (elem) {
+                elem.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+            }
+        } else {
+            window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+        }
+    }, [location,])
 
 
     return (
         <>
-            <Element name="home" id="home" className="element">
+            <div id="home" className="element">
                 <HomePage />
-            </Element>
+            </div>
             {/* about us */}
-            <Element name="about-us" className="element">
+            <div id="about-us" className="element">
                 <AboutUs />
-            </Element>
+            </div>
             {/* magazine */}
-            <Element name="magazine" className="element">
+            <div id="magazine" className="element">
                 <Magazine />
-            </Element>
+            </div>
             {/* partnership */}
-            <Element name="partnership" className="element">
+            <div id="partnership" className="element">
                 <Partnership />
-            </Element>
+            </div>
             {/* helpus */}
-            <Element name="helpus" className="element">
+            <div id="help-us" className="element">
                 <HelpUs />
-            </Element>
+            </div>
             {/* check out us */}
-            <Element name="checkus-out" className="element">
+            <div id="checkus-out" className="element">
                 <SocailCheckout />
-            </Element>
+            </div>
         </>
     );
 }

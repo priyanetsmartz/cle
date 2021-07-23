@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 const { toggleOpenDrawer } = appAction;
 
 function Hamburger(props) {
-    const [menuLoaded, setMenuLoaded] = useState(false);
+    //  const [menuLoaded, setMenuLoaded] = useState(false);
     const [classState, setClassState] = useState('');
     const [logoState, setlogoState] = useState(logo);
 
@@ -44,7 +44,7 @@ function Hamburger(props) {
         <div className={classState} id="header">
             <div className="container">
                 <div className="mt-5">
-                    <Link to="/"><img src={logoState} /></Link>
+                    <Link to="/"><img src={logoState} alt="logo" /></Link>
                     <div className="hamburger">
                         <Link to="/" className="open-menu" onClick={handleMenuOpen}>
                             <span className="hb-first"></span>

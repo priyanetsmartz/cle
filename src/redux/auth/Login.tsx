@@ -27,24 +27,6 @@ class Login {
     var payload = {};
     return AdminApi.request("/rest/V1/customerGroups/search/?searchCriteria[filterGroups][0][filters][0][field]=id&searchCriteria[filterGroups][0][filters][0][value]=3&searchCriteria[filterGroups][0][filters][0][condition_type]=gt", payload, "GET", "");
   }
-
-  // register(email: string, password: string, type: string) {
-  //   var payload = `{
-  //     "customer": {
-  //       "email":`+ email + `,
-  //       "firstname": "test",
-  //       "lastname": "Reddy",
-  //       "storeId": 1,
-  //       "websiteId": 1,
-  //       "group_id": 1
-  //     },
-  //     "password": `+ password + `,
-  //     "extension_attributes": {
-  //       "is_subscribed": false
-  //     }
-  //   }`;
-  //   return Api.request("rest/V1/customers", payload, "POST", "");
-  // }
   register(firstname: string, email: string, password: string, type: number) {
     var payload = {
       "customer": {
@@ -65,7 +47,14 @@ class Login {
 
   getPages() {
     var payload = {};
-    return Api.request("rest/V1/cmsPage/search?searchCriteria[filterGroups][0][filters][0][field]=identifier&searchCriteria[filterGroups][0][filters][0][value]=partnership", "", "GET", "");
+    return Api.request("rest/V1/cmsPage/search?searchCriteria[filterGroups][0][filters][0][field]=identifier&searchCriteria[filterGroups][0][filters][0][value]=partnership", payload, "GET", "");
+  }
+
+  getAuthRegister(email: any) {
+    var payload = {
+      email: email
+    }
+    return AdminApi.request("rest/V1/customer/detail?email=" + email, payload, "GET", "");
   }
 }
 

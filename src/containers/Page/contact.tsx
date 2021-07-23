@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import notification from '../../components/notification';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
-import history from './history';
+// import history from './history';
 import { Link } from "react-router-dom";
 import { siteConfig } from '../../settings/';
 import { useIntl } from 'react-intl';
@@ -72,12 +72,12 @@ function ContactUS(props) {
         e.preventDefault();
         //  const { register } = props;
         if (handleValidation()) {
-            const userInfo = {
-                "name": state.name,
-                "email": state.email,
-                "password": state.message
-            }
-            // register({ userInfo });
+            // const userInfo = {
+            //     "name": state.name,
+            //     "email": state.email,
+            //     "password": state.message
+            // }
+            // // register({ userInfo });
         } else {
             notification("warning", "", "Please enter required values");
         }

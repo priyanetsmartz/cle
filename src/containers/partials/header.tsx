@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-import logo from "../../image/CLE-LOGO.svg";
 import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import LanguageSwitcher from '../../containers/LanguageSwitcher';
 import authAction from "../../redux/auth/actions";
@@ -9,7 +8,8 @@ import { siteConfig } from '../../settings/';
 import { connect } from 'react-redux';
 import history from '../Page/history';
 import Hamburger from './hamburger';
-import { Link, animateScroll as scroll, scroller, Scroll } from 'react-scroll'
+import { Link } from "react-router-dom";
+
 
 const { logout } = authAction;
 const { showSignin, openSignUp, logoClass, toggleOpenDrawer, userType } = appAction;
@@ -18,12 +18,15 @@ const { showSignin, openSignUp, logoClass, toggleOpenDrawer, userType } = appAct
 function Header(props) {
     const [isLoaded, setIsLoaded] = useState(true);
     const [menuLoaded, setMenuLoaded] = useState(false);
-
-
     useEffect(() => {
         setTimeout(() => {
             setIsLoaded(false);
         }, 3000);
+
+        setMenuLoaded(props.openMenu)
+    },[props.openMenu]);
+
+    useEffect(() => {
 
         if (props && props.match && props.match.params.signup === 'true' && props && props.match && props.match.params.member === 'prive') {
             props.openSignUp(true);
@@ -31,9 +34,7 @@ function Header(props) {
         }
     }, [props.match.params.signup, props.match.params.member]); // here
 
-    useEffect(() => {
-        setMenuLoaded(props.openMenu)
-    });
+
 
 
 
@@ -47,20 +48,13 @@ function Header(props) {
         props.toggleOpenDrawer(false);
     }
     // handle menu click
-    const handleClick = (popupState) => {
+    const handleClick = () => {
         props.toggleOpenDrawer(false);
+        setIsLoaded(true);
     }
-    const magazinehandleClick = () => {
-        props.toggleOpenDrawer(false);
-        scroller.scrollTo('magazine', {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuart'
-        })
-    }
+
     // handle signup link click
     const handleSignUp = (e) => {
-        //  e.preventDefault();
         props.toggleOpenDrawer(false);
         props.openSignUp(true);
     }
@@ -77,7 +71,7 @@ function Header(props) {
         <>
             {/* universal screen loading */}
             {isLoaded && (
-                <div className="CLE-loading">
+                <div className="CLE-loading" style={{ "position": "fixed" }}>
                     <img className="loading-gif" src={loading} />
                 </div>
             )}
@@ -103,15 +97,14 @@ function Header(props) {
                         <div className="row">
                             <div className="col-md-5 offset-md-1">
                                 <ul className="left-menu-content">
-                                    
-                                    <li><Link to="/" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
-                                        handleClick('about-us');
+                                    <li><Link to="/#about-us" onClick={() => {
+                                        handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
-                                    <li><Link to="/" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
-                                        magazinehandleClick();
+                                    <li><Link to="/magazine/see-all" onClick={() => {
+                                        handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
-                                    <li><Link to="partnership" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
-                                        handleClick(setMenuLoaded);
+                                    <li><Link to="/#partnership" onClick={() => {
+                                        handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     {!localStorage.getItem('id_token') && (
                                         <li><Link to="/" onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
@@ -124,13 +117,15 @@ function Header(props) {
                             </div>
                             <div className="col-md-4">
                                 <ul className="right-menu-content">
-                                    <li><Link to="helpus" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
-                                        handleClick(setMenuLoaded);
+                                    <li><Link to="/#help-us" onClick={() => {
+                                        handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
-                                    <li><Link to="checkus-out" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
-                                        handleClick(setMenuLoaded);
+                                    <li><Link to="/#checkus-out" onClick={() => {
+                                        handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_checkus" /></Link></li>
-                                    <li><Link to="/" className="main-menu"><IntlMessages id="menu_contact" /></Link></li>
+                                    <li><Link to="/contact-us" className="main-menu" onClick={() => {
+                                        handleClick();
+                                    }}><IntlMessages id="menu_contact" /></Link></li>
                                     <li>
                                         <div><IntlMessages id="menu_findus" /></div>
                                         <div>
@@ -196,7 +191,6 @@ function Header(props) {
 
 function mapStateToProps(state) {
     let openMenu = '';
-    console.log(state);
     if (state.App && state.App.openDrawer) {
         openMenu = state.App.openDrawer;
     }

@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-import { Link } from "react-router-dom";
 import { GetHelpUsForm, SaveAnswers } from '../../redux/pages/allPages';
-import { Redirect } from 'react-router-dom'
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation, Redirect, Link } from "react-router-dom";
 
 function HelpUs() {
     let history = useHistory();
+   //
     const [activeTab, setActiveTab] = useState(1);
     const [activeIndex, setActiveIndex] = useState(0);
     const [form, setForm] = useState({
@@ -35,11 +34,11 @@ function HelpUs() {
         }
     });
     const [answers, setAnswers] = useState({});
-
+   
     useEffect(() => {
         async function getData() {
             let result: any = await GetHelpUsForm();
-          //  console.log(result);
+            //  console.log(result);
             setForm(result.data[0]);
         }
         getData()

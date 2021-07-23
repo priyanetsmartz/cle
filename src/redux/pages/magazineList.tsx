@@ -13,19 +13,19 @@ export function PostList() {
 export function GetCategoryData(language = 'english') {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/blog/list?store_id=${storeId}&page_no=1`, "", "GET", "");
+    return Api.request(`default/rest/all/V1/blog/list?store_id=${storeId}&page_no=1`,payload, "GET", "");
 }
 
 export function FeaturedList(language = 'english') {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/featured/blog?store_id=` + storeId, "", "GET", "");
+    return Api.request(`default/rest/all/V1/featured/blog?store_id=` + storeId, payload, "GET", "");
 }
 
 export function RelatedList(language = 'english', postId) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/related/blog?storeId=${storeId}&postId=${postId}`, "", "GET", "");
+    return Api.request(`default/rest/all/V1/related/blog?storeId=${storeId}&postId=${postId}`, payload, "GET", "");
 }
 
 export function PostData(url_key: string) {

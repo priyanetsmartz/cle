@@ -1,13 +1,7 @@
-import { getCookie } from "../../helpers/session";
 import ADMINAPI from "../../restApi/AdminApi";
 const AdminApi = new ADMINAPI();
 
 
-// get menu api right
-// export function getFooterMenu() {
-//     var payload = {};
-//     return AdminApi.request("/rest/V1/cmsBlock/search?searchCriteria[filterGroups][0][filters][0][field]=identifier&searchCriteria[filterGroups][0][filters][0][value]=footer_link", payload, "GET", "");
-// }
 
 // graphql api if needed
 export function Pages1(value: string) {
