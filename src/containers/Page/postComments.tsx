@@ -10,11 +10,11 @@ function PostComment(props) {
     const [state, setState] = useState({
         name: "",
         email: "",
-        post_id: 1, //change this
+        post_id: 12, //change this
         message: "",
-        store_id: 1, //change this
-        customer_id: null,
-        reply_to: 17 //change this
+        store_id: 3, //change this
+        customer_id: 1,
+        reply_to: null
     })
     const [errors, setError] = useState({
         errors: {}
@@ -36,13 +36,23 @@ function PostComment(props) {
             // postComment(state);
             let result: any = await AddComment(state);
             console.log(result);
-            if(result){
+            if (result) {
                 notification("success", "", "Comment added!");
+                setState(prevState => ({
+                    ...prevState,
+                    name: "",
+                    email: "",
+                    post_id: 12, //change this
+                    message: "",
+                    store_id: 3, //change this
+                    customer_id: 1,
+                    reply_to: null
+                }))
             }
         } else {
             notification("warning", "", "Please enter required values");
         }
-        
+
     }
 
     const handleValidation = () => {

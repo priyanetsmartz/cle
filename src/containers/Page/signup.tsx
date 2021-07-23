@@ -33,10 +33,10 @@ function RegistrationForm(props) {
         errors: {}
     });
     const [types, SetTypes] = useState([])
-    useEffect(() => {
-        console.log(props)
-        loadData();
-    }, []);
+    // useEffect(() => {
+    //     console.log(props)
+    //     loadData();
+    // }, []);
 
 
     useEffect(() => {
@@ -44,12 +44,11 @@ function RegistrationForm(props) {
 
     }, [props.signupModel])
 
-    async function loadData(value = "") {
-        const results: any = await loginApi.getCustomerType();
-        var jsonData = results.data.items;
-        // console.log(jsonData);
-        SetTypes(jsonData);
-    }
+    // async function loadData(value = "") {
+    //     const results: any = await loginApi.getCustomerType();
+    //     var jsonData = results.data.items;
+    //     SetTypes(jsonData);
+    // }
     const handleValidation = () => {
         let error = {};
         let formIsValid = true;
@@ -206,7 +205,7 @@ function RegistrationForm(props) {
                     <AppleSigninButton />
                     <FacebookLoginButton />
                 </div>
-                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/" ><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/terms-and-conditions" onClick={() => { hideModal(); }}><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"} onClick={() => { hideModal(); }} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
             <Modal.Footer> <Link to="/" className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to="/" className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
         </Modal>
     )

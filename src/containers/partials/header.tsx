@@ -9,7 +9,7 @@ import { siteConfig } from '../../settings/';
 import { connect } from 'react-redux';
 import history from '../Page/history';
 import Hamburger from './hamburger';
-import { Link, animateScroll as scroll, scroller } from 'react-scroll'
+import { Link, animateScroll as scroll, scroller, Scroll } from 'react-scroll'
 
 const { logout } = authAction;
 const { showSignin, openSignUp, logoClass, toggleOpenDrawer, userType } = appAction;
@@ -103,6 +103,7 @@ function Header(props) {
                         <div className="row">
                             <div className="col-md-5 offset-md-1">
                                 <ul className="left-menu-content">
+                                    
                                     <li><Link to="/" spy={true} smooth={true} duration={500} delay={1500} onClick={() => {
                                         handleClick('about-us');
                                     }} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>

@@ -68,5 +68,9 @@
   "footer.story": "قصتنا",
   "footer.joinus": "انضم إلينا",
   "footer.address": "شارع اسطنبول ، السلي",
-  "footer.address2": "الرياض 14322 ، المملكة العربية السعودية"
+  "footer.address2": "الرياض 14322 ، المملكة العربية السعودية",
+  "contact.email": "اسم",
+  "contact.name": "البريد الإلكتروني",
+  "contact.message": "رسالة",
+  "contact.send":"يرسل"
 }

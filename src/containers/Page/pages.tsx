@@ -32,11 +32,11 @@ function AllPages(props) {
                 <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
                     <text id="{pagesData.title}" data-name="{pagesData.title}" transform="translate(425 108)" fill="none" stroke="#2E2BAA"
                         strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">
-                        <tspan x="-423.555" y="0">{pagesData.title}</tspan>
+                        <tspan x="-423.555" y="0">{pagesData ? pagesData.title : "404"}</tspan>
                     </text>
                 </svg>
             </figure>
-            <div dangerouslySetInnerHTML={{ __html: pagesData.content }} />
+            <div dangerouslySetInnerHTML={{ __html: pagesData ? pagesData.content : "Ooops Page not found...." }} />
             {props.match.params.id === 'about-us' && (
                 <div><Link to={"/test"} className="signup-btn" onClick={() => { handleClick(); }}><IntlMessages id="aboutus.sign_up_now" /></Link></div>
             )}

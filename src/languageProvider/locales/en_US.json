@@ -68,5 +68,9 @@
   "footer.story": "Our Story",
   "footer.joinus": "Join Us",
   "footer.address": "Istanbul St, As Sulay",
-  "footer.address2": "Riyadh 14322, Kingdom of Saudi Arabia"
+  "footer.address2": "Riyadh 14322, Kingdom of Saudi Arabia",
+  "contact.email": "Name",
+  "contact.name": "Email",
+  "contact.message": "Message",
+  "contact.send": "Send"
 }

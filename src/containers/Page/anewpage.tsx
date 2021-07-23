@@ -15,7 +15,7 @@ function Home(props) {
 
     return (
         <>
-            <Element name="home" className="element">
+            <Element name="home" id="home" className="element">
                 <HomePage />
             </Element>
             {/* about us */}

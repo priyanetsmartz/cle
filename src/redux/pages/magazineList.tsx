@@ -22,6 +22,12 @@ export function FeaturedList(language = 'english') {
     return Api.request(`default/rest/all/V1/featured/blog?store_id=` + storeId, "", "GET", "");
 }
 
+export function RelatedList(language = 'english', postId) {
+    var storeId = language === 'english' ? 3 : 2;
+    var payload = {};
+    return Api.request(`default/rest/all/V1/related/blog?storeId=${storeId}&postId=${postId}`, "", "GET", "");
+}
+
 export function PostData(url_key: string) {
     return Api.request(`rest/V1/blog/detail?postId=${url_key}`, "", "GET", "");
 }
@@ -34,7 +40,7 @@ export function GetComments(postId: number) {
     return Api.request(`rest/V1/blog/comments?postId=${postId}`, "", "GET", "");
 }
 
-export function SendNewsletter(payload) {
-    console.log(payload);
-
+export function SendNewsletter(payload, language = 'english') {
+    const data = { storeId: language === 'english' ? 3 : 2, email: payload.userInfo.email }
+    return Api.request(`rest/all/V1/newsletter/subscriber`, data, "POST", "");
 }

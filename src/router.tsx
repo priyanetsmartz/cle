@@ -8,43 +8,41 @@ import Magazine from './containers/Page/magazine';
 import SinglePost from './containers/Page/singlePost';
 import ForgottenPassword from './containers/Page/forgotPassword';
 import PostComment from './containers/Page/postComments';
-import PartnerShip from './containers/Page/partnerShip';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import WithFooter from "./components/all-route/withFooter";
 import AllPosts from './containers/Page/magazineCategory';
 import newHome from './containers/Page/anewpage';
-import HelpUs from './containers/Page/helpUs';
 import ThankYou from './containers/Page/ThankYou';
 import ResetPassword from './containers/Page/ResetPassoword';
 import SocialCheckout from './containers/Page/SocialCheckout';
-import newpage from './containers/Page/new-home';
+import contact from "./containers/Page/contact";
+
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <div>
         <Switch>
           {/* <MainRoute exact path="/" component={Home} /> */}
-          <WithFooter path="/:signup?/:member?" component={newHome} />
-          <WithFooter path="/" component={newHome} />
-          {/* <MainRoute exact path="/partnership" component={PartnerShip} /> */}
-          {/* <MainRoute exact path="/help-us" component={HelpUs} /> */}
-          <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
+          
           <MainRoute exact path="/magazine" component={Magazine} />
           <WithFooter exact path="/magazine/see-all" component={AllPosts} />
           <WithFooter exact path="/magazine/:slug" component={SinglePost} />
-          {/* <MainRoute path="/:id" component={Pages} />
-          <MainRoute exact path="/checkout-us" component={SocialCheckout} /> */}
+          <WithFooter exact path="/:signup/:member" component={newHome} />
+          <WithFooter exact path="/" component={newHome} />
+          <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
+          <WithFooter exact path="/contact-us" component={contact} />
           <Route exact path="/forgot-password">
             <ForgottenPassword />
           </Route>
-          <Route exact path="/reset-password">
+          <Route exact path="/reset-password/:token">
             <ResetPassword />
           </Route>
-          <MainRoute path="/:id" component={Pages} />
           <Route exact path="/post-comment">
             <PostComment />
           </Route>
+          <MainRoute path="/:id" component={Pages} />
+
           {/* <Route exact path="/page-not-found" component={NotFound} /> */}
         </Switch>
       </div>
