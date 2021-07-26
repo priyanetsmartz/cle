@@ -78,13 +78,14 @@ export function* registerRequest() {
       const response = yield call(loginApi.register, firstname, email, password, type);
       if (response.data.id !== "") {
         const token = yield call(loginApi.getAuthRegister, email);
-        console.log(token[0])
-        if (token[0].new_token) {
+        console.log(token.data[0].new_token, console.log(typeof (token)))
+        if (token.data[0].new_token) {
+          yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
           notification("success", "", "Account registered");
-          localStorage.setItem('id_token', token.data.new_token);
-          yield setCookie("username", token.data.email);
-          //   yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
-          //  yield put(push("/"));
+          localStorage.setItem('id_token', token.data[0].new_token);
+          yield setCookie("username", token.data[0].email);
+
+          yield put(push("/"));
         } else {
           yield put({ type: actions.REGISTER_ERROR });
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });

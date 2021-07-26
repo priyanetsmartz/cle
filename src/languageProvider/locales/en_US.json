@@ -72,5 +72,13 @@
   "contact.email": "Name",
   "contact.name": "Email",
   "contact.message": "Message",
-  "contact.send": "Send"
+  "contact.send": "Send",
+  "magazine.realted": "You May have missed",
+  "magazine.highlights": "Highlights",
+  "magazine.newsletter": "Newsletter",
+  "magazine.sortby": "Sort By",
+  "magazinepost.slogan": "You may also want to read",
+  "profile.name": "Name",
+  "profile.email": "Email",
+  "profile.welcome": "Welcome"
 }

@@ -10,19 +10,19 @@ export function MagazineList(language: string) {
 export function PostList() {
     return Api.request("rest/V1/post/list", "", "GET", "");
 }
-export function GetCategoryData(language = 'english') {
+export function GetCategoryData(category: string, language: string) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/blog/list?store_id=${storeId}&page_no=1`,payload, "GET", "");
+    return Api.request(`default/rest/all/V1/blog/list?store_id=${storeId}&page_no=1`, payload, "GET", "");
 }
 
-export function FeaturedList(language = 'english') {
+export function FeaturedList(category: string, language: string) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
     return Api.request(`default/rest/all/V1/featured/blog?store_id=` + storeId, payload, "GET", "");
 }
 
-export function RelatedList(language = 'english', postId) {
+export function RelatedList(language: string, postId) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
     return Api.request(`default/rest/all/V1/related/blog?storeId=${storeId}&postId=${postId}`, payload, "GET", "");

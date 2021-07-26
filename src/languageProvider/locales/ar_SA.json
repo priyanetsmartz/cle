@@ -72,5 +72,13 @@
   "contact.email": "اسم",
   "contact.name": "البريد الإلكتروني",
   "contact.message": "رسالة",
-  "contact.send":"يرسل"
+  "contact.send":"يرسل",
+  "magazine.realted": "ربما فاتتك",
+  "magazine.highlights": "يسلط الضوء",  
+  "magazine.newsletter": "النشرة الإخبارية",  
+  "magazine.sortby": "ترتيب حسب",  
+  "magazinepost.slogan":"قد ترغب أيضًا في القراءة",
+  "profile.name": "اسم",
+  "profile.email": "بريد إلكتروني",
+  "profile.welcome": "مرحبا"
 }

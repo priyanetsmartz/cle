@@ -104,7 +104,7 @@ function SinglePost(props) {
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="mt-5 py-5">
-                                    <h2 className="pb-3 text-center">You may also want to read </h2>
+                                    <h2 className="pb-3 text-center"><IntlMessages id="magazinepost.slogan" /> </h2>
                                     {related.length > 0 && (
                                         <div className="container">
                                             <div className="row my-3">

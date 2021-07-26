@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { FeaturedList, GetCategoryData, SendNewsletter } from '../../redux/pages/magazineList';
 import moment from 'moment';
 import notification from '../../components/notification';
 import { connect } from 'react-redux';
 function MagazineCategory(props) {
+    const { category } = useParams();
     const [state, setState] = useState({
         email: ""
     })
@@ -23,16 +24,16 @@ function MagazineCategory(props) {
     }, [location,])
     useEffect(() => {
         async function getData() {
-            let result: any = await GetCategoryData();
-            let featuredResult: any = await FeaturedList();
+            let catPayload = category ? category : ""
+            let result: any = await GetCategoryData(catPayload, props.languages);
+            let featuredResult: any = await FeaturedList(catPayload, props.languages);
             setItems(result.data);
             setFeaturedItems(featuredResult.data);
             setlatestItem(result.data.slice(-1)[0]);
-            //console.log(featuredResult.data)
         }
         getData()
 
-    }, [])
+    }, [props.languages])
 
     const onValueChange = (e) => {
         //console.log(e.target.value);
@@ -125,12 +126,12 @@ function MagazineCategory(props) {
             </div>
 
             <div className="highlight-list mt-5 py-5">
-                <h2 className="pb-3 text-center">Highlights</h2>
+                <h2 className="pb-3 text-center"><IntlMessages id="magazine.highlights" /></h2>
                 {featured.length > 0 && (
                     <div className="container">
                         <div className="row my-3">
                             {featured.map((item, i) => {
-                             //   console.log(typeof (item.category))
+                                //   console.log(typeof (item.category))
                                 return (
                                     <div className="col-md-4" key={i}>
                                         <div className="blog-sec-main">
@@ -157,11 +158,11 @@ function MagazineCategory(props) {
             <div className="mt-5 py-5">
                 <div className="container">
                     <div className="missed-list-sec">
-                        <h2 className="pb-3 float-start">You May have missed</h2>
+                        <h2 className="pb-3 float-start"><IntlMessages id="magazine.realted" /></h2>
                         <div className="sort-by float-end">
                             <div className="row g-3 align-items-center">
                                 <div className="col-auto">
-                                    <label htmlFor="SortInput" className="col-form-label">Sort By</label>
+                                    <label htmlFor="SortInput" className="col-form-label"><IntlMessages id="magazine.sortby" /></label>
                                 </div>
                                 <div className="col-auto">
                                     <select className="form-select" aria-label="Default select example">
@@ -218,7 +219,7 @@ function MagazineCategory(props) {
                             <div className="banner-content-2 text-center">
                                 <figure className="newsletter-title">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="917" height="134" viewBox="0 0 917 134">
-                                        <text id="Newsletter" transform="translate(1 98)" fill="none" stroke="#2E2BAA" strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book"><tspan x="0" y="0">Newsletter</tspan></text>
+                                        <text id="Newsletter" transform="translate(1 98)" fill="none" stroke="#2E2BAA" strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book"><tspan x="0" y="0"><IntlMessages id="magazine.newsletter" /></tspan></text>
                                     </svg>
                                 </figure>
                                 <h4>Shop the sale first</h4>
@@ -277,9 +278,17 @@ function MagazineCategory(props) {
 }
 
 
-const mapStateToProps = state => ({
-});
+function mapStateToProps(state) {
+    let languages = '';
 
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+    return {
+        languages: languages
+
+    };
+};
 export default connect(
     mapStateToProps,
     {}

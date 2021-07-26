@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, {  useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import notification from '../../components/notification';
 import { connect } from "react-redux";
@@ -7,6 +7,8 @@ import appAction from "../../redux/app/actions";
 import { Link } from "react-router-dom";
 import { siteConfig } from '../../settings/';
 import { useIntl } from 'react-intl';
+import { getContactUsForm, SubmitContactUs } from '../../redux/pages/allPages';
+import { type } from 'os';
 const { openSignUp } = appAction;
 
 function ContactUS(props) {
@@ -14,11 +16,47 @@ function ContactUS(props) {
     const [state, setState] = useState({
         name: "",
         email: "",
+        phone: "",
         message: ""
     })
     const [errors, setError] = useState({
         errors: {}
     });
+
+    const [form, setForm] = useState({
+        "title": "",
+        "form_id": null,
+        "store_id": "",
+        "form_json": [],
+        "code": ""
+    });
+    const [payload, setPayload] = useState({
+        "answer_id": null,
+        "form_id": null,
+        "store_id": null,
+        "created_at": "",
+        "ip": "122.173.115.186",
+        "response_json": "",
+        "customer_id": null,
+        "admin_response_email": "",
+        "response_message": "",
+        "recipient_email": "",
+        "customer_name": "",
+        "admin_response_status": "0",
+        "referer_url": "",
+        "form_name": null,
+        "form_code": null
+    });
+
+    useEffect(() => {
+        async function getData() {
+            let result: any = await getContactUsForm(props.language);
+            setForm(result.data[0]);
+        }
+        getData()
+    }, []);
+
+
     const handleValidation = () => {
         let error = {};
         let formIsValid = true;
@@ -38,6 +76,11 @@ function ContactUS(props) {
             error["email"] = "Email is required";
         }
 
+        if (!state["phone"]) {
+            formIsValid = false;
+            error["email"] = "Phone is required";
+        }
+
         //password
         if (!state["name"]) {
             formIsValid = false;
@@ -53,6 +96,7 @@ function ContactUS(props) {
         setError({ errors: error });
         return formIsValid;
     }
+
     const handleChange = (e) => {
         const { id, value } = e.target
         setState(prevState => ({
@@ -68,16 +112,37 @@ function ContactUS(props) {
     //         ['type']: value
     //     }))
     // }
-    const handleSubmitClick = (e) => {
+    const handleSubmitClick = async (e) => {
         e.preventDefault();
         //  const { register } = props;
         if (handleValidation()) {
-            // const userInfo = {
-            //     "name": state.name,
-            //     "email": state.email,
-            //     "password": state.message
-            // }
-            // // register({ userInfo });
+            let data: any = {};
+            form.form_json[0].forEach(el => {
+                data[el.name] = {
+                    value: state[el.name],
+                    label: el.label,
+                    type: el.type
+                }
+            });
+
+            payload.response_json = JSON.stringify(data);
+            payload.form_id = form.form_id;
+            payload.store_id = form.store_id;
+            payload.customer_id = 1;
+            payload.form_name = form.title;
+            payload.form_code = form.code;
+            setPayload(payload);
+            let result: any = await SubmitContactUs({ answer: payload });
+            if (result) {
+                notification("success", "", "Message sent!");
+                setState(prevState => ({
+                    ...prevState,
+                    name: "",
+                    email: "",
+                    phone: "",
+                    message: ""
+                }))
+            }
         } else {
             notification("warning", "", "Please enter required values");
         }
@@ -98,39 +163,23 @@ function ContactUS(props) {
                         <div className="about-inner-pic">
                             <div className="row g-3">
                                 <h3>Reach to Us</h3>
-                                <div className="col-sm-12">
-                                    <input type="email"
-                                        className="form-control"
-                                        id="name"
-                                        aria-describedby="namw"
-                                        placeholder={intl.formatMessage({ id: 'contact.name' })}
-                                        value={state.name}
-                                        onChange={handleChange}
-                                    />
-                                    <span className="error">{errors.errors["name"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <input type="text"
-                                        className="form-control"
-                                        id="email"
-                                        aria-describedby="emailHelp"
-                                        placeholder={intl.formatMessage({ id: 'contact.email' })}
-                                        value={state.email}
-                                        onChange={handleChange}
-                                    />
-                                    <span className="error">{errors.errors["email"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <input type="text"
-                                        className="form-control"
-                                        id="message"
-                                        aria-describedby="message"
-                                        placeholder={intl.formatMessage({ id: 'contact.message' })}
-                                        value={state.message}
-                                        onChange={handleChange}
-                                    />
-                                    <span className="error">{errors.errors["message"]}</span>
-                                </div>
+
+                                {form && form.form_json[0] && form.form_json[0].map(item => {
+                                    return (
+                                        <div className="col-sm-12" key={item.name}>
+                                            <input type={item.type == 'textinput' ? 'text' : 'textarea'}
+                                                className={item.className}
+                                                id={item.name}
+                                                aria-describedby={item.name}
+                                                placeholder={item.placeholder}
+                                                value={state[item.name]}
+                                                onChange={handleChange}
+                                            />
+                                            <span className="error">{errors.errors[item.name]}</span>
+                                        </div>
+                                    )
+                                })}
+
                                 <div className="d-grid gap-2">
                                     <Link to="/" className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="contact.send" /></Link>
                                 </div>
@@ -187,8 +236,12 @@ function ContactUS(props) {
 }
 
 function mapStateToProps(state) {
+    let languages = '';
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
     return {
-        state
+        languages: languages
     };
 };
 export default connect(

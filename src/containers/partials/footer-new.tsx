@@ -23,21 +23,21 @@ function FooterExtra(props) {
                     <div className="col-md-2">
                         <ul className="footer-links">
                             <li className="fl-title"><IntlMessages id="footer.about" /></li>
-                            <li><Link to="/"><IntlMessages id="footer.profile" /></Link></li>
+                            <li><Link to="/profile"><IntlMessages id="footer.profile" /></Link></li>
                         </ul>
                     </div>
                     <div className="col-md-2">
                         <ul className="footer-links">
                             <li className="fl-title"><IntlMessages id="footer.sell" /></li>
-                            <li><Link to={"/partnetship"}><IntlMessages id="footer.Partnership" /></Link></li>
+                            <li><Link to="/#partnership"><IntlMessages id="footer.Partnership" /></Link></li>
                         </ul>
                     </div>
                     <div className="col-md-2">
                         <ul className="footer-links">
                             <li className="fl-title"><IntlMessages id="footer.useful" /></li>
-                            <li><Link to="/"><IntlMessages id="footer.help" /></Link></li>
+                            <li><Link to="/#help-us"><IntlMessages id="footer.help" /></Link></li>
                             <li><Link to="/"><IntlMessages id="footer.customer" /></Link></li>
-                            <li><Link to={"/magazine"}><IntlMessages id="footer.magazine" /></Link></li>
+                            <li><Link to="/magazine/see-all"><IntlMessages id="footer.magazine" /></Link></li>
                         </ul>
                     </div>
                     <div className="col-md-2">
@@ -52,7 +52,7 @@ function FooterExtra(props) {
                         <ul className="footer-address">
                             <li><img src={blackLogo} /></li>
                             <li><IntlMessages id="footer.address" /><br />
-                            <IntlMessages id="footer.address2" /><br />
+                                <IntlMessages id="footer.address2" /><br />
                                 (+966) 920 002 470</li>
                             <li>
                                 <Link to={{ pathname: siteConfig.facebookLink }} target="_blank" >
@@ -103,7 +103,7 @@ function mapStateToProps(state) {
     if (state && state.App) {
         showLogin = state.App.showLogin;
         signupModel = state.App.showSignUp
-    }    
+    }
     return {
         showLogin: showLogin,
         signupModel: signupModel

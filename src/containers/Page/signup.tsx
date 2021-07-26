@@ -4,7 +4,7 @@ import IntlMessages from "../../components/utility/intlMessages";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import notification from '../../components/notification';
-import Login from "../../redux/auth/Login";
+// import Login from "../../redux/auth/Login";
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../image/CLE-logo-black.svg";
