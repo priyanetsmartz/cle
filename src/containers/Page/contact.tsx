@@ -1,4 +1,4 @@
-import React, {  useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import notification from '../../components/notification';
 import { connect } from "react-redux";
@@ -97,6 +97,9 @@ function ContactUS(props) {
         return formIsValid;
     }
 
+    const Capitalize = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
     const handleChange = (e) => {
         const { id, value } = e.target
         setState(prevState => ({
@@ -153,7 +156,7 @@ function ContactUS(props) {
                 <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
                     <text id="Contact Us" data-name="Contact Us" transform="translate(425 108)" fill="none" stroke="#2E2BAA"
                         strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">
-                        <tspan x="-423.555" y="0">Contact Us</tspan>
+                        <tspan x="-423.555" y="0"><IntlMessages id="contact.title" /></tspan>
                     </text>
                 </svg>
             </figure>
@@ -162,7 +165,7 @@ function ContactUS(props) {
                     <div className="blue-back-image" style={{ background: "#fff" }}>
                         <div className="about-inner-pic">
                             <div className="row g-3">
-                                <h3>Reach to Us</h3>
+                                <h3><IntlMessages id="contact.reach" /></h3>
 
                                 {form && form.form_json[0] && form.form_json[0].map(item => {
                                     return (
@@ -171,7 +174,7 @@ function ContactUS(props) {
                                                 className={item.className}
                                                 id={item.name}
                                                 aria-describedby={item.name}
-                                                placeholder={item.placeholder}
+                                                placeholder={Capitalize(item.name)}
                                                 value={state[item.name]}
                                                 onChange={handleChange}
                                             />
@@ -189,7 +192,7 @@ function ContactUS(props) {
                 </div>
                 <div className="col-md-4 offset-md-1">
                     <div className="about-content">
-                        <h3>Contact us</h3>
+                        <h3><IntlMessages id="contact.right" /></h3>
                         <ul className="footer-address">
                             <li><IntlMessages id="footer.address" /><br />
                                 <IntlMessages id="footer.address2" /><br />

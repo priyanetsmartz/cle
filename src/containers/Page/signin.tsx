@@ -80,7 +80,7 @@ function SignIn(props) {
       }
       login({ userInfo });
     } else {
-      notification("warning", "", "Please enter valid username and password");
+      notification("warning", "", "Please enter valid email and password");
     }
   }
 

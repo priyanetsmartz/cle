@@ -83,7 +83,7 @@ function Header(props) {
                     <div className="container">
                         <div className="mt-5">
                             <div className="hamburger-close float-end">
-                                <Link to="/" className="open-menu">
+                                <Link to="#" className="open-menu">
                                     <svg id="Close" onClick={handleMenuClose} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
                                         <rect id="Rectangle_498" data-name="Rectangle 498" width="52.217" height="4.351"
                                             transform="translate(3.077 0) rotate(45)" fill="#2e2baa" />
@@ -100,7 +100,7 @@ function Header(props) {
                                     <li><Link to="/#about-us" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
-                                    <li><Link to="/magazine/see-all" onClick={() => {
+                                    <li><Link to="/magazines" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
                                     <li><Link to="/#partnership" onClick={() => {

@@ -1,42 +1,71 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { FeaturedList, GetCategoryData, SendNewsletter } from '../../redux/pages/magazineList';
+import { FeaturedList, GetCategoryData, SendNewsletter, GetCategoryList, GetDataOfCategory } from '../../redux/pages/magazineList';
 import moment from 'moment';
 import notification from '../../components/notification';
 import { connect } from 'react-redux';
+
 function MagazineCategory(props) {
     const { category } = useParams();
     const [state, setState] = useState({
         email: ""
     })
     const [items, setItems] = useState([]);
+    const [catMenu, setCatMenu] = useState([]);
     const [radio, setRadio] = useState('Womenswear');
     const [featured, setFeaturedItems] = useState([]);
+    const [pagination, setPagination] = useState(1);
+    const [sort, setSort] = useState(1);
+    const [page, setCurrent] = useState(1);
     const [errors, setError] = useState({
         errors: {}
     });
-    const [latest, setlatestItem] = useState({ title: '', published_at: '', short_content: '', post_id: '', list_thumbnail: '' });
+    const [latest, setlatestItem] = useState({ title: '', published_at: '', short_content: '', post_id: '', list_thumbnail: '', categroy: '' });
 
     const location = useLocation()
     useEffect(() => {
         window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
     }, [location,])
     useEffect(() => {
-        async function getData() {
-            let catPayload = category ? category : ""
-            let result: any = await GetCategoryData(catPayload, props.languages);
-            let featuredResult: any = await FeaturedList(catPayload, props.languages);
-            setItems(result.data);
-            setFeaturedItems(featuredResult.data);
-            setlatestItem(result.data.slice(-1)[0]);
+        if (category) {
+            getDataOfCategory(props.languages, category, 1)
+        } else {
+            getData(props.languages, 1, 'published_at', 'desc')
         }
-        getData()
+        getCategoryList(props.languages);
+
 
     }, [props.languages])
 
+    async function getData(language, page, sortBy = "published_at", sortByValue = "desc") {
+        let result: any = await GetCategoryData(language, page, sortBy, sortByValue);
+        let featuredResult: any = await FeaturedList(language);
+        setItems(result.data);
+        let dataTotal = result.data && result.data.length > 0 ? result.data[0].total_page : 0;
+        setPagination(dataTotal);
+        setFeaturedItems(featuredResult.data);
+        setlatestItem(result.data.slice(-1)[0]);
+    }
+
+    async function getDataOfCategory(languages, cat, page) {
+        let result: any = await GetDataOfCategory(languages, cat, page);
+        setItems(result.data);
+        setlatestItem(result.data.slice(-1)[0]);
+        let featuredCat = result.data.filter(catData => catData.is_featured === "1");
+        setFeaturedItems(featuredCat);
+    }
+
+    async function getCategoryList(language) {
+        let result: any = await GetCategoryList(props.languages);
+        setCatMenu(result.data);
+    }
+
+    async function getListData(page) {
+        let result: any = await GetCategoryData(props.languages, page, "", "");
+        setItems(result.data);
+    }
     const onValueChange = (e) => {
-        //console.log(e.target.value);
         setRadio(e.target.value);
     }
     const handleChange = (e) => {
@@ -47,6 +76,45 @@ function MagazineCategory(props) {
         }))
     }
 
+    const filtterData = (event) => {
+        //  console.log(event.target.value);
+        let sortBy = "published_at";
+        let sortByValue = "desc";
+        if (event.target.value === "1") {
+            sortBy = "published_at";
+            sortByValue = "desc";
+        } else if (event.target.value === "2") {
+            sortBy = "published_at";
+            sortByValue = "asc";
+        } else if (event.target.value === "3") {
+            sortBy = "title";
+            sortByValue = "asc";
+        } else if (event.target.value === "4") {
+            sortBy = "title";
+            sortByValue = "desc";
+        }
+        setSort(event.target.value);
+        getData(props.languages, 1, sortBy, sortByValue)
+    }
+
+    const getPaginationGroup = () => {
+        let start = Math.floor((page - 1) / 4) * 4;
+        let fill = pagination > 5 ? 4 : pagination;
+        return new Array(4).fill(pagination).map((_, idx) => start + idx + 1);
+    };
+    function goToNextPage() {
+        setCurrent((page) => page + 1);
+    }
+    function changePage(event) {
+        console.log(event.target.textContent);
+        event.preventDefault()
+        const pageNumber = Number(event.target.textContent);
+        setCurrent(pageNumber);
+        getListData(pageNumber);
+    }
+    function goToPreviousPage() {
+        setCurrent((page) => page - 1);
+    }
     const handleValidation = () => {
         let error = {};
         let formIsValid = true;
@@ -95,13 +163,20 @@ function MagazineCategory(props) {
                 <div className="row mt-3 mag-list-head">
                     <div className="col-md-6 offset-md-3 text-center">
                         <h3>Magazine</h3>
-                        <ul>
-                            <li><Link to="/" className="active-menu">Latest</Link></li>
-                            <li><Link to="/">Fashion</Link></li>
-                            <li><Link to="/">Watches</Link></li>
-                            <li><Link to="/">Lifestyle</Link></li>
-                            <li><Link to="/">Trends</Link></li>
-                        </ul>
+                        {catMenu.length > 0 && (
+                            <ul>
+                                <li key="0"><Link to="/magazines" className={!category ? "active-menu" : ""}>latest</Link></li>
+                                {catMenu.map((item, i) => {
+                                    let link = "/magazines/" + item.category_id;
+                                    let classValue = item.category_id === category ? "active-menu" : "";
+
+                                    return (
+                                        <li key={i}><Link to={link} className={classValue}>{item.name}</Link></li>
+                                    )
+                                })}
+                            </ul>
+                        )}
+
                     </div>
                 </div>
                 <div className="row">
@@ -119,7 +194,7 @@ function MagazineCategory(props) {
                 <img src={latest.list_thumbnail} />
                 <div className="banner-content text-center">
                     <h4>{latest.title}</h4>
-                    <div className="cat-date">Fashion<span>{moment(latest.published_at).format('LL')}</span></div>
+                    <div className="cat-date">{latest.categroy}<span>{moment(latest.published_at).format('LL')}</span></div>
                     <p>{latest.short_content}</p>
                     <Link to={"/magazine/" + latest.post_id} ><IntlMessages id="magazine.read_more" /></Link>
                 </div>
@@ -136,7 +211,7 @@ function MagazineCategory(props) {
                                     <div className="col-md-4" key={i}>
                                         <div className="blog-sec-main">
                                             <div className="mag-blog-pic-2"><img src={item.list_thumbnail} /></div>
-                                            <div className="cate-name">Trends</div>
+                                            <div className="cate-name">{item.categroy}</div>
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                             <p className="mag-blog-desc d-none">{item.short_content}</p>
@@ -165,13 +240,11 @@ function MagazineCategory(props) {
                                     <label htmlFor="SortInput" className="col-form-label"><IntlMessages id="magazine.sortby" /></label>
                                 </div>
                                 <div className="col-auto">
-                                    <select className="form-select" aria-label="Default select example">
-                                        <option >Most Popular</option>
-                                        <option value="1">Least Popular</option>
-                                        <option value="2">Date: New to Old</option>
-                                        <option value="3">Date: Old to New</option>
-                                        <option value="3">Alphabetical: A to Z</option>
-                                        <option value="3">Alphabetical: z to A</option>
+                                    <select className="form-select" onChange={filtterData} aria-label="Default select example">
+                                        <option value="1" selected={sort === 1}>Most Popular</option>
+                                        <option value="2" selected={sort === 2}>Least Popular</option>
+                                        <option value="3" selected={sort === 3}>Alphabetical: A to Z</option>
+                                        <option value="4" selected={sort === 4}>Alphabetical: Z to A</option>
                                     </select>
                                 </div>
                             </div>
@@ -185,7 +258,7 @@ function MagazineCategory(props) {
                                     <div className="col-md-4" key={i}>
                                         <div className="blog-sec-main">
                                             <div className="mag-blog-pic-2"><img src={item.list_thumbnail} /></div>
-                                            <div className="cate-name">Trends</div>
+                                            <div className="cate-name">{item.categroy}</div>
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                             <p className="mag-blog-desc d-none">{item.short_content}</p>
@@ -198,19 +271,22 @@ function MagazineCategory(props) {
 
 
                             <div className="col-md-12 pagination">
-                                <nav aria-label="Page navigation example">
+                                {pagination > 1 && (<nav aria-label="Page navigation example">
                                     <ul className="pagination justify-content-center">
-                                        <li className="page-item disabled">
-                                            <Link className="page-link" to="/test" aria-disabled="true">Previous</Link>
+                                        <li
+                                            className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
+                                            <Link onClick={goToPreviousPage} to="/" className="page-link" aria-disabled="true">Previous</Link>
                                         </li>
-                                        <li className="page-item"><Link className="page-link" to="/test">1</Link></li>
-                                        <li className="page-item"><Link className="page-link" to="/test">2</Link></li>
-                                        <li className="page-item"><Link className="page-link" to="/test">3</Link></li>
-                                        <li className="page-item">
-                                            <Link className="page-link" to="/test">Next</Link>
+                                        {getPaginationGroup().map((i, index) => (
+                                            <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="/">{i}</Link></li>
+                                        ))}
+                                        <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
+                                            <Link className="page-link" onClick={goToNextPage}
+                                                to="/">Next</Link>
                                         </li>
                                     </ul>
                                 </nav>
+                                )}
                             </div>
                         </div>
                     )}

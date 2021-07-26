@@ -18,6 +18,7 @@ function Hamburger(props) {
     }
     useEffect(() => {
         const header = document.getElementById("header");
+       // const home = document.getElementById("home");
         const sticky = header.offsetTop;
         const scrollCallBack: any = window.addEventListener("scroll", () => {
             if (window.pageYOffset > sticky) {

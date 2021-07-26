@@ -22,8 +22,8 @@ const PublicRoutes = ({ history }) => {
         {/* <MainRoute exact path="/" component={Home} /> */}
 
         <MainRoute exact path="/magazine" component={Magazine} />
-        <WithFooter exact path="/magazine/see-all/:category" component={AllPosts} />
-        <WithFooter exact path="/magazine/see-all" component={AllPosts} />
+        <WithFooter exact path="/magazines/:category" component={AllPosts} />
+        <WithFooter exact path="/magazines" component={AllPosts} />
         <WithFooter exact path="/magazine/:slug" component={SinglePost} />
         <WithFooter exact path="/:signup/:member" component={newHome} />
         <WithFooter exact path="/" component={newHome} />
@@ -31,7 +31,7 @@ const PublicRoutes = ({ history }) => {
         <WithFooter exact path="/contact-us" component={contact} />
         <WithFooter exact path="/forgot-password" component={ForgottenPassword} />
         <WithFooter exact path="/reset-password" component={ResetPassword} />
-        <WithFooter exact path="/profile" component={profile} />
+        <MainRoute exact path="/profile" component={profile} />
         <Route exact path="/post-comment">
           <PostComment />
         </Route>

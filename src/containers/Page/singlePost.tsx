@@ -3,9 +3,9 @@ import { PostData, GetComments, RelatedList } from '../../redux/pages/magazineLi
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { FacebookShareButton, LinkedinShareButton } from "react-share";
-// import { Button } from 'react-bootstrap';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
 const readingTime = require('reading-time');
 
 function SinglePost(props) {
@@ -32,7 +32,7 @@ function SinglePost(props) {
             getPostComments(result.data[0].post_id);
         }
         getData()
-    }, [])
+    }, [props.languages])
 
     const getPostComments = async (postId) => {
         let result: any = await GetComments(postId);
@@ -114,7 +114,7 @@ function SinglePost(props) {
                                                         <div className="col-md-4" key={i}>
                                                             <div className="blog-sec-main">
                                                                 <div className="mag-blog-pic-2"><img src={item.list_thumbnail} /></div>
-                                                                <div className="cate-name">Trends</div>
+                                                                <div className="cate-name">{item.categroy}</div>
                                                                 <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                                                 <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                                                 <p className="mag-blog-desc d-none">{item.short_content}</p>
@@ -143,4 +143,19 @@ function SinglePost(props) {
     );
 }
 
-export default SinglePost;
+
+function mapStateToProps(state) {
+    let languages = '';
+
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+    return {
+        languages: languages
+
+    };
+};
+export default connect(
+    mapStateToProps,
+    {}
+)(SinglePost);
