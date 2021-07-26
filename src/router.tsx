@@ -14,6 +14,7 @@ import ThankYou from './containers/Page/ThankYou';
 import ResetPassword from './containers/Page/ResetPassoword';
 import profile from './containers/Page/profile';
 import contact from "./containers/Page/contact";
+import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 
 const PublicRoutes = ({ history }) => {
   return (
@@ -32,6 +33,7 @@ const PublicRoutes = ({ history }) => {
         <WithFooter exact path="/forgot-password" component={ForgottenPassword} />
         <WithFooter exact path="/reset-password" component={ResetPassword} />
         <WithFooter exact path="/profile" component={profile} />
+        <WithFooter exact path="/password-link-expired" component={PasswordLinkExpired} />
         <Route exact path="/post-comment">
           <PostComment />
         </Route>

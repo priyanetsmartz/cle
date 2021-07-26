@@ -18,7 +18,7 @@
   "login.subtitle": "& be the first one to know about our launch",
   "register.email": "Email Address*",
   "register.password": "Create Password* (Min 6 Character)",
-  "register.confirmPassword": "Create Password* (Min 6 Character)",
+  "register.confirmPassword": "Confirm Password*",
   "register.button": "Signup",
   "logout": "Logout",
   "forgot_pass": "Forgot Password",
@@ -80,5 +80,7 @@
   "magazinepost.slogan": "You may also want to read",
   "profile.name": "Name",
   "profile.email": "Email",
-  "profile.welcome": "Welcome"
+  "profile.welcome": "Welcome",
+  "helpus.thankyou":"Thank you for taking the time to complete this survey",
+  "passwordlinkexpired":"The password token is expired. Reset and try again."
 }

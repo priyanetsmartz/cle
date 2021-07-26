@@ -80,5 +80,7 @@
   "magazinepost.slogan":"قد ترغب أيضًا في القراءة",
   "profile.name": "اسم",
   "profile.email": "بريد إلكتروني",
-  "profile.welcome": "مرحبا"
+  "profile.welcome": "مرحبا",
+  "helpus.thankyou":"شكرا لك على الوقت الذي استغرقته لإكمال هذا الاستطلاع",
+  "passwordlinkexpired":"انتهت صلاحية رمز كلمة المرور. أعد التعيين وحاول مرة أخرى."
 }

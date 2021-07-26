@@ -37,8 +37,9 @@ export function Pages(value: string, language: string) {
     return AdminApi.request("rest/V1/cmsPage/search?searchCriteria[filterGroups][0][filters][0][field]=store_id&searchCriteria[filterGroups][0][filters][0][value]=" + storeId + "&searchCriteria[filterGroups][0][filters][0][condition_type]==&searchCriteria[filterGroups][1][filters][0][field]=identifier&searchCriteria[filterGroups][1][filters][0][value]=" + value + "&searchCriteria[filterGroups][1][filters][0][condition_type]==", payload, "GET", "");
 }
 
-export function GetHelpUsForm() {
-    return AdminApi.request("rest/all/V1/customform/form?storeId=3&form_code=help-us", "", "GET", "");
+export function GetHelpUsForm(language) {
+    var storeId = language === 'english' ? 3 : 2;
+    return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=help-us`, "", "GET", "");
 }
 
 export function SaveAnswers(data) {
@@ -59,7 +60,7 @@ export function SaveNewPass(data) {
 
 export function getContactUsForm(language) {
     var storeId = language === 'english' ? 3 : 2;
-    return AdminApi.request(`rest/all/V1/customform/form?storeId=3&form_code=contact-us`, "", "GET", "");
+    return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=contact-us`, "", "GET", "");
 }
 
 export function SubmitContactUs(data) {
