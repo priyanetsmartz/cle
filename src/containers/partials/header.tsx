@@ -119,7 +119,9 @@ function Header(props) {
                                     {localStorage.getItem('id_token') && (
                                         <li><Link to="#" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
                                     )}
-                                    <li><IntlMessages id="menu_newhere" /> <Link to="#" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
+                                    {!localStorage.getItem('id_token') && (
+                                        <li><IntlMessages id="menu_newhere" /> <Link to="#" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
+                                    )}
                                 </ul>
                             </div>
                             <div className="col-md-4">

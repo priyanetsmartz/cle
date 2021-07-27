@@ -85,6 +85,8 @@
   "contact.reach": "Reach to Us",
   "contact.title": "Contact Us",
   "contact.right": "Contact Us",
-  "helpus.thankyou": "Thank you for taking the time to complete this survey",
-  "passwordlinkexpired": "The password token is expired. Reset and try again."
+  "helpus.thankyou":"Thank you for taking the time to complete this survey",
+  "passwordlinkexpired":"The password token is expired. Reset and try again.",
+  "reset_pass":"Reset Password",
+  "helpus.response_saving":"Saving your response..."
 }

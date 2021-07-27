@@ -9,6 +9,8 @@ function HelpUs(props) {
    //
     const [activeTab, setActiveTab] = useState(1);
     const [isSurveyEnd, setIsSurveyEnd] = useState(false);
+    const [isHidden, setIsHidden] = useState(false);
+    const [loading, setloading] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
     const [form, setForm] = useState({
         "title": "",
@@ -67,12 +69,17 @@ function HelpUs(props) {
             setActiveIndex(activeIndex + 1);
             setActiveTab(activeTab + 1);
         } else {
-            console.log(payload);
+            setloading(true);
             let result: any = await SaveAnswers(payload);
             if (result.data) {
                 setIsSurveyEnd(true);
+                setloading(false);
             }
         }
+    }
+
+    const toggleHelpUs = () => {
+        setIsHidden(!isHidden);
     }
 
     return (
@@ -89,25 +96,32 @@ function HelpUs(props) {
                 </figure>
                 <div className="row">
                     <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
-                        <ul className="counter-list">
-                            {form && form.form_json.map((ques, i) => {
-                                return (
-                                    <li className={activeTab == (i + 1) ? 'active' : ''} key={i}><span>{i + 1}</span></li>
-                                );
-                            })}
-
-                        </ul>
-                        {form && <h3>{form.title}</h3>}
-                        {isSurveyEnd && <div className="question-sec"><h2><IntlMessages id="helpus.thankyou" /></h2></div>}
-                        {(form && form.form_json.length > 0 && !isSurveyEnd) && <div className="question-sec">
-                            <h4>{form.form_json[activeIndex][0].label}</h4>
-                            <div className="select-answer">
-                                {form.form_json[activeIndex][0].values.map((opt, i) => {
+                        <div className="show-hide">
+                            {isHidden && <b onClick={toggleHelpUs}>+</b>}
+                            {!isHidden && <b onClick={toggleHelpUs}>-</b>}
+                        </div>
+                        {!isHidden && <div>
+                            <ul className="counter-list">
+                                {form && form.form_json.map((ques, i) => {
                                     return (
-                                        <button key={i} onClick={() => { optionHandler(i); }}>{opt.label}</button>
+                                        <li className={activeTab == (i + 1) ? 'active' : ''} key={i}><span>{i + 1}</span></li>
                                     );
                                 })}
-                            </div>
+
+                            </ul>
+                            {form && <h3>{form.title}</h3>}
+                            {isSurveyEnd && !loading && <div className="question-sec"><h2><IntlMessages id="helpus.thankyou" /></h2></div>}
+                            {!isSurveyEnd && loading && <div className="question-sec"><h2><IntlMessages id="helpus.response_saving" /></h2></div>}
+                            {(form && form.form_json.length > 0 && !isSurveyEnd && !loading) && <div className="question-sec">
+                                <h4>{form.form_json[activeIndex][0].label}</h4>
+                                <div className="select-answer">
+                                    {form.form_json[activeIndex][0].values.map((opt, i) => {
+                                        return (
+                                            <button key={i} onClick={() => { optionHandler(i); }}>{opt.label}</button>
+                                        );
+                                    })}
+                                </div>
+                            </div>}
                         </div>}
                     </div>
                 </div>

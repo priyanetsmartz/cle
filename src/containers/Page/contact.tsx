@@ -3,7 +3,6 @@ import IntlMessages from "../../components/utility/intlMessages";
 import notification from '../../components/notification';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
-// import history from './history';
 import { Link } from "react-router-dom";
 import { siteConfig } from '../../settings/';
 import { useIntl } from 'react-intl';
@@ -16,7 +15,7 @@ function ContactUS(props) {
     const [state, setState] = useState({
         name: "",
         email: "",
-        phone: "",
+        reason: "",
         message: ""
     })
     const [errors, setError] = useState({
@@ -76,12 +75,11 @@ function ContactUS(props) {
             error["email"] = "Email is required";
         }
 
-        if (!state["phone"]) {
+        if (!state["reason"]) {
             formIsValid = false;
-            error["email"] = "Phone is required";
+            error["reason"] = "Reason is required";
         }
 
-        //password
         if (!state["name"]) {
             formIsValid = false;
             error["name"] = 'Name is required';
@@ -108,16 +106,10 @@ function ContactUS(props) {
         }))
     }
 
-    // const selectType = (e) => {
-    //     const value = e.target.value;
-    //     setState(prevState => ({
-    //         ...prevState,
-    //         ['type']: value
-    //     }))
-    // }
     const handleSubmitClick = async (e) => {
         e.preventDefault();
         //  const { register } = props;
+        console.log(state)
         if (handleValidation()) {
             let data: any = {};
             form.form_json[0].forEach(el => {
@@ -142,7 +134,7 @@ function ContactUS(props) {
                     ...prevState,
                     name: "",
                     email: "",
-                    phone: "",
+                    reason: "",
                     message: ""
                 }))
             }
@@ -168,9 +160,9 @@ function ContactUS(props) {
                                 <h3><IntlMessages id="contact.reach" /></h3>
 
                                 {form && form.form_json[0] && form.form_json[0].map(item => {
-                                    return (
+                                    return (item.type == 'textinput' || item.type == 'textarea') ?
                                         <div className="col-sm-12" key={item.name}>
-                                            <input type={item.type == 'textinput' ? 'text' : 'textarea'}
+                                            <input type="text"
                                                 className={item.className}
                                                 id={item.name}
                                                 aria-describedby={item.name}
@@ -179,8 +171,15 @@ function ContactUS(props) {
                                                 onChange={handleChange}
                                             />
                                             <span className="error">{errors.errors[item.name]}</span>
+                                        </div> : <div className="col-sm-12" key={item.name}>
+                                            <select value={state.reason} onChange={handleChange} id={item.name}>
+                                                {item.values.map(opt => {
+                                                    return (<option key={opt.value} value={opt.value}>{opt.label}</option>);
+                                                })}
+                                            </select>
+                                            <span className="error">{errors.errors[item.name]}</span>
                                         </div>
-                                    )
+
                                 })}
 
                                 <div className="d-grid gap-2">
