@@ -480,6 +480,18 @@ background: #fff;}
     text-align: center;
 }
 
+.show-hide {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -32px;
+    font-size: 25px;
+    margin-right: -5px;
+}
+.show-hide b:hover {
+    cursor: pointer;
+}
+
+
 
 
 

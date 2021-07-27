@@ -83,40 +83,47 @@ function ResetPassword(props) {
 
 
     return (
-        <div>
-            <p><IntlMessages id="forgot_pass" /></p>
-            <br />
-            <form>
-                <div className="form-group text-left">
-                    <label><IntlMessages id="register.password" /></label>
-                    <input type="password"
-                        className="form-control"
-                        id="password"
-                        placeholder="Enter password"
-                        value={state.password}
-                        onChange={handleChange}
-                    />
-                    <span className="error">{errors.errors["password"]}</span>
+        <div className="container" style={{marginTop:'100px'}}>
+            <div className="row">
+                <div className="col-md-6 offset-md-3">
+                    <h3><IntlMessages id="reset_pass" /></h3>
+                    <br />
+                    <form>
+                        <div className="form-group text-left">
+                            <label><IntlMessages id="register.password" /></label>
+                            <input type="password"
+                                className="form-control"
+                                id="password"
+                                placeholder="Enter password"
+                                value={state.password}
+                                onChange={handleChange}
+                            />
+                            <span className="error">{errors.errors["password"]}</span>
+                        </div>
+                        <br />
+                        <div className="form-group text-left">
+                            <label><IntlMessages id="register.confirmPassword" /></label>
+                            <input type="password"
+                                className="form-control"
+                                id="confirmPassword"
+                                placeholder="Enter Confirm Password"
+                                value={state.confirmPassword}
+                                onChange={handleChange}
+                            />
+                            <span className="error">{errors.errors["confirmPassword"]}</span>
+                        </div>
+                        <br />
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            onClick={handleSubmitClick}
+                        >
+                            <IntlMessages id="retrieve_password" />
+                        </button>
+                    </form>
+
                 </div>
-                <div className="form-group text-left">
-                    <label><IntlMessages id="register.confirmPassword" /></label>
-                    <input type="password"
-                        className="form-control"
-                        id="confirmPassword"
-                        placeholder="Enter Confirm Password"
-                        value={state.confirmPassword}
-                        onChange={handleChange}
-                    />
-                    <span className="error">{errors.errors["confirmPassword"]}</span>
-                </div>
-                <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onClick={handleSubmitClick}
-                >
-                    <IntlMessages id="retrieve_password" />
-                </button>
-            </form>
+            </div>
         </div>
     );
 }

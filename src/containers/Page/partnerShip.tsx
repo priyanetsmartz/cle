@@ -39,13 +39,13 @@ function Partnership(props) {
 			<div className="squares mx-5">
   <svg xmlns="http://www.w3.org/2000/svg" width="17.414" height="228.801" viewBox="0 0 17.414 228.801">
   <g id="Group_767" data-name="Group 767" transform="translate(-212 -336.5)">
-    <path id="Union_1" data-name="Union 1" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.908,15.091,16,22.181l-8,8Z" transform="translate(212.707 337.207)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
-    <path id="Union_1-2" data-name="Union 1" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.908,15.091,16,22.181l-8,8Z" transform="translate(212.707 365.873)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
-    <path id="Union_1-3" data-name="Union 1" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.908,15.091,16,22.181l-8,8Z" transform="translate(212.707 394.538)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
-    <path id="Union_1-4" data-name="Union 1" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.908,15.091,16,22.181l-8,8Z" transform="translate(212.707 423.204)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
-    <path id="Union_2" data-name="Union 2" d="M0,36.181l7-7-7-7,7.091-7.091L0,8,8,0l8,8L8.909,15.091,16,22.182l-7,7,7,7-8,8Z" transform="translate(212.707 452.052)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
-    <path id="Union_3" data-name="Union 3" d="M0,36.181l7-7-7-7,7.091-7.091L0,8,8,0l8,8L8.909,15.091,16,22.182l-7,7,7,7-8,8Z" transform="translate(212.707 493.232)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
-    <path id="Union_4" data-name="Union 4" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.909,15.091,16,22.181l-8,8Z" transform="translate(212.707 534.412)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
+    <path id="Union_1" data-name="Union 1" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.908,15.091,16,22.181l-8,8Z" transform="translate(212.707 337.207)" fill="#fff" stroke="rgba(0,0,0,0)" strokeMiterlimit="10" strokeWidth="1"/>
+    <path id="Union_1-2" data-name="Union 1" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.908,15.091,16,22.181l-8,8Z" transform="translate(212.707 365.873)" fill="#fff" stroke="rgba(0,0,0,0)" strokeMiterlimit="10" strokeWidth="1"/>
+    <path id="Union_1-3" data-name="Union 1" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.908,15.091,16,22.181l-8,8Z" transform="translate(212.707 394.538)" fill="#fff" stroke="rgba(0,0,0,0)" strokeMiterlimit="10" strokeWidth="1"/>
+    <path id="Union_1-4" data-name="Union 1" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.908,15.091,16,22.181l-8,8Z" transform="translate(212.707 423.204)" fill="#fff" stroke="rgba(0,0,0,0)" strokeMiterlimit="10" strokeWidth="1"/>
+    <path id="Union_2" data-name="Union 2" d="M0,36.181l7-7-7-7,7.091-7.091L0,8,8,0l8,8L8.909,15.091,16,22.182l-7,7,7,7-8,8Z" transform="translate(212.707 452.052)" fill="#fff" stroke="rgba(0,0,0,0)" strokeMiterlimit="10" strokeWidth="1"/>
+    <path id="Union_3" data-name="Union 3" d="M0,36.181l7-7-7-7,7.091-7.091L0,8,8,0l8,8L8.909,15.091,16,22.182l-7,7,7,7-8,8Z" transform="translate(212.707 493.232)" fill="#fff" stroke="rgba(0,0,0,0)" strokeMiterlimit="10" strokeWidth="1"/>
+    <path id="Union_4" data-name="Union 4" d="M0,22.181l7.091-7.091L0,8,8,0l8,8L8.909,15.091,16,22.181l-8,8Z" transform="translate(212.707 534.412)" fill="#fff" stroke="rgba(0,0,0,0)" strokeMiterlimit="10" strokeWidth="1"/>
   </g>
 </svg>
   </div>

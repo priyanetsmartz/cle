@@ -66,30 +66,46 @@ function ForgottenPassword(props) {
 
 
   return (
-    <div>
-      <p><IntlMessages id="forgot_pass" /></p>
-      <br />
-      <form>
-        <div className="form-group text-left">
-          <label htmlFor="exampleInputEmail1"><IntlMessages id="email_address" /></label>
-          <input type="email"
-            className="form-control"
-            id="email"
-            aria-describedby="emailHelp"
-            placeholder="Enter email"
-            value={state.email}
-            onChange={handleChange}
-          />
-          <span className="error">{errors.errors["email"]}</span>
+    <div className="container" style={{marginTop:'100px'}}>
+      <div className="row">
+        <div className="col-md-6 offset-md-3">
+          <div className="row">
+            <div className="col-md-12">
+              <h3><IntlMessages id="forgot_pass" /></h3>
+            </div>
+          </div>
+          <br />
+          <form>
+            <div className="row">
+              <div className="form-group text-left">
+                <label htmlFor="exampleInputEmail1"><IntlMessages id="email_address" /></label>
+                <input type="email"
+                  className="form-control"
+                  id="email"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter email"
+                  value={state.email}
+                  onChange={handleChange}
+                />
+                <span className="error">{errors.errors["email"]}</span>
+              </div>
+            </div>
+            <br />
+            <div className="row">
+              <div className="col-md-12">
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={handleSubmitClick}
+            >
+              <IntlMessages id="retrieve_password" />
+            </button>
+              </div>
+            </div>
+          </form>
         </div>
-        <button
-          type="submit"
-          className="btn btn-primary"
-          onClick={handleSubmitClick}
-        >
-          <IntlMessages id="retrieve_password" />
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
