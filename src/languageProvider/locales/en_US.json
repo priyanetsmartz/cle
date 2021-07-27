@@ -42,6 +42,7 @@
   "signup.and": "and",
   "signup.privacy_policy": "Privacy Policy",
   "signup.member_sign_in": "Member Sign In",
+  "signup.member_sign_up": "Member Sign Up",
   "signup.become_partner": "Become Partner",
   "aboutus.sign_up_now": "Sign up Now",
   "aboutus.aboutus_para": "Discover the CLé fashion point of view with our edit of over 650+ established and innovative designers, from Prada, Gucci and Balenciaga to Saint Laurent, Halpern and Wales Bonner. We aim to be the most personal luxury shopping experience in the world – whether you join us online, via our app or at our pioneering retail and broadcasting destination.",
@@ -84,6 +85,6 @@
   "contact.reach": "Reach to Us",
   "contact.title": "Contact Us",
   "contact.right": "Contact Us",
-  "helpus.thankyou":"Thank you for taking the time to complete this survey",
-  "passwordlinkexpired":"The password token is expired. Reset and try again."
+  "helpus.thankyou": "Thank you for taking the time to complete this survey",
+  "passwordlinkexpired": "The password token is expired. Reset and try again."
 }

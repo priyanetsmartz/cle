@@ -21,7 +21,8 @@ function AllPages(props) {
     }, [props.match.params.id, props.languages])
 
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        e.preventDefault();
         const { openSignUp } = props;
         openSignUp(true);
     }
@@ -38,7 +39,7 @@ function AllPages(props) {
             </figure>
             <div dangerouslySetInnerHTML={{ __html: pagesData ? pagesData.content : "Ooops Page not found...." }} />
             {props.match.params.id === 'about-us' && (
-                <div><Link to={"/test"} className="signup-btn" onClick={() => { handleClick(); }}><IntlMessages id="aboutus.sign_up_now" /></Link></div>
+                <div><Link to={"/"} className="signup-btn" onClick={(e) => { handleClick(e); }}><IntlMessages id="aboutus.sign_up_now" /></Link></div>
             )}
         </div>
     );

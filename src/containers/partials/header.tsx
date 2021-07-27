@@ -8,6 +8,7 @@ import { siteConfig } from '../../settings/';
 import { connect } from 'react-redux';
 import history from '../Page/history';
 import Hamburger from './hamburger';
+import HamburgerWhite from './hamburgerWhite';
 import { Link } from "react-router-dom";
 import blackLogo from "../../image/CLE-logo-black.svg"
 
@@ -76,13 +77,18 @@ function Header(props) {
                 </div>
             )}
             {/* hamnurger section */}
-            <Hamburger />
+            {props.logo === 'black' && (
+                <Hamburger />
+            )}
+            {props.logo === 'white' && (
+                <HamburgerWhite />
+            )}
             {/** menu section starts */}
             {menuLoaded && (
                 <div className="menu-section">
                     <div className="container">
                         <div className="mt-5">
-                            <img src={blackLogo} />
+                            <Link to="/" onClick={handleMenuClose} ><img src={blackLogo} /></Link>
                             <div className="hamburger-close float-end">
                                 <Link to="#" className="open-menu">
                                     <svg id="Close" onClick={handleMenuClose} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
@@ -108,12 +114,12 @@ function Header(props) {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     {!localStorage.getItem('id_token') && (
-                                        <li><Link to="/" onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
+                                        <li><Link to="#" onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
                                     )}
                                     {localStorage.getItem('id_token') && (
-                                        <li><Link to="/" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
+                                        <li><Link to="#" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
                                     )}
-                                    <li><IntlMessages id="menu_newhere" /> <Link to="/" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
+                                    <li><IntlMessages id="menu_newhere" /> <Link to="#" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
                                 </ul>
                             </div>
                             <div className="col-md-4">

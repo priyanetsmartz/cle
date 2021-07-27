@@ -22,18 +22,18 @@ const PublicRoutes = ({ history }) => {
       <Switch>
         {/* <MainRoute exact path="/" component={Home} /> */}
 
-        <MainRoute exact path="/magazine" component={Magazine} />
-        <WithFooter exact path="/magazines/:category" component={AllPosts} />
-        <WithFooter exact path="/magazines" component={AllPosts} />
-        <WithFooter exact path="/magazine/:slug" component={SinglePost} />
+        <Route exact path="/magazine" component={Magazine} />
+        <MainRoute exact path="/magazines/:category" component={AllPosts} />
+        <MainRoute exact path="/magazines" component={AllPosts} />
+        <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <WithFooter exact path="/:signup/:member" component={newHome} />
         <WithFooter exact path="/" component={newHome} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
-        <WithFooter exact path="/contact-us" component={contact} />
-        <WithFooter exact path="/forgot-password" component={ForgottenPassword} />
-        <WithFooter exact path="/reset-password" component={ResetPassword} />
+        <MainRoute exact path="/contact-us" component={contact} />
+        <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
+        <MainRoute exact path="/reset-password" component={ResetPassword} />
         <MainRoute exact path="/profile" component={profile} />
-        <WithFooter exact path="/password-link-expired" component={PasswordLinkExpired} />
+        <MainRoute exact path="/password-link-expired" component={PasswordLinkExpired} />
         <Route exact path="/post-comment">
           <PostComment />
         </Route>

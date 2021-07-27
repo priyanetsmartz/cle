@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link, useLocation, useParams } from "react-router-dom";
+import appAction from "../../redux/app/actions";
 import { FeaturedList, GetCategoryData, SendNewsletter, GetCategoryList, GetDataOfCategory } from '../../redux/pages/magazineList';
 import moment from 'moment';
 import notification from '../../components/notification';
 import { connect } from 'react-redux';
-
+const { setCategory } = appAction;
 function MagazineCategory(props) {
     const { category } = useParams();
     const [state, setState] = useState({
@@ -18,15 +19,18 @@ function MagazineCategory(props) {
     const [pagination, setPagination] = useState(1);
     const [sort, setSort] = useState(1);
     const [page, setCurrent] = useState(1);
+    const [opacityVal, setOpacity] = useState(1);
     const [errors, setError] = useState({
         errors: {}
     });
     const [latest, setlatestItem] = useState({ title: '', published_at: '', short_content: '', post_id: '', list_thumbnail: '', categroy: '' });
+    const location = useLocation();
+    let filters = [{ id: 1, value: "Most Popular" }, { id: 2, value: "Least Popular" }, { id: 3, value: "Alphabetical: A to Z" }, { id: 4, value: "Alphabetical: Z to A" }]
 
-    const location = useLocation()
     useEffect(() => {
         window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
-    }, [location,])
+    }, [location])
+
     useEffect(() => {
         if (category) {
             getDataOfCategory(props.languages, category, 1, 'published_at', 'desc')
@@ -34,9 +38,7 @@ function MagazineCategory(props) {
             getData(props.languages, 1, 'published_at', 'desc')
         }
         getCategoryList(props.languages);
-
-
-    }, [props.languages])
+    }, [props.languages, category])
 
     async function getData(language, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetCategoryData(language, page, sortBy, sortByValue);
@@ -46,6 +48,7 @@ function MagazineCategory(props) {
         setPagination(dataTotal);
         setFeaturedItems(featuredResult.data);
         setlatestItem(result.data.slice(-1)[0]);
+        setOpacity(1);
     }
 
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
@@ -54,6 +57,7 @@ function MagazineCategory(props) {
         setlatestItem(result.data.slice(-1)[0]);
         let featuredCat = result.data.filter(catData => catData.is_featured === "1");
         setFeaturedItems(featuredCat);
+        setOpacity(1);
     }
 
     async function getCategoryList(language) {
@@ -62,8 +66,9 @@ function MagazineCategory(props) {
     }
 
     async function getListData(page) {
-        let result: any = await GetCategoryData(props.languages, page, "", "");
+        let result: any = await GetCategoryData(props.languages, page, "published_at", "desc");
         setItems(result.data);
+        setOpacity(1);
     }
     const onValueChange = (e) => {
         setRadio(e.target.value);
@@ -77,6 +82,7 @@ function MagazineCategory(props) {
     }
 
     const filtterData = (event) => {
+
         let sortBy = "published_at";
         let sortByValue = "desc";
         if (event.target.value === "1") {
@@ -93,7 +99,7 @@ function MagazineCategory(props) {
             sortByValue = "desc";
         }
         setSort(event.target.value);
-
+        setOpacity(0.3);
         if (category) {
             getDataOfCategory(props.languages, category, 1, sortBy, sortByValue)
         } else {
@@ -104,20 +110,32 @@ function MagazineCategory(props) {
     const getPaginationGroup = () => {
         let start = Math.floor((page - 1) / 4) * 4;
         let fill = pagination > 5 ? 4 : pagination;
-        return new Array(4).fill(pagination).map((_, idx) => start + idx + 1);
+        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
     };
-    function goToNextPage() {
+
+    const goToNextPage = (e) => {
+        setOpacity(0.3);
+        e.preventDefault();
+        getListData(page + 1);
         setCurrent((page) => page + 1);
+
     }
     function changePage(event) {
-        console.log(event.target.textContent);
+        setOpacity(0.3);
         event.preventDefault()
         const pageNumber = Number(event.target.textContent);
         setCurrent(pageNumber);
         getListData(pageNumber);
     }
-    function goToPreviousPage() {
+    const goToPreviousPage = (e) => {
+        setOpacity(0.3);
+        e.preventDefault();
+        getListData(page - 1);
         setCurrent((page) => page - 1);
+
+    }
+    const setCategory = (cate) => {
+
     }
     const handleValidation = () => {
         let error = {};
@@ -175,7 +193,7 @@ function MagazineCategory(props) {
                                     let classValue = item.category_id === category ? "active-menu" : "";
 
                                     return (
-                                        <li key={i}><Link to={link} className={classValue}>{item.name}</Link></li>
+                                        <li key={i}><Link to={link} onClick={setCategory(item.id)} className={classValue}>{item.name}</Link></li>
                                     )
                                 })}
                             </ul>
@@ -209,7 +227,7 @@ function MagazineCategory(props) {
                 {featured.length > 0 && (
                     <div className="container">
                         <div className="row my-3">
-                            {featured.map((item, i) => {
+                            {featured.slice(0, 3).map((item, i) => {
                                 //   console.log(typeof (item.category))
                                 return (
                                     <div className="col-md-4" key={i}>
@@ -244,11 +262,14 @@ function MagazineCategory(props) {
                                     <label htmlFor="SortInput" className="col-form-label"><IntlMessages id="magazine.sortby" /></label>
                                 </div>
                                 <div className="col-auto">
-                                    <select className="form-select" onChange={filtterData} aria-label="Default select example">
-                                        <option value="1" selected={sort === 1}>Most Popular</option>
-                                        <option value="2" selected={sort === 2}>Least Popular</option>
-                                        <option value="3" selected={sort === 3}>Alphabetical: A to Z</option>
-                                        <option value="4" selected={sort === 4}>Alphabetical: Z to A</option>
+                                    <select className="form-select" defaultValue={sort} onChange={filtterData} aria-label="Default select example">
+                                        {
+                                            filters.map((item, i) => {
+                                                return (
+                                                    <option value={item.id} key={i} >{item.value}</option>
+                                                )
+                                            })
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -256,7 +277,7 @@ function MagazineCategory(props) {
                         <div className="clearfix"></div>
                     </div>
                     {items.length > 0 && (
-                        <div className="row my-3">
+                        <div className="row my-3" style={{ opacity: opacityVal }}>
                             {items.map((item, i) => {
                                 return (
                                     <div className="col-md-4" key={i}>
@@ -279,13 +300,13 @@ function MagazineCategory(props) {
                                     <ul className="pagination justify-content-center">
                                         <li
                                             className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                            <Link onClick={goToPreviousPage} to="/" className="page-link" aria-disabled="true">Previous</Link>
+                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
                                         </li>
                                         {getPaginationGroup().map((i, index) => (
-                                            <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="/">{i}</Link></li>
+                                            <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
                                         ))}
                                         <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
-                                            <Link className="page-link" onClick={goToNextPage}
+                                            <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
                                                 to="/">Next</Link>
                                         </li>
                                     </ul>
@@ -359,13 +380,15 @@ function MagazineCategory(props) {
 
 
 function mapStateToProps(state) {
-    let languages = '';
-
+    let languages = '', categorySet = '';
+  ///  console.log(state);
     if (state && state.LanguageSwitcher) {
-        languages = state.LanguageSwitcher.language
+        languages = state.LanguageSwitcher.language;
+        categorySet = state.App.setCategory;
     }
     return {
-        languages: languages
+        languages: languages,
+        categorySet: categorySet
 
     };
 };

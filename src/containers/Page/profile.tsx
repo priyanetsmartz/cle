@@ -12,7 +12,7 @@ function Profile(props) {
     useEffect(() => {
         let email = getCookie("username");
         fetchMyAPI(email)
-    }, [])
+    })
 
     async function fetchMyAPI(email) {
         let result: any = await loginApi.getAuthRegister(email);
@@ -31,7 +31,7 @@ function Profile(props) {
     }
 
     return (
-        <div className="container about-inner">
+        <div className="container about-inner" style={{ "minHeight": "300px", "marginTop": "100px" }}>
             {profileDetails.email && (<>
                 <figure className="text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">

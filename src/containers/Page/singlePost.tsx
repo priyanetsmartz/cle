@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PostData, GetComments, RelatedList } from '../../redux/pages/magazineList';
+import { PostData, GetComments, GetDataOfCategory } from '../../redux/pages/magazineList';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { FacebookShareButton, LinkedinShareButton } from "react-share";
@@ -25,8 +25,9 @@ function SinglePost(props) {
         setShareUrl(window.location.href);
         async function getData() {
             let result: any = await PostData(slug);
-            let featuredResult: any = await RelatedList(props.languages, slug);
-            console.log(featuredResult.data);
+            let catId = result.data[0].categories[0];
+            let featuredResult: any = await GetDataOfCategory(props.languages, catId, 1, 'published_at', 'desc');
+            console.log(result.data[0].categories[0]);
             setRelated(featuredResult.data);
             setPost(result.data[0]);
             getPostComments(result.data[0].post_id);
@@ -109,7 +110,6 @@ function SinglePost(props) {
                                         <div className="container">
                                             <div className="row my-3">
                                                 {related.map((item, i) => {
-                                                    console.log(typeof (item.category))
                                                     return (
                                                         <div className="col-md-4" key={i}>
                                                             <div className="blog-sec-main">

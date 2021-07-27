@@ -12,7 +12,7 @@ const WithFooter = ({ component: Component, auth, ...rest }) => (
         render={props =>
             auth === undefined ? (
                 <>
-                    <Header  {...props} />
+                    <Header logo="white" {...props} />
                     {/* <Sidebar /> */}
                     <Component {...props} />
                     <Footer />

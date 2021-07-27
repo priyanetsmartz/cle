@@ -15,7 +15,7 @@ import FacebookLoginButton from '../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../socialMediaLogin/Google';
 import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
 import { useIntl } from 'react-intl';
-const { showSignin } = appAction;
+const { showSignin, openSignUp, toggleOpenDrawer } = appAction;
 const { login, logout } = authAction;
 
 function SignIn(props) {
@@ -36,14 +36,6 @@ function SignIn(props) {
       setState({ email: getCookie("username"), password: getCookie("password") })
     }
   }, []);
-
-  // useEffect(() => {
-  //   if (!props.auth && props.loading) {
-  //     setIsLoaded(props.showLogin)
-  //   } else {
-  //     setIsLoaded(false)
-  //   }
-  // }, [props.auth])
 
   useEffect(() => {
     setIsLoaded(props.showLogin)
@@ -67,6 +59,11 @@ function SignIn(props) {
     }
   };
 
+  const handleSignUp = (e) => {
+    props.toggleOpenDrawer(false);
+    props.showSignin(false);
+    props.openSignUp(true);
+  }
 
   const handleSubmitClick = (e) => {
     e.preventDefault();
@@ -181,8 +178,8 @@ function SignIn(props) {
           <AppleSigninButton />
           <FacebookLoginButton />
         </div>
-        <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"/terms-and-conditions"}><IntlMessages id="signup.terms_conditions" onClick={() => { hideModal(); }} /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} onClick={() => { hideModal(); }} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
-      <Modal.Footer><Link to={"/"} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to={"/"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
+        <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"/terms-and-conditions"} target="_blank"><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} target="_blank" ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+      <Modal.Footer className="signup_footer"><Link to="#" onClick={handleSignUp} className="sign-in-M"><IntlMessages id="signup.member_sign_up" /></Link><Link to={"/"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
     </Modal>
   );
 }
@@ -197,5 +194,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { login, logout, showSignin }
+  { login, logout, showSignin, openSignUp, toggleOpenDrawer }
 )(SignIn);

@@ -4,7 +4,6 @@ import IntlMessages from "../../components/utility/intlMessages";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import notification from '../../components/notification';
-// import Login from "../../redux/auth/Login";
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../image/CLE-logo-black.svg";
@@ -14,8 +13,7 @@ import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
 import { useIntl } from 'react-intl';
 import { Link } from "react-router-dom";
 const { register } = authAction;
-const { openSignUp } = appAction;
-// const loginApi = new Login();
+const { showSignin, openSignUp, toggleOpenDrawer } = appAction;
 
 
 function RegistrationForm(props) {
@@ -32,23 +30,14 @@ function RegistrationForm(props) {
     const [errors, setError] = useState({
         errors: {}
     });
-    //const [types, SetTypes] = useState([])
-    // useEffect(() => {
-    //     console.log(props)
-    //     loadData();
-    // }, []);
+
 
 
     useEffect(() => {
         setIsLoaded(props.signupModel)
-
     }, [props.signupModel])
 
-    // async function loadData(value = "") {
-    //     const results: any = await loginApi.getCustomerType();
-    //     var jsonData = results.data.items;
-    //     SetTypes(jsonData);
-    // }
+
     const handleValidation = () => {
         let error = {};
         let formIsValid = true;
@@ -95,14 +84,11 @@ function RegistrationForm(props) {
             [id]: value
         }))
     }
-
-    // const selectType = (e) => {
-    //     const value = e.target.value;
-    //     setState(prevState => ({
-    //         ...prevState,
-    //         ['type']: value
-    //     }))
-    // }
+    const handlesigninClick = () => {
+        props.openSignUp(false);
+        props.toggleOpenDrawer(false);
+        props.showSignin(true);
+    }
     const handleSubmitClick = (e) => {
         e.preventDefault();
         const { register } = props;
@@ -205,8 +191,8 @@ function RegistrationForm(props) {
                     <AppleSigninButton />
                     <FacebookLoginButton />
                 </div>
-                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/terms-and-conditions" onClick={() => { hideModal(); }}><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} onClick={() => { hideModal(); }} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
-            <Modal.Footer className="signup_footer"> <Link to="/" className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to="/" className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
+                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/terms-and-conditions" target="_blank" ><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} target="_blank"><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+            <Modal.Footer className="signup_footer"> <Link to="#" onClick={() => { handlesigninClick(); }} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to="/" className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
         </Modal>
     )
 }
@@ -223,5 +209,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { register, openSignUp }
+    { register, showSignin, openSignUp, toggleOpenDrawer }
 )(RegistrationForm);

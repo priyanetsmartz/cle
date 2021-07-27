@@ -179,7 +179,7 @@ z-index: 15;
 	right:0;
 	margin:auto;
 	}
-.blue-back-image{background:#2e2baa; width:424px; height:580px;position: relative;}
+.blue-back-image{background:#2e2baa; width:424px; height:580px;position: relative;top: -6%;}
 .container.about-inner {
     padding-top:6%;
 	position: relative;
@@ -266,7 +266,7 @@ p.signup-policy-links a{color:#000; font-size:12px;}
 .see-more-sec .see-more-text a{
     font-size: 12px;
     text-decoration: none;
-    color: #2e2baa;
+    color: #2e2baa !important;
     font-family: 'Monument Extended';
     font-weight: 500;
     transition: all 0.5s;
@@ -360,11 +360,11 @@ background: #fff;}
 .mag-blog-desc{font-size:16px; line-height:22px;transition: all 1s; display:none;}
 .mag-blog-pic-2 img{transition: all 0.5s; width:100%;margin: auto; position: relative; top:0px; bottom: 0;}
 .mag-blog-pic-2{transition: all 0.5s;height: 260px;overflow: hidden;}
-.blog-sec-main{height:min-content;overflow: hidden;position: relative;}
+.blog-sec-main{height:min-content;overflow: hidden;position: relative;z-index: 1;}
 .blog-sec-main:hover .mag-blog-desc{display:block !important;}
 .blog-sec-main:hover .mag-blog-pic-2 img {top: -28px;}
 .blog-sec-main:hover .mag-blog-pic-2{height: 233px;}
-.new-heading-back{position:absolute;width:max-content;height:max-content;margin:auto;top:0;bottom:0;right:0;}
+.new-heading-back{position:absolute;width:max-content !important;height:max-content;margin:auto !important;top:0;bottom:0;right:0;z-index: 0;}
 .mag-list-head{margin-bottom:30px;}
 .mag-list-head h3{font-family: 'Monument Extended';font-size:40px; line-height:38px; color:#2e2baa;margin:0;}
 .mag-list-head ul{margin:auto; padding:0; list-style-type:none;width: max-content;}
@@ -409,7 +409,7 @@ background: #fff;}
 .footer-address{margin:auto; padding:0; list-style-type:none;}
 .footer-address li{margin-bottom:10px;}
 .footer-address li img{margin-bottom:10px;}
-.footer-address li svg{margin-right:10px;}
+.footer-address li svg{margin-right:20px;}
 .footer-last-links a{font-size:12px; line-height:15px; color:#000; text-decoration:none;}
 
 .newReleaseTitle{margin:auto; padding:0; list-style-type:none; width:max-content;}
@@ -428,6 +428,7 @@ background: #fff;}
 .header-logo-menu.sticky {
     position: fixed;
     background: rgba(255, 255, 255, 0.7);
+	z-index: 2;
 }
 .about-signup-btn {
     position: absolute;
@@ -451,7 +452,7 @@ background: #fff;}
     transform: rotate(44deg);
     margin-bottom: 19px;
 }
-.container svg text {
+.container figure svg text {
     font-size: 90px;
 }
 .become-rotate {
@@ -479,6 +480,7 @@ background: #fff;}
     background: #fff;
     text-align: center;
 }
+.pagination nav{margin:20px auto;}
 
 
 

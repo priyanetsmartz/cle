@@ -21,6 +21,7 @@ const actions = {
   CLOSE_SIGN_UP: "CLOSE_SIGN_UP",
   LOGO_CLASS: "LOGO_CLASS",
   SET_TYPE: "SET_TYPE",
+  SET_CAT:"SET_CAT",
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
   }),
@@ -65,6 +66,10 @@ const actions = {
   userType: userType => ({
     type: actions.SET_TYPE,
     userType
-  })
+  }),
+  setCategory :setCategory =>({
+    type: actions.SET_CAT,
+    setCategory
+  }) 
 };
 export default actions;

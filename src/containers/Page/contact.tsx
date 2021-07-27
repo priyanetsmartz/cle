@@ -162,7 +162,7 @@ function ContactUS(props) {
             </figure>
             <div className="row" style={{ marginTop: "80px" }}>
                 <div className="col-md-5 offset-md-1">
-                    <div className="blue-back-image" style={{ background: "#fff" }}>
+                    <div className="blue-back-image" style={{ background: "#fff", height: "300px" }}>
                         <div className="about-inner-pic">
                             <div className="row g-3">
                                 <h3><IntlMessages id="contact.reach" /></h3>
