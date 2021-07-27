@@ -50,7 +50,7 @@ function ContactUS(props) {
 
     useEffect(() => {
         async function getData() {
-            let result: any = await getContactUsForm(props.language);
+            let result: any = await getContactUsForm(props.languages);
             setForm(result.data[0]);
         }
         getData()

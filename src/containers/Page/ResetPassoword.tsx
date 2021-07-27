@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-import { useLocation } from "react-router";
+import { useLocation, useHistory } from "react-router";
 import { ValidateToken, SaveNewPass } from "../../redux/pages/allPages";
 import notification from '../../components/notification';
 
 
 function ResetPassword(props) {
+    let history = useHistory();
     const pass = useLocation().search;
     const token = new URLSearchParams(pass).get("token");
-    const customerId = new URLSearchParams(pass).get("customerId");
+    const customerId = new URLSearchParams(pass).get("id");
+
     const [state, setState] = useState({
         password: "",
         confirmPassword: ""
@@ -18,13 +20,14 @@ function ResetPassword(props) {
     });
 
     useEffect(() => {
-
         async function getData() {
-            let result: any = await ValidateToken(token, customerId);
-            if (result.data.length > 0) {
-
-            } else {
-                notification("error", "", "No data found!");
+            try {
+                let result: any = await ValidateToken(token, customerId);
+                if (result) {
+        
+                } 
+            }catch(err){
+                history.push("password-link-expired");
             }
         }
         getData()

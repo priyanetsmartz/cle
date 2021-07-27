@@ -76,8 +76,8 @@ z-index: 15;
     text-align: center;
 	
 }
-.sign-up-btn a{background:transparent;width:100%;padding:17px 0; color:#2e2baa; border:1px solid #2e2baa; font-size:18px;text-decoration: none;display: block;}
-.sign-up-btn a:hover{background:#2e2baa;color:#fff; border:1px solid #2e2baa;}
+.sign-up-btn a{background:#2e2baa;width:100%;padding:17px 0; color:#fff; border:1px solid #2e2baa; font-size:18px;text-decoration: none;display: block;font-family: 'Monument Extended'; font-weight:500;}
+.sign-up-btn a:hover{background:transparent;color:#2e2baa; border:1px solid #2e2baa;}
 
 /** menu **/
 .menu-section{position: fixed;
@@ -105,7 +105,7 @@ z-index: 15;
 }
 .left-menu-content a.main-menu {
     font-size: 36px;
-    text-transform: uppercase;
+    text-transform: capitalize;
     text-decoration: none;
     color: #000;
 	font-family: 'Monument Extended';
@@ -181,7 +181,8 @@ z-index: 15;
 	}
 .blue-back-image{background:#2e2baa; width:424px; height:580px;position: relative;}
 .container.about-inner {
-    margin-top: -2%;
+    padding-top:6%;
+	position: relative;
 }
 .about-inner-pic {
     display: block;
@@ -215,14 +216,26 @@ z-index: 15;
 .or-bg{width:100%; height:2px; background:#2e2baa; margin:20px 0; position:relative;}
 .or-bg .or-text{background:#fff; padding:0 15px; position:absolute; width:max-content; top:-11px;bottom:0;right:0; left:0; margin:auto;font-family: 'Monument Extended';font-size:16px;font-weight: 500;}
 .social-login a{width:100%; display:block; border:1px solid; padding:10px; text-align:center; color:#000; font-size:16px;margin-bottom: 10px;text-decoration: none;}
-.social-login a svg{margin-right:15px;}
+.social-login a:after{content: ""; clear: both;display: block;}
+.social-login a svg {
+    margin-left: 25%;
+    width: max-content;
+    float: left;
+    text-align: right;
+}
+.social-login a span {
+    width: 65%;
+    float: right;
+    text-align: left;
+    line-height: 17px;
+}
 p.signup-policy-links{color:#000; font-size:12px;text-align: center;}
 p.signup-policy-links a{color:#000; font-size:12px;}
 .modal-body.signup_inner {
     padding-left: 55px;
     padding-right: 55px;
 }
-.signup_footer{border-top:0px solid; background:#F7F7FC; padding:10px;display: block;text-align: center;}
+.signup_footer{border-top:0px solid !important; background:#F7F7FC; padding:10px !important;display: block !important;text-align: center;}
 .signup_footer a{margin:0;text-decoration: none;color: #2e2baa;font-family: 'Monument Extended';font-size:14px;line-height: 33px;font-weight:300;height: 33px;display: inline-block;vertical-align: middle;width: 180px;}
 .sign-in-M {border-right: 2px solid #2e2baa; padding-right: 15px; margin-right:15px !important;}
 .signup_footer a:hover{font-weight:500;}
@@ -250,9 +263,28 @@ p.signup-policy-links a{color:#000; font-size:12px;}
 .see-more-sec{margin-top: 35px;}
 .see-more-sec .squares{float: left;}
 .see-more-sec .see-more-text{font-size:18px; line-height:24px; color:#fff; width:35%;float: left;}
-.partner-pic{position:absolute; top:-10px; right:20px;}
+.see-more-sec .see-more-text a{
+    font-size: 12px;
+    text-decoration: none;
+    color: #2e2baa;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    transition: all 0.5s;
+    background: #fff;
+    padding: 15px 20px;
+    display: inline-block;
+    text-align: center;
+	margin-top:20px;
+}
+.see-more-sec .see-more-text a:hover{background:#000;color:#fff;}
+.partner-pic {
+    position: absolute;
+    top: -10px;
+    right: 0;
+    text-align: right;
+}
 .partner-pic img{width:87%;}
-.join-cle-bottom{position:absolute; bottom:-10px; right:20px; cursor:pointer;}
+.join-cle-bottom{position:absolute; bottom:7%; right:10%; cursor:pointer;}
 .join-cle-logo{position:absolute; bottom:0; right:0;top:0;left:0;width:min-content;margin:auto;height:min-content;}
 .join-cle-bottom figure.join-cle-text{margin-bottom:0;transition: all 0.2s;}
 .join-cle-bottom:hover .join-cle-text{transform: rotate(90deg);}
@@ -328,16 +360,17 @@ background: #fff;}
 .mag-blog-desc{font-size:16px; line-height:22px;transition: all 1s; display:none;}
 .mag-blog-pic-2 img{transition: all 0.5s; width:100%;margin: auto; position: relative; top:0px; bottom: 0;}
 .mag-blog-pic-2{transition: all 0.5s;height: 260px;overflow: hidden;}
-.blog-sec-main{height:min-content;overflow: hidden;}
+.blog-sec-main{height:min-content;overflow: hidden;position: relative;}
 .blog-sec-main:hover .mag-blog-desc{display:block !important;}
 .blog-sec-main:hover .mag-blog-pic-2 img {top: -28px;}
 .blog-sec-main:hover .mag-blog-pic-2{height: 233px;}
+.new-heading-back{position:absolute;width:max-content;height:max-content;margin:auto;top:0;bottom:0;right:0;}
 .mag-list-head{margin-bottom:30px;}
 .mag-list-head h3{font-family: 'Monument Extended';font-size:40px; line-height:38px; color:#2e2baa;margin:0;}
 .mag-list-head ul{margin:auto; padding:0; list-style-type:none;width: max-content;}
 .mag-list-head ul li{display: inline-block;margin-right: 20px;}
 .mag-list-head ul li a{font-family: 'Monument Extended';font-size:13px; line-height:16px; color:#000; text-decoration:none;}
-.mag-list-head ul li a.active-menu{font-family: 'Monument Extended';font-size:13px; line-height:16px; color:#2e2baa;font-weight: 500; text-decoration:line-through;}
+.mag-list-head ul li a.active-menu{font-family: 'Monument Extended';font-size:13px; line-height:16px; color:#2e2baa;font-weight: 500; border-bottom: 2px solid #2e2baa;}
 .back-home a{font-size:16px; line-height:19px; color:#2e2baa;text-decoration:none;}
 .mag-top-banner{position:relative;margin-bottom: 170px;}
 .mag-top-banner img {width: 100%;}
@@ -392,12 +425,60 @@ background: #fff;}
 .mag-detail-desc p span.first-title{font-family: 'Monument Extended';font-size:48px; line-height:54px; color:#000;font-weight: 500;text-transform:uppercase;}
 .mag-detail-desc h3{font-family: 'Monument Extended';font-size:20px; line-height:22px; color:#000;}
 
-.sticky {
+.header-logo-menu.sticky {
     position: fixed;
+    background: rgba(255, 255, 255, 0.7);
+}
+.about-signup-btn {
+    position: absolute;
+    bottom: 10%;
+    right: -32%;
+    width: max-content;
+    left: 0;
+    margin: auto;
+}
+.blue-rotated-box {
+    width: 68px;
+    height: auto;
+    position: absolute;
+    left: 0;
+    bottom: 20%;
+}
+.blue-rotated-box .blue-small-box {
+    width: 48px;
+    height: 48px;
+    background: #2e2baa;
+    transform: rotate(44deg);
+    margin-bottom: 19px;
+}
+.container svg text {
+    font-size: 90px;
+}
+.become-rotate {
+    transform: rotate(-90deg);
+    font-size: 72px;
+    font-weight: bold;
+    position: absolute;
+    color: #2e2baa;
+    font-family: 'Monument Extended';
     top: 0;
-    width: 100%;
-  }
-  
+    left: 70px;
+    margin: auto;
+    bottom: 0;
+}
+.container.about-inner .squares {
+    bottom: 14%;
+    left: 9%;
+}
+.magazine-inner{padding-top: 6%;position: relative;}
+.container.help-us-inner{padding-top: 6%;position: relative;}
+.help-us-body {
+    background: #f7f7f7;
+}
+.help-us-content {
+    background: #fff;
+    text-align: center;
+}
 
 
 

@@ -29,7 +29,7 @@ function MagazineCategory(props) {
     }, [location,])
     useEffect(() => {
         if (category) {
-            getDataOfCategory(props.languages, category, 1)
+            getDataOfCategory(props.languages, category, 1, 'published_at', 'desc')
         } else {
             getData(props.languages, 1, 'published_at', 'desc')
         }
@@ -48,8 +48,8 @@ function MagazineCategory(props) {
         setlatestItem(result.data.slice(-1)[0]);
     }
 
-    async function getDataOfCategory(languages, cat, page) {
-        let result: any = await GetDataOfCategory(languages, cat, page);
+    async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
+        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue);
         setItems(result.data);
         setlatestItem(result.data.slice(-1)[0]);
         let featuredCat = result.data.filter(catData => catData.is_featured === "1");
@@ -77,7 +77,6 @@ function MagazineCategory(props) {
     }
 
     const filtterData = (event) => {
-        //  console.log(event.target.value);
         let sortBy = "published_at";
         let sortByValue = "desc";
         if (event.target.value === "1") {
@@ -94,7 +93,12 @@ function MagazineCategory(props) {
             sortByValue = "desc";
         }
         setSort(event.target.value);
-        getData(props.languages, 1, sortBy, sortByValue)
+
+        if (category) {
+            getDataOfCategory(props.languages, category, 1, sortBy, sortByValue)
+        } else {
+            getData(props.languages, 1, sortBy, sortByValue)
+        }
     }
 
     const getPaginationGroup = () => {
@@ -328,7 +332,7 @@ function MagazineCategory(props) {
                                     <span className="error">{errors.errors["email"]}</span>
                                 </form>
                                 <div className="terms-text text-center">
-                                    By signing up you agree with our <Link to="/terms-and-conditions">Terms & Conditions</Link> and <Link to="/privacy-policy-cookie-restriction-mode">Privacy Policy</Link>. To opt out, click Unsubscribe in our emails.
+                                    By signing up you agree with our <Link to="/terms-and-conditions">Terms & Conditions</Link> and <Link to="/privacy-policy">Privacy Policy</Link>. To opt out, click Unsubscribe in our emails.
                                 </div>
 
                                 <div className="join-cle-bottom-2">

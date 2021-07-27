@@ -205,7 +205,7 @@ function RegistrationForm(props) {
                     <AppleSigninButton />
                     <FacebookLoginButton />
                 </div>
-                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/terms-and-conditions" onClick={() => { hideModal(); }}><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"} onClick={() => { hideModal(); }} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+                <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/terms-and-conditions" onClick={() => { hideModal(); }}><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} onClick={() => { hideModal(); }} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
             <Modal.Footer className="signup_footer"> <Link to="/" className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to="/" className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
         </Modal>
     )

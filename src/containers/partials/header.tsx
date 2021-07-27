@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import history from '../Page/history';
 import Hamburger from './hamburger';
 import { Link } from "react-router-dom";
-
+import blackLogo from "../../image/CLE-logo-black.svg"
 
 const { logout } = authAction;
 const { showSignin, openSignUp, logoClass, toggleOpenDrawer, userType } = appAction;
@@ -24,7 +24,7 @@ function Header(props) {
         }, 3000);
 
         setMenuLoaded(props.openMenu)
-    },[props.openMenu]);
+    }, [props.openMenu]);
 
     useEffect(() => {
 
@@ -82,6 +82,7 @@ function Header(props) {
                 <div className="menu-section">
                     <div className="container">
                         <div className="mt-5">
+                            <img src={blackLogo} />
                             <div className="hamburger-close float-end">
                                 <Link to="#" className="open-menu">
                                     <svg id="Close" onClick={handleMenuClose} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">

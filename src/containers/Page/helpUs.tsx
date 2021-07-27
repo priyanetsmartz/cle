@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { GetHelpUsForm, SaveAnswers } from '../../redux/pages/allPages';
 import { useHistory, useLocation, Redirect, Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-function HelpUs() {
+function HelpUs(props) {
     let history = useHistory();
    //
     const [activeTab, setActiveTab] = useState(1);
+    const [isSurveyEnd, setIsSurveyEnd] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
     const [form, setForm] = useState({
         "title": "",
@@ -37,7 +39,7 @@ function HelpUs() {
    
     useEffect(() => {
         async function getData() {
-            let result: any = await GetHelpUsForm();
+            let result: any = await GetHelpUsForm(props.languages);
             //  console.log(result);
             setForm(result.data[0]);
         }
@@ -65,18 +67,17 @@ function HelpUs() {
             setActiveIndex(activeIndex + 1);
             setActiveTab(activeTab + 1);
         } else {
-            //last element save form
             console.log(payload);
             let result: any = await SaveAnswers(payload);
-            // console.log(result);
             if (result.data) {
-                history.push("/help-us/thank-you");
+                setIsSurveyEnd(true);
             }
         }
     }
 
     return (
         <>
+		<div className="help-us-body">
             <div className="container help-us-inner">
                 <figure className="text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="606" height="134" viewBox="0 0 606 134">
@@ -89,15 +90,16 @@ function HelpUs() {
                 <div className="row">
                     <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                         <ul className="counter-list">
-                            {form.form_json.map((ques, i) => {
+                            {form && form.form_json.map((ques, i) => {
                                 return (
                                     <li className={activeTab == (i + 1) ? 'active' : ''} key={i}><span>{i + 1}</span></li>
                                 );
                             })}
 
                         </ul>
-                        <h3>{form.title}</h3>
-                        {(form.form_json.length > 0) && <div className="question-sec">
+                        {form && <h3>{form.title}</h3>}
+                        {isSurveyEnd && <div className="question-sec"><h2><IntlMessages id="helpus.thankyou" /></h2></div>}
+                        {(form && form.form_json.length > 0 && !isSurveyEnd) && <div className="question-sec">
                             <h4>{form.form_json[activeIndex][0].label}</h4>
                             <div className="select-answer">
                                 {form.form_json[activeIndex][0].values.map((opt, i) => {
@@ -110,8 +112,20 @@ function HelpUs() {
                     </div>
                 </div>
             </div>
+			</div>
         </>
     );
 }
 
-export default HelpUs;
+function mapStateToProps(state) {
+    let languages = '';
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+    return {
+        languages: languages
+    };
+};
+export default connect(
+    mapStateToProps
+)(HelpUs);

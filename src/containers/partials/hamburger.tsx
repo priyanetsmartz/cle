@@ -7,18 +7,15 @@ import { connect } from "react-redux";
 const { toggleOpenDrawer } = appAction;
 
 function Hamburger(props) {
-    //  const [menuLoaded, setMenuLoaded] = useState(false);
     const [classState, setClassState] = useState('');
     const [logoState, setlogoState] = useState(logo);
 
     const handleMenuOpen = (e) => {
         e.preventDefault();
-        //  console.log('here');
         props.toggleOpenDrawer(true);
     }
     useEffect(() => {
         const header = document.getElementById("header");
-       // const home = document.getElementById("home");
         const sticky = header.offsetTop;
         const scrollCallBack: any = window.addEventListener("scroll", () => {
             if (window.pageYOffset > sticky) {
@@ -44,7 +41,7 @@ function Hamburger(props) {
     return (
         <div className={classState} id="header">
             <div className="container">
-                <div className="mt-5">
+                <div className="my-5">
                     <Link to="/"><img src={logoState} alt="logo" /></Link>
                     <div className="hamburger">
                         <Link to="/" className="open-menu" onClick={handleMenuOpen}>

@@ -44,7 +44,7 @@ function GoogleLoginButton(props) {
                             d="M22.412,3.673a5.265,5.265,0,0,1,3.673,1.414L28.766,2.47A9.127,9.127,0,0,0,22.412,0a9.493,9.493,0,0,0-8.487,5.236L17,7.621a5.743,5.743,0,0,1,5.415-3.948"
                             transform="translate(-12.912)" fill="#EB4335" />
                     </svg>
-                    <IntlMessages id="signup.continue_google" /></Link>
+                    <span><IntlMessages id="signup.continue_google" /></span></Link>
             )}
             buttonText="Login"
             onSuccess={responseGoogle}

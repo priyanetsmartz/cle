@@ -90,7 +90,7 @@ function FooterExtra(props) {
                         </ul>
                     </div>
                     <div className="col-md-12 footer-last-links mb-3">
-                        <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link>&nbsp;&nbsp;&nbsp;&nbsp;<Link to="/privacy-policy-cookie-restriction-mode"><IntlMessages id="signup.privacy_policy" /></Link>
+                        <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link>&nbsp;&nbsp;&nbsp;&nbsp;<Link to="/privacy-policy"><IntlMessages id="signup.privacy_policy" /></Link>
                     </div>
                 </div>
             </footer>

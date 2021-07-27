@@ -90,15 +90,15 @@ function SignIn(props) {
     let formIsValid = true;
 
     //Email   
-    // if (typeof state["email"] !== "undefined") {
-    //   let lastAtPos = state["email"].lastIndexOf('@');
-    //   let lastDotPos = state["email"].lastIndexOf('.');
+    if (typeof state["email"] !== "undefined") {
+      let lastAtPos = state["email"].lastIndexOf('@');
+      let lastDotPos = state["email"].lastIndexOf('.');
 
-    //   if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') == -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
-    //     formIsValid = false;
-    //     error["email"] = "Email is not valid";
-    //   }
-    // }
+      if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') == -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
+        formIsValid = false;
+        error["email"] = "Email is not valid";
+      }
+    }
     if (!state["email"]) {
       formIsValid = false;
       error["email"] = "Email is required";
@@ -170,6 +170,7 @@ function SignIn(props) {
           </div>
           <div className="d-grid gap-2">
             <Link to={"/"} className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="login.button" /></Link>
+            <Link to="/forgot-password" onClick={hideModal}>Forgot password?</Link>
           </div>
         </div>
         <div className="or-bg">
@@ -180,7 +181,7 @@ function SignIn(props) {
           <AppleSigninButton />
           <FacebookLoginButton />
         </div>
-        <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"/terms-and-conditions"}><IntlMessages id="signup.terms_conditions" onClick={() => { hideModal(); }} /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy-cookie-restriction-mode"} onClick={() => { hideModal(); }} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
+        <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"/terms-and-conditions"}><IntlMessages id="signup.terms_conditions" onClick={() => { hideModal(); }} /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} onClick={() => { hideModal(); }} ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
       <Modal.Footer><Link to={"/"} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to={"/"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
     </Modal>
   );

@@ -83,5 +83,7 @@
   "profile.welcome": "مرحبا",
   "contact.reach": "تواصل معنا",
   "contact.title": "اتصل بنا",
-  "contact.right": "اتصل بنا"
+  "contact.right": "اتصل بنا",
+  "helpus.thankyou":"شكرا لك على الوقت الذي استغرقته لإكمال هذا الاستطلاع",
+  "passwordlinkexpired":"انتهت صلاحية رمز كلمة المرور. أعد التعيين وحاول مرة أخرى."
 }

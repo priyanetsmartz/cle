@@ -28,6 +28,10 @@ function ForgottenPassword(props) {
       let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email, websiteId: 1 });
       if (result) {
         notification("success", "", "mail sent");
+        setState(prevState => ({
+          ...prevState,
+          email: ""
+        }));
       } else {
         notification("error", "", "No data found!");
       }

@@ -34,7 +34,11 @@ function AboutUs(props) {
                 </svg>
             </figure>
             <div dangerouslySetInnerHTML={{ __html: pagesData.content }} />
-            <div><Link to="/" className="signup-btn" onClick={() => { handleClick(); }}><IntlMessages id="aboutus.sign_up_now" /></Link></div>
+			<div className="blue-rotated-box">
+			<div className="blue-small-box"></div>
+			<div className="blue-small-box"></div>
+			</div>
+            <div className="about-signup-btn"><Link to="/" className="signup-btn" onClick={() => { handleClick(); }}><IntlMessages id="aboutus.sign_up_now" /></Link></div>
 
         </div>
     );
