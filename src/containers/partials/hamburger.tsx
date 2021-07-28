@@ -44,7 +44,7 @@ function Hamburger(props) {
                 <div className="my-5">
                     <Link to="/"><img src={blackLogo} alt="logo" /></Link>
                     <div className="hamburger">
-                        <Link to="/" className="open-menu" onClick={handleMenuOpen}>
+                        <Link to="#" className="open-menu" onClick={handleMenuOpen}>
                             <span className="hb-first"></span>
                             <span className="hb-second"></span>
                             <span className="hb-third"></span>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { PostData, GetComments, GetDataOfCategory } from '../../redux/pages/magazineList';
+import { PostData, GetComments, GetDataOfCategory, postViews } from '../../redux/pages/magazineList';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { FacebookShareButton, LinkedinShareButton } from "react-share";
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
+const axios = require("axios");
 const readingTime = require('reading-time');
 
 function SinglePost(props) {
@@ -24,10 +25,12 @@ function SinglePost(props) {
     useEffect(() => {
         setShareUrl(window.location.href);
         async function getData() {
+            const res = await axios.get('https://geolocation-db.com/json/')
+            console.log(res.data.IPv4);
             let result: any = await PostData(slug);
             let catId = result.data[0].categories[0];
             let featuredResult: any = await GetDataOfCategory(props.languages, catId, 1, 'published_at', 'desc');
-            console.log(result.data[0].categories[0]);
+            await postViews(props.languages, slug, res.data.IPv4);
             setRelated(featuredResult.data);
             setPost(result.data[0]);
             getPostComments(result.data[0].post_id);
@@ -40,7 +43,6 @@ function SinglePost(props) {
         setComments(result.data)
     }
     const stats = readingTime(post.full_content);
-    //  console.log(stats);
     return (
         <>
 

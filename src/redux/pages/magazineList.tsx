@@ -56,3 +56,14 @@ export function SendNewsletter(payload, language = 'english') {
     const data = { storeId: language === 'english' ? 3 : 2, email: payload.userInfo.email }
     return Api.request(`rest/all/V1/newsletter/subscriber`, data, "POST", "");
 }
+
+export function postViews(language, id, ip) {
+    const data = {
+        "postId": id,
+        "customerId": null,
+        "sessionId": localStorage.getItem('id_token') ? localStorage.getItem('id_token') : null,
+        "remoteAddr": ip,
+        "store_id": language === 'english' ? 3 : 2
+    }
+    return Api.request('rest/V1/addrecent/view', data, "POST", "");
+}

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import IntlMessages from "../../components/utility/intlMessages";
+import { useEffect, useState } from 'react';
 import { Pages } from '../../redux/pages/allPages';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
 import { Link } from "react-router-dom";
-import partnershipImage from "../../image/partnership-page-pic.png";
 const { openSignUp } = appAction;
 
 function Partnership(props) {
@@ -12,7 +10,6 @@ function Partnership(props) {
     useEffect(() => {
         async function fetchMyAPI() {
             let result: any = await Pages('partnership', props.languages);
-            //  console.log(result)
             var jsonData = result.data.items[0];
             SetPagesData(jsonData);
         }
@@ -103,7 +100,6 @@ function mapStateToProps(state) {
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
-    // console.log(state.LanguageSwitcher)
     return {
         signupModel: signupModel,
         languages: languages

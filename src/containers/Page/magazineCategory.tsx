@@ -18,6 +18,7 @@ function MagazineCategory(props) {
     const [featured, setFeaturedItems] = useState([]);
     const [pagination, setPagination] = useState(1);
     const [sort, setSort] = useState(1);
+    const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
     const [page, setCurrent] = useState(1);
     const [opacityVal, setOpacity] = useState(1);
     const [errors, setError] = useState({
@@ -65,8 +66,8 @@ function MagazineCategory(props) {
         setCatMenu(result.data);
     }
 
-    async function getListData(page) {
-        let result: any = await GetCategoryData(props.languages, page, "published_at", "desc");
+    async function getListData(languages, page, sortBy, sortByValue) {
+        let result: any = await GetCategoryData(languages, page, sortBy, sortByValue);
         setItems(result.data);
         setOpacity(1);
     }
@@ -86,10 +87,10 @@ function MagazineCategory(props) {
         let sortBy = "published_at";
         let sortByValue = "desc";
         if (event.target.value === "1") {
-            sortBy = "published_at";
+            sortBy = "views";
             sortByValue = "desc";
         } else if (event.target.value === "2") {
-            sortBy = "published_at";
+            sortBy = "views";
             sortByValue = "asc";
         } else if (event.target.value === "3") {
             sortBy = "title";
@@ -99,6 +100,7 @@ function MagazineCategory(props) {
             sortByValue = "desc";
         }
         setSort(event.target.value);
+        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
         setOpacity(0.3);
         if (category) {
             getDataOfCategory(props.languages, category, 1, sortBy, sortByValue)
@@ -116,7 +118,7 @@ function MagazineCategory(props) {
     const goToNextPage = (e) => {
         setOpacity(0.3);
         e.preventDefault();
-        getListData(page + 1);
+        getListData(props.languages, page + 1, sortValue.sortBy, sortValue.sortByValue);
         setCurrent((page) => page + 1);
 
     }
@@ -125,18 +127,16 @@ function MagazineCategory(props) {
         event.preventDefault()
         const pageNumber = Number(event.target.textContent);
         setCurrent(pageNumber);
-        getListData(pageNumber);
+        getListData(props.languages, pageNumber, sortValue.sortBy, sortValue.sortByValue);
     }
     const goToPreviousPage = (e) => {
         setOpacity(0.3);
         e.preventDefault();
-        getListData(page - 1);
+        getListData(props.languages, page - 1, sortValue.sortBy, sortValue.sortByValue);
         setCurrent((page) => page - 1);
 
     }
-    const setCategory = (cate) => {
 
-    }
     const handleValidation = () => {
         let error = {};
         let formIsValid = true;
@@ -263,6 +263,7 @@ function MagazineCategory(props) {
                                 </div>
                                 <div className="col-auto">
                                     <select className="form-select" defaultValue={sort} onChange={filtterData} aria-label="Default select example">
+                                        <option value={0} key="1" >---</option>
                                         {
                                             filters.map((item, i) => {
                                                 return (
@@ -381,7 +382,7 @@ function MagazineCategory(props) {
 
 function mapStateToProps(state) {
     let languages = '', categorySet = '';
-  ///  console.log(state);
+    ///  console.log(state);
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language;
         categorySet = state.App.setCategory;
