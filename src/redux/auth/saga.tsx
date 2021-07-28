@@ -30,6 +30,8 @@ export function* loginRequest() {
         });
         //Check if remember me is clicked
         if (userInfo) {
+          const token = yield call(loginApi.getAuthRegister, userInfo.email);
+          if (token.data[0].entity_id) localStorage.setItem('cust_id', token.data[0].entity_id); //store customer id
           if (userInfo.rememberme === true) {
             //set username and password and remember me into cookie
             yield setCookie("username", userInfo.email);
@@ -83,6 +85,7 @@ export function* registerRequest() {
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
           notification("success", "", "Account registered");
           localStorage.setItem('id_token', token.data[0].new_token);
+          localStorage.setItem('cust_id', token.data[0].entity_id);
           yield setCookie("username", token.data[0].email);
 
           yield put(push("/"));

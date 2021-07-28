@@ -88,5 +88,6 @@
   "helpus.thankyou":"Thank you for taking the time to complete this survey",
   "passwordlinkexpired":"The password token is expired. Reset and try again.",
   "reset_pass":"Reset Password",
-  "helpus.response_saving":"Saving your response..."
+  "helpus.response_saving":"Saving your response...",
+  "help_us.participate_in_survey":"Sign In to participate in the Survey"
 }

@@ -39,7 +39,8 @@ export function Pages(value: string, language: string) {
 
 export function GetHelpUsForm(language) {
     var storeId = language === 'english' ? 3 : 2;
-    return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=help-us`, "", "GET", "");
+    var formCode = language === 'english' ? 'help-us' : 'help-us-ar';
+    return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=${formCode}`, "", "GET", "");
 }
 
 export function SaveAnswers(data) {
@@ -60,7 +61,8 @@ export function SaveNewPass(data) {
 
 export function getContactUsForm(language) {
     var storeId = language === 'english' ? 3 : 2;
-    return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=contact-us`, "", "GET", "");
+    var formCode = language === 'english' ? 'contact-us' : 'contact-us-ar';
+    return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=${formCode}`, "", "GET", "");
 }
 
 export function SubmitContactUs(data) {

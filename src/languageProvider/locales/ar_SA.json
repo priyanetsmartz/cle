@@ -88,5 +88,6 @@
   "helpus.thankyou":"شكرا لك على الوقت الذي استغرقته لإكمال هذا الاستطلاع",
   "passwordlinkexpired":"انتهت صلاحية رمز كلمة المرور. أعد التعيين وحاول مرة أخرى.",
   "reset_pass":"إعادة تعيين كلمة المرور",
-  "helpus.response_saving":"جارٍ حفظ ردك ..."
+  "helpus.response_saving":"جارٍ حفظ ردك ...",
+  "help_us.participate_in_survey":"تسجيل الدخول للمشاركة في الاستبيان"
 }
