@@ -6,11 +6,24 @@ import social5 from "../../image/checkout-social-5.png";
 import social6 from "../../image/checkout-social-6.png";
 import social7 from "../../image/checkout-social-7.png";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Pages } from '../../redux/pages/allPages';
+import HorizontalScroll from 'react-scroll-horizontal'
 import { siteConfig } from '../../settings/';
 import IntlMessages from "../../components/utility/intlMessages";
-function SocailCheckout() {
+import { connect } from "react-redux";
+function SocailCheckout(props) {
 
-
+    const [pagesData, SetPagesData] = useState({ title: '', content: '' })
+    useEffect(() => {
+        async function fetchMyAPI() {
+            let result: any = await Pages('check-out', props.languages);
+            var jsonData = result.data.items[0];
+            console.log(jsonData);
+            SetPagesData(jsonData);
+        }
+        fetchMyAPI()
+    }, [props.languages])
     return (
         <>
             <div className="container magazine-inner">
@@ -92,7 +105,10 @@ function SocailCheckout() {
                 </div>
             </div>
             <div className="social-icon-list">
-                <div className="social-icon-scroll">
+                <HorizontalScroll
+                    animValues={1}
+                    className={'social-icon-scroll'}>
+                    {/* <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> */}
                     <div className="social-pic-icon">
                         <img src={social1} alt="social1" />
                     </div>
@@ -114,11 +130,24 @@ function SocailCheckout() {
                     <div className="social-pic-icon">
                         <img src={social7} alt="social1" />
                     </div>
-                </div>
+                </HorizontalScroll>
                 <div className="social-icon-blue-bg"></div>
             </div>
         </>
     );
 }
 
-export default SocailCheckout;
+function mapStateToProps(state) {
+    let languages = '';
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+    return {
+        languages: languages
+    };
+};
+export default connect(
+    mapStateToProps,
+    {}
+)(SocailCheckout);
+

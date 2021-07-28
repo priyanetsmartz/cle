@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../image/CLE-LOGO.svg";
 import blackLogo from "../../image/CLE-logo-black.svg"
 import appAction from '../../redux/app/actions';
@@ -43,7 +43,7 @@ function Hamburger(props) {
                 <div className="my-5">
                     <Link to="/"><img src={logoState} alt="logo" /></Link>
                     <div className="hamburger">
-                        <Link to="/" className="open-menu" onClick={handleMenuOpen}>
+                        <Link to="#" className="open-menu" onClick={handleMenuOpen}>
                             <span className="hb-first"></span>
                             <span className="hb-second"></span>
                             <span className="hb-third"></span>

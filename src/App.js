@@ -23,7 +23,7 @@ function App() {
   return (
     <HttpsRedirect>
       <LanguageContext.Provider value={{ value, setValue }} >
-        <ConfigProvider locale={currentAppLocale.antd} >
+        <ConfigProvider locale={currentAppLocale.antd}  >
           <IntlProvider
             locale={currentAppLocale.locale}
             messages={currentAppLocale.messages}
