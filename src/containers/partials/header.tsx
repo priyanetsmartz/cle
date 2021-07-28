@@ -64,6 +64,7 @@ function Header(props) {
         // Clear access token and ID token from local storage
         props.toggleOpenDrawer(false);
         localStorage.removeItem('id_token');
+        localStorage.removeItem('cust_id');
         props.logout();
         // navigate to the home route
         history.replace('/');

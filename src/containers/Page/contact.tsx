@@ -123,7 +123,6 @@ function ContactUS(props) {
             payload.response_json = JSON.stringify(data);
             payload.form_id = form.form_id;
             payload.store_id = form.store_id;
-            payload.customer_id = 1;
             payload.form_name = form.title;
             payload.form_code = form.code;
             setPayload(payload);

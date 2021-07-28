@@ -13,7 +13,7 @@ function PostComment(props) {
         post_id: 12, //change this
         message: "",
         store_id: 3, //change this
-        customer_id: 1,
+        customer_id: localStorage.getItem('cust_id'),
         reply_to: null
     })
     const [errors, setError] = useState({
@@ -45,7 +45,7 @@ function PostComment(props) {
                     post_id: 12, //change this
                     message: "",
                     store_id: 3, //change this
-                    customer_id: 1,
+                    customer_id: localStorage.getItem('cust_id'),
                     reply_to: null
                 }))
             }
