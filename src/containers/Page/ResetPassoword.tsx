@@ -10,6 +10,7 @@ function ResetPassword(props) {
     const pass = useLocation().search;
     const token = new URLSearchParams(pass).get("token");
     const customerId = new URLSearchParams(pass).get("id");
+    console.log(token, customerId);
 
     const [state, setState] = useState({
         password: "",
@@ -46,8 +47,13 @@ function ResetPassword(props) {
         e.preventDefault();
         if (handleValidation()) {
             let result: any = await SaveNewPass({ email: "", resetToken: token, newPassword: state.password });
-            if (result.data.length > 0) {
-
+            if (result) {
+                notification("success", "", "Password updated!");
+                setState(prevState => ({
+                    ...prevState,
+                    password: "",
+                    confirmPassword: ""
+                }))
             } else {
                 notification("error", "", "Error");
             }
