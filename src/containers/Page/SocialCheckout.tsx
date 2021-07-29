@@ -19,7 +19,7 @@ function SocailCheckout(props) {
         async function fetchMyAPI() {
             let result: any = await Pages('check-out', props.languages);
             var jsonData = result.data.items[0];
-            console.log(jsonData);
+           // console.log(jsonData);
             SetPagesData(jsonData);
         }
         fetchMyAPI()

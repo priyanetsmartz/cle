@@ -39,6 +39,8 @@ export default function appReducer(state = initState, action) {
       return { ...state, current: [], openKeys: [] };
     case actions.SHOW_SIGHNIN:
       return { ...state, showLogin: action.showLogin };
+    case actions.SHOW_HELPUS:
+      return { ...state, showHelpus: action.showHelpus };
     case actions.OPEN_SIGN_UP:
       return { ...state, showSignUp: action.showSignUp };
     case actions.LOGO_CLASS:

@@ -17,7 +17,7 @@ function MagazineCategory(props) {
     const [radio, setRadio] = useState('Womenswear');
     const [featured, setFeaturedItems] = useState([]);
     const [pagination, setPagination] = useState(1);
-    const [sort, setSort] = useState(1);
+    const [sort, setSort] = useState(0);
     const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
     const [page, setCurrent] = useState(1);
     const [opacityVal, setOpacity] = useState(1);
@@ -193,7 +193,7 @@ function MagazineCategory(props) {
                                     let classValue = item.category_id === category ? "active-menu" : "";
 
                                     return (
-                                        <li key={i}><Link to={link} onClick={setCategory(item.id)} className={classValue}>{item.name}</Link></li>
+                                        <li key={i}><Link to={link} className={classValue}>{item.name}</Link></li>
                                     )
                                 })}
                             </ul>
@@ -263,7 +263,7 @@ function MagazineCategory(props) {
                                 </div>
                                 <div className="col-auto">
                                     <select className="form-select" defaultValue={sort} onChange={filtterData} aria-label="Default select example">
-                                        <option value={0} key="1" >---</option>
+                                        <option value={0} key="0" >---</option>
                                         {
                                             filters.map((item, i) => {
                                                 return (

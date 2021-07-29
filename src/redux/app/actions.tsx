@@ -17,11 +17,12 @@ const actions = {
 
   CLOSE_ALL: 'CLOSE_ALL',
   SHOW_SIGHNIN: 'SHOW_SIGHNIN',
+  SHOW_HELPUS: 'SHOW_HELPUS',
   OPEN_SIGN_UP: "OPEN_SIGN_UP",
   CLOSE_SIGN_UP: "CLOSE_SIGN_UP",
   LOGO_CLASS: "LOGO_CLASS",
   SET_TYPE: "SET_TYPE",
-  SET_CAT:"SET_CAT",
+  SET_CAT: "SET_CAT",
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
   }),
@@ -51,6 +52,10 @@ const actions = {
     type: actions.SHOW_SIGHNIN,
     showLogin
   }),
+  showHelpus: showHelpus => ({
+    type: actions.SHOW_HELPUS,
+    showHelpus
+  }),
   openSignUp: showSignUp => ({
     type: actions.OPEN_SIGN_UP,
     showSignUp
@@ -67,9 +72,9 @@ const actions = {
     type: actions.SET_TYPE,
     userType
   }),
-  setCategory :setCategory =>({
+  setCategory: setCategory => ({
     type: actions.SET_CAT,
     setCategory
-  }) 
+  })
 };
 export default actions;
