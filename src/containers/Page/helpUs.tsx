@@ -16,6 +16,7 @@ function HelpUs(props) {
     const [isHidden, setIsHidden] = useState(false);
     const [loading, setloading] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [onLogin, setOnLogin] = useState(false);
     const [form, setForm] = useState({
         "title": "",
         "form_id": "",
@@ -46,11 +47,19 @@ function HelpUs(props) {
     useEffect(() => {
         async function getData() {
             let result: any = await GetHelpUsForm(props.languages);
-            //  console.log(result);
             setForm(result.data[0]);
         }
         getData()
     }, []);
+
+    useEffect(() => {
+        console.log(props.helpus);
+        if (props.helpus === true) {
+            setOnLogin(true);
+        } else if (props.helpus === false) {
+            setOnLogin(false);
+        }
+    }, [props.helpus])
 
     const optionHandler = async (optionIndex) => {
 
@@ -105,44 +114,52 @@ function HelpUs(props) {
                         </svg>
                     </figure>
                     <div className="row">
-                        {(localStorage.getItem('id_token') && (!isSurvey || isSurvey != customerId)) ? <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
-                            <div className="show-hide">
-                                {isHidden && <b onClick={toggleHelpUs}>+</b>}
-                                {!isHidden && <b onClick={toggleHelpUs}>-</b>}
-                            </div>
-                            {!isHidden && <div>
-                                <ul className="counter-list">
-                                    {form && form.form_json.map((ques, i) => {
-                                        return (
-                                            <li className={activeTab == (i + 1) ? 'active' : ''} key={i}><span>{i + 1}</span></li>
-                                        );
-                                    })}
 
-                                </ul>
-                                {form && <h3>{form.title}</h3>}
-                                {isSurveyEnd && !loading && <div className="question-sec"><h2><IntlMessages id="helpus.thankyou" /></h2></div>}
-                                {!isSurveyEnd && loading && <div className="question-sec"><h2><IntlMessages id="helpus.response_saving" /></h2></div>}
-                                {(form && form.form_json.length > 0 && !isSurveyEnd && !loading) && <div className="question-sec">
-                                    <h4>{form.form_json[activeIndex][0].label}</h4>
-                                    <div className="select-answer">
-                                        {form.form_json[activeIndex][0].values.map((opt, i) => {
+                        {((localStorage.getItem('id_token') && (!isSurvey || isSurvey != customerId)) || onLogin) && (
+                            <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
+                                <div className="show-hide">
+                                    {isHidden && <b onClick={toggleHelpUs}>+</b>}
+                                    {!isHidden && <b onClick={toggleHelpUs}>-</b>}
+                                </div>
+                                {!isHidden && <div>
+                                    <ul className="counter-list">
+                                        {form && form.form_json.map((ques, i) => {
                                             return (
-                                                <button key={i} onClick={() => { optionHandler(i); }}>{opt.label}</button>
+                                                <li className={activeTab == (i + 1) ? 'active' : ''} key={i}><span>{i + 1}</span></li>
                                             );
                                         })}
-                                    </div>
+
+                                    </ul>
+                                    {form && <h3>{form.title}</h3>}
+                                    {isSurveyEnd && !loading && <div className="question-sec"><h2><IntlMessages id="helpus.thankyou" /></h2></div>}
+                                    {!isSurveyEnd && loading && <div className="question-sec"><h2><IntlMessages id="helpus.response_saving" /></h2></div>}
+                                    {(form && form.form_json.length > 0 && !isSurveyEnd && !loading) && <div className="question-sec">
+                                        <h4>{form.form_json[activeIndex][0].label}</h4>
+                                        <div className="select-answer">
+                                            {form.form_json[activeIndex][0].values.map((opt, i) => {
+                                                return (
+                                                    <button key={i} onClick={() => { optionHandler(i); }}>{opt.label}</button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>}
                                 </div>}
-                            </div>}
-                        </div> : (localStorage.getItem('id_token') && isSurvey) ? <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
-                            <h3><IntlMessages id="helpus.thankyou" /></h3>
-                        </div> : <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
-                            <div><h3><IntlMessages id="help_us.participate_in_survey" /></h3></div>
-                            <div>
-                                <Link to="/" className="signup-btn" onClick={() => { handleClick(); }}>
-                                    <IntlMessages id="menu_Sign_in" />
-                                </Link>
                             </div>
-                        </div>}
+                        )}
+                        {(localStorage.getItem('id_token') && isSurvey) && (
+                            <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
+                                <h3><IntlMessages id="helpus.thankyou" /></h3>
+                            </div>
+                        )}
+                        {(!localStorage.getItem('id_token') && !isSurvey || !onLogin) && (
+                            <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
+                                <div><h3><IntlMessages id="help_us.participate_in_survey" /></h3></div>
+                                <div>
+                                    <Link to="/" className="signup-btn" onClick={() => { handleClick(); }}>
+                                        <IntlMessages id="menu_Sign_in" />
+                                    </Link>
+                                </div>
+                            </div>)}
                     </div>
                 </div>
             </div>
@@ -151,12 +168,15 @@ function HelpUs(props) {
 }
 
 function mapStateToProps(state) {
-    let languages = '';
+    let languages = '', helpus: "";
+    //console.log(state);
     if (state && state.LanguageSwitcher) {
-        languages = state.LanguageSwitcher.language
+        languages = state.LanguageSwitcher.language;
+        helpus = state.App.showHelpus;
     }
     return {
-        languages: languages
+        languages: languages,
+        helpus: helpus
     };
 };
 export default connect(

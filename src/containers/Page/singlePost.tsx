@@ -30,7 +30,7 @@ function SinglePost(props) {
             let result: any = await PostData(slug);
             let catId = result.data[0].categories[0];
             let featuredResult: any = await GetDataOfCategory(props.languages, catId, 1, 'published_at', 'desc');
-            await postViews(props.languages, slug, res.data.IPv4);
+           // await postViews(props.languages, slug, res.data.IPv4);
             setRelated(featuredResult.data);
             setPost(result.data[0]);
             getPostComments(result.data[0].post_id);

@@ -1,4 +1,3 @@
-
 import GoogleLogin from 'react-google-login';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { apiConfig } from '../../../settings';
@@ -11,6 +10,7 @@ function GoogleLoginButton(props) {
 
     const responseGoogle = (response) => {
         const { register } = props;
+        console.log(props.loginState)
         if (response.accessToken) {
             const userInfo = {
                 "firstname": response.profileObj.name,
@@ -18,8 +18,12 @@ function GoogleLoginButton(props) {
                 "accessToken": response.accessToken,
                 "type": 3,
             }
-            // console.log(userInfo);
-            register({ userInfo });
+            if (!props.loginState) {
+                register({ userInfo });
+            }else{
+                
+            }
+
         }
     }
 
@@ -49,16 +53,20 @@ function GoogleLoginButton(props) {
             buttonText="Login"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
-           // cookiePolicy={'single_host_origin'}
+        // cookiePolicy={'single_host_origin'}
         />
     )
 }
-const mapStateToProps = state => ({
-    auth: state.auth,
-    errors: state.errors,
-    // loginerror:state.errors.loginerror
-});
-
+function mapStateToProps(state) {
+    let loginState = '';
+    //  console.log(state);
+    if (state && state.App && state.App.showLogin) {
+        loginState = state.App.showLogin
+    }
+    return {
+        loginState: loginState
+    }
+}
 export default connect(
     mapStateToProps,
     { register }

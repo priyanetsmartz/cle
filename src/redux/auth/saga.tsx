@@ -50,6 +50,10 @@ export function* loginRequest() {
           type: appAction.SHOW_SIGHNIN,
           showLogin: false
         });
+        yield put({
+          type: appAction.SHOW_HELPUS,
+          showHelpus: true
+        });
         yield put(push("/"));
       } else {
         notification("error", "", "Invalid Username or password.");

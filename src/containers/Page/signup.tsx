@@ -100,12 +100,25 @@ function RegistrationForm(props) {
                 "type": props.userSetype
             }
             register({ userInfo });
+            setState({
+                email: "",
+                password: "",
+                confirmPassword: "",
+                type: 1
+            })
         } else {
             notification("warning", "", "Please enter required values");
         }
     }
 
     const hideModal = () => {
+        setError({ errors: {} });
+        setState({
+            email: "",
+            password: "",
+            confirmPassword: "",
+            type: 1
+        })
         const { openSignUp } = props;
         openSignUp(false);
     };

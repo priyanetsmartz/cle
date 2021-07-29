@@ -7,7 +7,6 @@ import { getCookie } from '../../helpers/session';
 import authAction from "../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import appAction from "../../redux/app/actions";
-import history from './history';
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../image/CLE-logo-black.svg";
@@ -76,6 +75,11 @@ function SignIn(props) {
         "rememberme": rememberMe
       }
       login({ userInfo });
+      if (getCookie("remember_me") === "true") {
+        setState({ email: getCookie("username"), password: getCookie("password") })
+      } else {
+        setState({ email: '', password: '' })
+      }
     } else {
       notification("warning", "", "Please enter valid email and password");
     }
@@ -112,6 +116,12 @@ function SignIn(props) {
 
   const hideModal = () => {
     const { showSignin } = props;
+    setError({ errors: {} });
+    if (getCookie("remember_me") === "true") {
+      setState({ email: getCookie("username"), password: getCookie("password") })
+    } else {
+      setState({ email: '', password: '' })
+    }
     showSignin(false);
   };
   const togglePasswordVisiblity = () => {

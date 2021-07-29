@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import blackLogo from "../../image/CLE-logo-black.svg"
 
 const { logout } = authAction;
-const { showSignin, openSignUp, logoClass, toggleOpenDrawer, userType } = appAction;
+const { showSignin, openSignUp, logoClass, toggleOpenDrawer, userType, showHelpus } = appAction;
 
 
 function Header(props) {
@@ -66,7 +66,7 @@ function Header(props) {
         localStorage.removeItem('id_token');
         localStorage.removeItem('cust_id');
         props.logout();
-        // navigate to the home route
+        props.showHelpus(false);
         history.replace('/');
     }
     return (
@@ -89,7 +89,7 @@ function Header(props) {
                 <div className="menu-section">
                     <div className="container">
                         <div className="mt-5">
-                            <Link to="/" onClick={handleMenuClose} ><img src={blackLogo} /></Link>
+                            <Link to="#" onClick={handleMenuClose} ><img src={blackLogo} /></Link>
                             <div className="hamburger-close float-end">
                                 <Link to="#" className="open-menu">
                                     <svg id="Close" onClick={handleMenuClose} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
@@ -211,5 +211,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { logout, showSignin, openSignUp, logoClass, toggleOpenDrawer, userType }
+    { logout, showSignin, openSignUp, logoClass, toggleOpenDrawer, userType, showHelpus }
 )(Header);
