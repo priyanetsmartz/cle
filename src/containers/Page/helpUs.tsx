@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { GetHelpUsForm, SaveAnswers } from '../../redux/pages/allPages';
-import { useHistory, useLocation, Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { setCookie, getCookie } from "../../helpers/session";
 import appAction from "../../redux/app/actions";
 const { showSignin } = appAction;
 
 function HelpUs(props) {
-    let history = useHistory();
     const customerId = localStorage.getItem('cust_id');
     const isSurvey = getCookie('help-us');
     const [activeTab, setActiveTab] = useState(1);
@@ -53,7 +51,7 @@ function HelpUs(props) {
     }, []);
 
     useEffect(() => {
-        console.log(props.helpus);
+        console.log(props);
         if (props.helpus === true) {
             setOnLogin(true);
         } else if (props.helpus === false) {
@@ -115,7 +113,7 @@ function HelpUs(props) {
                     </figure>
                     <div className="row">
 
-                        {((localStorage.getItem('id_token') && (!isSurvey || isSurvey != customerId)) || onLogin) && (
+                        {((localStorage.getItem('id_token') && (!isSurvey || isSurvey != customerId)) && !onLogin) && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div className="show-hide">
                                     {isHidden && <b onClick={toggleHelpUs}>+</b>}
@@ -151,13 +149,13 @@ function HelpUs(props) {
                                 <h3><IntlMessages id="helpus.thankyou" /></h3>
                             </div>
                         )}
-                        {(!localStorage.getItem('id_token') && !isSurvey || !onLogin) && (
+                        {(!localStorage.getItem('id_token') && (!isSurvey || !onLogin)) && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div><h3><IntlMessages id="help_us.participate_in_survey" /></h3></div>
                                 <div>
-                                    <Link to="/" className="signup-btn" onClick={() => { handleClick(); }}>
+                                    <button className="signup-btn" onClick={() => { handleClick(); }}>
                                         <IntlMessages id="menu_Sign_in" />
-                                    </Link>
+                                    </button>
                                 </div>
                             </div>)}
                     </div>
