@@ -8,10 +8,10 @@ const { openSignUp } = appAction;
 
 function AboutUs(props) {
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
+    const [onLogin, setOnLogin] = useState(false);
     useEffect(() => {
         async function fetchMyAPI() {
             let result: any = await Pages('about-us', props.languages);
-            //console.log(result)
             var jsonData = result.data.items[0];
             SetPagesData(jsonData);
         }
@@ -23,6 +23,16 @@ function AboutUs(props) {
         openSignUp(true);
     }
 
+    useEffect(() => {
+        let tokenCheck = localStorage.getItem('id_token');
+        let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
+       // console.log(tokenCheckFilter)
+        if (!tokenCheckFilter) {
+            setOnLogin(false);
+        } else {
+            setOnLogin(true);
+        }
+    })
     return (
         <div className="container about-inner">
             <figure className="text-center">
@@ -38,7 +48,7 @@ function AboutUs(props) {
 			<div className="blue-small-box"></div>
 			<div className="blue-small-box"></div>
 			</div>
-            {!localStorage.getItem('id_token') && <div className="about-signup-btn">
+            {!onLogin && <div className="about-signup-btn">
                 <Link to="/" className="signup-btn" onClick={() => { handleClick(); }}>
                     <IntlMessages id="aboutus.sign_up_now" />
                     </Link>
@@ -49,7 +59,7 @@ function AboutUs(props) {
 }
 
 function mapStateToProps(state) {
-    let signupModel = '', languages = '';
+    let signupModel = '', languages = '', helpusVal;
     if (state && state.App) {
         signupModel = state.App.showSignUp
     }
@@ -57,10 +67,14 @@ function mapStateToProps(state) {
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
+    if (state && state.Auth && state.Auth.idToken) {
+        helpusVal = state.Auth.idToken;
+    }
     // console.log(state.LanguageSwitcher)
     return {
         signupModel: signupModel,
-        languages: languages
+        languages: languages,
+        helpusVal: helpusVal
 
     };
 };

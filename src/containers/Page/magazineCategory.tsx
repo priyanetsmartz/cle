@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link, useLocation, useParams } from "react-router-dom";
 import appAction from "../../redux/app/actions";
+import { useIntl } from 'react-intl';
 import { FeaturedList, GetCategoryData, SendNewsletter, GetCategoryList, GetDataOfCategory } from '../../redux/pages/magazineList';
 import moment from 'moment';
 import notification from '../../components/notification';
 import { connect } from 'react-redux';
 const { setCategory } = appAction;
 function MagazineCategory(props) {
+    const intl = useIntl();
     const { category } = useParams();
     const [state, setState] = useState({
         email: ""
@@ -49,13 +51,21 @@ function MagazineCategory(props) {
         setPagination(dataTotal);
         setFeaturedItems(featuredResult.data);
         setlatestItem(result.data.slice(-1)[0]);
+        // console.log(result.data.slice(-1)[0]);
         setOpacity(1);
     }
 
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue);
         setItems(result.data);
-        setlatestItem(result.data.slice(-1)[0]);
+        if (result.data) {
+            setlatestItem(result.data.slice(-1)[0]);
+        } else {
+            setlatestItem(prevState => ({
+                ...prevState
+            }))
+        }
+        // console.log(result.data.slice(-1)[0]);
         let featuredCat = result.data.filter(catData => catData.is_featured === "1");
         setFeaturedItems(featuredCat);
         setOpacity(1);
@@ -164,7 +174,7 @@ function MagazineCategory(props) {
                 "email": state.email,
                 "type": radio
             }
-            const result: any = await SendNewsletter({ userInfo });
+            const result: any = await SendNewsletter({ userInfo }, props.languages);
             if (result.data[0].success == 1) {
                 notification("success", "", result.data[0].message);
                 setState(prevState => ({
@@ -184,7 +194,7 @@ function MagazineCategory(props) {
 
                 <div className="row mt-3 mag-list-head">
                     <div className="col-md-6 offset-md-3 text-center">
-                        <h3>Magazine</h3>
+                        <h3><IntlMessages id="magazine.title" /></h3>
                         {catMenu.length > 0 && (
                             <ul>
                                 <li key="0"><Link to="/magazines" className={!category ? "active-menu" : ""}>latest</Link></li>
@@ -206,21 +216,23 @@ function MagazineCategory(props) {
                         <Link to="/">
                             <svg className="me-2" xmlns="http://www.w3.org/2000/svg" width="6.08" height="9.743" viewBox="0 0 6.08 9.743">
                                 <path id="Path_13" data-name="Path 13" d="M0,5,4.5,0,9,5" transform="translate(0.747 9.372) rotate(-90)" fill="none" stroke="#2E2BAA" strokeWidth="1" />
-                            </svg> Back to Home
+                            </svg> <IntlMessages id="backhome.link" />
                         </Link>
                     </div>
                 </div>
             </div>
+            {latest && (
+                <div className="mag-top-banner">
+                    <img src={latest.list_thumbnail} />
+                    <div className="banner-content text-center">
+                        <h4>{latest.title}</h4>
+                        <div className="cat-date">{latest.categroy}<span>{moment(latest.published_at).format('LL')}</span></div>
+                        <p>  <div dangerouslySetInnerHTML={{ __html: latest.short_content }} /></p>
+                        <Link to={"/magazine/" + latest.post_id} ><IntlMessages id="magazine.read_more" /></Link>
+                    </div>
 
-            <div className="mag-top-banner">
-                <img src={latest.list_thumbnail} />
-                <div className="banner-content text-center">
-                    <h4>{latest.title}</h4>
-                    <div className="cat-date">{latest.categroy}<span>{moment(latest.published_at).format('LL')}</span></div>
-                    <p>{latest.short_content}</p>
-                    <Link to={"/magazine/" + latest.post_id} ><IntlMessages id="magazine.read_more" /></Link>
                 </div>
-            </div>
+            )}
 
             <div className="highlight-list mt-5 py-5">
                 <h2 className="pb-3 text-center"><IntlMessages id="magazine.highlights" /></h2>
@@ -236,7 +248,7 @@ function MagazineCategory(props) {
                                             <div className="cate-name">{item.categroy}</div>
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
-                                            <p className="mag-blog-desc d-none">{item.short_content}</p>
+                                            <p className="mag-blog-desc d-none">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
                                             <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                         </div>
                                     </div>
@@ -247,7 +259,7 @@ function MagazineCategory(props) {
                 )}
                 {!featured.length && (
                     <div className="container">
-                        No Data Available
+                        <IntlMessages id="no_data" />
                     </div>
                 )}
             </div>
@@ -287,7 +299,7 @@ function MagazineCategory(props) {
                                             <div className="cate-name">{item.categroy}</div>
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
-                                            <p className="mag-blog-desc d-none">{item.short_content}</p>
+                                            <p className="mag-blog-desc d-none">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
                                             <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                         </div>
 
@@ -324,17 +336,19 @@ function MagazineCategory(props) {
                                         <text id="Newsletter" transform="translate(1 98)" fill="none" stroke="#2E2BAA" strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book"><tspan x="0" y="0"><IntlMessages id="magazine.newsletter" /></tspan></text>
                                     </svg>
                                 </figure>
-                                <h4>Shop the sale first</h4>
+                                <h4><IntlMessages id="newsletter.title" /></h4>
 
-                                <p>Sign up htmlFor exclusive early Sale access and tailored new arrivals.</p>
+                                <p><IntlMessages id="newsletter.subtitle" /></p>
                                 <div className="wear-ckeckbox">
                                     <div className="form-check form-check-inline">
                                         <input className="form-check-input" type="radio" checked={radio === "Womenswear"} onChange={onValueChange} name="inlineRadioOptions" id="inlineRadio1" value="Womenswear" />
-                                        <label className="form-check-label" htmlFor="inlineRadio1">Womenswear</label>
+                                        <label className="form-check-label" htmlFor="inlineRadio1"><IntlMessages
+                                            id="newsletter.option1" /></label>
                                     </div>
                                     <div className="form-check form-check-inline">
                                         <input className="form-check-input" type="radio" onChange={onValueChange} name="inlineRadioOptions" id="inlineRadio2" value="Menswear" />
-                                        <label className="form-check-label" htmlFor="inlineRadio2">Menswear</label>
+                                        <label className="form-check-label" htmlFor="inlineRadio2"><IntlMessages
+                                            id="newsletter.option2" /></label>
                                     </div>
                                 </div>
 
@@ -344,17 +358,17 @@ function MagazineCategory(props) {
                                         <input type="text"
                                             id="email"
                                             aria-describedby="emailHelp"
-                                            placeholder="email"
+                                            placeholder={intl.formatMessage({ id: 'newsletter.input' })}
                                             value={state.email}
                                             onChange={handleChange} />
                                     </div>
                                     <div className="col-auto">
-                                        <button type="submit" className="btn btn-primary mb-3" onClick={handleSubmitClick} >Sign me up</button>
+                                        <button type="submit" className="btn btn-primary mb-3" onClick={handleSubmitClick} ><IntlMessages id="newsletter.signup" /></button>
                                     </div>
                                     <span className="error">{errors.errors["email"]}</span>
                                 </form>
                                 <div className="terms-text text-center">
-                                    By signing up you agree with our <Link to="/terms-and-conditions">Terms & Conditions</Link> and <Link to="/privacy-policy">Privacy Policy</Link>. To opt out, click Unsubscribe in our emails.
+                                    <IntlMessages id="newsletter.foot" /> <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link> <IntlMessages id="signup.and" /> <Link to="/privacy-policy"><IntlMessages id="signup.privacy_policy" /></Link>. <IntlMessages id="newsletter.optout" />
                                 </div>
 
                                 <div className="join-cle-bottom-2">

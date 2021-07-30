@@ -12,11 +12,7 @@ function Magazine(props) {
     useEffect(() => {
         async function getData() {
             let result: any = await MagazineList(props.languages);
-            if (result.data.length > 0) {
-                setItems(result.data);
-            } else {
-                notification("error", "", "No data found!");
-            }
+            setItems(result.data);
         }
         getData()
 
@@ -40,13 +36,17 @@ function Magazine(props) {
                                 <div className="blog-sec-main">
                                     <div className="mag-blog-pic"><img src={item.list_thumbnail} /></div>
                                     <h3 className="mag-blog-title mt-5 mb-3">{item.title}</h3>
-                                    <p className="mag-blog-desc d-none">{item.short_content}...</p>
+                                    <p className="mag-blog-desc d-none"><div dangerouslySetInnerHTML={{ __html: item.short_content }} />...</p>
                                     <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                 </div>
                             </div>
                         );
                     })}
-
+                    {!items.length && (
+                        <div className="container">
+                            <IntlMessages id="no_data" />
+                        </div>
+                    )}
                     <figure className="new-heading-back">
                         <svg xmlns="http://www.w3.org/2000/svg" width="770" height="134" viewBox="0 0 770 134">
                             <text id="Magazine" transform="translate(385 98)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="110"
@@ -73,7 +73,6 @@ function mapStateToProps(state) {
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
-    // console.log(state.LanguageSwitcher)
     return {
         languages: languages
 

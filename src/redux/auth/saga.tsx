@@ -72,25 +72,31 @@ export function* registerRequest() {
   yield takeEvery("REGISTER_REQUEST", function* (payload: any) {
     try {
       //user details
-      var firstname = payload.payload.userInfo.first_name;
-      var lastname = payload.payload.userInfo.last_name;
-      var type = payload.payload.userInfo.type;
-      var email = payload.payload.userInfo.email;
-      var password = payload.payload.userInfo.password;
+      let firstname = payload.payload.userInfo.first_name;
+      let lastname = payload.payload.userInfo.last_name;
+      let type = payload.payload.userInfo.type;
+      let email = payload.payload.userInfo.email;
+      let password = payload.payload.userInfo.password;
+      let storeId = payload.payload.userInfo.storeId;
       // var rememberMe = payload.payload.userInfo.rememberMe;
       //API call to login request
-      const response = yield call(loginApi.register, firstname, lastname, email, password, type);
+      const response = yield call(loginApi.register, firstname, lastname, email, password, type, storeId);
       if (response.data.id !== "") {
         const token = yield call(loginApi.getAuthRegister, email);
         //  console.log(token.data[0].new_token, console.log(typeof (token)))
         if (token.data[0].new_token) {
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
+          yield put({
+            type: actions.LOGIN_SUCCESS,
+            token: token.data[0].new_token,
+            userInfo: payload.payload.userInfo
+          });
           notification("success", "", "Account registered");
           localStorage.setItem('id_token', token.data[0].new_token);
           localStorage.setItem('cust_id', token.data[0].entity_id);
           yield setCookie("username", token.data[0].email);
           yield put(push("/"));
-          
+
         } else {
           yield put({ type: actions.REGISTER_ERROR });
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });

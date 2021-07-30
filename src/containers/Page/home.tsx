@@ -9,6 +9,7 @@ const { openSignUp } = appAction;
 
 function Home(props) {
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
+    const [onLogin, setOnLogin] = useState(false);
     useEffect(() => {
         let pageIdentifier = 'home';
         async function fetchMyAPI() {
@@ -24,21 +25,30 @@ function Home(props) {
         const { openSignUp } = props;
         openSignUp(true);
     }
+    useEffect(() => {
+        let tokenCheck = localStorage.getItem('id_token');
+        let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
+        if (!tokenCheckFilter) {
+            setOnLogin(false);
+        } else {
+            setOnLogin(true);
+        }
+    })
 
     return (
         <div className="homescreen-bg">
             <img src={homeBg} alt="homepage" />
             <div className="position-absolute container top-50 start-50 translate-middle home-inner-text">
                 <figure className="time-is-now">
-                    
-					<svg xmlns="http://www.w3.org/2000/svg" width="616" height="278.5" viewBox="0 0 616 278.5">
-  <g id="Group_793" data-name="Group 793" transform="translate(-703 -220.5)">
-    <text id="Time" transform="translate(704 350.5)" fill="none" stroke="#2E2BAA" strokeWidth="1" fontSize="147" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="home.time" /></tspan></text>
-    <text id="NOW_" data-name={<IntlMessages id="home.now" />} transform="translate(862 458)" fill="#2E2BAA" fontSize="114" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="home.now" /></tspan></text>
-    <text id="Is" transform="translate(788 412)" fill="#2E2BAA" stroke="#2E2BAA" strokeWidth="1" fontSize="48" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.is" /></tspan></text>
-    <text id="New_luxury_marketplace" data-name="New luxury marketplace" transform="translate(867 493)" fill="#2E2BAA" fontSize="20" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.slogan" /></tspan></text>
-  </g>
-</svg>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="616" height="278.5" viewBox="0 0 616 278.5">
+                        <g id="Group_793" data-name="Group 793" transform="translate(-703 -220.5)">
+                            <text id="Time" transform="translate(704 350.5)" fill="none" stroke="#2E2BAA" strokeWidth="1" fontSize="147" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="home.time" /></tspan></text>
+                            <text id="NOW_" data-name={<IntlMessages id="home.now" />} transform="translate(862 458)" fill="#2E2BAA" fontSize="114" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="home.now" /></tspan></text>
+                            <text id="Is" transform="translate(788 412)" fill="#2E2BAA" stroke="#2E2BAA" strokeWidth="1" fontSize="48" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.is" /></tspan></text>
+                            <text id="New_luxury_marketplace" data-name="New luxury marketplace" transform="translate(867 493)" fill="#2E2BAA" fontSize="20" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.slogan" /></tspan></text>
+                        </g>
+                    </svg>
                 </figure>
                 <figure className="play-video-now">
                     <svg xmlns="http://www.w3.org/2000/svg" width="98.73" height="100.606" viewBox="0 0 98.73 100.606">
@@ -121,7 +131,7 @@ function Home(props) {
                     </svg>
 
                 </figure>
-                {!localStorage.getItem('id_token') && <div className="position-absolute mx-auto sign-up-btn">
+                {!onLogin && <div className="position-absolute mx-auto sign-up-btn">
                     <Link className="" to="/" onClick={(e) => { handleClick(e); }} role="button"><IntlMessages id="sign_up_now" /></Link>
                 </div>}
             </div>
@@ -129,17 +139,22 @@ function Home(props) {
     );
 }
 function mapStateToProps(state) {
-    let signupModel = '', languages = '';
+    let signupModel = '', languages = '', helpusVal;
+    //console.log(state.Auth);
     if (state && state.App) {
         signupModel = state.App.showSignUp
     }
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
+    if (state && state.Auth && state.Auth.idToken) {
+        helpusVal = state.Auth.idToken;
+    }
     // console.log(state.LanguageSwitcher)
     return {
         signupModel: signupModel,
-        languages: languages
+        languages: languages,
+        helpusVal: helpusVal
 
     };
 }

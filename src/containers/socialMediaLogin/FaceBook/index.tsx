@@ -8,18 +8,21 @@ import { connect } from 'react-redux';
 import Login from "../../../redux/auth/Login";
 import { setCookie } from '../../../helpers/session';
 const loginApi = new Login();
-const { showSignin } = appAction;
+const { showSignin, openSignUp } = appAction;
 const { register, loginSuccess } = authAction;
 /** Apple Signin button */
 function FacebookLoginButton(props) {
 
     const responseFacebook = (response) => {
         const { register } = props;
-        console.log(response)
+        //   console.log(response)
         if (response.accessToken) {
+            let name = response.name.split(" ");
+            //console.log(name[0],name[1])
             const userInfo = {
-                "first_name": response.profileObj.name,
-                "email": response.profileObj.email,
+                "first_name": name[0],
+                "last_name": name[1],
+                "email": response.email,
                 "accessToken": response.accessToken,
                 "type": 1,
             }
@@ -73,5 +76,5 @@ function mapStateToProps(state) {
 }
 export default connect(
     mapStateToProps,
-    { register, showSignin, loginSuccess }
+    { register, showSignin, loginSuccess, openSignUp }
 )(FacebookLoginButton);
