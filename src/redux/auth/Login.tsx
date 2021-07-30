@@ -27,13 +27,14 @@ class Login {
     var payload = {};
     return AdminApi.request("/rest/V1/customerGroups/search/?searchCriteria[filterGroups][0][filters][0][field]=id&searchCriteria[filterGroups][0][filters][0][value]=3&searchCriteria[filterGroups][0][filters][0][condition_type]=gt", payload, "GET", "");
   }
-  register(firstname: string, lastname: string, email: string, password: string, type: number) {
+  register(firstname: string, lastname: string, email: string, password: string, type: number,store:string) {
+    var storeId = store === 'english' ? 3 : 2;
     var payload = {
       "customer": {
         "email": email,
         "firstname": firstname,
         "lastname": lastname,
-        "storeId": 1,
+        "storeId": storeId,
         "websiteId": 1,
         "group_id": type
       },

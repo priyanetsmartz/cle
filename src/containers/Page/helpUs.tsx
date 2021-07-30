@@ -9,12 +9,13 @@ const { showSignin } = appAction;
 function HelpUs(props) {
     const customerId = localStorage.getItem('cust_id');
     const isSurvey = getCookie('help-us');
+    const [onLogin, setOnLogin] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
     const [isSurveyEnd, setIsSurveyEnd] = useState(false);
     const [isHidden, setIsHidden] = useState(false);
     const [loading, setloading] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [onLogin, setOnLogin] = useState(false);
+
     const [form, setForm] = useState({
         "title": "",
         "form_id": "",
@@ -51,13 +52,14 @@ function HelpUs(props) {
     }, []);
 
     useEffect(() => {
-        // console.log(props.helpus);
-        if (props.helpus) {
-            setOnLogin(true);
-        } else {
+        let tokenCheck = localStorage.getItem('id_token');
+        let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
+        if (!tokenCheckFilter) {
             setOnLogin(false);
+        } else {
+            setOnLogin(true);
         }
-    }, [props.helpus])
+    })
 
     const optionHandler = async (optionIndex) => {
 
@@ -113,7 +115,8 @@ function HelpUs(props) {
                     </figure>
                     <div className="row">
 
-                        {((localStorage.getItem('id_token') && (!isSurvey || isSurvey != customerId)) && !onLogin) && (
+                        {/* {((localStorage.getItem('id_token') && (!isSurvey || isSurvey != customerId)) || onLogin === true) && ( */}
+                        {onLogin && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div className="show-hide">
                                     {isHidden && <b onClick={toggleHelpUs}>+</b>}
@@ -144,12 +147,13 @@ function HelpUs(props) {
                                 </div>}
                             </div>
                         )}
-                        {(localStorage.getItem('id_token') && isSurvey) && (
+                        {(onLogin && isSurvey) && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <h3><IntlMessages id="helpus.thankyou" /></h3>
                             </div>
                         )}
-                        {(!localStorage.getItem('id_token') && !isSurvey || onLogin == null) && (
+                        {/* {(!localStorage.getItem('id_token') || !onLogin) && ( */}
+                        {!onLogin && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div><h3><IntlMessages id="help_us.participate_in_survey" /></h3></div>
                                 <div>
@@ -157,7 +161,9 @@ function HelpUs(props) {
                                         <IntlMessages id="menu_Sign_in" />
                                     </button>
                                 </div>
-                            </div>)}
+                            </div>
+
+                        )}
                     </div>
                 </div>
             </div>
@@ -166,15 +172,16 @@ function HelpUs(props) {
 }
 
 function mapStateToProps(state) {
-    let languages = '', helpus: "";
-    console.log(state.Auth.idToken);
+    let languages = '', helpusVal;
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language;
-        helpus = state.Auth.idToken;
+    }
+    if (state && state.Auth && state.Auth.idToken) {
+        helpusVal = state.Auth.idToken;
     }
     return {
         languages: languages,
-        helpus: helpus
+        helpusVal: helpusVal
     };
 };
 export default connect(

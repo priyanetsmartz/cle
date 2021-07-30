@@ -61,7 +61,7 @@ export function postViews(language, id, ip) {
     const data = {
         "postId": id,
         "customerId": null,
-        "sessionId": localStorage.getItem('id_token') ? localStorage.getItem('id_token') : null,
+        "sessionId": localStorage.getItem('id_token') ? localStorage.getItem('id_token') : ip,
         "remoteAddr": ip,
         "store_id": language === 'english' ? 3 : 2
     }

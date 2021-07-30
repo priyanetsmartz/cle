@@ -34,10 +34,7 @@ function Header(props) {
             props.openSignUp(true);
             props.userType(4);
         }
-    }, [props.match.params.signup, props.match.params.member]); // here
-
-
-
+    }, [props.match.params.signup, props.match.params.member]); // here  
 
 
     // it will close menu screen

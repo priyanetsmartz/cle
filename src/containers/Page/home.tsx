@@ -11,6 +11,7 @@ const { openSignUp } = appAction;
 
 function Home(props) {
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
+    const [onLogin, setOnLogin] = useState(false);
     const [isModalshow, setIsModalShow] = useState(false);
     useEffect(() => {
         let pageIdentifier = 'home';
@@ -27,6 +28,15 @@ function Home(props) {
         const { openSignUp } = props;
         openSignUp(true);
     }
+    useEffect(() => {
+        let tokenCheck = localStorage.getItem('id_token');
+        let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
+        if (!tokenCheckFilter) {
+            setOnLogin(false);
+        } else {
+            setOnLogin(true);
+        }
+    })
 
     const toggleModeal = () => {
         setIsModalShow(!isModalshow);
@@ -128,7 +138,7 @@ function Home(props) {
                     </svg>
 
                 </figure>
-                {!localStorage.getItem('id_token') && <div className="position-absolute mx-auto sign-up-btn">
+                {!onLogin && <div className="position-absolute mx-auto sign-up-btn">
                     <Link className="" to="/" onClick={(e) => { handleClick(e); }} role="button"><IntlMessages id="sign_up_now" /></Link>
                 </div>}
             </div>
@@ -145,17 +155,22 @@ function Home(props) {
     );
 }
 function mapStateToProps(state) {
-    let signupModel = '', languages = '';
+    let signupModel = '', languages = '', helpusVal;
+    //console.log(state.Auth);
     if (state && state.App) {
         signupModel = state.App.showSignUp
     }
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
+    if (state && state.Auth && state.Auth.idToken) {
+        helpusVal = state.Auth.idToken;
+    }
     // console.log(state.LanguageSwitcher)
     return {
         signupModel: signupModel,
-        languages: languages
+        languages: languages,
+        helpusVal: helpusVal
 
     };
 }

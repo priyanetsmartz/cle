@@ -24,7 +24,8 @@ function RegistrationForm(props) {
         email: "",
         password: "",
         confirmPassword: "",
-        type: 1
+        type: 1,
+        storeId: ""
     })
     const [isLoaded, setIsLoaded] = useState(false);
     const [passwordShown, setPasswordShown] = useState(false);
@@ -100,6 +101,9 @@ function RegistrationForm(props) {
         props.toggleOpenDrawer(false);
         props.showSignin(true);
     }
+    const handleContact = (e) => {
+        props.openSignUp(false);
+    }
     const handleSubmitClick = (e) => {
         e.preventDefault();
         const { register } = props;
@@ -109,17 +113,19 @@ function RegistrationForm(props) {
                 "last_name": state.last_name,
                 "email": state.email,
                 "password": state.password,
-                "type": props.userSetype
+                "type": props.userSetype,
+                "storeId": props.languages
             }
             register({ userInfo });
-            
+
             setState({
                 email: "",
                 password: "",
                 confirmPassword: "",
                 type: 1,
                 first_name: "",
-                last_name: ""
+                last_name: "",
+                storeId: ""
             })
         } else {
             notification("warning", "", "Please enter required values");
@@ -134,7 +140,8 @@ function RegistrationForm(props) {
             confirmPassword: "",
             type: 1,
             first_name: "",
-            last_name: ""
+            last_name: "",
+            storeId: ""
         })
         const { openSignUp } = props;
         openSignUp(false);
@@ -234,7 +241,7 @@ function RegistrationForm(props) {
                     <FacebookLoginButton />
                 </div>
                 <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/terms-and-conditions" target="_blank" ><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} target="_blank"><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
-            <Modal.Footer className="signup_footer"> <Link to="#" onClick={() => { handlesigninClick(); }} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to="/" className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
+            <Modal.Footer className="signup_footer"> <Link to="#" onClick={() => { handlesigninClick(); }} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to="/contact-us" onClick={handleContact} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
         </Modal>
     )
 }
@@ -245,7 +252,8 @@ const mapStateToProps = state => ({
     auth: state.Auth.idToken,
     errors: state.errors,
     loading: state.Auth.loading,
-    userSetype: state.App.userType
+    userSetype: state.App.userType,
+    languages: state.LanguageSwitcher.language
     // loginerror:state.errors.loginerror
 });
 

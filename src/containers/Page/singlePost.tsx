@@ -16,6 +16,8 @@ function SinglePost(props) {
         post_thumbnail: "",
         full_content: "",
         published_at: "",
+        short_content: "",
+        category_name: "",
         author_name:""
     });
     const [comments, setComments] = useState([]);
@@ -28,11 +30,11 @@ function SinglePost(props) {
         setShareUrl(window.location.href);
         async function getData() {
             const res = await axios.get('https://geolocation-db.com/json/')
-            console.log(res.data.IPv4);
+            //    console.log(res.data.IPv4);
             let result: any = await PostData(slug);
             let catId = result.data[0].categories[0];
             let featuredResult: any = await GetDataOfCategory(props.languages, catId, 1, 'published_at', 'desc');
-           // await postViews(props.languages, slug, res.data.IPv4);
+            await postViews(props.languages, slug, res.data.IPv4);
             setRelated(featuredResult.data);
             setPost(result.data[0]);
             getPostComments(result.data[0].post_id);
@@ -63,7 +65,7 @@ function SinglePost(props) {
                     <div className="row">
                         <div className="col-md-12 text-center">
                             <ul className="newReleaseTitle">
-                                <li className="border-right">New Release</li>
+                                <li className="border-right">{post.category_name}</li>
                                 <li>{stats.text}</li>
                             </ul>
                         </div>
@@ -93,7 +95,7 @@ function SinglePost(props) {
 
                                     <TwitterShareButton
                                         url={shareUrl}
-                                        title ={post.title}>
+                                        title={post.title}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="85.393" height="22" viewBox="0 0 85.393 22">
                                             <g id="Group_727" data-name="Group 727" transform="translate(-785.223 -4492)">
                                                 <g id="Group_728" data-name="Group 728">
@@ -138,7 +140,7 @@ function SinglePost(props) {
                                                                 <div className="cate-name">{item.categroy}</div>
                                                                 <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                                                 <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
-                                                                <p className="mag-blog-desc d-none">{item.short_content}</p>
+                                                                <p className="mag-blog-desc d-none"> <div dangerouslySetInnerHTML={{ __html: post.short_content }} /></p>
                                                                 <Link to={"/magazine/" + item.post_id} className="signup-btn mx-auto "><IntlMessages id="magazine.read_more" /></Link>
                                                             </div>
                                                         </div>
@@ -149,7 +151,7 @@ function SinglePost(props) {
                                     )}
                                     {!related.length && (
                                         <div className="container">
-                                            No Data Available
+                                            <IntlMessages id="no_data" />
                                         </div>
                                     )}
                                 </div>
