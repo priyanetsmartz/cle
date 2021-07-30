@@ -14,10 +14,12 @@ import FacebookLoginButton from '../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../socialMediaLogin/Google';
 import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
 import { useIntl } from 'react-intl';
+import { useLocation, useHistory } from "react-router";
 const { showSignin, openSignUp, toggleOpenDrawer } = appAction;
 const { login, logout } = authAction;
 
 function SignIn(props) {
+  let history = useHistory();
   const [state, setState] = useState({
     email: "",
     password: ""
