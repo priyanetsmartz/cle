@@ -30,7 +30,7 @@ function Home(props) {
                 <HomePage />
             </div>
             {/* about us */}
-            <div id="about-us" className="element">
+            <div id="our-story" className="element">
                 <AboutUs />
             </div>
             {/* magazine */}
@@ -38,11 +38,11 @@ function Home(props) {
                 <Magazine />
             </div>
             {/* partnership */}
-            <div id="partnership" className="element">
+            <div id="work-with-us" className="element">
                 <Partnership />
             </div>
             {/* helpus */}
-            <div id="help-us" className="element">
+            <div id="tell-us-more" className="element">
                 <HelpUs />
             </div>
             {/* check out us */}

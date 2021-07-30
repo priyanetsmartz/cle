@@ -104,13 +104,13 @@ function Header(props) {
                         <div className="row">
                             <div className="col-md-5 offset-md-1">
                                 <ul className="left-menu-content">
-                                    <li><Link to="/#about-us" onClick={() => {
+                                    <li><Link to="/#our-story" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
                                     <li><Link to="/magazines" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
-                                    <li><Link to="/#partnership" onClick={() => {
+                                    <li><Link to="/#work-with-us" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     {!localStorage.getItem('id_token') && (
@@ -126,7 +126,7 @@ function Header(props) {
                             </div>
                             <div className="col-md-4">
                                 <ul className="right-menu-content">
-                                    <li><Link to="/#help-us" onClick={() => {
+                                    <li><Link to="/#tell-us-more" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
                                     <li><Link to="/#checkus-out" onClick={() => {

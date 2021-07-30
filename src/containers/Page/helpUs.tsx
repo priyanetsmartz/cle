@@ -49,7 +49,7 @@ function HelpUs(props) {
             setForm(result.data[0]);
         }
         getData()
-    }, []);
+    }, [props.languages]);
 
     useEffect(() => {
         let tokenCheck = localStorage.getItem('id_token');
@@ -116,7 +116,7 @@ function HelpUs(props) {
                     <div className="row">
 
                         {/* {((localStorage.getItem('id_token') && (!isSurvey || isSurvey != customerId)) || onLogin === true) && ( */}
-                        {onLogin && (
+                        {(onLogin && !isSurvey )&& (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div className="show-hide">
                                     {isHidden && <b onClick={toggleHelpUs}>+</b>}
@@ -147,7 +147,7 @@ function HelpUs(props) {
                                 </div>}
                             </div>
                         )}
-                        {(onLogin && isSurvey) && (
+                        {(isSurvey) && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <h3><IntlMessages id="helpus.thankyou" /></h3>
                             </div>

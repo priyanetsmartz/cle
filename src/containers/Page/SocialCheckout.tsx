@@ -37,7 +37,7 @@ function SocailCheckout(props) {
                 </figure>
 
                 <div className="social-title">
-                    <h1><IntlMessages id="checkusout.subtitle" /></h1>
+                    {/* <h1><IntlMessages id="checkusout.subtitle" /></h1> */}
                     <div className="social-icon-sec">
                         <ul>
                             <Link to={{ pathname: siteConfig.facebookLink }} target="_blank" >
