@@ -15,6 +15,7 @@ import ResetPassword from './containers/Page/ResetPassoword';
 import profile from './containers/Page/profile';
 import contact from "./containers/Page/contact";
 import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
+import PriveUser from './containers/Page/PriveUser';
 
 const PublicRoutes = ({ history }) => {
   return (
@@ -32,6 +33,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/contact-us" component={contact} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
+        <MainRoute exact path="/prive-user" component={PriveUser} />
         <MainRoute exact path="/profile" component={profile} />
         <MainRoute exact path="/password-link-expired" component={PasswordLinkExpired} />
         <Route exact path="/post-comment">
