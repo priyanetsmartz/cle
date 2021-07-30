@@ -17,6 +17,8 @@
   "login.RememberMe": "تذكرنى",
   "login.title": "تسجيل الدخول",
   "login.subtitle": "وكن أول من يعرف عن إطلاقنا",
+  "register.first_name": "الاسم الاول*",
+  "register.last_name": "الكنية*",
   "register.password": "إنشاء كلمة مرور * (6 أحرف على الأقل)",
   "register.confirmPassword": "إنشاء كلمة مرور * (6 أحرف على الأقل)",
   "register.button": "اشتراك",

@@ -185,11 +185,11 @@ function SignIn(props) {
         </div>
         <div className="social-login">
           <GoogleLoginButton />
-          <AppleSigninButton />
+          {/* <AppleSigninButton /> */}
           <FacebookLoginButton />
         </div>
         <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"/terms-and-conditions"} target="_blank"><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} target="_blank" ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
-      <Modal.Footer className="signup_footer"><Link to="#" onClick={handleSignUp} className="sign-in-M"><IntlMessages id="signup.member_sign_up" /></Link><Link to={"/"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
+      <Modal.Footer className="signup_footer" ><Link to="#" onClick={handleSignUp} className="sign-in-M" style={{ "fontSize": "13px"}}><IntlMessages id="signup.member_sign_up" /></Link><Link to={"#"} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
     </Modal>
   );
 }

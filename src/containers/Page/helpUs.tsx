@@ -53,10 +53,10 @@ function HelpUs(props) {
     }, []);
 
     useEffect(() => {
-        console.log(props.helpus);
-        if (props.helpus === true) {
+        // console.log(props.helpus);
+        if (props.helpus) {
             setOnLogin(true);
-        } else if (props.helpus === false) {
+        } else {
             setOnLogin(false);
         }
     }, [props.helpus])
@@ -151,7 +151,7 @@ function HelpUs(props) {
                                 <h3><IntlMessages id="helpus.thankyou" /></h3>
                             </div>
                         )}
-                        {(!localStorage.getItem('id_token') && !isSurvey || !onLogin) && (
+                        {(!localStorage.getItem('id_token') && !isSurvey || onLogin == null) && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div><h3><IntlMessages id="help_us.participate_in_survey" /></h3></div>
                                 <div>
@@ -169,10 +169,10 @@ function HelpUs(props) {
 
 function mapStateToProps(state) {
     let languages = '', helpus: "";
-    //console.log(state);
+    console.log(state.Auth.idToken);
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language;
-        helpus = state.App.showHelpus;
+        helpus = state.Auth.idToken;
     }
     return {
         languages: languages,

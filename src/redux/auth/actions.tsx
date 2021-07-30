@@ -26,6 +26,10 @@ const actions = {
     type: actions.LOGIN_REQUEST,
     payload
   }),
+  loginSuccess: token => ({
+    type: actions.LOGIN_SUCCESS,
+    token
+  }),
   logout: () => ({
     type: actions.LOGOUT
   }),

@@ -12,7 +12,7 @@ function Profile(props) {
     useEffect(() => {
         let email = getCookie("username");
         fetchMyAPI(email)
-    })
+    },[])
 
     async function fetchMyAPI(email) {
         let result: any = await loginApi.getAuthRegister(email);

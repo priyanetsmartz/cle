@@ -1,3 +1,4 @@
+/* @import url("CLE-responsive.css"); */
 html{width:100%;height:100%;}
 body{width:100%;height:100%; overflow:hidden;}
 .inner_pages_body{overflow:auto !important;}
@@ -368,7 +369,8 @@ background: #fff;}
 .mag-list-head{margin-bottom:30px;}
 .mag-list-head h3{font-family: 'Monument Extended';font-size:40px; line-height:38px; color:#2e2baa;margin:0;}
 .mag-list-head ul{margin:auto; padding:0; list-style-type:none;width: max-content;}
-.mag-list-head ul li{display: inline-block;margin-right: 20px;}
+.mag-list-head ul li{display: inline-block;margin-right: 35px;
+margin-top: 15px;}
 .mag-list-head ul li a{font-family: 'Monument Extended';font-size:13px; line-height:16px; color:#000; text-decoration:none;}
 .mag-list-head ul li a.active-menu{font-family: 'Monument Extended';font-size:13px; line-height:16px; color:#2e2baa;font-weight: 500; border-bottom: 2px solid #2e2baa;}
 .back-home a{font-size:16px; line-height:19px; color:#2e2baa;text-decoration:none;}
@@ -452,9 +454,10 @@ background: #fff;}
     transform: rotate(44deg);
     margin-bottom: 19px;
 }
-.container figure svg text {
-    font-size: 90px;
-}
+/* .container figure svg text { */
+    /* font-size: 90px; */
+/* } */
+.home-inner-text figure.time-is-now svg text#New_luxury_marketplace{font-size: 20px;}
 .become-rotate {
     transform: rotate(-90deg);
     font-size: 72px;
@@ -481,18 +484,27 @@ background: #fff;}
     text-align: center;
 }
 .pagination nav{margin:20px auto;}
-
-.show-hide {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: -32px;
-    font-size: 25px;
-    margin-right: -5px;
+.error {
+    display: block;
+    width: 100%;
+    color: red;
+    font-size: 14px;
 }
-.show-hide b:hover {
-    cursor: pointer;
+.newsletter-signup {
+    width: max-content !important; 
+    margin: auto !important;
 }
-
+.newsletter-signup input.form-control {
+    width: 347px !important;
+    border-radius: 0 !important;
+    border: 0px solid !important;
+    padding: 10px !important;
+}
+.newsletter-signup button.btn {
+    font-family: 'Monument Extended';font-size:14px; line-height:20px; color:#fff; border-radius:0; background:#2e2baa;
+    padding: 10px;padding: 10px 40px;
+}
+.home-inner-text:after{content: ""; clear: both;display: block;}
 
 
 

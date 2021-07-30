@@ -3,26 +3,45 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { apiConfig } from '../../../settings';
 import { Link } from "react-router-dom";
 import authAction from "../../../redux/auth/actions";
+import appAction from "../../../redux/app/actions";
 import { connect } from 'react-redux';
-const { register } = authAction;
+import Login from "../../../redux/auth/Login";
+import { setCookie } from '../../../helpers/session';
+const loginApi = new Login();
+const { showSignin } = appAction;
+const { register, loginSuccess } = authAction;
 /** Apple Signin button */
 function FacebookLoginButton(props) {
 
     const responseFacebook = (response) => {
-       // console.log(response);
         const { register } = props;
+        console.log(response)
         if (response.accessToken) {
             const userInfo = {
-                "firstname": response.name,
-                "email": response.email,
+                "first_name": response.profileObj.name,
+                "email": response.profileObj.email,
                 "accessToken": response.accessToken,
-                "type": 3,
+                "type": 1,
             }
-            // console.log(userInfo);
-            register({ userInfo });
+            fetchMyAPI(userInfo)
         }
     }
+    async function fetchMyAPI(userInfo) {
+        let result: any = await loginApi.getAuthRegister(userInfo.email);
+        var jsonData = result.data[0];
+        if (jsonData) {
+            localStorage.setItem('id_token', jsonData.new_token);
+            localStorage.setItem('cust_id', jsonData.entity_id);
+            setCookie("username", jsonData.email)
+            props.loginSuccess(jsonData.new_token)
+        } else {
+            const { register } = props;
+            register({ userInfo });
+        }
 
+        props.showSignin(false);
+        props.openSignUp(false);
+    }
     return (
         <FacebookLogin
             appId={apiConfig.facebookKey}
@@ -43,13 +62,16 @@ function FacebookLoginButton(props) {
 }
 
 
-const mapStateToProps = state => ({
-    auth: state.auth,
-    errors: state.errors,
-    // loginerror:state.errors.loginerror
-});
-
+function mapStateToProps(state) {
+    let loginState = '';
+    if (state && state.App && state.App.showLogin) {
+        loginState = state.App.showLogin
+    }
+    return {
+        loginState: loginState
+    }
+}
 export default connect(
     mapStateToProps,
-    { register }
+    { register, showSignin, loginSuccess }
 )(FacebookLoginButton);

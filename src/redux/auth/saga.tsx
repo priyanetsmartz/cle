@@ -24,9 +24,7 @@ export function* loginRequest() {
         yield put({
           type: actions.LOGIN_SUCCESS,
           token: response.data,
-          userInfo: payload.payload.userInfo,
-          // token: response.id,
-          // history: payload.payload.history
+          userInfo: payload.payload.userInfo
         });
         //Check if remember me is clicked
         if (userInfo) {
@@ -44,7 +42,6 @@ export function* loginRequest() {
             removeCookie("remember_me");
           }
         }
-        //     yield setCookie("id_token", response.data);
         localStorage.setItem('id_token', response.data);
         yield put({
           type: appAction.SHOW_SIGHNIN,
@@ -75,24 +72,25 @@ export function* registerRequest() {
   yield takeEvery("REGISTER_REQUEST", function* (payload: any) {
     try {
       //user details
-      var firstname = payload.payload.userInfo.firstname ? payload.payload.userInfo.firstname : "magento";
+      var firstname = payload.payload.userInfo.first_name;
+      var lastname = payload.payload.userInfo.last_name;
       var type = payload.payload.userInfo.type;
       var email = payload.payload.userInfo.email;
       var password = payload.payload.userInfo.password;
       // var rememberMe = payload.payload.userInfo.rememberMe;
       //API call to login request
-      const response = yield call(loginApi.register, firstname, email, password, type);
+      const response = yield call(loginApi.register, firstname, lastname, email, password, type);
       if (response.data.id !== "") {
         const token = yield call(loginApi.getAuthRegister, email);
-        console.log(token.data[0].new_token, console.log(typeof (token)))
+        //  console.log(token.data[0].new_token, console.log(typeof (token)))
         if (token.data[0].new_token) {
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
           notification("success", "", "Account registered");
           localStorage.setItem('id_token', token.data[0].new_token);
           localStorage.setItem('cust_id', token.data[0].entity_id);
           yield setCookie("username", token.data[0].email);
-
           yield put(push("/"));
+          
         } else {
           yield put({ type: actions.REGISTER_ERROR });
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });

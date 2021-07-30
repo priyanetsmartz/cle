@@ -85,7 +85,7 @@ function SocailCheckout(props) {
                                     </g>
                                 </svg></li>
                             </Link>
-                            <Link to={{ pathname: siteConfig.twitter }} target="_blank" >
+                            {/* <Link to={{ pathname: siteConfig.twitter }} target="_blank" >
                                 <li><svg xmlns="http://www.w3.org/2000/svg" width="85.393" height="22" viewBox="0 0 85.393 22">
                                     <g id="Group_727" data-name="Group 727" transform="translate(-785.223 -4492)">
                                         <g id="Group_728" data-name="Group 728">
@@ -99,7 +99,7 @@ function SocailCheckout(props) {
                                         </g>
                                     </g>
                                 </svg></li>
-                            </Link>
+                            </Link> */}
                         </ul>
                     </div>
                 </div>

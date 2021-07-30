@@ -3,30 +3,48 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { apiConfig } from '../../../settings';
 import { Link } from "react-router-dom";
 import authAction from "../../../redux/auth/actions";
+import appAction from "../../../redux/app/actions";
 import { connect } from 'react-redux';
-const { register } = authAction;
+import Login from "../../../redux/auth/Login";
+import { setCookie } from '../../../helpers/session';
+const loginApi = new Login();
+const { showSignin, openSignUp } = appAction;
+const { register, loginSuccess } = authAction;
 /** Apple Signin button */
 function GoogleLoginButton(props) {
 
     const responseGoogle = (response) => {
-        const { register } = props;
-        console.log(props.loginState)
+        console.log(response)
         if (response.accessToken) {
+            let name = response.profileObj.name.split(" ");
+            console.log(name[0],name[1])
             const userInfo = {
-                "firstname": response.profileObj.name,
+                "first_name": name[0],
+                "last_name": name[1],
                 "email": response.profileObj.email,
                 "accessToken": response.accessToken,
-                "type": 3,
+                "type": 1,
             }
-            if (!props.loginState) {
-                register({ userInfo });
-            }else{
-                
-            }
+            fetchMyAPI(userInfo)
 
         }
     }
+    async function fetchMyAPI(userInfo) {
+        let result: any = await loginApi.getAuthRegister(userInfo.email);
+        var jsonData = result.data[0];
+        if (jsonData) {
+            localStorage.setItem('id_token', jsonData.new_token);
+            localStorage.setItem('cust_id', jsonData.entity_id);
+            setCookie("username", jsonData.email)
+            props.loginSuccess(jsonData.new_token)
+        } else {
+            const { register } = props;
+            register({ userInfo });
+        }
 
+        props.showSignin(false);
+        props.openSignUp(false);
+    }
 
     return (
         <GoogleLogin
@@ -59,7 +77,6 @@ function GoogleLoginButton(props) {
 }
 function mapStateToProps(state) {
     let loginState = '';
-    //  console.log(state);
     if (state && state.App && state.App.showLogin) {
         loginState = state.App.showLogin
     }
@@ -69,5 +86,5 @@ function mapStateToProps(state) {
 }
 export default connect(
     mapStateToProps,
-    { register }
+    { register, showSignin, openSignUp, loginSuccess }
 )(GoogleLoginButton);

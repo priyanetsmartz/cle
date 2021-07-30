@@ -19,6 +19,8 @@ const { showSignin, openSignUp, toggleOpenDrawer } = appAction;
 function RegistrationForm(props) {
     const intl = useIntl();
     const [state, setState] = useState({
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -41,6 +43,15 @@ function RegistrationForm(props) {
     const handleValidation = () => {
         let error = {};
         let formIsValid = true;
+        if (!state["first_name"]) {
+            formIsValid = false;
+            error["first_name"] = 'First Name is required';
+        }
+
+        if (!state["last_name"]) {
+            formIsValid = false;
+            error["last_name"] = 'Last Name is required';
+        }
 
         //Email   
         if (typeof state["email"] !== "undefined") {
@@ -94,17 +105,21 @@ function RegistrationForm(props) {
         const { register } = props;
         if (handleValidation()) {
             const userInfo = {
-                "name": "",
+                "first_name": state.first_name,
+                "last_name": state.last_name,
                 "email": state.email,
                 "password": state.password,
                 "type": props.userSetype
             }
             register({ userInfo });
+            
             setState({
                 email: "",
                 password: "",
                 confirmPassword: "",
-                type: 1
+                type: 1,
+                first_name: "",
+                last_name: ""
             })
         } else {
             notification("warning", "", "Please enter required values");
@@ -117,7 +132,9 @@ function RegistrationForm(props) {
             email: "",
             password: "",
             confirmPassword: "",
-            type: 1
+            type: 1,
+            first_name: "",
+            last_name: ""
         })
         const { openSignUp } = props;
         openSignUp(false);
@@ -137,7 +154,28 @@ function RegistrationForm(props) {
                 <p><IntlMessages id="signup.be_the_first_one" /></p>
                 <div className="row g-3">
                     <div className="col-sm-12">
-                        {/* <input type="text" className="form-control" placeholder="Email Address*" aria-label="Email" /> */}
+                        <input type="text"
+                            className="form-control"
+                            id="first_name"
+                            aria-describedby="nameHelp"
+                            placeholder={intl.formatMessage({ id: 'register.first_name' })}
+                            value={state.first_name}
+                            onChange={handleChange}
+                        />
+                        <span className="error">{errors.errors["first_name"]}</span>
+                    </div>
+                    <div className="col-sm-12">
+                        <input type="text"
+                            className="form-control"
+                            id="last_name"
+                            aria-describedby="nameHelp"
+                            placeholder={intl.formatMessage({ id: 'register.last_name' })}
+                            value={state.last_name}
+                            onChange={handleChange}
+                        />
+                        <span className="error">{errors.errors["last_name"]}</span>
+                    </div>
+                    <div className="col-sm-12">
                         <input type="email"
                             className="form-control"
                             id="email"
@@ -183,15 +221,6 @@ function RegistrationForm(props) {
                         </span>
                         <span className="error">{errors.errors["confirmPassword"]}</span>
                     </div>
-                    {/* <div className="col-sm-12">
-                        <label htmlFor="type"><IntlMessages id="signup.type" /></label>
-                        <select value={state.type} onChange={selectType}>
-                            <option key="-1" value="--">---</option>
-                            {types.map(item => {
-                                return (<option key={item.id} value={item.id}>{item.code}</option>);
-                            })}
-                        </select>                        
-                    </div> */}
                     <div className="d-grid gap-2">
                         <Link to="/" className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="signup.sign_up" /></Link>
                     </div>
@@ -201,7 +230,7 @@ function RegistrationForm(props) {
                 </div>
                 <div className="social-login">
                     <GoogleLoginButton />
-                    <AppleSigninButton />
+                    {/* <AppleSigninButton /> */}
                     <FacebookLoginButton />
                 </div>
                 <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/terms-and-conditions" target="_blank" ><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} target="_blank"><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>

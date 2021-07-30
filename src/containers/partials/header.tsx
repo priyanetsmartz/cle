@@ -7,6 +7,7 @@ import appAction from "../../redux/app/actions";
 import { siteConfig } from '../../settings/';
 import { connect } from 'react-redux';
 import history from '../Page/history';
+// import cookie from 'js-cookie';
 import Hamburger from './hamburger';
 import HamburgerWhite from './hamburgerWhite';
 import { Link } from "react-router-dom";
@@ -51,7 +52,7 @@ function Header(props) {
     // handle menu click
     const handleClick = () => {
         props.toggleOpenDrawer(false);
-        setIsLoaded(true);
+       // setIsLoaded(true);
     }
 
     // handle signup link click
@@ -65,6 +66,7 @@ function Header(props) {
         props.toggleOpenDrawer(false);
         localStorage.removeItem('id_token');
         localStorage.removeItem('cust_id');
+      //  cookie.remove('name', { path: '', domain: '.dev.cle.com/' })
         props.logout();
         props.showHelpus(false);
         history.replace('/');

@@ -37,7 +37,7 @@ function FooterExtra(props) {
                             <li className="fl-title"><IntlMessages id="footer.useful" /></li>
                             <li><Link to="/#help-us"><IntlMessages id="footer.help" /></Link></li>
                             <li><Link to="/"><IntlMessages id="footer.customer" /></Link></li>
-                            <li><Link to="/magazine/see-all"><IntlMessages id="footer.magazine" /></Link></li>
+                            <li><Link to="/magazines"><IntlMessages id="footer.magazine" /></Link></li>
                         </ul>
                     </div>
                     <div className="col-md-2">
