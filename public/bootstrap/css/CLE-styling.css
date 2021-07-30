@@ -506,6 +506,11 @@ margin-top: 15px;}
 }
 .home-inner-text:after{content: ""; clear: both;display: block;}
 
+.video-close{
+    text-align: end;
+    cursor: pointer;
+}
+
 
 
 

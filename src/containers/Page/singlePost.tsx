@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PostData, GetComments, GetDataOfCategory, postViews } from '../../redux/pages/magazineList';
+import { PostData, GetComments, GetDataOfCategory, postViews, GetCategoryList } from '../../redux/pages/magazineList';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
@@ -15,12 +15,14 @@ function SinglePost(props) {
         title: "",
         post_thumbnail: "",
         full_content: "",
-        published_at: ""
+        published_at: "",
+        author_name:""
     });
     const [comments, setComments] = useState([]);
     const [shareUrl, setShareUrl] = useState('');
     const { slug } = useParams();
     const [related, setRelated] = useState([]);
+    const [catMenu, setCatMenu] = useState([]);
 
     useEffect(() => {
         setShareUrl(window.location.href);
@@ -36,11 +38,17 @@ function SinglePost(props) {
             getPostComments(result.data[0].post_id);
         }
         getData()
+        getCategory();
     }, [props.languages])
 
     const getPostComments = async (postId) => {
         let result: any = await GetComments(postId);
         setComments(result.data)
+    }
+
+    const getCategory = async () => {
+        let result: any = await GetCategoryList(props.languages);
+        setCatMenu(result.data);
     }
     const stats = readingTime(post.full_content);
     return (
@@ -105,10 +113,20 @@ function SinglePost(props) {
                             </ul>
                         </div>
                         <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
+                        <h6><IntlMessages id="magazinepost.author" />: {post.author_name}</h6>
+                        <div>
+                        {catMenu.map((item, i) => {
+                            return (
+                                <button type="button" className="btn btn-outline-dark" key={i}>
+                                <Link to={`/magazines/${item.category_id}`}>{item.name}</Link>
+                                </button>
+                            );
+                        })}
+                        </div>
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="mt-5 py-5">
-                                    <h2 className="pb-3 text-center"><IntlMessages id="magazinepost.slogan" /> </h2>
+                                    {related.length > 0 && <h2 className="pb-3 text-center"><IntlMessages id="magazinepost.slogan" /> </h2>}
                                     {related.length > 0 && (
                                         <div className="container">
                                             <div className="row my-3">
