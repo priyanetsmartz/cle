@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PostData, GetComments, GetDataOfCategory, postViews } from '../../redux/pages/magazineList';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
-import { FacebookShareButton, LinkedinShareButton } from "react-share";
+import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
@@ -73,23 +73,6 @@ function SinglePost(props) {
                                             <path id="facebook" d="M18.093,7.758A10.614,10.614,0,0,1,23.5,9.229,10.818,10.818,0,0,1,26.2,25.568a10.912,10.912,0,0,1-6.043,3.609v-7.7h2.1l.475-3.025h-3.18V16.472a1.722,1.722,0,0,1,.366-1.138,1.675,1.675,0,0,1,1.344-.511h1.921v-2.65q-.041-.013-.784-.105a15.591,15.591,0,0,0-1.692-.105,4.228,4.228,0,0,0-3.038,1.083,4.187,4.187,0,0,0-1.141,3.108v2.3H14.11v3.025h2.42v7.7a10.65,10.65,0,0,1-6.549-3.609,10.805,10.805,0,0,1,2.706-16.34,10.617,10.617,0,0,1,5.406-1.471Z" transform="translate(-7.383 -7.758)" fill="#2E2BAA" fillRule="evenodd" />
                                         </svg>
                                     </FacebookShareButton>
-                                    {/* <svg id="instagram" xmlns="http://www.w3.org/2000/svg" width="21.419" height="21.419" viewBox="0 0 21.419 21.419">
-                                        <g id="Group_34" data-name="Group 34">
-                                            <g id="Group_33" data-name="Group 33" transform="translate(0)">
-                                                <path id="Path_15" data-name="Path 15" d="M16.069,0H5.36A5.371,5.371,0,0,0,0,5.355v10.71A5.371,5.371,0,0,0,5.36,21.419h10.71a5.371,5.371,0,0,0,5.355-5.355V5.355A5.371,5.371,0,0,0,16.069,0Zm3.57,16.065a3.574,3.574,0,0,1-3.57,3.57H5.36a3.574,3.574,0,0,1-3.57-3.57V5.355a3.574,3.574,0,0,1,3.57-3.57h10.71a3.573,3.573,0,0,1,3.57,3.57v10.71Z" transform="translate(-0.005)" fill="#2E2BAA" />
-                                            </g>
-                                        </g>
-                                        <g id="Group_36" data-name="Group 36" transform="translate(15.173 3.57)">
-                                            <g id="Group_35" data-name="Group 35">
-                                                <ellipse id="Ellipse_1" data-name="Ellipse 1" cx="1.339" cy="1.339" rx="1.339" ry="1.339" fill="#2E2BAA" />
-                                            </g>
-                                        </g>
-                                        <g id="Group_38" data-name="Group 38" transform="translate(5.355 5.355)">
-                                            <g id="Group_37" data-name="Group 37">
-                                                <path id="Path_16" data-name="Path 16" d="M107.76,102.4a5.355,5.355,0,1,0,5.355,5.355A5.354,5.354,0,0,0,107.76,102.4Zm0,8.925a3.57,3.57,0,1,1,3.57-3.57A3.57,3.57,0,0,1,107.76,111.325Z" transform="translate(-102.405 -102.4)" fill="#2E2BAA" />
-                                            </g>
-                                        </g>
-                                    </svg> */}
                                     <LinkedinShareButton
                                         url={shareUrl}
                                         title={post.title}>
@@ -99,6 +82,24 @@ function SinglePost(props) {
                                             <path id="Path_19" data-name="Path 19" d="M12.577,10a2.59,2.59,0,1,0,2.577,2.577A2.577,2.577,0,0,0,12.577,10Z" transform="translate(-10 -10)" fill="#2E2BAA" />
                                         </svg>
                                     </LinkedinShareButton>
+
+                                    <TwitterShareButton
+                                        url={shareUrl}
+                                        title ={post.title}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="85.393" height="22" viewBox="0 0 85.393 22">
+                                            <g id="Group_727" data-name="Group 727" transform="translate(-785.223 -4492)">
+                                                <g id="Group_728" data-name="Group 728">
+                                                    <text id="Twitter" transform="translate(813.615 4510)" fontSize="18"
+                                                        fontFamily="Lato-Semibold, Lato" fontWeight="600">
+                                                        {/* <tspan x="0" y="0">Twitter</tspan> */}
+                                                    </text>
+                                                    <path id="twitter-brands"
+                                                        d="M20.989,52.817c.015.208.015.416.015.623A13.548,13.548,0,0,1,7.362,67.082,13.549,13.549,0,0,1,0,64.93a9.919,9.919,0,0,0,1.158.059A9.6,9.6,0,0,0,7.11,62.94a4.8,4.8,0,0,1-4.483-3.325,6.047,6.047,0,0,0,.905.074,5.071,5.071,0,0,0,1.262-.163A4.8,4.8,0,0,1,.95,54.821v-.059a4.829,4.829,0,0,0,2.167.609,4.8,4.8,0,0,1-1.484-6.412,13.628,13.628,0,0,0,9.886,5.017,5.412,5.412,0,0,1-.119-1.1,4.8,4.8,0,0,1,8.3-3.28,9.439,9.439,0,0,0,3.043-1.158,4.782,4.782,0,0,1-2.108,2.642,9.612,9.612,0,0,0,2.761-.742A10.306,10.306,0,0,1,20.989,52.817Z"
+                                                        transform="translate(785.223 4445.418)" fill="#2E2BAA" />
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </TwitterShareButton>
 
                                 </li>
                             </ul>

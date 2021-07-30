@@ -38,7 +38,11 @@ function AboutUs(props) {
 			<div className="blue-small-box"></div>
 			<div className="blue-small-box"></div>
 			</div>
-            <div className="about-signup-btn"><Link to="/" className="signup-btn" onClick={() => { handleClick(); }}><IntlMessages id="aboutus.sign_up_now" /></Link></div>
+            {!localStorage.getItem('id_token') && <div className="about-signup-btn">
+                <Link to="/" className="signup-btn" onClick={() => { handleClick(); }}>
+                    <IntlMessages id="aboutus.sign_up_now" />
+                    </Link>
+                    </div>}
 
         </div>
     );

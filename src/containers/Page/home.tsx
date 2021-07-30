@@ -121,9 +121,9 @@ function Home(props) {
                     </svg>
 
                 </figure>
-                <div className="position-absolute mx-auto sign-up-btn">
+                {!localStorage.getItem('id_token') && <div className="position-absolute mx-auto sign-up-btn">
                     <Link className="" to="/" onClick={(e) => { handleClick(e); }} role="button"><IntlMessages id="sign_up_now" /></Link>
-                </div>
+                </div>}
             </div>
         </div>
     );
