@@ -21,7 +21,7 @@ function Magazine(props) {
     return (
         <>
             <div className="container magazine-inner">
-                <figure className="offset-md-1 ps-4">
+                <figure className="offset-md-1 ps-4  page-head">
                     <svg xmlns="http://www.w3.org/2000/svg" width="770" height="134" viewBox="0 0 770 134">
                         <text id="Magazine" transform="translate(385 98)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="110"
                             fontFamily="Monument Extended Book">

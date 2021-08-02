@@ -141,7 +141,7 @@ function ContactUS(props) {
     }
     return (
         <div className="container about-inner"  >
-            <figure className="text-center">
+           <figure className="text-center page-head">
                 <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
                     <text id="Contact Us" data-name="Contact Us" transform="translate(425 108)" fill="none" stroke="#2E2BAA"
                         strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">

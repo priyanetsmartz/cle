@@ -91,8 +91,8 @@ function Header(props) {
                 <div className="menu-section">
                     <div className="container">
                         <div className="mt-5">
-                            <Link to="#" onClick={handleMenuClose} ><img src={blackLogo} alt="logo" /></Link>
-                            <div className="hamburger-close float-end">
+                            <Link to="#" className="menu-logo" onClick={handleMenuClose} ><img src={blackLogo} alt="logo" /></Link>
+                            <div className="hamburger-close">
                                 <Link to="#" className="open-menu">
                                     <svg id="Close" onClick={handleMenuClose} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
                                         <rect id="Rectangle_498" data-name="Rectangle 498" width="52.217" height="4.351"
