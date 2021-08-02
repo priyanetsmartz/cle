@@ -41,7 +41,7 @@ function Hamburger(props) {
         <div className={classState} id="header">
             <div className="container">
                 <div className="my-5">
-                    <Link to="/"><img src={logoState} alt="logo" /></Link>
+                    <Link className="main-logo-white" to="/"><img src={logoState} alt="logo" /></Link>
                     <div className="hamburger">
                         <Link to="#" className="open-menu" onClick={handleMenuOpen}>
                             <span className="hb-first"></span>
@@ -57,7 +57,6 @@ function Hamburger(props) {
 }
 
 function mapStateToProps(state) {
-    //console.log(state);
     return state;
 }
 

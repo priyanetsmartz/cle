@@ -105,7 +105,7 @@ function HelpUs(props) {
         <>
             <div className="help-us-body">
                 <div className="container help-us-inner">
-                    <figure className="text-center">
+                    <figure className="text-center page-head">
                         <svg xmlns="http://www.w3.org/2000/svg" width="606" height="134" viewBox="0 0 606 134">
                             <text id="Help_us" data-name={<IntlMessages id="help_us.title" />} transform="translate(303 98)" fill="none" stroke="#2E2BAA"
                                 strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">
@@ -116,7 +116,7 @@ function HelpUs(props) {
                     <div className="row">
 
                         {/* {((localStorage.getItem('id_token') && (!isSurvey || isSurvey != customerId)) || onLogin === true) && ( */}
-                        {(onLogin && !isSurvey )&& (
+                        {(onLogin && !isSurvey) && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div className="show-hide">
                                     {isHidden && <b onClick={toggleHelpUs}>+</b>}
@@ -147,13 +147,13 @@ function HelpUs(props) {
                                 </div>}
                             </div>
                         )}
-                        {(isSurvey) && (
+                        {(isSurvey && onLogin) && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <h3><IntlMessages id="helpus.thankyou" /></h3>
                             </div>
                         )}
                         {/* {(!localStorage.getItem('id_token') || !onLogin) && ( */}
-                        {!onLogin && (
+                        {((!onLogin && isSurvey) ||(!onLogin && !isSurvey))&& (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div><h3><IntlMessages id="help_us.participate_in_survey" /></h3></div>
                                 <div>

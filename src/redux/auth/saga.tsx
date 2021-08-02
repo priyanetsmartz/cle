@@ -43,9 +43,9 @@ export function* loginRequest() {
             removeCookie("remember_me");
           }
           // token.data[0].group_id = "3";
-         
-          
+
           localStorage.setItem('id_token', response.data);
+          localStorage.setItem('token_email', token.data[0].email);
           yield put({
             type: appAction.SHOW_SIGHNIN,
             showLogin: false
@@ -54,9 +54,9 @@ export function* loginRequest() {
             type: appAction.SHOW_HELPUS,
             showHelpus: true
           });
-          if(token.data[0].group_id === "3"){
+          if (token.data[0].group_id === "3") {
             yield put(push("/prive-user"));
-          }else{
+          } else {
             // yield put(push("/"));
           }
         }
@@ -103,12 +103,12 @@ export function* registerRequest() {
           localStorage.setItem('id_token', token.data[0].new_token);
           localStorage.setItem('cust_id', token.data[0].entity_id);
           yield setCookie("username", token.data[0].email);
-          if(token.data[0].group_id === "3"){
+          if (token.data[0].group_id === "3") {
             yield put(push("/prive-user"));
-          }else{
+          } else {
             // yield put(push("/"));
           }
-          
+
         } else {
           yield put({ type: actions.REGISTER_ERROR });
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
