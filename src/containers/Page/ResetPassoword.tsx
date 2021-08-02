@@ -10,7 +10,7 @@ function ResetPassword(props) {
     const pass = useLocation().search;
     const token = new URLSearchParams(pass).get("token");
     const customerId = new URLSearchParams(pass).get("id");
-    console.log(token, customerId);
+    // console.log(token, customerId);
 
     const [state, setState] = useState({
         password: "",
@@ -54,6 +54,7 @@ function ResetPassword(props) {
                     password: "",
                     confirmPassword: ""
                 }))
+                history.push("/");
             } else {
                 notification("error", "", "Error");
             }

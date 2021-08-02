@@ -40,6 +40,14 @@ function SignIn(props) {
 
   useEffect(() => {
     setIsLoaded(props.showLogin)
+    // console.log(props.showLogin);
+    if(!props.showLogin){
+      if (getCookie("remember_me") === "true") {
+        setState({ email: getCookie("username"), password: getCookie("password") })
+      } else {
+        setState({ email: '', password: '' })
+      }
+    }
   }, [props.showLogin])
 
 
@@ -80,11 +88,11 @@ function SignIn(props) {
         "rememberme": rememberMe
       }
       login({ userInfo });
-      if (getCookie("remember_me") === "true") {
-        setState({ email: getCookie("username"), password: getCookie("password") })
-      } else {
-        // setState({ email: '', password: '' })
-      }
+      // if (getCookie("remember_me") === "true") {
+      //   setState({ email: getCookie("username"), password: getCookie("password") })
+      // } else {
+      //   setState({ email: '', password: '' })
+      // }
     } else {
       notification("warning", "", "Please enter valid email and password");
     }
@@ -200,10 +208,9 @@ function SignIn(props) {
 }
 
 function mapStateToProps(state) {
-  // console.log(state);
   return {
     auth: state.Auth.idToken,
-    loading: state.Auth.loading
+    loading: state.Auth.loading,
   }
 }
 
