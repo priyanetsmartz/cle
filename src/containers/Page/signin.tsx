@@ -82,7 +82,7 @@ function SignIn(props) {
       if (getCookie("remember_me") === "true") {
         setState({ email: getCookie("username"), password: getCookie("password") })
       } else {
-        setState({ email: '', password: '' })
+        // setState({ email: '', password: '' })
       }
     } else {
       notification("warning", "", "Please enter valid email and password");
