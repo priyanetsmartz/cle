@@ -1,7 +1,7 @@
 import { getCookie } from "../helpers/session";
 import Notification from "../components/notification";
-import CommonFunctions from "../commonFunctions/CommonFunctions";
-const commonFunctions = new CommonFunctions();
+// import CommonFunctions from "../commonFunctions/CommonFunctions";
+// const commonFunctions = new CommonFunctions();
 // const baseUrl = commonFunctions.getBaseUrl();
 const baseUrl ='https://4a83875b65.nxcli.net/';
 //const qs = require("qs");

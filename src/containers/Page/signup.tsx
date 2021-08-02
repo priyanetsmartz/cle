@@ -96,9 +96,10 @@ function RegistrationForm(props) {
             [id]: value
         }))
     }
-    const handlesigninClick = () => {
+    const handlesigninClick = (e) => {
+        e.preventDefault();
         props.openSignUp(false);
-        props.toggleOpenDrawer(false);
+        //  props.toggleOpenDrawer(false);
         props.showSignin(true);
     }
     const handleContact = (e) => {
@@ -241,7 +242,7 @@ function RegistrationForm(props) {
                     <FacebookLoginButton />
                 </div>
                 <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" />  <Link to="/terms-and-conditions" target="_blank" ><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} target="_blank"><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
-            <Modal.Footer className="signup_footer"> <Link to="#" onClick={() => { handlesigninClick(); }} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to="/contact-us" onClick={handleContact} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
+            <Modal.Footer className="signup_footer"> <Link to="#" onClick={(e) => { handlesigninClick(e); }} className="sign-in-M"><IntlMessages id="signup.member_sign_in" /></Link><Link to="/contact-us" onClick={handleContact} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
         </Modal>
     )
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../image/CLE-LOGO.svg";
 import blackLogo from "../../image/CLE-logo-black.svg"
 import appAction from '../../redux/app/actions';
@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 const { toggleOpenDrawer } = appAction;
 
 function Hamburger(props) {
-    const { id } = useParams();
     const [classState, setClassState] = useState('');
     const [logoState, setlogoState] = useState(logo);
 

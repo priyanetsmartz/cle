@@ -18,7 +18,7 @@ function SinglePost(props) {
         published_at: "",
         short_content: "",
         category_name: "",
-        author_name:""
+        author_name: ""
     });
     const [comments, setComments] = useState([]);
     const [shareUrl, setShareUrl] = useState('');
@@ -27,37 +27,46 @@ function SinglePost(props) {
     const [catMenu, setCatMenu] = useState([]);
 
     useEffect(() => {
-        setShareUrl(window.location.href);
-        async function getData() {
-            const res = await axios.get('https://geolocation-db.com/json/')
-            //    console.log(res.data.IPv4);
-            let result: any = await PostData(slug);
-            let catId = result.data[0].categories[0];
-            let featuredResult: any = await GetDataOfCategory(props.languages, catId, 1, 'published_at', 'desc');
-            await postViews(props.languages, slug, res.data.IPv4);
-            setRelated(featuredResult.data);
-            setPost(result.data[0]);
-            getPostComments(result.data[0].post_id);
-        }
         getData()
-        getCategory();
-    }, [props.languages])
-
-    const getPostComments = async (postId) => {
-        let result: any = await GetComments(postId);
-        setComments(result.data)
-    }
+    },[])
 
     const getCategory = async () => {
         let result: any = await GetCategoryList(props.languages);
         setCatMenu(result.data);
     }
+
+    useEffect(() => {        
+        getCategory();
+        setShareUrl(window.location.href);
+        PostViews(props.languages);
+    }, [props.languages])
+
+
+    async function getData() {
+        let result: any = await PostData(slug);
+        let catId = result.data[0].categories[0];
+        let featuredResult: any = await GetDataOfCategory(props.languages, catId, 1, 'published_at', 'desc');
+        setRelated(featuredResult.data);
+        setPost(result.data[0]);
+        getPostComments(result.data[0].post_id);
+    }
+    async function PostViews(languages) {
+        const res = await axios.get('https://geolocation-db.com/json/');
+        await PostData(slug);
+        await postViews(languages, slug, res.data.IPv4);
+    }
+    const getPostComments = async (postId) => {
+        let result: any = await GetComments(postId);
+        setComments(result.data)
+    }
+
+   
     const stats = readingTime(post.full_content);
     return (
         <>
 
             <div>
-                <img src={post.post_thumbnail} />
+                <img src={post.post_thumbnail} alt="post-thumbnail" />
             </div>
 
             <div className="detail-page mt-5 ">
@@ -117,13 +126,13 @@ function SinglePost(props) {
                         <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
                         <h6><IntlMessages id="magazinepost.author" />: {post.author_name}</h6>
                         <div>
-                        {catMenu.map((item, i) => {
-                            return (
-                                <button type="button" className="btn btn-outline-dark" key={i}>
-                                    <Link to={`/magazines/${item.category_id}`}>{item.name}</Link>
-                                </button>
-                            );
-                        })}
+                            {catMenu.map((item, i) => {
+                                return (
+                                    <button type="button" className="btn btn-outline-dark" key={i}>
+                                        <Link to={`/learn-category/${item.category_id}`}>{item.name}</Link>
+                                    </button>
+                                );
+                            })}
                         </div>
                         <div className="row">
                             <div className="col-md-12">
@@ -136,12 +145,12 @@ function SinglePost(props) {
                                                     return (
                                                         <div className="col-md-4" key={i}>
                                                             <div className="blog-sec-main">
-                                                                <div className="mag-blog-pic-2"><img src={item.list_thumbnail} /></div>
+                                                                <div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="post-thumbnail" /></div>
                                                                 <div className="cate-name">{item.categroy}</div>
                                                                 <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                                                 <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                                                 <p className="mag-blog-desc d-none"> <div dangerouslySetInnerHTML={{ __html: post.short_content }} /></p>
-                                                                <Link to={"/magazine/" + item.post_id} className="signup-btn mx-auto "><IntlMessages id="magazine.read_more" /></Link>
+                                                                <Link to={"/learn/" + item.post_id} className="signup-btn mx-auto "><IntlMessages id="magazine.read_more" /></Link>
                                                             </div>
                                                         </div>
                                                     );

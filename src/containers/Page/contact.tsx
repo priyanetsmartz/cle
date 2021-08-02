@@ -4,14 +4,11 @@ import notification from '../../components/notification';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
 import { Link } from "react-router-dom";
-import { siteConfig } from '../../settings/';
 import { useIntl } from 'react-intl';
 import { getContactUsForm, SubmitContactUs } from '../../redux/pages/allPages';
-import { type } from 'os';
 const { openSignUp } = appAction;
 
 function ContactUS(props) {
-    const intl = useIntl();
     const [state, setState] = useState({
         name: "",
         email: "",
@@ -53,7 +50,7 @@ function ContactUS(props) {
             setForm(result.data[0]);
         }
         getData()
-    }, []);
+    }, [props.languages]);
 
 
     const handleValidation = () => {
@@ -163,7 +160,7 @@ function ContactUS(props) {
                                 </div>
 
                                 {form && form.form_json[0] && form.form_json[0].map(item => {
-                                    return item.type == 'textinput' ?
+                                    return item.type === 'textinput' ?
                                         <div className="col-sm-12" key={item.name}>
                                             <label htmlFor=""> <b>{item.label}</b></label>
                                             <input type="text"
@@ -175,7 +172,7 @@ function ContactUS(props) {
                                                 onChange={handleChange}
                                             />
                                             <span className="error">{errors.errors[item.name]}</span>
-                                        </div> :  item.type == 'textarea' ? <div className="col-sm-12" key={item.name}>
+                                        </div> :  item.type === 'textarea' ? <div className="col-sm-12" key={item.name}>
                                         <label htmlFor=""> <b>{item.label}</b></label>
                                         <textarea id={item.name} value={state.message} className={item.className} placeholder={Capitalize(item.name)} onChange={handleChange}></textarea>
                                             <span className="error">{errors.errors[item.name]}</span>

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import notification from '../../components/notification';
 
 import { MagazineList } from '../../redux/pages/magazineList';
 
@@ -32,12 +31,12 @@ function Magazine(props) {
                 <div className="row my-3 mag-first-sec">
                     {items.slice(0, 4).map((item, i) => {
                         return (
-                            <div className={"col-md-5 " + (((i % 2) == 0) ? 'offset-md-1' : 'mt-5')} key={i}>
+                            <div className={"col-md-5 " + (((i % 2) === 0) ? 'offset-md-1' : 'mt-5')} key={i}>
                                 <div className="blog-sec-main">
-                                    <div className="mag-blog-pic"><img src={item.list_thumbnail} /></div>
+                                    <div className="mag-blog-pic"><img src={item.list_thumbnail} alt="list-thumbnail" /></div>
                                     <h3 className="mag-blog-title mt-5 mb-3">{item.title}</h3>
                                     <p className="mag-blog-desc d-none"><div dangerouslySetInnerHTML={{ __html: item.short_content }} />...</p>
-                                    <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                    <Link to={"/learn/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                 </div>
                             </div>
                         );
@@ -59,7 +58,7 @@ function Magazine(props) {
                 </div>
                 <div className="row mt-5">
                     <div className="col-12 text-center">
-                        <Link to={"/magazines"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
+                        <Link to={"/learn"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
                     </div>
                 </div>
 

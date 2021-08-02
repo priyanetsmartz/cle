@@ -7,7 +7,6 @@ import { FeaturedList, GetCategoryData, SendNewsletter, GetCategoryList, GetData
 import moment from 'moment';
 import notification from '../../components/notification';
 import { connect } from 'react-redux';
-const { setCategory } = appAction;
 function MagazineCategory(props) {
     const intl = useIntl();
     const { category } = useParams();
@@ -36,6 +35,7 @@ function MagazineCategory(props) {
 
     useEffect(() => {
         if (category) {
+            setOpacity(0.3);
             getDataOfCategory(props.languages, category, 1, 'published_at', 'desc')
         } else {
             getData(props.languages, 1, 'published_at', 'desc')
@@ -175,7 +175,7 @@ function MagazineCategory(props) {
                 "type": radio
             }
             const result: any = await SendNewsletter({ userInfo }, props.languages);
-            if (result.data[0].success == 1) {
+            if (result.data[0].success === 1) {
                 notification("success", "", result.data[0].message);
                 setState(prevState => ({
                     ...prevState,
@@ -190,16 +190,16 @@ function MagazineCategory(props) {
     }
     return (
         <>
-            <div className="container magazine-inner">
+            <div className="container magazine-inner"   style={{ opacity: opacityVal }}>
 
                 <div className="row mt-3 mag-list-head">
                     <div className="col-md-6 offset-md-3 text-center">
                         <h3><IntlMessages id="magazine.title" /></h3>
                         {catMenu.length > 0 && (
                             <ul>
-                                <li key="0"><Link to="/magazines" className={!category ? "active-menu" : ""}>latest</Link></li>
+                                <li key="0"><Link to="/learn" className={!category ? "active-menu" : ""}>latest</Link></li>
                                 {catMenu.map((item, i) => {
-                                    let link = "/magazines/" + item.category_id;
+                                    let link = "/learn-category/" + item.category_id;
                                     let classValue = item.category_id === category ? "active-menu" : "";
 
                                     return (
@@ -223,12 +223,12 @@ function MagazineCategory(props) {
             </div>
             {latest && (
                 <div className="mag-top-banner">
-                    <img src={latest.list_thumbnail} />
+                    <img src={latest.list_thumbnail} alt="list_thumbnail" />
                     <div className="banner-content text-center">
                         <h4>{latest.title}</h4>
                         <div className="cat-date">{latest.categroy}<span>{moment(latest.published_at).format('LL')}</span></div>
                         <p>  <div dangerouslySetInnerHTML={{ __html: latest.short_content }} /></p>
-                        <Link to={"/magazine/" + latest.post_id} ><IntlMessages id="magazine.read_more" /></Link>
+                        <Link to={"/learn/" + latest.post_id} ><IntlMessages id="magazine.read_more" /></Link>
                     </div>
 
                 </div>
@@ -244,12 +244,12 @@ function MagazineCategory(props) {
                                 return (
                                     <div className="col-md-4" key={i}>
                                         <div className="blog-sec-main">
-                                            <div className="mag-blog-pic-2"><img src={item.list_thumbnail} /></div>
+                                            <div className="mag-blog-pic-2"><img src={item.list_thumbnail}  alt="list_thumbnail"/></div>
                                             <div className="cate-name">{item.categroy}</div>
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                             <p className="mag-blog-desc d-none">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
-                                            <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                            <Link to={"/learn/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                         </div>
                                     </div>
                                 );
@@ -295,12 +295,12 @@ function MagazineCategory(props) {
                                 return (
                                     <div className="col-md-4" key={i}>
                                         <div className="blog-sec-main">
-                                            <div className="mag-blog-pic-2"><img src={item.list_thumbnail} /></div>
+                                            <div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="list_thumbnail" /></div>
                                             <div className="cate-name">{item.categroy}</div>
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                             <p className="mag-blog-desc d-none">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
-                                            <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                            <Link to={"/learn/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                         </div>
 
                                     </div>
