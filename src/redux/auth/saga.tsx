@@ -57,7 +57,7 @@ export function* loginRequest() {
           if(token.data[0].group_id === "3"){
             yield put(push("/prive-user"));
           }else{
-            yield put(push("/"));
+            // yield put(push("/"));
           }
         }
       } else {
@@ -106,7 +106,7 @@ export function* registerRequest() {
           if(token.data[0].group_id === "3"){
             yield put(push("/prive-user"));
           }else{
-            yield put(push("/"));
+            // yield put(push("/"));
           }
           
         } else {
