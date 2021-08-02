@@ -21,11 +21,11 @@ function App() {
   const currentAppLocale =
     AppLocale[getCurrentLanguage(value).locale];
 
-  // useEffect(() => {
-  //   console.log(language);
-    // if (morning) import(`./CLE-styling.css`);
-    // else import(`./CLE-styling.css`);
-  // }, []);
+  useEffect(() => {
+    console.log(language);
+    if (language && language === 'arabic') import(`./CLE-arabic.css`);
+    else import(`./CLE-styling.css`);
+  }, []);
 
   return (
     <HttpsRedirect>
