@@ -4,7 +4,7 @@ import actions from "./actions";
 import appAction from "../app/actions"
 import Login from "./Login";
 import notification from "../../components/notification";
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 
 import { setCookie, removeCookie } from "../../helpers/session";
 const loginApi = new Login();

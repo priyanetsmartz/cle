@@ -1,7 +1,7 @@
 import { Route, Switch } from 'react-router' // react-router v4/v5
 import { ConnectedRouter } from 'connected-react-router';
 // import About from './containers/Page/about';
-import Magazine from './containers/Page/magazine';
+// import Magazine from './containers/Page/magazine';
 import SinglePost from './containers/Page/singlePost';
 import ForgottenPassword from './containers/Page/forgotPassword';
 import PostComment from './containers/Page/postComments';
@@ -23,10 +23,10 @@ const PublicRoutes = ({ history }) => {
       <Switch>
         {/* <MainRoute exact path="/" component={Home} /> */}
 
-        <Route exact path="/magazine" component={Magazine} />
-        <MainRoute exact path="/magazines/:category" component={AllPosts} />
-        <MainRoute exact path="/magazines" component={AllPosts} />
-        <MainRoute exact path="/magazine/:slug" component={SinglePost} />
+        {/* <Route exact path="/learn" component={Magazine} /> */}
+        <MainRoute exact path="/learn-category/:category" component={AllPosts} />
+        <MainRoute exact path="/learn/:slug" component={SinglePost} />
+        <MainRoute exact path="/learn" component={AllPosts} />        
         <WithFooter exact path="/:signup/:member" component={newHome} />
         <WithFooter exact path="/" component={newHome} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />

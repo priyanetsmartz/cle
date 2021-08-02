@@ -61,7 +61,8 @@ function SignIn(props) {
   };
 
   const handleSignUp = (e) => {
-    props.toggleOpenDrawer(false);
+    e.preventDefault();
+   // props.toggleOpenDrawer(false);
     props.showSignin(false);
     props.openSignUp(true);
   }

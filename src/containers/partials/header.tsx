@@ -39,21 +39,24 @@ function Header(props) {
 
     // it will close menu screen
     const handleMenuClose = (e) => {
+        e.preventDefault();
         props.toggleOpenDrawer(false);
     }
     // handle sigin click
-    const handlesigninClick = () => {
+    const handlesigninClick = (e) => {
+        e.preventDefault();
         props.showSignin(true);
         props.toggleOpenDrawer(false);
     }
     // handle menu click
     const handleClick = () => {
         props.toggleOpenDrawer(false);
-       // setIsLoaded(true);
+        // setIsLoaded(true);
     }
 
     // handle signup link click
     const handleSignUp = (e) => {
+        e.preventDefault();
         props.toggleOpenDrawer(false);
         props.openSignUp(true);
     }
@@ -63,7 +66,7 @@ function Header(props) {
         props.toggleOpenDrawer(false);
         localStorage.removeItem('id_token');
         localStorage.removeItem('cust_id');
-      //  cookie.remove('name', { path: '', domain: '.dev.cle.com/' })
+        //  cookie.remove('name', { path: '', domain: '.dev.cle.com/' })
         props.logout();
         props.showHelpus(false);
         history.replace('/');
@@ -73,7 +76,7 @@ function Header(props) {
             {/* universal screen loading */}
             {isLoaded && (
                 <div className="CLE-loading" style={{ "position": "fixed" }}>
-                    <img className="loading-gif" src={loading} />
+                    <img className="loading-gif" src={loading} alt="loader" />
                 </div>
             )}
             {/* hamnurger section */}
@@ -88,7 +91,7 @@ function Header(props) {
                 <div className="menu-section">
                     <div className="container">
                         <div className="mt-5">
-                            <Link to="#" onClick={handleMenuClose} ><img src={blackLogo} /></Link>
+                            <Link to="#" onClick={handleMenuClose} ><img src={blackLogo} alt="logo" /></Link>
                             <div className="hamburger-close float-end">
                                 <Link to="#" className="open-menu">
                                     <svg id="Close" onClick={handleMenuClose} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
@@ -107,14 +110,14 @@ function Header(props) {
                                     <li><Link to="/#our-story" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
-                                    <li><Link to="/magazines" onClick={() => {
+                                    <li><Link to="/learn" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
                                     <li><Link to="/#work-with-us" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     {!localStorage.getItem('id_token') && (
-                                        <li><Link to="#" onClick={() => { handlesigninClick(); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
+                                        <li><Link to="#" onClick={(e) => { handlesigninClick(e); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
                                     )}
                                     {localStorage.getItem('id_token') && (
                                         <li><Link to="#" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>

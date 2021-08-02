@@ -18,7 +18,8 @@ function AboutUs(props) {
         fetchMyAPI()
     }, [props.languages])
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        e.preventDefault()
         const { openSignUp } = props;
         openSignUp(true);
     }
@@ -49,7 +50,7 @@ function AboutUs(props) {
 			<div className="blue-small-box"></div>
 			</div>
             {!onLogin && <div className="about-signup-btn">
-                <Link to="/" className="signup-btn" onClick={() => { handleClick(); }}>
+                <Link to="#" className="signup-btn" onClick={(e) => { handleClick(e); }}>
                     <IntlMessages id="aboutus.sign_up_now" />
                     </Link>
                     </div>}

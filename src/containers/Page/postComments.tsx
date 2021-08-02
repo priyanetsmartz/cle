@@ -63,7 +63,7 @@ function PostComment(props) {
             let lastAtPos = state["email"].lastIndexOf('@');
             let lastDotPos = state["email"].lastIndexOf('.');
 
-            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') == -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') === -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
                 formIsValid = false;
                 error["email"] = "Email is not valid";
             }
