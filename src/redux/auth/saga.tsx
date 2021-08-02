@@ -103,17 +103,12 @@ export function* registerRequest() {
           localStorage.setItem('id_token', token.data[0].new_token);
           localStorage.setItem('cust_id', token.data[0].entity_id);
           yield setCookie("username", token.data[0].email);
-<<<<<<< HEAD
           if(token.data[0].group_id === "3"){
             yield put(push("/prive-user"));
           }else{
             yield put(push("/"));
           }
           
-=======
-          yield put(push("/"));
-
->>>>>>> ddac759c96878d55c910812aac58df6d4492a71c
         } else {
           yield put({ type: actions.REGISTER_ERROR });
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
