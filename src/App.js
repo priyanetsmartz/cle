@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HttpsRedirect from 'react-https-redirect';
 import { Provider } from 'react-redux'
 import { store, history } from "./redux/store";
@@ -11,6 +11,7 @@ import config, {
 import PublicRoutes from "./router.tsx";
 import { getCookie } from "./helpers/session";
 import { LanguageContext } from './languageContext';
+// import(`./CLE-styling.css`)
 
 
 function App() {
@@ -19,6 +20,12 @@ function App() {
   const [value, setValue] = useState(defaultLang);
   const currentAppLocale =
     AppLocale[getCurrentLanguage(value).locale];
+
+  useEffect(() => {
+    console.log(language);
+    if (language && language === 'arabic') import(`./CLE-arabic.css`);
+    else import(`./CLE-styling.css`);
+  }, []);
 
   return (
     <HttpsRedirect>
