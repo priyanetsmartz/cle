@@ -228,7 +228,7 @@ function MagazineCategory(props) {
                         <h4>{latest.title}</h4>
                         <div className="cat-date">{latest.categroy}<span>{moment(latest.published_at).format('LL')}</span></div>
                         <p>  <div dangerouslySetInnerHTML={{ __html: latest.short_content }} /></p>
-                        <Link to={"/learn/" + latest.post_id} ><IntlMessages id="magazine.read_more" /></Link>
+                        <Link to={"/magazine/" + latest.post_id} ><IntlMessages id="magazine.read_more" /></Link>
                     </div>
 
                 </div>
@@ -249,7 +249,7 @@ function MagazineCategory(props) {
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                             <p className="mag-blog-desc d-none">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
-                                            <Link to={"/learn/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                            <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                         </div>
                                     </div>
                                 );
@@ -300,7 +300,7 @@ function MagazineCategory(props) {
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                             <p className="mag-blog-desc d-none">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
-                                            <Link to={"/learn/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                            <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                         </div>
 
                                     </div>

@@ -20,7 +20,7 @@ function SinglePost(props) {
         category_name: "",
         author_name: ""
     });
-    const [comments, setComments] = useState([]);
+    // const [comments, setComments] = useState([]);
     const [shareUrl, setShareUrl] = useState('');
     const { slug } = useParams();
     const [related, setRelated] = useState([]);
@@ -28,14 +28,14 @@ function SinglePost(props) {
 
     useEffect(() => {
         getData()
-    },[])
+    }, [props.match.params.slug])
 
     const getCategory = async () => {
         let result: any = await GetCategoryList(props.languages);
         setCatMenu(result.data);
     }
 
-    useEffect(() => {        
+    useEffect(() => {
         getCategory();
         setShareUrl(window.location.href);
         PostViews(props.languages);
@@ -48,19 +48,19 @@ function SinglePost(props) {
         let featuredResult: any = await GetDataOfCategory(props.languages, catId, 1, 'published_at', 'desc');
         setRelated(featuredResult.data);
         setPost(result.data[0]);
-        getPostComments(result.data[0].post_id);
+        // getPostComments(result.data[0].post_id);
     }
     async function PostViews(languages) {
         const res = await axios.get('https://geolocation-db.com/json/');
         await PostData(slug);
         await postViews(languages, slug, res.data.IPv4);
     }
-    const getPostComments = async (postId) => {
-        let result: any = await GetComments(postId);
-        setComments(result.data)
-    }
+    // const getPostComments = async (postId) => {
+    //     let result: any = await GetComments(postId);
+    //     setComments(result.data)
+    // }
 
-   
+
     const stats = readingTime(post.full_content);
     return (
         <>
@@ -124,7 +124,7 @@ function SinglePost(props) {
                             </ul>
                         </div>
                         <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
-                        <h6><IntlMessages id="magazinepost.author" />: {post.author_name}</h6>
+                        <h6><IntlMessages id="magazinepost.author" />: {post.author_name ? post.author_name : "Admin"}</h6>
                         <div>
                             {catMenu.map((item, i) => {
                                 return (
@@ -150,7 +150,7 @@ function SinglePost(props) {
                                                                 <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                                                 <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                                                 <p className="mag-blog-desc d-none"> <div dangerouslySetInnerHTML={{ __html: post.short_content }} /></p>
-                                                                <Link to={"/learn/" + item.post_id} className="signup-btn mx-auto "><IntlMessages id="magazine.read_more" /></Link>
+                                                                <Link to={`/magazine/${item.post_id}`} className="signup-btn mx-auto "><IntlMessages id="magazine.read_more" /></Link>
                                                             </div>
                                                         </div>
                                                     );

@@ -57,7 +57,6 @@ function Hamburger(props) {
 }
 
 function mapStateToProps(state) {
-    //console.log(state);
     return state;
 }
 

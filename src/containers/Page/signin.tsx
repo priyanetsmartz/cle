@@ -19,7 +19,6 @@ const { showSignin, openSignUp, toggleOpenDrawer } = appAction;
 const { login, logout } = authAction;
 
 function SignIn(props) {
-  let history = useHistory();
   const [state, setState] = useState({
     email: "",
     password: ""
@@ -28,7 +27,6 @@ function SignIn(props) {
     errors: {}
   });
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isDisable, setIsDisable] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
 
@@ -63,7 +61,7 @@ function SignIn(props) {
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    // props.toggleOpenDrawer(false);
+   // props.toggleOpenDrawer(false);
     props.showSignin(false);
     props.openSignUp(true);
   }
@@ -71,9 +69,8 @@ function SignIn(props) {
     props.showSignin(false);
   }
   const handleSubmitClick = (e) => {
-    setIsDisable(true)
     e.preventDefault();
-    const { login } = props;    
+    const { login } = props;
     if (handleValidation()) {
       const userInfo = {
         "type": "user",
@@ -82,17 +79,14 @@ function SignIn(props) {
         "rememberme": rememberMe
       }
       login({ userInfo });
-    //  setIsDisable(false)
       if (getCookie("remember_me") === "true") {
         setState({ email: getCookie("username"), password: getCookie("password") })
       } else {
         // setState({ email: '', password: '' })
       }
     } else {
-    //  setIsDisable(false)
       notification("warning", "", "Please enter valid email and password");
     }
-    setIsDisable(false)
   }
 
 
@@ -144,7 +138,7 @@ function SignIn(props) {
       <Modal.Header> <img src={logo} alt="logo" />
         <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
       <Modal.Body><h2><IntlMessages id="login.title" /></h2>
-        {/* <p><IntlMessages id="login.subtitle" /></p> */}
+        <p><IntlMessages id="login.subtitle" /></p>
         <div className="row g-3">
           <div className="col-sm-12">
             {/* <input type="text" className="form-control" placeholder="Email Address*" aria-label="Email" /> */}
@@ -185,7 +179,7 @@ function SignIn(props) {
             </div>
           </div>
           <div className="d-grid gap-2">
-            <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={isDisable ? { pointerEvents: "none", opacity: "0.3" } : null}> <IntlMessages id="login.button" /></Link>
+            <Link to={"/"} className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="login.button" /></Link>
             <Link to="/forgot-password" onClick={hideModal}><IntlMessages id="forgot_pass" />?</Link>
           </div>
         </div>

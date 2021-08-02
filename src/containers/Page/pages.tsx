@@ -38,9 +38,6 @@ function AllPages(props) {
                 </svg>
             </figure>
             <div dangerouslySetInnerHTML={{ __html: pagesData ? pagesData.content : "Ooops Page not found...." }} />
-            {props.match.params.id === 'about-us' && (
-                <div><Link to={"/"} className="signup-btn" onClick={(e) => { handleClick(e); }}><IntlMessages id="aboutus.sign_up_now" /></Link></div>
-            )}
         </div>
     );
 }

@@ -36,7 +36,7 @@ function Magazine(props) {
                                     <div className="mag-blog-pic"><img src={item.list_thumbnail} alt="list-thumbnail" /></div>
                                     <h3 className="mag-blog-title mt-5 mb-3">{item.title}</h3>
                                     <p className="mag-blog-desc d-none"><div dangerouslySetInnerHTML={{ __html: item.short_content }} />...</p>
-                                    <Link to={"/learn/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                    <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                 </div>
                             </div>
                         );

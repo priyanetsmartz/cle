@@ -11,7 +11,7 @@ import config, {
 import PublicRoutes from "./router.tsx";
 import { getCookie } from "./helpers/session";
 import { LanguageContext } from './languageContext';
-// import(`./CLE-styling.css`)
+import(`./CLE-styling.css`)
 
 
 function App() {
@@ -22,8 +22,8 @@ function App() {
     AppLocale[getCurrentLanguage(value).locale];
 
   useEffect(() => {
-    console.log(language);
-    if (language && language === 'arabic') import(`./CLE-arabic.css`);
+    //  console.log(language);
+    if (value && value === 'arabic') import(`./CLE-arabic.css`);
     else import(`./CLE-styling.css`);
   }, []);
 
