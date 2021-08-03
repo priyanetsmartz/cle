@@ -13,24 +13,24 @@ export function* loginRequest() {
 
   yield takeEvery("LOGIN_REQUEST", function* (payload: any) {
     try {
-      //   console.log(payload.payload.userInfo);
+      // console.log(payload.payload.userInfo);
       //user details
-      var type = payload.payload.userInfo.type;
+      var type = payload.payload.userInfo.group_id;
       var email = payload.payload.userInfo.email;
       var password = payload.payload.userInfo.password;
       var userInfo = payload.payload.userInfo;
       //API call to login request
       const response = yield call(loginApi.login, email, password, type);
       if (response.data !== "") {
-        yield put({
-          type: actions.LOGIN_SUCCESS,
-          token: response.data,
-          userInfo: payload.payload.userInfo
-        });
         //Check if remember me is clicked
         if (userInfo) {
           const token = yield call(loginApi.getAuthRegister, userInfo.email);
           if (token.data[0].entity_id) localStorage.setItem('cust_id', token.data[0].entity_id); //store customer id
+          yield put({
+            type: actions.LOGIN_SUCCESS,
+            token: response.data,
+            userInfo: token.data[0].group_id
+          });
           if (userInfo.rememberme === true) {
             //set username and password and remember me into cookie
             yield setCookie("username", userInfo.email);
@@ -42,10 +42,10 @@ export function* loginRequest() {
             removeCookie("password");
             removeCookie("remember_me");
           }
-          // token.data[0].group_id = "3";
 
           localStorage.setItem('id_token', response.data);
           localStorage.setItem('token_email', token.data[0].email);
+          localStorage.setItem('token', token.data[0].group_id);
           yield put({
             type: appAction.SHOW_SIGHNIN,
             showLogin: false
@@ -54,7 +54,8 @@ export function* loginRequest() {
             type: appAction.SHOW_HELPUS,
             showHelpus: true
           });
-          if (token.data[0].group_id === "3") {
+          //  console.log(token.data[0].group_id, typeof (token.data[0].group_id))
+          if (token.data[0].group_id === "4") {
             yield put(push("/prive-user"));
           } else {
             // yield put(push("/"));
@@ -79,10 +80,11 @@ export function* loginError() {
 export function* registerRequest() {
   yield takeEvery("REGISTER_REQUEST", function* (payload: any) {
     try {
+      console.log(payload.payload.userInfo);
       //user details
       let firstname = payload.payload.userInfo.first_name;
       let lastname = payload.payload.userInfo.last_name;
-      let type = payload.payload.userInfo.type;
+      let type = payload.payload.userInfo.group_id;
       let email = payload.payload.userInfo.email;
       let password = payload.payload.userInfo.password;
       let storeId = payload.payload.userInfo.storeId;
@@ -97,13 +99,17 @@ export function* registerRequest() {
           yield put({
             type: actions.LOGIN_SUCCESS,
             token: token.data[0].new_token,
-            userInfo: payload.payload.userInfo
+            userInfo: token.data[0].group_id
           });
           notification("success", "", "Account registered");
           localStorage.setItem('id_token', token.data[0].new_token);
           localStorage.setItem('cust_id', token.data[0].entity_id);
+          localStorage.setItem('token_email', token.data[0].email);
+          localStorage.setItem('token', token.data[0].group_id);
+
           yield setCookie("username", token.data[0].email);
-          if (token.data[0].group_id === "3") {
+          //console.log(token.data[0].group_id, typeof (token.data[0].group_id))
+          if (token.data[0].group_id === "4") {
             yield put(push("/prive-user"));
           } else {
             // yield put(push("/"));

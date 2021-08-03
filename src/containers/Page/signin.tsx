@@ -14,7 +14,6 @@ import FacebookLoginButton from '../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../socialMediaLogin/Google';
 import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
 import { useIntl } from 'react-intl';
-import { useLocation, useHistory } from "react-router";
 const { showSignin, openSignUp, toggleOpenDrawer } = appAction;
 const { login, logout } = authAction;
 
@@ -29,6 +28,7 @@ function SignIn(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
+  const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
     if (getCookie("remember_me") === "true") {
@@ -39,8 +39,7 @@ function SignIn(props) {
 
   useEffect(() => {
     setIsLoaded(props.showLogin)
-    // console.log(props.showLogin);
-    if(!props.showLogin){
+    if (!props.showLogin) {
       if (getCookie("remember_me") === "true") {
         setState({ email: getCookie("username"), password: getCookie("password") })
       } else {
@@ -49,6 +48,9 @@ function SignIn(props) {
     }
   }, [props.showLogin])
 
+  useEffect(() => {
+    setIsShow(props.loading);
+  }, [props.loading])
 
   const handleChange = (e) => {
     const { id, value } = e.target
@@ -69,7 +71,7 @@ function SignIn(props) {
 
   const handleSignUp = (e) => {
     e.preventDefault();
-   // props.toggleOpenDrawer(false);
+    // props.toggleOpenDrawer(false);
     props.showSignin(false);
     props.openSignUp(true);
   }
@@ -77,6 +79,7 @@ function SignIn(props) {
     props.showSignin(false);
   }
   const handleSubmitClick = (e) => {
+    setIsShow(true);
     e.preventDefault();
     const { login } = props;
     if (handleValidation()) {
@@ -87,12 +90,14 @@ function SignIn(props) {
         "rememberme": rememberMe
       }
       login({ userInfo });
+      //  setIsShow(false);
       // if (getCookie("remember_me") === "true") {
       //   setState({ email: getCookie("username"), password: getCookie("password") })
       // } else {
       //   setState({ email: '', password: '' })
       // }
     } else {
+      setIsShow(false);
       notification("warning", "", "Please enter valid email and password");
     }
   }
@@ -123,6 +128,7 @@ function SignIn(props) {
       error["password"] = 'Password is required';
     }
     setError({ errors: error });
+    setIsShow(false);
     return formIsValid;
   }
 
@@ -187,7 +193,8 @@ function SignIn(props) {
             </div>
           </div>
           <div className="d-grid gap-2">
-            <Link to={"/"} className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="login.button" /></Link>
+            <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}> <IntlMessages id="login.button" /></Link>
+            <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  Loading...</div>
             <Link to="/forgot-password" onClick={hideModal}><IntlMessages id="forgot_pass" />?</Link>
           </div>
         </div>
@@ -206,6 +213,7 @@ function SignIn(props) {
 }
 
 function mapStateToProps(state) {
+  // console.log(state.Auth.loading);
   return {
     auth: state.Auth.idToken,
     loading: state.Auth.loading,

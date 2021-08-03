@@ -25,6 +25,7 @@ function SinglePost(props) {
     const { slug } = useParams();
     const [related, setRelated] = useState([]);
     const [catMenu, setCatMenu] = useState([]);
+    const [opacityVal, setOpacity] = useState(1);
 
     useEffect(() => {
         getData()
@@ -43,11 +44,15 @@ function SinglePost(props) {
 
 
     async function getData() {
+        setOpacity(0.3);
         let result: any = await PostData(slug);
         let catId = result.data[0].categories[0];
         let featuredResult: any = await GetDataOfCategory(props.languages, catId, 1, 'published_at', 'desc');
-        setRelated(featuredResult.data);
+        const filteredItems = featuredResult.data.filter(item => item.post_id !== slug)
+        setRelated(filteredItems);
         setPost(result.data[0]);
+        setOpacity(1);
+        // don't delete will be used in next sprint
         // getPostComments(result.data[0].post_id);
     }
     async function PostViews(languages) {
@@ -55,21 +60,24 @@ function SinglePost(props) {
         await PostData(slug);
         await postViews(languages, slug, res.data.IPv4);
     }
+    // don't delete will be used in next sprint
     // const getPostComments = async (postId) => {
     //     let result: any = await GetComments(postId);
     //     setComments(result.data)
     // }
 
-
+    const imgStyle = {
+        width: "100%"
+    };
     const stats = readingTime(post.full_content);
     return (
-        <>
+        <div style={{ opacity: opacityVal }}>
 
             <div>
-                <img src={post.post_thumbnail} alt="post-thumbnail" />
+                <img style={imgStyle} src={post.post_thumbnail} alt="post-thumbnail" />
             </div>
 
-            <div className="detail-page mt-5 ">
+            <div className="detail-page mt-5" >
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12 text-center">
@@ -171,7 +179,7 @@ function SinglePost(props) {
 
             </div>
 
-        </>
+        </div>
     );
 }
 
