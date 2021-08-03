@@ -25,7 +25,7 @@ function mapStateToProps(state) {
     // console.log(state.Auth);
     return {
         auth: state.Auth.idToken,
-        token: state.Auth.token
+        token: state.Auth.userInfo.group_id
     }
 }
 export default connect(mapStateToProps)(PrivateRoute);

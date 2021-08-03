@@ -46,15 +46,12 @@ function HelpUs(props) {
     const [answers, setAnswers] = useState({});
 
     useEffect(() => {
-        setCustomerId(localStorage.getItem('cust_id'));
-        setIsSurvey(customerId && (customerId == getCookie('help-us')) ? true : false);
-        console.log(customerId, isSurvey, getCookie('help-us'))
         async function getData() {
             let result: any = await GetHelpUsForm(props.languages);
             setForm(result.data[0]);
         }
         getData()
-    }, [props.languages, props.helpusVal]);
+    }, [props.languages]);
 
     useEffect(() => {
         let tokenCheck = localStorage.getItem('id_token');
@@ -63,11 +60,13 @@ function HelpUs(props) {
             setOnLogin(false);
         } else {
             setOnLogin(true);
+            setCustomerId(localStorage.getItem('cust_id'));
+            setIsSurvey(customerId && (customerId === getCookie('help-us')) ? true : false);
         }
     })
 
     const optionHandler = async (optionIndex) => {
-        if(!onLogin) return handleClick();
+        if (!onLogin) return handleClick();
 
         const tempObj = {
             value: form.form_json[activeIndex][0].values[optionIndex].label,

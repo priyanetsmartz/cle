@@ -14,10 +14,10 @@ const { register, loginSuccess } = authAction;
 function GoogleLoginButton(props) {
 
     const responseGoogle = (response) => {
-     //   console.log(response)
+        //   console.log(response)
         if (response.accessToken) {
             let name = response.profileObj.name.split(" ");
-           // console.log(name[0],name[1])
+            // console.log(name[0],name[1])
             const userInfo = {
                 "first_name": name[0],
                 "last_name": name[1],
@@ -71,7 +71,7 @@ function GoogleLoginButton(props) {
             buttonText="Login"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
-        // cookiePolicy={'single_host_origin'}
+            cookiePolicy={'single_host_origin'}
         />
     )
 }

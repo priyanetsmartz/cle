@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { connect } from "react-redux";
-import authAction from "../../redux/auth/actions";
 import IntlMessages from "../../components/utility/intlMessages";
 import { SendMailForgotPass } from "../../redux/pages/allPages";
 import notification from '../../components/notification';
-
+import { Link } from "react-router-dom";
 
 function ForgottenPassword(props) {
   const [state, setState] = useState({
     email: ""
   })
+  const [isShow, setIsShow] = useState(false);
   const [errors, setError] = useState({
     errors: {}
   });
@@ -24,6 +23,7 @@ function ForgottenPassword(props) {
 
   const handleSubmitClick = async (e) => {
     e.preventDefault();
+    setIsShow(true);
     if (handleValidation()) {
       let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email, websiteId: 1 });
       if (result) {
@@ -32,10 +32,12 @@ function ForgottenPassword(props) {
           ...prevState,
           email: ""
         }));
+        setIsShow(false);
       } else {
         notification("error", "", "No data found!");
       }
     } else {
+
       notification("error", "", "Please enter valid email");
     }
   }
@@ -66,7 +68,7 @@ function ForgottenPassword(props) {
 
 
   return (
-    <div className="container" style={{marginTop:'100px'}}>
+    <div className="container" style={{ marginTop: '100px' }}>
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <div className="row">
@@ -93,14 +95,8 @@ function ForgottenPassword(props) {
             <br />
             <div className="row">
               <div className="col-md-12">
-
-            <button
-              type="submit"
-              className="btn btn-primary"
-              onClick={handleSubmitClick}
-            >
-              <IntlMessages id="retrieve_password" />
-            </button>
+                <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}>  <IntlMessages id="retrieve_password" /></Link>
+                <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  Loading...</div>
               </div>
             </div>
           </form>

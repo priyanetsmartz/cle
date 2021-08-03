@@ -6,7 +6,7 @@ import Login from "./Login";
 import notification from "../../components/notification";
 // import { useHistory } from "react-router";
 
-import { setCookie, removeCookie } from "../../helpers/session";
+import { setCookie, removeCookie, getCookie } from "../../helpers/session";
 const loginApi = new Login();
 
 export function* loginRequest() {
@@ -29,7 +29,10 @@ export function* loginRequest() {
           yield put({
             type: actions.LOGIN_SUCCESS,
             token: response.data,
-            userInfo: token.data[0].group_id
+            userInfo: {
+              group_id: token.data[0].group_id,
+              survey: getCookie('help-us')
+            }
           });
           if (userInfo.rememberme === true) {
             //set username and password and remember me into cookie
@@ -58,7 +61,7 @@ export function* loginRequest() {
           if (token.data[0].group_id === "4") {
             yield put(push("/prive-user"));
           } else {
-            // yield put(push("/"));
+            yield put(push("/"));
           }
         }
       } else {
@@ -99,7 +102,9 @@ export function* registerRequest() {
           yield put({
             type: actions.LOGIN_SUCCESS,
             token: token.data[0].new_token,
-            userInfo: token.data[0].group_id
+            userInfo: {
+              group_id: token.data[0].group_id
+            }
           });
           notification("success", "", "Account registered");
           localStorage.setItem('id_token', token.data[0].new_token);
@@ -112,18 +117,18 @@ export function* registerRequest() {
           if (token.data[0].group_id === "4") {
             yield put(push("/prive-user"));
           } else {
-            // yield put(push("/"));
+            yield put(push("/"));
           }
 
         } else {
           yield put({ type: actions.REGISTER_ERROR });
-          yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
+          yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: true });
         }
 
       } else {
         notification("error", "", "Invalid email or password.");
         yield put({ type: actions.REGISTER_ERROR });
-        yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
+        yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: true });
       }
     } catch (e) {
       if (e && e.data.message) {

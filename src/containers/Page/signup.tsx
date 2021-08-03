@@ -43,15 +43,6 @@ function RegistrationForm(props) {
 
     useEffect(() => {
         setIsShow(props.loading);
-        setState({
-            email: "",
-            password: "",
-            confirmPassword: "",
-            type: 1,
-            first_name: "",
-            last_name: "",
-            storeId: ""
-        })
     }, [props.loading])
 
     const handleValidation = () => {
@@ -87,16 +78,23 @@ function RegistrationForm(props) {
             error["confirmPassword"] = 'confirm password not matched';
         }
 
+        if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#^])([A-Za-z\d$@$!%*?&#^]{6,})$/.test(state["password"]))) {
+            formIsValid = false;
+            error["password"] = 'The password should contain at least one digit, one lower case, one upper case, Special Character from amongst these $@$!%*?&#^ and at least 6 from the mentioned characters.';
+        }
+
         //password
         if (!state["password"]) {
             formIsValid = false;
             error["password"] = 'Password is required';
         }
 
+
         if (!state["confirmPassword"]) {
             formIsValid = false;
             error["confirmPassword"] = 'Confirm Password is required';
         }
+
 
 
         setError({ errors: error });
@@ -132,7 +130,7 @@ function RegistrationForm(props) {
                 "type": props.userSetype,
                 "storeId": props.languages
             }
-            register({ userInfo });            
+            register({ userInfo });
         } else {
             notification("warning", "", "Please enter required values");
         }

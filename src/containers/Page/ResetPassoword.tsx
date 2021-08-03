@@ -3,7 +3,7 @@ import IntlMessages from "../../components/utility/intlMessages";
 import { useLocation, useHistory } from "react-router";
 import { ValidateToken, SaveNewPass } from "../../redux/pages/allPages";
 import notification from '../../components/notification';
-
+import { Link } from "react-router-dom";
 
 function ResetPassword(props) {
     let history = useHistory();
@@ -16,6 +16,7 @@ function ResetPassword(props) {
         password: "",
         confirmPassword: ""
     })
+    const [isShow, setIsShow] = useState(false);
     const [errors, setError] = useState({
         errors: {}
     });
@@ -25,9 +26,9 @@ function ResetPassword(props) {
             try {
                 let result: any = await ValidateToken(token, customerId);
                 if (result) {
-        
-                } 
-            }catch(err){
+
+                }
+            } catch (err) {
                 history.push("password-link-expired");
             }
         }
@@ -45,6 +46,7 @@ function ResetPassword(props) {
 
     const handleSubmitClick = async (e) => {
         e.preventDefault();
+        setIsShow(true);
         if (handleValidation()) {
             let result: any = await SaveNewPass({ email: "", resetToken: token, newPassword: state.password });
             console.log(result);
@@ -55,11 +57,13 @@ function ResetPassword(props) {
                     password: "",
                     confirmPassword: ""
                 }))
+                setIsShow(false);
                 history.push("/");
             } else {
                 notification("error", "", "Error");
             }
         } else {
+            setIsShow(false);
             console.log("Please enter valid password");
         }
     }
@@ -91,7 +95,7 @@ function ResetPassword(props) {
 
 
     return (
-        <div className="container" style={{marginTop:'100px'}}>
+        <div className="container" style={{ marginTop: '100px' }}>
             <div className="row">
                 <div className="col-md-6 offset-md-3">
                     <h3><IntlMessages id="reset_pass" /></h3>
@@ -121,13 +125,8 @@ function ResetPassword(props) {
                             <span className="error">{errors.errors["confirmPassword"]}</span>
                         </div>
                         <br />
-                        <button
-                            type="submit"
-                            className="btn btn-primary"
-                            onClick={handleSubmitClick}
-                        >
-                            <IntlMessages id="retrieve_password" />
-                        </button>
+                        <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}>  <IntlMessages id="retrieve_password" /></Link>
+                        <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  Loading...</div>
                     </form>
 
                 </div>
