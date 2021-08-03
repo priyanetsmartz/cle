@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import Header from '../../containers/partials/header';
 import Footer from '../../containers/partials/footer-new';
 
-const PrivateRoute = ({ component: Component, auth, ...rest }) => (
+const MainRoute = ({ component: Component, auth, ...rest }) => (
   <Route
     {...rest}
     render={props =>
@@ -27,4 +27,4 @@ function mapStateToProps(state) {
     auth: state.auth
   }
 }
-export default connect(mapStateToProps)(PrivateRoute);
+export default connect(mapStateToProps)(MainRoute);

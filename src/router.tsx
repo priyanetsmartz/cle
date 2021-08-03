@@ -8,6 +8,7 @@ import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import WithFooter from "./components/all-route/withFooter";
+import PrivateRoute from "./components/all-route/privateRoute";
 import AllPosts from './containers/Page/magazineCategory';
 import newHome from './containers/Page/anewpage';
 import ThankYou from './containers/Page/ThankYou';
@@ -33,8 +34,8 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/contact-us" component={contact} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
-        <MainRoute exact path="/prive-user" component={PriveUser} />
-        <MainRoute exact path="/profile" component={profile} />
+        <PrivateRoute exact path="/prive-user" component={PriveUser} />
+        <PrivateRoute exact path="/profile" component={profile} />
         <MainRoute exact path="/password-link-expired" component={PasswordLinkExpired} />
         <Route exact path="/post-comment">
           <PostComment />

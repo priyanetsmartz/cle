@@ -523,6 +523,19 @@ margin-top: 15px;}
 .page-head svg text{font-size: 70px;}
 .inner-pages .page-head svg text{font-size: 45px;}
 
+.spinner {
+    font-size: 12px;
+    text-decoration: none;
+    color: #fff;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    transition: all 0.5s;
+    background: #2e2baa;
+    padding: 15px 20px;
+    border: 1px solid #2e2baa;
+    display: inline-block;
+    text-align: center;
+}
 
 
 

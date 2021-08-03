@@ -30,6 +30,7 @@ function RegistrationForm(props) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [passwordShown, setPasswordShown] = useState(false);
     const [confirmPasswordShown, setConfirmPasswordShown] = useState(false);
+    const [isShow, setIsShow] = useState(false);
     const [errors, setError] = useState({
         errors: {}
     });
@@ -40,6 +41,18 @@ function RegistrationForm(props) {
         setIsLoaded(props.signupModel)
     }, [props.signupModel])
 
+    useEffect(() => {
+        setIsShow(props.loading);
+        setState({
+            email: "",
+            password: "",
+            confirmPassword: "",
+            type: 1,
+            first_name: "",
+            last_name: "",
+            storeId: ""
+        })
+    }, [props.loading])
 
     const handleValidation = () => {
         let error = {};
@@ -87,6 +100,7 @@ function RegistrationForm(props) {
 
 
         setError({ errors: error });
+        setIsShow(false);
         return formIsValid;
     }
     const handleChange = (e) => {
@@ -106,6 +120,7 @@ function RegistrationForm(props) {
         props.openSignUp(false);
     }
     const handleSubmitClick = (e) => {
+        setIsShow(true);
         e.preventDefault();
         const { register } = props;
         if (handleValidation()) {
@@ -117,17 +132,7 @@ function RegistrationForm(props) {
                 "type": props.userSetype,
                 "storeId": props.languages
             }
-            register({ userInfo });
-
-            setState({
-                email: "",
-                password: "",
-                confirmPassword: "",
-                type: 1,
-                first_name: "",
-                last_name: "",
-                storeId: ""
-            })
+            register({ userInfo });            
         } else {
             notification("warning", "", "Please enter required values");
         }
@@ -230,7 +235,8 @@ function RegistrationForm(props) {
                         <span className="error">{errors.errors["confirmPassword"]}</span>
                     </div>
                     <div className="d-grid gap-2">
-                        <Link to="/" className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="signup.sign_up" /></Link>
+                        <Link to="/" className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}> <IntlMessages id="signup.sign_up" /></Link>
+                        <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  Loading...</div>
                     </div>
                 </div>
                 <div className="or-bg">
