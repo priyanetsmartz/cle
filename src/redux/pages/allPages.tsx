@@ -1,5 +1,7 @@
 import ADMINAPI from "../../restApi/AdminApi";
+import FORGOTPASSAPI from "../../restApi/ForgotPassApi";
 const AdminApi = new ADMINAPI();
+const ForgotPassApi = new FORGOTPASSAPI();
 
 
 
@@ -56,7 +58,7 @@ export function ValidateToken(token: string, customerId: string) {
 }
 
 export function SaveNewPass(data) {
-    return AdminApi.request("rest/V1/customers/resetPassword", data, "POST", "");
+    return ForgotPassApi.request("rest/V1/customers/resetPassword", data, "POST", "");
 }
 
 export function getContactUsForm(language) {

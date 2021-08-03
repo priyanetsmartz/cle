@@ -50,7 +50,7 @@ function ResetPassword(props) {
         if (handleValidation()) {
             let result: any = await SaveNewPass({ email: "", resetToken: token, newPassword: state.password });
             console.log(result);
-            if (result) {
+            if (result.data) {
                 notification("success", "", "Password updated!");
                 setState(prevState => ({
                     ...prevState,
@@ -60,7 +60,8 @@ function ResetPassword(props) {
                 setIsShow(false);
                 history.push("/");
             } else {
-                notification("error", "", "Error");
+                notification("error", "", "Token Expired!");
+                history.push("/");
             }
         } else {
             setIsShow(false);
