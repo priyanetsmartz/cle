@@ -47,6 +47,7 @@ function ResetPassword(props) {
         e.preventDefault();
         if (handleValidation()) {
             let result: any = await SaveNewPass({ email: "", resetToken: token, newPassword: state.password });
+            console.log(result);
             if (result) {
                 notification("success", "", "Password updated!");
                 setState(prevState => ({

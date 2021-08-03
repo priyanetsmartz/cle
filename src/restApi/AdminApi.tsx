@@ -50,6 +50,7 @@ class AdminApi {
                     }
                 })
                 .catch(function (err) {
+                    console.log(err)
                     reject(err.response);
                 });
         });

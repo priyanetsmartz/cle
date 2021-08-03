@@ -7,8 +7,10 @@ import appAction from "../../redux/app/actions";
 const { showSignin } = appAction;
 
 function HelpUs(props) {
-    const customerId = localStorage.getItem('cust_id');
-    const isSurvey = getCookie('help-us');
+
+    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
+    const [isSurvey, setIsSurvey] = useState(customerId && (customerId == getCookie('help-us')) ? true : false);
+
     const [onLogin, setOnLogin] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
     const [isSurveyEnd, setIsSurveyEnd] = useState(false);
@@ -44,12 +46,15 @@ function HelpUs(props) {
     const [answers, setAnswers] = useState({});
 
     useEffect(() => {
+        setCustomerId(localStorage.getItem('cust_id'));
+        setIsSurvey(customerId && (customerId == getCookie('help-us')) ? true : false);
+        console.log(customerId, isSurvey, getCookie('help-us'))
         async function getData() {
             let result: any = await GetHelpUsForm(props.languages);
             setForm(result.data[0]);
         }
         getData()
-    }, [props.languages]);
+    }, [props.languages, props.helpusVal]);
 
     useEffect(() => {
         let tokenCheck = localStorage.getItem('id_token');
@@ -62,6 +67,7 @@ function HelpUs(props) {
     })
 
     const optionHandler = async (optionIndex) => {
+        if(!onLogin) return handleClick();
 
         const tempObj = {
             value: form.form_json[activeIndex][0].values[optionIndex].label,
@@ -115,8 +121,7 @@ function HelpUs(props) {
                     </figure>
                     <div className="row">
 
-                        {/* {((localStorage.getItem('id_token') && (!isSurvey || isSurvey != customerId)) || onLogin === true) && ( */}
-                        {(onLogin && !isSurvey) && (
+                        {!isSurvey && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div className="show-hide">
                                     {isHidden && <b onClick={toggleHelpUs}>+</b>}
@@ -134,7 +139,7 @@ function HelpUs(props) {
                                     {form && <h3>{form.title}</h3>}
                                     {isSurveyEnd && !loading && <div className="question-sec"><h2><IntlMessages id="helpus.thankyou" /></h2></div>}
                                     {!isSurveyEnd && loading && <div className="question-sec"><h2><IntlMessages id="helpus.response_saving" /></h2></div>}
-                                    {(form && form.form_json.length > 0 && !isSurveyEnd && !loading) && <div className="question-sec">
+                                    {(form && form.form_json.length > 0 && !loading && !isSurveyEnd) && <div className="question-sec">
                                         <h4>{form.form_json[activeIndex][0].label}</h4>
                                         <div className="select-answer">
                                             {form.form_json[activeIndex][0].values.map((opt, i) => {
@@ -151,18 +156,6 @@ function HelpUs(props) {
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <h3><IntlMessages id="helpus.thankyou" /></h3>
                             </div>
-                        )}
-                        {/* {(!localStorage.getItem('id_token') || !onLogin) && ( */}
-                        {((!onLogin && isSurvey) ||(!onLogin && !isSurvey))&& (
-                            <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
-                                <div><h3><IntlMessages id="help_us.participate_in_survey" /></h3></div>
-                                <div>
-                                    <button className="signup-btn" onClick={() => { handleClick(); }}>
-                                        <IntlMessages id="menu_Sign_in" />
-                                    </button>
-                                </div>
-                            </div>
-
                         )}
                     </div>
                 </div>
