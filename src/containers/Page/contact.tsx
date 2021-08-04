@@ -101,10 +101,8 @@ function ContactUS(props) {
     }
 
     const handleSubmitClick = async (e) => {
-        console.log(state);
         e.preventDefault();
         //  const { register } = props;
-        console.log(state)
         if (handleValidation()) {
             let data: any = {};
             form.form_json[0].forEach(el => {
