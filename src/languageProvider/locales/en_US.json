@@ -111,5 +111,17 @@
   "magazine.filter1": "Most Popular",
   "magazine.filter2": "Least Popular",
   "magazine.filter3": "Alphabetical: A to Z",
-  "magazine.filter4": "Alphabetical: Z to A"
+  "magazine.filter4": "Alphabetical: Z to A",
+  "prive.top1":"PRIVÉ",
+  "prive.top2":"account",
+  "prive.cta":"Check your account",
+  "prive.home":"Home",
+  "prive.onboard":"Privé onboarding",
+  "prive.benefits":"Privé benefits",
+  "prive.slogan":"CLÉ Privé comes with a host of exclusive benefits, reserved only for our most valued clients and customers.",
+  "prive.exclusives":"Privé Exclusives",
+  "prive.early":"Early access products",
+  "prive.birthday":"The birthday reward",
+  "prive.comingsoon":"Coming Soon"
+
 }

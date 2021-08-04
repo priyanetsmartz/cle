@@ -11,7 +11,7 @@ import config, {
 import PublicRoutes from "./router.tsx";
 import { getCookie } from "./helpers/session";
 import { LanguageContext } from './languageContext';
-//import(`./CLE-styling.css`)
+import { Helmet } from "react-helmet";
 
 
 function App() {
@@ -21,31 +21,25 @@ function App() {
   const currentAppLocale =
     AppLocale[getCurrentLanguage(value).locale];
 
-  useEffect(() => {   
-    if (value && value === 'arabic') {
-      console.log(value);
-      import(`./CLE-arabic.css`);
-    } else {
-      console.log(value);
-      import(`./CLE-styling.css`);
-    }
-  });
-
   return (
     <HttpsRedirect>
       <LanguageContext.Provider value={{ value, setValue }} >
-        <ConfigProvider locale={currentAppLocale.antd} direction="rtl" >
+        <ConfigProvider locale={currentAppLocale.antd}  >
           <IntlProvider
             locale={currentAppLocale.locale}
             messages={currentAppLocale.messages}
           >
             <Provider store={store}>
+              {value && value === 'arabic' ?
+                < Helmet >
+                  <link rel="stylesheet" href="/bootstrap/css/CLE-arabic.css" />
+                </Helmet> : null}
               <PublicRoutes history={history} />
             </Provider>
           </IntlProvider>
         </ConfigProvider>
       </LanguageContext.Provider>
-    </HttpsRedirect>
+    </HttpsRedirect >
   );
 }
 
