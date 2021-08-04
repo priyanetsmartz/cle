@@ -162,19 +162,19 @@ function ContactUS(props) {
                                                 className={item.className}
                                                 id={item.name}
                                                 aria-describedby={item.name}
-                                                placeholder={Capitalize(item.name)}
+                                                placeholder={Capitalize(item.label)}
                                                 value={state[item.name]}
                                                 onChange={handleChange}
                                             />
                                             <span className="error">{errors.errors[item.name]}</span>
-                                        </div> : item.type === 'textarea' ? <div className="col-sm-12" key={item.name}>
-                                            <label htmlFor=""> <b>{item.label}</b></label>
-                                            <textarea id={item.name} value={state.message} className={item.className} placeholder={Capitalize(item.name)} onChange={handleChange}></textarea>
+                                        </div> :  item.type === 'textarea' ? <div className="col-sm-12" key={item.name}>
+                                        <label htmlFor=""> <b>{item.label}</b></label>
+                                        <textarea id={item.name} value={state.message} className={item.className} placeholder={Capitalize(item.label)} onChange={handleChange}></textarea>
                                             <span className="error">{errors.errors[item.name]}</span>
                                         </div> : <div className="col-sm-12" key={item.name}>
                                             <label htmlFor=""> <b>{item.label}</b></label>
                                             <select value={state.reason} onChange={handleChange} id={item.name} className={item.className}>
-                                                <option value="">Select</option>
+                                                <option value="">{item.label}</option>
                                                 {item.values && item.values.map(opt => {
                                                     return (<option key={opt.value} value={opt.value}>{opt.label}</option>);
                                                 })}
