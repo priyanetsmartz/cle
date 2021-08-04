@@ -27,7 +27,7 @@ function MagazineCategory(props) {
     });
     const [latest, setlatestItem] = useState({ title: '', published_at: '', short_content: '', post_id: '', list_thumbnail: '', categroy: '' });
     const location = useLocation();
-    let filters = [{ id: 1, value: "Most Popular" }, { id: 2, value: "Least Popular" }, { id: 3, value: "Alphabetical: A to Z" }, { id: 4, value: "Alphabetical: Z to A" }]
+    // let filters = [{ id: 1, value: "Most Popular" }, { id: 2, value: "Least Popular" }, { id: 3, value: "Alphabetical: A to Z" }, { id: 4, value: "Alphabetical: Z to A" }]
 
     useEffect(() => {
         window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
@@ -151,10 +151,7 @@ function MagazineCategory(props) {
         let error = {};
         let formIsValid = true;
         if (typeof state["email"] !== "undefined") {
-            let lastAtPos = state["email"].lastIndexOf('@');
-            let lastDotPos = state["email"].lastIndexOf('.');
-
-            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') === -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
+            if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
                 formIsValid = false;
                 error["email"] = "Email is not valid";
             }
@@ -190,7 +187,7 @@ function MagazineCategory(props) {
     }
     return (
         <>
-            <div className="container magazine-inner"   style={{ opacity: opacityVal }}>
+            <div className="container magazine-inner" style={{ opacity: opacityVal }}>
 
                 <div className="row mt-3 mag-list-head">
                     <div className="col-md-6 offset-md-3 text-center">
@@ -244,7 +241,7 @@ function MagazineCategory(props) {
                                 return (
                                     <div className="col-md-4" key={i}>
                                         <div className="blog-sec-main">
-                                            <div className="mag-blog-pic-2"><img src={item.list_thumbnail}  alt="list_thumbnail"/></div>
+                                            <div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="list_thumbnail" /></div>
                                             <div className="cate-name">{item.categroy}</div>
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
@@ -274,15 +271,19 @@ function MagazineCategory(props) {
                                     <label htmlFor="SortInput" className="col-form-label"><IntlMessages id="magazine.sortby" /></label>
                                 </div>
                                 <div className="col-auto">
-                                    <select className="form-select" defaultValue={sort} onChange={filtterData} aria-label="Default select example">
-                                        <option value={0} key="0" >---</option>
-                                        {
+                                    <select className="form-select" defaultValue={sort} onChange={filtterData} >
+                                        <option value={0} key="0" >{intl.formatMessage({ id: "magazine.filter" })}</option>
+                                        <option value={1} key="1" >{intl.formatMessage({ id: "magazine.filter1" })}</option>
+                                        <option value={2} key="2" >{intl.formatMessage({ id: "magazine.filter2" })}</option>
+                                        <option value={3} key="3" >{intl.formatMessage({ id: "magazine.filter3" })}</option>
+                                        <option value={4} key="4" >{intl.formatMessage({ id: "magazine.filter4" })}</option>
+                                        {/* {
                                             filters.map((item, i) => {
                                                 return (
                                                     <option value={item.id} key={i} >{item.value}</option>
                                                 )
                                             })
-                                        }
+                                        } */}
                                     </select>
                                 </div>
                             </div>

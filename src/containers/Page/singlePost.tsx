@@ -52,6 +52,7 @@ function SinglePost(props) {
         const filteredItems = featuredResult.data.filter(item => item.post_id !== slug)
         setRelated(filteredItems);
         setPost(result.data[0]);
+        window.scrollTo(0, 0)
         setOpacity(1);
     }
     async function PostViews(languages) {

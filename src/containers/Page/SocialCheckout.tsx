@@ -27,7 +27,7 @@ function SocailCheckout(props) {
     return (
         <>
             <div className="container magazine-inner">
-                <figure className="ps-4">
+                <figure className="ps-4 page-head">
                     <svg xmlns="http://www.w3.org/2000/svg" width="850" height="134" viewBox="0 0 850 134">
                         <text id="Check_out" data-name={<IntlMessages id="checkusout.title" />} transform="translate(425 98)" fill="none" stroke="#2E2BAA"
                             strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">

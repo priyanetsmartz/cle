@@ -11,7 +11,7 @@ import config, {
 import PublicRoutes from "./router.tsx";
 import { getCookie } from "./helpers/session";
 import { LanguageContext } from './languageContext';
-import(`./CLE-styling.css`)
+//import(`./CLE-styling.css`)
 
 
 function App() {
@@ -21,16 +21,20 @@ function App() {
   const currentAppLocale =
     AppLocale[getCurrentLanguage(value).locale];
 
-  useEffect(() => {
-    //  console.log(language);
-    if (value && value === 'arabic') import(`./CLE-arabic.css`);
-    else import(`./CLE-styling.css`);
-  }, [language]);
+  useEffect(() => {   
+    if (value && value === 'arabic') {
+      console.log(value);
+      import(`./CLE-arabic.css`);
+    } else {
+      console.log(value);
+      import(`./CLE-styling.css`);
+    }
+  });
 
   return (
     <HttpsRedirect>
       <LanguageContext.Provider value={{ value, setValue }} >
-        <ConfigProvider locale={currentAppLocale.antd}  >
+        <ConfigProvider locale={currentAppLocale.antd} direction="rtl" >
           <IntlProvider
             locale={currentAppLocale.locale}
             messages={currentAppLocale.messages}
