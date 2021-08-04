@@ -1,70 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
+import { Pages } from '../../redux/pages/allPages';
+import banner from "../../image/prive-top-banner.png";
+import logo from "../../image/logo_prive_kopia.png";
+import gem from "../../image/gem-solid.png";
+import clock from "../../image/clock-solid.png";
+import gold from "../../image/gift-solid.png";
+import { connect } from 'react-redux';
 import IntlMessages from "../../components/utility/intlMessages";
-import { FeaturedList, GetCategoryData, SendNewsletter, GetCategoryList, GetDataOfCategory } from '../../redux/pages/magazineList';
-
-
 
 function PriveUser(props) {
-  const { category } = useParams();
-  const [catMenu, setCatMenu] = useState([]);
-  const [opacityVal, setOpacity] = useState(1);
-  const [latest, setlatestItem] = useState({list_thumbnail:'https://4a83875b65.nxcli.net/pub/media/amasty/blog/cache/p/o/1440/760/post-list-top.png'})
-
+  const [pagesData, SetPagesData] = useState({ title: '', content: '' })
 
   useEffect(() => {
-    getCategoryList(props.languages);
-  }, [props.languages, category])
+    async function fetchMyAPI() {
+      let result: any = await Pages('cle-prive', props.languages);
+      var jsonData = result.data.items[0];
+      SetPagesData(jsonData)
 
-  async function getCategoryList(language) {
-    let result: any = await GetCategoryList(props.languages);
-    setCatMenu(result.data);
-  }
-
-
-
-
+    }
+    fetchMyAPI()
+  }, [props.languages])
   return (
-
     <>
-      <div className="container magazine-inner" style={{ opacity: opacityVal }}>
-
+      <div className="container magazine-inner">
         <div className="row mt-3 mag-list-head">
           <div className="col-md-6 offset-md-3 text-center">
-            <h3><IntlMessages id="prive.prive_user" /></h3>
-            {catMenu.length > 0 && (
-              <ul>
-                <li key="0"><Link to="/learn" className={!category ? "active-menu" : ""}>Latest</Link></li>
-                {catMenu.map((item, i) => {
-                  let link = "/learn-category/" + item.category_id;
-                  let classValue = item.category_id === category ? "active-menu" : "";
 
-                  return (
-                    <li key={i}><Link to={link} className={classValue}>{item.name}</Link></li>
-                  )
-                })}
-              </ul>
-            )}
-
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12 back-home mb-2">
-            <Link to="/">
-              <svg className="me-2" xmlns="http://www.w3.org/2000/svg" width="6.08" height="9.743" viewBox="0 0 6.08 9.743">
-                <path id="Path_13" data-name="Path 13" d="M0,5,4.5,0,9,5" transform="translate(0.747 9.372) rotate(-90)" fill="none" stroke="#2E2BAA" strokeWidth="1" />
-              </svg> <IntlMessages id="backhome.link" />
-            </Link>
           </div>
         </div>
       </div>
-      <div className="mag-top-banner">
-        <img src={latest.list_thumbnail} alt="list_thumbnail" />
-        
+      <div className="prive-top-banner">
+        <img src={banner} alt="prive-banner" />
+        <div className="prive-banner-content container">
+          <div className="prive-banner-left-content">
+            <svg xmlns="http://www.w3.org/2000/svg" width="381" height="130.75" viewBox="0 0 381 130.75">
+              <text id="Privé" transform="translate(20 79.25)" fill="none" stroke="#fff" stroke-width="1.25" font-size="79" font-family="Monument Extended" font-weight="700"><tspan x="0" y="0"><IntlMessages id="prive.top1" /></tspan></text>
+              <text id="account" transform="translate(0 111.75)" fill="#017abb" font-size="60" font-family="Monument Extended" font-weight="500"><tspan x="0" y="0"><IntlMessages id="prive.top2" /></tspan></text> </svg>
+            <p>
+              <div dangerouslySetInnerHTML={{ __html: pagesData ? pagesData.content : "Ooops Page not found...." }} />
+            </p>
+            <Link className="signup-btn" to="/profile"><IntlMessages id="prive.cta" /></Link>
+          </div>
+          <div className="prive-banner-right-content">
+            <img src={logo} alt="logo" />
+          </div>
+          <div className="clearfix"></div>
+        </div>
+      </div>
+      <div className="container">
+
+        <div className="row">
+          <div className="col-md-12 breadcrumb my-3"><Link to="/"><IntlMessages id="prive.home" /> </Link> / <IntlMessages id="prive.onboard" /></div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-8 offset-md-2 prive-benefits">
+            <h2><IntlMessages id="prive.benefits" /> </h2>
+            <p><IntlMessages id="prive.slogan" /></p>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-4">
+            <div className="prive-benf-col">
+              <img src={gem} alt="Privé Exclusives" />
+              <p><IntlMessages id="prive.exclusives" /></p>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="prive-benf-col">
+              <img src={clock} alt="Early access products" />
+              <p><IntlMessages id="prive.early" /></p>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="prive-benf-col">
+              <img src={gold} alt="The Birthday reward" />
+              <p><IntlMessages id="prive.birthday" /></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div className="start-shopping">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <h2><IntlMessages id="prive.benefits" /></h2>
+              <p><IntlMessages id="prive.slogan" /></p>
+              <Link className="cle-btn-white-bg" to="#"><IntlMessages id="prive.comingsoon" /></Link>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
 }
 
-export default PriveUser
 
+function mapStateToProps(state) {
+  let languages = '';
+  if (state && state.LanguageSwitcher) {
+    languages = state.LanguageSwitcher.language
+  }
+  return {
+    languages: languages
+
+  };
+};
+export default connect(
+  mapStateToProps,
+  {})(PriveUser);

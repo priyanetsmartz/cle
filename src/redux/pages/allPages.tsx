@@ -10,7 +10,7 @@ export function Pages1(value: string) {
     var payload =
     {
         query: `
-        cmsPage(identifier: "`+ value + `") {
+        cmsPage(identifier: "about-us") {
         identifier
         url_key
         title

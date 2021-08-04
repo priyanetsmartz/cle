@@ -111,5 +111,16 @@
   "magazine.filter1": "الأكثر شهرة",
   "magazine.filter2": "الأقل شعبية",
   "magazine.filter3": "أبجديًا: من الألف إلى الياء",
-  "magazine.filter4": "أبجديًا: من ي إلى أ"
+  "magazine.filter4": "أبجديًا: من ي إلى أ",  
+  "prive.top1":"PRIVÉ",
+  "prive.top2":"الحساب",
+  "prive.cta":"تحقق من حسابك",
+  "prive.home":"الصفحة الرئيسية",
+  "prive.onboard":"Privé على متن الطائرة",
+  "prive.benefits":"Privé فوائد",
+  "prive.slogan":"تأتي CLÉ Privé مع مجموعة من المزايا الحصرية ، المخصصة فقط لعملائنا وعملائنا الكرام.",
+  "prive.exclusives":"حصرية خاصة",
+  "prive.early":"منتجات الوصول المبكر",
+  "prive.birthday":"جائزة عيد الميلاد",
+  "prive.comingsoon":"قريبا"
 }

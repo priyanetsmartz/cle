@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import IntlMessages from "../../components/utility/intlMessages";
 import { Pages } from '../../redux/pages/allPages';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
-import { Link } from "react-router-dom";
 //import history from './history';
 const { openSignUp } = appAction;
 

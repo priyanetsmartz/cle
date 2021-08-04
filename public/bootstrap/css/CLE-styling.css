@@ -533,6 +533,39 @@ margin-top: 15px;}
 .inner-pages .page-head svg text{font-size:45px !important;}
 .about-inner .page-head svg text{font-size: 95px;}
 
+.spinner {
+    font-size: 12px;
+    text-decoration: none;
+    color: #fff;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    transition: all 0.5s;
+    background: #2e2baa;
+    padding: 15px 20px;
+    border: 1px solid #2e2baa;
+    display: inline-block;
+    text-align: center;
+}
+
+.prive-top-banner{position:relative; width:100%;}
+.prive-top-banner img {width: 100%;}
+.prive-banner-content{position:absolute; height:max-content; bottom:0px; right:0; left:0; top:0; margin:auto;}
+.prive-banner-right-content{float:right;}
+.prive-banner-left-content{float:left; width:35%;}
+.prive-banner-left-content p{font-size:18px; line-height:27px; color:#fff; font-weight:700;}
+.breadcrumb a{color:#777; text-decoration:none; margin-right:6px;}
+.breadcrumb{color:#777;}
+.prive-benefits h2{font-family: 'Monument Extended';font-size:36px; line-height:46px; color:#000;}
+.prive-benefits p{font-size:18px; line-height:27px; color:#000; font-weight:400;}
+.prive-benefits{margin:30px auto; text-align:center;}
+.prive-benf-col{background:#000; color:#fff; width:100%; padding:50px;text-align:center;font-family: 'Monument Extended';font-size:24px; line-height:30px;padding: 100px 60px;}
+.prive-benf-col img {margin-bottom: 20px;}
+.cle-btn-white-bg{color:#017abb; background:#fff;font-family: 'Monument Extended';font-size:12px;font-weight:500; border:1px solid #fff; display:inline-block;padding: 10px 30px;text-decoration: none;}
+.cle-btn-white-bg:hover{color:#fff; background:transparent;}
+.start-shopping{text-align:center;background:#017abb; margin:60px 0; padding:60px 0;}
+.start-shopping h2{font-family: 'Monument Extended';font-size:36px; line-height:46px; color:#fff;}
+.start-shopping p{font-size:18px; line-height:27px; font-weight:400; color:#fff;margin: 20px 0 30px;}
+
 
 
 

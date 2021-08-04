@@ -7,7 +7,6 @@ import appAction from "../../redux/app/actions";
 import { siteConfig } from '../../settings/';
 import { connect } from 'react-redux';
 import history from '../Page/history';
-// import cookie from 'js-cookie';
 import Hamburger from './hamburger';
 import HamburgerWhite from './hamburgerWhite';
 import { Link } from "react-router-dom";
@@ -68,7 +67,6 @@ function Header(props) {
         localStorage.removeItem('cust_id');
         localStorage.removeItem('token_email');
         localStorage.removeItem('token');        
-        //  cookie.remove('name', { path: '', domain: '.dev.cle.com/' })
         props.logout();
         props.showHelpus(false);
         history.replace('/');
