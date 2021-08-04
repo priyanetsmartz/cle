@@ -6,6 +6,7 @@ import notification from '../../components/notification';
 import { AddComment } from '../../redux/pages/magazineList';
 import { GetComments } from '../../redux/pages/magazineList';
 import UserImg from '../../image/user.png'
+import moment from 'moment';
 const { postComment } = authAction;
 
 function PostComment(props) {
@@ -50,13 +51,7 @@ function PostComment(props) {
                 notification("success", "", "Comment added!");
                 setState(prevState => ({
                     ...prevState,
-                    name: "",
-                    email: "",
-                    post_id: 12, //change this
                     message: "",
-                    store_id: 3, //change this
-                    customer_id: localStorage.getItem('cust_id'),
-                    reply_to: null
                 }))
             }
         } else {
@@ -78,6 +73,13 @@ function PostComment(props) {
         return formIsValid;
     }
 
+    const cancle = () => {
+        setState(prevState => ({
+            ...prevState,
+            message: "",
+        }))
+    }
+
     return (
         <>
             {localStorage.getItem('id_token') && <div className="container mt-5">
@@ -92,7 +94,7 @@ function PostComment(props) {
                                 </div>
                                 <div className="mt-2 text-right">
                                     <button className="btn btn-primary btn-sm shadow-none" type="button" onClick={handleSubmitClick}>Post comment</button>
-                                    <button className="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button>
+                                    <button className="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button" onClick={cancle}>Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +116,7 @@ function PostComment(props) {
                                             &nbsp;&nbsp;<small className="font-weight-bold">{item.message}</small>
                                             </span>
                                         </div>
-                                        <small>{item.created_at}</small>
+                                        <small>{moment(item.created_at).fromNow()}</small>
                                     </div>
                                     <div className="action d-flex justify-content-between mt-2 align-items-center">
                                     </div>
