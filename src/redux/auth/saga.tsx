@@ -45,9 +45,10 @@ export function* loginRequest() {
             removeCookie("password");
             removeCookie("remember_me");
           }
-
+          
           localStorage.setItem('id_token', response.data);
           localStorage.setItem('token_email', token.data[0].email);
+          localStorage.setItem('token_name', token.data[0].firstname+' '+token.data[0].lastname);
           localStorage.setItem('token', token.data[0].group_id);
           yield put({
             type: appAction.SHOW_SIGHNIN,
@@ -110,6 +111,7 @@ export function* registerRequest() {
           localStorage.setItem('id_token', token.data[0].new_token);
           localStorage.setItem('cust_id', token.data[0].entity_id);
           localStorage.setItem('token_email', token.data[0].email);
+          localStorage.setItem('token_name', token.data[0].firstname+' '+token.data[0].lastname);
           localStorage.setItem('token', token.data[0].group_id);
 
           yield setCookie("username", token.data[0].email);

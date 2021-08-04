@@ -6,6 +6,7 @@ import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "re
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
+import PostComment from './postComments';
 const axios = require("axios");
 const readingTime = require('reading-time');
 
@@ -20,7 +21,7 @@ function SinglePost(props) {
         category_name: "",
         author_name: ""
     });
-    // const [comments, setComments] = useState([]);
+    
     const [shareUrl, setShareUrl] = useState('');
     const { slug } = useParams();
     const [related, setRelated] = useState([]);
@@ -52,19 +53,14 @@ function SinglePost(props) {
         setRelated(filteredItems);
         setPost(result.data[0]);
         setOpacity(1);
-        // don't delete will be used in next sprint
-        // getPostComments(result.data[0].post_id);
     }
     async function PostViews(languages) {
         const res = await axios.get('https://geolocation-db.com/json/');
         await PostData(slug);
         await postViews(languages, slug, res.data.IPv4);
     }
-    // don't delete will be used in next sprint
-    // const getPostComments = async (postId) => {
-    //     let result: any = await GetComments(postId);
-    //     setComments(result.data)
-    // }
+
+    
 
     const imgStyle = {
         width: "100%"
@@ -133,6 +129,7 @@ function SinglePost(props) {
                         </div>
                         <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
                         <h6><IntlMessages id="magazinepost.author" />: {post.author_name ? post.author_name : "Admin"}</h6>
+                        
                         <div>
                             {catMenu.map((item, i) => {
                                 return (
@@ -142,6 +139,12 @@ function SinglePost(props) {
                                 );
                             })}
                         </div>
+
+                        {/* comments sections starts here */}
+                        <PostComment postId={slug}/>
+                        
+                        {/* comments section ends here */}
+
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="mt-5 py-5">

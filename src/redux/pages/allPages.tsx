@@ -50,7 +50,7 @@ export function SaveAnswers(data) {
 }
 
 export function SendMailForgotPass(data) {
-    return AdminApi.request("rest/V1/customers/password", data, "PUT", "");
+    return ForgotPassApi.request("rest/V1/customers/password", data, "PUT", "");
 }
 
 export function ValidateToken(token: string, customerId: string) {
