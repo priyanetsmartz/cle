@@ -22,9 +22,9 @@ function ForgottenPassword(props) {
   }
 
   const handleSubmitClick = async (e) => {
-    e.preventDefault();
-    setIsShow(true);
+    e.preventDefault();    
     if (handleValidation()) {
+      setIsShow(true);
       let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email, websiteId: 1 });
       if (result) {
         notification("success", "", "mail sent");
@@ -48,10 +48,7 @@ function ForgottenPassword(props) {
     let formIsValid = true;
 
     if (typeof state["email"] !== "undefined") {
-      let lastAtPos = state["email"].lastIndexOf('@');
-      let lastDotPos = state["email"].lastIndexOf('.');
-
-      if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') === -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
+      if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
         formIsValid = false;
         error["email"] = "Email is not valid";
       }

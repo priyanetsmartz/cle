@@ -19,7 +19,7 @@
   "register.first_name": "First Name*",
   "register.last_name": "Last Name*",
   "register.email": "Email Address*",
-  "register.password": "Create Password* (Min 6 Character)",
+  "register.password": "Create Password* (Min 8 Character)",
   "register.confirmPassword": "Confirm Password*",
   "register.button": "Signup",
   "logout": "Logout",
@@ -106,5 +106,10 @@
   "newsletter.input": "Email",
   "newsletter.option1": "Womenswear",
   "newsletter.option2": "Menswear",
-  "prive.prive_user":"Prive User"
+  "prive.prive_user": "Prive User",
+  "magazine.filter": "Recently Added",
+  "magazine.filter1": "Most Popular",
+  "magazine.filter2": "Least Popular",
+  "magazine.filter3": "Alphabetical: A to Z",
+  "magazine.filter4": "Alphabetical: Z to A"
 }

@@ -59,10 +59,7 @@ function ContactUS(props) {
 
         //Email   
         if (typeof state["email"] !== "undefined") {
-            let lastAtPos = state["email"].lastIndexOf('@');
-            let lastDotPos = state["email"].lastIndexOf('.');
-
-            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && state["email"].indexOf('@@') === -1 && lastDotPos > 2 && (state["email"].length - lastDotPos) > 2)) {
+            if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
                 formIsValid = false;
                 error["email"] = "Email is not valid";
             }
@@ -141,7 +138,7 @@ function ContactUS(props) {
     }
     return (
         <div className="container about-inner"  >
-           <figure className="text-center page-head">
+            <figure className="text-center page-head">
                 <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
                     <text id="Contact Us" data-name="Contact Us" transform="translate(425 108)" fill="none" stroke="#2E2BAA"
                         strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">
@@ -172,9 +169,9 @@ function ContactUS(props) {
                                                 onChange={handleChange}
                                             />
                                             <span className="error">{errors.errors[item.name]}</span>
-                                        </div> :  item.type === 'textarea' ? <div className="col-sm-12" key={item.name}>
-                                        <label htmlFor=""> <b>{item.label}</b></label>
-                                        <textarea id={item.name} value={state.message} className={item.className} placeholder={Capitalize(item.name)} onChange={handleChange}></textarea>
+                                        </div> : item.type === 'textarea' ? <div className="col-sm-12" key={item.name}>
+                                            <label htmlFor=""> <b>{item.label}</b></label>
+                                            <textarea id={item.name} value={state.message} className={item.className} placeholder={Capitalize(item.name)} onChange={handleChange}></textarea>
                                             <span className="error">{errors.errors[item.name]}</span>
                                         </div> : <div className="col-sm-12" key={item.name}>
                                             <label htmlFor=""> <b>{item.label}</b></label>
@@ -196,7 +193,7 @@ function ContactUS(props) {
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     );

@@ -51,6 +51,7 @@ function SinglePost(props) {
         const filteredItems = featuredResult.data.filter(item => item.post_id !== slug)
         setRelated(filteredItems);
         setPost(result.data[0]);
+        window.scrollTo(0, 0)
         setOpacity(1);
         // don't delete will be used in next sprint
         // getPostComments(result.data[0].post_id);

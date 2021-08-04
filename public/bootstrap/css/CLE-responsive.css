@@ -3,15 +3,20 @@
     margin-top: 2rem !important;
     margin-bottom: 2rem !important;
 }
-.homescreen-bg img{height:420px;}
+.homescreen-bg img{ 
+height: auto;
+width: 160%;
+margin-left: -43%;
+margin-top: 0%;
+}
 	.home-inner-text{height: 340px;}
 .home-inner-text figure.time-is-now {
-    width: 55%;
+    width: 46%;
 float: right;
-bottom: 27%;
+bottom: 35%;
 margin: 0;
 position: absolute;
-right: 2%;
+right: 7%;
 }
 .time-is-now svg { 
     width: 100%;
@@ -31,7 +36,7 @@ position: absolute;
 }
 .sign-up-btn{
 	width: auto;
-right: 8%;
+right:25%;
 left: auto;
 bottom: 10%;
 }
@@ -40,11 +45,11 @@ bottom: 10%;
 .blue-back-image {
     background: #2e2baa;
     width: 100%;
-    height: 360px;
+    height:100%;
     position: relative;
     top: -3%;
 }
-.about-inner-pic{top: -2%;left: -1%;}
+.about-inner-pic{top: -2%;left: -1%;position: relative;}
 .about-inner-pic img {
     width: 90%;
 }
@@ -135,6 +140,7 @@ bottom: 10%;
 .newsletter-signup{width: 100% !important;}
 .newsletter-signup input { width: 100%;  border: 0px solid; height: 40px;}
 .join-cle-bottom-2 { position: relative; bottom: 0px; left: 0; margin-top: 20px;}
+.question-sec .select-answer{width:100%;}
 }
 
 @media (min-width: 580px) and (max-width: 767px) {

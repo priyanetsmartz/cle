@@ -23,6 +23,11 @@ function Home(props) {
         fetchMyAPI()
     }, [props.languages])
 
+    const handleClick = (e) => {
+        e.preventDefault()
+        const { openSignUp } = props;
+        openSignUp(true);
+    }
     useEffect(() => {
         let tokenCheck = localStorage.getItem('id_token');
         let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
@@ -31,13 +36,7 @@ function Home(props) {
         } else {
             setOnLogin(true);
         }
-    },[props.helpusVal])
-
-    const handleClick = (e) => {
-        e.preventDefault()
-        const { openSignUp } = props;
-        openSignUp(true);
-    }
+    })
 
     const toggleModeal = () => {
         setIsModalShow(!isModalshow);
@@ -48,15 +47,15 @@ function Home(props) {
             <img src={homeBg} alt="homepage" />
             <div className="position-absolute container top-50 start-50 translate-middle home-inner-text">
                 <figure className="time-is-now">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" width="616" height="278.5" viewBox="0 0 616 278.5">
-                        <g id="Group_793" data-name="Group 793" transform="translate(-703 -220.5)">
-                            <text id="Time" transform="translate(704 350.5)" fill="none" stroke="#2E2BAA" strokeWidth="1" fontSize="147" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="home.time" /></tspan></text>
-                            <text id="NOW_" data-name={<IntlMessages id="home.now" />} transform="translate(862 458)" fill="#2E2BAA" fontSize="114" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="home.now" /></tspan></text>
-                            <text id="Is" transform="translate(788 412)" fill="#2E2BAA" stroke="#2E2BAA" strokeWidth="1" fontSize="48" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.is" /></tspan></text>
-                            <text id="New_luxury_marketplace" data-name="New luxury marketplace" transform="translate(867 493)" fill="#2E2BAA" fontSize="20" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.slogan" /></tspan></text>
-                        </g>
-                    </svg>
+					<svg xmlns="http://www.w3.org/2000/svg" width="616" height="317.5" viewBox="0 0 616 317.5">
+  <g id="Group_805" data-name="Group 805" transform="translate(-703 -220.5)">
+    <text id="YOUR" transform="translate(704 350.5)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="147" fontFamily="Monument Extended" fontWeight="700"><IntlMessages id="home.time" /></text>
+    <text id="NEXT" transform="translate(862 446)" fill="#2e2baa" fontSize="114" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="home.now" /></tspan></text>
+    <text id="GENERATION" transform="translate(734 494)" fill="#2e2baa" stroke="#2e2baa" strokeWidth="1" fontSize="48" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.is" /></tspan></text>
+    <text id="New_luxury_marketplace" data-name="New luxury marketplace" transform="translate(867 532)" fill="#2e2baa" fontSize="20" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.slogan" /></tspan></text>
+  </g>
+</svg>
+					
                 </figure>
                 <figure className="play-video-now" onClick={toggleModeal}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="98.73" height="100.606" viewBox="0 0 98.73 100.606">
@@ -146,9 +145,9 @@ function Home(props) {
             {/* video player modal starts here */}
             <Modal show={isModalshow}>
                 <p className="video-close" onClick={toggleModeal}>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="15pt" viewBox="0 0 329.26933 329" width="15pt"><path d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="15pt" viewBox="0 0 329.26933 329" width="15pt"><path d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0"/></svg>
                 </p>
-                <VideoPlayer />
+                <VideoPlayer/>
             </Modal>
             {/* video player modal ends here */}
 
