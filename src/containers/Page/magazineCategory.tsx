@@ -55,6 +55,7 @@ function MagazineCategory(props) {
         setPagination(dataTotal);
         setFeaturedItems(featuredResult.data);
         setlatestItem(result.data.slice(-1)[0]);
+        console.log(result.data.slice(-1)[0])
         // console.log(result.data.slice(-1)[0]);
         setOpacity(1);
     }

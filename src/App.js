@@ -31,7 +31,7 @@ function App() {
           >
             <Provider store={store}>
               {value && value === 'arabic' ?
-                < Helmet >
+                <Helmet >
                   <link rel="stylesheet" href="/bootstrap/css/CLE-arabic.css" />
                 </Helmet> : null}
               <PublicRoutes history={history} />

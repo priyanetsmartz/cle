@@ -353,7 +353,7 @@ height: 30px;margin-bottom: 12px;}
 .become-rotate{display:none;}
 #work-with-us .squares{display:none;}
 .join-cle-bottom{bottom:8%;width: max-content;right: 0;position: relative;left: 0;margin: auto;}
-.help-us-content{margin: 0 10px 30px;width: 94% !important;}
+.help-us-content{margin: 0 10px 30px !important;width: 97% !important;}
 .sign-in-M {border-right: 0px solid #2e2baa;  padding-right: 0; margin-right: 0;border-bottom: 2px solid #2e2baa;}
 .social-login a span{width:70%;}
 .social-login a svg{margin-left: 15%;}

@@ -52,5 +52,20 @@ right: 0;}
     border-right: 0px solid #000;
     border-left: 1px solid #000;
 }
+.about-inner .page-head svg text{transform: translate(105%,108px);font-size: 110px;}
+.magazine-inner .page-head svg text{transform: translate(115%,108px);font-size: 110px;}
+.partnership-title.page-head svg text{transform: translate(115%,108px);font-size: 110px;}
+.help-us-inner .page-head svg text{transform: translate(110%,108px);font-size: 95px;}
+.inner-pages .page-head svg text{transform: translate(55%,108px);font-size: 55px !important;}
+.magazine-inner .page-head svg text#Check_out{transform: translate(96%,108px);font-size: 110px;}
+
+.become-rotate{
+	position: relative;
+left: 0;
+top: 30%;
+}
+.cms-content {
+    direction: rtl;
+}
 
 

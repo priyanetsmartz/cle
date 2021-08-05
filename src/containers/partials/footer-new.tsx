@@ -1,22 +1,20 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { footer } from '../../redux/pages/allPages';
+import { footer, analyticsFetch } from '../../redux/pages/allPages';
 import SignUp from '../Page/signup';
 import SignIn from '../Page/signin';
 
 function FooterExtra(props) {
-    // const [menuLoaded, setMenuLoaded] = useState(false);
-    // const handleMenuOpen = (e) => {
-    //     e.preventDefault();
-    //     setMenuLoaded(true)
-    // }
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
+    const [analyticsCode, SetAnalyticsCode] = useState({ status: 0, accountNo: 0 })
     useEffect(() => {
         async function fetchMyAPI() {
             let result: any = await footer(props.languages);
             var jsonData = result.data.items[0];
             SetPagesData(jsonData);
+            let analytics: any = await analyticsFetch();
+            SetAnalyticsCode(analytics.data);
         }
         fetchMyAPI()
     }, [props.languages])
@@ -26,8 +24,11 @@ function FooterExtra(props) {
         <>
             <SignIn showLogin={props.showLogin} />
             <SignUp signupModel={props.signupModel} />
-            {pagesData ? <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> : ""}       
-                
+            {pagesData ? <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> : ""}
+            {analyticsCode.status === 1 && (
+                /* eslint-disable no-undef */
+               "test"
+            )}
         </>
     );
 }

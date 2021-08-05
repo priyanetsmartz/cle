@@ -75,3 +75,7 @@ export function footer(language: string) {
     var storeId = language === 'english' ? 3 : 2;
     return AdminApi.request(`rest/V1/cmsBlock/search?searchCriteria[filterGroups][0][filters][0][field]=store_id&searchCriteria[filterGroups][0][filters][0][value]=${storeId}&searchCriteria[filterGroups][0][filters][0][condition_type]==&searchCriteria[filterGroups][1][filters][0][field]=identifier&searchCriteria[filterGroups][1][filters][0][value]=footer_block&searchCriteria[filterGroups][1][filters][0][condition_type]==`, "", "GET", "");
 }
+
+export function analyticsFetch() {
+    return AdminApi.request('rest/V1/google/analytics?storeId=1', "", "GET", "")
+}
