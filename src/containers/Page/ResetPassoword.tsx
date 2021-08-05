@@ -79,6 +79,11 @@ function ResetPassword(props) {
             error["password"] = "Password is required";
         }
 
+        if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#^])([A-Za-z\d$@$!%*?&#^]{8,})$/.test(state["password"]))) {
+            formIsValid = false;
+            error["password"] = 'The password should contain at least one digit, one lower case, one upper case, Special Character from amongst these $@$!%*?&#^ and at least 6 from the mentioned characters.';
+        }
+
         if (!state["confirmPassword"]) {
             formIsValid = false;
             error["confirmPassword"] = "Confirm Password is required";
