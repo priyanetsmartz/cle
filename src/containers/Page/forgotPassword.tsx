@@ -3,8 +3,10 @@ import IntlMessages from "../../components/utility/intlMessages";
 import { SendMailForgotPass } from "../../redux/pages/allPages";
 import notification from '../../components/notification';
 import { Link } from "react-router-dom";
+import { useIntl } from 'react-intl';
 
 function ForgottenPassword(props) {
+  const intl = useIntl();
   const [state, setState] = useState({
     email: ""
   })
@@ -83,7 +85,7 @@ function ForgottenPassword(props) {
                   className="form-control"
                   id="email"
                   aria-describedby="emailHelp"
-                  placeholder="Enter email"
+                  placeholder={intl.formatMessage({ id: 'email_address' })}
                   value={state.email}
                   onChange={handleChange}
                 />
@@ -94,7 +96,7 @@ function ForgottenPassword(props) {
             <div className="row">
               <div className="col-md-12">
                 <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}>  <IntlMessages id="retrieve_password" /></Link>
-                <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  Loading...</div>
+                <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
               </div>
             </div>
           </form>

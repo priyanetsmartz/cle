@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PostData, GetComments, GetDataOfCategory, postViews, GetCategoryList } from '../../redux/pages/magazineList';
+import { PostData, GetDataOfCategory, postViews, GetCategoryList } from '../../redux/pages/magazineList';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
@@ -7,11 +7,12 @@ import IntlMessages from "../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import PostComment from './postComments';
+import { getCookie } from "../../helpers/session";
 const axios = require("axios");
 const readingTime = require('reading-time');
 
 function SinglePost(props) {
-
+    const language = getCookie('currentLanguage');
     const [post, setPost] = useState({
         title: "",
         post_thumbnail: "",
@@ -21,7 +22,7 @@ function SinglePost(props) {
         category_name: "",
         author_name: ""
     });
-    
+
     const [shareUrl, setShareUrl] = useState('');
     const { slug } = useParams();
     const [related, setRelated] = useState([]);
@@ -38,17 +39,19 @@ function SinglePost(props) {
     }
 
     useEffect(() => {
+        let lang = props.languages ? props.languages : language;
         getCategory();
         setShareUrl(window.location.href);
-        PostViews(props.languages);
+        PostViews(lang);
     }, [props.languages])
 
 
     async function getData() {
+        let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
-        let result: any = await PostData(slug);
+        let result: any = await PostData(lang, slug);
         let catId = result.data[0].categories[0];
-        let featuredResult: any = await GetDataOfCategory(props.languages, catId, 1, 'published_at', 'desc');
+        let featuredResult: any = await GetDataOfCategory(lang, catId, 1, 'published_at', 'desc');
         const filteredItems = featuredResult.data.filter(item => item.post_id !== slug)
         setRelated(filteredItems);
         setPost(result.data[0]);
@@ -57,11 +60,11 @@ function SinglePost(props) {
     }
     async function PostViews(languages) {
         const res = await axios.get('https://geolocation-db.com/json/');
-        await PostData(slug);
+        await PostData(languages, slug);
         await postViews(languages, slug, res.data.IPv4);
     }
 
-    
+
 
     const imgStyle = {
         width: "100%"
@@ -130,7 +133,7 @@ function SinglePost(props) {
                         </div>
                         <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
                         <h6><IntlMessages id="magazinepost.author" />: {post.author_name ? post.author_name : "Admin"}</h6>
-                        
+
                         <div>
                             {catMenu.map((item, i) => {
                                 return (
@@ -140,11 +143,6 @@ function SinglePost(props) {
                                 );
                             })}
                         </div>
-
-                        {/* comments sections starts here */}
-                        <PostComment postId={slug}/>
-                        
-                        {/* comments section ends here */}
 
                         <div className="row">
                             <div className="col-md-12">
@@ -170,14 +168,18 @@ function SinglePost(props) {
                                             </div>
                                         </div>
                                     )}
-                                    {!related.length && (
+                                    {/* {!related.length && (
                                         <div className="container">
                                             <IntlMessages id="no_data" />
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         </div>
+                        {/* comments sections starts here */}
+                        <PostComment postId={slug} />
+
+                        {/* comments section ends here */}
                     </div>
                 </div>
 

@@ -45,10 +45,10 @@ export function* loginRequest() {
             removeCookie("password");
             removeCookie("remember_me");
           }
-          
+
           localStorage.setItem('id_token', response.data);
           localStorage.setItem('token_email', token.data[0].email);
-          localStorage.setItem('token_name', token.data[0].firstname+' '+token.data[0].lastname);
+          localStorage.setItem('token_name', token.data[0].firstname + ' ' + token.data[0].lastname);
           localStorage.setItem('token', token.data[0].group_id);
           yield put({
             type: appAction.SHOW_SIGHNIN,
@@ -58,7 +58,7 @@ export function* loginRequest() {
             type: appAction.SHOW_HELPUS,
             showHelpus: true
           });
-          //  console.log(token.data[0].group_id, typeof (token.data[0].group_id))
+          notification("success", "", "Successfully Logged in");
           if (token.data[0].group_id === "4") {
             yield put(push("/prive-user"));
           } else {
@@ -107,15 +107,14 @@ export function* registerRequest() {
               group_id: token.data[0].group_id
             }
           });
-          notification("success", "", "Account registered");
+          notification("success", "", "Account registered and Successfully Logged in");
           localStorage.setItem('id_token', token.data[0].new_token);
           localStorage.setItem('cust_id', token.data[0].entity_id);
           localStorage.setItem('token_email', token.data[0].email);
-          localStorage.setItem('token_name', token.data[0].firstname+' '+token.data[0].lastname);
+          localStorage.setItem('token_name', token.data[0].firstname + ' ' + token.data[0].lastname);
           localStorage.setItem('token', token.data[0].group_id);
 
           yield setCookie("username", token.data[0].email);
-          //console.log(token.data[0].group_id, typeof (token.data[0].group_id))
           if (token.data[0].group_id === "4") {
             yield put(push("/prive-user"));
           } else {

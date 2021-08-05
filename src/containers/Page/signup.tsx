@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import IntlMessages from "../../components/utility/intlMessages";
 import authAction from "../../redux/auth/actions";
@@ -241,7 +241,7 @@ function RegistrationForm(props) {
                     </div>
                     <div className="d-grid gap-2">
                         <Link to="/" className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}> <IntlMessages id="signup.sign_up" /></Link>
-                        <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  Loading...</div>
+                        <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                     </div>
                 </div>
                 <div className="or-bg">

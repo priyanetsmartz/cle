@@ -122,5 +122,9 @@
   "prive.exclusives":"حصرية خاصة",
   "prive.early":"منتجات الوصول المبكر",
   "prive.birthday":"جائزة عيد الميلاد",
-  "prive.comingsoon":"قريبا"
+  "prive.comingsoon":"قريبا",  
+  "loading":"جار التحميل...",  
+  "postComments":"اكتب تعليقا",
+  "postComment.CTA":"أضف تعليقا",
+  "postComment.cancel":"يلغي"
 }

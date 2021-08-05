@@ -9,7 +9,6 @@ const loginApi = new Login();
 
 function Profile(props) {
     const [profileDetails, SetProfileDetails] = useState({ email: "", firstname: "", lastname: "" });
-    const [noData, setNoData] = useState("");
     useEffect(() => {
         let tokenCheck = localStorage.getItem('token_email');
         fetchMyAPI(tokenCheck)
@@ -19,7 +18,6 @@ function Profile(props) {
         let result: any = await loginApi.getAuthRegister(email);
         var jsonData = result.data[0];
         if (jsonData === undefined) {
-            setNoData("Please login")
         } else {
             SetProfileDetails(jsonData)
         }

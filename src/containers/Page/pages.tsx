@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Pages, Pages1 } from '../../redux/pages/allPages';
-import { connect } from "react-redux";
-import appAction from "../../redux/app/actions";
-//import history from './history';
-const { openSignUp } = appAction;
+import { useEffect, useState } from 'react';
+import { Pages } from '../../redux/pages/allPages';
+import { getCookie } from "../../helpers/session";
 
 function AllPages(props) {
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
+    const language = getCookie('currentLanguage');
     useEffect(() => {
         let pageIdentifier = props.match.params.id;
+        let lang = props.languages ? props.languages : language;
         async function fetchMyAPI() {
-            let result: any = await Pages(pageIdentifier, props.languages);
+            let result: any = await Pages(pageIdentifier, lang);
             // let test: any = await Pages1(pageIdentifier);
             // console.log(test)
             var jsonData = result.data.items[0];
@@ -19,13 +18,6 @@ function AllPages(props) {
         }
         fetchMyAPI()
     }, [props.match.params.id, props.languages])
-
-
-    const handleClick = (e) => {
-        e.preventDefault();
-        const { openSignUp } = props;
-        openSignUp(true);
-    }
 
     return (
         <div className="container about-inner inner-pages">
@@ -42,22 +34,4 @@ function AllPages(props) {
     );
 }
 
-function mapStateToProps(state) {
-    let signupModel = '', languages = '';
-    if (state && state.App) {
-        signupModel = state.App.showSignUp
-    }
-    if (state && state.LanguageSwitcher) {
-        languages = state.LanguageSwitcher.language
-    }
-    // console.log(state.LanguageSwitcher)
-    return {
-        signupModel: signupModel,
-        languages: languages
-
-    };
-};
-export default connect(
-    mapStateToProps,
-    { openSignUp }
-)(AllPages);
+export default AllPages;

@@ -7,6 +7,7 @@ import appAction from "../../../redux/app/actions";
 import { connect } from 'react-redux';
 import Login from "../../../redux/auth/Login";
 import { setCookie } from '../../../helpers/session';
+import notification from "../../../components/notification";
 const loginApi = new Login();
 const { showSignin, openSignUp } = appAction;
 const { register, loginSuccess } = authAction;
@@ -36,6 +37,7 @@ function FacebookLoginButton(props) {
             localStorage.setItem('cust_id', jsonData.entity_id);
             setCookie("username", jsonData.email)
             props.loginSuccess(jsonData.new_token)
+            notification("success", "", "Successfully Logged in");
         } else {
             const { register } = props;
             register({ userInfo });

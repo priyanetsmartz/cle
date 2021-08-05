@@ -4,11 +4,13 @@ import notification from '../../components/notification';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
 import { Link } from "react-router-dom";
-import { useIntl } from 'react-intl';
+import { getCookie } from "../../helpers/session";
 import { getContactUsForm, SubmitContactUs } from '../../redux/pages/allPages';
 const { openSignUp } = appAction;
 
 function ContactUS(props) {
+    const language = getCookie('currentLanguage');
+    const [isShow, setIsShow] = useState(false);
     const [state, setState] = useState({
         name: "",
         email: "",
@@ -46,7 +48,8 @@ function ContactUS(props) {
 
     useEffect(() => {
         async function getData() {
-            let result: any = await getContactUsForm(props.languages);
+            let lang = props.languages ? props.languages : language;
+            let result: any = await getContactUsForm(lang);
             setForm(result.data[0]);
         }
         getData()
@@ -104,6 +107,7 @@ function ContactUS(props) {
         e.preventDefault();
         //  const { register } = props;
         if (handleValidation()) {
+            setIsShow(true);
             let data: any = {};
             form.form_json[0].forEach(el => {
                 data[el.name] = {
@@ -122,6 +126,7 @@ function ContactUS(props) {
             let result: any = await SubmitContactUs({ answer: payload });
             if (result) {
                 notification("success", "", "Message sent!");
+                setIsShow(false);
                 setState(prevState => ({
                     ...prevState,
                     name: "",
@@ -131,6 +136,7 @@ function ContactUS(props) {
                 }))
             }
         } else {
+            setIsShow(false);
             notification("warning", "", "Please enter required values");
         }
     }
@@ -167,9 +173,9 @@ function ContactUS(props) {
                                                 onChange={handleChange}
                                             />
                                             <span className="error">{errors.errors[item.name]}</span>
-                                        </div> :  item.type === 'textarea' ? <div className="col-sm-12" key={item.name}>
-                                        <label htmlFor=""> <b>{item.label}</b></label>
-                                        <textarea id={item.name} value={state.message} className={item.className} placeholder={Capitalize(item.label)} onChange={handleChange}></textarea>
+                                        </div> : item.type === 'textarea' ? <div className="col-sm-12" key={item.name}>
+                                            <label htmlFor=""> <b>{item.label}</b></label>
+                                            <textarea id={item.name} value={state.message} className={item.className} placeholder={Capitalize(item.label)} onChange={handleChange}></textarea>
                                             <span className="error">{errors.errors[item.name]}</span>
                                         </div> : <div className="col-sm-12" key={item.name}>
                                             <label htmlFor=""> <b>{item.label}</b></label>
@@ -185,7 +191,8 @@ function ContactUS(props) {
                                 })}
 
                                 <div className="d-flex justify-content-end">
-                                    <Link to="/" className="signup-btn" onClick={handleSubmitClick}> <IntlMessages id="contact.send" /></Link>
+                                    <Link to="/" className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}> <IntlMessages id="contact.send" /></Link>
+                                    <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
                                 </div>
                             </div>
                         </div>

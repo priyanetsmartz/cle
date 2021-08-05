@@ -40,8 +40,9 @@ export function RelatedList(language: string, postId) {
     return Api.request(`default/rest/all/V1/related/blog?storeId=${storeId}&postId=${postId}`, payload, "GET", "");
 }
 
-export function PostData(url_key: string) {
-    return Api.request(`rest/V1/blog/detail?postId=${url_key}`, "", "GET", "");
+export function PostData(language = 'english', url_key: string) {
+    var storeId = language === 'english' ? 3 : 2;
+    return Api.request(`rest/V1/blog/detail?storeId=${storeId}&postId=${url_key}`, "", "GET", "");
 }
 
 export function AddComment(payload: any) {

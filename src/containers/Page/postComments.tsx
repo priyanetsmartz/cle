@@ -5,11 +5,11 @@ import IntlMessages from "../../components/utility/intlMessages";
 import notification from '../../components/notification';
 import { AddComment } from '../../redux/pages/magazineList';
 import { GetComments } from '../../redux/pages/magazineList';
-import UserImg from '../../image/user.png'
 import moment from 'moment';
 const { postComment } = authAction;
 
 function PostComment(props) {
+    const [isShow, setIsShow] = useState(false);
     const [state, setState] = useState({
         name: localStorage.getItem('token_name'),
         email: localStorage.getItem('token_email'),
@@ -45,6 +45,7 @@ function PostComment(props) {
     const handleSubmitClick = async (e) => {
         e.preventDefault();
         if (handleValidation()) {
+            setIsShow(true);
             let result: any = await AddComment(state);
             if (result) {
                 getComments()
@@ -53,8 +54,10 @@ function PostComment(props) {
                     ...prevState,
                     message: "",
                 }))
+                setIsShow(false);
             }
         } else {
+            setIsShow(false);
             notification("warning", "", "Please enter required values");
         }
 
@@ -82,19 +85,22 @@ function PostComment(props) {
 
     return (
         <>
+            <h2><IntlMessages id="postComments" /></h2>
             {localStorage.getItem('id_token') && <div className="container mt-5">
                 <div className="d-flex justify-content-center row">
                     <div className="col-md-8">
                         <div className="d-flex flex-column comment-section">
                             <div className="bg-light p-2">
                                 <div className="d-flex flex-row align-items-start">
-                                    <img className="rounded-circle" src={UserImg} width="40" />
+                                    {/* <img className="rounded-circle" src={UserImg} width="40" /> */}
                                     <textarea className="form-control ml-1 shadow-none textarea"
                                         value={state.message} onChange={handleChange} id="message"></textarea>
+                                    <span className="error">{errors.errors["message"]}</span>
                                 </div>
                                 <div className="mt-2 text-right">
-                                    <button className="btn btn-primary btn-sm shadow-none" type="button" onClick={handleSubmitClick}>Post comment</button>
-                                    <button className="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button" onClick={cancle}>Cancel</button>
+                                    <button className="btn btn-primary btn-sm shadow-none" style={{ "display": !isShow ? "inline-block" : "none" }} type="button" onClick={handleSubmitClick}><IntlMessages id="postComment.CTA" /></button>
+                                    <div className="tn btn-primary btn-sm shadow-none" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
+                                    <button className="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button" onClick={cancle}><IntlMessages id="postComment.cancel" /></button>
                                 </div>
                             </div>
                         </div>
@@ -102,33 +108,32 @@ function PostComment(props) {
                 </div>
             </div>}
 
-        {/* comments listing starts from here */}
-            <div className="container mt-5">
-                <div className="row d-flex justify-content-center">
-                    <div className="col-md-8">
-                        {comments.map((item, i) => {
-                            return (
-                                <div className="card p-3" key={i}>
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <div className="user d-flex flex-row align-items-center">
-                                            <img src={UserImg} width="30" className="user-img rounded-circle mr-2" />
-                                            <span>&nbsp;&nbsp;<small className="font-weight-bold text-primary">{item.name}</small>
-                                            &nbsp;&nbsp;<small className="font-weight-bold">{item.message}</small>
-                                            </span>
+            {/* comments listing starts from here */}
+            {comments.length > 0 && (
+                <div className="container mt-5">
+                    <div className="row d-flex justify-content-center">
+                        <div className="col-md-8">
+                            {comments.map((item, i) => {
+                                return (
+                                    <div className="card p-3 mt-4" key={i}>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div className="user d-flex flex-row align-items-center">
+                                                {/* <img src={UserImg} width="30" className="user-img rounded-circle mr-2" alt="user-image" /> */}
+                                                <span>&nbsp;&nbsp;<small className="font-weight-bold text-primary">{item.name}</small>
+                                                    &nbsp;&nbsp;<small className="font-weight-bold">{item.message}</small>
+                                                </span>
+                                            </div>
+                                            <small>{moment(item.created_at).fromNow()}</small>
                                         </div>
-                                        <small>{moment(item.created_at).fromNow()}</small>
-                                    </div>
-                                    <div className="action d-flex justify-content-between mt-2 align-items-center">
-                                    </div>
-                                </div>
-                            );
-                        })}
+                                    </div>                                    
+                                );
+                            })}
 
 
+                        </div>
                     </div>
                 </div>
-            </div>
-
+            )}
         </>
     );
 }

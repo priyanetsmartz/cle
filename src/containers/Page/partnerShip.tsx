@@ -3,13 +3,16 @@ import { Pages } from '../../redux/pages/allPages';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
 import { Link } from "react-router-dom";
+import { getCookie } from "../../helpers/session";
 const { openSignUp } = appAction;
 
 function Partnership(props) {
+    const language = getCookie('currentLanguage');
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
     useEffect(() => {
         async function fetchMyAPI() {
-            let result: any = await Pages('partnership', props.languages);
+            let lang = props.languages ? props.languages : language;
+            let result: any = await Pages('partnership', lang);
             var jsonData = result.data.items[0];
             SetPagesData(jsonData);
         }

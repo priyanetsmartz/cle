@@ -6,31 +6,31 @@ const ForgotPassApi = new FORGOTPASSAPI();
 
 
 // graphql api if needed
-export function Pages1(value: string) {
-    var payload =
-    {
-        query: `
-        cmsPage(identifier: "about-us") {
-        identifier
-        url_key
-        title
-        content
-        content_heading
-        page_layout
-        meta_title
-        meta_description
-        meta_keywords
-    }
-        `
+// export function Pages1(value: string) {
+//     var payload =
+//     {
+//         query: `
+//         cmsPage(identifier: "about-us") {
+//         identifier
+//         url_key
+//         title
+//         content
+//         content_heading
+//         page_layout
+//         meta_title
+//         meta_description
+//         meta_keywords
+//     }
+//         `
 
-    }
-    return AdminApi.request(
-        "graphql",
-        payload,
-        "POST",
-        ""
-    );
-}
+//     }
+//     return AdminApi.request(
+//         "graphql",
+//         payload,
+//         "POST",
+//         ""
+//     );
+// }
 // rest api 
 export function Pages(value: string, language: string) {
     //console.log(language);

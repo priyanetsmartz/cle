@@ -3,15 +3,18 @@ import { Pages } from '../../redux/pages/allPages';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import appAction from "../../redux/app/actions";
+import { getCookie } from "../../helpers/session";
 import IntlMessages from "../../components/utility/intlMessages";
 const { openSignUp } = appAction;
 
 function AboutUs(props) {
+    const language = getCookie('currentLanguage');
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
     const [onLogin, setOnLogin] = useState(false);
     useEffect(() => {
         async function fetchMyAPI() {
-            let result: any = await Pages('about-us', props.languages);
+            let lang = props.languages ? props.languages : language;
+            let result: any = await Pages('about-us', lang);
             var jsonData = result.data.items[0];
             SetPagesData(jsonData);
         }
@@ -27,7 +30,7 @@ function AboutUs(props) {
     useEffect(() => {
         let tokenCheck = localStorage.getItem('id_token');
         let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
-       // console.log(tokenCheckFilter)
+        // console.log(tokenCheckFilter)
         if (!tokenCheckFilter) {
             setOnLogin(false);
         } else {
@@ -45,15 +48,15 @@ function AboutUs(props) {
                 </svg>
             </figure>
             <div dangerouslySetInnerHTML={{ __html: pagesData.content }} />
-			<div className="blue-rotated-box">
-			<div className="blue-small-box"></div>
-			<div className="blue-small-box"></div>
-			</div>
+            <div className="blue-rotated-box">
+                <div className="blue-small-box"></div>
+                <div className="blue-small-box"></div>
+            </div>
             {!onLogin && <div className="about-signup-btn">
                 <Link to="#" className="signup-btn" onClick={(e) => { handleClick(e); }}>
                     <IntlMessages id="aboutus.sign_up_now" />
-                    </Link>
-                    </div>}
+                </Link>
+            </div>}
 
         </div>
     );

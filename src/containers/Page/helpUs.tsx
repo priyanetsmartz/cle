@@ -4,6 +4,7 @@ import { GetHelpUsForm, SaveAnswers } from '../../redux/pages/allPages';
 import { connect } from "react-redux";
 import { setCookie, getCookie } from "../../helpers/session";
 import appAction from "../../redux/app/actions";
+
 const { showSignin } = appAction;
 
 function HelpUs(props) {
@@ -44,10 +45,11 @@ function HelpUs(props) {
         }
     });
     const [answers, setAnswers] = useState({});
-
+    const language = getCookie('currentLanguage');
     useEffect(() => {
         async function getData() {
-            let result: any = await GetHelpUsForm(props.languages);
+            let lang = props.languages ? props.languages : language;
+            let result: any = await GetHelpUsForm(lang);
             setForm(result.data[0]);
         }
         getData()
@@ -151,7 +153,7 @@ function HelpUs(props) {
                                 </div>}
                             </div>
                         )}
-                        {(isSurvey && onLogin) && (
+                        {isSurvey && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <h3><IntlMessages id="helpus.thankyou" /></h3>
                             </div>

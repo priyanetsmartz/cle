@@ -2,15 +2,16 @@ import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-
+import { getCookie } from "../../helpers/session";
 import { MagazineList } from '../../redux/pages/magazineList';
 
 function Magazine(props) {
     const [items, setItems] = useState([]);
-
+    const language = getCookie('currentLanguage');
     useEffect(() => {
         async function getData() {
-            let result: any = await MagazineList(props.languages);
+            let lang = props.languages ? props.languages : language;
+            let result: any = await MagazineList(lang);
             setItems(result.data);
         }
         getData()

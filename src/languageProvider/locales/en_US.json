@@ -122,6 +122,10 @@
   "prive.exclusives":"Privé Exclusives",
   "prive.early":"Early access products",
   "prive.birthday":"The birthday reward",
-  "prive.comingsoon":"Coming Soon"
+  "prive.comingsoon":"Coming Soon",
+  "loading":"loading...",
+  "postComments":"Post Comments",
+  "postComment.CTA":"Post Comment",
+  "postComment.cancel":"Cancel"
 
 }

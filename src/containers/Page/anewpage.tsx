@@ -1,5 +1,3 @@
-import appAction from "../../redux/app/actions";
-import { connect } from 'react-redux';
 import HomePage from './home';
 import Partnership from './partnerShip';
 import AboutUs from './about';
@@ -8,7 +6,6 @@ import HelpUs from './helpUs';
 import SocailCheckout from './SocialCheckout';
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-const { openSignUp } = appAction;
 
 function Home(props) {
     const location = useLocation()
@@ -52,23 +49,5 @@ function Home(props) {
         </>
     );
 }
-function mapStateToProps(state) {
-    let signupModel = '', languages = '';
-    if (state && state.App) {
-        signupModel = state.App.showSignUp
-    }
-    if (state && state.LanguageSwitcher) {
-        languages = state.LanguageSwitcher.language
-    }
-    // console.log(state.LanguageSwitcher)
-    return {
-        signupModel: signupModel,
-        languages: languages
-
-    };
-}
-export default connect(
-    mapStateToProps,
-    { openSignUp }
-)(Home);
+export default Home;
 

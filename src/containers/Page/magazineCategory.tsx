@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { Link, useLocation, useParams } from "react-router-dom";
-import appAction from "../../redux/app/actions";
-import { useIntl } from 'react-intl';
 import { FeaturedList, GetCategoryData, SendNewsletter, GetCategoryList, GetDataOfCategory } from '../../redux/pages/magazineList';
 import moment from 'moment';
 import notification from '../../components/notification';
+import { getCookie } from "../../helpers/session";
+import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
+
 function MagazineCategory(props) {
+    const [isShow, setIsShow] = useState(false);
+    const language = getCookie('currentLanguage');
     const intl = useIntl();
     const { category } = useParams();
     const [state, setState] = useState({
@@ -34,13 +37,14 @@ function MagazineCategory(props) {
     }, [location])
 
     useEffect(() => {
+        let lang = props.languages ? props.languages : language;
         if (category) {
             setOpacity(0.3);
-            getDataOfCategory(props.languages, category, 1, 'published_at', 'desc')
+            getDataOfCategory(lang, category, 1, 'published_at', 'desc')
         } else {
-            getData(props.languages, 1, 'published_at', 'desc')
+            getData(lang, 1, 'published_at', 'desc')
         }
-        getCategoryList(props.languages);
+        getCategoryList(lang);
     }, [props.languages, category])
 
     async function getData(language, page, sortBy = "published_at", sortByValue = "desc") {
@@ -72,7 +76,8 @@ function MagazineCategory(props) {
     }
 
     async function getCategoryList(language) {
-        let result: any = await GetCategoryList(props.languages);
+        let lang = props.languages ? props.languages : language;
+        let result: any = await GetCategoryList(lang);
         setCatMenu(result.data);
     }
 
@@ -93,7 +98,7 @@ function MagazineCategory(props) {
     }
 
     const filtterData = (event) => {
-
+        let lang = props.languages ? props.languages : language;
         let sortBy = "published_at";
         let sortByValue = "desc";
         if (event.target.value === "1") {
@@ -113,9 +118,9 @@ function MagazineCategory(props) {
         setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
         setOpacity(0.3);
         if (category) {
-            getDataOfCategory(props.languages, category, 1, sortBy, sortByValue)
+            getDataOfCategory(lang, category, 1, sortBy, sortByValue)
         } else {
-            getData(props.languages, 1, sortBy, sortByValue)
+            getData(lang, 1, sortBy, sortByValue)
         }
     }
 
@@ -126,23 +131,26 @@ function MagazineCategory(props) {
     };
 
     const goToNextPage = (e) => {
+        let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         e.preventDefault();
-        getListData(props.languages, page + 1, sortValue.sortBy, sortValue.sortByValue);
+        getListData(lang, page + 1, sortValue.sortBy, sortValue.sortByValue);
         setCurrent((page) => page + 1);
 
     }
     function changePage(event) {
+        let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         event.preventDefault()
         const pageNumber = Number(event.target.textContent);
         setCurrent(pageNumber);
-        getListData(props.languages, pageNumber, sortValue.sortBy, sortValue.sortByValue);
+        getListData(lang, pageNumber, sortValue.sortBy, sortValue.sortByValue);
     }
     const goToPreviousPage = (e) => {
+        let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         e.preventDefault();
-        getListData(props.languages, page - 1, sortValue.sortBy, sortValue.sortByValue);
+        getListData(lang, page - 1, sortValue.sortBy, sortValue.sortByValue);
         setCurrent((page) => page - 1);
 
     }
@@ -165,23 +173,28 @@ function MagazineCategory(props) {
         return formIsValid;
     }
     const handleSubmitClick = async (e) => {
+        let lang = props.languages ? props.languages : language;
         e.preventDefault();
         if (handleValidation()) {
+            setIsShow(true);
             const userInfo = {
                 "email": state.email,
                 "type": radio
             }
-            const result: any = await SendNewsletter({ userInfo }, props.languages);
+            const result: any = await SendNewsletter({ userInfo }, lang);
             if (result.data[0].success === 1) {
                 notification("success", "", result.data[0].message);
                 setState(prevState => ({
                     ...prevState,
                     email: ""
                 }))
+                setIsShow(false);
             } else {
+                setIsShow(false);
                 notification("error", "", result.data[0].message);
             }
         } else {
+            setIsShow(false);
             notification("warning", "", "Please enter required values");
         }
     }
@@ -364,7 +377,9 @@ function MagazineCategory(props) {
                                             onChange={handleChange} />
                                     </div>
                                     <div className="col-auto">
-                                        <button type="submit" className="btn btn-primary mb-3" onClick={handleSubmitClick} ><IntlMessages id="newsletter.signup" /></button>
+                                        <button type="submit" className="btn btn-primary mb-3" style={{ "display": !isShow ? "inline-block" : "none" }} onClick={handleSubmitClick} ><IntlMessages id="newsletter.signup" /></button>
+                                        <div className="tn btn-primary btn-sm shadow-none" style={{ "display": isShow ? "inline-block" : "none" }}>
+                                            <span className="btn btn-primary mb-3" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                                     </div>
                                     <span className="error">{errors.errors["email"]}</span>
                                 </form>

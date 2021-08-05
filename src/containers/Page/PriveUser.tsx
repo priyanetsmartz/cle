@@ -8,13 +8,15 @@ import clock from "../../image/clock-solid.png";
 import gold from "../../image/gift-solid.png";
 import { connect } from 'react-redux';
 import IntlMessages from "../../components/utility/intlMessages";
+import { getCookie } from "../../helpers/session";
 
 function PriveUser(props) {
   const [pagesData, SetPagesData] = useState({ title: '', content: '' })
-
+  const language = getCookie('currentLanguage');
   useEffect(() => {
     async function fetchMyAPI() {
-      let result: any = await Pages('cle-prive', props.languages);
+      let lang = props.languages ? props.languages : language;
+      let result: any = await Pages('cle-prive', lang);
       var jsonData = result.data.items[0];
       SetPagesData(jsonData)
 

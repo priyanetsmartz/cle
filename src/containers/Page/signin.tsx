@@ -196,7 +196,7 @@ function SignIn(props) {
           </div>
           <div className="d-grid gap-2">
             <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}> <IntlMessages id="login.button" /></Link>
-            <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  Loading...</div>
+            <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
             <Link to="/forgot-password" onClick={hideModal}><IntlMessages id="forgot_pass" />?</Link>
           </div>
         </div>
