@@ -127,7 +127,7 @@ function HelpUs(props) {
                                     {!isHidden && <b onClick={toggleHelpUs}>-</b>}
                                 </div>
                                 {!isHidden && <div>
-                                    <ul className="counter-list">
+                                    <ul className="counter-list arabic-rtl-direction">
                                         {form && form.form_json.map((ques, i) => {
                                             return (
                                                 <li className={activeTab == (i + 1) ? 'active' : ''} key={i}><span>{i + 1}</span></li>

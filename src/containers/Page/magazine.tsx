@@ -28,7 +28,7 @@ function Magazine(props) {
                             <tspan x="-383.515" y="0"><IntlMessages id="magazine.header" /></tspan>
                         </text> </svg>
                 </figure>
-                <div className="row my-3 mag-first-sec">
+                <div className="row my-3 mag-first-sec arabic-rtl-direction">
                     {items.slice(0, 4).map((item, i) => {
                         return (
                             <div className={"col-md-5 " + (((i % 2) === 0) ? 'offset-md-1' : 'mt-5')} key={i}>
@@ -56,7 +56,7 @@ function Magazine(props) {
                     </figure>
 
                 </div>
-                <div className="row mt-5">
+                <div className="row mt-5 arabic-rtl-direction">
                     <div className="col-12 text-center">
                         <Link to={"/learn"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
                     </div>

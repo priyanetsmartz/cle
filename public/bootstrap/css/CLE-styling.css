@@ -495,6 +495,7 @@ margin-top: 15px;}
 .help-us-content {
     background: #fff;
     text-align: center;
+	margin-bottom: 100px;
 }
 .pagination nav{margin:20px auto;}
 .error {
@@ -532,6 +533,18 @@ margin-top: 15px;}
 .help-us-inner .page-head svg text{font-size: 65px;}
 .inner-pages .page-head svg text{font-size:45px !important;}
 .about-inner .page-head svg text{font-size: 95px;}
+
+.missed-list-head{float:left;}
+.sort-by{float:right;}
+
+.author-name{font-size:16px; line-height:30px; color:#000; font-weight:400;padding: 15px 0;border-bottom: 1px solid #000;margin-bottom: 15px;}
+.cate-keywords .btn{border:1px solid #c2c2c2; color:#777; padding:10px 20px; margin-right:10px; margin-bottom:10px; border-radius:0px;}
+.cate-keywords .btn a{color:#777;text-decoration: none;}
+.newsletter-signup input {
+    width: 100%;
+    border: 0px solid;
+    height: 40px;
+}
 
 .spinner {
     font-size: 12px;

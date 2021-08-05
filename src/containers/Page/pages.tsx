@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Pages } from '../../redux/pages/allPages';
+import { Pages, Pages1 } from '../../redux/pages/allPages';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
 //import history from './history';
@@ -11,6 +11,8 @@ function AllPages(props) {
         let pageIdentifier = props.match.params.id;
         async function fetchMyAPI() {
             let result: any = await Pages(pageIdentifier, props.languages);
+            // let test: any = await Pages1(pageIdentifier);
+            // console.log(test)
             var jsonData = result.data.items[0];
             SetPagesData(jsonData)
 
