@@ -59,7 +59,7 @@ function Magazine(props) {
                 </div>
                 <div className="row mt-5 arabic-rtl-direction">
                     <div className="col-12 text-center">
-                        <Link to={"/learn"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
+                        <Link to={"/magazines"} className="signup-btn" href=""><IntlMessages id="magazine.see_all_articles" /></Link>
                     </div>
                 </div>
 

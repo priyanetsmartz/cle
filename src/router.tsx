@@ -25,9 +25,9 @@ const PublicRoutes = ({ history }) => {
         {/* <MainRoute exact path="/" component={Home} /> */}
 
         {/* <Route exact path="/learn" component={Magazine} /> */}
-        <MainRoute exact path="/learn-category/:category" component={AllPosts} />
+        <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
-        <MainRoute exact path="/learn" component={AllPosts} />
+        <MainRoute exact path="/magazines" component={AllPosts} />
         <WithFooter exact path="/:signup/:member" component={newHome} />
         <WithFooter exact path="/" component={newHome} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />

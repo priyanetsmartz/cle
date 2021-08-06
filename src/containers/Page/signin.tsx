@@ -150,7 +150,7 @@ function SignIn(props) {
     <Modal show={isLoaded} onHide={hideModal}>
       <Modal.Header> <img src={logo} alt="logo" />
         <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
-      <Modal.Body><h2><IntlMessages id="login.title" /></h2>
+      <Modal.Body className="arabic-rtl-direction"><h2><IntlMessages id="login.title" /></h2>
         {/* <p><IntlMessages id="login.subtitle" /></p> */}
         <div className="row g-3">
           <div className="col-sm-12">

@@ -68,8 +68,8 @@ function ForgottenPassword(props) {
 
 
   return (
-    <div className="container" style={{ marginTop: '100px' }}>
-      <div className="row">
+    <div className="container" style={{ marginTop: '150px' }}>
+      <div className="row arabic-rtl-direction">
         <div className="col-md-6 offset-md-3">
           <div className="row">
             <div className="col-md-12">

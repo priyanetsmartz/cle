@@ -151,10 +151,10 @@ function ContactUS(props) {
                 </svg>
             </figure>
             <div className="row" style={{ marginTop: "80px" }}>
-                <div className="col-md-4 offset-md-4">
-                    <div className="blue-back-image" style={{ background: "#fff", height: "420px" }}>
-                        <div className="about-inner-pic">
-                            <div className="row g-3">
+                <div className="col-md-6 offset-md-3">
+                    <div>
+                        <div>
+                            <div className="row g-3 arabic-rtl-direction">
                                 <div className="text-center">
                                     <h3><IntlMessages id="contact.reach" /></h3>
                                     <p><IntlMessages id="contact.do_you_have_question" /></p>

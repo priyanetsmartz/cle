@@ -138,7 +138,7 @@ function SinglePost(props) {
                             {catMenu.map((item, i) => {
                                 return (
                                     <button type="button" className="btn btn-outline-dark" key={i}>
-                                        <Link to={`/learn-category/${item.category_id}`}>{item.name}</Link>
+                                        <Link to={`/magazines/${item.category_id}`}>{item.name}</Link>
                                     </button>
                                 );
                             })}
