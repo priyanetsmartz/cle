@@ -11,15 +11,28 @@ import { Pages } from '../../redux/pages/allPages';
 import HorizontalScroll from 'react-scroll-horizontal'
 import { siteConfig } from '../../settings/';
 import IntlMessages from "../../components/utility/intlMessages";
+import Slider from "react-slick";
 import { connect } from "react-redux";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 function SocailCheckout(props) {
-
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        centerMode: true,
+        variableWidth: true,
+        autoplay: true,
+        autoplaySpeed: 2000
+    };
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
     useEffect(() => {
         async function fetchMyAPI() {
             let result: any = await Pages('check-out', props.languages);
             var jsonData = result.data.items[0];
-           // console.log(jsonData);
+            // console.log(jsonData);
             SetPagesData(jsonData);
         }
         fetchMyAPI()
@@ -38,10 +51,11 @@ function SocailCheckout(props) {
 
                 <div className="social-title">
                     {/* <h1><IntlMessages id="checkusout.subtitle" /></h1> */}
+                    <h1><IntlMessages id="checkusout.subtitle" /></h1>
                     <div className="social-icon-sec">
                         <ul>
                             <Link to={{ pathname: siteConfig.facebookLink }} target="_blank" >
-                                <li><svg xmlns="http://www.w3.org/2000/svg" width="100.935" height="22" viewBox="0 0 100.935 22">
+                                <li><svg xmlns="http://www.w3.org/2000/svg" width="105" height="22" viewBox="0 0 105 22">
                                     <g id="Group_725" data-name="Group 725" transform="translate(-517.065 -4492)">
                                         <path id="facebook"
                                             d="M16.883,7.758a9.415,9.415,0,0,1,4.8,1.3,9.6,9.6,0,0,1,2.4,14.494,9.68,9.68,0,0,1-5.361,3.2V19.929h1.863L21,17.245H18.181V15.488a1.528,1.528,0,0,1,.325-1.009,1.486,1.486,0,0,1,1.192-.453h1.7V11.674q-.037-.012-.7-.093a13.83,13.83,0,0,0-1.5-.093,3.75,3.75,0,0,0-2.694.961A3.714,3.714,0,0,0,15.5,15.206v2.039H13.35v2.684H15.5v6.829a9.447,9.447,0,0,1-5.81-3.2,9.585,9.585,0,0,1,2.4-14.494,9.418,9.418,0,0,1,4.8-1.3Z"
@@ -54,7 +68,7 @@ function SocailCheckout(props) {
                                 </svg></li>
                             </Link>
                             <Link to={{ pathname: siteConfig.instagram }} target="_blank" >
-                                <li><svg xmlns="http://www.w3.org/2000/svg" width="103" height="22" viewBox="0 0 103 22">
+                                <li><svg xmlns="http://www.w3.org/2000/svg" width="110" height="22" viewBox="0 0 110 22">
                                     <g id="Group_726" data-name="Group 726" transform="translate(-650.855 -4492)">
                                         <text id="Instagram" transform="translate(674.855 4510)" fontSize="18"
                                             fontFamily="Lato-Semibold, Lato" fontWeight="600">
@@ -104,11 +118,10 @@ function SocailCheckout(props) {
                     </div>
                 </div>
             </div>
-            <div className="social-icon-list">
+            {/* <div className="social-icon-list">
                 <HorizontalScroll
                     animValues={1}
                     className={'social-icon-scroll'}>
-                    {/* <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> */}
                     <div className="social-pic-icon">
                         <img src={social1} alt="social1" />
                     </div>
@@ -131,6 +144,32 @@ function SocailCheckout(props) {
                         <img src={social7} alt="social1" />
                     </div>
                 </HorizontalScroll>
+                <div className="social-icon-blue-bg"></div>
+            </div> */}
+            <div className="social-icon-list">
+                <Slider className={'social-icon-scroll'} {...settings}>
+                    <div className="social-pic-icon">
+                        <img src={social1} alt="social1" />
+                    </div>
+                    <div className="social-pic-icon">
+                        <img src={social4} alt="social1" />
+                    </div>
+                    <div className="social-pic-icon">
+                        <img src={social2} alt="social1" />
+                    </div>
+                    <div className="social-pic-icon">
+                        <img src={social3} alt="social1" />
+                    </div>
+                    <div className="social-pic-icon">
+                        <img src={social5} alt="social1" />
+                    </div>
+                    <div className="social-pic-icon">
+                        <img src={social6} alt="social1" />
+                    </div>
+                    <div className="social-pic-icon">
+                        <img src={social7} alt="social1" />
+                    </div>
+                </Slider>
                 <div className="social-icon-blue-bg"></div>
             </div>
         </>

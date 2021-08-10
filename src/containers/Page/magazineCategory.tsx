@@ -201,7 +201,7 @@ function MagazineCategory(props) {
     }
     return (
         <>
-            <div className="container magazine-inner" style={{ opacity: opacityVal }}>
+            <div className="container magazine-inner"  style={{ opacity: opacityVal }}>
 
                 <div className="row mt-3 mag-list-head">
                     <div className="col-md-6 offset-md-3 text-center">

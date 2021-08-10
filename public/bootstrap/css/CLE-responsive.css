@@ -3,11 +3,18 @@
     margin-top: 2rem !important;
     margin-bottom: 2rem !important;
 }
-.homescreen-bg img{ 
-height: auto;
-width: 160%;
-margin-left: -43%;
-margin-top: 0%;
+/* .homescreen-bg img{  */
+/* height: auto; */
+/* width: 160%; */
+/* margin-left: -43%; */
+/* margin-top: 0%; */
+/* } */
+
+.homescreen-bg img {
+    height: auto;
+    width: 1185px;
+    margin-left: -130%;
+    margin-top: 0%;
 }
 	.home-inner-text{height: 340px;}
 .home-inner-text figure.time-is-now {
@@ -69,6 +76,7 @@ bottom: 10%;
     position: relative;
     right: 0;
     left: 0;
+	float: none;
 }
 .loading-gif{width:100%; height:auto;}
 #magazine .container.magazine-inner figure svg{width:80%; height:auto;}
@@ -386,5 +394,5 @@ height: 30px;margin-bottom: 12px;}
 	
 }
 @media (min-width: 1024px) and (max-width: 1280px) {
-	
+	.home-inner-text figure.time-is-now{margin-right: -2%;}
 }

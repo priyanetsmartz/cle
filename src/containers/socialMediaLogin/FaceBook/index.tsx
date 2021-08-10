@@ -15,9 +15,9 @@ const { register, loginSuccess } = authAction;
 function FacebookLoginButton(props) {
 
     const responseFacebook = (response) => {
-        //   console.log(response)
+        console.log(response)
         if (response.accessToken) {
-            let name = response.name.split(" ");
+            let name = response.name ? response.name.split(" "):"";
             //console.log(name[0],name[1])
             const userInfo = {
                 "first_name": name[0],
@@ -51,6 +51,7 @@ function FacebookLoginButton(props) {
             appId={apiConfig.facebookKey}
             autoLoad={false}
             fields="name,email,picture"
+            scope="public_profile"
             callback={responseFacebook}
             render={renderProps => (
                 <Link to="#" onClick={renderProps.onClick}>

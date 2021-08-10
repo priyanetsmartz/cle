@@ -17,7 +17,6 @@ import profile from './containers/Page/profile';
 import contact from "./containers/Page/contact";
 import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 import PriveUser from './containers/Page/PriveUser';
-
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
