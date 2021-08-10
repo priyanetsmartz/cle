@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { getCustomerDetails, saveCustomerDetails, getCountriesList } from '../../../redux/pages/customers';
+import { getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference } from '../../../redux/pages/customers';
 
 
 function CustomerDetails(props) {
+    //for customer details
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [countries, setCountries] = useState([]);
     const [telephone, setTelephone] = useState("");
     const [country, setCountry] = useState("");
-    const [dob, setDob] = useState("");
     const [custForm, setCustForm] = useState({
         id: custId,
         email: "",
@@ -16,20 +16,36 @@ function CustomerDetails(props) {
         lastname: "",
         middlename: "",
         gender: 0,
-        website_id: 0
+        dob:"",
+        website_id: 0,
+        addresses: [],
+        created_at:"",
+        created_in:"",
+        updated_at:"",
+        group_id:"",
+        disable_auto_group_change:"",
+        extension_attributes:""
     });
-
     const [errors, setError] = useState({
         errors: {}
     });
 
+    //for attributes details
+    const [attributes, setAttributes] = useState({});
+    
+    
     useEffect(() => {
         async function getData() {
             let result: any = await getCustomerDetails(custId);
             setCustForm(result.data);
+            if(result.data.addresses.length > 0){
+                setCountry(result.data.addresses[0].country_id);
+                setTelephone(result.data.addresses[0].telephone);
+            }
         }
         getData();
         getCountries();
+        getAttributes();
     }, []);
 
     const getCountries = async () => {
@@ -47,12 +63,34 @@ function CustomerDetails(props) {
 
     const handleSubmitClick = async (e) => {
         e.preventDefault();
-        console.log(custForm, dob, country, telephone);
+        const address = {
+            country_id: country,
+            telephone: telephone,
+            id: custForm.addresses[0].id
+        }
+        custForm.addresses.push(address);
+        delete custForm.created_at;
+        delete custForm.created_in;
+        delete custForm.updated_at;
+        delete custForm.group_id;
+        delete custForm.disable_auto_group_change;
+        delete custForm.extension_attributes;
+
+        console.log(custForm);
+        let result: any = await saveCustomerDetails(custId, {customer:custForm});
+    }
+
+
+    //for attributes
+    const getAttributes = async () => {
+        let result: any = await getPreference(custId);
+        console.log(result);
+        setAttributes(result.data[0]);
     }
 
 
     return (
-        <div className="container" style={{marginTop:'150px'}}>
+        <div className="container" style={{ marginTop: '150px' }}>
             <div className="row">
                 <div className="col-md-6 offset-md-3">
                     <h4>Customer Details</h4>
@@ -97,24 +135,24 @@ function CustomerDetails(props) {
                                 id="phone"
                                 placeholder="Phone"
                                 value={telephone}
-                                onChange={(e) => {setTelephone(e.target.value)}}
+                                onChange={(e) => { setTelephone(e.target.value) }}
                             />
                             <span className="error">{errors.errors["phone"]}</span>
                         </div>
                         <div className="col-sm-12">
                             <label htmlFor=""> <b>Date of Birth</b></label>
-                            <input type="text"
+                            <input type="date"
                                 className="form-control"
                                 id="dob"
                                 placeholder="Date of Birth"
-                                value={dob}
-                                onChange={(e) => {setDob(e.target.value)}}
+                                value={custForm.dob}
+                                onChange={handleChange}
                             />
                             <span className="error">{errors.errors["dob"]}</span>
                         </div>
                         <div className="col-sm-12">
                             <label htmlFor=""> Country</label>
-                            <select value={country} onChange={(e) => {setCountry(e.target.value)}} id="country" className='form-control'>
+                            <select value={country} onChange={(e) => { setCountry(e.target.value) }} id="country" className='form-control'>
                                 {countries && countries.map(opt => {
                                     return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
                                 })}
@@ -124,7 +162,7 @@ function CustomerDetails(props) {
                         <div className="d-flex justify-content-end">
                             <button className="signup-btn" onClick={handleSubmitClick}> Confirm</button>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -133,7 +171,7 @@ function CustomerDetails(props) {
 }
 
 function mapStateToProps(state) {
-    
+
     return {
         state: state
 
