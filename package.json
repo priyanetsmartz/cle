@@ -41,7 +41,8 @@
     "redux-saga": "^1.1.3",
     "redux-thunk": "^2.3.0",
     "typescript": "^4.3.5",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "@fullpage/react-fullpage": "latest"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0"

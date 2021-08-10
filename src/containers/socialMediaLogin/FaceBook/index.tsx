@@ -15,7 +15,7 @@ const { register, loginSuccess } = authAction;
 function FacebookLoginButton(props) {
 
     const responseFacebook = (response) => {
-        //   console.log(response)
+          console.log(response)
         if (response.accessToken) {
             let name = response.name.split(" ");
             //console.log(name[0],name[1])

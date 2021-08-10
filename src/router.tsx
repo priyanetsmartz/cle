@@ -17,6 +17,7 @@ import profile from './containers/Page/profile';
 import contact from "./containers/Page/contact";
 import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 import PriveUser from './containers/Page/PriveUser';
+import CustomerDetails from './containers/Page/customer/customerDetails'
 
 const PublicRoutes = ({ history }) => {
   return (
@@ -32,6 +33,7 @@ const PublicRoutes = ({ history }) => {
         <WithFooter exact path="/" component={newHome} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
+        <MainRoute exact path="/customer-details" component={CustomerDetails} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
         <PrivateRoute exact path="/prive-user" component={PriveUser} />

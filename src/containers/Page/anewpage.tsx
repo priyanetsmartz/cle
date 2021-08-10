@@ -6,6 +6,8 @@ import HelpUs from './helpUs';
 import SocailCheckout from './SocialCheckout';
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import "fullpage.js/vendors/scrolloverflow"; // Optional. When using scrollOverflow:true
+import ReactFullpage from "@fullpage/react-fullpage";
 
 function Home(props) {
     const location = useLocation()
@@ -20,33 +22,49 @@ function Home(props) {
         }
     }, [location,])
 
+    const onLeave = (origin, destination, direction) => {
+        console.log("Leaving section " + origin.index);
+      }
+      const afterLoad = (origin, destination, direction) => {
+        console.log("After load: " + destination.index);
+      }
+
 
     return (
-        <>
-            <div id="home" className="element">
-                <HomePage />
+        <ReactFullpage
+        scrollOverflow={true}
+        onLeave={onLeave}
+        afterLoad={afterLoad}
+        render={({ state, fullpageApi }) => {
+          return (
+            <div id="fullpage-wrapper">
+                <div id="home" className="section section1">
+                    <HomePage />
+                </div>
+                {/* about us */}
+                <div id="our-story" className="section">
+                    <AboutUs />
+                </div>
+                {/* magazine */}
+                <div id="magazine" className="section">
+                    <Magazine />
+                </div>
+                {/* partnership */}
+                <div id="work-with-us" className="section">
+                    <Partnership />
+                </div>
+                {/* helpus */}
+                <div id="tell-us-more" className="section">
+                    <HelpUs />
+                </div>
+                {/* check out us */}
+                <div id="checkus-out" className="section">
+                    <SocailCheckout />
+                </div>
             </div>
-            {/* about us */}
-            <div id="our-story" className="element">
-                <AboutUs />
-            </div>
-            {/* magazine */}
-            <div id="magazine" className="element">
-                <Magazine />
-            </div>
-            {/* partnership */}
-            <div id="work-with-us" className="element">
-                <Partnership />
-            </div>
-            {/* helpus */}
-            <div id="tell-us-more" className="element">
-                <HelpUs />
-            </div>
-            {/* check out us */}
-            <div id="checkus-out" className="element">
-                <SocailCheckout />
-            </div>
-        </>
+          );
+        }}
+      />
     );
 }
 export default Home;
