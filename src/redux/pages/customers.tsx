@@ -11,7 +11,11 @@ export function getCustomerDetails(custId) {
 }
 
 export function saveCustomerDetails(custId, data) {
-    return AdminApi.request(`rest/V1/customers/${custId}`, data, "PUT", "");
+    return AdminApi.request(`default/rest/all/V1/customers/${custId}`, data, "PUT", "");
+}
+
+export function uodateCustEmail(data) {
+    return AdminApi.request(`default/rest/all/V1/customers/me`, data, "PUT", "");
 }
 
 export function updateCustAddress(custId, data) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
+import notification from '../../../components/notification';
 import { getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference } from '../../../redux/pages/customers';
 
 
@@ -26,6 +27,19 @@ function CustomerDetails(props) {
         disable_auto_group_change:"",
         extension_attributes:""
     });
+    const [custAddForm, setcustAddForm] = useState({
+        id:0,
+        customer_id:parseInt(custId),
+        firstname:"",
+        lastname:"",
+        telephone:"",
+        postcode:"",
+        city:"",
+        region_id:538,
+        country_id:"",
+        street:[],
+        address:""
+     });
     const [errors, setError] = useState({
         errors: {}
     });
@@ -39,6 +53,8 @@ function CustomerDetails(props) {
             let result: any = await getCustomerDetails(custId);
             setCustForm(result.data);
             if(result.data.addresses.length > 0){
+                result.data.addresses[0].street = result.data.addresses[0].street[0];
+                setcustAddForm(result.data.addresses[0]);
                 setCountry(result.data.addresses[0].country_id);
                 setTelephone(result.data.addresses[0].telephone);
             }
@@ -66,7 +82,7 @@ function CustomerDetails(props) {
         const address = {
             country_id: country,
             telephone: telephone,
-            id: custForm.addresses[0].id
+            id: 0
         }
         custForm.addresses.push(address);
         delete custForm.created_at;
@@ -78,18 +94,54 @@ function CustomerDetails(props) {
 
         console.log(custForm);
         let result: any = await saveCustomerDetails(custId, {customer:custForm});
+        if(result){
+            notification("success", "", "Customer details Updated");
+        }
     }
 
+    //for customer address
+    const handleAddChange = (e) => {
+        const { id, value } = e.target;
+        setcustAddForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
+    }
+
+    //save customer address
+    const handleAddSubmit = async (e) => {
+        e.preventDefault();
+        custAddForm.telephone = custAddForm.telephone != "" ? custAddForm.telephone : "234567"
+        custAddForm.street = [custAddForm.street]
+        custAddForm.postcode = "123456"
+        delete custAddForm.address;
+        const addressData = {
+            id:custId,
+            email:custForm.email,
+            firstname:custForm.firstname,
+            lastname:custForm.lastname,
+            website_id:custForm.website_id,
+            addresses:[custAddForm]
+        }
+        
+
+        console.log(addressData);
+        let result: any = await saveCustomerDetails(custId, {customer:addressData});
+        if(result){
+            notification("success", "", "Customer address Updated");
+        }
+    }
 
     //for attributes
     const getAttributes = async () => {
         let result: any = await getPreference(custId);
-        console.log(result);
+        // console.log(result);
         setAttributes(result.data[0]);
     }
 
 
     return (
+        <>
         <div className="container" style={{ marginTop: '150px' }}>
             <div className="row">
                 <div className="col-md-6 offset-md-3">
@@ -167,6 +219,76 @@ function CustomerDetails(props) {
                 </div>
             </div>
         </div>
+
+        <hr />
+        {/* customer address form starts here */}
+        <div className="container" style={{ marginTop: '150px' }}>
+            <div className="row">
+                <div className="col-md-6 offset-md-3">
+                    <h4>Address Details</h4>
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>First Name</b></label>
+                            <input type="text"
+                                className="form-control"
+                                id="firstname"
+                                placeholder="First Name"
+                                value={custAddForm.firstname}
+                                onChange={handleAddChange}
+                            />
+                            <span className="error">{errors.errors["firstname"]}</span>
+                        </div>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>Surname</b></label>
+                            <input type="text"
+                                className="form-control"
+                                id="lastname"
+                                placeholder="Surname"
+                                value={custAddForm.lastname}
+                                onChange={handleAddChange}
+                            />
+                            <span className="error">{errors.errors["lastname"]}</span>
+                        </div>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>Address</b></label>
+                            <input type="text"
+                                className="form-control"
+                                id="street"
+                                placeholder="Address"
+                                value={custAddForm.street}
+                                onChange={handleAddChange}
+                            />
+                            <span className="error">{errors.errors["address"]}</span>
+                        </div>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>City</b></label>
+                            <input type="text"
+                                className="form-control"
+                                id="city"
+                                placeholder="City"
+                                value={custAddForm.city}
+                                onChange={handleAddChange}
+                            />
+                            <span className="error">{errors.errors["city"]}</span>
+                        </div>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> Country</label>
+                            <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className='form-control'>
+                                {countries && countries.map(opt => {
+                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                })}
+                            </select>
+                            <span className="error">{errors.errors["country"]}</span>
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <button className="signup-btn" onClick={handleAddSubmit}> Confirm</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </>
     );
 }
 
