@@ -8,7 +8,6 @@ import social7 from "../../image/checkout-social-7.png";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { Pages } from '../../redux/pages/allPages';
-import HorizontalScroll from 'react-scroll-horizontal'
 import { siteConfig } from '../../settings/';
 import IntlMessages from "../../components/utility/intlMessages";
 import Slider from "react-slick";

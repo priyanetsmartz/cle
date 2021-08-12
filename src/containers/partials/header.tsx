@@ -122,7 +122,7 @@ function Header(props) {
                                         <li><Link to="#" onClick={(e) => { handlesigninClick(e); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
                                     )}
                                     {localStorage.getItem('id_token') && (
-                                        <li><Link to="#" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
+                                        <li><Link to="/" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
                                     )}
                                     {!localStorage.getItem('id_token') && (
                                         <li><IntlMessages id="menu_newhere" /> <Link to="#" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
