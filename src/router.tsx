@@ -20,6 +20,7 @@ import PriveUser from './containers/Page/PriveUser';
 import CustomerDetails from './containers/Page/customer/customerDetails'
 import Test from './containers/Page/test';
 import New from './containers/Page/new';
+import One from './containers/Page/one'
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -32,10 +33,12 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />
-        {/* <WithFooter exact path="/:signup/:member" component={NewHome} /> */}
+        <WithFooter exact path="/:signup/:member" component={NewHome} />
         <WithFooter exact path="/" component={NewHome} />
         {/* <Route exact path="/test/:signup/:member" component={Test } /> */}
         <WithFooter exact path="/test1" component={New} />
+        <WithFooter exact path="/:signup/:member" component={One} />
+        <WithFooter exact path="/one" component={One} />
         <Route exact path="/test" component={Test} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />

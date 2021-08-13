@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import HomePage from './home';
 import Partnership from './partnerShip';
 import AboutUs from './about';
 import Magazine from './magazine';
+import MagazineNew from './magazine-new';
 import HelpUs from './helpUs';
 import SocailCheckout from './SocialCheckout';
 import { useLocation } from "react-router-dom";
@@ -23,11 +24,31 @@ function Home(props) {
         }
     }, [location])
 
+    const [show, doShow] = useState({
+        currentPage: 1,
+        isFooterVisble: false
+    });
+    let _pageScroller = null;
 
+    const goToPage = (eventKey) => {
+        _pageScroller.goToPage(eventKey);
+    };
+
+    const pageOnChange = (number) => {
+        doShow({
+            currentPage: number,
+            isFooterVisble: number === 7
+        });
+    };
+    let ref = React.useRef<HTMLButtonElement>(null);
     return (
         <>
+        
             <Header logo="white" {...props} />
-            <ReactPageScroller>
+            <ReactPageScroller
+                // ref={(c) => (_pageScroller = c)}
+                // pageOnChange={pageOnChange}
+                >
                 <div id="home" className="section">
                     <HomePage />
                 </div>
@@ -37,7 +58,7 @@ function Home(props) {
                 </div>
                 {/* magazine */}
                 <div id="magazine" className="section">
-                    <Magazine />
+                    <MagazineNew />
                 </div>
                 {/* partnership */}
                 <div id="work-with-us" className="section">
@@ -51,7 +72,7 @@ function Home(props) {
                 <div id="checkus-out" className="section">
                     <SocailCheckout />
                 </div>
-                <div id="checkus-out" className="section">
+                <div id="footer" className="section">
                     <Footer />
                 </div>
             </ReactPageScroller>

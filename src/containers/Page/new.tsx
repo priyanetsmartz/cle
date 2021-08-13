@@ -1,38 +1,43 @@
-import React from "react";
 import HomePage from './home';
 import Partnership from './partnerShip';
 import AboutUs from './about';
 import Magazine from './magazine';
+import MagazineWew from './magazine-new';
 import HelpUs from './helpUs';
 import SocailCheckout from './SocialCheckout';
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import $ from 'jquery';
-import smartscroll from 'smartscroll';
-// window.jQuery = $;
+import { $ } from 'react-jquery-plugin'
+
 function Home(props) {
     const location = useLocation()
     useEffect(() => {
-        $.getScript('https://code.jquery.com/jquery-3.1.1.min.js')
-        $.getScript('https://cdnjs.cloudflare.com/ajax/libs/lethargy/1.0.9/lethargy.js')
-        $.getScript('https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/5.2.8/EventEmitter.js')
-        $.getScript('https://cdn.jsdelivr.net/npm/smartscroll@2.5.6/smartscroll.min.js', function (data, textStatus) {
-            $.smartscroll({
-                mode: "set", // "vp", "set"
+        // if (typeof $.smartscroll !== 'undefined') {
+        $.getScript('https://code.jquery.com/jquery-3.6.0.min.js')
+        $.getScript('https://cdnjs.cloudflare.com/ajax/libs/lethargy/1.0.9/lethargy.min.js')
+        $.getScript('https://rawgit.com/Olical/EventEmitter/master/EventEmitter.min.js')
+        $.getScript('https://localhost:3000/bootstrap/jQuery-Smart-Scroll/smartscroll.js', function (data, textStatus, jqxhr) {
+            console.log(data); // Data returned
+            console.log(textStatus); // Success
+            console.log(jqxhr.status); // 200
+            console.log("Load was performed.");
+            var options = {
+                mode: "vp", // "vp", "set"
                 autoHash: false,
-                sectionScroll: true,
+                sectionScroll: false,
                 initialScroll: true,
                 keepHistory: false,
                 sectionWrapperSelector: ".newpage",
                 sectionClass: "section",
-                animationSpeed: 2500,
+                animationSpeed: 2000,
                 headerHash: "header",
                 breakpoint: null,
                 eventEmitter: null,
-                dynamicHeight: true
-
-            });
+                dynamicHeight: false
+            };
+            $.smartscroll(options);
         });
+        // }
     })
     useEffect(() => {
         if (location.hash) {
@@ -45,35 +50,38 @@ function Home(props) {
         }
     }, [location])
 
-
+    const style = {
+        // height: '100%',
+        // width: '100%'
+    }
     return (
         <div className="newpage">
-            <div id="home" className="section" data-hash="home">
+            <div id="home" className="section" data-hash="home" style={style}>
                 <HomePage />
             </div>
             {/* about us */}
-            <div id="our-story" className="section" data-hash="our-story">
+            <div id="our-story" className="section" data-hash="our-story" style={style}>
                 <AboutUs />
             </div>
             {/* magazine */}
-            <div id="magazine" className="section" data-hash="magazine">
-                <Magazine />
+            <div id="magazine" className="section" data-hash="magazine" style={style}>
+                <MagazineWew />
             </div>
             {/* partnership */}
-            <div id="work-with-us" className="section" data-hash="partnership">
+            <div id="work-with-us" className="section" data-hash="partnership" style={style}>
                 <Partnership />
             </div>
             {/* helpus */}
-            <div id="tell-us-more" className="section" data-hash="helpus">
+            <div id="tell-us-more" className="section" data-hash="helpus" style={style}>
                 <HelpUs />
             </div>
             {/* check out us */}
-            <div id="checkus-out" className="section" data-hash="checkusout">
+            <div id="checkus-out" className="section" data-hash="checkusout" style={style}>
                 <SocailCheckout />
             </div>
+
         </div>
 
     );
 }
 export default Home;
-

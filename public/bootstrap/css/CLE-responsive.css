@@ -1,5 +1,5 @@
 @media (min-width: 360px) and (max-width: 579px) {
-	.container{padding-right: 20px;padding-left: 20px;}
+	.container{padding-right: 20px !important;padding-left: 20px !important;} 
 #header .my-5 {
     margin-top: 2rem !important;
     margin-bottom: 2rem !important;
@@ -159,7 +159,7 @@ bottom: 10%;
 	width:max-content !important;
 	height:315px;
 }
-.social-pic-icon img{width:60%;}
+.social-pic-icon img{width:100%;}
 
 .mag-list-head ul{width: 100%;}
 .mag-list-head ul li{margin-right: 15px;margin-left: 15px;}
@@ -209,6 +209,7 @@ bottom: 10%;
 .footer-links {margin: auto auto 20px;}
 .footer-links li.fl-title{margin-bottom:5px;}
 .footer-links li {margin-bottom: 5px;}
+.mag-come-soon{font-size: 25px;line-height: 35px;height: 290px;}
 }
 
 @media (min-width: 580px) and (max-width: 767px) {

@@ -13,8 +13,6 @@ import { useEffect } from "react";
 function Home(props) {
     const location = useLocation()
     useEffect(() => {
-        let el = document.getElementById('home').nextElementSibling;
-        console.log('Siblings of div-01:', el);
         if (location.hash) {
             let elem = document.getElementById(location.hash.slice(1))
             if (elem) {
@@ -27,28 +25,28 @@ function Home(props) {
     return (
         // <div className="newpage">
         <>
-            <div id="home" className="section" data-hash="section1">
+            <div id="home" className="section" data-hash="home">
                 <HomePage />
             </div>
             {/* about us */}
-            <div id="our-story" className="section" data-hash="section2">
+            <div id="our-story" className="section" data-hash="our-story">
                 <AboutUs />
             </div>
             {/* magazine */}
-            <div id="magazine" className="section" data-hash="section3">
+            <div id="magazine" className="section" data-hash="magazine">
                 {/* <Magazine /> */}
                 <MagazineWew />
             </div>
             {/* partnership */}
-            <div id="work-with-us" className="section" data-hash="section4">
+            <div id="work-with-us" className="section" data-hash="work-with-us">
                 <Partnership />
             </div>
             {/* helpus */}
-            <div id="tell-us-more" className="section" data-hash="section5">
+            <div id="tell-us-more" className="section" data-hash="tell-us-more">
                 <HelpUs />
             </div>
             {/* check out us */}
-            <div id="checkus-out" className="section" data-hash="section6">
+            <div id="checkus-out" className="section" data-hash="checkus-out">
                 <SocailCheckout />
             </div>
         </>

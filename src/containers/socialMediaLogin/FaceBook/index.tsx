@@ -49,7 +49,7 @@ function FacebookLoginButton(props) {
     }
     return (
         <FacebookLogin
-            appId='803715873652015'
+            appId={apiConfig.facebookKey}
             autoLoad={false}
             fields="email"
             scope="email"
