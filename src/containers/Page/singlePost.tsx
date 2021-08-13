@@ -132,9 +132,10 @@ function SinglePost(props) {
                             </ul>
                         </div>
                         <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
-                        <h6><IntlMessages id="magazinepost.author" />: {post.author_name ? post.author_name : "Admin"}</h6>
+						<div className="col-md-10 offset-md-1">
+                        <h6 className="author-name"><IntlMessages id="magazinepost.author" />: {post.author_name ? post.author_name : "Admin"}</h6>
 
-                        <div>
+                        <div className="cate-keywords">
                             {catMenu.map((item, i) => {
                                 return (
                                     <button type="button" className="btn btn-outline-dark" key={i}>
@@ -143,11 +144,12 @@ function SinglePost(props) {
                                 );
                             })}
                         </div>
+						</div>
 
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="mt-5 py-5">
-                                    {related.length > 0 && <h2 className="pb-3 text-center"><IntlMessages id="magazinepost.slogan" /> </h2>}
+                                    {related.length > 0 && <h2 className="pb-3 text-center want-read"><IntlMessages id="magazinepost.slogan" /> </h2>}
                                     {related.length > 0 && (
                                         <div className="container">
                                             <div className="row my-3">

@@ -113,12 +113,10 @@ function HelpUs(props) {
             <div className="help-us-body">
                 <div className="container help-us-inner">
                     <figure className="text-center page-head">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="606" height="134" viewBox="0 0 606 134">
-                            <text id="Help_us" data-name={<IntlMessages id="help_us.title" />} transform="translate(303 98)" fill="none" stroke="#2E2BAA"
-                                strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">
-                                <tspan x="-301.4" y="0"><IntlMessages id="help_us.title" /></tspan>
-                            </text>
-                        </svg>
+                        
+						<svg xmlns="http://www.w3.org/2000/svg" width="848" height="117" viewBox="0 0 848 117">
+  <text id="Help_us" data-name={<IntlMessages id="help_us.title" />} transform="translate(424 85)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="96" fontFamily="Monument Extended Book"><tspan x="-422.016" y="0"><IntlMessages id="help_us.title" /></tspan></text> </svg>
+
                     </figure>
                     <div className="row">
 

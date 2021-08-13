@@ -29,10 +29,10 @@ function Header(props) {
     }, [props.openMenu]);
 
     useEffect(() => {
-
         if (props && props.match && props.match.params.signup === 'true' && props && props.match && props.match.params.member === 'prive') {
             props.openSignUp(true);
             props.userType(4);
+            console.log(props.userType)
         }
     }, [props.match.params.signup, props.match.params.member]); // here  
 
@@ -112,20 +112,20 @@ function Header(props) {
                                     <li><Link to="/#our-story" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
-                                    <li><Link to="/magazines" onClick={() => {
+                                    <li><Link to="/#magazine" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
                                     <li><Link to="/#work-with-us" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Partnership" /></Link></li>
                                     {!localStorage.getItem('id_token') && (
-                                        <li><Link to="#" onClick={(e) => { handlesigninClick(e); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
+                                        <li className="mobile-hide"><Link to="#" onClick={(e) => { handlesigninClick(e); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
                                     )}
                                     {localStorage.getItem('id_token') && (
-                                        <li><Link to="/" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
+                                        <li className="mobile-hide"><Link to="/" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
                                     )}
                                     {!localStorage.getItem('id_token') && (
-                                        <li><IntlMessages id="menu_newhere" /> <Link to="#" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
+                                        <li className="mobile-hide"><IntlMessages id="menu_newhere" /> <Link to="#" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
                                     )}
                                 </ul>
                             </div>
@@ -140,9 +140,20 @@ function Header(props) {
                                     <li><Link to="/contact-us" className="main-menu" onClick={() => {
                                         handleClick();
                                     }}><IntlMessages id="menu_contact" /></Link></li>
+									
+									{!localStorage.getItem('id_token') && (
+                                        <li className="mobile-show"><Link to="#" onClick={(e) => { handlesigninClick(e); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
+                                    )}
+                                    {localStorage.getItem('id_token') && (
+                                        <li className="mobile-show"><Link to="/" onClick={() => { logout(); }} className="menu-btn"><IntlMessages id="logout" /></Link></li>
+                                    )}
+                                    {!localStorage.getItem('id_token') && (
+                                        <li className="mobile-show"><IntlMessages id="menu_newhere" /> <Link to="#" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
+                                    )}
+									
                                     <li>
-                                        <div><IntlMessages id="menu_findus" /></div>
-                                        <div>
+                                        <div className="social-menu-head"><IntlMessages id="menu_findus" /></div>
+                                        <div className="social-menu-icons">
                                             <Link to={{ pathname: siteConfig.facebookLink }} target="_blank" >
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="21.42" height="21.419" viewBox="0 0 21.42 21.419">
                                                     <path id="facebook"

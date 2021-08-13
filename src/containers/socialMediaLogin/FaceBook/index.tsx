@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import Login from "../../../redux/auth/Login";
 import { setCookie } from '../../../helpers/session';
 import notification from "../../../components/notification";
+
 const loginApi = new Login();
 const { showSignin, openSignUp } = appAction;
 const { register, loginSuccess } = authAction;
@@ -17,7 +18,7 @@ function FacebookLoginButton(props) {
     const responseFacebook = (response) => {
         console.log(response)
         if (response.accessToken) {
-            let name = response.name ? response.name.split(" "):"";
+            let name = response.name ? response.name.split(" ") : "";
             //console.log(name[0],name[1])
             const userInfo = {
                 "first_name": name[0],
@@ -48,10 +49,11 @@ function FacebookLoginButton(props) {
     }
     return (
         <FacebookLogin
-            appId={apiConfig.facebookKey}
+            appId='803715873652015'
             autoLoad={false}
-            fields="name,email,picture"
-            scope="public_profile"
+            fields="email"
+            scope="email"
+            data-scope="email"
             callback={responseFacebook}
             render={renderProps => (
                 <Link to="#" onClick={renderProps.onClick}>

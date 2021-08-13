@@ -19,7 +19,7 @@
   "login.subtitle": "وكن أول من يعرف عن إطلاقنا",
   "register.first_name": "الاسم الاول*",
   "register.last_name": "الكنية*",
-  "register.password": "إنشاء كلمة مرور * (6 أحرف على الأقل)",
+  "register.password": "إنشاء كلمة مرور * (8 أحرف على الأقل)",
   "register.confirmPassword": "تأكيد كلمة السر",
   "register.button": "تسجيل",
   "logout": "تسجيل الخروج",

@@ -38,7 +38,7 @@ function AboutUs(props) {
         }
     })
     return (
-        <div className="container about-inner">
+        <div className="container about-inner aboutUs-inner">
             <figure className="text-center page-head">
                 <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
                     <text id="{pagesData.title}" data-name="{pagesData.title}" transform="translate(425 108)" fill="none" stroke="#2E2BAA"

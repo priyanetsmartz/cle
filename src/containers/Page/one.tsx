@@ -3,22 +3,15 @@ import $ from 'jquery';
 export default class Slimscroll extends React.Component {
     render() {
        function h() {
-            $.getScript('https://localhost:3000/bootstrap/jQuery-Smart-Scroll/smartscroll.min.js', function (data, textStatus) {
-                $.smartscroll({
-                    mode: "vp", // "vp", "set"
-                    autoHash: true,
-                    sectionScroll: false,
-                    initialScroll: false,
-                    keepHistory: false,
-                    sectionWrapperSelector: "newpage",
-                    sectionClass: "section",
-                    animationSpeed: 3000,
-                    // headerHash: "header",
-                    breakpoint: null,
-                    eventEmitter: null,
-                    dynamicHeight: false
-              
-                  });
+            $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js', function (data, textStatus) {
+                $("body").slimScroll({
+                    size: '8px',
+                    width: "100%",
+                    height: '100%',
+                    color: "#ff4800",
+                    allowPageScroll: true,
+                    alwaysVisible: true
+                });
             });
         }
         return (

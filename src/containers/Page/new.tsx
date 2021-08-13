@@ -7,25 +7,25 @@ import HelpUs from './helpUs';
 import SocailCheckout from './SocialCheckout';
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-// import smartscroll from '../../../node_modules/smartscroll';
 import $ from 'jquery';
+import smartscroll from 'smartscroll';
 // window.jQuery = $;
 function Home(props) {
     const location = useLocation()
     useEffect(() => {
-        $.getScript('https://code.jquery.com/jquery-1.11.3.min.js')
-        $.getScript('https://cdnjs.cloudflare.com/ajax/libs/lethargy/1.0.9/lethargy.min.js')
-        $.getScript('https://rawgit.com/Olical/EventEmitter/master/EventEmitter.min.js')
-        $.getScript('https://localhost:3000/bootstrap/jQuery-Smart-Scroll/smartscroll.js', function (data, textStatus) {
+        $.getScript('https://code.jquery.com/jquery-3.1.1.min.js')
+        $.getScript('https://cdnjs.cloudflare.com/ajax/libs/lethargy/1.0.9/lethargy.js')
+        $.getScript('https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/5.2.8/EventEmitter.js')
+        $.getScript('https://cdn.jsdelivr.net/npm/smartscroll@2.5.6/smartscroll.min.js', function (data, textStatus) {
             $.smartscroll({
-                mode: "vp", // "vp", "set"
-                autoHash: true,
+                mode: "set", // "vp", "set"
+                autoHash: false,
                 sectionScroll: true,
                 initialScroll: true,
-                keepHistory: true,
+                keepHistory: false,
                 sectionWrapperSelector: ".newpage",
                 sectionClass: "section",
-                animationSpeed: 3000,
+                animationSpeed: 2500,
                 headerHash: "header",
                 breakpoint: null,
                 eventEmitter: null,

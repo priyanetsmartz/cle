@@ -88,10 +88,11 @@ export function* registerRequest() {
       //user details
       let firstname = payload.payload.userInfo.first_name;
       let lastname = payload.payload.userInfo.last_name;
-      let type = payload.payload.userInfo.group_id;
+      let type = payload.payload.userInfo.type;
       let email = payload.payload.userInfo.email;
       let password = payload.payload.userInfo.password;
       let storeId = payload.payload.userInfo.storeId;
+     // console.log(type);
       // var rememberMe = payload.payload.userInfo.rememberMe;
       //API call to login request
       const response = yield call(loginApi.register, firstname, lastname, email, password, type, storeId);

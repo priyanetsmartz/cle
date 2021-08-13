@@ -61,7 +61,7 @@ function mapStateToProps(state) {
     if (state && state.Auth && state.Auth.idToken) {
         authtoken = state.Auth.idToken;
     }
-    // console.log(authtoken)
+    console.log(authtoken)
     return {
         authtoken: authtoken
     };

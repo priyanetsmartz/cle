@@ -51,7 +51,7 @@ function Home(props) {
                 <div id="checkus-out" className="section">
                     <SocailCheckout />
                 </div>
-                <div id="footer" className="section">
+                <div id="checkus-out" className="section">
                     <Footer />
                 </div>
             </ReactPageScroller>

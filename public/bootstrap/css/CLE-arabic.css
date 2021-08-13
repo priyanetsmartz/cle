@@ -24,7 +24,7 @@ right: 0;}
     bottom:10%;
 }
 #our-story .about-inner .arabic-rtl-direction .col-md-4.offset-md-1{margin-left: 0;margin-right: 8.33333333%;}
-.see-more-sec{margin-left:0; margin-right:50px;}
+.see-more-sec{margin-left:0; margin-right:120px;}
 .container.about-inner .squares{right: 10%;left: auto;}
 .see-more-sec .see-more-text{float:right;}
 .partner-pic{left: 0;right: auto;}
@@ -34,10 +34,18 @@ right: 0;}
 .counter-list li:last-child:after{display:block;}
 .counter-list li:last-child {width: 53px;}
 
-.left-main-menu{order:1;}
+.left-main-menu{order:1;margin-left: 11%;}
 .left-main-menu ul{border-right:0px solid; border-left:4px solid #2e2baa;width: 60%;padding: 40px 0px 40px 70px;}
 .right-main-menu{order:0; text-align:right;}
-
+.left-menu-content a.main-menu{font-size: 35px;font-weight: bold;}
+.left-menu-content li{margin-bottom: 20px;height: 50px;font-size: 24px;}
+.left-menu-content a.menu-btn{font-size: 14px;}
+.right-menu-content li{margin-bottom: 20px;height: 50px;font-size: 24px;}
+.right-menu-content a.main-menu{font-size: 35px;font-weight: bold;}
+.social-menu-icons {
+    margin-top: 0px;
+}
+.partner-main-div h1{margin-right: 20px;}
 .mag-list-head ul{direction:rtl;}
 .back-home {
     direction: rtl;
@@ -52,12 +60,15 @@ right: 0;}
     border-right: 0px solid #000;
     border-left: 1px solid #000;
 }
-.about-inner .page-head svg text{transform: translate(105%,108px);font-size: 110px;}
-.magazine-inner .page-head svg text{transform: translate(115%,108px);font-size: 110px;}
-.partnership-title.page-head svg text{transform: translate(115%,108px);font-size: 110px;}
-.help-us-inner .page-head svg text{transform: translate(110%,108px);font-size: 95px;}
-.inner-pages .page-head svg text{transform: translate(55%,108px);font-size: 55px !important;}
-.magazine-inner .page-head svg text#Check_out{transform: translate(96%,108px);font-size: 110px;}
+.about-inner .page-head svg text{transform: translate(105%,90px);font-size: 110px;}
+.magazine-inner .page-head svg text{transform: translate(115%,90px);font-size: 110px;}
+.partnership-title.page-head svg text{transform: translate(115%,90px);font-size: 110px;}
+.help-us-inner .page-head svg text{transform: translate(110%,90px);font-size: 95px;}
+.inner-pages .page-head svg text{transform: translate(55%,90px);font-size: 55px !important;}
+.magazine-inner .page-head svg text#Check_out{transform: translate(96%,90px);font-size: 110px;}
+.mag-blog-title{font-size:24px;}
+.mag-blog-title.mt-5 {margin-top: 1rem !important;}
+.signup-btn{margin-bottom:10px;}
 
 .become-rotate{
 	position: relative;
@@ -67,6 +78,8 @@ top: 30%;
 .cms-content {
     direction: rtl;
 }
+.footer-links li.fl-title{font-size:18px;}
+.footer-links li a{font-size:18px;}
 @media (min-width: 360px) and (max-width: 579px){
 	.container {
     padding-left: 15px;

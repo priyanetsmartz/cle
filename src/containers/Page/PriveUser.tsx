@@ -37,8 +37,8 @@ function PriveUser(props) {
         <div className="prive-banner-content container">
           <div className="prive-banner-left-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="381" height="130.75" viewBox="0 0 381 130.75">
-              <text id="Privé" transform="translate(20 79.25)" fill="none" stroke="#fff" stroke-width="1.25" font-size="79" font-family="Monument Extended" font-weight="700"><tspan x="0" y="0"><IntlMessages id="prive.top1" /></tspan></text>
-              <text id="account" transform="translate(0 111.75)" fill="#017abb" font-size="60" font-family="Monument Extended" font-weight="500"><tspan x="0" y="0"><IntlMessages id="prive.top2" /></tspan></text> </svg>
+              <text id="Privé" transform="translate(20 79.25)" fill="none" stroke="#fff" strokeWidth="1.25" fontSize="79" fontFamily="Monument Extended" font-weight="700"><tspan x="0" y="0"><IntlMessages id="prive.top1" /></tspan></text>
+              <text id="account" transform="translate(0 111.75)" fill="#017abb" fontSize="60" fontFamily="Monument Extended" font-weight="500"><tspan x="0" y="0"><IntlMessages id="prive.top2" /></tspan></text> </svg>
             <p>
               <div dangerouslySetInnerHTML={{ __html: pagesData ? pagesData.content : "Ooops Page not found...." }} />
             </p>
