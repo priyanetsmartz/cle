@@ -112,7 +112,7 @@ function Header(props) {
                                     <li><Link to="/#our-story" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
-                                    <li><Link to="/magazines" onClick={() => {
+                                    <li><Link to="magazines" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Magazine" /></Link></li>
                                     <li><Link to="/#work-with-us" onClick={() => {

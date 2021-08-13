@@ -32,7 +32,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />
-        <WithFooter exact path="/:signup/:member" component={NewHome} />
+        {/* <WithFooter exact path="/:signup/:member" component={NewHome} /> */}
         <WithFooter exact path="/" component={NewHome} />
         <WithFooter exact path="/test1" component={New} />
         <Route exact path="/test" component={Test} />

@@ -14,7 +14,7 @@ export function saveCustomerDetails(custId, data) {
     return AdminApi.request(`default/rest/all/V1/customers/${custId}`, data, "PUT", "");
 }
 
-export function uodateCustEmail(data) {
+export function updateCustEmail(data) {
     return AdminApi.request(`default/rest/all/V1/customers/me`, data, "PUT", "");
 }
 
