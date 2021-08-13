@@ -18,6 +18,7 @@ import contact from "./containers/Page/contact";
 import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 import PriveUser from './containers/Page/PriveUser';
 import CustomerDetails from './containers/Page/customer/customerDetails'
+import CustomerOrders from './containers/Page/customer/customerOrders'
 import Test from './containers/Page/test';
 import New from './containers/Page/new';
 import One from './containers/Page/one'
@@ -29,13 +30,12 @@ const PublicRoutes = ({ history }) => {
 
         {/* <Route exact path="/learn" component={Magazine} /> */}
                 
-       
+        <Route exact path="/test/:signup/:member" component={Test } />
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />
         <WithFooter exact path="/:signup/:member" component={NewHome} />
         <WithFooter exact path="/" component={NewHome} />
-        {/* <Route exact path="/test/:signup/:member" component={Test } /> */}
         <WithFooter exact path="/test1" component={New} />
         <WithFooter exact path="/:signup/:member" component={One} />
         <WithFooter exact path="/one" component={One} />
@@ -43,6 +43,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
         <MainRoute exact path="/customer-details" component={CustomerDetails} />
+        <MainRoute exact path="/customer-orders" component={CustomerOrders} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
         <PrivateRoute exact path="/prive-user" component={PriveUser} />

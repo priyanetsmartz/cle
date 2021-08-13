@@ -113,9 +113,9 @@ function HelpUs(props) {
             <div className="help-us-body">
                 <div className="container help-us-inner">
                     <figure className="text-center page-head">
-                        
+                         
 						<svg xmlns="http://www.w3.org/2000/svg" width="848" height="117" viewBox="0 0 848 117">
-  <text id="Help_us" data-name={<IntlMessages id="help_us.title" />} transform="translate(424 85)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="96" fontFamily="Monument Extended Book"><tspan x="-422.016" y="0"><IntlMessages id="help_us.title" /></tspan></text> </svg>
+  <text id="Help_us" data-name={<IntlMessages id="help_us.title" />} transform="translate(424 85)" fill="none" stroke="#2e2baa" stroke-width="1" font-size="96" font-family="Monument Extended Book"><tspan x="-422.016" y="0"><IntlMessages id="help_us.title" /></tspan></text> </svg>
 
                     </figure>
                     <div className="row">
@@ -123,8 +123,7 @@ function HelpUs(props) {
                         {!isSurvey && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div className="show-hide">
-                                    {isHidden && <b onClick={toggleHelpUs}>+</b>}
-                                    {!isHidden && <b onClick={toggleHelpUs}>-</b>}
+                                    
                                 </div>
                                 {!isHidden && <div>
                                     <ul className="counter-list arabic-rtl-direction">

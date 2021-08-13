@@ -6,9 +6,9 @@ const siteConfig = {
   siteName: 'CLE',
   siteIcon: 'ion-flash',
   footerText: 'CLE ©' + (new Date()).getFullYear(),
-  facebookLink: 'https://www.facebook.com/',
-  instagram: 'https://www.instagram.com/',
-  linkedin: 'https://www.linkedin.com/',
+  facebookLink: 'https://www.facebook.com/werecle',
+  instagram: 'https://www.instagram.com/werecle',
+  linkedin: 'https://sa.linkedin.com/company/werecle',
   twitter : 'https://www.twitter.com/'
 };
 const apiConfig = {
