@@ -20,8 +20,9 @@ import PriveUser from './containers/Page/PriveUser';
 import CustomerDetails from './containers/Page/customer/customerDetails'
 import CustomerOrders from './containers/Page/customer/customerOrders'
 import Test from './containers/Page/test';
-import New from './containers/Page/new';
+// import New from './containers/Page/new';
 import One from './containers/Page/one'
+import Onee from './containers/Page/newest';
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -30,15 +31,16 @@ const PublicRoutes = ({ history }) => {
 
         {/* <Route exact path="/learn" component={Magazine} /> */}
                 
-        <Route exact path="/test/:signup/:member" component={Test } />
+        {/* <Route exact path="/test/:signup/:member" component={Test } /> */}
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />
         <WithFooter exact path="/:signup/:member" component={NewHome} />
         <WithFooter exact path="/" component={NewHome} />
-        <WithFooter exact path="/test1" component={New} />
+        {/* <WithFooter exact path="/test1" component={New} /> */}
         <WithFooter exact path="/:signup/:member" component={One} />
         <WithFooter exact path="/one" component={One} />
+        {/* <WithFooter exact path="/onee" component={Onee} /> */}
         <Route exact path="/test" component={Test} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />

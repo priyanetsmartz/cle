@@ -11,45 +11,7 @@ import { $ } from 'react-jquery-plugin'
 
 function Home(props) {
     const location = useLocation()
-    useEffect(() => {
-        // if (typeof $.smartscroll !== 'undefined') {
-        // $.getScript('https://code.jquery.com/jquery-3.6.0.min.js')
-        $.getScript('https://cdnjs.cloudflare.com/ajax/libs/lethargy/1.0.9/lethargy.min.js')
-        $.getScript('https://rawgit.com/Olical/EventEmitter/master/EventEmitter.min.js')
-        $.getScript('https://localhost:3000/bootstrap/jQuery-Smart-Scroll/smartscroll.js', function (data, textStatus, jqxhr) {
-            console.log(data); // Data returned
-            console.log(textStatus); // Success
-            console.log(jqxhr.status); // 200
-            console.log("Load was performed.");
-            var options = {
-                mode: "vp", // "vp", "set"
-                autoHash: false,
-                sectionScroll: false,
-                initialScroll: true,
-                keepHistory: false,
-                sectionWrapperSelector: ".newpage",
-                sectionClass: "section",
-                animationSpeed: 2000,
-                headerHash: "header",
-                breakpoint: null,
-                eventEmitter: null,
-                dynamicHeight: false
-            };
-            $.smartscroll(options);
-        });
-        // }
-    },[])
-    useEffect(() => {
-        if (location.hash) {
-            let elem = document.getElementById(location.hash.slice(1))
-            if (elem) {
-                elem.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
-            }
-        } else {
-            window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
-        }
-    }, [location])
-
+   
     const style = {
         // height: '100%',
         // width: '100%'
