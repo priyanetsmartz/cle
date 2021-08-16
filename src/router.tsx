@@ -8,6 +8,7 @@ import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import WithFooter from "./components/all-route/withFooter";
+import HomeRoute from './components/all-route/HomeRoute';
 import PrivateRoute from "./components/all-route/privateRoute";
 import AllPosts from './containers/Page/magazineCategory';
 import NewHome from './containers/Page/anewpage';
@@ -19,10 +20,11 @@ import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 import PriveUser from './containers/Page/PriveUser';
 import CustomerDetails from './containers/Page/customer/customerDetails'
 import CustomerOrders from './containers/Page/customer/customerOrders'
-import Test from './containers/Page/test';
 // import New from './containers/Page/new';
-import One from './containers/Page/one'
-import Onee from './containers/Page/newest';
+import One from './containers/Page/one';
+import Product from './containers/Page/product/product';
+import Cart from './containers/Page/product/cart';
+
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -30,7 +32,7 @@ const PublicRoutes = ({ history }) => {
         {/* <MainRoute exact path="/" component={Home} /> */}
 
         {/* <Route exact path="/learn" component={Magazine} /> */}
-                
+
         {/* <Route exact path="/test/:signup/:member" component={Test } /> */}
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
@@ -39,9 +41,9 @@ const PublicRoutes = ({ history }) => {
         <WithFooter exact path="/" component={NewHome} />
         {/* <WithFooter exact path="/test1" component={New} /> */}
         <WithFooter exact path="/:signup/:member" component={One} />
-        <WithFooter exact path="/one" component={One} />
+        <HomeRoute exact path="/one" component={One} />
         {/* <WithFooter exact path="/onee" component={Onee} /> */}
-        <Route exact path="/test" component={Test} />
+        {/* <Route exact path="/test" component={Test} /> */}
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
         <MainRoute exact path="/customer-details" component={CustomerDetails} />
@@ -54,7 +56,12 @@ const PublicRoutes = ({ history }) => {
         <Route exact path="/post-comment">
           <PostComment />
         </Route>
+        <WithFooter exact path="/products" component={Product} />
+        <WithFooter exact path="/my-cart" component={Cart} />
         <MainRoute path="/:id" component={Pages} />
+
+        {/* Product Routes */}
+
 
         {/* <Route exact path="/page-not-found" component={NotFound} /> */}
       </Switch>

@@ -115,7 +115,7 @@ function HelpUs(props) {
                     <figure className="text-center page-head">
                          
 						<svg xmlns="http://www.w3.org/2000/svg" width="848" height="117" viewBox="0 0 848 117">
-  <text id="Help_us" data-name={<IntlMessages id="help_us.title" />} transform="translate(424 85)" fill="none" stroke="#2e2baa" stroke-width="1" font-size="96" font-family="Monument Extended Book"><tspan x="-422.016" y="0"><IntlMessages id="help_us.title" /></tspan></text> </svg>
+  <text id="Help_us" data-name={<IntlMessages id="help_us.title" />} transform="translate(424 85)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="96" fontFamily="Monument Extended Book"><tspan x="-422.016" y="0"><IntlMessages id="help_us.title" /></tspan></text> </svg>
 
                     </figure>
                     <div className="row">
