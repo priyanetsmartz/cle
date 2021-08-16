@@ -119,7 +119,7 @@ function One(props) {
     }
     return (
         <div className="sectiosn" >
-            <FullPage afterChange={test} normal  >
+            <FullPage afterChange={test} duration={800}   >
                 <Slide id="home" className={show} >
                     <HomePage />
                 </Slide>
