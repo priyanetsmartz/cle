@@ -15,7 +15,11 @@ export function saveCustomerDetails(custId, data) {
 }
 
 export function updateCustEmail(data) {
-    return AdminApi.request(`default/rest/all/V1/customers/me`, data, "PUT", "");
+    return AdminApi.request(`rest/V1/customers/me`, data, "PUT", "");
+}
+
+export function changePassword(data) {
+    return AdminApi.request(`rest/V1/customers/me/password`, data, "PUT", "");
 }
 
 export function updateCustAddress(custId, data) {
@@ -38,6 +42,12 @@ export function getCustomerOrders(custId) {
 export function getCustomerOrdersByDate(custId, date) {
     custId = 115; //remove that 
     return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]=${date}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
+}
+
+export function sortCustomerOrders(custId, sort) {
+    custId = 115; //remove that 
+    const pageSize = 10;
+    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=${sort}`, "", "GET", "");
 }
 
 export function searchOrders(orderId) {

@@ -6,7 +6,7 @@ import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import { siteConfig } from '../../settings/';
 import { connect } from 'react-redux';
-import history from '../Page/history';
+import { useHistory } from "react-router";
 // import cookie from 'js-cookie';
 import Hamburger from './hamburger';
 import HamburgerWhite from './hamburgerWhite';
@@ -18,6 +18,7 @@ const { showSignin, openSignUp, logoClass, toggleOpenDrawer, userType, showHelpu
 
 
 function Header(props) {
+    let history = useHistory();
     const [isLoaded, setIsLoaded] = useState(true);
     const [menuLoaded, setMenuLoaded] = useState(false);
     useEffect(() => {
@@ -42,6 +43,13 @@ function Header(props) {
         e.preventDefault();
         props.toggleOpenDrawer(false);
     }
+
+    const goToHome = (e) => {
+        e.preventDefault();
+        props.toggleOpenDrawer(false);
+        history.push("/");
+    }
+    
     // handle sigin click
     const handlesigninClick = (e) => {
         e.preventDefault();
@@ -93,7 +101,7 @@ function Header(props) {
                 <div className="menu-section">
                     <div className="container">
                         <div className="mt-5">
-                            <Link className="menu-logo" to="/" onClick={handleMenuClose}><img src={blackLogo} alt="logo" /></Link>
+                            <Link className="menu-logo" to="/" onClick={goToHome}><img src={blackLogo} alt="logo" /></Link>
                             <div className="hamburger-close">
                                 <Link to="#" className="open-menu">
                                     <svg id="Close" onClick={handleMenuClose} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
