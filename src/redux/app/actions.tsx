@@ -23,6 +23,7 @@ const actions = {
   LOGO_CLASS: "LOGO_CLASS",
   SET_TYPE: "SET_TYPE",
   SET_CAT: "SET_CAT",
+  
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
   }),

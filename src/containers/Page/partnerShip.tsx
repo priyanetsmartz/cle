@@ -49,7 +49,7 @@ function Partnership(props) {
                 </svg>
             </div>
             <div className="join-cle-bottom">
-                <Link to="#" onClick={handleClick}><figure className="join-cle-text">
+                <Link to="/contact-us" ><figure className="join-cle-text">
                     <svg xmlns="http://www.w3.org/2000/svg" width="180.31" height="180.802" viewBox="0 0 180.31 180.802">
                         <g id="Group_773" data-name="Group 773" transform="translate(7.582 7.975)">
                             <path id="Path_350" data-name="Path 350" d="M9.564,15.87a6.351,6.351,0,0,1,3.369,4.209q.453,2.48-1.579,5.9T6.934,30.191a6.337,6.337,0,0,1-5.315-.95L2.829,27.2a6.393,6.393,0,0,0,2.125.829,3.273,3.273,0,0,0,2.231-.493A7.177,7.177,0,0,0,9.54,24.9a7.211,7.211,0,0,0,1.2-3.344,3.3,3.3,0,0,0-.633-2.2,6.374,6.374,0,0,0-1.746-1.468l-3.788-2.25L1.114,21.466-.7,20.387l4.665-7.846Z" transform="translate(6.118 18.244)" fill="#2E2BAA" />

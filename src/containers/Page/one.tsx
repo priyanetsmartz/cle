@@ -1,22 +1,21 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import $ from 'jquery';
+import React, { useState } from 'react';
 import { useLocation } from "react-router-dom";
 import HomePage from './home';
 import Partnership from './partnerShip';
 import AboutUs from './about';
-import Magazine from './magazine';
+// import Magazine from './magazine';
 import { useEffect } from "react";
 import MagazineNew from './magazine-new';
 import HelpUs from './helpUs';
 import SocailCheckout from './SocialCheckout';
-import styled from "styled-components";
+import Footer from '../partials/footer-new'
+
 import { FullPage, Slide } from 'react-full-page';
-import Header from '../partials/header';
-import Footer from '../partials/footer-new';
+
 
 function One(props) {
     const [show, doShow] = useState('inactive');
-    const location = useLocation();
+    const location = useLocation()
     useEffect(() => {
         if (location.hash) {
             let elem = document.getElementById(location.hash.slice(1))
@@ -27,57 +26,176 @@ function One(props) {
             window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
         }
     }, [location])
+    function beforeFxn(e) {
+        if (e.from === 0 && e.to === 1) {
+            const home = document.getElementById("home");
+            const story = document.getElementById("our-story");
+            home.classList.add("no-active");
+            home.classList.remove("active");
+        }
+        if (e.from === 1 && e.to === 2) {
+            const magazine = document.getElementById("magazine");
+            const story = document.getElementById("our-story");
+            const home = document.getElementById("home");
+            story.classList.remove("active");
+            story.classList.add("no-active");
+            home.classList.remove("no-active");
+        
+        }
+        if (e.from === 2 && e.to === 3) {
+            const story = document.getElementById("our-story");
+            const magazine = document.getElementById("magazine");
+            const work = document.getElementById("work-with-us");
+            story.classList.remove("no-active");
+            magazine.classList.add("no-active");
+            magazine.classList.remove("active");
+            
+        }
+        if (e.from === 3 && e.to === 4) {
+            const magazine = document.getElementById("magazine");
+            const tell = document.getElementById("tell-us-more");
+            const work = document.getElementById("work-with-us");
 
-    const Div = styled.div`
-  height: 100% !important;
-  width: 100% !important;
-`;
-    const ourRef = useRef(null),
-        anotherRef = useRef(null),
-        refThree = useRef(null);
-    // useEffect(() => {
-    //     const scrollPos = window.scrollY + window.innerHeight;
-    //     const topPos = (element) => element.getBoundingClientRect().bottom;
-    //     const getHeight = (element) => element.offsetHeight;
-    //     const div1Pos = topPos(ourRef.current),
-    //         div2Pos = topPos(anotherRef.current),
-    //         div3Pos = topPos(refThree.current);
+            work.classList.add("no-active");
+            work.classList.remove("active");
+            magazine.classList.remove("no-active");
+        }
+        if (e.from === 4 && e.to === 5) {
+            const work = document.getElementById("work-with-us");
+            const tell = document.getElementById("tell-us-more");
+            const check = document.getElementById("checkus-out");
 
-    //     const div1Height = getHeight(ourRef.current);
-    //     const div2Height = getHeight(anotherRef.current);
-    //     const div3Height = getHeight(refThree.current);
+            tell.classList.add("no-active");
+            tell.classList.remove("active");
+            work.classList.remove("no-active");
+        }
 
-    //     console.log(div1Pos, div2Pos, div3Pos)
-    //     console.log(div1Height, div2Height, div3Height)
+        if (e.from === 5 && e.to === 4) {
+            const tell = document.getElementById("tell-us-more");
+            const check = document.getElementById("checkus-out");
+            check.classList.remove("active");
+            tell.classList.remove("no-active");
+        }
 
-    //     const onScroll = (event) => {
-    //         if (scrollPos < div1Height) {
-    //             doShow('active')
-    //         } else {
-    //             doShow('in')
-    //         }
-    //     };
+        if (e.from === 4 && e.to === 3) {
+            const tell = document.getElementById("tell-us-more");
+            const work = document.getElementById("work-with-us");
 
-    //     window.addEventListener("scroll", onScroll);
-    //     return () => window.removeEventListener("scroll", onScroll);
-    // });
-    let CustomControls = {
-        "position": "relative",
-        "animation": "Movehead ease 0.5s",
-        " animation-iteration-count": 1,
-        "animation-fill-mode": "forwards",
+            work.classList.remove("no-active");
+            tell.classList.remove("active");
+        }
+
+        if (e.from === 3 && e.to === 2) {
+            const story = document.getElementById("our-story");
+            const magazine = document.getElementById("magazine");
+            const work = document.getElementById("work-with-us");
+
+      
+            magazine.classList.remove("no-active");
+            work.classList.remove("active");
+        }
+
+        if (e.from === 2 && e.to === 1) {
+            const magazine = document.getElementById("magazine");
+            const story = document.getElementById("our-story");
+            const home = document.getElementById("home");
+
+         
+            story.classList.remove("no-active");
+            magazine.classList.remove("active");
+        }
+        if (e.from === 1 && e.to === 0) {
+            const home = document.getElementById("home");
+            const story = document.getElementById("our-story");
+
+           
+            home.classList.remove("no-active");
+            story.classList.remove("active");
+        }
+        // console.log('here 0');
     }
-    function  beforeChangefxn() {
-        console.log('here');
+
+    function afterFxn(e) {
+        if (e.from === 0 && e.to === 1) {
+            const home = document.getElementById("home");
+            const story = document.getElementById("our-story");
+            
+            story.classList.add("active");
+        }
+        if (e.from === 1 && e.to === 2) {
+            const magazine = document.getElementById("magazine");
+            const story = document.getElementById("our-story");
+            const home = document.getElementById("home");
+
+            magazine.classList.add("active");
+        }
+        if (e.from === 2 && e.to === 3) {
+            const story = document.getElementById("our-story");
+            const magazine = document.getElementById("magazine");
+            const work = document.getElementById("work-with-us");
+            work.classList.add("active");
+        }
+        if (e.from === 3 && e.to === 4) {
+            const magazine = document.getElementById("magazine");
+            const tell = document.getElementById("tell-us-more");
+            const work = document.getElementById("work-with-us");
+            
+            tell.classList.add("active");
+        }
+        if (e.from === 4 && e.to === 5) {
+            const work = document.getElementById("work-with-us");
+            const tell = document.getElementById("tell-us-more");
+            const check = document.getElementById("checkus-out");
+
+          
+            check.classList.add("active");
+        }
+
+        if (e.from === 5 && e.to === 4) {
+            const tell = document.getElementById("tell-us-more");
+            const check = document.getElementById("checkus-out");
+        
+            tell.classList.add("active");
+        }
+
+        if (e.from === 4 && e.to === 3) {
+            const tell = document.getElementById("tell-us-more");
+            const work = document.getElementById("work-with-us");
+
+            work.classList.add("active");
+        }
+
+        if (e.from === 3 && e.to === 2) {
+            const story = document.getElementById("our-story");
+            const magazine = document.getElementById("magazine");
+            const work = document.getElementById("work-with-us");
+
+            // story.classList.add("active");
+            // magazine.classList.remove("no-active");
+            magazine.classList.add("active");
+        }
+
+        if (e.from === 2 && e.to === 1) {
+            const magazine = document.getElementById("magazine");
+            const story = document.getElementById("our-story");
+            const home = document.getElementById("home");
+
+            story.classList.add("active");
+        }
+        if (e.from === 1 && e.to === 0) {
+            const home = document.getElementById("home");
+            const story = document.getElementById("our-story");
+
+            home.classList.add("active");
+        }
     }
     return (
-        <>
-            <FullPage controlsProps={{beforeChange : beforeChangefxn}} >
-              
-                <Slide id="home" className="section">
+        <div className="sectiosn" >
+            <FullPage afterChange={afterFxn} beforeChange={beforeFxn} duration={800}   >
+                <Slide id="home" className={show} >
                     <HomePage />
                 </Slide>
-                <Slide id="our-story" className="section" controlsProps>
+                <Slide id="our-story" className="section">
                     <AboutUs />
                 </Slide>
                 {/* magazine */}
@@ -96,11 +214,11 @@ function One(props) {
                 <Slide id="checkus-out" className="section">
                     <SocailCheckout />
                 </Slide>
-                {/* <Slide id="footer" className="section">
+                <Slide id="footer" className="section">
                     <Footer />
-                </Slide> */}
+                </Slide>
             </FullPage>
-        </>
+        </div>
     )
 
 
