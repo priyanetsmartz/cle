@@ -1,5 +1,7 @@
 import ADMINAPI from "../../restApi/AdminApi";
+import FORGOTPASS from "../../restApi/ForgotPassApi";
 const AdminApi = new ADMINAPI();
+const ForgotPassApi = new FORGOTPASS();
 
 
 export function getCountriesList() {
@@ -15,11 +17,11 @@ export function saveCustomerDetails(custId, data) {
 }
 
 export function updateCustEmail(data) {
-    return AdminApi.request(`rest/V1/customers/me`, data, "PUT", "");
+    return AdminApi.request(`rest/V1/customer/emailReset`, data, "PUT", "");
 }
 
 export function changePassword(data) {
-    return AdminApi.request(`rest/V1/customers/me/password`, data, "PUT", "");
+    return ForgotPassApi.request(`rest/V1/customers/me/password`, data, "PUT", "");
 }
 
 export function updateCustAddress(custId, data) {

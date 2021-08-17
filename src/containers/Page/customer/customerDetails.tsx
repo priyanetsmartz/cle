@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
-import { getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference, changePassword,
-    updateCustEmail} from '../../../redux/pages/customers';
+import {
+    getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference, changePassword,
+    updateCustEmail
+} from '../../../redux/pages/customers';
 
 
 function CustomerDetails(props) {
@@ -21,8 +23,8 @@ function CustomerDetails(props) {
         email: "",
         firstname: "",
         lastname: "",
-        gender:"",
-        dob:"",
+        gender: "",
+        dob: "",
         website_id: 1,
         addresses: []
     });
@@ -113,10 +115,10 @@ function CustomerDetails(props) {
             ...prevState,
             [id]: value
         }))
-        
-        
+
+
     }
-  
+
 
     //for attributes
     const getAttributes = async () => {
@@ -135,9 +137,18 @@ function CustomerDetails(props) {
     }
 
     const handleChangePass = async () => {
-        if(handleValidation()){
-            let result: any = await changePassword({currentPassword:changePass.password,newPassword:changePass.newPassword});
-            console.log(result);
+        if (handleValidation()) {
+            let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
+            if(result.data){
+                notification("success", "", "Password updated");
+                setChangePass({
+                    confirmNewPassword:"",
+                    newPassword:"",
+                    password:""
+                });
+            }else{
+                notification("error", "", "Invalid email or password");
+            }
         }
     }
 
@@ -167,8 +178,8 @@ function CustomerDetails(props) {
     }
     //change password ends here----------------------------------------->
 
-      //change email starts here----------------------------------------->
-      const handleEmail = (e) => {
+    //change email starts here----------------------------------------->
+    const handleEmail = (e) => {
         const { id, value } = e.target
         setChangeEmail(prevState => ({
             ...prevState,
@@ -177,16 +188,23 @@ function CustomerDetails(props) {
     }
 
     const handleChangeEmail = async () => {
-        if(handleValidationEmail()){
+        if (handleValidationEmail()) {
             const req = {
-                id: custId,
-                firstname: custForm.firstname,
-                lastname: custForm.lastname,
-                email: changeEmail.newEmail,
-               website_id: 1
-              }
-            let result: any = await updateCustEmail({customer:req});
+                customerId: custId,
+                newEmail: changeEmail.newEmail,
+                password: changeEmail.password
+            }
+
+            let result: any = await updateCustEmail(req);
             console.log(result);
+            if(result){
+                notification("success", "", "New email Updated");
+                setChangeEmail({
+                    confirmNewEmail:"",
+                    newEmail:"",
+                    password:""
+                })
+            }
         }
     }
 
@@ -218,6 +236,11 @@ function CustomerDetails(props) {
         if (!changeEmail["password"]) {
             formIsValid = false;
             error["password"] = "Password is required";
+        }
+
+        if (changeEmail["confirmNewEmail"] !== changeEmail["newEmail"]) {
+            formIsValid = false;
+            error["confirmNewEmail"] = 'Confirm New password not matched';
         }
 
         setError({ errors: error });

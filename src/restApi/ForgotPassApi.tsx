@@ -25,7 +25,7 @@ class ForgotPassApi {
 
         let authtoken = '';
 
-        const token = apiConfig.adminToken;
+        const token = localStorage.getItem('id_token') ? localStorage.getItem('id_token') :  apiConfig.adminToken;
         authtoken = `Bearer ${token}`;
         return new Promise(function (resolve, reject) {
             var url = baseUrl + name

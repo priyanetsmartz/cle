@@ -116,7 +116,7 @@ function CustomerOrders(props) {
                                     <p>{item.grand_total}</p>
                                 </div>
                                 <div className="col-md-7">
-
+                                    <img src={item.extension_attributes.shipping_assignments[0].items[0].extension_attributes.item_image} alt="" height="100" width="100"/>
                                 </div>
                                 <hr />
                             </div>
