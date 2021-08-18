@@ -5,7 +5,7 @@ import Item4 from "../../image/checkout-social-4.png";
 import Item5 from "../../image/checkout-social-5.png";
 import Item6 from "../../image/checkout-social-6.png";
 
-import actions from './cartAction';
+import actions from './productAction';
 interface item {
     id: number;
     title: string;
@@ -17,9 +17,7 @@ interface item {
 }
 
 type itemsInterface = item[];
-// interface itemsInterface  {
-//     [index: number]: item;
-// }
+
 let itemsObject: itemsInterface = [
     { id: 1, title: 'Winter body', desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ex.", price: 110, img: Item1 },
     { id: 2, title: 'Adidas', desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ex.", price: 80, img: Item2 },

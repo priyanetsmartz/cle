@@ -1,5 +1,5 @@
-import API from "../../restApi/Api";
-import ADMINAPI from "../../restApi/AdminApi";
+import API from "../../restApi/AdminApi";
+import ADMINAPI from "../../restApi/Api";
 
 const Api = new API();
 const AdminApi = new ADMINAPI();

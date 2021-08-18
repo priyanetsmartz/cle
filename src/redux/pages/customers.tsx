@@ -1,4 +1,4 @@
-import ADMINAPI from "../../restApi/AdminApi";
+import ADMINAPI from "../../restApi/Api";
 const AdminApi = new ADMINAPI();
 
 

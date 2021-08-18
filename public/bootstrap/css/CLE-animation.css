@@ -1,3 +1,6 @@
+/* .active{display:block !important;} */
+/* .section{display:none;} */
+
 /** home animation start **/
 #home.active .homescreen-bg img {
     position: relative;
@@ -62,6 +65,8 @@
 /** home animation end **/
 
 /** our story animation start **/
+#our-story .page-head{left: -20%;}
+#our-story .blue-back-image{top:6%;}
 #our-story.active .page-head{
 	position: relative;
 	animation: Movehead ease 0.5s;
@@ -153,7 +158,7 @@
                 font-size: 20px;
             }
             100% {
-                font-size: 36px;
+                font-size: 46px;
             }
 				}
 #magazine.no-active .mag-come-soon{
@@ -163,10 +168,10 @@
     animation-fill-mode: forwards;}
 @keyframes Movecomesoonbc{
             0% {
-                font-size: 36px;
+                font-size: 46px;
             }
             100% {
-                font-size: 46px;
+                font-size: 56px;
             }
 				}
 /** magazine animation end **/
@@ -231,10 +236,10 @@
     animation-fill-mode: forwards;}
 @keyframes partnerPic{
             0% {
-                top:15%;
+                top:30px;
             }
             100% {
-                top:-10%;
+                top:-10px;
             }
 				}
 #work-with-us.no-active .partner-pic{
@@ -244,14 +249,69 @@
     animation-fill-mode: forwards;}
 @keyframes partnerPicbc{
             0% {
-                top:-10%;
+                top:-10px;
             }
             100% {
-                top:-20%;
+                top:-30px;
             }
 				}
 
 /** WorkWithUs animation end **/
+
+/** tell us animation start **/
+#tell-us-more.active .page-head{
+	position: relative;
+	animation: Movehead4 ease 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;}
+@keyframes Movehead4{
+            0% {
+                left: -25%;
+            }
+            100% {
+                left: 0%;
+            }
+				}
+#tell-us-more.no-active .page-head{
+	position: relative;
+	animation: Movehead4bc ease 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;}
+@keyframes Movehead4bc{
+            0% {
+                left: 0%;
+            }
+            100% {
+                left: 25%;
+            }
+				}
+#tell-us-more.active .help-us-content{
+	position: relative;
+	animation: MovehelpUS ease 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;}
+@keyframes MovehelpUS{
+            0% {
+                right:-10%;
+            }
+            100% {
+                right:0%;
+            }
+				}
+#tell-us-more.no-active .help-us-content{
+	position: relative;
+	animation: MovehelpUSbc ease 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;}
+@keyframes MovehelpUSbc{
+            0% {
+                right:0%;
+            }
+            100% {
+                right:10%;
+            }
+				}
+/** tell us animation end **/
 
 
 

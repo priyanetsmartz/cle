@@ -36,14 +36,9 @@ const PublicRoutes = ({ history }) => {
         {/* <Route exact path="/test/:signup/:member" component={Test } /> */}
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
-        <MainRoute exact path="/magazines" component={AllPosts} />
-        <WithFooter exact path="/:signup/:member" component={NewHome} />
-        <WithFooter exact path="/" component={NewHome} />
-        {/* <WithFooter exact path="/test1" component={New} /> */}
-        <WithFooter exact path="/:signup/:member" component={One} />
-        <HomeRoute exact path="/one" component={One} />
-        {/* <WithFooter exact path="/onee" component={Onee} /> */}
-        {/* <Route exact path="/test" component={Test} /> */}
+        <MainRoute exact path="/magazines" component={AllPosts} />   
+        <HomeRoute exact path="/:signup/:member" component={One} />
+        <HomeRoute exact path="/" component={One} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
         <MainRoute exact path="/customer-details" component={CustomerDetails} />

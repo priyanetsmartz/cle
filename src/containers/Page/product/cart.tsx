@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import cartAction from "../../../redux/cart/cartAction";
+import cartAction from "../../../redux/cart/productAction";
 
 const { removeItem, addQuantity, subtractQuantity } = cartAction;
 
