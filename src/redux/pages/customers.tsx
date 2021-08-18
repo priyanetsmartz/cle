@@ -43,7 +43,7 @@ export function getCustomerOrders(custId) {
 
 export function getCustomerOrdersByDate(custId, date) {
     custId = 115; //remove that 
-    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]=${date}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
+    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]=${date}&searchCriteria[filterGroups][0][filters][0][conditionType]=gteq`, "", "GET", "");
 }
 
 export function sortCustomerOrders(custId, sort) {
@@ -53,6 +53,10 @@ export function sortCustomerOrders(custId, sort) {
 }
 
 export function searchOrders(orderId) {
+    return AdminApi.request(`rest/V1/orders/${orderId}`, "", "GET", "");
+}
+
+export function getOrderDetails(orderId) {
     return AdminApi.request(`rest/V1/orders/${orderId}`, "", "GET", "");
 }
 
