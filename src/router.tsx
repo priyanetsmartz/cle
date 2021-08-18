@@ -29,11 +29,6 @@ const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Switch>
-        {/* <MainRoute exact path="/" component={Home} /> */}
-
-        {/* <Route exact path="/learn" component={Magazine} /> */}
-
-        {/* <Route exact path="/test/:signup/:member" component={Test } /> */}
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />   
@@ -54,10 +49,6 @@ const PublicRoutes = ({ history }) => {
         <WithFooter exact path="/products" component={Product} />
         <WithFooter exact path="/my-cart" component={Cart} />
         <MainRoute path="/:id" component={Pages} />
-
-        {/* Product Routes */}
-
-
         {/* <Route exact path="/page-not-found" component={NotFound} /> */}
       </Switch>
     </ConnectedRouter >

@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
-import { getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference } from '../../../redux/pages/customers';
+import {
+    getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference, changePassword,
+    updateCustEmail
+} from '../../../redux/pages/customers';
 
 
 function CustomerDetails(props) {
@@ -20,8 +23,8 @@ function CustomerDetails(props) {
         email: "",
         firstname: "",
         lastname: "",
-        gender:"",
-        dob:"",
+        gender: "",
+        dob: "",
         website_id: 1,
         addresses: []
     });
@@ -36,6 +39,18 @@ function CustomerDetails(props) {
         region_id: 538,
         country_id: "",
         street: ""
+    });
+
+    const [changePass, setChangePass] = useState({
+        password: "",
+        newPassword: "",
+        confirmNewPassword: "",
+    });
+
+    const [changeEmail, setChangeEmail] = useState({
+        newEmail: "",
+        confirmNewEmail: "",
+        password: "",
     });
 
     const [errors, setError] = useState({
@@ -100,33 +115,10 @@ function CustomerDetails(props) {
             ...prevState,
             [id]: value
         }))
-        
-        
+
+
     }
 
-    //save customer address
-    const handleAddSubmit = async (e) => {
-        // e.preventDefault();
-        // custAddForm.telephone = custAddForm.telephone != "" ? custAddForm.telephone : "234567"
-        // custAddForm.street = [custAddForm.street]
-        // custAddForm.postcode = "123456"
-        // delete custAddForm.address;
-        // const addressData = {
-        //     id: custId,
-        //     email: custForm.email,
-        //     firstname: custForm.firstname,
-        //     lastname: custForm.lastname,
-        //     website_id: custForm.website_id,
-        //     addresses: [custAddForm]
-        // }
-
-
-        console.log(custAddForm);
-        // let result: any = await saveCustomerDetails(custId, { customer: addressData });
-        // if (result) {
-        //     notification("success", "", "Customer address Updated");
-        // }
-    }
 
     //for attributes
     const getAttributes = async () => {
@@ -134,6 +126,127 @@ function CustomerDetails(props) {
         // console.log(result);
         setAttributes(result.data[0]);
     }
+
+    //change password starts here----------------------------------------->
+    const handlePassword = (e) => {
+        const { id, value } = e.target
+        setChangePass(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
+    }
+
+    const handleChangePass = async () => {
+        if (handleValidation()) {
+            let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
+            if(result.data){
+                notification("success", "", "Password updated");
+                setChangePass({
+                    confirmNewPassword:"",
+                    newPassword:"",
+                    password:""
+                });
+            }else{
+                notification("error", "", "Invalid email or password");
+            }
+        }
+    }
+
+    const handleValidation = () => {
+        let error = {};
+        let formIsValid = true;
+
+        if (!changePass["password"]) {
+            formIsValid = false;
+            error["password"] = 'Password is required';
+        }
+        if (!changePass["newPassword"]) {
+            formIsValid = false;
+            error["newPassword"] = 'New Password is required';
+        }
+        if (!changePass["confirmNewPassword"]) {
+            formIsValid = false;
+            error["confirmNewPassword"] = 'Confirm New Password is required';
+        }
+        if (changePass["confirmNewPassword"] !== changePass["newPassword"]) {
+            formIsValid = false;
+            error["confirmNewPassword"] = 'Confirm New password not matched';
+        }
+
+        setError({ errors: error });
+        return formIsValid;
+    }
+    //change password ends here----------------------------------------->
+
+    //change email starts here----------------------------------------->
+    const handleEmail = (e) => {
+        const { id, value } = e.target
+        setChangeEmail(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
+    }
+
+    const handleChangeEmail = async () => {
+        if (handleValidationEmail()) {
+            const req = {
+                customerId: custId,
+                newEmail: changeEmail.newEmail,
+                password: changeEmail.password
+            }
+
+            let result: any = await updateCustEmail(req);
+            console.log(result);
+            if(result){
+                notification("success", "", "New email Updated");
+                setChangeEmail({
+                    confirmNewEmail:"",
+                    newEmail:"",
+                    password:""
+                })
+            }
+        }
+    }
+
+    const handleValidationEmail = () => {
+        let error = {};
+        let formIsValid = true;
+
+        if (typeof changeEmail["newEmail"] !== "undefined") {
+            if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(changeEmail["newEmail"]))) {
+                formIsValid = false;
+                error["newEmail"] = "New Email is not valid";
+            }
+        }
+        if (typeof changeEmail["confirmNewEmail"] !== "undefined") {
+            if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(changeEmail["confirmNewEmail"]))) {
+                formIsValid = false;
+                error["confirmNewEmail"] = "Confirm New Email is not valid";
+            }
+        }
+        if (!changeEmail["newEmail"]) {
+            formIsValid = false;
+            error["newEmail"] = "New Email is required";
+        }
+        if (!changeEmail["confirmNewEmail"]) {
+            formIsValid = false;
+            error["confirmNewEmail"] = "Confirm New Email is required";
+        }
+
+        if (!changeEmail["password"]) {
+            formIsValid = false;
+            error["password"] = "Password is required";
+        }
+
+        if (changeEmail["confirmNewEmail"] !== changeEmail["newEmail"]) {
+            formIsValid = false;
+            error["confirmNewEmail"] = 'Confirm New password not matched';
+        }
+
+        setError({ errors: error });
+        return formIsValid;
+    }
+    //change email ends here----------------------------------------->
 
     const openMyDetails = () => {
         setMyDetailsModel(!myDetailsModel);
@@ -231,6 +344,87 @@ function CustomerDetails(props) {
                         </div>
                         <div className="col-md-3">
                             <button className="signup-btn" onClick={openAddressModal}>Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="row" style={{ marginTop: '150px' }}>
+                <h3>Change Password and Email</h3>
+                <div className="col-md-5 offset-md-1">
+                    <div className="row">
+                        <b>Change Password</b>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>Password</b></label>
+                            <input type="password"
+                                className="form-control"
+                                id="password"
+                                value={changePass.password}
+                                onChange={handlePassword}
+                            />
+                            <span className="error">{errors.errors["password"]}</span>
+                        </div>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>New Password</b></label>
+                            <input type="password"
+                                className="form-control"
+                                id="newPassword"
+                                value={changePass.newPassword}
+                                onChange={handlePassword}
+                            />
+                            <span className="error">{errors.errors["newPassword"]}</span>
+                        </div>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>Confirm New Password</b></label>
+                            <input type="password"
+                                className="form-control"
+                                id="confirmNewPassword"
+                                value={changePass.confirmNewPassword}
+                                onChange={handlePassword}
+                            />
+                            <span className="error">{errors.errors["confirmNewPassword"]}</span>
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <button className="signup-btn" onClick={handleChangePass}> Confirm</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md-5 offset-md-1">
+                    <div className="row">
+                        <b>New Email</b>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>New Email Address</b></label>
+                            <input type="email"
+                                className="form-control"
+                                id="newEmail"
+                                value={changeEmail.newEmail}
+                                onChange={handleEmail}
+                            />
+                            <span className="error">{errors.errors["newEmail"]}</span>
+                        </div>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>Confirm New Email Address</b></label>
+                            <input type="email"
+                                className="form-control"
+                                id="confirmNewEmail"
+                                value={changeEmail.confirmNewEmail}
+                                onChange={handleEmail}
+                            />
+                            <span className="error">{errors.errors["confirmNewEmail"]}</span>
+                        </div>
+                        <div className="col-sm-12">
+                            <label htmlFor=""> <b>Password</b></label>
+                            <input type="password"
+                                className="form-control"
+                                id="password"
+                                value={changeEmail.password}
+                                onChange={handleEmail}
+                            />
+                            <span className="error">{errors.errors["password"]}</span>
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <button className="signup-btn" onClick={handleChangeEmail}> Confirm</button>
                         </div>
                     </div>
                 </div>
