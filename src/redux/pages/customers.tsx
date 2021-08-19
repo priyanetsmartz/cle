@@ -37,17 +37,17 @@ export function getPreference(custId) {
 }
 
 export function getCustomerOrders(custId) {
-    custId = 115; //remove that 
+    custId = 114; //remove that 
     return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
 }
 
 export function getCustomerOrdersByDate(custId, date) {
-    custId = 115; //remove that 
+    custId = 114; //remove that 
     return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]=${date}&searchCriteria[filterGroups][0][filters][0][conditionType]=gteq`, "", "GET", "");
 }
 
 export function sortCustomerOrders(custId, sort) {
-    custId = 115; //remove that 
+    custId = 114; //remove that 
     const pageSize = 10;
     return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=${sort}`, "", "GET", "");
 }
@@ -56,8 +56,17 @@ export function searchOrders(orderId) {
     return AdminApi.request(`rest/V1/orders/${orderId}`, "", "GET", "");
 }
 
-export function getOrderDetails(orderId) {
-    return AdminApi.request(`rest/V1/orders/${orderId}`, "", "GET", "");
+export function getWishList(custId) {
+    custId = 114; //remove that 
+    return AdminApi.request(`rest/V1/wishlist/items?customerId=${custId}`, "", "GET", "");
+}
+
+export function addItemToWishList(productId) {
+    return AdminApi.request(`rest/V1/wishlist/add/${productId}`, "", "GET", "");
+}
+
+export function removeItemFromWishList(custId) {
+    return AdminApi.request(`rest/V1/wishlist/items?customerId=${custId}`, "", "GET", "");
 }
 
 

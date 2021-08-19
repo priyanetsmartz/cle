@@ -21,6 +21,7 @@ import PriveUser from './containers/Page/PriveUser';
 import CustomerDetails from './containers/Page/customer/customerDetails';
 import CustomerOrders from './containers/Page/customer/customerOrders';
 import OrderDetails from './containers/Page/customer/orderDetails';
+import WishList from './containers/Page/customer/wishList';
 // import New from './containers/Page/new';
 import One from './containers/Page/one';
 import Product from './containers/Page/product/product';
@@ -33,13 +34,14 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />   
-        <HomeRoute exact path="/:signup/:member" component={One} />
+        {/* <HomeRoute exact path="/:signup/:member" component={One} /> */}
         <HomeRoute exact path="/" component={One} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
         <MainRoute exact path="/customer-details" component={CustomerDetails} />
         <MainRoute exact path="/customer-orders" component={CustomerOrders} />
         <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
+        <MainRoute exact path="/wish-list" component={WishList} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
         <PrivateRoute exact path="/prive-user" component={PriveUser} />

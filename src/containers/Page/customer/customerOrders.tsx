@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders } from '../../../redux/pages/customers';
+import { Link } from "react-router-dom";
 
 
 function CustomerOrders(props) {
@@ -21,6 +22,7 @@ function CustomerOrders(props) {
     const getData = async () => {
         let result: any = await getCustomerOrders(custId);
         setOrders(result.data);
+        console.log(result);
     }
 
     const handleSearch = async (e) => {
@@ -116,6 +118,7 @@ function CustomerOrders(props) {
                                     <p>{item.grand_total}</p>
                                 </div>
                                 <div className="col-md-7">
+                                    <Link className="menu-logo" to={`order-details/${item.increment_id}`}>View Details</Link>
                                     <img src={item.extension_attributes.shipping_assignments[0].items[0].extension_attributes.item_image} alt="" height="100" width="100"/>
                                 </div>
                                 <hr />
