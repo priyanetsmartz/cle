@@ -69,4 +69,9 @@ export function removeItemFromWishList(custId) {
     return AdminApi.request(`rest/V1/wishlist/items?customerId=${custId}`, "", "GET", "");
 }
 
+export function wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchName) {
+    custId = 114; //remove that
+    return AdminApi.request(`rest/V1/wishlist/items?customerId=${custId}&page_size=${pageSize}&soryByValue=${sortOrder}&sortBy=${sortBy}&name=${searchName}`, "", "GET", "");
+}
+
 
