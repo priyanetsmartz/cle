@@ -11,6 +11,7 @@ import { useHistory } from "react-router";
 import Hamburger from './hamburger';
 import HamburgerWhite from './hamburgerWhite';
 import { Link } from "react-router-dom";
+
 import blackLogo from "../../image/CLE-logo-black.svg"
 
 const { logout } = authAction;
@@ -49,7 +50,7 @@ function Header(props) {
         props.toggleOpenDrawer(false);
         history.push("/");
     }
-    
+
     // handle sigin click
     const handlesigninClick = (e) => {
         e.preventDefault();
@@ -75,7 +76,7 @@ function Header(props) {
         localStorage.removeItem('id_token');
         localStorage.removeItem('cust_id');
         localStorage.removeItem('token_email');
-        localStorage.removeItem('token');        
+        localStorage.removeItem('token');
         //  cookie.remove('name', { path: '', domain: '.dev.cle.com/' })
         props.logout();
         props.showHelpus(false);
@@ -117,7 +118,7 @@ function Header(props) {
                         <div className="row">
                             <div className="col-md-5 offset-md-1 left-main-menu">
                                 <ul className="left-menu-content">
-                                    <li><Link to="/#our-story" onClick={() => {
+                                    <li data-menuanchor="our-story"><Link to="/#our-story" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Aboutus" /></Link></li>
                                     <li><Link to="/#magazine" onClick={() => {
@@ -139,7 +140,7 @@ function Header(props) {
                             </div>
                             <div className="col-md-4 right-main-menu">
                                 <ul className="right-menu-content">
-                                    <li><Link to="/#tell-us-more" onClick={() => {
+                                    <li data-menuanchor="tell-us-more"><Link to="/#tell-us-more" onClick={() => {
                                         handleClick();
                                     }} className="main-menu"><IntlMessages id="menu_Help_Us" /></Link></li>
                                     <li><Link to="/#checkus-out" onClick={() => {
@@ -148,8 +149,8 @@ function Header(props) {
                                     <li><Link to="/contact-us" className="main-menu" onClick={() => {
                                         handleClick();
                                     }}><IntlMessages id="menu_contact" /></Link></li>
-									
-									{!localStorage.getItem('id_token') && (
+
+                                    {!localStorage.getItem('id_token') && (
                                         <li className="mobile-show"><Link to="#" onClick={(e) => { handlesigninClick(e); }} className="menu-btn"><IntlMessages id="menu_Sign_in" /></Link></li>
                                     )}
                                     {localStorage.getItem('id_token') && (
@@ -158,7 +159,7 @@ function Header(props) {
                                     {!localStorage.getItem('id_token') && (
                                         <li className="mobile-show"><IntlMessages id="menu_newhere" /> <Link to="#" onClick={handleSignUp} className="create-account"><IntlMessages id="menu_SignUp" /></Link></li>
                                     )}
-									
+
                                     <li>
                                         <div className="social-menu-head"><IntlMessages id="menu_findus" /></div>
                                         <div className="social-menu-icons">

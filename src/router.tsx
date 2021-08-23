@@ -31,9 +31,9 @@ const PublicRoutes = ({ history }) => {
       <Switch>
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
-        <MainRoute exact path="/magazines" component={AllPosts} />   
-        <HomeRoute exact path="/:signup/:member" component={One} />
-        <HomeRoute exact path="/" component={One} />
+        <MainRoute exact path="/magazines" component={AllPosts} />
+        <HomeRoute exact path="/:signup/:member" component={NewHome} />
+        <HomeRoute exact path="/" component={NewHome} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
         <MainRoute exact path="/customer-details" component={CustomerDetails} />

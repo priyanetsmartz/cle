@@ -2,7 +2,7 @@
 /* .section{display:none;} */
 
 /** home animation start **/
-#home.active .homescreen-bg img {
+.home.active .homescreen-bg img {
     position: relative;
 	animation: MoveBg ease 0.5s;
     animation-iteration-count: 1;
@@ -20,7 +20,7 @@
 				margin-left:-10%;
             }
 				}
-#home.active .home-inner-text{animation: MoveInnerText ease 0.5s;
+.home.active .home-inner-text{animation: MoveInnerText ease 0.5s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes MoveInnerText{
@@ -31,7 +31,7 @@
                 top: 50% !important;opacity:1;
             }
 				}
-#home.no-active .homescreen-bg img {
+.home.no-active .homescreen-bg img {
     position: relative;
 	animation: MoveBgback ease 0.5s;
     animation-iteration-count: 1;
@@ -49,7 +49,7 @@
 				margin-left: -15%;
             }
 				}
-#home.no-active .home-inner-text{animation: MoveInnerTextbc ease 0.5s;
+.home.no-active .home-inner-text{animation: MoveInnerTextbc ease 0.5s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes MoveInnerTextbc{
@@ -65,9 +65,9 @@
 /** home animation end **/
 
 /** our story animation start **/
-#our-story .page-head{left: -20%;}
-#our-story .blue-back-image{top:6%;}
-#our-story.active .page-head{
+.our-story .page-head{left: -20%;}
+.our-story .blue-back-image{top:6%;}
+.our-story.active .page-head{
 	position: relative;
 	animation: Movehead ease 0.5s;
     animation-iteration-count: 1;
@@ -80,7 +80,7 @@
                 left:0%;
             }
 				}
-#our-story.no-active .page-head{
+.our-story.no-active .page-head{
 	position: relative;
 	animation: Moveheadbc ease 0.5s;
     animation-iteration-count: 1;
@@ -93,7 +93,7 @@
                 left:10%;
             }
 				}
-#our-story.active .blue-back-image{
+.our-story.active .blue-back-image{
 	position: relative;
 	animation: MovebackImage ease 0.5s;
     animation-iteration-count: 1;
@@ -106,7 +106,7 @@
                 top:-6%;
             }
 				}
-#our-story.no-active .blue-back-image{
+.our-story.no-active .blue-back-image{
 	position: relative;
 	animation: MoveheadImagebc ease 0.5s;
     animation-iteration-count: 1;
@@ -122,7 +122,7 @@
 /** our story animation end **/
 
 /** magazine animation start **/
-#magazine.active .page-head{
+.magazine.active .page-head{
 	position: relative;
 	animation: Movehead2 ease 0.5s;
     animation-iteration-count: 1;
@@ -135,7 +135,7 @@
                 left: -15%;
             }
 				}
-#magazine.no-active .page-head{
+.magazine.no-active .page-head{
 	position: relative;
 	animation: Movehead2bc ease 0.5s;
     animation-iteration-count: 1;
@@ -148,7 +148,7 @@
                 left: 0%;
             }
 				}
-#magazine.active .mag-come-soon{
+.magazine.active .mag-come-soon{
 	position: relative;
 	animation: Movecomesoon ease 0.5s;
     animation-iteration-count: 1;
@@ -161,7 +161,7 @@
                 font-size: 46px;
             }
 				}
-#magazine.no-active .mag-come-soon{
+.magazine.no-active .mag-come-soon{
 	position: relative;
 	animation: Movecomesoonbc ease 0.5s;
     animation-iteration-count: 1;
@@ -177,7 +177,7 @@
 /** magazine animation end **/
 
 /** WorkWithUs animation start **/
-#work-with-us.active .page-head{
+.work-with-us.active .page-head{
 	position: relative;
 	animation: Movehead3 ease 0.5s;
     animation-iteration-count: 1;
@@ -190,7 +190,7 @@
                 left: 0%;
             }
 				}
-#work-with-us.no-active .page-head{
+.work-with-us.no-active .page-head{
 	position: relative;
 	animation: Movehead3bc ease 0.5s;
     animation-iteration-count: 1;
@@ -203,7 +203,7 @@
                 left: 15%;
             }
 				}
-#work-with-us.active .partner-main-div{
+.work-with-us.active .partner-main-div{
 	position: relative;
 	animation: partnerMain ease 0.5s;
     animation-iteration-count: 1;
@@ -216,7 +216,7 @@
                 top:0;
             }
 				}
-#work-with-us.no-active .partner-main-div{
+.work-with-us.no-active .partner-main-div{
 	position: relative;
 	animation: partnerMainbc ease 0.5s;
     animation-iteration-count: 1;
@@ -229,7 +229,7 @@
                 top:-15%;
             }
 				}
-#work-with-us.active .partner-pic{
+.work-with-us.active .partner-pic{
 	position: relative;
 	animation: partnerPic ease 0.5s;
     animation-iteration-count: 1;
@@ -242,7 +242,7 @@
                 top:-10px;
             }
 				}
-#work-with-us.no-active .partner-pic{
+.work-with-us.no-active .partner-pic{
 	position: relative;
 	animation: partnerPicbc ease 0.5s;
     animation-iteration-count: 1;
@@ -259,7 +259,7 @@
 /** WorkWithUs animation end **/
 
 /** tell us animation start **/
-#tell-us-more.active .page-head{
+.tell-us-more.active .page-head{
 	position: relative;
 	animation: Movehead4 ease 0.5s;
     animation-iteration-count: 1;
@@ -272,7 +272,7 @@
                 left: 0%;
             }
 				}
-#tell-us-more.no-active .page-head{
+.tell-us-more.no-active .page-head{
 	position: relative;
 	animation: Movehead4bc ease 0.5s;
     animation-iteration-count: 1;
@@ -285,7 +285,7 @@
                 left: 25%;
             }
 				}
-#tell-us-more.active .help-us-content{
+.tell-us-more.active .help-us-content{
 	position: relative;
 	animation: MovehelpUS ease 0.5s;
     animation-iteration-count: 1;
@@ -298,7 +298,7 @@
                 right:0%;
             }
 				}
-#tell-us-more.no-active .help-us-content{
+.tell-us-more.no-active .help-us-content{
 	position: relative;
 	animation: MovehelpUSbc ease 0.5s;
     animation-iteration-count: 1;
