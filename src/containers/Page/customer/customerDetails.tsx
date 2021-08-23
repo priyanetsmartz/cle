@@ -14,6 +14,7 @@ function CustomerDetails(props) {
     const [myDetailsModel, setMyDetailsModel] = useState(false);
     const [myPreferenceModel, setMyPreferenceModel] = useState(false);
     const [myAddressModal, setMyAddressModal] = useState(false);
+    const [giftingModal, setGiftingModal] = useState(false);
 
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [telephone, setTelephone] = useState("");
@@ -139,14 +140,14 @@ function CustomerDetails(props) {
     const handleChangePass = async () => {
         if (handleValidation()) {
             let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
-            if(result.data){
+            if (result.data) {
                 notification("success", "", "Password updated");
                 setChangePass({
-                    confirmNewPassword:"",
-                    newPassword:"",
-                    password:""
+                    confirmNewPassword: "",
+                    newPassword: "",
+                    password: ""
                 });
-            }else{
+            } else {
                 notification("error", "", "Invalid email or password");
             }
         }
@@ -197,12 +198,12 @@ function CustomerDetails(props) {
 
             let result: any = await updateCustEmail(req);
             console.log(result);
-            if(result){
+            if (result) {
                 notification("success", "", "New email Updated");
                 setChangeEmail({
-                    confirmNewEmail:"",
-                    newEmail:"",
-                    password:""
+                    confirmNewEmail: "",
+                    newEmail: "",
+                    password: ""
                 })
             }
         }
@@ -258,6 +259,10 @@ function CustomerDetails(props) {
 
     const openAddressModal = () => {
         setMyAddressModal(!myAddressModal);
+    }
+
+    const openGigitingModal = () => {
+        setGiftingModal(!giftingModal);
     }
 
 
@@ -344,6 +349,28 @@ function CustomerDetails(props) {
                         </div>
                         <div className="col-md-3">
                             <button className="signup-btn" onClick={openAddressModal}>Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="row" style={{ marginTop: '150px' }}>
+                <div className="col-md-10 offset-md-1">
+                    <h3>Gifting Preferences</h3>
+                    <p>You can put information abount certain occasions or birthdays them we'll communicate gift ideas.</p>
+                    <div className="row">
+                        <div className="col-md-3">
+                            <b>My Birthday</b>
+                            <p>01 May 1990</p>
+                        </div>
+                        <div className="col-md-3">
+                            <b>List of Birthdays</b>
+                            <p>Jhon / Mom +3 more</p>
+                        </div>
+                        <div className="col-md-3">
+                        </div>
+                        <div className="col-md-3">
+                            <button className="signup-btn" onClick={openGigitingModal}>Edit</button>
                         </div>
                     </div>
                 </div>
@@ -638,6 +665,21 @@ function CustomerDetails(props) {
 
                             </div>
                         </div>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* Gifting preference details modal */}
+            <Modal show={giftingModal} size="lg">
+                <Modal.Header> 
+                    <h4>Gifting Preferences</h4>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openGigitingModal} aria-label="Close"></button>
+                </Modal.Header>
+                <div className="row">
+                    <b>My Birthday</b>
+                    <p>01 May 1990</p>
+                    <div className="col-md-6">
+                        
                     </div>
                 </div>
             </Modal>
