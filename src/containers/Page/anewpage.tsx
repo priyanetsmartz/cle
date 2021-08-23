@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import ReactFullpage from '@fullpage/react-fullpage';
 import Footer from '../partials/footer-new';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 function Home(props) {
     const location = useLocation()
@@ -163,49 +164,83 @@ function Home(props) {
     };
     const anchors = ["home", "our-story", "magazine", "work-with-us", "tell-us-more", "checkus-out", "footer"];
     return (
-        <ReactFullpage
-            //fullpage options
-            anchors={anchors}
-            scrollingSpeed={1200} /* Options here */
-            onLeave={onLeave}
-            afterLoad={afterLoad}
+        <>
+            <BrowserView>
+                <ReactFullpage
+                    //fullpage options
+                    anchors={anchors}
+                    scrollingSpeed={1200} /* Options here */
+                    onLeave={onLeave}
+                    afterLoad={afterLoad}
 
-            className="sectiosn"
-            sectionClassName='section'
-            scrollBar="true"
-            render={({ state, fullpageApi }) => {
-                return (
-                    <div className="sectiosn" >
-                        <div id="home1" className="section home">
-                            <HomePage />
-                        </div>
-                        {/* about us */}
-                        <div id="our-story1" className="section our-story" >
-                            <AboutUs />
-                        </div>
-                        {/* magazine */}
-                        <div id="magazine1" className="section magazine" >
-                            <MagazineNew />
-                        </div>
-                        {/* partnership */}
-                        <div id="work-with-us1" className="section work-with-us" >
-                            <Partnership />
-                        </div>
-                        {/* helpus */}
-                        <div id="tell-us-more1" className="section tell-us-more" >
-                            <HelpUs />
-                        </div>
-                        {/* check out us */}
-                        <div id="checkus-out1" className="section checkus-out" >
-                            <SocailCheckout />
-                        </div>
-                        <div className="section footer">
-                            <Footer />
-                        </div>
+                    className="sectiosn"
+                    sectionClassName='section'
+                    scrollBar="true"
+                    render={({ state, fullpageApi }) => {
+                        return (
+                            <div className="sectiosn" >
+                                <div id="home1" className="section home">
+                                    <HomePage />
+                                </div>
+                                {/* about us */}
+                                <div id="our-story1" className="section our-story" >
+                                    <AboutUs />
+                                </div>
+                                {/* magazine */}
+                                <div id="magazine1" className="section magazine" >
+                                    <MagazineNew />
+                                </div>
+                                {/* partnership */}
+                                <div id="work-with-us1" className="section work-with-us" >
+                                    <Partnership />
+                                </div>
+                                {/* helpus */}
+                                <div id="tell-us-more1" className="section tell-us-more" >
+                                    <HelpUs />
+                                </div>
+                                {/* check out us */}
+                                <div id="checkus-out1" className="section checkus-out" >
+                                    <SocailCheckout />
+                                </div>
+                                <div className="section footer">
+                                    <Footer />
+                                </div>
+                            </div>
+                        )
+                    }}
+                />
+            </BrowserView>
+            <MobileView>
+                <div className="sectiosn" >
+                    <div id="home1" className="section home">
+                        <HomePage />
                     </div>
-                )
-            }}
-        />
+                    {/* about us */}
+                    <div id="our-story1" className="section our-story" >
+                        <AboutUs />
+                    </div>
+                    {/* magazine */}
+                    <div id="magazine1" className="section magazine" >
+                        <MagazineNew />
+                    </div>
+                    {/* partnership */}
+                    <div id="work-with-us1" className="section work-with-us" >
+                        <Partnership />
+                    </div>
+                    {/* helpus */}
+                    <div id="tell-us-more1" className="section tell-us-more" >
+                        <HelpUs />
+                    </div>
+                    {/* check out us */}
+                    <div id="checkus-out1" className="section checkus-out" >
+                        <SocailCheckout />
+                    </div>
+                    <div className="section footer">
+                        <Footer />
+                    </div>
+                </div>
+            </MobileView>
+        </>
     );
 }
 export default Home;
