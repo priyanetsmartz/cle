@@ -65,8 +65,9 @@ export function addItemToWishList(productId) {
     return AdminApi.request(`rest/V1/wishlist/add/${productId}`, "", "GET", "");
 }
 
-export function removeItemFromWishList(custId) {
-    return AdminApi.request(`rest/V1/wishlist/items?customerId=${custId}`, "", "GET", "");
+export function removeItemFromWishList(custId, wishlist_item_id) {
+    custId = 114; //remove that
+    return AdminApi.request(`rest/V1/wishlist/delete/${wishlist_item_id}?customerId=${custId}`, "", "DELETE", "");
 }
 
 export function wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchName) {
