@@ -52,8 +52,8 @@ const PublicRoutes = ({ history }) => {
         <Route exact path="/post-comment">
           <PostComment />
         </Route>
-        <WithFooter exact path="/products" component={Product} />
-        <WithFooter exact path="/my-cart" component={Cart} />
+        <MainRoute exact path="/products" component={Product} />
+        <MainRoute exact path="/my-cart" component={Cart} />
         <MainRoute path="/:id" component={Pages} />
         {/* <Route exact path="/page-not-found" component={NotFound} /> */}
       </Switch>

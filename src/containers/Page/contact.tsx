@@ -53,7 +53,11 @@ function ContactUS(props) {
             setForm(result.data[0]);
         }
         getData()
-    }, [props.languages]);
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
+    }, [props.languages, language]);
 
 
     const handleValidation = () => {

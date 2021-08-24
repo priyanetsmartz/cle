@@ -77,6 +77,8 @@ function Header(props) {
         localStorage.removeItem('cust_id');
         localStorage.removeItem('token_email');
         localStorage.removeItem('token');
+        localStorage.removeItem('token_name');
+        localStorage.removeItem('cartQuoteId');
         //  cookie.remove('name', { path: '', domain: '.dev.cle.com/' })
         props.logout();
         props.showHelpus(false);

@@ -13,8 +13,8 @@
 
 .homescreen-bg img {
     height: auto;
-    width: 1185px !important;
-    margin-left: -130% !important;
+    min-width: 1185px !important;
+left: -122% !important;
     margin-top: 0% !important;
 }
 	.home-inner-text{height: 340px;}
@@ -128,12 +128,12 @@ bottom: 10%;
 #magazine .blog-sec-main .mag-blog-desc {display: block !important;}
 .partner-pic{top:0;position: relative !important;}
 .partner-pic img{width: 100%; margin-right:0;}
-#work-with-us .partner-main-div{width: 100%;height: auto;margin-top:0px !important;padding:30px 22px;}
+#work-with-us1 .partner-main-div{width: 100%;height: auto;margin-top:0px !important;padding:30px 22px;}
 .partner-main-div h1{font-size: 20px;line-height: normal;width: 100%;}
 .see-more-sec .squares{display:none;}
 .see-more-sec .see-more-text{font-size: 18px;line-height: 24px;width: 100%;float: none;}
-#work-with-us .mag-first-sec{top: 0;margin-top: 0 !important;}
-#work-with-us .see-more-sec {margin-top: 15px !important;}
+#work-with-us1 .mag-first-sec{top: 0;margin-top: 0 !important;}
+#work-with-us1 .see-more-sec {margin-top: 15px !important;}
 .become-rotate{display:none;}
 .container.about-inner .squares {
     bottom: auto;
@@ -216,6 +216,7 @@ bottom: 10%;
 .header-logo-menu.sticky {background: rgba(255, 255, 255, 0.7);}
 .section{height:max-content !important;}
 #checkus-out.section{height:max-content !important;}
+.help-us-body {padding-top: 30%;  padding-bottom: 15%;}
 }
 
 @media (min-width: 580px) and (max-width: 767px) {
@@ -348,12 +349,12 @@ bottom: 10%;
 #magazine .blog-sec-main .mag-blog-desc {display: block !important;}
 .partner-pic{top:0;position: relative !important;}
 .partner-pic img{width: 100%; margin-right:0;}
-#work-with-us .partner-main-div{width: 100%;height: auto;margin-top:0px !important;padding:30px 22px;}
+#work-with-us1 .partner-main-div{width: 100%;height: auto;margin-top:0px !important;padding:30px 22px;}
 .partner-main-div h1{font-size: 20px;line-height: normal;width: 100%;}
 .see-more-sec .squares{display:none;}
 .see-more-sec .see-more-text{font-size: 18px;line-height: 24px;width: 100%;float: none;}
-#work-with-us .mag-first-sec{top: 0;margin-top: 0 !important;}
-#work-with-us .see-more-sec {margin-top: 15px !important;}
+#work-with-us1 .mag-first-sec{top: 0;margin-top: 0 !important;}
+#work-with-us1 .see-more-sec {margin-top: 15px !important;}
 .become-rotate{display:none;}
 .container.about-inner .squares {
     bottom: auto;
@@ -569,12 +570,12 @@ bottom: 10%;
 #magazine .blog-sec-main .mag-blog-desc {display: block !important;}
 .partner-pic{top:0;position: relative !important;}
 .partner-pic img{width: 100%; margin-right:0;}
-#work-with-us .partner-main-div{width: 100%;height: auto;margin-top:0px !important;padding:40px;}
+#work-with-us1 .partner-main-div{width: 100%;height: auto;margin-top:0px !important;padding:40px;}
 .partner-main-div h1{font-size:45px;line-height: normal;width: 100%;}
 .see-more-sec .squares{display:none;}
 .see-more-sec .see-more-text{font-size: 26px;line-height: 36px;width: 75%;float: none;}
-#work-with-us .mag-first-sec{top: 0;margin-top: 0 !important;}
-#work-with-us .see-more-sec {margin-top: 15px !important;margin-left:40%;}
+#work-with-us1 .mag-first-sec{top: 0;margin-top: 0 !important;}
+#work-with-us1 .see-more-sec {margin-top: 15px !important;margin-left:40%;}
 .become-rotate{display:none;}
 .container.about-inner .squares {
     bottom: auto;
@@ -657,6 +658,10 @@ bottom: 10%;
 .header-logo-menu.sticky {background: rgba(255, 255, 255, 0.7);}
 .section{height:max-content !important;}
 #checkus-out.section{height:max-content !important;}
+.left-main-menu{width: 100%;
+margin-left: 0;
+margin-top: 10%;}
+.right-main-menu{width:100%;}
 }
 @media (min-width: 963px) and (max-width: 1024px) {
 	

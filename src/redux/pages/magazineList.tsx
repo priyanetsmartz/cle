@@ -1,4 +1,4 @@
-import API from "../../restApi/Api";
+import API from "../../restApi/AdminApi";
 const Api = new API();
 
 export function MagazineList(language: string) {

@@ -14,16 +14,21 @@ import { BrowserView, MobileView } from 'react-device-detect';
 function Home(props) {
     const location = useLocation()
     useEffect(() => {
+        
         if (location.hash) {
             //   console.log(location.hash)
             let elem = document.getElementById(location.hash.slice(1) + '1')
             //  let elemClass =  document.getElementsByClassName(location.hash.slice(1))
-            // console.log(elem)
+            console.log(elem)
             if (elem) {
                 elem.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
             }
         } else {
             window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+        }
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
         }
     })
     const onLeave = (origin, destination, direction) => {
@@ -168,13 +173,14 @@ function Home(props) {
             <BrowserView>
                 <ReactFullpage
                     //fullpage options
-                    anchors={anchors}
+                    // anchors={anchors}
                     scrollingSpeed={1200} /* Options here */
                     onLeave={onLeave}
                     afterLoad={afterLoad}
 
                     className="sectiosn"
                     sectionClassName='section'
+                    // normalScrollElements= '.checkus-out'
                     scrollBar="true"
                     render={({ state, fullpageApi }) => {
                         return (

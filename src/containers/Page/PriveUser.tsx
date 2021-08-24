@@ -22,7 +22,7 @@ function PriveUser(props) {
 
     }
     fetchMyAPI()
-  }, [props.languages])
+  }, [props.languages,language])
   return (
     <>
       <div className="container magazine-inner">

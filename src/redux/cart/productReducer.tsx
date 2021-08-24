@@ -12,7 +12,7 @@ const cartReducer = (state = initState, action) => {
     if (action.type === actions.PRODUCT_LIST) {
         return {
             ...state,
-            items: action.payload.items
+            items: action.payload
         }
     }
     if (action.type === actions.ADD_TO_CART) {

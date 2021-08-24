@@ -1,6 +1,7 @@
 import Notification from "../components/notification";
 import CommonFunctions from "../commonFunctions/CommonFunctions";
 import { apiConfig } from '../settings';
+import { getCookie } from "../helpers/session";
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 // const baseUrl = 'https://4a83875b65.nxcli.net/';
@@ -27,8 +28,8 @@ class AdminApi {
         }
 
         let authtoken = '';
-
-        const token = apiConfig.adminToken;
+        let token = localStorage.getItem('id_token');
+       // const token = apiConfig.adminToken;
         authtoken = `Bearer ${token}`;
         return new Promise(function (resolve, reject) {
             var url = baseUrl + name

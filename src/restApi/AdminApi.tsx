@@ -1,9 +1,10 @@
 import { getCookie } from "../helpers/session";
 import Notification from "../components/notification";
+import { apiConfig } from '../settings';
 // import CommonFunctions from "../commonFunctions/CommonFunctions";
 // const commonFunctions = new CommonFunctions();
 // const baseUrl = commonFunctions.getBaseUrl();
-const baseUrl ='https://4a83875b65.nxcli.net/';
+const baseUrl = 'https://4a83875b65.nxcli.net/';
 //const qs = require("qs");
 const axios = require("axios");
 const processResponse = true;
@@ -25,14 +26,9 @@ class API {
       queryString = '';
     }
     //Get token value from cookie
-    const id_token = getCookie("id_token");
     let authtoken = '';
-    //Check if token is not defined and attach to query string
-    if (id_token !== undefined) {
-      const token = 'hcy0yuocc3geyjhoqd3esopkmjiky8tv';
-      authtoken = `Bearer ${token}`;
-    }
-    const token = 'hcy0yuocc3geyjhoqd3esopkmjiky8tv';
+
+    const token = apiConfig.adminToken;
     authtoken = `Bearer ${token}`;
     return new Promise(function (resolve, reject) {
       var url = queryString === '' ? baseUrl + name : baseUrl + name + "?" + queryString;

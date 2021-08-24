@@ -24,7 +24,7 @@ function Magazine(props) {
             <div className="container magazine-inner">
                 <figure className="offset-md-1 ps-4  page-head">
                     <svg xmlns="http://www.w3.org/2000/svg" width="770" height="134" viewBox="0 0 770 134">
-                        <text id="Magazine" transform="translate(385 98)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="110"
+                        <text id="Magazines" transform="translate(385 98)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="110"
                             fontFamily="Monument Extended Book">
                             <tspan x="-383.515" y="0"><IntlMessages id="magazine.header" /></tspan>
                         </text> </svg>
