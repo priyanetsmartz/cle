@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import HttpsRedirect from 'react-https-redirect';
 import { Provider } from 'react-redux'
 import { store, history } from "./redux/store";

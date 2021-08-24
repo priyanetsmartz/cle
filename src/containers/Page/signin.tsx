@@ -35,6 +35,10 @@ function SignIn(props) {
       setRememberMe(true);
       setState({ email: getCookie("username"), password: getCookie("password") })
     }
+    return () => {
+      // componentwillunmount in functional component.
+      // Anything in here is fired on component unmount.
+  }
   }, []);
 
   useEffect(() => {

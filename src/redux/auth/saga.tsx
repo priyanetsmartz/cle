@@ -26,6 +26,7 @@ export function* loginRequest() {
         if (userInfo) {
           const token = yield call(loginApi.getAuthRegister, userInfo.email);
           if (token.data[0].entity_id) localStorage.setItem('cust_id', token.data[0].entity_id); //store customer id
+
           yield put({
             type: actions.LOGIN_SUCCESS,
             token: response.data,
@@ -50,6 +51,8 @@ export function* loginRequest() {
           localStorage.setItem('token_email', token.data[0].email);
           localStorage.setItem('token_name', token.data[0].firstname + ' ' + token.data[0].lastname);
           localStorage.setItem('token', token.data[0].group_id);
+          const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
+          localStorage.setItem('cartQuoteId', cartToken.data);
           yield put({
             type: appAction.SHOW_SIGHNIN,
             showLogin: false
@@ -59,11 +62,11 @@ export function* loginRequest() {
             showHelpus: true
           });
           notification("success", "", "Successfully Logged in");
-          if (token.data[0].group_id === "4") {
-            yield put(push("/prive-user"));
-          } else {
-            yield put(push("/"));
-          }
+          // if (token.data[0].group_id === "4") {
+          //   yield put(push("/prive-user"));
+          // } else {
+          //   yield put(push("/"));
+          // }
         }
       } else {
         notification("error", "", "Invalid Username or password.");
@@ -92,7 +95,7 @@ export function* registerRequest() {
       let email = payload.payload.userInfo.email;
       let password = payload.payload.userInfo.password;
       let storeId = payload.payload.userInfo.storeId;
-     // console.log(type);
+      // console.log(type);
       // var rememberMe = payload.payload.userInfo.rememberMe;
       //API call to login request
       const response = yield call(loginApi.register, firstname, lastname, email, password, type, storeId);

@@ -1,4 +1,4 @@
-import ADMINAPI from "../../restApi/Api";
+import ADMINAPI from "../../restApi/AdminApi";
 import FORGOTPASSAPI from "../../restApi/ForgotPassApi";
 const AdminApi = new ADMINAPI();
 const ForgotPassApi = new FORGOTPASSAPI();
