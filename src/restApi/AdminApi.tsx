@@ -1,10 +1,9 @@
 import { getCookie } from "../helpers/session";
 import Notification from "../components/notification";
 import { apiConfig } from '../settings';
-// import CommonFunctions from "../commonFunctions/CommonFunctions";
-// const commonFunctions = new CommonFunctions();
-// const baseUrl = commonFunctions.getBaseUrl();
-const baseUrl = 'https://4a83875b65.nxcli.net/';
+import CommonFunctions from "../commonFunctions/CommonFunctions";
+const commonFunctions = new CommonFunctions();
+const baseUrl = commonFunctions.getBaseUrl();
 //const qs = require("qs");
 const axios = require("axios");
 const processResponse = true;

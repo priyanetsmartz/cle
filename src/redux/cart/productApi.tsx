@@ -34,8 +34,8 @@ export function getNewInCategories(sortOrder, pageSize) {
     return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=9&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&fields=items[sku,name,id,price,custom_attributes]&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=created_at& searchCriteria[sortOrders][0][direction]=${sortOrder}`, "", "GET", "");
 }
 
-export function getCategoryPage() {
-    return APi.request(`rest/V1/categories/9?storeId=2`, "", "GET", "");
+export function getCategoryPage(catId) {
+    return APi.request(`rest/V1/categories/${catId}?storeId=2`, "", "GET", "");
 }
 
 export function getCategoryDetails() {

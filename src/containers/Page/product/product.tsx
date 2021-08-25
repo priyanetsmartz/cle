@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
+import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+const commonFunctions = new CommonFunctions();
+const baseUrl = commonFunctions.getBaseUrl();
 const { addToCart, productList } = cartAction;
 
 function Products(props) {
@@ -61,7 +64,7 @@ function Products(props) {
         getProducts()
     }
 
-    const path = "https://4a83875b65.nxcli.net/pub/media/catalog/product";
+    const path = baseUrl+"pub/media/catalog/product";
     return (
         <div className="container" style={{ "marginTop": "200px" }}>
             <div className="row">

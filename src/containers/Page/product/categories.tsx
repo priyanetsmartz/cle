@@ -3,14 +3,17 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
-import { getNewInCategories } from '../../../redux/cart/productApi';
+import { getNewInCategories, getCategoryPage } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 const { addToCart, productList } = cartAction;
 
 function Categories(props) {
     const [catProducts, setCatProducts] = useState([]);
+    const [categories, setCategories] = useState({});
+    const [catId, setCatId] = useState(9);
     useEffect(() => {
         getProducts();
+        getCategories();
     }, [])
 
     const getProducts = async () => {
@@ -19,8 +22,13 @@ function Categories(props) {
         setCatProducts(result.data.items);
     }
 
+    const getCategories = async () => {
+        let result: any = await getCategoryPage(catId);
+        console.log(result);
+        setCategories(result.data);
+    }
 
-    const path = "https://4a83875b65.nxcli.net/pub/media/catalog/product";
+
     return (
         <div className="container" style={{ "marginTop": "200px" }}>
             <div className="row">
