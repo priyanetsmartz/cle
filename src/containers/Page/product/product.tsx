@@ -23,30 +23,38 @@ function Products(props) {
     }, [])
 
     const getProducts = async () => {
+        let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductByCategory();
-        let whishlist: any = await getWhishlistItemsForUser();
-        let products = result.data.items;
-        let WhishlistData = whishlist.data;
-        const mergeById = (a1, a2) =>
-            a1.map(itm => ({
-                ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
-                ...itm
-            }));
+        let productResult = result.data.items;
+        if (customer_id) {
+            let whishlist: any = await getWhishlistItemsForUser();
+            let products = result.data.items;
+            let WhishlistData = whishlist.data;
+            const mergeById = (a1, a2) =>
+                a1.map(itm => ({
+                    ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
+                    ...itm
+                }));
 
-        let productResult = mergeById(products, WhishlistData);
+            productResult = mergeById(products, WhishlistData);
+        }
         props.productList(productResult);
     }
 
-    function handleClick(id: number, sku:string) {
+    function handleClick(id: number, sku: string) {
         let cartData = {
             "cartItem": {
-              "sku": sku,
-              "qty": 1,
-              "quote_id": localStorage.getItem('cartQuoteId')
+                "sku": sku,
+                "qty": 1,
+                "quote_id": localStorage.getItem('cartQuoteId')
             }
-          }
-        addToCartApi(cartData)
+        }
+        let customer_id = localStorage.getItem('cust_id');
+        if (customer_id) {
+            addToCartApi(cartData)
+        }
         props.addToCart(id);
+        notification("success", "", "Item added to cart");
     }
 
     async function handleWhishlist(id: number) {
@@ -84,9 +92,9 @@ function Products(props) {
                             }
                             <div className="card-one">
                                 <div className="card">
-                                    <img src={item.custom_attributes ? path + '/' + item.custom_attributes[0].value : item} alt={item.name} />
+                                    <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} />
                                     <span className="card-title">{item.name}</span>
-                                    {token && (<Link to="#" onClick={() => { handleClick(item.id,item.sku) }} className="btn-floating halfway-fab waves-effect waves-light red" ><i className="material-icons">add</i></Link>
+                                    {!token && (<Link to="#" onClick={() => { handleClick(item.id, item.sku) }} className="btn-floating halfway-fab waves-effect waves-light red" ><i className="material-icons">add</i></Link>
                                     )}
                                 </div>
 
