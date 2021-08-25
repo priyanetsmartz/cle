@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
-import { getWishList, wishListSearchSort } from '../../../redux/pages/customers';
+import { getWishList, removeItemFromWishList, wishListSearchSort } from '../../../redux/pages/customers';
+import product from '../product/product';
 
 
 function WishList(props) {
@@ -33,6 +34,15 @@ function WishList(props) {
     const sortHandler = (e) => {
         setSortOrder(e.target.value);
         getData();
+    }
+
+    const itemREmoveHandler = async (productId) => {
+        let result: any = await removeItemFromWishList(custId, productId);
+        console.log(result);
+        if (result) {
+            notification("success", "", result.data[0].message);
+            getData();
+        }
     }
 
 
@@ -66,6 +76,7 @@ function WishList(props) {
                                             <img src={item.img_src} alt={item.name} style={{ height: '100px', width: '100px' }} />
                                             <p>Name : {item.name}</p>
                                             <p>Product Price : {item.price}</p>
+                                            <button onClick={() => itemREmoveHandler(item.product_id)}>Remove</button>
                                         </div>
                                     );
                                 })}

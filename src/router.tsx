@@ -22,6 +22,7 @@ import CustomerDetails from './containers/Page/customer/customerDetails';
 import CustomerOrders from './containers/Page/customer/customerOrders';
 import OrderDetails from './containers/Page/customer/orderDetails';
 import WishList from './containers/Page/customer/wishList';
+import Categories from './containers/Page/product/categories';
 // import New from './containers/Page/new';
 import One from './containers/Page/one';
 import Product from './containers/Page/product/product';
@@ -42,6 +43,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/customer-orders" component={CustomerOrders} />
         <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
         <MainRoute exact path="/wish-list" component={WishList} />
+        <MainRoute exact path="/categories" component={Categories} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
         <PrivateRoute exact path="/prive-user" component={PriveUser} />
