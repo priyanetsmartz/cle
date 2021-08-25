@@ -14,7 +14,7 @@ import { BrowserView, MobileView } from 'react-device-detect';
 function Home(props) {
     const location = useLocation()
     useEffect(() => {
-        
+        console.log(location.hash)
         if (location.hash) {
             //   console.log(location.hash)
             let elem = document.getElementById(location.hash.slice(1) + '1')

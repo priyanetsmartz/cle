@@ -62,11 +62,11 @@ export function* loginRequest() {
             showHelpus: true
           });
           notification("success", "", "Successfully Logged in");
-          // if (token.data[0].group_id === "4") {
-          //   yield put(push("/prive-user"));
-          // } else {
-          //   yield put(push("/"));
-          // }
+          if (token.data[0].group_id === "4") {
+            yield put(push("/prive-user"));
+          } else {
+            yield put(push("/"));
+          }
         }
       } else {
         notification("error", "", "Invalid Username or password.");

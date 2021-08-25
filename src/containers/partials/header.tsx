@@ -28,6 +28,10 @@ function Header(props) {
         }, 3000);
 
         setMenuLoaded(props.openMenu)
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.openMenu]);
 
     useEffect(() => {

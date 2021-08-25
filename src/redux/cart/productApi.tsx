@@ -29,3 +29,22 @@ export function getWhishlistItemsForUser() {
 export function addToCartApi(cartData) {
     return APi.request(`rest/V1/carts/mine/items`, cartData, "POST", "")
 }
+
+export function getCartItems() {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`rest/V1/carts/${cartQuoteId}`, "", "GET", "")
+}
+
+export function getCartTotal() {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`rest/V1/carts/${cartQuoteId}/totals`, "", "GET", "")
+}
+export function removeItemFromCart(id: number) {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`rest/V1/carts/${cartQuoteId}/items/${id}`, "", "DELETE", "")
+}
+
+export function updateCartItem(id,cartData) {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`rest/V1/carts/${cartQuoteId}/items/${id}`, cartData, "PUT", "")
+}
