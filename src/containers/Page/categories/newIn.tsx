@@ -4,20 +4,21 @@ import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import { getNewInCategories, getCategoryPage } from '../../../redux/cart/productApi';
+import { Pages1 } from '../../../redux/pages/allPages';
 import notification from "../../../components/notification";
 const { addToCart, productList } = cartAction;
 
-function Categories(props) {
+function NewIn(props) {
     const [catProducts, setCatProducts] = useState([]);
     const [categories, setCategories] = useState({});
     const [catId, setCatId] = useState(9);
     useEffect(() => {
-        getProducts();
-        getCategories();
+        // getProducts();
+        // getCategories();
     }, [])
 
     const getProducts = async () => {
-        let result: any = await getNewInCategories('DESC', 7);
+        let result: any = await getNewInCategories('DESC', 10);
         console.log(result);
         setCatProducts(result.data.items);
     }
@@ -54,4 +55,4 @@ const mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
     { addToCart, productList }
-)(Categories);
+)(NewIn);
