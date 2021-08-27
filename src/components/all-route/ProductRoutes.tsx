@@ -9,15 +9,11 @@ const ProductRoutes = ({ component: Component, auth, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      auth === undefined ? (
-        <>
-          <Header  />
-          <Component {...props} />
-          <Footer />
-        </>
-      ) : (
-        <Redirect to="/" />
-      )
+      <>
+        <Header />
+        <Component {...props} />
+        <Footer />
+      </>
     }
   />
 );
