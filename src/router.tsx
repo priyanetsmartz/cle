@@ -7,6 +7,7 @@ import ForgottenPassword from './containers/Page/forgotPassword';
 import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
+import ProductRoutes from "./components/all-route/ProductRoutes";
 import WithFooter from "./components/all-route/withFooter";
 import HomeRoute from './components/all-route/HomeRoute';
 import PrivateRoute from "./components/all-route/privateRoute";
@@ -22,7 +23,8 @@ import CustomerDetails from './containers/Page/customer/customerDetails';
 import CustomerOrders from './containers/Page/customer/customerOrders';
 import OrderDetails from './containers/Page/customer/orderDetails';
 import WishList from './containers/Page/customer/wishList';
-import Categories from './containers/Page/product/categories';
+import Categories from './containers/Page/categories/categories';
+import ProductDetails from './containers/Page/product/productDetails';
 // import New from './containers/Page/new';
 import One from './containers/Page/one';
 import Product from './containers/Page/product/product';
@@ -44,6 +46,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
         <MainRoute exact path="/wish-list" component={WishList} />
         <MainRoute exact path="/categories" component={Categories} />
+        <ProductRoutes exact path="/product-details" component={ProductDetails} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
         <PrivateRoute exact path="/prive-user" component={PriveUser} />
