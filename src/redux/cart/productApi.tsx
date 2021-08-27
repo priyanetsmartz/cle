@@ -2,8 +2,9 @@ import AdminApi from "../../restApi/AdminApi";
 const APi = new AdminApi();
 
 
-export function getProductByCategory() {
-    return APi.request(`rest/all/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=2&searchCriteria[filter_groups][0][filters][0][condition_type]=eq`, "", "GET", "");
+export function getProductByCategory(page,pageSize,category, sortBy, sortByValue) {
+    category = 2;
+    return APi.request(`rest/all/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${category}&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}`, "", "GET", "");
 }
 
 export function addWhishlist(id: number) {
@@ -44,7 +45,7 @@ export function removeItemFromCart(id: number) {
     return APi.request(`rest/V1/carts/${cartQuoteId}/items/${id}`, "", "DELETE", "")
 }
 
-export function updateCartItem(id,cartData) {
+export function updateCartItem(id, cartData) {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
     return APi.request(`rest/V1/carts/${cartQuoteId}/items/${id}`, cartData, "PUT", "")
 }
