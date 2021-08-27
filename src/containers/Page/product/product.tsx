@@ -6,25 +6,40 @@ import cartAction from "../../../redux/cart/productAction";
 import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+import { getCookie } from '../../../helpers/session';
+import { Pages, Pages1 } from '../../../redux/pages/allPages';
+import axios from 'axios';
+import { apiConfig } from '../../../settings';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const { addToCart, productList } = cartAction;
 
+
 function Products(props) {
+    let pageSize = 9;
+    const [pagination, setPagination] = useState(1);
+    const [page, setCurrent] = useState(1);
     const [token, setToken] = useState('');
+    const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
+    const [sort, setSort] = useState(0);
+    const language = getCookie('currentLanguage');
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
         getProducts();
+
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [])
+    }, [sortValue, page])
 
-    const getProducts = async () => {
+    async function getProducts() {
+
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory();
+        let result: any = await getProductByCategory(page, pageSize, 'category', sortValue.sortBy, sortValue.sortByValue);
+        //  console.log(Math.ceil(result.data.total_count / 9))
+        setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
@@ -39,8 +54,46 @@ function Products(props) {
             productResult = mergeById(products, WhishlistData);
         }
         props.productList(productResult);
+        const token = apiConfig.adminToken;
+        let authtoken = `Bearer ${token}`;
+        
+        let body = {
+            query: `{
+                cmsPage(identifier: "about-us") {
+                        identifier
+                        title
+                    }
+                }
+            `,
+            variables: {}
+        }
+        let options = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': authtoken
+            }
+        }
+        axios.post('https://4a83875b65.nxcli.net/graphql', body, options)
+            .then((response) => {
+                console.log(response);
+            });
     }
+    const filtterData = (event) => {
+        let lang = props.languages ? props.languages : language;
+        let sortBy = "created_at";
+        let sortByValue = "desc";
+        if (event.target.value === "1") {
+            sortBy = "price";
+            sortByValue = "desc";
+        } else if (event.target.value === "2") {
+            sortBy = "price";
+            sortByValue = "asc";
+        }
 
+        setSort(event.target.value);
+        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
+
+    }
     function handleClick(id: number, sku: string) {
         let cartData = {
             "cartItem": {
@@ -72,9 +125,44 @@ function Products(props) {
         getProducts()
     }
 
-    const path = baseUrl+"pub/media/catalog/product";
+    const getPaginationGroup = () => {
+        let start = Math.floor((page - 1) / 4) * 4;
+        let fill = pagination > 5 ? 4 : pagination;
+        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
+    };
+
+    const goToNextPage = (e) => {
+        let lang = props.languages ? props.languages : language;
+        e.preventDefault();
+        setCurrent((page) => page + 1);
+
+    }
+    function changePage(event) {
+        let lang = props.languages ? props.languages : language;
+
+        event.preventDefault()
+        const pageNumber = Number(event.target.textContent);
+        setCurrent(pageNumber);
+    }
+    const goToPreviousPage = (e) => {
+        let lang = props.languages ? props.languages : language;
+
+        e.preventDefault();
+        setCurrent((page) => page - 1);
+
+    }
+
+
     return (
         <div className="container" style={{ "marginTop": "200px" }}>
+            <div className="col-auto">
+                <select className="form-select" defaultValue={sort} onChange={filtterData} >
+                    <option value={0} key="0" >Newest First</option>
+                    <option value={1} key="1" >High to low -- price </option>
+                    <option value={2} key="2" >Low to High -- price</option>
+                    <option value={3} key="3" >Our picks</option>
+                </select>
+            </div>
             <div className="row">
                 {props.items.map(item => {
                     return (
@@ -126,6 +214,24 @@ function Products(props) {
                         </div>
                     )
                 })}
+                <div className="col-md-12 pagination">
+                    {pagination > 1 && (<nav aria-label="Page navigation example">
+                        <ul className="pagination justify-content-center">
+                            <li
+                                className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
+                                <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
+                            </li>
+                            {getPaginationGroup().map((i, index) => (
+                                <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
+                            ))}
+                            <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
+                                <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
+                                    to="/">Next</Link>
+                            </li>
+                        </ul>
+                    </nav>
+                    )}
+                </div>
             </div>
         </div >
     )
