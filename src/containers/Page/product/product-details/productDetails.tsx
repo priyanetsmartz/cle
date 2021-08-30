@@ -18,6 +18,8 @@ import social4 from "../../../../image/checkout-social-4.png";
 import social5 from "../../../../image/checkout-social-5.png";
 import social6 from "../../../../image/checkout-social-6.png";
 import social7 from "../../../../image/checkout-social-7.png";
+import Promotion from '../../../partials/promotion';
+
 
 function ProductDetails(props) {
     const [isPriveuser, setIsPriveUser] = useState(false);
@@ -26,7 +28,6 @@ function ProductDetails(props) {
     ]);
     const [sizeGuideModal, setSizeGuideModal] = useState(false);
     const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
-
     useEffect(() => {
         console.log(props.items.Cart);
         setSizeGuideModal(props.items.Cart.isOpenSizeGuide);
@@ -40,37 +41,18 @@ function ProductDetails(props) {
     return (
         <>
             <main>
-                <section>
-                    <div className="notification">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <div className="promotion_alert">
-                                        <p>
-                                            <span className="promition">promotion</span> Contrary to popular belief, Lorem Ipsum is not simply random
-                                            text.
-                                        </p>
-                                    </div>
-                                    <div className="alert_cross">
-                                        <a href="#"><img src="images/cross.svg" className="" alt="" /> </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
+                <Promotion />
                 <section>
                     <div className="container">
                         <div className="row">
                             <div className="col-sm-12">
                                 <nav aria-label="breadcrumb">
                                     <ol className="breadcrumb">
-                                        <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                        <li className="breadcrumb-item"><a href="#">Women</a></li>
-                                        <li className="breadcrumb-item"><a href="#">Designers</a></li>
-                                        <li className="breadcrumb-item"><a href="#">Bottega Veneta</a></li>
-                                        <li className="breadcrumb-item"><a href="#">Jewelry</a></li>
+                                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
+                                        <li className="breadcrumb-item"><Link to="#">Women</Link></li>
+                                        <li className="breadcrumb-item"><Link to="#">Designers</Link></li>
+                                        <li className="breadcrumb-item"><Link to="#">Bottega Veneta</Link></li>
+                                        <li className="breadcrumb-item"><Link to="#">Jewelry</Link></li>
                                         <li className="breadcrumb-item active" aria-current="page">Necklaces</li>
                                     </ol>
                                 </nav>
@@ -91,12 +73,12 @@ function ProductDetails(props) {
                                 <div className="product_description">
                                     <div className="list_accordon">
                                         <ul>
-                                            <li><a href="#" className="active">Sale</a></li>
-                                            <li><a href="#">New Designers</a></li>
-                                            <li><a href="#">Popular</a></li>
+                                            <li><Link to="#" className="active">Sale</Link></li>
+                                            <li><Link to="#">New Designers</Link></li>
+                                            <li><Link to="#">Popular</Link></li>
                                         </ul>
                                         {isPriveuser && <div className="logo_stampg">
-                                            <a href="#"><img src={cleWork} alt="" className="img-fluid" /></a>
+                                            <Link to="#"><img src={cleWork} alt="" className="img-fluid" /></Link>
                                         </div>}
                                     </div>
                                     <div className="product_details">
@@ -133,7 +115,7 @@ function ProductDetails(props) {
                                             </div>
                                             <div className="col-sm-4">
                                                 <div className="form-group">
-                                                    <a className="" onClick={sizeGuideModalHandler}>Size Guide</a>
+                                                    <Link className="" to="#" onClick={sizeGuideModalHandler}>Size Guide</Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -216,7 +198,7 @@ function ProductDetails(props) {
                                                             <li> Max feature width 1.4in/3.8cm</li>
                                                             <li> Max feature length 0.7in/1.3cm</li>
                                                         </ul>
-                                                        <a href="#" className="sizeguid">Size Guide</a>
+                                                        <Link to="#" className="sizeguid">Size Guide</Link>
                                                     </div>
                                                 </div>
                                             </div>

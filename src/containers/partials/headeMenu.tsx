@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux'
 import CLELogo from '../../image/CLIlogo.png'
@@ -6,7 +5,7 @@ import avatar from '../../image/avtar.svg'
 import favorit from '../../image/favrot.svg'
 import cartIcon from '../../image/carticon.svg'
 import IconZoomIn from '../../image/Icon_zoom_in.svg'
-
+import { Link } from "react-router-dom";
 
 function HeaderMenu(props) {
     useEffect(() => {
@@ -19,35 +18,35 @@ function HeaderMenu(props) {
                     <div className="col-4 pt-1">
                         <div className="select-wearing">
                             <ul>
-                                <li> <a href="#" className="line-through-active up-arrow">Women</a> </li>
-                                <li> <a href="#">Men</a></li>
-                                <li> <a href="#">Kids</a></li>
-                                <li> <a href="#">All</a></li>
+                                <li> <Link href="#" className="line-through-active up-arrow">Women</Link> </li>
+                                <li> <Link href="#">Men</Link></li>
+                                <li> <Link href="#">Kids</Link></li>
+                                <li> <Link href="#">All</Link></li>
                             </ul>
                         </div>
                     </div>
                     <div className="col-4">
                         <div className="cli_logo">
-                            <a className=" me-2" href="#">
-                                <img src={CLELogo} className="img-fluid" />
-                            </a>
+                            <Link className=" me-2" to="/">
+                                <img src={CLELogo} className="img-fluid"  alt="logo"/>
+                            </Link>
                         </div>
                     </div>
                     <div className="col-4">
 
                         <div className="sell_item" style={{ display: 'none' }}>
                             <div className="sell_itemnote mb-2">
-                                <a href="" className="btn btn-green">Sell an Item</a>
+                                <Link href="" className="btn btn-green">Sell an Item</Link>
                             </div>
                         </div>
 
                         <div className="user_cart">
                             <div className="cartuser-info">
                                 <ul>
-                                    <li><a href="#">Alex </a></li>
-                                    <li> <a href="#"><img src={avatar}/> </a></li>
-                                    <li> <a href="#"><img src={favorit} /></a> </li>
-                                    <li> <a href="#"><img src={cartIcon} /> <span className="cart-number">(3)</span></a></li>
+                                    <li><Link href="#">Alex </Link></li>
+                                    <li> <Link href="#"><img src={avatar} alt="userimage" /> </Link></li>
+                                    <li> <Link href="#"><img src={favorit}  alt="wishlist"/></Link> </li>
+                                    <li> <Link href="#"><img src={cartIcon} alt="cart" /> <span className="cart-number">(3)</span></Link></li>
                                 </ul>
                             </div>
                         </div>
@@ -77,25 +76,25 @@ function HeaderMenu(props) {
                     <div className="navbar-collapse collapse mainmenu-bar" id="bdNavbar">
                         <ul className="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
                             <li className="nav-item col-6 col-md-auto">
-                                <a className="nav-link p-2" href="/">New in</a>
+                                <Link className="nav-link p-2" href="/">New in</Link>
                             </li>
                             <li className="nav-item col-6 col-md-auto">
-                                <a className="nav-link p-2 active" aria-current="true" href="#" >Watches</a>
+                                <Link className="nav-link p-2 active" aria-current="true" href="#" >Watches</Link>
                             </li>
                             <li className="nav-item col-6 col-md-auto">
-                                <a className="nav-link p-2" href="/docs/5.0/examples/" >Jewerly</a>
+                                <Link className="nav-link p-2" href="/docs/5.0/examples/" >Jewerly</Link>
                             </li>
                             <li className="nav-item col-6 col-md-auto">
-                                <a className="nav-link p-2" href="https://icons.getbootstrap.com/" target="_blank"
-                                    rel="noopener">Designers</a>
+                                <Link className="nav-link p-2" href="https://icons.getbootstrap.com/" target="_blank"
+                                    rel="noopener">Designers</Link>
                             </li>
                             <li className="nav-item col-6 col-md-auto">
-                                <a className="nav-link p-2" href="https://themes.getbootstrap.com/" target="_blank"
-                                    rel="noopener">Pre-Owned</a>
+                                <Link className="nav-link p-2" href="https://themes.getbootstrap.com/" target="_blank"
+                                    rel="noopener">Pre-Owned</Link>
                             </li>
                             <li className="nav-item col-6 col-md-auto">
-                                <a className="nav-link p-2" href="https://blog.getbootstrap.com/" target="_blank"
-                                    rel="noopener">Sale</a>
+                                <Link className="nav-link p-2" href="https://blog.getbootstrap.com/" target="_blank"
+                                    rel="noopener">Sale</Link>
                             </li>
                         </ul>
 
