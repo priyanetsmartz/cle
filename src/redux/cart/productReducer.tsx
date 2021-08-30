@@ -97,6 +97,22 @@ const cartReducer = (state = initState, action) => {
         }
 
     }
+
+    if (action.type === actions.OPEN_SIZE_GUIDE) {
+        console.log(action)
+        return {
+            ...state,
+            isOpenSizeGuide: action.isOpen
+        }
+    }
+
+    if (action.type === actions.OPEN_MEASURING_GUIDE) {
+        console.log(action)
+        return {
+            ...state,
+            isOpenMeasuringGuide: action.isOpen
+        }
+    }
     return state
 }
 

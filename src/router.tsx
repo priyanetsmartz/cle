@@ -24,7 +24,7 @@ import CustomerOrders from './containers/Page/customer/customerOrders';
 import OrderDetails from './containers/Page/customer/orderDetails';
 import WishList from './containers/Page/customer/wishList';
 import Categories from './containers/Page/categories/categories';
-import ProductDetails from './containers/Page/product/productDetails';
+import ProductDetails from './containers/Page/product/product-details/productDetails';
 // import New from './containers/Page/new';
 import One from './containers/Page/one';
 import Product from './containers/Page/product/product';
