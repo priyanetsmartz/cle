@@ -853,10 +853,17 @@ font-size: 14px;
     }
     .my_profile_sect h1 {
         font-size: 24px;
-        font-family: 'Monument Extended';
-        font-weight: normal;
+        font-family: 'Monument Extended';     
         font-style: normal;
         margin-top: 30px;
+        font-weight: 500;
+    }
+
+
+    .my_profile_sect.check-als h1 {
+        font-family: 'Monument Extended';  
+        font-weight: 400;
+        font-style: normal;
     }
 
     .my_profile_sect p { 
@@ -878,14 +885,124 @@ font-size: 14px;
 }
 
 .addnew_address {
-    width: 100%;float: left;
+    width: 20%;
+    float: left;
     background-color: #2E2BAA;
-    padding: 150px 20px;
+    padding: 20px;
+    height: 325px;
+    position: relative;
+    margin-right: 20px;
+    font-family: 'Monument Extended';
+    font-weight: normal;
+    font-style: normal;
 }
 
-.addnew_address span {
+
+.default_dlivy, .default_billing {
+    color: #707070;
+    font-size: 16px;
+}
+.addressnew_addressblue {
+    width: 100%;
+    float: left;
+}
+
+.addnew_address .addressnew_addressblue span {
     color:#fff;
     font-size: 22px;
+    position: absolute;
+    bottom: 0;
+    bottom: 18px
+}
+
+.btn-outline-success {
+    border: 0;
+    color: #2E2BAA;
+
+}
+
+.btn-outline-secondary {
+    border: 0;
+    color: #707070;
+
+}
+
+.addressnew_addressbodr h3 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+.addressnew_addressbodr {
+    width: 20%;
+    float: left;
+    border: 1px solid #707070;
+    padding: 20px;
+}
+
+.addressnew_addressbodr ul {
+    margin:0;
+    padding:0;
+
+}
+
+.addressnew_addressbodr ul li {
+    list-style: none;
+    padding: 4px 0px 0 0;
+    font-size: 16px;
+}
+
+.addressnew_addressbodr.bank_card {
+margin-right: 20px;
+}
+
+.add_changeaddress {
+    width: 100%;
+    float: left;
+}
+
+.address-action.paypal_card {
+ margin-top: 87px;
+}
+
+.address-action.bank_card {
+width: 100%;
+margin-top: 79px;
+float: left;
+}
+
+.address-action {
+    width: 100%;
+    float: left;
+    display: flex;
+    justify-content: space-between;
+    text-decoration: none;
+    margin-top: 28px;
+}
+
+.address-action a.delete_btn {
+    font-size: 16px;
+    color: #707070;
+    text-decoration: none;
+    font-family: 'Monument Extended';
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.address-action a.edit_btn {
+    font-size: 16px;
+    color: #2E2BAA;
+    text-decoration: none;
+    font-family: 'Monument Extended';
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+add_changeaddress {
+    width: 100%;
+    float: left;
 }
 
 .display_address {
@@ -1030,6 +1147,102 @@ size_tbl tbody, td, tfoot, th, thead, tr {
 }
 
 
+.change_passwordsec {
+    width: 100%;
+    float: left;
+
+}
+.change_passwordsec label.heading_lbl {
+    font-weight: 600;
+}
+
+.forgot_paswd {
+    width: 100%;
+    float: left;
+    display: flex;
+}
+
+.Frgt_paswd {
+    width: 100%;
+    float: left;
+    
+}
+.Frgt_paswd .confirm-btn {
+    float: right;
+}
+.forgt-pasdw {
+    text-decoration: underline;
+    color: #707070;
+    font-size: 14px;
+}
+
+.change-paswd-sec, .newemail-sec {
+    width: 80%;
+    float: left;
+    margin-top: 30px;
+}
+
+.hidden-pass {
+    width: 40px;
+    float: left;
+    position: absolute;
+    right: 0;
+    top: 39px;
+}
+
+span.hidden-pass  i {
+    color:#ABABAB;
+}
+.form-field {
+    position: relative;
+}
+
+.change-paswd-sec .form-field input {
+    padding-right: 50px;
+
+}
+
+.accordion-flush .accordion-item .accordion-button {
+    border-radius: 0;   
+    font-family: 'Monument Extended';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+    color: #000;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.delet_account_accordin {
+    width: 100%;
+    float: left;
+}
+
+.delet_account_accordin .accordion-header img {
+    margin-right: 10px;
+}
+
+.my_profile_sect.check-als .btn-secondary {
+    color: #fff;
+    background-color: #2E2BAA;
+    border-color: #2E2BAA;
+    border-radius: 0;
+    font-family: 'Monument Extended';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    padding: 20px 20px;
+}
+
+
+.my_profile_sect.check-als .accordion-item {
+    background-color: #fff;
+    border: 2px solid rgba(0,0,0,.125);
+}
+
 
 
 
@@ -1058,6 +1271,26 @@ size_tbl tbody, td, tfoot, th, thead, tr {
             font-size: 10px;
         }
 
+        .addnew_address {
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 20px;
+        }
+
+        .addressnew_addressbodr {
+            width: 100%;
+        }
+
+        .addressnew_addressbodr.bank_card {
+            margin-right: 0;
+            margin-bottom: 20px;
+        }
+
+        .change-paswd-sec, .newemail-sec {
+            width: 100%;
+            float: left;
+        }
+
     }
 
       @media only screen and (max-width: 768px) {
@@ -1074,45 +1307,4 @@ size_tbl tbody, td, tfoot, th, thead, tr {
 
       @media only screen and (max-width: 320px) {
 
-    }
-
-    .img-container {
-        height: 500px;
-        width: 500px;
-        overflow: hidden;
-        position: relative;
-    }
-    .img-container img{
-        position: absolute;
-        /* transform: scale(0.6); */
-        transition: transform 0.5s ease;
-    }
-    .product-full-img{
-        height: 100%;
-        width: 100%;
-    }
-    
-    .img-container:hover img{
-        transform: scale(1.2);
-        cursor: zoom-in;
-      }
-    
-    .product-img {
-        height: 60px;
-        width: 60px;
-        margin-top: 8px;
-        margin-bottom: 8px;
-    }
-    
-    
-    .product-img-slider {
-        max-height: 450px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-    }
-    .product-img-slider :hover{
-        padding: 1px;
-        border: 1px solid #2e2baa;
     }
