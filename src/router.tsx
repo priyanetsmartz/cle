@@ -8,9 +8,9 @@ import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import ProductRoutes from "./components/all-route/ProductRoutes";
-import WithFooter from "./components/all-route/withFooter";
+import PrivateRoute from "./components/all-route/PrivateRoute";
 import HomeRoute from './components/all-route/HomeRoute';
-import PrivateRoute from "./components/all-route/privateRoute";
+import PriveRoute from "./components/all-route/priveRoute";
 import AllPosts from './containers/Page/magazineCategory';
 import NewHome from './containers/Page/anewpage';
 import ThankYou from './containers/Page/ThankYou';
@@ -26,7 +26,7 @@ import WishList from './containers/Page/customer/wishList';
 import Categories from './containers/Page/categories/categories';
 import ProductDetails from './containers/Page/product/productDetails';
 // import New from './containers/Page/new';
-import One from './containers/Page/one';
+
 import Product from './containers/Page/product/product';
 import Cart from './containers/Page/product/cart';
 
@@ -41,22 +41,22 @@ const PublicRoutes = ({ history }) => {
         <HomeRoute exact path="/" component={NewHome} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
-        <MainRoute exact path="/customer-details" component={CustomerDetails} />
-        <MainRoute exact path="/customer-orders" component={CustomerOrders} />
+        <PrivateRoute exact path="/customer-details" component={CustomerDetails} />
+        <PrivateRoute exact path="/customer-orders" component={CustomerOrders} />
         <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
-        <MainRoute exact path="/wish-list" component={WishList} />
+        <PrivateRoute exact path="/wishlist" component={WishList} />
         <MainRoute exact path="/categories" component={Categories} />
-        <MainRoute exact path="/product-details" component={ProductDetails} />
+        <ProductRoutes exact path="/product-details" component={ProductDetails} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
-        <PrivateRoute exact path="/prive-user" component={PriveUser} />
-        <MainRoute exact path="/profile" component={profile} />
+        <PriveRoute exact path="/prive-user" component={PriveUser} />
+        <PrivateRoute exact path="/profile" component={profile} />
         <MainRoute exact path="/password-link-expired" component={PasswordLinkExpired} />
         <Route exact path="/post-comment">
           <PostComment />
         </Route>
-        <MainRoute exact path="/products" component={Product} />
-        <MainRoute exact path="/my-cart" component={Cart} />
+        <ProductRoutes exact path="/products" component={Product} />
+        <PrivateRoute exact path="/my-cart" component={Cart} />
         <MainRoute path="/:id" component={Pages} />
         {/* <Route exact path="/page-not-found" component={NotFound} /> */}
       </Switch>

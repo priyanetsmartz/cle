@@ -14,7 +14,7 @@ import social4 from "../../../image/checkout-social-4.png";
 import social5 from "../../../image/checkout-social-5.png";
 import social6 from "../../../image/checkout-social-6.png";
 import social7 from "../../../image/checkout-social-7.png";
-
+import Promotion from "../../partials/promotion";
 
 
 function ProductDetails(props) {
@@ -22,12 +22,12 @@ function ProductDetails(props) {
     const [sizeGuideModal, setSizeGuideModal] = useState(false);
     const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
     const [productImage, setProductImages] = useState([
-        social1,social2, social3, social4, social5
+        social1, social2, social3, social4, social5
     ]);
     const [fullSizedImg, setFullSizedImg] = useState(productImage[0]);
 
 
-    
+
     useEffect(() => {
     }, []);
 
@@ -50,37 +50,18 @@ function ProductDetails(props) {
     return (
         <>
             <main>
-                <section>
-                    <div className="notification">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <div className="promotion_alert">
-                                        <p>
-                                            <span className="promition">promotion</span> Contrary to popular belief, Lorem Ipsum is not simply random
-                                            text.
-                                        </p>
-                                    </div>
-                                    <div className="alert_cross">
-                                        <a href="#"><img src="images/cross.svg" className="" alt="" /> </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
+                <Promotion />
                 <section>
                     <div className="container">
                         <div className="row">
                             <div className="col-sm-12">
                                 <nav aria-label="breadcrumb">
                                     <ol className="breadcrumb">
-                                        <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                        <li className="breadcrumb-item"><a href="#">Women</a></li>
-                                        <li className="breadcrumb-item"><a href="#">Designers</a></li>
-                                        <li className="breadcrumb-item"><a href="#">Bottega Veneta</a></li>
-                                        <li className="breadcrumb-item"><a href="#">Jewelry</a></li>
+                                        <li className="breadcrumb-item"><Link href="#">Home</Link></li>
+                                        <li className="breadcrumb-item"><Link href="#">Women</Link></li>
+                                        <li className="breadcrumb-item"><Link href="#">Designers</Link></li>
+                                        <li className="breadcrumb-item"><Link href="#">Bottega Veneta</Link></li>
+                                        <li className="breadcrumb-item"><Link href="#">Jewelry</Link></li>
                                         <li className="breadcrumb-item active" aria-current="page">Necklaces</li>
                                     </ol>
                                 </nav>
@@ -107,19 +88,19 @@ function ProductDetails(props) {
                                             <img src={fullSizedImg} alt="" className="product-full-img"/>
                                         </div>
                                     </div> */}
-                                    <ProductImages/>
+                                    <ProductImages />
                                 </div>
                             </div>
                             <div className="col-sm-4">
                                 <div className="product_description">
                                     <div className="list_accordon">
                                         <ul>
-                                            <li><a href="#" className="active">Sale</a></li>
-                                            <li><a href="#">New Designers</a></li>
-                                            <li><a href="#">Popular</a></li>
+                                            <li><Link to="#" className="active">Sale</Link></li>
+                                            <li><Link to="#">New Designers</Link></li>
+                                            <li><Link to="#">Popular</Link></li>
                                         </ul>
                                         {isPriveuser && <div className="logo_stampg">
-                                            <a href="#"><img src={cleWork} alt="" className="img-fluid" /></a>
+                                            <Link to="#"><img src={cleWork} alt="" className="img-fluid" /></Link>
                                         </div>}
                                     </div>
                                     <div className="product_details">
@@ -156,7 +137,7 @@ function ProductDetails(props) {
                                             </div>
                                             <div className="col-sm-4">
                                                 <div className="form-group">
-                                                    <a className="" onClick={sizeGuideModalHandler}>Size Guide</a>
+                                                    <Link className="" to="#" onClick={sizeGuideModalHandler}>Size Guide</Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -239,7 +220,7 @@ function ProductDetails(props) {
                                                             <li> Max feature width 1.4in/3.8cm</li>
                                                             <li> Max feature length 0.7in/1.3cm</li>
                                                         </ul>
-                                                        <a href="#" className="sizeguid">Size Guide</a>
+                                                        <Link to="#" className="sizeguid">Size Guide</Link>
                                                     </div>
                                                 </div>
                                             </div>
@@ -288,42 +269,42 @@ function ProductDetails(props) {
                                 <div className="recommed-slider">
                                     <div className="regular slider">
                                         <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" /> </div>
+                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
                                             <div className="product_name"> Bottega Veneta </div>
                                             <div className="product_price"> $2,803</div>
                                         </div>
                                         <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" /> </div>
+                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
                                             <div className="product_name"> Bottega Veneta </div>
                                             <div className="product_price"> $2,803</div>
                                         </div>
                                         <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" /> </div>
+                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
                                             <div className="product_name"> Bottega Veneta </div>
                                             <div className="product_price"> $2,803</div>
                                         </div>
                                         <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" /> </div>
+                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
                                             <div className="product_name"> Bottega Veneta </div>
                                             <div className="product_price"> $2,803</div>
                                         </div>
                                         <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" /> </div>
+                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
                                             <div className="product_name"> Bottega Veneta </div>
                                             <div className="product_price"> $2,803</div>
                                         </div>
                                         <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" /> </div>
+                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
                                             <div className="product_name"> Bottega Veneta </div>
                                             <div className="product_price"> $2,803</div>
                                         </div>
                                         <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" /> </div>
+                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
                                             <div className="product_name"> Bottega Veneta </div>
                                             <div className="product_price"> $2,803</div>
                                         </div>
                                         <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" /> </div>
+                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
                                             <div className="product_name"> Bottega Veneta </div>
                                             <div className="product_price"> $2,803</div>
                                         </div>
@@ -377,18 +358,18 @@ function ProductDetails(props) {
 
             {/* size guide modal starts here */}
             <Modal show={sizeGuideModal} >
-               <h3>Size Guide</h3>
-               <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={sizeGuideModalHandler} aria-label="Close"></button>
+                <h3>Size Guide</h3>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={sizeGuideModalHandler} aria-label="Close"></button>
 
-               <button type="button" onClick={measuringGuideHanler}> View Measuring Guide</button>
+                <button type="button" onClick={measuringGuideHanler}> View Measuring Guide</button>
             </Modal>
             {/* size guide modal ends here */}
             {/* measuring guide modal starts here */}
             <Modal show={measuringGuideModal} >
-               <h3>Measuring Guide</h3>
-               <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={measuringGuideHanler} aria-label="Close"></button>
+                <h3>Measuring Guide</h3>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={measuringGuideHanler} aria-label="Close"></button>
 
-               <button type="button" onClick={measuringGuideHanler}> View Size Guide</button>
+                <button type="button" onClick={measuringGuideHanler}> View Size Guide</button>
             </Modal>
             {/* measuring guide modal ends here */}
         </>

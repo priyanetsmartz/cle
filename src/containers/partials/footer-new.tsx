@@ -21,15 +21,11 @@ function FooterExtra(props) {
 
 
     return (
-        <>
+        <div style={{ "clear": "both" }}>
             <SignIn showLogin={props.showLogin} />
             <SignUp signupModel={props.signupModel} />
-            {pagesData ? <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> : ""}
-            {analyticsCode.status === 1 && (
-                /* eslint-disable no-undef */
-               "test"
-            )}
-        </>
+            {pagesData ? <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> : ""}            
+        </div>
     );
 }
 

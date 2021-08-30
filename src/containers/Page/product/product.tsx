@@ -7,7 +7,7 @@ import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhi
 import notification from "../../../components/notification";
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { getCookie } from '../../../helpers/session';
-import { Pages, Pages1 } from '../../../redux/pages/allPages';
+import Promotion from "../../partials/promotion";
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const { addToCart, productList } = cartAction;
@@ -132,86 +132,91 @@ function Products(props) {
 
 
     return (
-        <div className="container" style={{ "marginTop": "200px" }}>
-            <div className="col-auto">
-                <select className="form-select" defaultValue={sort} onChange={filtterData} >
-                    <option value={0} key="0" >Newest First</option>
-                    <option value={1} key="1" >High to low -- price </option>
-                    <option value={2} key="2" >Low to High -- price</option>
-                    <option value={3} key="3" >Our picks</option>
-                </select>
-            </div>
-            <div className="row">
-                {props.items.map(item => {
-                    return (
-                        <div className="col-md-4" key={item.id}>
-                            {token && (
-                                <div>
-                                    {!item.wishlist_item_id && (
-                                        <span onClick={() => { handleWhishlist(item.id) }}  >Add Whishlist</span>
-                                    )}
-                                    {item.wishlist_item_id && (
-                                        <span onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }}>Remove Whishlist</span>
-                                    )}
+        <main>
+            <Promotion />
+            <section>
+                <div className="container">
+                    <div className="col-auto">
+                        <select className="form-select" defaultValue={sort} onChange={filtterData} >
+                            <option value={0} key="0" >Newest First</option>
+                            <option value={1} key="1" >High to low -- price </option>
+                            <option value={2} key="2" >Low to High -- price</option>
+                            <option value={3} key="3" >Our picks</option>
+                        </select>
+                    </div>
+                    <div className="row">
+                        {props.items.map(item => {
+                            return (
+                                <div className="col-md-4" key={item.id}>
+                                    {token && (
+                                        <div>
+                                            {!item.wishlist_item_id && (
+                                                <span onClick={() => { handleWhishlist(item.id) }}  >Add Whishlist</span>
+                                            )}
+                                            {item.wishlist_item_id && (
+                                                <span onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }}>Remove Whishlist</span>
+                                            )}
+                                        </div>
+                                    )
+                                    }
+                                    <div className="card-one">
+                                        <div className="card">
+                                            <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} />
+                                            <span className="card-title">{item.name}</span>
+                                            {!token && (<Link to="#" onClick={() => { handleClick(item.id, item.sku) }} className="btn-floating halfway-fab waves-effect waves-light red" ><i className="material-icons">add</i></Link>
+                                            )}
+                                        </div>
+
+                                        <div className="card-content">
+                                            <p>{item.desc}</p>
+                                            {(item.extension_attributes && item.extension_attributes.configurable_product_options && item.extension_attributes.configurable_product_options.length > 0) && (
+                                                <div>{item.extension_attributes.configurable_product_options.map(varient => {
+                                                    return (
+                                                        <div key={varient.id}>
+                                                            {varient.label}
+                                                            {(varient.values.length > 0 && (
+                                                                <div>
+                                                                    {
+                                                                        varient.values.map(val => {
+                                                                            return (<p key={val.value_index}>{val.value_index}</p>)
+                                                                        })
+                                                                    }
+                                                                </div>
+                                                            ))}
+                                                        </div>
+
+                                                    )
+                                                })}</div>
+
+                                            )}
+                                            <p><b>Price: {item.price}</b></p>
+                                        </div>
+                                    </div>
                                 </div>
                             )
-                            }
-                            <div className="card-one">
-                                <div className="card">
-                                    <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} />
-                                    <span className="card-title">{item.name}</span>
-                                    {!token && (<Link to="#" onClick={() => { handleClick(item.id, item.sku) }} className="btn-floating halfway-fab waves-effect waves-light red" ><i className="material-icons">add</i></Link>
-                                    )}
-                                </div>
-
-                                <div className="card-content">
-                                    <p>{item.desc}</p>
-                                    {(item.extension_attributes && item.extension_attributes.configurable_product_options && item.extension_attributes.configurable_product_options.length > 0) && (
-                                        <div>{item.extension_attributes.configurable_product_options.map(varient => {
-                                            return (
-                                                <div key={varient.id}>
-                                                    {varient.label}
-                                                    {(varient.values.length > 0 && (
-                                                        <div>
-                                                            {
-                                                                varient.values.map(val => {
-                                                                    return (<p key={val.value_index}>{val.value_index}</p>)
-                                                                })
-                                                            }
-                                                        </div>
-                                                    ))}
-                                                </div>
-
-                                            )
-                                        })}</div>
-
-                                    )}
-                                    <p><b>Price: {item.price}</b></p>
-                                </div>
-                            </div>
+                        })}
+                        <div className="col-md-12 pagination">
+                            {pagination > 1 && (<nav aria-label="Page navigation example">
+                                <ul className="pagination justify-content-center">
+                                    <li
+                                        className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
+                                        <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
+                                    </li>
+                                    {getPaginationGroup().map((i, index) => (
+                                        <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
+                                    ))}
+                                    <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
+                                        <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
+                                            to="/">Next</Link>
+                                    </li>
+                                </ul>
+                            </nav>
+                            )}
                         </div>
-                    )
-                })}
-                <div className="col-md-12 pagination">
-                    {pagination > 1 && (<nav aria-label="Page navigation example">
-                        <ul className="pagination justify-content-center">
-                            <li
-                                className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
-                            </li>
-                            {getPaginationGroup().map((i, index) => (
-                                <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
-                            ))}
-                            <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
-                                <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                    to="/">Next</Link>
-                            </li>
-                        </ul>
-                    </nav>
-                    )}
+                    </div>
                 </div>
-            </div>
-        </div >
+            </section>
+        </main >
     )
 }
 const mapStateToProps = (state) => {
