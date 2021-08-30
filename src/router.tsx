@@ -8,7 +8,7 @@ import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import ProductRoutes from "./components/all-route/ProductRoutes";
-import PrivateRoute from "./components/all-route/PrivateRoute";
+import PrivateRoute from "./components/all-route/ProductRoutes";
 import HomeRoute from './components/all-route/HomeRoute';
 import PriveRoute from "./components/all-route/priveRoute";
 import AllPosts from './containers/Page/magazineCategory';
