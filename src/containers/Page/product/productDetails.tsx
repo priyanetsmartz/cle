@@ -1,14 +1,51 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
+import Modal from "react-bootstrap/Modal";
+import ProductImages from './productImges';
 import ShareIcon from '../../../image/share-alt-solidicon.svg';
 import productImg from '../../../image/product_img.svg';
 import cleWork from '../../../image/cle work-logo.svg';
+import social1 from "../../../image/checkout-social-1.png";
+import social2 from "../../../image/checkout-social-2.png";
+import social3 from "../../../image/checkout-social-3.png";
+import social4 from "../../../image/checkout-social-4.png";
+import social5 from "../../../image/checkout-social-5.png";
+import social6 from "../../../image/checkout-social-6.png";
+import social7 from "../../../image/checkout-social-7.png";
+
 
 
 function ProductDetails(props) {
+    const [isPriveuser, setIsPriveUser] = useState(false);
+    const [sizeGuideModal, setSizeGuideModal] = useState(false);
+    const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
+    const [productImage, setProductImages] = useState([
+        social1,social2, social3, social4, social5
+    ]);
+    const [fullSizedImg, setFullSizedImg] = useState(productImage[0]);
+
+
+    
     useEffect(() => {
-    }, [])
+    }, []);
+
+    const sizeGuideModalHandler = () => {
+        setSizeGuideModal(!sizeGuideModal);
+    }
+
+    const measuringGuideHanler = () => {
+        setSizeGuideModal(!sizeGuideModal);
+        setMeasuringGuideModal(!measuringGuideModal);
+    }
+
+    const changeImg = (i) => {
+        setFullSizedImg(productImage[i]);
+    }
+
+
+
 
     return (
         <>
@@ -57,7 +94,20 @@ function ProductDetails(props) {
                         <div className="row">
                             <div className="col-sm-8">
                                 <div className="product-slider">
-                                    <img src={productImg} alt="" className="img-fluid" />
+                                    {/* <img src={productImg} alt="" className="img-fluid" /> */}
+                                    {/* <div className="row">
+                                        <div className="col-sm-2 product-img-slider">
+                                        {productImage.map((img, i) => {
+                                            return (
+                                                <img src={img} className="product-img" key={i} alt="" onClick={() => changeImg(i)}/>
+                                            );
+                                        })}
+                                        </div>
+                                        <div className="col-sm-10 zoomin frame">
+                                            <img src={fullSizedImg} alt="" className="product-full-img"/>
+                                        </div>
+                                    </div> */}
+                                    <ProductImages/>
                                 </div>
                             </div>
                             <div className="col-sm-4">
@@ -68,9 +118,9 @@ function ProductDetails(props) {
                                             <li><a href="#">New Designers</a></li>
                                             <li><a href="#">Popular</a></li>
                                         </ul>
-                                        <div className="logo_stampg">
+                                        {isPriveuser && <div className="logo_stampg">
                                             <a href="#"><img src={cleWork} alt="" className="img-fluid" /></a>
-                                        </div>
+                                        </div>}
                                     </div>
                                     <div className="product_details">
                                         <h1>Bottega Veneta</h1>
@@ -106,7 +156,7 @@ function ProductDetails(props) {
                                             </div>
                                             <div className="col-sm-4">
                                                 <div className="form-group">
-                                                    <a href="#" className="">Size Guide</a>
+                                                    <a className="" onClick={sizeGuideModalHandler}>Size Guide</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -121,7 +171,7 @@ function ProductDetails(props) {
 
                                     <div className="row my-3">
                                         <div className="d-grid gap-2 d-md-flex justify-content-start">
-                                            <button type="button" className="btn btn-outline-primary me-4">Send a Gift</button>
+                                            <Link to="my-cart" type="button" className="btn btn-outline-primary me-4">Send a Gift</Link>
                                             <button type="button" className="btn btn-outline-success"><img src={ShareIcon} alt=""
                                                 className="pe-1" /> </button>
                                         </div>
@@ -324,6 +374,23 @@ function ProductDetails(props) {
                     </div>
                 </section>
             </main>
+
+            {/* size guide modal starts here */}
+            <Modal show={sizeGuideModal} >
+               <h3>Size Guide</h3>
+               <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={sizeGuideModalHandler} aria-label="Close"></button>
+
+               <button type="button" onClick={measuringGuideHanler}> View Measuring Guide</button>
+            </Modal>
+            {/* size guide modal ends here */}
+            {/* measuring guide modal starts here */}
+            <Modal show={measuringGuideModal} >
+               <h3>Measuring Guide</h3>
+               <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={measuringGuideHanler} aria-label="Close"></button>
+
+               <button type="button" onClick={measuringGuideHanler}> View Size Guide</button>
+            </Modal>
+            {/* measuring guide modal ends here */}
         </>
     )
 }

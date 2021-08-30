@@ -46,7 +46,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
         <MainRoute exact path="/wish-list" component={WishList} />
         <MainRoute exact path="/categories" component={Categories} />
-        <ProductRoutes exact path="/product-details" component={ProductDetails} />
+        <MainRoute exact path="/product-details" component={ProductDetails} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
         <PrivateRoute exact path="/prive-user" component={PriveUser} />
