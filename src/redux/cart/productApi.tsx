@@ -65,3 +65,80 @@ export function getCategoryDetails() {
 export function getPriveUserProducts() {
     return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=9&searchCriteria[filter_groups][0][filters][0][field]=prive&searchCriteria[filter_groups][0][filters][0][value]=1&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&fields=items[sku,name,id,price,custom_attributes]&searchCriteria[pageSize]=7&searchCriteria[sortOrders][0][field]=created_at& searchCriteria[sortOrders][0][direction]=DESC`, "", "GET", "");
 }
+
+export function  getProductFilter(category_id:number) {
+    
+    let payload = {
+        query: `{
+            products(
+            filter: { category_id: { eq: "9" } }, pageSize: 10
+            ) {
+            aggregations{
+            attribute_code
+            count
+            label
+            options{
+            count
+            label
+            value
+            }
+            }
+            total_count
+            page_info {
+            page_size
+            current_page
+            }
+            items {
+            id
+            name
+            sku
+            short_description {
+            html
+            }
+            image {
+            url
+            }
+            price_range {
+            minimum_price {
+            regular_price {
+            value
+            currency
+            }
+            final_price {
+            value
+            currency
+            }
+            fixed_product_taxes {
+            label
+            amount {
+            value
+            currency
+            }
+            }
+            }
+            maximum_price {
+            discount {
+            amount_off
+            percent_off
+            }
+            fixed_product_taxes {
+            label
+            amount {
+            value
+            currency
+            }
+            }
+            }
+            }
+            }
+            }
+           }
+   `,
+    }
+    return APi.request(
+        "graphql",
+        payload,
+        "POST",
+        ""
+    );
+}

@@ -3,13 +3,11 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
-import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi } from '../../../redux/cart/productApi';
+import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { getCookie } from '../../../helpers/session';
 import { Pages, Pages1 } from '../../../redux/pages/allPages';
-import axios from 'axios';
-import { apiConfig } from '../../../settings';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const { addToCart, productList } = cartAction;
@@ -53,30 +51,10 @@ function Products(props) {
 
             productResult = mergeById(products, WhishlistData);
         }
+        // get product page filter
+        let result1: any = await getProductFilter(9);
+        console.log(result1)
         props.productList(productResult);
-        const token = apiConfig.adminToken;
-        let authtoken = `Bearer ${token}`;
-        
-        let body = {
-            query: `{
-                cmsPage(identifier: "about-us") {
-                        identifier
-                        title
-                    }
-                }
-            `,
-            variables: {}
-        }
-        let options = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': authtoken
-            }
-        }
-        axios.post('https://4a83875b65.nxcli.net/graphql', body, options)
-            .then((response) => {
-                console.log(response);
-            });
     }
     const filtterData = (event) => {
         let lang = props.languages ? props.languages : language;
