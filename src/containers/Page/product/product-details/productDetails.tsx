@@ -3,49 +3,39 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import SizeGuide from './sizeGuide';
+import MeasuringGuide from './measuringGuide';
+import Recomendations from './recomendations';
+
 import ProductImages from './productImges';
-import ShareIcon from '../../../image/share-alt-solidicon.svg';
-import productImg from '../../../image/product_img.svg';
-import cleWork from '../../../image/cle work-logo.svg';
-import social1 from "../../../image/checkout-social-1.png";
-import social2 from "../../../image/checkout-social-2.png";
-import social3 from "../../../image/checkout-social-3.png";
-import social4 from "../../../image/checkout-social-4.png";
-import social5 from "../../../image/checkout-social-5.png";
-import social6 from "../../../image/checkout-social-6.png";
-import social7 from "../../../image/checkout-social-7.png";
-import Promotion from "../../partials/promotion";
+import ShareIcon from '../../../../image/share-alt-solidicon.svg';
+import cleWork from '../../../../image/cle work-logo.svg';
+import social1 from "../../../../image/checkout-social-1.png";
+import social2 from "../../../../image/checkout-social-2.png";
+import social3 from "../../../../image/checkout-social-3.png";
+import social4 from "../../../../image/checkout-social-4.png";
+import social5 from "../../../../image/checkout-social-5.png";
+import social6 from "../../../../image/checkout-social-6.png";
+import social7 from "../../../../image/checkout-social-7.png";
+import Promotion from '../../../partials/promotion';
 
 
 function ProductDetails(props) {
     const [isPriveuser, setIsPriveUser] = useState(false);
+    const [productImages, setProductImages] = useState([
+        social1, social2, social3, social4, social5, social6, social7
+    ]);
     const [sizeGuideModal, setSizeGuideModal] = useState(false);
     const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
-    const [productImage, setProductImages] = useState([
-        social1, social2, social3, social4, social5
-    ]);
-    const [fullSizedImg, setFullSizedImg] = useState(productImage[0]);
-
-
-
     useEffect(() => {
-    }, []);
+        console.log(props.items.Cart);
+        setSizeGuideModal(props.items.Cart.isOpenSizeGuide);
+        setMeasuringGuideModal(props.items.Cart.isOpenMeasuringGuide);
+    }, [props.items.Cart]);
 
     const sizeGuideModalHandler = () => {
         setSizeGuideModal(!sizeGuideModal);
     }
-
-    const measuringGuideHanler = () => {
-        setSizeGuideModal(!sizeGuideModal);
-        setMeasuringGuideModal(!measuringGuideModal);
-    }
-
-    const changeImg = (i) => {
-        setFullSizedImg(productImage[i]);
-    }
-
-
-
 
     return (
         <>
@@ -57,11 +47,11 @@ function ProductDetails(props) {
                             <div className="col-sm-12">
                                 <nav aria-label="breadcrumb">
                                     <ol className="breadcrumb">
-                                        <li className="breadcrumb-item"><Link href="#">Home</Link></li>
-                                        <li className="breadcrumb-item"><Link href="#">Women</Link></li>
-                                        <li className="breadcrumb-item"><Link href="#">Designers</Link></li>
-                                        <li className="breadcrumb-item"><Link href="#">Bottega Veneta</Link></li>
-                                        <li className="breadcrumb-item"><Link href="#">Jewelry</Link></li>
+                                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
+                                        <li className="breadcrumb-item"><Link to="#">Women</Link></li>
+                                        <li className="breadcrumb-item"><Link to="#">Designers</Link></li>
+                                        <li className="breadcrumb-item"><Link to="#">Bottega Veneta</Link></li>
+                                        <li className="breadcrumb-item"><Link to="#">Jewelry</Link></li>
                                         <li className="breadcrumb-item active" aria-current="page">Necklaces</li>
                                     </ol>
                                 </nav>
@@ -76,19 +66,8 @@ function ProductDetails(props) {
                             <div className="col-sm-8">
                                 <div className="product-slider">
                                     {/* <img src={productImg} alt="" className="img-fluid" /> */}
-                                    {/* <div className="row">
-                                        <div className="col-sm-2 product-img-slider">
-                                        {productImage.map((img, i) => {
-                                            return (
-                                                <img src={img} className="product-img" key={i} alt="" onClick={() => changeImg(i)}/>
-                                            );
-                                        })}
-                                        </div>
-                                        <div className="col-sm-10 zoomin frame">
-                                            <img src={fullSizedImg} alt="" className="product-full-img"/>
-                                        </div>
-                                    </div> */}
-                                    <ProductImages />
+                                    
+                                    <ProductImages  productImages = {productImages}/>
                                 </div>
                             </div>
                             <div className="col-sm-4">
@@ -262,57 +241,7 @@ function ProductDetails(props) {
                 </section>
 
                 <section>
-                    <div className="container">
-                        <div className="col-sm-12">
-                            <div className="recommendations-section text-center ">
-                                <h1>Recommendations</h1>
-                                <div className="recommed-slider">
-                                    <div className="regular slider">
-                                        <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
-                                            <div className="product_name"> Bottega Veneta </div>
-                                            <div className="product_price"> $2,803</div>
-                                        </div>
-                                        <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
-                                            <div className="product_name"> Bottega Veneta </div>
-                                            <div className="product_price"> $2,803</div>
-                                        </div>
-                                        <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
-                                            <div className="product_name"> Bottega Veneta </div>
-                                            <div className="product_price"> $2,803</div>
-                                        </div>
-                                        <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
-                                            <div className="product_name"> Bottega Veneta </div>
-                                            <div className="product_price"> $2,803</div>
-                                        </div>
-                                        <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
-                                            <div className="product_name"> Bottega Veneta </div>
-                                            <div className="product_price"> $2,803</div>
-                                        </div>
-                                        <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
-                                            <div className="product_name"> Bottega Veneta </div>
-                                            <div className="product_price"> $2,803</div>
-                                        </div>
-                                        <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
-                                            <div className="product_name"> Bottega Veneta </div>
-                                            <div className="product_price"> $2,803</div>
-                                        </div>
-                                        <div className="productcalr">
-                                            <div className="product_img"><img src="images/kbg8zolf.png" className="image-fluid" alt="product slider" /> </div>
-                                            <div className="product_name"> Bottega Veneta </div>
-                                            <div className="product_price"> $2,803</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   <Recomendations/>
                 </section>
 
                 <section>
@@ -357,19 +286,13 @@ function ProductDetails(props) {
             </main>
 
             {/* size guide modal starts here */}
-            <Modal show={sizeGuideModal} >
-                <h3>Size Guide</h3>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={sizeGuideModalHandler} aria-label="Close"></button>
-
-                <button type="button" onClick={measuringGuideHanler}> View Measuring Guide</button>
+            <Modal show={sizeGuideModal} size="lg">
+                <SizeGuide/>
             </Modal>
             {/* size guide modal ends here */}
             {/* measuring guide modal starts here */}
-            <Modal show={measuringGuideModal} >
-                <h3>Measuring Guide</h3>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={measuringGuideHanler} aria-label="Close"></button>
-
-                <button type="button" onClick={measuringGuideHanler}> View Size Guide</button>
+            <Modal show={measuringGuideModal}  size="lg">
+                <MeasuringGuide/>
             </Modal>
             {/* measuring guide modal ends here */}
         </>
@@ -378,7 +301,7 @@ function ProductDetails(props) {
 
 const mapStateToProps = (state) => {
     return {
-        items: state.Cart.items
+        items: state
     }
 }
 

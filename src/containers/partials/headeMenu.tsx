@@ -27,7 +27,7 @@ function HeaderMenu(props) {
                     </div>
                     <div className="col-4">
                         <div className="cli_logo">
-                            <Link className=" me-2" href="#">
+                            <Link className=" me-2" to="/">
                                 <img src={CLELogo} className="img-fluid"  alt="logo"/>
                             </Link>
                         </div>
