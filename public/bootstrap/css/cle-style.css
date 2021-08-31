@@ -1308,3 +1308,45 @@ span.hidden-pass  i {
       @media only screen and (max-width: 320px) {
 
     }
+    /* product images slider and zoom in styles starts here */
+    .img-container {
+        height: 500px;
+        width: 500px;
+        overflow: hidden;
+        position: relative;
+    }
+    .img-container img{
+        position: absolute;
+        /* transform: scale(0.6); */
+        transition: transform 0.5s ease;
+    }
+    .product-full-img{
+        height: 100%;
+        width: 100%;
+    }
+    
+    .img-container:hover img{
+        transform: scale(1.2);
+        cursor: zoom-in;
+      }
+    
+    .product-img {
+        height: 60px;
+        width: 60px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    
+    
+    .product-img-slider {
+        max-height: 450px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+    }
+    .product-img-slider :hover{
+        padding: 1px;
+        border: 1px solid #2e2baa;
+    }
+    /* product images slider and zoom in styles ends here */
