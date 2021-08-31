@@ -180,7 +180,7 @@ function Home(props) {
 
                     className="sectiosn"
                     sectionClassName='section'
-                    // normalScrollElements= '.checkus-out'
+                    normalScrollElements='.checkus-out'
                     scrollBar="true"
                     render={({ state, fullpageApi }) => {
                         return (
