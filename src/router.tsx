@@ -8,7 +8,7 @@ import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import ProductRoutes from "./components/all-route/ProductRoutes";
-import PrivateRoute from "./components/all-route/PrivateRoute";
+import PrivateRoute from "./components/all-route/ProductRoutes";
 import HomeRoute from './components/all-route/HomeRoute';
 import PriveRoute from "./components/all-route/priveRoute";
 import AllPosts from './containers/Page/magazineCategory';
@@ -19,7 +19,8 @@ import profile from './containers/Page/profile';
 import contact from "./containers/Page/contact";
 import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 import PriveUser from './containers/Page/PriveUser';
-import CustomerDetails from './containers/Page/customer/customerDetails';
+// import CustomerDetails from './containers/Page/customer/customerDetails';
+import MyAccount from './containers/Page/customer/myAccount';
 import CustomerOrders from './containers/Page/customer/customerOrders';
 import OrderDetails from './containers/Page/customer/orderDetails';
 import WishList from './containers/Page/customer/wishList';
@@ -41,7 +42,7 @@ const PublicRoutes = ({ history }) => {
         <HomeRoute exact path="/" component={NewHome} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
-        <PrivateRoute exact path="/customer-details" component={CustomerDetails} />
+        <PrivateRoute exact path="/myaccount" component={MyAccount} />
         <PrivateRoute exact path="/customer-orders" component={CustomerOrders} />
         <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
         <PrivateRoute exact path="/wishlist" component={WishList} />
