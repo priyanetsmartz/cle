@@ -10,16 +10,83 @@ body{
     float: left;
 }
 
+.form-control, .form-select {
+    border-radius: 0;
+    border: 1px solid #000000;
+}
+
+.form-check {
+    margin:0;
+  }
+  .form-check .tag {
+    color: #595959;
+    display: block;
+    float: left;
+    font-weight: bold;
+    position: relative;
+    width: 120px;
+  }
+  .form-check label {
+    display: flex;
+  }
+  .form-check .form-check-input {
+    display: none;
+  }
+  .form-check-input + label:before {
+    background-color: #fafafa;
+    border: 1px solid #2E2BAA;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    display: inline-block;
+    transition-duration: 0.3s;
+    width: 23px;
+    height: 23px;
+    content: '';
+    margin-right: 10px;
+  }
+  .form-check-input:checked + label:before {
+    background-color: #2E2BAA;
+  }
+
+
+  .btn-link-blue {
+    font-weight: 400;
+    color: #2E2BAA;
+    text-decoration: none;
+    font-size: 16px;
+    font-family: 'Monument Extended';
+    transition: all 0.8s ease-in-out;
+  
+}
+
+.btn-link-blue:hover {
+    color: #000;
+}
+
+.btn-link-grey {
+    font-weight: 400;
+    color: #707070;
+    text-decoration: none;
+    font-size: 16px;
+    font-family: 'Monument Extended';
+    transition: all 0.8s ease-in-out;
+    
+}
+
+.btn-link-grey:hover {
+    color: #000;
+}
+
+
 .btn-secondary {
     color: #fff;
     background-color: #2E2BAA;
     border-color: #2E2BAA;
     border-radius: 0;
     font-family: 'Monument Extended';
-    font-weight: normal;
+    font-weight: 500;
     font-style: normal;
     font-size: 12px;
-    padding: 12px 20px;
+    padding: 12px 40px;
 }
 
 .btn-outline-primary:hover {
@@ -1225,13 +1292,23 @@ span.hidden-pass  i {
     margin-right: 10px;
 }
 
+.delet_account_accordin ul.cont-customr-care {
+     margin: 0px 0px 0px 20px;
+     padding: 0
+}
+
+.delet_account_accordin ul.cont-customr-care li {
+ 
+    padding: 0 0px 6px 0;
+}
+
 .my_profile_sect.check-als .btn-secondary {
     color: #fff;
     background-color: #2E2BAA;
     border-color: #2E2BAA;
     border-radius: 0;
     font-family: 'Monument Extended';
-    font-weight: normal;
+    font-weight: 500;
     font-style: normal;
     font-size: 16px;
     padding: 20px 20px;
@@ -1242,6 +1319,324 @@ span.hidden-pass  i {
     background-color: #fff;
     border: 2px solid rgba(0,0,0,.125);
 }
+
+
+span.maindatory {
+    margin-left: 2px;
+   
+}
+
+.CLE_pf_details {
+    width: 100%;
+    float: left;
+    position: relative;
+    border: 1px solid #f0f0f0;
+}
+.CLE_pf_details h1 {
+    font-size: 24px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    margin-top: 30px;
+    font-weight: 500;
+}
+
+
+.CLE_pf_details .cross_icn {
+    position: absolute;
+    top: 32px;
+    right: 6px;
+    color: #2E2BAA;
+    font-size: 14px;
+}
+
+.CLE_pf_details .dobfeild {
+    display: flex;
+}
+
+.Mosty_interested_in {
+    width: 100%;
+    float: left;
+}
+
+.interestd_check {
+    display: flex;
+}
+.interestd_check .form-check {
+    margin-right: 103px;
+    padding-left: 0;
+
+}
+
+
+.Mosty_interested_in h2 {
+    font-size: 16px;   
+    margin-top: 10px;
+    font-weight: 600;
+    margin-bottom:15px;
+   
+}
+
+.clothing_size {
+    width: 100;
+    float: left;
+}
+
+.clothing_size h2 {
+    font-size: 16px;    
+    margin-top: 30px;
+    font-weight: 600;
+}
+
+.cl_size_sec {
+    width: 100%;
+    float: left;
+}
+
+.cl_size_sec ul {
+    margin: 10px 0;
+    padding:0;
+   
+}
+
+.cl_size_sec ul li {
+    list-style: none;
+    padding: 0px 16px 0 0;
+    float: left;   
+    margin-bottom: 25px;
+ 
+}
+
+.cl_size_sec ul li a {
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;    
+    border: 1px solid #000;
+    text-transform: uppercase;
+    width: 54px;
+    height: 43px;
+    display: block;
+    text-align: center;
+    line-height: 43px;
+    
+}
+
+
+
+.cl_size_sec ul li a:hover, .cl_size_sec ul li a.active {
+    border: 1px solid #2E2BAA;
+    color: #2E2BAA;
+}
+
+.sizebtn {
+width: 100%;
+float: left;
+margin: 20px 0;
+display: flex;
+}
+
+
+.sizebtn .save-btn {
+    width: 100%;
+    float: left;
+    
+}
+
+.save-btn.removel_allbtn {
+    text-align: right;
+    padding-right: 15px;
+
+}
+
+.sizebtn.clothnmrgin {
+    margin-top: 88px;
+}
+
+.favorite_designers {
+    width: 100%;
+    float: left;
+}
+
+.favorite_designers h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.search_results {
+    position: relative;
+    display: block;   
+    width: 100%;   
+    float: left;
+    margin-bottom: 10px;
+}
+
+.search_results img.search_icn{
+    position: absolute;
+    top: 17px;
+    left: 10px;
+}
+
+.search_results .form-control, .form-select {
+    border-radius: 0;
+    border: 0;
+    padding: 0.8rem 2.6rem;
+    background-color: #F7F7F7;
+}
+
+.favt_section {
+    border: 1px solid #000;
+    width: 100%;
+    float: left;
+    padding: 20px;
+}
+.favt_section ul {
+    margin: 0;
+    padding: 0;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.favt_section ul li {
+    list-style: none;
+    display: block;
+    width: 100%;
+    padding: 0px 0px 8px 0;
+}
+.favt_section ul li div.form-check {
+    padding-left: 0;
+}
+
+.favdesignr_size_sec {
+width: 100%;
+float: left;
+padding: 20px;
+}
+
+.favt_dragdrop {
+    width: 100%;
+    float: left;
+    border: 1px solid #000;
+}
+
+
+
+.favdesignr_size_sec ul {
+    margin: 0;
+    padding:0;
+    height: 174px;
+    max-height: 174px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.favdesignr_size_sec ul li {
+    list-style: none;
+    padding: 2px 5px;
+    float: left;
+    margin-top: 5px;
+   
+}
+
+.favdesignr_size_sec li a {
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;    
+    border: 1px solid #000;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    display: block;
+   
+    
+}
+
+.my_birthday {
+    width: 100%;
+    float: left; 
+
+}
+
+.my_birthday label {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+.my_birthday .birthdate {
+   
+    font-size: 16px;
+}
+
+.dobfeild_gift {
+    display: flex;
+}
+.gifting_pref {
+    width: 100%;
+    float: left;
+    position: relative;
+    border: 1px solid #f0f0f0;
+}
+
+.gifting_pref h1 {
+    font-size: 24px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    margin-top: 30px;
+    font-weight: 500;
+}
+
+.gifting_pref .cross_icn {
+    position: absolute;
+    top: 32px;
+    right: 6px;
+    color: #2E2BAA;
+    font-size: 14px;
+}
+
+/* product images slider and zoom in styles starts here */
+.img-container {
+    height: 500px;
+    width: 500px;
+    overflow: hidden;
+    position: relative;
+}
+.img-container img{
+    position: absolute;
+    /* transform: scale(0.6); */
+    transition: transform 0.5s ease;
+}
+.product-full-img{
+    height: 100%;
+    width: 100%;
+}
+
+.img-container:hover img{
+    transform: scale(1.2);
+    cursor: zoom-in;
+  }
+
+.product-img {
+    height: 60px;
+    width: 60px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+
+.product-img-slider {
+    max-height: 450px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+.product-img-slider :hover{
+    padding: 1px;
+    border: 1px solid #2e2baa;
+}
+/* product images slider and zoom in styles ends here */
 
 
 
@@ -1308,45 +1703,3 @@ span.hidden-pass  i {
       @media only screen and (max-width: 320px) {
 
     }
-    /* product images slider and zoom in styles starts here */
-    .img-container {
-        height: 500px;
-        width: 500px;
-        overflow: hidden;
-        position: relative;
-    }
-    .img-container img{
-        position: absolute;
-        /* transform: scale(0.6); */
-        transition: transform 0.5s ease;
-    }
-    .product-full-img{
-        height: 100%;
-        width: 100%;
-    }
-    
-    .img-container:hover img{
-        transform: scale(1.2);
-        cursor: zoom-in;
-      }
-    
-    .product-img {
-        height: 60px;
-        width: 60px;
-        margin-top: 8px;
-        margin-bottom: 8px;
-    }
-    
-    
-    .product-img-slider {
-        max-height: 450px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-    }
-    .product-img-slider :hover{
-        padding: 1px;
-        border: 1px solid #2e2baa;
-    }
-    /* product images slider and zoom in styles ends here */
