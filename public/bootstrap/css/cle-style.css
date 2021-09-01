@@ -15,10 +15,16 @@ body{
     border: 1px solid #000000;
 }
 
-.form-check {
+.form-control {
+    
+    padding: 0.6rem 0.78rem;
+
+}
+
+.customcheckbox.form-check {
     margin:0;
   }
-  .form-check .tag {
+  .customcheckbox.form-check .tag {
     color: #595959;
     display: block;
     float: left;
@@ -26,13 +32,13 @@ body{
     position: relative;
     width: 120px;
   }
-  .form-check label {
+  .customcheckbox.form-check label {
     display: flex;
   }
-  .form-check .form-check-input {
+  .customcheckbox.form-check .form-check-input {
     display: none;
   }
-  .form-check-input + label:before {
+  .customcheckbox.form-check .form-check-input +  label:before {
     background-color: #fafafa;
     border: 1px solid #2E2BAA;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
@@ -43,9 +49,31 @@ body{
     content: '';
     margin-right: 10px;
   }
-  .form-check-input:checked + label:before {
+  .customcheckbox.form-check .form-check-input:checked + label:before {
     background-color: #2E2BAA;
   }
+
+  .form-switch .form-check-input {
+    background-image:url("../images/switch-unchecked.svg");
+    width: 3em;
+    margin-left: 25px;
+
+  }
+
+  .form-check.form-switch.custom-switch {
+    padding-left: 0;
+  }
+  .form-check.form-switch.custom-switch label {
+      float: left;
+
+  }
+
+  .form-switch .form-check-input:checked {
+    background-color: #fff;
+    border-color: #fff;
+    background-image: url("../images/switch-checked.svg");
+    border: 1px solid #000;
+}
 
 
   .btn-link-blue {
@@ -1344,7 +1372,7 @@ span.maindatory {
 .CLE_pf_details .cross_icn {
     position: absolute;
     top: 32px;
-    right: 6px;
+    right: 11px;
     color: #2E2BAA;
     font-size: 14px;
 }
@@ -1475,11 +1503,21 @@ display: flex;
     left: 10px;
 }
 
-.search_results .form-control, .form-select {
+.search_results .form-control{
     border-radius: 0;
     border: 0;
     padding: 0.8rem 2.6rem;
-    background-color: #F7F7F7;
+    background-color: transparent;
+    border:1px solid #000;
+}
+
+
+ .form-select {
+    border-radius: 0;
+    border: 0;
+    padding: 0.6rem 0.78rem;
+    background-color: transparent;
+    border:1px solid #000;
 }
 
 .favt_section {
@@ -1595,48 +1633,63 @@ padding: 20px;
     font-size: 14px;
 }
 
-/* product images slider and zoom in styles starts here */
-.img-container {
-    height: 500px;
-    width: 500px;
-    overflow: hidden;
-    position: relative;
-}
-.img-container img{
-    position: absolute;
-    /* transform: scale(0.6); */
-    transition: transform 0.5s ease;
-}
-.product-full-img{
-    height: 100%;
+.add_frd_birthdaysec {
     width: 100%;
+    float: left;
 }
 
-.img-container:hover img{
-    transform: scale(1.2);
-    cursor: zoom-in;
-  }
-
-.product-img {
-    height: 60px;
-    width: 60px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+.add_frd_birthdaysec  h2 {
+ font-size: 16;
+ font-weight: 600;
 }
 
 
-.product-img-slider {
-    max-height: 450px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
+.dobfeild {display: flex;}
+
+.dobfeild .form-select {
+     background-color:  transparent; 
+    border: 1px solid #000;
 }
-.product-img-slider :hover{
-    padding: 1px;
-    border: 1px solid #2e2baa;
+
+.list_birthday {
+    width: 100%;
+    float: left;
 }
-/* product images slider and zoom in styles ends here */
+
+
+
+.list_birthday h2, .add_frd_birthdaysec h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+.or_diivdr {
+    width: 100%;
+    float: left;
+}
+.or_diivdr {
+    font-size: 16px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.payment_mode {
+    width: 100%;
+    float: left;
+}
+
+.payment_mode h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.cvv_inpt {
+    width: 150px;
+  
+}
 
 
 

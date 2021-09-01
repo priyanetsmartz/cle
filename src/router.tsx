@@ -42,12 +42,12 @@ const PublicRoutes = ({ history }) => {
         <HomeRoute exact path="/" component={NewHome} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
-        {/* <PrivateRoute exact path="/myaccount" component={MyAccount} /> */}
-        {/* <PrivateRoute exact path="/customer-orders" component={CustomerOrders} /> */}
-        {/* <MainRoute exact path="/order-details/:orderId" component={OrderDetails} /> */}
-        {/* <PrivateRoute exact path="/wishlist" component={WishList} /> */}
-        {/* <MainRoute exact path="/categories" component={Categories} /> */}
-        {/* <ProductRoutes exact path="/product-details" component={ProductDetails} /> */}
+        <PrivateRoute exact path="/myaccount" component={MyAccount} />
+        <PrivateRoute exact path="/customer-orders" component={CustomerOrders} />
+        <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
+        <PrivateRoute exact path="/wishlist" component={WishList} />
+        <MainRoute exact path="/categories" component={Categories} />
+        <ProductRoutes exact path="/product-details" component={ProductDetails} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
         <PriveRoute exact path="/prive-user" component={PriveUser} />
@@ -56,8 +56,8 @@ const PublicRoutes = ({ history }) => {
         <Route exact path="/post-comment">
           <PostComment />
         </Route>
-        {/* <ProductRoutes exact path="/products" component={Product} />
-        <PrivateRoute exact path="/my-cart" component={Cart} /> */}
+        <ProductRoutes exact path="/products" component={Product} />
+        <PrivateRoute exact path="/my-cart" component={Cart} />
         <MainRoute path="/:id" component={Pages} />
         {/* <Route exact path="/page-not-found" component={NotFound} /> */}
       </Switch>
