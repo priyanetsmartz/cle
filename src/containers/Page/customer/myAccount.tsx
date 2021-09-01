@@ -20,6 +20,11 @@ function MyAccount(props) {
 
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [telephone, setTelephone] = useState("");
+    const [dob, setDob] = useState({
+        day: '',
+        month: '',
+        year: ''
+    });
     const [country, setCountry] = useState("");
     const [custForm, setCustForm] = useState({
         id: custId,
@@ -62,11 +67,11 @@ function MyAccount(props) {
 
     //for attributes details
     const [attributes, setAttributes] = useState({
-        clothing_size: {},
-        favourite_categories: {},
-        favourite_designers: {},
-        mostly_intersted_in: {},
-        shoes_size: {}
+        clothing_size: { slected: null },
+        favourite_categories: { slected: null },
+        favourite_designers: { slected: null },
+        mostly_intersted_in: { slected: null },
+        shoes_size: { slected: null }
     });
 
 
@@ -101,8 +106,10 @@ function MyAccount(props) {
 
     const handleSubmitClick = async (e) => {
         e.preventDefault();
+        custForm.dob = `${dob.day}/${dob.month}/${dob.year}`;
         custForm.addresses[0] = custAddForm;
         custForm.addresses[0].street = [custForm.addresses[0].street];
+        custForm.addresses[0].telephone = telephone;
         console.log(custForm);
         let result: any = await saveCustomerDetails(custId, { customer: custForm });
         if (result) {
@@ -122,11 +129,9 @@ function MyAccount(props) {
 
     }
 
-
     //for attributes
     const getAttributes = async () => {
         let result: any = await getPreference(custId);
-        console.log(result);
         setAttributes(result.data[0]);
     }
 
@@ -150,7 +155,7 @@ function MyAccount(props) {
                     password: ""
                 });
             } else {
-                notification("error", "", "Invalid email or password");
+                notification("error", "", "Invalid password!");
             }
         }
     }
@@ -199,14 +204,15 @@ function MyAccount(props) {
             }
 
             let result: any = await updateCustEmail(req);
-            console.log(result);
-            if (result) {
+            if (result.data) {
                 notification("success", "", "New email Updated");
                 setChangeEmail({
                     confirmNewEmail: "",
                     newEmail: "",
                     password: ""
                 })
+            } else {
+                notification("error", "", "Error in updating email!");
             }
         }
     }
@@ -267,6 +273,13 @@ function MyAccount(props) {
         setGiftingModal(!giftingModal);
     }
 
+    const dobHandler = (e) => {
+        const { id, value } = e.target;
+        setDob(prevState => ({
+            ...prevState,
+            [id]: value
+        }));
+    }
 
     return (
         <>
@@ -356,7 +369,7 @@ function MyAccount(props) {
                                         <div className="field-name">
                                             {Object.values(attributes.mostly_intersted_in).map((type) => {
                                                 return (
-                                                    <span>{type},</span>
+                                                    <span key={type}>{type},</span>
                                                 )
                                             })}
                                         </div>
@@ -365,7 +378,7 @@ function MyAccount(props) {
                                         <label className="form-label"><IntlMessages id="myaccount.clothingSize" /></label>
                                         <div className="field-name">{Object.values(attributes.clothing_size).map((s) => {
                                             return (
-                                                <span>{s}/</span>
+                                                <span key={s}>{s}/</span>
                                             )
                                         })}</div>
                                     </div>
@@ -373,18 +386,20 @@ function MyAccount(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.shoeSize" /></label>
-                                        <div className="field-name">{Object.values(attributes.clothing_size).map((s) => {
-                                            return (
-                                                <span>{s}/</span>
-                                            )
-                                        })}</div>
+                                        <div className="field-name">
+                                            {Object.values(attributes.clothing_size).map((s) => {
+                                                return (
+                                                    <span>{s}/</span>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteDesigners" /></label>
                                         <div className="field-name">
                                             {Object.values(attributes.favourite_designers).map((d) => {
                                                 return (
-                                                    <span>{d},</span>
+                                                    <span key={d}>{d},</span>
                                                 )
                                             })}
                                         </div>
@@ -479,7 +494,7 @@ function MyAccount(props) {
                         </div>
 
                         {custForm && custForm.addresses.map(address => {
-                            return (<div className="addressnew_addressbodr">
+                            return (<div className="addressnew_addressbodr" key={address.street}>
                                 <h3>Address</h3>
                                 <ul>
                                     <li>{address.firstname + ' ' + address.lastname}</li>
@@ -569,7 +584,7 @@ function MyAccount(props) {
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="change-paswd-sec">
-                                <label className="heading_lbl"><IntlMessages id="login.changePassword" /></label>
+                                <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" /></label>
                                     <input type="password" className="form-control" placeholder="000"
@@ -764,81 +779,77 @@ function MyAccount(props) {
 
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
-                <Modal.Header> <h4>Customer Details</h4>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openMyDetails} aria-label="Close"></button></Modal.Header>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-12">
-
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> <b>First Name</b></label>
-                                    <input type="text"
-                                        className="form-control"
-                                        id="firstname"
-                                        placeholder="First Name"
-                                        value={custForm.firstname}
-                                        onChange={handleChange}
-                                    />
-                                    <span className="error">{errors.errors["firstname"]}</span>
+                <div className="CLE_pf_details">
+                    <h1>My Details</h1>
+                    <a onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <div className="">
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Frist name<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" placeholder="Ann"
+                                id="firstname"
+                                value={custForm.firstname}
+                                onChange={handleChange} />
+                            <span className="error">{errors.errors["firstname"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Surname<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" placeholder="Smith" id="lastname"
+                                value={custForm.lastname}
+                                onChange={handleChange} />
+                            <span className="error">{errors.errors["lastname"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Gender</label>
+                            <input type="text" className="form-control" placeholder="Woman" id="gender"
+                                value={custForm.gender}
+                                onChange={handleChange} />
+                            <span className="error">{errors.errors["gender"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Phone number</label>
+                            <input type="number" className="form-control" placeholder="+48 123 456 789" id="phone"
+                                value={telephone}
+                                onChange={(e) => { setTelephone(e.target.value) }}
+                            />
+                            <span className="error">{errors.errors["phone"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Date of birth</label>
+                            <div className="dobfeild">
+                                <select className="form-select me-3" aria-label="Default select example" onChange={dobHandler} id="day">
+                                    <option value="">Select</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                </select>
+                                <select className="form-select me-3" aria-label="Default select example" onChange={dobHandler} id="month">
+                                    <option value="">Select</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                </select>
+                                <select className="form-select" aria-label="Default select example" onChange={dobHandler} id="year">
+                                    <option value="">Select</option>
+                                    <option value="1990">1990</option>
+                                    <option value="1991">1991</option>
+                                    <option value="1993">1993</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Country<span className="maindatory">*</span></label>
+                            <select value={country} onChange={(e) => { setCountry(e.target.value) }} id="country" className="form-select" aria-label="Default select example">
+                                {countries && countries.map(opt => {
+                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                })}
+                            </select>
+                            <span className="error">{errors.errors["country"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <div className="Frgt_paswd">
+                                <div className="confirm-btn">
+                                    <button type="button" className="btn btn-secondary" onClick={handleSubmitClick}>Confirm</button>
                                 </div>
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> <b>Surname</b></label>
-                                    <input type="text"
-                                        className="form-control"
-                                        id="lastname"
-                                        placeholder="Surname"
-                                        value={custForm.lastname}
-                                        onChange={handleChange}
-                                    />
-                                    <span className="error">{errors.errors["lastname"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> <b>Gender</b></label>
-                                    <input type="text"
-                                        className="form-control"
-                                        id="gender"
-                                        placeholder="Gender"
-                                        value={custForm.gender}
-                                        onChange={handleChange}
-                                    />
-                                    <span className="error">{errors.errors["gender"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> <b>Phone</b></label>
-                                    <input type="text"
-                                        className="form-control"
-                                        id="phone"
-                                        placeholder="Phone"
-                                        value={telephone}
-                                        onChange={(e) => { setTelephone(e.target.value) }}
-                                    />
-                                    <span className="error">{errors.errors["phone"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> <b>Date of Birth</b></label>
-                                    <input type="date"
-                                        className="form-control"
-                                        id="dob"
-                                        placeholder="Date of Birth"
-                                        value={custForm.dob}
-                                        onChange={handleChange}
-                                    />
-                                    <span className="error">{errors.errors["dob"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> Country</label>
-                                    <select value={country} onChange={(e) => { setCountry(e.target.value) }} id="country" className='form-control'>
-                                        {countries && countries.map(opt => {
-                                            return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
-                                        })}
-                                    </select>
-                                    <span className="error">{errors.errors["country"]}</span>
-                                </div>
-                                <div className="d-flex justify-content-end">
-                                    <button className="signup-btn" onClick={handleSubmitClick}> Confirm</button>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -846,57 +857,175 @@ function MyAccount(props) {
             </Modal>
 
             {/* my preference details modal */}
-            <Modal show={myPreferenceModel} size="xl">
-                <Modal.Header> <h4>My Preferences</h4>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openMyPreferences} aria-label="Close"></button></Modal.Header>
-                <div className="container" style={{ marginTop: '150px' }}>
-                    <div className="row">
-                        <div className="col-md-6">
-                            <div className="d-flex justify-content-between">
-                                <span>{attributes.clothing_size['7']}</span>
-                                <span>{attributes.clothing_size['8']}</span>
-                                <span>{attributes.clothing_size['9']}</span>
-                                <span>{attributes.clothing_size['10']}</span>
-                                <span>{attributes.clothing_size['11']}</span>
-                                <span>{attributes.clothing_size['12']}</span>
-                            </div>
+            <Modal show={myPreferenceModel} size="lg">
+                <div className="CLE_pf_details">
+                    <h1>My Preferences</h1>
+                    <a onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <div className="Mosty_interested_in">
+                        <h2>Mosty interested in</h2>
+                        <div className="interestd_check">
+                            {Object.values(attributes.mostly_intersted_in).map((interest) => {
+                                return (interest && interest != '' &&
+                                    <div className="form-check" key={interest}>
+                                        <input className="form-check-input" type="checkbox" value="" id={interest}
+                                            checked={attributes.mostly_intersted_in.slected == interest ? true : false} />
+                                        <label className="form-check-label" htmlFor={interest}>
+                                            {interest}
+                                        </label>
+                                    </div>
+                                )
+                            })}
+
                         </div>
-                        <div className="col-md-6">
-                            <h6>Favourite Categories</h6>
-                            <div className="d-flex justify-content-between">
-                                <span>{attributes.favourite_categories['20']}</span>
-                                <span>{attributes.favourite_categories['21']}</span>
-                                <span>{attributes.favourite_categories['22']}</span>
-                                <span>{attributes.favourite_categories['23']}</span>
+
+                        <div className="row">
+
+                            <div className="col-sm-6">
+                                <div className="clothing_size mb-4">
+                                    <h2>Clothing size</h2>
+                                    <div className="cl_size_sec">
+                                        <ul>
+                                            {Object.values(attributes.clothing_size).map((clothingSize, i) => {
+                                                return (clothingSize && clothingSize != '' &&
+                                                    <li><a key={i} className={attributes.clothing_size.slected ? 'active' : 'null'}>{clothingSize}</a></li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                    <div className="sizebtn clothnmrgin">
+                                        <div className="save-btn"><a href="#" className="btn-link-blue">Save</a></div>
+                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <hr />
-                        <div className="col-md-6">
-                            <h6>Favourite Designers</h6>
-                            <div className="d-flex justify-content-between">
-                                <span>{attributes.favourite_designers['17']}</span>
-                                <span>{attributes.favourite_designers['18']}</span>
-                                <span>{attributes.favourite_designers['19']}</span>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <h6>Mostly Intersted In</h6>
-                            <div className="d-flex justify-content-between">
-                                <span>{attributes.mostly_intersted_in['4']}</span>
-                                <span>{attributes.mostly_intersted_in['5']}</span>
-                                <span>{attributes.mostly_intersted_in['6']}</span>
-                            </div>
-                        </div>
-                        <hr />
-                        <div className="col-md-6">
-                            <h6>Shoe Size</h6>
-                            <div className="d-flex justify-content-between">
-                                <span>{attributes.shoes_size['13']}</span>
-                                <span>{attributes.shoes_size['14']}</span>
-                                <span>{attributes.shoes_size['15']}</span>
-                                <span>{attributes.shoes_size['16']}</span>
+                            <div className="col-sm-6">
+                                <div className="clothing_size">
+                                    <h2>Shoes size</h2>
+                                    <div className="cl_size_sec">
+                                        <ul>
+                                            {Object.values(attributes.shoes_size).map((shoeSize) => {
+                                                return (shoeSize && shoeSize != '' &&
+                                                    <li><a key={shoeSize} className={attributes.clothing_size.slected ? 'active' : 'null'}>{shoeSize}</a></li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                    <div className="sizebtn">
+                                        <div className="save-btn"><a href="#" className="btn-link-blue">Save</a></div>
+                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                    </div>
+                                </div>
                             </div>
 
+                        </div>
+
+                    </div>
+
+                    <div className="favorite_designers mb-4">
+                        <h2>Favorite designers</h2>
+                        <div className="row">
+
+                            <div className="col-sm-6">
+                                <div className="search_results">
+                                    <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
+                                    <input type="search" placeholder="Search..." className="form-control me-1" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className="row">
+
+                            <div className="col-sm-6">
+                                <div className="favt_section">
+                                    <ul>
+                                        {Object.values(attributes.favourite_designers).map((designer) => {
+                                            return (designer && designer != '' &&
+                                                <li key={designer}>
+                                                    <div className="form-check">
+                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                                            checked={attributes.favourite_designers.slected == designer ? true : false} />
+                                                        <label className="form-check-label">
+                                                            {designer}
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="col-sm-6">
+                                <div className="favt_dragdrop">
+                                    <div className="favdesignr_size_sec">
+                                        <ul>
+                                            <li><a href="#">À La Garçonne</a></li>
+                                            <li><a href="#">ADAMO</a></li>
+                                            <li><a href="#">A.EMERY</a></li>
+                                            <li><a href="#" className="active">Dodo Bar Or</a></li>
+                                        </ul>
+                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className="favorite_designers mb-4">
+                        <h2>Favorite categories</h2>
+                        <div className="row">
+
+                            <div className="col-sm-6">
+                                <div className="search_results">
+                                    <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
+                                    <input type="search" placeholder="Search..." className="form-control me-1" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className="row">
+
+                            <div className="col-sm-6">
+                                <div className="favt_section">
+                                    <ul>
+                                        {Object.values(attributes.favourite_categories).map((category) => {
+                                            return (category && category != '' &&
+                                                <li key={category}>
+                                                    <div className="form-check">
+                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                                            checked={attributes.favourite_categories.slected == category ? true : false} />
+                                                        <label className="form-check-label">
+                                                            {category}
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            )
+                                        })}
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="col-sm-6">
+                                <div className="favt_dragdrop">
+                                    <div className="favdesignr_size_sec">
+                                        <ul>
+
+                                            <li><a href="#">Belts</a></li>
+                                            <li><a href="#">Necklaces</a></li>
+                                            <li><a href="#">Scarves</a></li>
+                                            <li><a href="#" className="active">Watches</a></li>
+
+                                        </ul>
+                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="width-100 mb-4">
+                        <div className="float-end">
+                            <button type="button" className="btn btn-secondary">Confirm</button>
                         </div>
                     </div>
                 </div>
@@ -904,75 +1033,6 @@ function MyAccount(props) {
 
             {/* my details modal */}
             <Modal show={myAddressModal}>
-                {/* <Modal.Header> <h4>My Address</h4> */}
-                {/* <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openAddressModal} aria-label="Close"></button></Modal.Header>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-12">
-
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> <b>First Name</b></label>
-                                    <input type="text"
-                                        className="form-control"
-                                        id="firstname"
-                                        placeholder="First Name"
-                                        value={custAddForm.firstname}
-                                        onChange={handleAddChange}
-                                    />
-                                    <span className="error">{errors.errors["firstname"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> <b>Surname</b></label>
-                                    <input type="text"
-                                        className="form-control"
-                                        id="lastname"
-                                        placeholder="Surname"
-                                        value={custAddForm.lastname}
-                                        onChange={handleAddChange}
-                                    />
-                                    <span className="error">{errors.errors["lastname"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> <b>Address</b></label>
-                                    <input type="text"
-                                        className="form-control"
-                                        id="street"
-                                        placeholder="Address"
-                                        value={custAddForm.street}
-                                        onChange={handleAddChange}
-                                    />
-                                    <span className="error">{errors.errors["address"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> <b>City</b></label>
-                                    <input type="text"
-                                        className="form-control"
-                                        id="city"
-                                        placeholder="City"
-                                        value={custAddForm.city}
-                                        onChange={handleAddChange}
-                                    />
-                                    <span className="error">{errors.errors["city"]}</span>
-                                </div>
-                                <div className="col-sm-12">
-                                    <label htmlFor=""> Country</label>
-                                    <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className='form-control'>
-                                        {countries && countries.map(opt => {
-                                            return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
-                                        })}
-                                    </select>
-                                    <span className="error">{errors.errors["country"]}</span>
-                                </div>
-                                <div className="d-flex justify-content-end">
-                                    <button className="signup-btn" onClick={handleSubmitClick}> Confirm</button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
-
                 <div className="CLE_pf_details">
                     <h1>My Address</h1>
                     <a className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></a>
@@ -1035,16 +1095,209 @@ function MyAccount(props) {
 
             {/* Gifting preference details modal */}
             <Modal show={giftingModal} size="lg">
-                <Modal.Header>
-                    <h4>Gifting Preferences</h4>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openGigitingModal} aria-label="Close"></button>
-                </Modal.Header>
-                <div className="row">
-                    <b>My Birthday</b>
-                    <p>01 May 1990</p>
-                    <div className="col-md-6">
+                <div className="gifting_pref">
+                    <div className="girft_details">
+                        <h1>Gifting Preferences</h1>
+                        <a onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                        <div className="my_birthday mb-3">
+                            <label className="form-label">My birthday</label>
+                            <div className="birthdate">01 May 1990</div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <div className="width-100">
+                                <div className="dobfeild_gift row">
+                                    <div className="col-sm-4">
+                                        <label className="form-label">I like</label>
+                                        <select className="form-select me-3" aria-label="Default select example">
+                                            <option value="">01</option>
+                                            <option value="1">01</option>
+                                            <option value="2">02</option>
+                                            <option value="3">03</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-sm-4">
+                                        <label className="form-label">&nbsp;</label>
+                                        <select className="form-select me-3" aria-label="Default select example">
+                                            <option value="">May</option>
+                                            <option value="1">May</option>
+                                            <option value="2">June</option>
+                                            <option value="3">July</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-sm-4">
+                                        <label className="form-label">&nbsp;</label>
+                                        <select className="form-select" aria-label="Default select example">
+                                            <option value="">1988</option>
+                                            <option value="1">1990</option>
+                                            <option value="2">1991</option>
+                                            <option value="3">1993</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-sm-6">
+                            <div className="dobfeild_gift row">
+                                <div className="col-sm-6">
+                                    <label className="form-label">I like</label>
+                                    <select className="form-select " aria-label="Default select example">
+                                        <option value="">Watches</option>
+                                        <option value="1">01</option>
+                                        <option value="2">02</option>
+                                        <option value="3">03</option>
+                                    </select>
+                                </div>
+                                <div className="col-sm-6">
+                                    <label className="form-label">Style</label>
+                                    <select className="form-select " aria-label="Default select example">
+                                        <option value="">Contemporary</option>
+                                        <option value="1">May</option>
+                                        <option value="2">June</option>
+                                        <option value="3">July</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
 
                     </div>
+
+                    <div className="row">
+                        <div className="col-sm-12 mt-3 mb-5">
+                            <div className="form-check form-switch custom-switch">
+                                <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Notify me via emial</label>
+                                <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <div className="add_frd_birthdaysec">
+                                <h2>Add a friend’s birthday</h2>
+                                <div className="width-100 mb-3 form-field">
+                                    <label htmlFor="exampleInputEmail1" className="form-label">Name<span className="maindatory">*</span></label>
+                                    <input type="text" className="form-control" placeholder="John" />
+
+                                </div>
+                                <div className="width-100 mb-3 form-field">
+                                    <label htmlFor="exampleInputEmail1" className="form-label">Date of birth</label>
+                                    <div className="dobfeild">
+                                        <select className="form-select me-3" aria-label="Default select example">
+                                            <option value="">01</option>
+                                            <option value="1">01</option>
+                                            <option value="2">02</option>
+                                            <option value="3">03</option>
+                                        </select>
+                                        <select className="form-select me-3" aria-label="Default select example">
+                                            <option value="">May</option>
+                                            <option value="1">May</option>
+                                            <option value="2">June</option>
+                                            <option value="3">July</option>
+                                        </select>
+                                        <select className="form-select" aria-label="Default select example">
+                                            <option value="">1990</option>
+                                            <option value="1">1990</option>
+                                            <option value="2">1991</option>
+                                            <option value="3">1993</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="width-100 mb-3 form-field">
+                                    <div className="dobfeild_gift row">
+                                        <div className="col-sm-6">
+                                            <label className="form-label">Gift for</label>
+                                            <select className="form-select " aria-label="Default select example">
+                                                <option value="">Watches</option>
+                                                <option value="1">01</option>
+                                                <option value="2">02</option>
+                                                <option value="3">03</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <label className="form-label">Who loves</label>
+                                            <select className="form-select " aria-label="Default select example">
+                                                <option value="">Watches</option>
+                                                <option value="1">May</option>
+                                                <option value="2">June</option>
+                                                <option value="3">July</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div className="width-100 mb-3 form-field">
+                                    <div className="dobfeild_gift row">
+                                        <div className="width-100">
+                                            <label className="form-label">Style</label>
+                                        </div>
+                                        <div className="col-sm-6">
+
+                                            <select className="form-select " aria-label="Default select example">
+                                                <option value="">Contemporary</option>
+                                                <option value="1">01</option>
+                                                <option value="2">02</option>
+                                                <option value="3">03</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className="float-end">
+                                                <button type="button" className="btn btn-secondary">Add date</button>
+                                            </div>
+                                        </div>
+                                        <div className="width-100 my-4">
+                                            <div className="form-check form-switch custom-switch">
+                                                <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Notify me via
+                                                    emial</label>
+                                                <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                                    checked={false} />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                        <div className="col-sm-6">
+                            <div className="list_birthday">
+                                <div className="width-100">
+                                    <h2>List of added birthdays</h2>
+                                </div>
+
+                                <div className="favt_dragdrop  mt-3">
+
+                                    <div className="favdesignr_size_sec">
+                                        <ul>
+
+                                            <li><a href="#">John / 20 May 1988</a></li>
+                                            <li><a href="#">Mom / 20 June 1964</a></li>
+                                            <li><a href="#">Dad / 20 July 1962</a></li>
+
+                                        </ul>
+                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="width-100 mb-4">
+                            <div className="float-end">
+                                <button type="button" className="btn btn-secondary">Confirm</button>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
             </Modal>
         </>

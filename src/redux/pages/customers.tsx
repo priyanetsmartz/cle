@@ -17,7 +17,7 @@ export function saveCustomerDetails(custId, data) {
 }
 
 export function updateCustEmail(data) {
-    return AdminApi.request(`rest/V1/customer/emailReset`, data, "PUT", "");
+    return ForgotPassApi.request(`rest/V1/customer/emailReset`, data, "PUT", "");
 }
 
 export function changePassword(data) {
