@@ -6,6 +6,8 @@ import {
     getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference, changePassword,
     updateCustEmail
 } from '../../../redux/pages/customers';
+import IntlMessages from "../../../components/utility/intlMessages";
+import { Link } from "react-router-dom";
 
 
 function MyAccount(props) {
@@ -124,7 +126,7 @@ function MyAccount(props) {
     //for attributes
     const getAttributes = async () => {
         let result: any = await getPreference(custId);
-        // console.log(result);
+        console.log(result);
         setAttributes(result.data[0]);
     }
 
@@ -287,10 +289,8 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>My Details</h1>
-                            <p>
-                                Feel free to edit any of your details below so your CLé account is totally up to date.
-                            </p>
+                            <h1><IntlMessages id="myaccount.myDetails" /></h1>
+                            <p><IntlMessages id="myaccount.feelFreeToEdit" /></p>
                         </div>
                     </div>
                     <div className="row">
@@ -298,31 +298,31 @@ function MyAccount(props) {
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label">Name</label>
+                                        <label className="form-label"><IntlMessages id="myaccount.name" /></label>
                                         <div className="field-name">{custForm.firstname}</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label">SurName</label>
+                                        <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
                                         <div className="field-name">{custForm.lastname}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label">Gender</label>
+                                        <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                                         <div className="field-name">{custForm.gender}</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label">Phone Number</label>
+                                        <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
                                         <div className="field-name">{custForm.addresses[0]?.telephone}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label">Date of birth</label>
+                                        <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
                                         <div className="field-name">{custForm.dob}</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label">Country</label>
+                                        <label className="form-label"><IntlMessages id="myaccount.country" /></label>
                                         <div className="field-name">{custForm.addresses[0]?.country_id}</div>
                                     </div>
                                 </div>
@@ -330,7 +330,9 @@ function MyAccount(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary" onClick={openMyDetails}>Edit</button>
+                                <button type="button" className="btn btn-secondary" onClick={openMyDetails}>
+                                    <IntlMessages id="myaccount.edit" />
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -341,10 +343,8 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>My Preferences</h1>
-                            <p>
-                                You can personalize or re-manage the preference settings
-                            </p>
+                            <h1><IntlMessages id="myaccount.myPreferences" /></h1>
+                            <p><IntlMessages id="myaccount.youCanPersonalize" /></p>
                         </div>
                     </div>
                     <div className="row">
@@ -352,28 +352,54 @@ function MyAccount(props) {
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label">Mosty interested in:</label>
-                                        <div className="field-name">Womenswear</div>
+                                        <label className="form-label"><IntlMessages id="myaccount.mostlyInterested" /></label>
+                                        <div className="field-name">
+                                            {Object.values(attributes.mostly_intersted_in).map((type) => {
+                                                return (
+                                                    <span>{type},</span>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label">Clothing size</label>
-                                        <div className="field-name">M / L</div>
+                                        <label className="form-label"><IntlMessages id="myaccount.clothingSize" /></label>
+                                        <div className="field-name">{Object.values(attributes.clothing_size).map((s) => {
+                                            return (
+                                                <span>{s}/</span>
+                                            )
+                                        })}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label">Shoes size</label>
-                                        <div className="field-name">8 / 8,5</div>
+                                        <label className="form-label"><IntlMessages id="myaccount.shoeSize" /></label>
+                                        <div className="field-name">{Object.values(attributes.clothing_size).map((s) => {
+                                            return (
+                                                <span>{s}/</span>
+                                            )
+                                        })}</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label">Favorite designers</label>
-                                        <div className="field-name">À La Garçonne / + 3 more</div>
+                                        <label className="form-label"><IntlMessages id="myaccount.favoriteDesigners" /></label>
+                                        <div className="field-name">
+                                            {Object.values(attributes.favourite_designers).map((d) => {
+                                                return (
+                                                    <span>{d},</span>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label">Favorite categories</label>
-                                        <div className="field-name">Belts / + 3 more</div>
+                                        <label className="form-label"><IntlMessages id="myaccount.favoriteCategories" /></label>
+                                        <div className="field-name">
+                                            {Object.values(attributes.favourite_designers).map((type) => {
+                                                return (
+                                                    <span>{type},</span>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label">&nbsp;</label>
@@ -384,7 +410,9 @@ function MyAccount(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary">Edit</button>
+                                <button type="button" className="btn btn-secondary" onClick={openMyPreferences}>
+                                    <IntlMessages id="myaccount.edit" />
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -395,10 +423,8 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>Gifting Preferences</h1>
-                            <p>
-                                You can put information about certain occasions or birthdays then We'll communicate gift ideas.
-                            </p>
+                            <h1><IntlMessages id="myaccount.giftingPreferences" /></h1>
+                            <p><IntlMessages id="myaccount.youCanPutInfo" /> </p>
                         </div>
                     </div>
                     <div className="row">
@@ -406,7 +432,7 @@ function MyAccount(props) {
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label">My birthday</label>
+                                        <label className="form-label"><IntlMessages id="myaccount.myBirthday" /></label>
                                         <div className="field-name">01 May 1990</div>
                                     </div>
                                     <div className="field_details">
@@ -416,7 +442,7 @@ function MyAccount(props) {
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label">List of birthdays</label>
+                                        <label className="form-label"><IntlMessages id="myaccount.listOfBirthdays" /></label>
                                         <div className="field-name">John / Mom / +3 more</div>
                                     </div>
                                     <div className="field_details">
@@ -428,7 +454,9 @@ function MyAccount(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary">Edit</button>
+                                <button type="button" className="btn btn-secondary" onClick={openGigitingModal}>
+                                    <IntlMessages id="myaccount.edit" />
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -439,34 +467,39 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>My Addresses</h1>
-                            <p>
-                                Add or change your address.
-                            </p>
+                            <h1><IntlMessages id="myaccount.myAddresses" /></h1>
+                            <p><IntlMessages id="myaccount.addOrChange" /></p>
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        <div className="addnew_address">
+                        <div className="addnew_address" onClick={openAddressModal}>
                             <div className="addressnew_addressblue">
-                                <span> Add New Address </span>
+                                <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
                             </div>
                         </div>
-                        <div className="addressnew_addressbodr">
-                            <h3>Address</h3>
-                            <ul>
-                                <li>Ann Smith</li>
-                                <li>Baker Street 105</li>
-                                <li>40-333</li>
-                                <li>London</li>
-                                <li>Great Britain</li>
-                            </ul>
-                            <div className="default_dlivy mt-3">Default delivery address</div>
-                            <div className="default_billing">Default billing address</div>
-                            <div className="address-action">
-                                <a href="#" className="delete_btn">Delete</a>
-                                <a href="#" className="edit_btn">Edit</a>
-                            </div>
-                        </div>
+
+                        {custForm && custForm.addresses.map(address => {
+                            return (<div className="addressnew_addressbodr">
+                                <h3>Address</h3>
+                                <ul>
+                                    <li>{address.firstname + ' ' + address.lastname}</li>
+                                    <li>{address.street}</li>
+                                    {/* <li>40-333</li> */}
+                                    <li>{address.city}</li>
+                                    <li>{address.country_id}</li>
+                                </ul>
+                                <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
+                                <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
+                                <div className="address-action">
+                                    <a href="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
+                                    <a className="edit_btn" onClick={openAddressModal}>
+                                        <IntlMessages id="myaccount.edit" />
+                                    </a>
+                                </div>
+                            </div>);
+                        })}
+
+
                     </div>
                 </div>
             </section>
@@ -475,43 +508,40 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>Payment Methods</h1>
-                            <p>
-                                Add or change your payments.
-                            </p>
+                            <h1><IntlMessages id="myaccount.paymentMethods" /></h1>
+                            <p><IntlMessages id="myaccount.addOrChangePayments" /> </p>
                         </div>
                     </div>
                     <div className="add_changeaddress">
                         <div className="addnew_address">
                             <div className="addressnew_addressblue">
-                                <span> Add new payment method </span>
+                                <span> <IntlMessages id="myaccount.addNewPayment" /> </span>
                             </div>
                         </div>
                         <div className="addressnew_addressbodr bank_card">
-                            <h3>Bank card</h3>
+                            <h3><IntlMessages id="myaccount.bankCard" /></h3>
                             <ul>
                                 <li>Mastercard</li>
                                 <li>**** **** **** 0356</li>
                                 <li>Exp: 06/25</li>
                                 <li>Ann Smith</li>
                             </ul>
-                            <div className="default_dlivy mt-3">Default delivery address</div>
+                            <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action bank_card">
-                                <a href="#" className="delete_btn">Delete</a>
-                                <a href="#" className="edit_btn">Edit</a>
+                                <a href="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
+                                <a href="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></a>
                             </div>
                         </div>
                         <div className="addressnew_addressbodr">
                             <h3>PayPal</h3>
                             <ul>
-                                <li>You'll need to enter your login
-                                    details when you place your order.</li>
-                                <li>Set as default payment method</li>
+                                <li><IntlMessages id="myaccount.youWillNeedToEnter" /></li>
+                                <li><IntlMessages id="myaccount.setAsDefault" /></li>
                             </ul>
-                            <div className="default_dlivy mt-3">Default delivery address</div>
+                            <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action paypal_card">
-                                <a href="#" className="delete_btn">Delete</a>
-                                <a href="#" className="edit_btn">Edit</a>
+                                <a href="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
+                                <a href="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></a>
                             </div>
                         </div>
                     </div>
@@ -522,48 +552,61 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>Change Password and Email</h1>
-                            <p>
-                                Feel free to update your Password and Email so your CLé account stays secure.
-                            </p>
+                            <h1><IntlMessages id="myaccount.changePasswordEmail" /></h1>
+                            <p><IntlMessages id="myaccount.feelFreeToUpdate" /></p>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
-                            <label className="form-label heading_lbl">Password</label>
+                            <label className="form-label heading_lbl"><IntlMessages id="login.password" /></label>
                             <div className="password_edit">&#9728;&#9728;&#9728;&#9728;&#9728;</div>
                         </div>
                         <div className="col-sm-6">
-                            <label className="form-label heading_lbl">Email</label>
-                            <div className="password_edit">ann.smith@gmail.com</div>
+                            <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
+                            <div className="password_edit">{custForm.email}</div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="change-paswd-sec">
-                                <label className="heading_lbl">Change password</label>
+                                <label className="heading_lbl"><IntlMessages id="login.changePassword" /></label>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label">Password</label>
-                                    <input type="password" className="form-control" placeholder="000" />
+                                    <label className="form-label"><IntlMessages id="login.password" /></label>
+                                    <input type="password" className="form-control" placeholder="000"
+                                        id="password"
+                                        value={changePass.password}
+                                        onChange={handlePassword} />
                                     <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
+                                    <span className="error">{errors.errors["password"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label">New password <span
+                                    <label className="form-label"><IntlMessages id="myaccount.newPassword" /> <span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000" />
+                                    <input type="password" className="form-control" placeholder="000" id="newPassword"
+                                        value={changePass.newPassword}
+                                        onChange={handlePassword} />
                                     <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
+                                    <span className="error">{errors.errors["newPassword"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label">Confirm new password <span
+                                    <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /> <span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000" />
+                                    <input type="password" className="form-control" placeholder="000"
+                                        id="confirmNewPassword"
+                                        value={changePass.confirmNewPassword}
+                                        onChange={handlePassword} />
                                     <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
+                                    <span className="error">{errors.errors["confirmNewPassword"]}</span>
                                 </div>
                                 <div className="forgot_paswd">
-                                    <div className="Frgt_paswd"><a href="#" className="forgt-pasdw">Forgot your password?</a></div>
+                                    <div className="Frgt_paswd">
+                                        <Link to="forget-password" className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
+
+                                    </div>
                                     <div className="Frgt_paswd">
                                         <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary">Confirm</button>
+                                            <button type="button" className="btn btn-secondary" onClick={handleChangePass}>
+                                                <IntlMessages id="myaccount.confirm" /></button>
                                         </div>
                                     </div>
                                 </div>
@@ -571,26 +614,38 @@ function MyAccount(props) {
                         </div>
                         <div className="col-sm-6">
                             <div className="newemail-sec">
-                                <label className="heading_lbl">New email</label>
+                                <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
                                 <div className="width-100 mb-3">
-                                    <label className="form-label">New email address*</label>
-                                    <input type="password" className="form-control" placeholder="000" />
+                                    <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
+                                    <input type="email" className="form-control" placeholder="000" id="newEmail"
+                                        value={changeEmail.newEmail}
+                                        onChange={handleEmail} />
+                                    <span className="error">{errors.errors["newEmail"]}</span>
                                 </div>
                                 <div className="width-100 mb-3">
-                                    <label className="form-label">Confirm new email address*<span
+                                    <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000" />
+                                    <input type="email" className="form-control" placeholder="000" id="confirmNewEmail"
+                                        value={changeEmail.confirmNewEmail}
+                                        onChange={handleEmail} />
+                                    <span className="error">{errors.errors["confirmNewEmail"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label">Password*<span
+                                    <label className="form-label"><IntlMessages id="login.password" /><span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000" />
+                                    <input type="password" className="form-control" placeholder="000"
+                                        id="password"
+                                        value={changeEmail.password}
+                                        onChange={handleEmail} />
                                     <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
+                                    <span className="error">{errors.errors["password"]}</span>
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
                                         <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary">Confirm</button>
+                                            <button type="button" className="btn btn-secondary" onClick={handleChangeEmail}>
+                                                <IntlMessages id="myaccount.confirm" />
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -668,7 +723,9 @@ function MyAccount(props) {
                                 </div>
                             </div>
                             <div className="width-100 mt-3">
-                                <button type="button" className="btn btn-secondary">Contact us</button>
+                                <Link to="contact-us" className="btn btn-secondary">
+                                    <IntlMessages id="contact.title" />
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -680,31 +737,33 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1 className="text-center mb-4">Check also</h1>
+                            <h1 className="text-center mb-4"><IntlMessages id="myaccount.checkAlso" /></h1>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary">My Orders & Returns</button>
+                                <Link to="customer-orders" className="btn btn-secondary">
+                                    <IntlMessages id="myaccount.myOrdersReturns" /></Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary">Order details</button>
+                                <Link to="customer-orders" className="btn btn-secondary">
+                                    <IntlMessages id="myaccount.orderDetails" /></Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary">Return details</button>
+                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.returnDetails" /></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-             {/* customer details modal */}
-             <Modal show={myDetailsModel} >
+            {/* customer details modal */}
+            <Modal show={myDetailsModel} >
                 <Modal.Header> <h4>Customer Details</h4>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openMyDetails} aria-label="Close"></button></Modal.Header>
                 <div className="container">
@@ -845,8 +904,8 @@ function MyAccount(props) {
 
             {/* my details modal */}
             <Modal show={myAddressModal}>
-                <Modal.Header> <h4>My Address</h4>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openAddressModal} aria-label="Close"></button></Modal.Header>
+                {/* <Modal.Header> <h4>My Address</h4> */}
+                {/* <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openAddressModal} aria-label="Close"></button></Modal.Header>
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12">
@@ -912,12 +971,71 @@ function MyAccount(props) {
                             </div>
                         </div>
                     </div>
+                </div> */}
+
+                <div className="CLE_pf_details">
+                    <h1>My Address</h1>
+                    <a className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></a>
+                    <div className="">
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">First name<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" placeholder="Ann"
+                                id="firstname"
+                                value={custAddForm.firstname}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["firstname"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Surname<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" id="lastname"
+                                placeholder="Surname"
+                                value={custAddForm.lastname}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["lastname"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Address<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" id="street"
+                                placeholder="Address"
+                                value={custAddForm.street}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["address"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">City*</label>
+                            <input type="number" className="form-control" id="city"
+                                placeholder="City"
+                                value={custAddForm.city}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["city"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Country<span className="maindatory">*</span></label>
+                            <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
+                                {countries && countries.map(opt => {
+                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                })}
+                            </select>
+                            <span className="error">{errors.errors["country"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <div className="Frgt_paswd">
+                                <div className="confirm-btn">
+                                    <button type="button" className="btn btn-secondary" onClick={handleSubmitClick}>Confirm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </Modal>
 
             {/* Gifting preference details modal */}
             <Modal show={giftingModal} size="lg">
-                <Modal.Header> 
+                <Modal.Header>
                     <h4>Gifting Preferences</h4>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openGigitingModal} aria-label="Close"></button>
                 </Modal.Header>
@@ -925,7 +1043,7 @@ function MyAccount(props) {
                     <b>My Birthday</b>
                     <p>01 May 1990</p>
                     <div className="col-md-6">
-                        
+
                     </div>
                 </div>
             </Modal>
