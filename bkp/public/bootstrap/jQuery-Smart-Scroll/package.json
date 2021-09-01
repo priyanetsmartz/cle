@@ -1,0 +1,40 @@
+{
+  "name": "smartscroll",
+  "version": "2.5.5",
+  "description": "Scrolljacking jQuery plugin",
+  "main": "smartscroll.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "build": "npm run format && npm run minify",
+    "lint": "eslint smartscroll.js",
+    "format": "eslint smartscroll.js --fix",
+    "minify": "uglifyjs smartscroll.js --ie8 --compress --mangle -o smartscroll.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/d4nyll/smartscroll.git"
+  },
+  "keywords": [
+    "scrolljacking",
+    "scroll",
+    "hash",
+    "jquery",
+    "jquery-plugin",
+    "ecosystem:jquery"
+  ],
+  "author": "Daniel Li <dan@danyll.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/d4nyll/smartscroll/issues"
+  },
+  "homepage": "https://github.com/d4nyll/smartscroll#readme",
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "uglify-js": "^3.4.9"
+  }
+}

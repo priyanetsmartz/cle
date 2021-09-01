@@ -1,17 +1,19 @@
+import React from "react";
 import { Route, Redirect } from "react-router";
 import { connect } from "react-redux";
-import { withRouter } from 'react-router-dom';
+// import PropTypes from "prop-types";
+
 import Header from '../../containers/partials/header';
 import Footer from '../../containers/partials/footer-new';
-const localToken = localStorage.getItem('id_token');
 
-const PriveRoute = ({ component: Component, auth, token, ...rest }) => (
+const WithFooter = ({ component: Component, auth, ...rest }) => (
     <Route
         {...rest}
         render={props =>
-            (auth || localToken) ? (
+            auth === undefined ? (
                 <>
-                    <Header logo="black" {...props} />
+                    <Header logo="white" {...props} />
+                    {/* <Sidebar /> */}
                     <Component {...props} />
                     <Footer />
                 </>
@@ -23,10 +25,8 @@ const PriveRoute = ({ component: Component, auth, token, ...rest }) => (
 );
 
 function mapStateToProps(state) {
-    console.log(state.Auth.idToken)
     return {
-        auth: state.Auth.idToken
+        auth: state.auth
     }
 }
-
-export default withRouter(connect(mapStateToProps)(PriveRoute))
+export default connect(mapStateToProps)(WithFooter);

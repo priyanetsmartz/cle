@@ -28,7 +28,7 @@ class AdminApi {
 
         let authtoken = '';
         let token = localStorage.getItem('id_token');
-       // const token = apiConfig.adminToken;
+        // const token = apiConfig.adminToken;
         authtoken = `Bearer ${token}`;
         return new Promise(function (resolve, reject) {
             var url = baseUrl + name

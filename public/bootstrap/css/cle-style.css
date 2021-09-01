@@ -117,7 +117,16 @@ body{
 
 .select-wearing ul {
   margin:0;
-  padding:0
+  padding:0;
+  position: relative;
+}
+
+.select-wearing ul.menuactive {
+    display: block;
+}
+
+.select-wearing ul.menudeactive  {
+    display: none;
 }
 
 .select-wearing ul li {
@@ -1348,5 +1357,27 @@ span.hidden-pass  i {
     .product-img-slider :hover{
         padding: 1px;
         border: 1px solid #2e2baa;
+    }
+    .select-wearing ul li ul {
+        margin: 0;
+        padding: 0;
+        display: none;
+        width: 1000px;
+        float: left;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        z-index:999;
+    }
+    .select-wearing ul li:hover ul {
+        margin: 0;
+        padding: 0;
+        display:block;
+    }
+    .select-wearing ul li ul li {
+       list-style:none;
+       padding: 3px 10px;
+       float:left;
+       display: inline-block;
     }
     /* product images slider and zoom in styles ends here */
