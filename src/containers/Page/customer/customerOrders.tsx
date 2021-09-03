@@ -17,6 +17,10 @@ function CustomerOrders(props) {
 
     useEffect(() => {
         getData();
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, []);
 
     const getData = async () => {

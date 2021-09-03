@@ -36,6 +36,10 @@ function Hamburger(props) {
         const classValueLogo = 'header-logo-menu';
         setClassState(classValueLogo);
         document.body.classList.add(classValue);
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, []);
     return (
         <div className={classState} id="header">

@@ -25,16 +25,7 @@ function SocailCheckout(props) {
         autoplay: true,
         autoplaySpeed: 2000
     };
-    // const [pagesData, SetPagesData] = useState({ title: '', content: '' })
-    useEffect(() => {
-        // async function fetchMyAPI() {
-        //     let result: any = await Pages('check-out', props.languages);
-        //     var jsonData = result.data.items[0];
-        //     // console.log(jsonData);
-        //     SetPagesData(jsonData);
-        // }
-        // fetchMyAPI()
-    }, [props.languages])
+
     return (
         <>
             <div className="container magazine-inner">

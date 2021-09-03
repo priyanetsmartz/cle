@@ -10,7 +10,11 @@ import { menu } from '../../redux/pages/allPages';
 import { useLocation } from "react-router-dom";
 import { getCartItems, getCartTotal } from '../../redux/cart/productApi';
 import { useHistory } from "react-router";
-
+import authAction from "../../redux/auth/actions";
+import appAction from "../../redux/app/actions";
+import IntlMessages from "../../components/utility/intlMessages";
+const { logout } = authAction;
+const { showSignin, openSignUp } = appAction;
 function HeaderMenu(props) {
     let history = useHistory();
     const location = useLocation()
@@ -23,6 +27,7 @@ function HeaderMenu(props) {
     const [showAccount, SetShowAccount] = useState(false)
     const [cartItemsVal, setCartItems] = useState([{ id: '', item_id: 0, extension_attributes: { item_image: "" }, name: '', price: 0, quantity: 0, desc: '', qty: 0, sku: '' }]);
     const [cartTotal, setCartTotal] = useState(0);
+
     useEffect(() => {
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
@@ -33,6 +38,10 @@ function HeaderMenu(props) {
             SetActiveCat(catMenu);
         }
         fetchMyAPI()
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.languages, location, category])
     useEffect(() => {
         callGetCartItems()
@@ -92,7 +101,7 @@ function HeaderMenu(props) {
 
     const logout = () => {
         // Clear access token and ID token from local storage
-        props.toggleOpenDrawer(false);
+        // props.toggleOpenDrawer(false);
         localStorage.removeItem('id_token');
         localStorage.removeItem('cust_id');
         localStorage.removeItem('token_email');
@@ -101,35 +110,41 @@ function HeaderMenu(props) {
         localStorage.removeItem('cartQuoteId');
         //  cookie.remove('name', { path: '', domain: '.dev.cle.com/' })
         props.logout();
-        props.showHelpus(false);
+        //  props.showHelpus(false);
         history.replace('/');
     }
-
+    // handle sigin click
+    const handlesigninClick = (e) => {
+        e.preventDefault();
+        props.showSignin(true);
+    }
     return (
         <>
             <div className="container">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
                     <div className="col-4 pt-1">
                         <div className="select-wearing">
-                            <ul>
-                                {
-                                    menuData.map(val => {
-                                        return (<li key={val.id}> <Link to={'products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
-                                            {
-                                                <ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
-                                                    {val.child.map((childMenu) => {
-                                                        return (
-                                                            <li className="nav-item col-6 col-md-auto" key={childMenu.id}>
-                                                                <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} to={'products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
-                                                            </li>
-                                                        );
-                                                    })}
-                                                </ul>
-                                            }
-                                        </li>)
-                                    })
-                                }
-                            </ul>
+                            {menuData.length > 0 && (
+                                <ul>
+                                    {
+                                        menuData.map(val => {
+                                            return (
+                                                <li key={val.id}> <Link to={'products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                    {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
+                                                        {val.child.map((childMenu) => {
+                                                            return (
+                                                                <li className="nav-item col-6 col-md-auto" key={childMenu.id}>
+                                                                    <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} to={'products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
+                                                                </li>
+                                                            );
+                                                        })}
+                                                    </ul>
+                                                    )}
+                                                </li>)
+                                        })
+                                    }
+                                </ul>
+                            )}
                         </div>
                     </div>
                     <div className="col-4">
@@ -166,7 +181,7 @@ function HeaderMenu(props) {
                                             <div className="d-grid">
                                                 {
                                                     customer_id ? <button className="btn btn-secondary" onClick={() => { logout(); }} type="button">Logout</button> :
-                                                        <button className="btn btn-secondary" type="button">Login</button>
+                                                        <button className="btn btn-secondary" type="button" onClick={(e) => { handlesigninClick(e); }} ><IntlMessages id="menu_Sign_in" /></button>
                                                 }
 
                                             </div>
@@ -238,29 +253,6 @@ function HeaderMenu(props) {
                     </button>
 
                     <div className="navbar-collapse collapse mainmenu-bar" id="bdNavbar">
-                        {/* <ul className="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
-                            <li className="nav-item col-6 col-md-auto">
-                                <Link className="nav-link p-2" href="/">New in</Link>
-                            </li>
-                            <li className="nav-item col-6 col-md-auto">
-                                <Link className="nav-link p-2 active" aria-current="true" to="#" >Watches</Link>
-                            </li>
-                            <li className="nav-item col-6 col-md-auto">
-                                <Link className="nav-link p-2" href="/docs/5.0/examples/" >Jewerly</Link>
-                            </li>
-                            <li className="nav-item col-6 col-md-auto">
-                                <Link className="nav-link p-2" href="https://icons.getbootstrap.com/" target="_blank"
-                                    rel="noopener">Designers</Link>
-                            </li>
-                            <li className="nav-item col-6 col-md-auto">
-                                <Link className="nav-link p-2" href="https://themes.getbootstrap.com/" target="_blank"
-                                    rel="noopener">Pre-Owned</Link>
-                            </li>
-                            <li className="nav-item col-6 col-md-auto">
-                                <Link className="nav-link p-2" href="https://blog.getbootstrap.com/" target="_blank"
-                                    rel="noopener">Sale</Link>
-                            </li>
-                        </ul> */}
 
                         <hr className="d-md-none text-white-50" />
 
@@ -291,10 +283,12 @@ function HeaderMenu(props) {
 
 const mapStateToProps = (state) => {
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        languages: state.LanguageSwitcher.language
     }
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { logout, showSignin, openSignUp }
 )(HeaderMenu);

@@ -17,6 +17,10 @@ function AllPages(props) {
 
         }
         fetchMyAPI()
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.match.params.id, props.languages])
 
     return (

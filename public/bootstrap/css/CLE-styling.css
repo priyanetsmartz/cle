@@ -11,6 +11,9 @@ body{width:100%;height:100%; overflow:hidden; font-family: 'Lato', sans-serif !i
 
 .footer .fp-tableCell{height:auto !important;}
 
+.home-video-desktop{width:100%;}
+.home-video-mobile{display:none;}
+
 .sectiosn > div{height: auto !important;}
 .sticky .main-logo-white {
     display: none;
@@ -47,18 +50,20 @@ body{width:100%;height:100%; overflow:hidden; font-family: 'Lato', sans-serif !i
 .hamburger a{height:24px;display: block;width:48px;}
 .hamburger a span {
     float: right;
-    background: #2e2baa;
+    background: #fff;
     height: 4px;
     display: block;
 	transition: width 0.5s;
 }
+.header-logo-menu.sticky .hamburger a span{background: #2e2baa;}
+.header-logo-menu .hamburger.hamburger-black a span {background: #2e2baa;}
 .hamburger a span.hb-first{width:48px;}
 .hamburger a span.hb-second{width:32px; margin:6px 0;}
 .hamburger a span.hb-third{width:40px;}
 .hamburger a:hover span.hb-first{width:40px;}
 .hamburger a:hover span.hb-second{width:48px;}
 .hamburger a:hover span.hb-third{width:32px;}
-
+.home-inner-text{z-index:1;}
 .home-inner-text figure.time-is-now {
     width: max-content;
     float: right;
@@ -233,7 +238,6 @@ z-index: 15;
 .social-login a:after{content: ""; clear: both;display: block;}
 .social-login a svg {
     margin-left: 25%;
-    width: max-content;
     float: left;
     text-align: right;
 }
@@ -654,6 +658,17 @@ small.text-primary {
 
 .mag-come-soon{font-family: 'Monument Extended';font-size:46px; line-height:56px;color:#2e2baa;height:520px;display: flex !important;	justify-content:center;	align-items:center; text-transform:uppercase;}
 .footer-logo{width:74px;}
+    
+.inner-pages .page-head svg text{font-size: 65px;transform: translate(240px, 108px);}
+.sign-head{font-size:1.5rem;}
+
+	
+
+	
+
+
+
+
 
 
 

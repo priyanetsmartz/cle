@@ -21,6 +21,7 @@ const { showSignin, openSignUp, logoClass, toggleOpenDrawer, userType, showHelpu
 function Header(props) {
     let history = useHistory();
     const [isLoaded, setIsLoaded] = useState(true);
+    const [userState, setUserState] = useState(1);
     const [menuLoaded, setMenuLoaded] = useState(false);
     useEffect(() => {
         setTimeout(() => {
@@ -38,9 +39,19 @@ function Header(props) {
         if (props && props.match && props.match.params.signup === 'true' && props && props.match && props.match.params.member === 'prive') {
             props.openSignUp(true);
             props.userType(4);
-            console.log(props.userType)
+           // console.log(props.userType)
         }
-    }, [props.match.params.signup, props.match.params.member]); // here  
+        if (props && props.match && props.match.params.signup === 'true' && props && props.match && props.match.params.member === 'signup') {
+            props.openSignUp(true);
+            props.userType(1);
+            //console.log(props.userType)
+        }
+        return () => {
+            props.userType(1);
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
+    }, []); // here  
 
 
     // it will close menu screen

@@ -1,6 +1,5 @@
 import ADMINAPI from "../../restApi/AdminApi";
 import FORGOTPASSAPI from "../../restApi/ForgotPassApi";
-import GRAPHQLAPI from "../../restApi/graphqlApi";
 const AdminApi = new ADMINAPI();
 const ForgotPassApi = new FORGOTPASSAPI();
 

@@ -16,6 +16,10 @@ function WishList(props) {
 
     useEffect(() => {
         getData();
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, []);
 
 

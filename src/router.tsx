@@ -8,7 +8,7 @@ import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import ProductRoutes from "./components/all-route/ProductRoutes";
-import PrivateRoute from "./components/all-route/LoggedinRoute";
+import PrivateRoute from "./components/all-route/ProductRoutes";
 import HomeRoute from './components/all-route/HomeRoute';
 import PriveRoute from "./components/all-route/priveRoute";
 import AllPosts from './containers/Page/magazineCategory';
@@ -36,8 +36,6 @@ const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Switch>
-        <ProductRoutes exact path="/product/:sku" component={ProductDetails} />
-        <ProductRoutes exact path="/products/:category" component={Categories} />
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />
@@ -60,7 +58,6 @@ const PublicRoutes = ({ history }) => {
         <Route exact path="/post-comment">
           <PostComment />
         </Route>
-        <ProductRoutes exact path="/products/:category/:key_url" component={Categories} />
         <ProductRoutes exact path="/products" component={Product} />
         <PrivateRoute exact path="/my-cart" component={Cart} />
         <MainRoute path="/:id" component={Pages} />

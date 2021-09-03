@@ -1,5 +1,8 @@
 @media (min-width: 360px) and (max-width: 579px) {
 	.container{padding-right: 20px !important;padding-left: 20px !important;} 
+.home-video-desktop{display:none;}
+.home-video-mobile{display:block;}
+.sign-head{font-size:1.2rem;}
 #header .my-5 {
     margin-top: 2rem !important;
     margin-bottom: 2rem !important;
@@ -19,7 +22,7 @@ left: -122% !important;
 }
 	.home-inner-text{height: 340px;}
 .home-inner-text figure.time-is-now {
-    width: 46%;
+    width: 60%;
 float: right;
 bottom: 35%;
 margin: 0;
@@ -30,6 +33,7 @@ right: 7%;
     width: 100%;
     height: auto;
 }
+.home-inner-text figure.time-is-now svg text#New_luxury_marketplace {font-size: 30px;}
 .home-inner-text figure.play-video-now {
     width: min-content;
 margin-right: 0;
@@ -43,9 +47,9 @@ position: absolute;
 	height:auto;
 }
 .sign-up-btn{
-	width: auto;
-right:25%;
-left: auto;
+	width: max-content;
+right:0;
+left: 0;
 bottom: 10%;
 }
 .sign-up-btn a{width: max-content;padding: 12px 20px;font-size: 12px;}
@@ -62,7 +66,7 @@ bottom: 10%;
     width: 90%;
 }
 .about-content {
-    margin-top: 20px;
+    margin-top: 35px;
     padding-right: 0px;
 }
 .about-content h3{font-size:24px;}
@@ -115,10 +119,10 @@ bottom: 10%;
 .right-menu-content li.lang-sec{padding-top:0px;}
 .right-menu-content li a.main-menu:hover {padding-top: 8px;}
 .container figure.page-head svg{width: 100%;height: auto;}
-.container figure.page-head.partnership-title svg text{font-size: 80px;}
+/* .container figure.page-head.partnership-title svg text{font-size: 80px;} */
 .container.help-us-inner figure.page-head svg text{font-size: 90px;}
 .blue-rotated-box{display:none;}
-.container.about-inner{padding-top:15%;}
+.container.about-inner{padding-top:25%;}
 .container.magazine-inner{padding-top:15%;}
 #magazine .mag-first-sec{top: 0;margin-top: 0 !important;}
 .mag-blog-pic{height: auto;}
@@ -211,16 +215,20 @@ bottom: 10%;
 .footer-links li {margin-bottom: 5px;}
 .mag-come-soon{font-size: 25px;line-height: 35px;height: 290px;}
 .inner-pages .page-head svg text {
-    font-size: 90px !important;
+    font-size: 52px !important;transform:translate(425px, 108px)
 }
 .header-logo-menu.sticky {background: rgba(255, 255, 255, 0.7);}
 .section{height:max-content !important;}
 #checkus-out.section{height:max-content !important;}
 .help-us-body {padding-top: 30%;  padding-bottom: 15%;}
+.question-sec .select-answer button{width:100%; margin-left:0; margin-right:0;}
 }
 
-@media (min-width: 580px) and (max-width: 767px) {
+@media (min-width: 580px) and (max-width: 752px) {
 	.container{padding-right: 20px !important;padding-left: 20px !important;} 
+	.home-video-desktop{display:none;}
+.home-video-mobile{display:block;}
+.sign-head{font-size:1.2rem;}
 #header .my-5 {
     margin-top: 2rem !important;
     margin-bottom: 2rem !important;
@@ -439,12 +447,17 @@ bottom: 10%;
 #checkus-out.section{height:max-content !important;}
 }
 
-@media (min-width: 768px) and (max-width: 962px) {
+@media (min-width: 753px) and (max-width: 962px) {
 	.container{padding-right: 25px !important;padding-left: 25px !important;} 
 #header .my-5 {
     margin-top: 2rem !important;
     margin-bottom: 2rem !important;
 }
+.inner-pages .page-head svg text {
+    font-size: 47px !important;transform:translate(425px, 108px)
+}
+.question-sec .select-answer button{width:100%;margin-left:0; margin-right:0;}
+.home-video-desktop{width:auto;}
 /* .homescreen-bg img{  */
 /* height: auto; */
 /* width: 160%; */
@@ -460,7 +473,7 @@ margin-left: -65% !important;
 }
 	.home-inner-text{height: 340px;}
 .home-inner-text figure.time-is-now {
-    width: 46%;
+    width: 60%;
 float: right;
 bottom: 35%;
 margin: 0;
@@ -471,6 +484,7 @@ right: 7%;
     width: 100%;
     height: auto;
 }
+.home-inner-text figure.time-is-now svg text#New_luxury_marketplace {font-size: 30px;}
 .home-inner-text figure.play-video-now {
     width: min-content;
 margin-right: 0;
@@ -581,7 +595,7 @@ bottom: 10%;
     bottom: auto;
     left:20%;
     position: absolute;
-    top: 29%;
+    top: 23%;
 }
 .container.about-inner .squares svg{height:auto !important;}
 .join-cle-bottom{bottom:0;width: max-content;right: 0;position: relative;left: 0;margin:-107px auto 20px;}

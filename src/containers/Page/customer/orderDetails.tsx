@@ -11,8 +11,12 @@ function OrderDetails(props) {
     const [order, setOrder]:any = useState({});
 
     useEffect(() => {
-        console.log(orderId);
+      //  console.log(orderId);
         getData();
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, []);
 
     const getData = async () => {

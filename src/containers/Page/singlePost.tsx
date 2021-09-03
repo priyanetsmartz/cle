@@ -31,6 +31,10 @@ function SinglePost(props) {
 
     useEffect(() => {
         getData()
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.match.params.slug])
 
     const getCategory = async () => {
@@ -43,6 +47,10 @@ function SinglePost(props) {
         getCategory();
         setShareUrl(window.location.href);
         PostViews(lang);
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.languages])
 
 

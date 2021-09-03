@@ -5,16 +5,14 @@ import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
-import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { getCookie } from '../../../helpers/session';
 import Promotion from "../../partials/promotion";
-const commonFunctions = new CommonFunctions();
-const baseUrl = commonFunctions.getBaseUrl();
+import Recomendations from './product-details/recomendations';
 const { addToCart, productList } = cartAction;
 
 
 function Products(props) {
-    let pageSize = 9;
+    const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
     const [page, setCurrent] = useState(1);
     const [token, setToken] = useState('');
@@ -30,7 +28,7 @@ function Products(props) {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [sortValue, page])
+    }, [sortValue, page, pageSize])
 
     async function getProducts() {
 
@@ -53,7 +51,7 @@ function Products(props) {
         }
         // get product page filter
         let result1: any = await getProductFilter(9);
-        console.log(result1)
+        //   console.log(result1)
         props.productList(productResult);
     }
     const filtterData = (event) => {
@@ -102,7 +100,9 @@ function Products(props) {
         notification("success", "", del.data[0].message);
         getProducts()
     }
-
+    const handlePageSize = (page) => {
+        setPageSize(page)
+    }
     const getPaginationGroup = () => {
         let start = Math.floor((page - 1) / 4) * 4;
         let fill = pagination > 5 ? 4 : pagination;
@@ -136,91 +136,375 @@ function Products(props) {
             <Promotion />
             <section>
                 <div className="container">
-                    <div className="col-auto">
-                        <select className="form-select" defaultValue={sort} onChange={filtterData} >
-                            <option value={0} key="0" >Newest First</option>
-                            <option value={1} key="1" >High to low -- price </option>
-                            <option value={2} key="2" >Low to High -- price</option>
-                            <option value={3} key="3" >Our picks</option>
-                        </select>
-                    </div>
                     <div className="row">
-                        {props.items.map(item => {
-                            return (
-                                <div className="col-md-4" key={item.id}>
-                                    {token && (
-                                        <div>
-                                            {!item.wishlist_item_id && (
-                                                <span onClick={() => { handleWhishlist(item.id) }}  >Add Whishlist</span>
-                                            )}
-                                            {item.wishlist_item_id && (
-                                                <span onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }}>Remove Whishlist</span>
-                                            )}
-                                        </div>
-                                    )
-                                    }
-                                    <div className="card-one">
-                                        <div className="card">
-                                            <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} />
-                                            <span className="card-title">{item.name}</span>
-                                            {!token && (<Link to="#" onClick={() => { handleClick(item.id, item.sku) }} className="btn-floating halfway-fab waves-effect waves-light red" ><i className="material-icons">add</i></Link>
-                                            )}
-                                        </div>
+                        <div className="col-sm-12">
+                            <nav aria-label="breadcrumb">
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to="#">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="#">Products</Link></li>
 
-                                        <div className="card-content">
-                                            <p>{item.desc}</p>
-                                            {(item.extension_attributes && item.extension_attributes.configurable_product_options && item.extension_attributes.configurable_product_options.length > 0) && (
-                                                <div>{item.extension_attributes.configurable_product_options.map(varient => {
-                                                    return (
-                                                        <div key={varient.id}>
-                                                            {varient.label}
-                                                            {(varient.values.length > 0 && (
-                                                                <div>
-                                                                    {
-                                                                        varient.values.map(val => {
-                                                                            return (<p key={val.value_index}>{val.value_index}</p>)
-                                                                        })
-                                                                    }
-                                                                </div>
-                                                            ))}
-                                                        </div>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
 
-                                                    )
-                                                })}</div>
+            </section>
 
+
+            <section>
+                <div className="container">
+                    <div className="row">
+
+                        <div className="col-sm-3">
+                            <div className="pro_categry_sidebar">
+                                <div className="width-100">
+                                    <div className="results_show">1,206 results</div>
+                                </div>
+                                <div className="sidebar_nav">
+                                    <div className="flex-shrink-0 p-0 bg-white">
+
+                                        <ul className="list-unstyled ps-0">
+                                            <li className="mb-3">
+                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#home-collapse" aria-expanded="true">
+                                                    Category
+                                                </button>
+                                                <div className="collapse show" id="home-collapse">
+                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li className="mb-3">
+                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#dashboard-collapse" aria-expanded="false">
+                                                    Designers
+                                                </button>
+                                                <div className="collapse" id="dashboard-collapse">
+                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li className="mb-3">
+                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#orders-collapse" aria-expanded="false">
+                                                    Color
+                                                </button>
+                                                <div className="collapse" id="orders-collapse">
+                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li className="mb-3">
+                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#account-collapse" aria-expanded="false">
+                                                    Watches size
+                                                </button>
+                                                <div className="collapse" id="account-collapse">
+                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+
+                                            <li className="mb-3">
+                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#account-collapse" aria-expanded="false">
+                                                    Jewelry size
+                                                </button>
+                                                <div className="collapse" id="account-collapse">
+                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+
+                                            <li className="mb-3">
+                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#account-collapse" aria-expanded="false">
+                                                    Accessories size
+                                                </button>
+                                                <div className="collapse" id="account-collapse">
+                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+
+                                            <li className="mb-3">
+                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#account-collapse" aria-expanded="false">
+                                                    Clothes size
+                                                </button>
+                                                <div className="collapse" id="account-collapse">
+                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+
+                                            <li className="mb-3">
+                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#account-collapse" aria-expanded="false">
+                                                    Prices
+                                                </button>
+                                                <div className="collapse" id="account-collapse">
+                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li className="mb-3">
+                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                    data-bs-target="#account-collapse" aria-expanded="false">
+                                                    Release years
+                                                </button>
+                                                <div className="collapse" id="account-collapse">
+                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
+                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-sm-9">
+                            <div className="resltspage_sec">
+                                <div className="paginatn_result">
+                                    <span>Results per page</span>
+                                    <ul>
+                                        <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
+                                        <li><Link to="#" className={pageSize === 60 ? "active" : ""}  onClick={() => { handlePageSize(60) }} >60</Link></li>
+                                        <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
+                                    </ul>
+                                </div>
+                                <div className="sort_by">
+                                    <div className="sortbyfilter">
+                                        <select className="form-select customfliter" aria-label="Default select example" defaultValue={sort} onChange={filtterData} >
+                                            <option value={0} key="0" >Newest First</option>
+                                            <option value={1} key="1" >High to low -- price </option>
+                                            <option value={2} key="2" >Low to High -- price</option>
+                                            <option value={3} key="3" >Our picks</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="product-listing">
+                                <div className="row g-2">
+                                    {props.items.map(item => {
+                                        return (
+                                            <div className="col-md-4" key={item.id}>
+                                                {token && (
+                                                    <div>
+                                                        {!item.wishlist_item_id && (
+                                                            <span onClick={() => { handleWhishlist(item.id) }}  >Add Whishlist</span>
+                                                        )}
+                                                        {item.wishlist_item_id && (
+                                                            <span onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }}>Remove Whishlist</span>
+                                                        )}
+                                                    </div>
+                                                )
+                                                }
+                                                <div className="product py-4">
+
+                                                    <div className="text-center"> <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} width="200" /> </div>
+                                                    <div className="about text-center">
+                                                        <h5>{item.name}</h5>
+                                                        <div className="tagname">{item.desc}</div>
+                                                        <div className="pricetag">${item.price}</div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className="resltspage_sec footer-pagints">
+                                <div className="paginatn_result">
+                                    <span>Results per page</span>
+                                    <ul>
+                                        <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
+                                        <li><Link to="#" className={pageSize === 60 ? "active" : ""}  onClick={() => { handlePageSize(60) }} >60</Link></li>
+                                        <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
+                                    </ul>
+                                </div>
+                                <div className="page_by">
+                                    <div className="pagination">
+
+                                        <div className="col-md-12 pagination">
+                                            {pagination > 1 && (<nav aria-label="Page navigation example">
+                                                <ul className="pagination justify-content-center">
+                                                    <li
+                                                        className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
+                                                        <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
+                                                    </li>
+                                                    {getPaginationGroup().map((i, index) => (
+                                                        <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
+                                                    ))}
+                                                    <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
+                                                        <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
+                                                            to="/">Next</Link>
+                                                    </li>
+                                                </ul>
+                                            </nav>
                                             )}
-                                            <p><b>Price: {item.price}</b></p>
                                         </div>
                                     </div>
                                 </div>
-                            )
-                        })}
-                        <div className="col-md-12 pagination">
-                            {pagination > 1 && (<nav aria-label="Page navigation example">
-                                <ul className="pagination justify-content-center">
-                                    <li
-                                        className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                        <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
-                                    </li>
-                                    {getPaginationGroup().map((i, index) => (
-                                        <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
-                                    ))}
-                                    <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
-                                        <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                            to="/">Next</Link>
-                                    </li>
-                                </ul>
-                            </nav>
-                            )}
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <section className="mb-5">
+                <Recomendations />
+            </section>
+
+            <section className="my_profile_sect check-als mb-5">
+                <div className="container">
+
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h1 className="text-center mb-4">Explore more</h1>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-sm-4 mb-1">
+                            <div className="d-grid ">
+                                <button type="button" className="btn btn-secondary">New designers</button>
+                            </div>
+                        </div>
+                        <div className="col-sm-4 mb-1">
+                            <div className="d-grid ">
+                                <button type="button" className="btn btn-secondary">New designers</button>
+                            </div>
+                        </div>
+                        <div className="col-sm-4 mb-1">
+                            <div className="d-grid ">
+                                <button type="button" className="btn btn-secondary">New designers</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </section>
+
+
+            <section className="my-5">
+                <div className="container">
+                    <div className="row">
+                        <div className="versace_sec">
+                            <h4>CLé Versace</h4>
+                            <p>Founded in 1978 in Milan, Gianni Versace S.r.l. is one of the leading international fashion design houses
+                                and a symbol of Italian luxury world-wide. It designs, manufactures, distributes and retails fashion and
+                                lifestyle products including haute couture, prèt-à-porter, accessories, jewellery, watches, eyewear,
+                                fragrances, and home furnishings all bearing the distinctive Medusa logo. The Versace Group distributes
+                                its products through a world-wide D.O.S network which includes over 200 boutiques in the principal cities
+                                and over 1500 wholesalers worldwide. Donatella Versace has been Artistic Director of Versace since 1997
+                                and has steered the brand into the 21st century. Today, Versace represents its heritage through its strong
+                                and fearless designs, while addressing a new global audience which continues to strengthen Versace’s
+                                position in contemporary culture.</p>
                         </div>
                     </div>
                 </div>
             </section>
-        </main >
+
+
+
+
+        </main>
     )
 }
 const mapStateToProps = (state) => {
-    console.log(state);
+    //  console.log(state);
     return {
         items: state.Cart.items
     }

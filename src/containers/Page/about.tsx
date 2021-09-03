@@ -19,14 +19,12 @@ function AboutUs(props) {
             SetPagesData(jsonData);
         }
         fetchMyAPI()
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.languages])
-
-    const handleClick = (e) => {
-        e.preventDefault()
-        const { openSignUp } = props;
-        openSignUp(true);
-    }
-
+    
     useEffect(() => {
         let tokenCheck = localStorage.getItem('id_token');
         let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
@@ -36,7 +34,18 @@ function AboutUs(props) {
         } else {
             setOnLogin(true);
         }
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     })
+
+    
+    const handleClick = (e) => {
+        e.preventDefault()
+        const { openSignUp } = props;
+        openSignUp(true);
+    }
     return (
         <div className="container about-inner aboutUs-inner">
             <figure className="text-center page-head">
