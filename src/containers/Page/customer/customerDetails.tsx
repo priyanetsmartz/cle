@@ -82,10 +82,6 @@ function CustomerDetails(props) {
         getData();
         getCountries();
         getAttributes();
-        return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
-        }
     }, []);
 
     const getCountries = async () => {
