@@ -145,7 +145,7 @@ function ContactUS(props) {
         }
     }
     return (
-        <div className="container about-inner"  >
+        <div className="container about-inner inner-pages"  >
             <figure className="text-center page-head">
                 <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
                     <text id="Contact Us" data-name="Contact Us" transform="translate(425 108)" fill="none" stroke="#2E2BAA"
@@ -154,7 +154,7 @@ function ContactUS(props) {
                     </text>
                 </svg>
             </figure>
-            <div className="row" style={{ marginTop: "80px" }}>
+            <div className="row">
                 <div className="col-md-6 offset-md-3">
                     <div>
                         <div>

@@ -22,6 +22,10 @@ function PriveUser(props) {
 
     }
     fetchMyAPI()
+    return () => {
+      // componentwillunmount in functional component.
+      // Anything in here is fired on component unmount.
+  }
   }, [props.languages,language])
   return (
     <>

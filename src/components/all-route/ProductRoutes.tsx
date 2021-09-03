@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Redirect } from "react-router";
+import { Route } from "react-router";
 import { connect } from "react-redux";
 
 import Header from '../../containers/partials/headeMenu';

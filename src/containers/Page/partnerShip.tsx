@@ -17,6 +17,10 @@ function Partnership(props) {
             SetPagesData(jsonData);
         }
         fetchMyAPI()
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.languages])
 
     const handleClick = (e) => {
@@ -27,12 +31,10 @@ function Partnership(props) {
     return (
         <div className="container about-inner">
             <figure className="text-center partnership-title page-head">
-                <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
-                    <text id="{pagesData.title}" data-name="{pagesData.title}" transform="translate(425 108)" fill="none" stroke="#2E2BAA"
-                        strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">
-                        <tspan x="-423.555" y="0">{pagesData.title}</tspan>
-                    </text>
-                </svg>
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="1118" height="134" viewBox="0 0 1118 134">
+                    <text id="{pagesData.title}" data-name="{pagesData.title}" transform="translate(559 98)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book"><tspan x="-557.48" y="0">{pagesData.title}</tspan></text> </svg>
+
             </figure>
             <div dangerouslySetInnerHTML={{ __html: pagesData.content }} />
             <div className="squares mx-5">

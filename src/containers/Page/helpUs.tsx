@@ -53,6 +53,10 @@ function HelpUs(props) {
             setForm(result.data[0]);
         }
         getData()
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.languages]);
 
     useEffect(() => {
@@ -64,6 +68,10 @@ function HelpUs(props) {
             setOnLogin(true);
             setCustomerId(localStorage.getItem('cust_id'));
             setIsSurvey(customerId && (customerId === getCookie('help-us')) ? true : false);
+        }
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
         }
     })
 

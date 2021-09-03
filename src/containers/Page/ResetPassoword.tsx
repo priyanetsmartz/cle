@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
 import { useLocation, useHistory } from "react-router";
 import { ValidateToken, SaveNewPass } from "../../redux/pages/allPages";
@@ -33,7 +33,10 @@ function ResetPassword(props) {
             }
         }
         getData()
-
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [])
 
     const handleChange = (e) => {

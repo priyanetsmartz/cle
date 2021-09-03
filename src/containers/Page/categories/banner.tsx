@@ -4,9 +4,6 @@ import { connect } from 'react-redux'
 
 
 function CategoryBanner(props) {
-    useEffect(() => {
-    }, [])
-
     return (
         <div className="container" style={{ "marginTop": "200px" }}>
             <h3>Banner</h3>

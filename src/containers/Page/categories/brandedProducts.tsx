@@ -4,9 +4,6 @@ import { connect } from 'react-redux'
 
 
 function BrandedProducts(props) {
-    useEffect(() => {
-    }, [])
-
     return (
         <div className="container" style={{ "marginTop": "200px" }}>
             <h3>Branded Products</h3>

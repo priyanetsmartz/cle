@@ -39,10 +39,18 @@ function RegistrationForm(props) {
 
     useEffect(() => {
         setIsLoaded(props.signupModel)
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.signupModel])
 
     useEffect(() => {
         setIsShow(props.loading);
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.loading])
 
     const handleValidation = () => {
@@ -160,7 +168,7 @@ function RegistrationForm(props) {
         <Modal show={isLoaded} onHide={hideModal}>
             <Modal.Header> <img src={logo} alt="logo" />
                 <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
-            <Modal.Body className="arabic-rtl-direction"><h2><IntlMessages id="signup.sign_up" /></h2>
+            <Modal.Body className="arabic-rtl-direction"><h2 className="sign-head"><IntlMessages id="signup.sign_up" /></h2>
                 <p><IntlMessages id="signup.be_the_first_one" /></p>
                 <div className="row g-3">
                     <div className="col-sm-12">

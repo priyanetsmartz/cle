@@ -15,7 +15,10 @@ function Magazine(props) {
             setItems(result.data);
         }
         getData()
-
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.languages])
 
 

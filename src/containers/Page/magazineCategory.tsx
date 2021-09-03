@@ -45,6 +45,10 @@ function MagazineCategory(props) {
             getData(lang, 1, 'published_at', 'desc')
         }
         getCategoryList(lang);
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.languages, category])
 
     async function getData(language, page, sortBy = "published_at", sortByValue = "desc") {

@@ -12,6 +12,10 @@ function Profile(props) {
     useEffect(() => {
         let tokenCheck = localStorage.getItem('token_email');
         fetchMyAPI(tokenCheck)
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [props.authtoken])
 
     async function fetchMyAPI(email) {

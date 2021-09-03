@@ -26,6 +26,10 @@ function PostComment(props) {
 
     useEffect(() => {
         getComments()
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, []);
 
     const getComments = async () => {

@@ -6,8 +6,6 @@ import {
     getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference, changePassword,
     updateCustEmail
 } from '../../../redux/pages/customers';
-import IntlMessages from "../../../components/utility/intlMessages";
-import { Link } from "react-router-dom";
 
 
 function MyAccount(props) {
@@ -20,11 +18,6 @@ function MyAccount(props) {
 
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [telephone, setTelephone] = useState("");
-    const [dob, setDob] = useState({
-        day: '',
-        month: '',
-        year: ''
-    });
     const [country, setCountry] = useState("");
     const [custForm, setCustForm] = useState({
         id: custId,
@@ -67,11 +60,11 @@ function MyAccount(props) {
 
     //for attributes details
     const [attributes, setAttributes] = useState({
-        clothing_size: { slected: null },
-        favourite_categories: { slected: null },
-        favourite_designers: { slected: null },
-        mostly_intersted_in: { slected: null },
-        shoes_size: { slected: null }
+        clothing_size: {},
+        favourite_categories: {},
+        favourite_designers: {},
+        mostly_intersted_in: {},
+        shoes_size: {}
     });
 
 
@@ -89,6 +82,10 @@ function MyAccount(props) {
         getData();
         getCountries();
         getAttributes();
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, []);
 
     const getCountries = async () => {
@@ -106,10 +103,8 @@ function MyAccount(props) {
 
     const handleSubmitClick = async (e) => {
         e.preventDefault();
-        custForm.dob = `${dob.day}/${dob.month}/${dob.year}`;
         custForm.addresses[0] = custAddForm;
         custForm.addresses[0].street = [custForm.addresses[0].street];
-        custForm.addresses[0].telephone = telephone;
         console.log(custForm);
         let result: any = await saveCustomerDetails(custId, { customer: custForm });
         if (result) {
@@ -129,9 +124,11 @@ function MyAccount(props) {
 
     }
 
+
     //for attributes
     const getAttributes = async () => {
         let result: any = await getPreference(custId);
+        // console.log(result);
         setAttributes(result.data[0]);
     }
 
@@ -155,7 +152,7 @@ function MyAccount(props) {
                     password: ""
                 });
             } else {
-                notification("error", "", "Invalid password!");
+                notification("error", "", "Invalid email or password");
             }
         }
     }
@@ -204,15 +201,14 @@ function MyAccount(props) {
             }
 
             let result: any = await updateCustEmail(req);
-            if (result.data) {
+            console.log(result);
+            if (result) {
                 notification("success", "", "New email Updated");
                 setChangeEmail({
                     confirmNewEmail: "",
                     newEmail: "",
                     password: ""
                 })
-            } else {
-                notification("error", "", "Error in updating email!");
             }
         }
     }
@@ -273,13 +269,6 @@ function MyAccount(props) {
         setGiftingModal(!giftingModal);
     }
 
-    const dobHandler = (e) => {
-        const { id, value } = e.target;
-        setDob(prevState => ({
-            ...prevState,
-            [id]: value
-        }));
-    }
 
     return (
         <>
@@ -302,8 +291,10 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.myDetails" /></h1>
-                            <p><IntlMessages id="myaccount.feelFreeToEdit" /></p>
+                            <h1>My Details</h1>
+                            <p>
+                                Feel free to edit any of your details below so your CLé account is totally up to date.
+                            </p>
                         </div>
                     </div>
                     <div className="row">
@@ -311,31 +302,31 @@ function MyAccount(props) {
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.name" /></label>
+                                        <label className="form-label">Name</label>
                                         <div className="field-name">{custForm.firstname}</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
+                                        <label className="form-label">SurName</label>
                                         <div className="field-name">{custForm.lastname}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
+                                        <label className="form-label">Gender</label>
                                         <div className="field-name">{custForm.gender}</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
+                                        <label className="form-label">Phone Number</label>
                                         <div className="field-name">{custForm.addresses[0]?.telephone}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
+                                        <label className="form-label">Date of birth</label>
                                         <div className="field-name">{custForm.dob}</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.country" /></label>
+                                        <label className="form-label">Country</label>
                                         <div className="field-name">{custForm.addresses[0]?.country_id}</div>
                                     </div>
                                 </div>
@@ -343,9 +334,7 @@ function MyAccount(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary" onClick={openMyDetails}>
-                                    <IntlMessages id="myaccount.edit" />
-                                </button>
+                                <button type="button" className="btn btn-secondary" onClick={openMyDetails}>Edit</button>
                             </div>
                         </div>
                     </div>
@@ -356,8 +345,10 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.myPreferences" /></h1>
-                            <p><IntlMessages id="myaccount.youCanPersonalize" /></p>
+                            <h1>My Preferences</h1>
+                            <p>
+                                You can personalize or re-manage the preference settings
+                            </p>
                         </div>
                     </div>
                     <div className="row">
@@ -365,56 +356,28 @@ function MyAccount(props) {
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.mostlyInterested" /></label>
-                                        <div className="field-name">
-                                            {Object.values(attributes.mostly_intersted_in).map((type) => {
-                                                return (
-                                                    <span key={type}>{type},</span>
-                                                )
-                                            })}
-                                        </div>
+                                        <label className="form-label">Mosty interested in:</label>
+                                        <div className="field-name">Womenswear</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.clothingSize" /></label>
-                                        <div className="field-name">{Object.values(attributes.clothing_size).map((s) => {
-                                            return (
-                                                <span key={s}>{s}/</span>
-                                            )
-                                        })}</div>
+                                        <label className="form-label">Clothing size</label>
+                                        <div className="field-name">M / L</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.shoeSize" /></label>
-                                        <div className="field-name">
-                                            {Object.values(attributes.clothing_size).map((s) => {
-                                                return (
-                                                    <span>{s}/</span>
-                                                )
-                                            })}
-                                        </div>
+                                        <label className="form-label">Shoes size</label>
+                                        <div className="field-name">8 / 8,5</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.favoriteDesigners" /></label>
-                                        <div className="field-name">
-                                            {Object.values(attributes.favourite_designers).map((d) => {
-                                                return (
-                                                    <span key={d}>{d},</span>
-                                                )
-                                            })}
-                                        </div>
+                                        <label className="form-label">Favorite designers</label>
+                                        <div className="field-name">À La Garçonne / + 3 more</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.favoriteCategories" /></label>
-                                        <div className="field-name">
-                                            {Object.values(attributes.favourite_designers).map((type) => {
-                                                return (
-                                                    <span>{type},</span>
-                                                )
-                                            })}
-                                        </div>
+                                        <label className="form-label">Favorite categories</label>
+                                        <div className="field-name">Belts / + 3 more</div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label">&nbsp;</label>
@@ -425,9 +388,7 @@ function MyAccount(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary" onClick={openMyPreferences}>
-                                    <IntlMessages id="myaccount.edit" />
-                                </button>
+                                <button type="button" className="btn btn-secondary">Edit</button>
                             </div>
                         </div>
                     </div>
@@ -438,8 +399,10 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.giftingPreferences" /></h1>
-                            <p><IntlMessages id="myaccount.youCanPutInfo" /> </p>
+                            <h1>Gifting Preferences</h1>
+                            <p>
+                                You can put information about certain occasions or birthdays then We'll communicate gift ideas.
+                            </p>
                         </div>
                     </div>
                     <div className="row">
@@ -447,7 +410,7 @@ function MyAccount(props) {
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.myBirthday" /></label>
+                                        <label className="form-label">My birthday</label>
                                         <div className="field-name">01 May 1990</div>
                                     </div>
                                     <div className="field_details">
@@ -457,7 +420,7 @@ function MyAccount(props) {
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.listOfBirthdays" /></label>
+                                        <label className="form-label">List of birthdays</label>
                                         <div className="field-name">John / Mom / +3 more</div>
                                     </div>
                                     <div className="field_details">
@@ -469,9 +432,7 @@ function MyAccount(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary" onClick={openGigitingModal}>
-                                    <IntlMessages id="myaccount.edit" />
-                                </button>
+                                <button type="button" className="btn btn-secondary">Edit</button>
                             </div>
                         </div>
                     </div>
@@ -482,81 +443,79 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.myAddresses" /></h1>
-                            <p><IntlMessages id="myaccount.addOrChange" /></p>
-                        </div>
-                    </div>
-                    <div className="add_changeaddress">
-                        <div className="addnew_address" onClick={openAddressModal}>
-                            <div className="addressnew_addressblue">
-                                <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
-                            </div>
-                        </div>
-
-                        {custForm && custForm.addresses.map(address => {
-                            return (<div className="addressnew_addressbodr" key={address.street}>
-                                <h3>Address</h3>
-                                <ul>
-                                    <li>{address.firstname + ' ' + address.lastname}</li>
-                                    <li>{address.street}</li>
-                                    {/* <li>40-333</li> */}
-                                    <li>{address.city}</li>
-                                    <li>{address.country_id}</li>
-                                </ul>
-                                <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                                <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
-                                <div className="address-action">
-                                    <a href="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
-                                    <a className="edit_btn" onClick={openAddressModal}>
-                                        <IntlMessages id="myaccount.edit" />
-                                    </a>
-                                </div>
-                            </div>);
-                        })}
-
-
-                    </div>
-                </div>
-            </section>
-
-            <section className="my_profile_sect mb-4">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.paymentMethods" /></h1>
-                            <p><IntlMessages id="myaccount.addOrChangePayments" /> </p>
+                            <h1>My Addresses</h1>
+                            <p>
+                                Add or change your address.
+                            </p>
                         </div>
                     </div>
                     <div className="add_changeaddress">
                         <div className="addnew_address">
                             <div className="addressnew_addressblue">
-                                <span> <IntlMessages id="myaccount.addNewPayment" /> </span>
+                                <span> Add New Address </span>
+                            </div>
+                        </div>
+                        <div className="addressnew_addressbodr">
+                            <h3>Address</h3>
+                            <ul>
+                                <li>Ann Smith</li>
+                                <li>Baker Street 105</li>
+                                <li>40-333</li>
+                                <li>London</li>
+                                <li>Great Britain</li>
+                            </ul>
+                            <div className="default_dlivy mt-3">Default delivery address</div>
+                            <div className="default_billing">Default billing address</div>
+                            <div className="address-action">
+                                <a href="#" className="delete_btn">Delete</a>
+                                <a href="#" className="edit_btn">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="my_profile_sect mb-4">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h1>Payment Methods</h1>
+                            <p>
+                                Add or change your payments.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="add_changeaddress">
+                        <div className="addnew_address">
+                            <div className="addressnew_addressblue">
+                                <span> Add new payment method </span>
                             </div>
                         </div>
                         <div className="addressnew_addressbodr bank_card">
-                            <h3><IntlMessages id="myaccount.bankCard" /></h3>
+                            <h3>Bank card</h3>
                             <ul>
                                 <li>Mastercard</li>
                                 <li>**** **** **** 0356</li>
                                 <li>Exp: 06/25</li>
                                 <li>Ann Smith</li>
                             </ul>
-                            <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
+                            <div className="default_dlivy mt-3">Default delivery address</div>
                             <div className="address-action bank_card">
-                                <a href="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
-                                <a href="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></a>
+                                <a href="#" className="delete_btn">Delete</a>
+                                <a href="#" className="edit_btn">Edit</a>
                             </div>
                         </div>
                         <div className="addressnew_addressbodr">
                             <h3>PayPal</h3>
                             <ul>
-                                <li><IntlMessages id="myaccount.youWillNeedToEnter" /></li>
-                                <li><IntlMessages id="myaccount.setAsDefault" /></li>
+                                <li>You'll need to enter your login
+                                    details when you place your order.</li>
+                                <li>Set as default payment method</li>
                             </ul>
-                            <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
+                            <div className="default_dlivy mt-3">Default delivery address</div>
                             <div className="address-action paypal_card">
-                                <a href="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
-                                <a href="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></a>
+                                <a href="#" className="delete_btn">Delete</a>
+                                <a href="#" className="edit_btn">Edit</a>
                             </div>
                         </div>
                     </div>
@@ -567,61 +526,48 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.changePasswordEmail" /></h1>
-                            <p><IntlMessages id="myaccount.feelFreeToUpdate" /></p>
+                            <h1>Change Password and Email</h1>
+                            <p>
+                                Feel free to update your Password and Email so your CLé account stays secure.
+                            </p>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
-                            <label className="form-label heading_lbl"><IntlMessages id="login.password" /></label>
+                            <label className="form-label heading_lbl">Password</label>
                             <div className="password_edit">&#9728;&#9728;&#9728;&#9728;&#9728;</div>
                         </div>
                         <div className="col-sm-6">
-                            <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                            <div className="password_edit">{custForm.email}</div>
+                            <label className="form-label heading_lbl">Email</label>
+                            <div className="password_edit">ann.smith@gmail.com</div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="change-paswd-sec">
-                                <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
+                                <label className="heading_lbl">Change password</label>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="login.password" /></label>
-                                    <input type="password" className="form-control" placeholder="000"
-                                        id="password"
-                                        value={changePass.password}
-                                        onChange={handlePassword} />
+                                    <label className="form-label">Password</label>
+                                    <input type="password" className="form-control" placeholder="000" />
                                     <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
-                                    <span className="error">{errors.errors["password"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.newPassword" /> <span
+                                    <label className="form-label">New password <span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000" id="newPassword"
-                                        value={changePass.newPassword}
-                                        onChange={handlePassword} />
+                                    <input type="password" className="form-control" placeholder="000" />
                                     <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
-                                    <span className="error">{errors.errors["newPassword"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /> <span
+                                    <label className="form-label">Confirm new password <span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000"
-                                        id="confirmNewPassword"
-                                        value={changePass.confirmNewPassword}
-                                        onChange={handlePassword} />
+                                    <input type="password" className="form-control" placeholder="000" />
                                     <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
-                                    <span className="error">{errors.errors["confirmNewPassword"]}</span>
                                 </div>
                                 <div className="forgot_paswd">
-                                    <div className="Frgt_paswd">
-                                        <Link to="forget-password" className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
-
-                                    </div>
+                                    <div className="Frgt_paswd"><a href="#" className="forgt-pasdw">Forgot your password?</a></div>
                                     <div className="Frgt_paswd">
                                         <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary" onClick={handleChangePass}>
-                                                <IntlMessages id="myaccount.confirm" /></button>
+                                            <button type="button" className="btn btn-secondary">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -629,38 +575,26 @@ function MyAccount(props) {
                         </div>
                         <div className="col-sm-6">
                             <div className="newemail-sec">
-                                <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+                                <label className="heading_lbl">New email</label>
                                 <div className="width-100 mb-3">
-                                    <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
-                                    <input type="email" className="form-control" placeholder="000" id="newEmail"
-                                        value={changeEmail.newEmail}
-                                        onChange={handleEmail} />
-                                    <span className="error">{errors.errors["newEmail"]}</span>
+                                    <label className="form-label">New email address*</label>
+                                    <input type="password" className="form-control" placeholder="000" />
                                 </div>
                                 <div className="width-100 mb-3">
-                                    <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
+                                    <label className="form-label">Confirm new email address*<span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="email" className="form-control" placeholder="000" id="confirmNewEmail"
-                                        value={changeEmail.confirmNewEmail}
-                                        onChange={handleEmail} />
-                                    <span className="error">{errors.errors["confirmNewEmail"]}</span>
+                                    <input type="password" className="form-control" placeholder="000" />
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="login.password" /><span
+                                    <label className="form-label">Password*<span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000"
-                                        id="password"
-                                        value={changeEmail.password}
-                                        onChange={handleEmail} />
+                                    <input type="password" className="form-control" placeholder="000" />
                                     <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
-                                    <span className="error">{errors.errors["password"]}</span>
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
                                         <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary" onClick={handleChangeEmail}>
-                                                <IntlMessages id="myaccount.confirm" />
-                                            </button>
+                                            <button type="button" className="btn btn-secondary">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -738,9 +672,7 @@ function MyAccount(props) {
                                 </div>
                             </div>
                             <div className="width-100 mt-3">
-                                <Link to="contact-us" className="btn btn-secondary">
-                                    <IntlMessages id="contact.title" />
-                                </Link>
+                                <button type="button" className="btn btn-secondary">Contact us</button>
                             </div>
                         </div>
                     </div>
@@ -752,104 +684,106 @@ function MyAccount(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1 className="text-center mb-4"><IntlMessages id="myaccount.checkAlso" /></h1>
+                            <h1 className="text-center mb-4">Check also</h1>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className="btn btn-secondary">
-                                    <IntlMessages id="myaccount.myOrdersReturns" /></Link>
+                                <button type="button" className="btn btn-secondary">My Orders & Returns</button>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className="btn btn-secondary">
-                                    <IntlMessages id="myaccount.orderDetails" /></Link>
+                                <button type="button" className="btn btn-secondary">Order details</button>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.returnDetails" /></button>
+                                <button type="button" className="btn btn-secondary">Return details</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* customer details modal */}
-            <Modal show={myDetailsModel} >
-                <div className="CLE_pf_details">
-                    <h1>My Details</h1>
-                    <a onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></a>
-                    <div className="">
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Frist name<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Ann"
-                                id="firstname"
-                                value={custForm.firstname}
-                                onChange={handleChange} />
-                            <span className="error">{errors.errors["firstname"]}</span>
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Surname<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Smith" id="lastname"
-                                value={custForm.lastname}
-                                onChange={handleChange} />
-                            <span className="error">{errors.errors["lastname"]}</span>
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Gender</label>
-                            <input type="text" className="form-control" placeholder="Woman" id="gender"
-                                value={custForm.gender}
-                                onChange={handleChange} />
-                            <span className="error">{errors.errors["gender"]}</span>
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Phone number</label>
-                            <input type="number" className="form-control" placeholder="+48 123 456 789" id="phone"
-                                value={telephone}
-                                onChange={(e) => { setTelephone(e.target.value) }}
-                            />
-                            <span className="error">{errors.errors["phone"]}</span>
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Date of birth</label>
-                            <div className="dobfeild">
-                                <select className="form-select me-3" aria-label="Default select example" onChange={dobHandler} id="day">
-                                    <option value="">Select</option>
-                                    <option value="01">01</option>
-                                    <option value="02">02</option>
-                                    <option value="03">03</option>
-                                </select>
-                                <select className="form-select me-3" aria-label="Default select example" onChange={dobHandler} id="month">
-                                    <option value="">Select</option>
-                                    <option value="05">May</option>
-                                    <option value="06">June</option>
-                                    <option value="07">July</option>
-                                </select>
-                                <select className="form-select" aria-label="Default select example" onChange={dobHandler} id="year">
-                                    <option value="">Select</option>
-                                    <option value="1990">1990</option>
-                                    <option value="1991">1991</option>
-                                    <option value="1993">1993</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Country<span className="maindatory">*</span></label>
-                            <select value={country} onChange={(e) => { setCountry(e.target.value) }} id="country" className="form-select" aria-label="Default select example">
-                                {countries && countries.map(opt => {
-                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
-                                })}
-                            </select>
-                            <span className="error">{errors.errors["country"]}</span>
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <div className="Frgt_paswd">
-                                <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={handleSubmitClick}>Confirm</button>
+             {/* customer details modal */}
+             <Modal show={myDetailsModel} >
+                <Modal.Header> <h4>Customer Details</h4>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openMyDetails} aria-label="Close"></button></Modal.Header>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> <b>First Name</b></label>
+                                    <input type="text"
+                                        className="form-control"
+                                        id="firstname"
+                                        placeholder="First Name"
+                                        value={custForm.firstname}
+                                        onChange={handleChange}
+                                    />
+                                    <span className="error">{errors.errors["firstname"]}</span>
                                 </div>
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> <b>Surname</b></label>
+                                    <input type="text"
+                                        className="form-control"
+                                        id="lastname"
+                                        placeholder="Surname"
+                                        value={custForm.lastname}
+                                        onChange={handleChange}
+                                    />
+                                    <span className="error">{errors.errors["lastname"]}</span>
+                                </div>
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> <b>Gender</b></label>
+                                    <input type="text"
+                                        className="form-control"
+                                        id="gender"
+                                        placeholder="Gender"
+                                        value={custForm.gender}
+                                        onChange={handleChange}
+                                    />
+                                    <span className="error">{errors.errors["gender"]}</span>
+                                </div>
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> <b>Phone</b></label>
+                                    <input type="text"
+                                        className="form-control"
+                                        id="phone"
+                                        placeholder="Phone"
+                                        value={telephone}
+                                        onChange={(e) => { setTelephone(e.target.value) }}
+                                    />
+                                    <span className="error">{errors.errors["phone"]}</span>
+                                </div>
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> <b>Date of Birth</b></label>
+                                    <input type="date"
+                                        className="form-control"
+                                        id="dob"
+                                        placeholder="Date of Birth"
+                                        value={custForm.dob}
+                                        onChange={handleChange}
+                                    />
+                                    <span className="error">{errors.errors["dob"]}</span>
+                                </div>
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> Country</label>
+                                    <select value={country} onChange={(e) => { setCountry(e.target.value) }} id="country" className='form-control'>
+                                        {countries && countries.map(opt => {
+                                            return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                        })}
+                                    </select>
+                                    <span className="error">{errors.errors["country"]}</span>
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <button className="signup-btn" onClick={handleSubmitClick}> Confirm</button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -857,175 +791,57 @@ function MyAccount(props) {
             </Modal>
 
             {/* my preference details modal */}
-            <Modal show={myPreferenceModel} size="lg">
-                <div className="CLE_pf_details">
-                    <h1>My Preferences</h1>
-                    <a onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></a>
-                    <div className="Mosty_interested_in">
-                        <h2>Mosty interested in</h2>
-                        <div className="interestd_check">
-                            {Object.values(attributes.mostly_intersted_in).map((interest) => {
-                                return (interest && interest != '' &&
-                                    <div className="form-check" key={interest}>
-                                        <input className="form-check-input" type="checkbox" value="" id={interest}
-                                            checked={attributes.mostly_intersted_in.slected == interest ? true : false} />
-                                        <label className="form-check-label" htmlFor={interest}>
-                                            {interest}
-                                        </label>
-                                    </div>
-                                )
-                            })}
-
-                        </div>
-
-                        <div className="row">
-
-                            <div className="col-sm-6">
-                                <div className="clothing_size mb-4">
-                                    <h2>Clothing size</h2>
-                                    <div className="cl_size_sec">
-                                        <ul>
-                                            {Object.values(attributes.clothing_size).map((clothingSize, i) => {
-                                                return (clothingSize && clothingSize != '' &&
-                                                    <li><a key={i} className={attributes.clothing_size.slected ? 'active' : 'null'}>{clothingSize}</a></li>
-                                                )
-                                            })}
-                                        </ul>
-                                    </div>
-                                    <div className="sizebtn clothnmrgin">
-                                        <div className="save-btn"><a href="#" className="btn-link-blue">Save</a></div>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-sm-6">
-                                <div className="clothing_size">
-                                    <h2>Shoes size</h2>
-                                    <div className="cl_size_sec">
-                                        <ul>
-                                            {Object.values(attributes.shoes_size).map((shoeSize) => {
-                                                return (shoeSize && shoeSize != '' &&
-                                                    <li><a key={shoeSize} className={attributes.clothing_size.slected ? 'active' : 'null'}>{shoeSize}</a></li>
-                                                )
-                                            })}
-                                        </ul>
-                                    </div>
-                                    <div className="sizebtn">
-                                        <div className="save-btn"><a href="#" className="btn-link-blue">Save</a></div>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div className="favorite_designers mb-4">
-                        <h2>Favorite designers</h2>
-                        <div className="row">
-
-                            <div className="col-sm-6">
-                                <div className="search_results">
-                                    <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
-                                    <input type="search" placeholder="Search..." className="form-control me-1" />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="row">
-
-                            <div className="col-sm-6">
-                                <div className="favt_section">
-                                    <ul>
-                                        {Object.values(attributes.favourite_designers).map((designer) => {
-                                            return (designer && designer != '' &&
-                                                <li key={designer}>
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                                            checked={attributes.favourite_designers.slected == designer ? true : false} />
-                                                        <label className="form-check-label">
-                                                            {designer}
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            )
-                                        })}
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="col-sm-6">
-                                <div className="favt_dragdrop">
-                                    <div className="favdesignr_size_sec">
-                                        <ul>
-                                            <li><a href="#">À La Garçonne</a></li>
-                                            <li><a href="#">ADAMO</a></li>
-                                            <li><a href="#">A.EMERY</a></li>
-                                            <li><a href="#" className="active">Dodo Bar Or</a></li>
-                                        </ul>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div className="favorite_designers mb-4">
-                        <h2>Favorite categories</h2>
-                        <div className="row">
-
-                            <div className="col-sm-6">
-                                <div className="search_results">
-                                    <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
-                                    <input type="search" placeholder="Search..." className="form-control me-1" />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="row">
-
-                            <div className="col-sm-6">
-                                <div className="favt_section">
-                                    <ul>
-                                        {Object.values(attributes.favourite_categories).map((category) => {
-                                            return (category && category != '' &&
-                                                <li key={category}>
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                                            checked={attributes.favourite_categories.slected == category ? true : false} />
-                                                        <label className="form-check-label">
-                                                            {category}
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            )
-                                        })}
-
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="col-sm-6">
-                                <div className="favt_dragdrop">
-                                    <div className="favdesignr_size_sec">
-                                        <ul>
-
-                                            <li><a href="#">Belts</a></li>
-                                            <li><a href="#">Necklaces</a></li>
-                                            <li><a href="#">Scarves</a></li>
-                                            <li><a href="#" className="active">Watches</a></li>
-
-                                        </ul>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
-                                    </div>
-                                </div>
+            <Modal show={myPreferenceModel} size="xl">
+                <Modal.Header> <h4>My Preferences</h4>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openMyPreferences} aria-label="Close"></button></Modal.Header>
+                <div className="container" style={{ marginTop: '150px' }}>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="d-flex justify-content-between">
+                                <span>{attributes.clothing_size['7']}</span>
+                                <span>{attributes.clothing_size['8']}</span>
+                                <span>{attributes.clothing_size['9']}</span>
+                                <span>{attributes.clothing_size['10']}</span>
+                                <span>{attributes.clothing_size['11']}</span>
+                                <span>{attributes.clothing_size['12']}</span>
                             </div>
                         </div>
-                    </div>
-                    <div className="width-100 mb-4">
-                        <div className="float-end">
-                            <button type="button" className="btn btn-secondary">Confirm</button>
+                        <div className="col-md-6">
+                            <h6>Favourite Categories</h6>
+                            <div className="d-flex justify-content-between">
+                                <span>{attributes.favourite_categories['20']}</span>
+                                <span>{attributes.favourite_categories['21']}</span>
+                                <span>{attributes.favourite_categories['22']}</span>
+                                <span>{attributes.favourite_categories['23']}</span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div className="col-md-6">
+                            <h6>Favourite Designers</h6>
+                            <div className="d-flex justify-content-between">
+                                <span>{attributes.favourite_designers['17']}</span>
+                                <span>{attributes.favourite_designers['18']}</span>
+                                <span>{attributes.favourite_designers['19']}</span>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <h6>Mostly Intersted In</h6>
+                            <div className="d-flex justify-content-between">
+                                <span>{attributes.mostly_intersted_in['4']}</span>
+                                <span>{attributes.mostly_intersted_in['5']}</span>
+                                <span>{attributes.mostly_intersted_in['6']}</span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div className="col-md-6">
+                            <h6>Shoe Size</h6>
+                            <div className="d-flex justify-content-between">
+                                <span>{attributes.shoes_size['13']}</span>
+                                <span>{attributes.shoes_size['14']}</span>
+                                <span>{attributes.shoes_size['15']}</span>
+                                <span>{attributes.shoes_size['16']}</span>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -1033,60 +849,70 @@ function MyAccount(props) {
 
             {/* my details modal */}
             <Modal show={myAddressModal}>
-                <div className="CLE_pf_details">
-                    <h1>My Address</h1>
-                    <a className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></a>
-                    <div className="">
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">First name<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Ann"
-                                id="firstname"
-                                value={custAddForm.firstname}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["firstname"]}</span>
+                <Modal.Header> <h4>My Address</h4>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openAddressModal} aria-label="Close"></button></Modal.Header>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
 
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Surname<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="lastname"
-                                placeholder="Surname"
-                                value={custAddForm.lastname}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["lastname"]}</span>
-
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Address<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="street"
-                                placeholder="Address"
-                                value={custAddForm.street}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["address"]}</span>
-
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">City*</label>
-                            <input type="number" className="form-control" id="city"
-                                placeholder="City"
-                                value={custAddForm.city}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["city"]}</span>
-
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Country<span className="maindatory">*</span></label>
-                            <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
-                                {countries && countries.map(opt => {
-                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
-                                })}
-                            </select>
-                            <span className="error">{errors.errors["country"]}</span>
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <div className="Frgt_paswd">
-                                <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={handleSubmitClick}>Confirm</button>
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> <b>First Name</b></label>
+                                    <input type="text"
+                                        className="form-control"
+                                        id="firstname"
+                                        placeholder="First Name"
+                                        value={custAddForm.firstname}
+                                        onChange={handleAddChange}
+                                    />
+                                    <span className="error">{errors.errors["firstname"]}</span>
                                 </div>
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> <b>Surname</b></label>
+                                    <input type="text"
+                                        className="form-control"
+                                        id="lastname"
+                                        placeholder="Surname"
+                                        value={custAddForm.lastname}
+                                        onChange={handleAddChange}
+                                    />
+                                    <span className="error">{errors.errors["lastname"]}</span>
+                                </div>
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> <b>Address</b></label>
+                                    <input type="text"
+                                        className="form-control"
+                                        id="street"
+                                        placeholder="Address"
+                                        value={custAddForm.street}
+                                        onChange={handleAddChange}
+                                    />
+                                    <span className="error">{errors.errors["address"]}</span>
+                                </div>
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> <b>City</b></label>
+                                    <input type="text"
+                                        className="form-control"
+                                        id="city"
+                                        placeholder="City"
+                                        value={custAddForm.city}
+                                        onChange={handleAddChange}
+                                    />
+                                    <span className="error">{errors.errors["city"]}</span>
+                                </div>
+                                <div className="col-sm-12">
+                                    <label htmlFor=""> Country</label>
+                                    <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className='form-control'>
+                                        {countries && countries.map(opt => {
+                                            return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                        })}
+                                    </select>
+                                    <span className="error">{errors.errors["country"]}</span>
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <button className="signup-btn" onClick={handleSubmitClick}> Confirm</button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -1095,209 +921,16 @@ function MyAccount(props) {
 
             {/* Gifting preference details modal */}
             <Modal show={giftingModal} size="lg">
-                <div className="gifting_pref">
-                    <div className="girft_details">
-                        <h1>Gifting Preferences</h1>
-                        <a onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></a>
-                        <div className="my_birthday mb-3">
-                            <label className="form-label">My birthday</label>
-                            <div className="birthdate">01 May 1990</div>
-                        </div>
+                <Modal.Header> 
+                    <h4>Gifting Preferences</h4>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openGigitingModal} aria-label="Close"></button>
+                </Modal.Header>
+                <div className="row">
+                    <b>My Birthday</b>
+                    <p>01 May 1990</p>
+                    <div className="col-md-6">
+                        
                     </div>
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <div className="width-100">
-                                <div className="dobfeild_gift row">
-                                    <div className="col-sm-4">
-                                        <label className="form-label">I like</label>
-                                        <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">01</option>
-                                            <option value="1">01</option>
-                                            <option value="2">02</option>
-                                            <option value="3">03</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <label className="form-label">&nbsp;</label>
-                                        <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">May</option>
-                                            <option value="1">May</option>
-                                            <option value="2">June</option>
-                                            <option value="3">July</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <label className="form-label">&nbsp;</label>
-                                        <select className="form-select" aria-label="Default select example">
-                                            <option value="">1988</option>
-                                            <option value="1">1990</option>
-                                            <option value="2">1991</option>
-                                            <option value="3">1993</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-6">
-                            <div className="dobfeild_gift row">
-                                <div className="col-sm-6">
-                                    <label className="form-label">I like</label>
-                                    <select className="form-select " aria-label="Default select example">
-                                        <option value="">Watches</option>
-                                        <option value="1">01</option>
-                                        <option value="2">02</option>
-                                        <option value="3">03</option>
-                                    </select>
-                                </div>
-                                <div className="col-sm-6">
-                                    <label className="form-label">Style</label>
-                                    <select className="form-select " aria-label="Default select example">
-                                        <option value="">Contemporary</option>
-                                        <option value="1">May</option>
-                                        <option value="2">June</option>
-                                        <option value="3">July</option>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <div className="row">
-                        <div className="col-sm-12 mt-3 mb-5">
-                            <div className="form-check form-switch custom-switch">
-                                <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Notify me via emial</label>
-                                <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <div className="add_frd_birthdaysec">
-                                <h2>Add a friend’s birthday</h2>
-                                <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Name<span className="maindatory">*</span></label>
-                                    <input type="text" className="form-control" placeholder="John" />
-
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Date of birth</label>
-                                    <div className="dobfeild">
-                                        <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">01</option>
-                                            <option value="1">01</option>
-                                            <option value="2">02</option>
-                                            <option value="3">03</option>
-                                        </select>
-                                        <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">May</option>
-                                            <option value="1">May</option>
-                                            <option value="2">June</option>
-                                            <option value="3">July</option>
-                                        </select>
-                                        <select className="form-select" aria-label="Default select example">
-                                            <option value="">1990</option>
-                                            <option value="1">1990</option>
-                                            <option value="2">1991</option>
-                                            <option value="3">1993</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div className="width-100 mb-3 form-field">
-                                    <div className="dobfeild_gift row">
-                                        <div className="col-sm-6">
-                                            <label className="form-label">Gift for</label>
-                                            <select className="form-select " aria-label="Default select example">
-                                                <option value="">Watches</option>
-                                                <option value="1">01</option>
-                                                <option value="2">02</option>
-                                                <option value="3">03</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <label className="form-label">Who loves</label>
-                                            <select className="form-select " aria-label="Default select example">
-                                                <option value="">Watches</option>
-                                                <option value="1">May</option>
-                                                <option value="2">June</option>
-                                                <option value="3">July</option>
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div className="width-100 mb-3 form-field">
-                                    <div className="dobfeild_gift row">
-                                        <div className="width-100">
-                                            <label className="form-label">Style</label>
-                                        </div>
-                                        <div className="col-sm-6">
-
-                                            <select className="form-select " aria-label="Default select example">
-                                                <option value="">Contemporary</option>
-                                                <option value="1">01</option>
-                                                <option value="2">02</option>
-                                                <option value="3">03</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="float-end">
-                                                <button type="button" className="btn btn-secondary">Add date</button>
-                                            </div>
-                                        </div>
-                                        <div className="width-100 my-4">
-                                            <div className="form-check form-switch custom-switch">
-                                                <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Notify me via
-                                                    emial</label>
-                                                <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                                    checked={false} />
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-
-
-                            </div>
-                        </div>
-                        <div className="col-sm-6">
-                            <div className="list_birthday">
-                                <div className="width-100">
-                                    <h2>List of added birthdays</h2>
-                                </div>
-
-                                <div className="favt_dragdrop  mt-3">
-
-                                    <div className="favdesignr_size_sec">
-                                        <ul>
-
-                                            <li><a href="#">John / 20 May 1988</a></li>
-                                            <li><a href="#">Mom / 20 June 1964</a></li>
-                                            <li><a href="#">Dad / 20 July 1962</a></li>
-
-                                        </ul>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="width-100 mb-4">
-                            <div className="float-end">
-                                <button type="button" className="btn btn-secondary">Confirm</button>
-                            </div>
-                        </div>
-
-                    </div>
-
                 </div>
             </Modal>
         </>

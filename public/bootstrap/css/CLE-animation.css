@@ -4,7 +4,8 @@
 /** home animation start **/
 .home.active .homescreen-bg img {
     position: relative;
-	animation: MoveBg ease 0.5s;
+	animation: MoveBg ease 0.6s;
+	animation-delay: 1s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
@@ -20,7 +21,8 @@
 				margin-left:-10%;
             }
 				}
-.home.active .home-inner-text{animation: MoveInnerText ease 0.5s;
+.home.active .home-inner-text{animation: MoveInnerText ease 0.6s;
+animation-delay: 1s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes MoveInnerText{
@@ -33,7 +35,7 @@
 				}
 .home.no-active .homescreen-bg img {
     position: relative;
-	animation: MoveBgback ease 0.5s;
+	animation: MoveBgback ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
@@ -49,7 +51,7 @@
 				margin-left: -15%;
             }
 				}
-.home.no-active .home-inner-text{animation: MoveInnerTextbc ease 0.5s;
+.home.no-active .home-inner-text{animation: MoveInnerTextbc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes MoveInnerTextbc{
@@ -69,7 +71,8 @@
 .our-story .blue-back-image{top:6%;}
 .our-story.active .page-head{
 	position: relative;
-	animation: Movehead ease 0.5s;
+	animation: Movehead ease 0.6s;
+	animation-delay: 0.4s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Movehead{
@@ -82,7 +85,7 @@
 				}
 .our-story.no-active .page-head{
 	position: relative;
-	animation: Moveheadbc ease 0.5s;
+	animation: Moveheadbc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Moveheadbc{
@@ -95,7 +98,8 @@
 				}
 .our-story.active .blue-back-image{
 	position: relative;
-	animation: MovebackImage ease 0.5s;
+	animation: MovebackImage ease 0.6s;
+	animation-delay: 0.4s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes MovebackImage{
@@ -108,7 +112,7 @@
 				}
 .our-story.no-active .blue-back-image{
 	position: relative;
-	animation: MoveheadImagebc ease 0.5s;
+	animation: MoveheadImagebc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes MoveheadImagebc{
@@ -124,7 +128,8 @@
 /** magazine animation start **/
 .magazine.active .page-head{
 	position: relative;
-	animation: Movehead2 ease 0.5s;
+	animation: Movehead2 ease 0.6s;
+	animation-delay: 0.4s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Movehead2{
@@ -137,7 +142,7 @@
 				}
 .magazine.no-active .page-head{
 	position: relative;
-	animation: Movehead2bc ease 0.5s;
+	animation: Movehead2bc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Movehead2bc{
@@ -150,7 +155,8 @@
 				}
 .magazine.active .mag-come-soon{
 	position: relative;
-	animation: Movecomesoon ease 0.5s;
+	animation: Movecomesoon ease 0.6s;
+	animation-delay: 0.4s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Movecomesoon{
@@ -163,7 +169,7 @@
 				}
 .magazine.no-active .mag-come-soon{
 	position: relative;
-	animation: Movecomesoonbc ease 0.5s;
+	animation: Movecomesoonbc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Movecomesoonbc{
@@ -179,7 +185,8 @@
 /** WorkWithUs animation start **/
 .work-with-us.active .page-head{
 	position: relative;
-	animation: Movehead3 ease 0.5s;
+	animation: Movehead3 ease 0.6s;
+	animation-delay: 0.4s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Movehead3{
@@ -192,7 +199,7 @@
 				}
 .work-with-us.no-active .page-head{
 	position: relative;
-	animation: Movehead3bc ease 0.5s;
+	animation: Movehead3bc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Movehead3bc{
@@ -205,7 +212,8 @@
 				}
 .work-with-us.active .partner-main-div{
 	position: relative;
-	animation: partnerMain ease 0.5s;
+	animation: partnerMain ease 0.6s;
+	animation-delay: 0.4s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes partnerMain{
@@ -218,7 +226,7 @@
 				}
 .work-with-us.no-active .partner-main-div{
 	position: relative;
-	animation: partnerMainbc ease 0.5s;
+	animation: partnerMainbc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes partnerMainbc{
@@ -231,7 +239,8 @@
 				}
 .work-with-us.active .partner-pic{
 	position: relative;
-	animation: partnerPic ease 0.5s;
+	animation: partnerPic ease 0.6s;
+	animation-delay: 0.4s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes partnerPic{
@@ -244,7 +253,7 @@
 				}
 .work-with-us.no-active .partner-pic{
 	position: relative;
-	animation: partnerPicbc ease 0.5s;
+	animation: partnerPicbc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes partnerPicbc{
@@ -261,7 +270,8 @@
 /** tell us animation start **/
 .tell-us-more.active .page-head{
 	position: relative;
-	animation: Movehead4 ease 0.5s;
+	animation: Movehead4 ease 0.6s;
+	animation-delay: 0.4s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Movehead4{
@@ -274,7 +284,7 @@
 				}
 .tell-us-more.no-active .page-head{
 	position: relative;
-	animation: Movehead4bc ease 0.5s;
+	animation: Movehead4bc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes Movehead4bc{
@@ -287,7 +297,8 @@
 				}
 .tell-us-more.active .help-us-content{
 	position: relative;
-	animation: MovehelpUS ease 0.5s;
+	animation: MovehelpUS ease 0.6s;
+	animation-delay: 0.4s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes MovehelpUS{
@@ -300,7 +311,7 @@
 				}
 .tell-us-more.no-active .help-us-content{
 	position: relative;
-	animation: MovehelpUSbc ease 0.5s;
+	animation: MovehelpUSbc ease 0.6s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;}
 @keyframes MovehelpUSbc{
@@ -312,6 +323,34 @@
             }
 				}
 /** tell us animation end **/
+
+/* .checkus-out.active .social-title{ */
+	/* position: relative; */
+	/* animation: Movecheckus ease 0.6s; */
+	/* animation-delay: 0.4s; */
+    /* animation-iteration-count: 1; */
+    /* animation-fill-mode: forwards;} */
+/* @keyframes Movecheckus{ */
+            /* 0% { */
+                /* margin-left: 0; */
+            /* } */
+            /* 100% { */
+                /* margin-left: auto; */
+            /* } */
+				/* } */
+/* .social-title.no-active .social-title{ */
+	/* position: relative; */
+	/* animation: Movecheckusbc ease 0.6s; */
+    /* animation-iteration-count: 1; */
+    /* animation-fill-mode: forwards;} */
+/* @keyframes Movecheckusbc{ */
+            /* 0% { */
+                /* margin-right: auto; */
+            /* } */
+            /* 100% { */
+                /* margin-right: 0; */
+            /* } */
+				/* } */
 
 
 
