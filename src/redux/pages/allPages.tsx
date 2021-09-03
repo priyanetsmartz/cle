@@ -75,3 +75,8 @@ export function footer(language: string) {
 export function analyticsFetch() {
     return AdminApi.request('rest/V1/google/analytics?storeId=1', "", "GET", "")
 }
+
+export function  menu(language: string) {
+    var storeId = language === 'english' ? 3 : 2;
+    return AdminApi.request(`rest/all/V1/menu/items?storeId=${storeId}`, "", "GET", "")
+}

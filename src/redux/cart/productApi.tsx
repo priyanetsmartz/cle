@@ -2,7 +2,7 @@ import AdminApi from "../../restApi/AdminApi";
 const APi = new AdminApi();
 
 
-export function getProductByCategory(page,pageSize,category, sortBy, sortByValue) {
+export function getProductByCategory(page, pageSize, category, sortBy, sortByValue) {
     category = 2;
     return APi.request(`rest/all/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${category}&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}`, "", "GET", "");
 }
@@ -66,8 +66,8 @@ export function getPriveUserProducts() {
     return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=9&searchCriteria[filter_groups][0][filters][0][field]=prive&searchCriteria[filter_groups][0][filters][0][value]=1&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&fields=items[sku,name,id,price,custom_attributes]&searchCriteria[pageSize]=7&searchCriteria[sortOrders][0][field]=created_at& searchCriteria[sortOrders][0][direction]=DESC`, "", "GET", "");
 }
 
-export function  getProductFilter(category_id:number) {
-    
+export function getProductFilter(category_id: number) {
+
     let payload = {
         query: `{
             products(
@@ -136,7 +136,7 @@ export function  getProductFilter(category_id:number) {
    `,
     }
     return APi.request(
-        "graphql",
+        "en/graphql",
         payload,
         "POST",
         ""

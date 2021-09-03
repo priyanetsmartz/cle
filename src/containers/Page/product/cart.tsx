@@ -43,9 +43,9 @@ function CartItemPage(props) {
             }, []);
             let obj = { cartItem: "" };
             let cartObject = Object.assign(obj, { cartItem: newCartData });
-            console.log(cartObject)
+            //   console.log(cartObject)
             //  console.log(Object.assign({}, newCartData))
-            addToCartApi(cartObject)
+            //  addToCartApi(cartObject)
             // let simpleArray = magentoCart.filter(v => !(cookieArray.some(e => e.sku === v.sku)));
             // cartData = [...cookieArray, ...simpleArray]
 
@@ -144,7 +144,7 @@ function CartItemPage(props) {
     }
 
     return (
-        <div className="container" style={{ "marginTop": "200px" }}>
+        <div className="container" >
             <div className="row">
                 {cartItemsVal.length ?
                     (

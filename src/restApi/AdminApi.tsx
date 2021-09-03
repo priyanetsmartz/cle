@@ -39,7 +39,7 @@ class API {
           method: method,
           url: url,
           data: postData,
-          headers: { "Content-Type": "application/json", 'Authorization': authtoken }
+          headers: { "Content-Type": "application/json", 'Authorization': authtoken}
         })
         .then(async response => {
           if (processResponse) {

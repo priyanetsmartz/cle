@@ -47,15 +47,15 @@ function Home(props) {
             <img src={homeBg} alt="homepage" />
             <div className="position-absolute container top-50 start-50 translate-middle home-inner-text">
                 <figure className="time-is-now">
-					<svg xmlns="http://www.w3.org/2000/svg" width="616" height="317.5" viewBox="0 0 616 317.5">
-  <g id="Group_805" data-name="Group 805" transform="translate(-703 -220.5)">
-    <text id="YOUR" transform="translate(704 350.5)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="147" fontFamily="Monument Extended" fontWeight="700"><IntlMessages id="home.time" /></text>
-    <text id="NEXT" transform="translate(862 446)" fill="#2e2baa" fontSize="114" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="home.now" /></tspan></text>
-    <text id="GENERATION" transform="translate(734 494)" fill="#2e2baa" stroke="#2e2baa" strokeWidth="1" fontSize="48" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.is" /></tspan></text>
-    <text id="New_luxury_marketplace" data-name="New luxury marketplace" transform="translate(867 532)" fill="#2e2baa" fontSize="20" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.slogan" /></tspan></text>
-  </g>
-</svg>
-					
+                    <svg xmlns="http://www.w3.org/2000/svg" width="616" height="317.5" viewBox="0 0 616 317.5">
+                        <g id="Group_805" data-name="Group 805" transform="translate(-703 -220.5)">
+                            <text id="YOUR" transform="translate(704 350.5)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="147" fontFamily="Monument Extended" fontWeight="700"><IntlMessages id="home.time" /></text>
+                            <text id="NEXT" transform="translate(862 446)" fill="#2e2baa" fontSize="114" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="home.now" /></tspan></text>
+                            <text id="GENERATION" transform="translate(734 494)" fill="#2e2baa" stroke="#2e2baa" strokeWidth="1" fontSize="48" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.is" /></tspan></text>
+                            <text id="New_luxury_marketplace" data-name="New luxury marketplace" transform="translate(867 532)" fill="#2e2baa" fontSize="20" fontFamily="Monument Extended"><tspan x="0" y="0"><IntlMessages id="home.slogan" /></tspan></text>
+                        </g>
+                    </svg>
+
                 </figure>
                 <figure className="play-video-now" onClick={toggleModeal}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="98.73" height="100.606" viewBox="0 0 98.73 100.606">
@@ -116,9 +116,7 @@ function Home(props) {
                             <path id="Path_316" data-name="Path 316"
                                 d="M36.763,87.155l-.126,1.534-1.371-.113.127-1.534Zm.6-7.236-.526,6.392L35.462,86.2l.527-6.39Z"
                                 transform="translate(655.45 340.417) rotate(30)" fill="#2e2baa" />
-                            <path id="Path_317" data-name="Path 317"
-                                d="M25.211,86.615l-1.334-.333,2.133-8.538,1.334.333-.269,1.078a3.08,3.08,0,0,1,1.563-.63,5.7,5.7,0,0,1,2.1.173,5.5,5.5,0,0,1,1.947.878,3.093,3.093,0,0,1,1.194,3.433,3.264,3.264,0,0,1-.979,1.718,3.213,3.213,0,0,1-1.692.761,5.5,5.5,0,0,1-2.131-.141,5.713,5.713,0,0,1-1.934-.834,3.091,3.091,0,0,1-1.083-1.291Zm2.533-6.8a2.01,2.01,0,0,0-.782,3.127,3.8,3.8,0,0,0,2.051,1.12,3.613,3.613,0,0,0,2.292-.029,2.092,2.092,0,0,0,.783-3.137,3.6,3.6,0,0,0-2.009-1.1A3.786,3.786,0,0,0,27.744,79.815Z"
-                                transform="translate(655.45 340.417) rotate(30)" fill="#2e2baa" />
+                            <path id="Path_317" data-name="Path 317" d="M25.211,86.615l-1.334-.333,2.133-8.538,1.334.333-.269,1.078a3.08,3.08,0,0,1,1.563-.63,5.7,5.7,0,0,1,2.1.173,5.5,5.5,0,0,1,1.947.878,3.093,3.093,0,0,1,1.194,3.433,3.264,3.264,0,0,1-.979,1.718,3.213,3.213,0,0,1-1.692.761,5.5,5.5,0,0,1-2.131-.141,5.713,5.713,0,0,1-1.934-.834,3.091,3.091,0,0,1-1.083-1.291Zm2.533-6.8a2.01,2.01,0,0,0-.782,3.127,3.8,3.8,0,0,0,2.051,1.12,3.613,3.613,0,0,0,2.292-.029,2.092,2.092,0,0,0,.783-3.137,3.6,3.6,0,0,0-2.009-1.1A3.786,3.786,0,0,0,27.744,79.815Z" transform="translate(655.45 340.417) rotate(30)" fill="#2e2baa" />
                             <path id="Path_318" data-name="Path 318"
                                 d="M18.708,75.421a1.836,1.836,0,0,0-1.21.308l-1.307-.706a2.751,2.751,0,0,1,2.059-.85,5.787,5.787,0,0,1,2.781.8A5.637,5.637,0,0,1,23.523,77.3a2.918,2.918,0,0,1-.131,2.836,3.081,3.081,0,0,1-1.413,1.4,3.436,3.436,0,0,1-1.935.261,6.378,6.378,0,0,1-2.174-.743,5.378,5.378,0,0,1-2.437-2.318,3.353,3.353,0,0,1,.32-3.115l6.485,3.5a1.788,1.788,0,0,0-.09-1.674,4.312,4.312,0,0,0-1.7-1.43A4.442,4.442,0,0,0,18.708,75.421Zm2.919,4.652L16.6,77.359a1.7,1.7,0,0,0,.287,1.424,4.409,4.409,0,0,0,1.538,1.238Q20.53,81.155,21.627,80.073Z"
                                 transform="translate(655.45 340.417) rotate(30)" fill="#2e2baa" />
@@ -145,9 +143,9 @@ function Home(props) {
             {/* video player modal starts here */}
             <Modal show={isModalshow}>
                 <p className="video-close" onClick={toggleModeal}>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="15pt" viewBox="0 0 329.26933 329" width="15pt"><path d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="15pt" viewBox="0 0 329.26933 329" width="15pt"><path d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0" /></svg>
                 </p>
-                <VideoPlayer/>
+                <VideoPlayer />
             </Modal>
             {/* video player modal ends here */}
 

@@ -174,7 +174,7 @@ function Home(props) {
                 <ReactFullpage
                     //fullpage options
                     // anchors={anchors}
-                    scrollingSpeed={1200} /* Options here */
+                    scrollingSpeed={500} /* Options here */
                     onLeave={onLeave}
                     afterLoad={afterLoad}
 

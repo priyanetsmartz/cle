@@ -1,9 +1,11 @@
 import { Route, Redirect } from "react-router";
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom';
-import Header from '../../containers/partials/header';
+// import Header from '../../containers/partials/header';
 import Footer from '../../containers/partials/footer-new';
+import Header from '../../containers/partials/headeMenu';
 const localToken = localStorage.getItem('id_token');
+
 
 const PriveRoute = ({ component: Component, auth, token, ...rest }) => (
     <Route
@@ -11,7 +13,7 @@ const PriveRoute = ({ component: Component, auth, token, ...rest }) => (
         render={props =>
             (auth || localToken) ? (
                 <>
-                    <Header logo="black" {...props} />
+                    <Header />
                     <Component {...props} />
                     <Footer />
                 </>
