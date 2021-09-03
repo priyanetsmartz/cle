@@ -17,6 +17,8 @@ function MyAccount(props) {
     const [myPreferenceModel, setMyPreferenceModel] = useState(false);
     const [myAddressModal, setMyAddressModal] = useState(false);
     const [giftingModal, setGiftingModal] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState(false);
+    const [addCard, setAddCard] = useState(false);
 
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [telephone, setTelephone] = useState("");
@@ -271,6 +273,14 @@ function MyAccount(props) {
 
     const openGigitingModal = () => {
         setGiftingModal(!giftingModal);
+    }
+
+    const openPaymentMethodModal = () => {
+        setPaymentMethod(!paymentMethod);
+    }
+
+    const OpenCardModal = () => {
+        setAddCard(!addCard);
     }
 
     const dobHandler = (e) => {
@@ -528,7 +538,7 @@ function MyAccount(props) {
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        <div className="addnew_address">
+                        <div className="addnew_address" onClick={openPaymentMethodModal}>
                             <div className="addressnew_addressblue">
                                 <span> <IntlMessages id="myaccount.addNewPayment" /> </span>
                             </div>
@@ -1298,6 +1308,82 @@ function MyAccount(props) {
 
                     </div>
 
+                </div>
+            </Modal>
+
+            {/* add payment method modal */}
+            <Modal show={paymentMethod}>
+                <div className="CLE_pf_details">
+                    <h1 className="mb-3">Payment Methods</h1>
+                    <a onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <div className="payment_medt">
+                        <div className="width-100">
+                            <div className="d-grid gap-2 mx-auto">
+                                <button type="button" className="btn btn-outline-primary" onClick={OpenCardModal}>Add credit / debit card</button>
+                            </div>
+                            <div className="or_diivdr">
+                                OR
+                            </div>
+                        </div>
+                        <div className="width-100">
+                            <div className="d-grid gap-2 mx-auto">
+                                <button type="button" className="btn btn-outline-primary"> Add PayPal</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* add credit card modal */}
+            <Modal show={addCard}>
+                <div className="CLE_pf_detahils">
+                    <h1 className="mb-3">Payment Methods</h1>
+                    <a onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <div className="payment_mode">
+                        <h2>Add credit / debit card</h2>
+                        <div className="width-100 mb-3 form-field">
+                            <label htmlFor="exampleInputEmail1" className="form-label">Card number*<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" placeholder="XXXX XXXX XXXX XXXX" />
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label htmlFor="exampleInputEmail1" className="form-label">Expiry date*</label>
+                            <div className="dobfeild">
+                                <select className="form-select me-3" aria-label="Default select example">
+                                    <option value="">Month</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                </select>
+                                <select className="form-select me-3" aria-label="Default select example">
+                                    <option value="">Year</option>
+                                    <option value="1">May</option>
+                                    <option value="2">June</option>
+                                    <option value="3">July</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label htmlFor="exampleInputEmail1" className="form-label">Name on card*<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" placeholder="Baker Street 105" />
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label htmlFor="exampleInputEmail1" className="form-label">CVV<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control cvv_inpt" placeholder="XXX" />
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <div className="form-check">
+                                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                                <label className="form-check-label" htmlFor="flexCheckDefault">
+                                    Save card details for next time
+                                </label>
+                            </div>
+                        </div>
+                        <div className="width-100 mb-4">
+                            <div className="float-end">
+                                <button type="button" className="btn btn-secondary">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </Modal>
         </>
