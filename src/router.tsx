@@ -53,7 +53,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
         <PriveRoute exact path="/prive-user" component={PriveUser} />
-        {/* <PrivateRoute exact path="/profile" component={profile} /> */}
+        <PrivateRoute exact path="/profile" component={profile} />
         <MainRoute exact path="/password-link-expired" component={PasswordLinkExpired} />
         <Route exact path="/post-comment">
           <PostComment />

@@ -16,7 +16,9 @@ body {
 .form-control {
     padding: 0.6rem 0.78rem;
 }
-
+.bg-favorite {
+    background-color: #2E2BAA!important;
+}
 .customcheckbox.form-check {
     margin: 0;
 }
@@ -138,8 +140,8 @@ body {
 
 .btn-primary {
     color: #fff;
-    background-color: #000000;
-    border-color: #000000;
+    background-color: #000000 !Important;
+    border-color: #000000  !Important;
     padding: 12px 20px;
     border-radius: 0;
     font-family: 'Monument Extended';
@@ -1826,8 +1828,8 @@ span.maindatory {
 .product-listing .product {
     width: 100%;
     float: left;
+    position: relative;
 }
-
 .product-listing .product:hover {
     border: 1px solid #000;
     cursor: pointer;
@@ -1890,11 +1892,44 @@ span.maindatory {
 .page-link {
     border: 0;
     color: #000;
-}
-
-.page-link {
     padding: 0 12px;
 }
+
+.product-listing .product .about {
+    width: 100%;
+    float: left;
+}
+
+.product-listing .off {
+    display: none;
+}
+
+.product-listing .cart-button {
+    bottom: 0px;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    transition: all 0.6s ease 0s;
+}
+
+.product-listing .product:hover .off {
+    display: inline-block;
+    color: #fff;
+    border-radius: 5px;
+    padding: 3px 10px;
+    font-size: 12px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.product-listing .product:hover .cart-button {
+    bottom: 20px;
+    opacity: 1;
+}
+
 
 /* All media screen below */
 
@@ -1949,16 +1984,13 @@ span.maindatory {
         width: 100%;
         float: left;
     }
-
     .product_listbanner {
         padding: 20px;
     }
-
     .product_listbanner .product_inner {
         width: 100%;
         float: left;
     }
-
     .banner_productsec img.product-listbnr {
         object-fit: unset;
         width: 1000px;
@@ -1966,15 +1998,15 @@ span.maindatory {
         object-position: unset;
     }
 }
-	    /* Portrait and Landscape */
-        @media only screen 
-        and (min-device-width: 768px) 
-        and (max-device-width: 1024px) 
-        and (-webkit-min-device-pixel-ratio: 1) {
-            .product_listbanner {
-                padding: 52px 30px;
-            }
-        }
+
+/* Portrait and Landscape */
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+    .product_listbanner {
+        padding: 52px 30px;
+    }
+}
+
 @media only screen and (max-width: 768px) {}
 
 @media only screen and (max-width: 600px) {}
@@ -2051,6 +2083,10 @@ span.maindatory {
     padding: 3px 10px;
     float: left;
     display: inline-block;
+}
+
+.whishlist-section span {
+    cursor: pointer;
 }
 
 /* product images slider and zoom in styles ends here */

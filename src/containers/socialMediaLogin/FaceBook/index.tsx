@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import Login from "../../../redux/auth/Login";
 import { setCookie } from '../../../helpers/session';
 import notification from "../../../components/notification";
-
+import { history } from "../../../redux/store";
 const loginApi = new Login();
 const { showSignin, openSignUp } = appAction;
 const { register, loginSuccess } = authAction;
@@ -21,12 +21,13 @@ function FacebookLoginButton(props) {
             let name = response.name ? response.name.split(" ") : "";
             //console.log(name[0],name[1])
             const userInfo = {
-                "first_name": name[0],
-                "last_name": name[1],
+                "first_name": name[0] ? name[0] : response.email,
+                "last_name": name[1] ? name[1] : response.email,
                 "email": response.email,
                 "accessToken": response.accessToken,
-                "type": 1,
+                "type": props.userSetype,
             }
+           // console.log(userInfo)
             fetchMyAPI(userInfo)
         }
     }
@@ -36,8 +37,13 @@ function FacebookLoginButton(props) {
         if (jsonData) {
             localStorage.setItem('id_token', jsonData.new_token);
             localStorage.setItem('cust_id', jsonData.entity_id);
+            localStorage.setItem('token', jsonData.group_id);
             setCookie("username", jsonData.email)
             props.loginSuccess(jsonData.new_token)
+           //console.log(jsonData.group_id)
+            if (jsonData.group_id === "4") {
+                history.push("/prive-user");
+            }
             notification("success", "", "Successfully Logged in");
         } else {
             const { register } = props;
@@ -70,12 +76,14 @@ function FacebookLoginButton(props) {
 
 
 function mapStateToProps(state) {
+    //console.log(state)
     let loginState = '';
     if (state && state.App && state.App.showLogin) {
         loginState = state.App.showLogin
     }
     return {
-        loginState: loginState
+        loginState: loginState,
+        userSetype: state.App.userType,
     }
 }
 export default connect(

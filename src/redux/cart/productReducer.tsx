@@ -99,7 +99,7 @@ const cartReducer = (state = initState, action) => {
     }
 
     if (action.type === actions.OPEN_SIZE_GUIDE) {
-        console.log(action)
+        //  console.log(action)
         return {
             ...state,
             isOpenSizeGuide: action.isOpen
@@ -107,7 +107,7 @@ const cartReducer = (state = initState, action) => {
     }
 
     if (action.type === actions.OPEN_MEASURING_GUIDE) {
-        console.log(action)
+        //   console.log(action)
         return {
             ...state,
             isOpenMeasuringGuide: action.isOpen

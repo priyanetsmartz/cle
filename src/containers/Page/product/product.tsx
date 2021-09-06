@@ -14,6 +14,7 @@ const { addToCart, productList } = cartAction;
 function Products(props) {
     const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
+    const [opacity, setOpacity] = useState(1);
     const [page, setCurrent] = useState(1);
     const [token, setToken] = useState('');
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
@@ -31,7 +32,7 @@ function Products(props) {
     }, [sortValue, page, pageSize])
 
     async function getProducts() {
-
+        setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductByCategory(page, pageSize, 'category', sortValue.sortBy, sortValue.sortByValue);
         //  console.log(Math.ceil(result.data.total_count / 9))
@@ -46,11 +47,13 @@ function Products(props) {
                     ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
                     ...itm
                 }));
-
+           
             productResult = mergeById(products, WhishlistData);
+
         }
+        setOpacity(1);
         // get product page filter
-        let result1: any = await getProductFilter(9);
+        //let result1: any = await getProductFilter(9);
         //   console.log(result1)
         props.productList(productResult);
     }
@@ -353,7 +356,7 @@ function Products(props) {
                                     <span>Results per page</span>
                                     <ul>
                                         <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-                                        <li><Link to="#" className={pageSize === 60 ? "active" : ""}  onClick={() => { handlePageSize(60) }} >60</Link></li>
+                                        <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
                                         <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
                                     </ul>
                                 </div>
@@ -369,23 +372,23 @@ function Products(props) {
                                 </div>
                             </div>
 
-                            <div className="product-listing">
+                            <div className="product-listing" style={{ 'opacity': opacity }}>
                                 <div className="row g-2">
                                     {props.items.map(item => {
                                         return (
                                             <div className="col-md-4" key={item.id}>
-                                                {token && (
-                                                    <div>
-                                                        {!item.wishlist_item_id && (
-                                                            <span onClick={() => { handleWhishlist(item.id) }}  >Add Whishlist</span>
-                                                        )}
-                                                        {item.wishlist_item_id && (
-                                                            <span onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }}>Remove Whishlist</span>
-                                                        )}
-                                                    </div>
-                                                )
-                                                }
                                                 <div className="product py-4">
+                                                    {token && (
+                                                        <span className="off bg-favorite">
+                                                            {!item.wishlist_item_id && (
+                                                                <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                            )}
+                                                            {item.wishlist_item_id && (
+                                                                <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                            )}
+                                                        </span>
+                                                    )
+                                                    }
 
                                                     <div className="text-center"> <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} width="200" /> </div>
                                                     <div className="about text-center">
@@ -393,7 +396,11 @@ function Products(props) {
                                                         <div className="tagname">{item.desc}</div>
                                                         <div className="pricetag">${item.price}</div>
                                                     </div>
-
+                                                    {/* {token && ( */}
+                                                        <div className="cart-button mt-3 px-2"> <button onClick={() => { handleClick(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
+                                                            <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
+                                                        </div>
+                                                    {/* )} */}
                                                 </div>
                                             </div>
                                         )
@@ -406,7 +413,7 @@ function Products(props) {
                                     <span>Results per page</span>
                                     <ul>
                                         <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-                                        <li><Link to="#" className={pageSize === 60 ? "active" : ""}  onClick={() => { handlePageSize(60) }} >60</Link></li>
+                                        <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
                                         <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
                                     </ul>
                                 </div>

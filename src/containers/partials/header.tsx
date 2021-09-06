@@ -39,18 +39,19 @@ function Header(props) {
         if (props && props.match && props.match.params.signup === 'true' && props && props.match && props.match.params.member === 'prive') {
             props.openSignUp(true);
             props.userType(4);
-           // console.log(props.userType)
-        }
-        if (props && props.match && props.match.params.signup === 'true' && props && props.match && props.match.params.member === 'signup') {
+            // console.log(props.userType)
+        } else if (props && props.match && props.match.params.signup === 'true' && props && props.match && props.match.params.member === 'signup') {
             props.openSignUp(true);
             props.userType(1);
             //console.log(props.userType)
         }
+        //console.log(props.userType)
         return () => {
             props.userType(1);
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
+
     }, []); // here  
 
 

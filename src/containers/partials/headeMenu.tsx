@@ -70,6 +70,7 @@ function HeaderMenu(props) {
                 }
                 return a;
             }, []);
+            console.log(newCartData)
             // let obj = { cartItem: "" };
             // let cartObject = Object.assign(obj, { cartItem: newCartData });
             // cartData = [...cookieArray, ...simpleArray]
@@ -189,7 +190,7 @@ function HeaderMenu(props) {
 
                                     </li>
                                     <li> <Link to="/wishlist"><img src={favorit} alt="wishlist" /></Link> </li>
-                                    <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">(3)</span></Link>
+                                    <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">({cartItemsVal.length})</span></Link>
                                         <div className="miniaccount_details" style={{ "display": !showCart ? "none" : "block" }}>
                                             <div className="cart_your">Your cart</div>
                                             <Link to="#" className="cross_icn" onClick={() => { hideCart() }} > <i className="fas fa-times"></i></Link>

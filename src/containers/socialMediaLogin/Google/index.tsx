@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import authAction from "../../../redux/auth/actions";
 import appAction from "../../../redux/app/actions";
 import { connect } from 'react-redux';
+import { history } from "../../../redux/store";
 import Login from "../../../redux/auth/Login";
 import { setCookie } from '../../../helpers/session';
 import notification from "../../../components/notification";
@@ -24,7 +25,7 @@ function GoogleLoginButton(props) {
                 "last_name": name[1],
                 "email": response.profileObj.email,
                 "accessToken": response.accessToken,
-                "type": 1,
+                "type": props.userSetype,
             }
             fetchMyAPI(userInfo)
 
@@ -36,8 +37,14 @@ function GoogleLoginButton(props) {
         if (jsonData) {
             localStorage.setItem('id_token', jsonData.new_token);
             localStorage.setItem('cust_id', jsonData.entity_id);
+            localStorage.setItem('token', jsonData.group_id);
             setCookie("username", jsonData.email)
             props.loginSuccess(jsonData.new_token)
+
+          
+            if (jsonData.group_id === "4") {
+                history.push("/prive-user");
+            }
             notification("success", "", "Successfully Logged in");
         } else {
             const { register } = props;
@@ -83,7 +90,8 @@ function mapStateToProps(state) {
         loginState = state.App.showLogin
     }
     return {
-        loginState: loginState
+        loginState: loginState,
+        userSetype: state.App.userType,
     }
 }
 export default connect(

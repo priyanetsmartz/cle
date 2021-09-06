@@ -46,7 +46,7 @@ function PriveUser(props) {
             <p>
               <div dangerouslySetInnerHTML={{ __html: pagesData ? pagesData.content : "Ooops Page not found...." }} />
             </p>
-            <Link className="signup-btn" to="/profile"><IntlMessages id="prive.cta" /></Link>
+            {/* <Link className="signup-btn" to="/profile"><IntlMessages id="prive.cta" /></Link> */}
           </div>
           <div className="prive-banner-right-content">
             <img src={logo} alt="logo" />

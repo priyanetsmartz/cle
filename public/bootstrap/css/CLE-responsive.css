@@ -1,4 +1,10 @@
 @media (min-width: 360px) and (max-width: 579px) {
+	.prive-top-banner{overflow:hidden;}
+	.prive-top-banner img{width: 1100px; margin-left: -271px;}
+.prive-banner-left-content{width: 65%;}
+.prive-banner-left-content svg{width: 60%; height: auto;} .prive-banner-left-content p {font-size: 13px; line-height: 16px;} .prive-banner-left-content .signup-btn{padding: 9px 10px;} .prive-banner-right-content {float: left;} .prive-banner-right-content img{width: 30%; margin-top: 15px;}
+.prive-benf-col{padding: 40px;  margin-bottom: 10px;font-size: 18px;}
+
 	.container{padding-right: 20px !important;padding-left: 20px !important;} 
 .home-video-desktop{display:none;}
 .home-video-mobile{display:block;}
@@ -225,6 +231,12 @@ bottom: 10%;
 }
 
 @media (min-width: 580px) and (max-width: 752px) {
+	.prive-top-banner{overflow:hidden;}
+	.prive-top-banner img{width: 1100px; margin-left: -271px;}
+.prive-banner-left-content{width: 65%;}
+.prive-banner-left-content svg{width: 60%; height: auto;} .prive-banner-left-content p {font-size: 13px; line-height: 16px;} .prive-banner-left-content .signup-btn{padding: 9px 10px;} .prive-banner-right-content {float: left;} .prive-banner-right-content img{width: 30%; margin-top: 15px;}
+.prive-benf-col{padding: 40px;  margin-bottom: 10px;font-size: 18px;}
+
 	.container{padding-right: 20px !important;padding-left: 20px !important;} 
 	.home-video-desktop{display:none;}
 .home-video-mobile{display:block;}
@@ -448,6 +460,12 @@ bottom: 10%;
 }
 
 @media (min-width: 753px) and (max-width: 962px) {
+	.prive-top-banner{overflow:hidden;}
+	.prive-top-banner img{width: 1100px; margin-left: -271px;}
+.prive-banner-left-content{width: 65%;}
+.prive-banner-left-content svg{width: 60%; height: auto;} .prive-banner-left-content p {font-size: 13px; line-height: 16px;} .prive-banner-left-content .signup-btn{padding: 9px 10px;} .prive-banner-right-content {float: left;} .prive-banner-right-content img{width: 30%; margin-top: 15px;}
+.prive-benf-col{padding: 40px;  margin-bottom: 10px;font-size: 18px;}
+
 	.container{padding-right: 25px !important;padding-left: 25px !important;} 
 #header .my-5 {
     margin-top: 2rem !important;

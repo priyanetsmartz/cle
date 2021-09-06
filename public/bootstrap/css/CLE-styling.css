@@ -377,7 +377,7 @@ float: left;
 	height:498px;
 	margin:auto 15px;
 }
-.social-pic-icon img{height:max-content !important;}
+.social-pic-icon img{height:max-content !important; box-shadow:0 0 15px rgba(0, 0, 0, 0.4);}
 .social-icon-scroll::after {content: ""; clear: both;display: block;}
 .social-icon-blue-bg{background:#2e2baa; width:185%; height:432px;position:absolute;bottom:0;left:0;z-index:0;}
 

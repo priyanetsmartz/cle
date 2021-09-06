@@ -87,13 +87,14 @@ export function* loginError() {
 export function* registerRequest() {
   yield takeEvery("REGISTER_REQUEST", function* (payload: any) {
     try {
-      console.log(payload.payload.userInfo);
+   //   console.log(payload.payload.userInfo);
       //user details
       let firstname = payload.payload.userInfo.first_name;
       let lastname = payload.payload.userInfo.last_name;
       let type = payload.payload.userInfo.type;
       let email = payload.payload.userInfo.email;
       let password = payload.payload.userInfo.password;
+     // let storeId = payload.payload.userInfo.storeId;
       let storeId = payload.payload.userInfo.storeId;
       // console.log(type);
       // var rememberMe = payload.payload.userInfo.rememberMe;
