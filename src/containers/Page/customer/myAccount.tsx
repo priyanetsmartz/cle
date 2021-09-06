@@ -680,7 +680,6 @@ function MyAccount(props) {
                 </div>
             </section>
 
-
             <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
@@ -757,7 +756,6 @@ function MyAccount(props) {
                 </div>
             </section>
 
-
             <section className="my_profile_sect check-als mb-4">
                 <div className="container">
                     <div className="row">
@@ -815,14 +813,14 @@ function MyAccount(props) {
                                 onChange={handleChange} />
                             <span className="error">{errors.errors["gender"]}</span>
                         </div>
-                        <div className="width-100 mb-3 form-field">
+                        {/* <div className="width-100 mb-3 form-field">
                             <label className="form-label">Phone number</label>
                             <input type="number" className="form-control" placeholder="+48 123 456 789" id="phone"
                                 value={telephone}
                                 onChange={(e) => { setTelephone(e.target.value) }}
                             />
                             <span className="error">{errors.errors["phone"]}</span>
-                        </div>
+                        </div> */}
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
@@ -846,7 +844,7 @@ function MyAccount(props) {
                                 </select>
                             </div>
                         </div>
-                        <div className="width-100 mb-3 form-field">
+                        {/* <div className="width-100 mb-3 form-field">
                             <label className="form-label">Country<span className="maindatory">*</span></label>
                             <select value={country} onChange={(e) => { setCountry(e.target.value) }} id="country" className="form-select" aria-label="Default select example">
                                 {countries && countries.map(opt => {
@@ -854,7 +852,7 @@ function MyAccount(props) {
                                 })}
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
-                        </div>
+                        </div> */}
                         <div className="width-100 mb-3 form-field">
                             <div className="Frgt_paswd">
                                 <div className="confirm-btn">
