@@ -299,8 +299,8 @@ function MyAccount(props) {
                         <div className="col-sm-12">
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item"><a href="#">My profile</a></li>
+                                    <li className="breadcrumb-item"><Link to="#">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="#">My profile</Link></li>
                                 </ol>
                             </nav>
                         </div>
@@ -516,10 +516,10 @@ function MyAccount(props) {
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
                                 <div className="address-action">
-                                    <a href="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
-                                    <a className="edit_btn" onClick={openAddressModal}>
+                                    <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
+                                    <Link className="edit_btn" onClick={openAddressModal}>
                                         <IntlMessages id="myaccount.edit" />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>);
                         })}
@@ -553,8 +553,8 @@ function MyAccount(props) {
                             </ul>
                             <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action bank_card">
-                                <a href="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
-                                <a href="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></a>
+                                <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
+                                <Link to="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></Link>
                             </div>
                         </div>
                         <div className="addressnew_addressbodr">
@@ -565,8 +565,8 @@ function MyAccount(props) {
                             </ul>
                             <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action paypal_card">
-                                <a href="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
-                                <a href="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></a>
+                                <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
+                                <Link to="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></Link>
                             </div>
                         </div>
                     </div>
@@ -789,7 +789,7 @@ function MyAccount(props) {
             <Modal show={myDetailsModel} >
                 <div className="CLE_pf_details">
                     <h1>My Details</h1>
-                    <a onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <Link onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Frist name<span className="maindatory">*</span></label>
@@ -868,15 +868,15 @@ function MyAccount(props) {
             <Modal show={myPreferenceModel} size="lg">
                 <div className="CLE_pf_details">
                     <h1>My Preferences</h1>
-                    <a onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <Link onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     <div className="Mosty_interested_in">
                         <h2>Mosty interested in</h2>
                         <div className="interestd_check">
                             {Object.values(attributes.mostly_intersted_in).map((interest) => {
-                                return (interest && interest != '' &&
+                                return (interest && interest !== '' &&
                                     <div className="form-check" key={interest}>
                                         <input className="form-check-input" type="checkbox" value="" id={interest}
-                                            checked={attributes.mostly_intersted_in.slected == interest ? true : false} />
+                                            checked={attributes.mostly_intersted_in.slected === interest ? true : false} />
                                         <label className="form-check-label" htmlFor={interest}>
                                             {interest}
                                         </label>
@@ -894,15 +894,15 @@ function MyAccount(props) {
                                     <div className="cl_size_sec">
                                         <ul>
                                             {Object.values(attributes.clothing_size).map((clothingSize, i) => {
-                                                return (clothingSize && clothingSize != '' &&
-                                                    <li><a key={i} className={attributes.clothing_size.slected ? 'active' : 'null'}>{clothingSize}</a></li>
+                                                return (clothingSize && clothingSize !== '' &&
+                                                    <li><Link key={i} className={attributes.clothing_size.slected ? 'active' : 'null'}>{clothingSize}</Link></li>
                                                 )
                                             })}
                                         </ul>
                                     </div>
                                     <div className="sizebtn clothnmrgin">
-                                        <div className="save-btn"><a href="#" className="btn-link-blue">Save</a></div>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                        <div className="save-btn"><Link to="#" className="btn-link-blue">Save</Link></div>
+                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
                                     </div>
                                 </div>
                             </div>
@@ -912,15 +912,15 @@ function MyAccount(props) {
                                     <div className="cl_size_sec">
                                         <ul>
                                             {Object.values(attributes.shoes_size).map((shoeSize) => {
-                                                return (shoeSize && shoeSize != '' &&
-                                                    <li><a key={shoeSize} className={attributes.clothing_size.slected ? 'active' : 'null'}>{shoeSize}</a></li>
+                                                return (shoeSize && shoeSize !== '' &&
+                                                    <li><Link key={shoeSize} className={attributes.clothing_size.slected ? 'active' : 'null'}>{shoeSize}</Link></li>
                                                 )
                                             })}
                                         </ul>
                                     </div>
                                     <div className="sizebtn">
-                                        <div className="save-btn"><a href="#" className="btn-link-blue">Save</a></div>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                        <div className="save-btn"><Link to="#" className="btn-link-blue">Save</Link></div>
+                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
                                     </div>
                                 </div>
                             </div>
@@ -947,11 +947,11 @@ function MyAccount(props) {
                                 <div className="favt_section">
                                     <ul>
                                         {Object.values(attributes.favourite_designers).map((designer) => {
-                                            return (designer && designer != '' &&
+                                            return (designer && designer !== '' &&
                                                 <li key={designer}>
                                                     <div className="form-check">
                                                         <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                                            checked={attributes.favourite_designers.slected == designer ? true : false} />
+                                                            checked={attributes.favourite_designers.slected === designer ? true : false} />
                                                         <label className="form-check-label">
                                                             {designer}
                                                         </label>
@@ -966,12 +966,12 @@ function MyAccount(props) {
                                 <div className="favt_dragdrop">
                                     <div className="favdesignr_size_sec">
                                         <ul>
-                                            <li><a href="#">À La Garçonne</a></li>
-                                            <li><a href="#">ADAMO</a></li>
-                                            <li><a href="#">A.EMERY</a></li>
-                                            <li><a href="#" className="active">Dodo Bar Or</a></li>
+                                            <li><Link to="#">À La Garçonne</Link></li>
+                                            <li><Link to="#">ADAMO</Link></li>
+                                            <li><Link to="#">A.EMERY</Link></li>
+                                            <li><Link to="#" className="active">Dodo Bar Or</Link></li>
                                         </ul>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
                                     </div>
 
                                 </div>
@@ -998,11 +998,11 @@ function MyAccount(props) {
                                 <div className="favt_section">
                                     <ul>
                                         {Object.values(attributes.favourite_categories).map((category) => {
-                                            return (category && category != '' &&
+                                            return (category && category !== '' &&
                                                 <li key={category}>
                                                     <div className="form-check">
                                                         <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                                            checked={attributes.favourite_categories.slected == category ? true : false} />
+                                                            checked={attributes.favourite_categories.slected === category ? true : false} />
                                                         <label className="form-check-label">
                                                             {category}
                                                         </label>
@@ -1019,13 +1019,13 @@ function MyAccount(props) {
                                     <div className="favdesignr_size_sec">
                                         <ul>
 
-                                            <li><a href="#">Belts</a></li>
-                                            <li><a href="#">Necklaces</a></li>
-                                            <li><a href="#">Scarves</a></li>
-                                            <li><a href="#" className="active">Watches</a></li>
+                                            <li><Link to="#">Belts</Link></li>
+                                            <li><Link to="#">Necklaces</Link></li>
+                                            <li><Link to="#">Scarves</Link></li>
+                                            <li><Link to="#" className="active">Watches</Link></li>
 
                                         </ul>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
                                     </div>
                                 </div>
                             </div>
@@ -1043,7 +1043,7 @@ function MyAccount(props) {
             <Modal show={myAddressModal}>
                 <div className="CLE_pf_details">
                     <h1>My Address</h1>
-                    <a className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></a>
+                    <Link className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></Link>
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">First name<span className="maindatory">*</span></label>
@@ -1106,7 +1106,7 @@ function MyAccount(props) {
                 <div className="gifting_pref">
                     <div className="girft_details">
                         <h1>Gifting Preferences</h1>
-                        <a onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                        <Link onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
                         <div className="my_birthday mb-3">
                             <label className="form-label">My birthday</label>
                             <div className="birthdate">01 May 1990</div>
@@ -1286,12 +1286,12 @@ function MyAccount(props) {
                                     <div className="favdesignr_size_sec">
                                         <ul>
 
-                                            <li><a href="#">John / 20 May 1988</a></li>
-                                            <li><a href="#">Mom / 20 June 1964</a></li>
-                                            <li><a href="#">Dad / 20 July 1962</a></li>
+                                            <li><Link to="#">John / 20 May 1988</Link></li>
+                                            <li><Link to="#">Mom / 20 June 1964</Link></li>
+                                            <li><Link to="#">Dad / 20 July 1962</Link></li>
 
                                         </ul>
-                                        <div className="save-btn removel_allbtn"><a href="#" className="btn-link-grey">Remove all</a></div>
+                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
                                     </div>
 
                                 </div>
@@ -1313,7 +1313,7 @@ function MyAccount(props) {
             <Modal show={paymentMethod}>
                 <div className="CLE_pf_details">
                     <h1 className="mb-3">Payment Methods</h1>
-                    <a onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <Link onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     <div className="payment_medt">
                         <div className="width-100">
                             <div className="d-grid gap-2 mx-auto">
@@ -1336,7 +1336,7 @@ function MyAccount(props) {
             <Modal show={addCard}>
                 <div className="CLE_pf_detahils">
                     <h1 className="mb-3">Payment Methods</h1>
-                    <a onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <Link onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     <div className="payment_mode">
                         <h2>Add credit / debit card</h2>
                         <div className="width-100 mb-3 form-field">

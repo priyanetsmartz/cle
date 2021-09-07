@@ -142,3 +142,7 @@ export function getProductFilter(category_id: number) {
         ""
     );
 }
+
+export function getProductDetails(sku: string) {
+    return APi.request(`rest/V1/products/${sku}`, "", "GET", "");
+}

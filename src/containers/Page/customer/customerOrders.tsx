@@ -28,7 +28,7 @@ function CustomerOrders(props) {
     const handleSearch = async (e) => {
         const val = e.target.value;
         setOrderId(val);
-        if (val == "") return getData();
+        if (val === "") return getData();
         let result: any = await searchOrders(val);
         if (result) {
             orders.items = [];
@@ -43,7 +43,7 @@ function CustomerOrders(props) {
         let currentDate = moment(new Date());
         if(!filter){
             getData();
-        }else if(filter == 1 || filter == 3 || filter == 6){
+        }else if(filter === 1 || filter === 3 || filter === 6){
             filterDate = moment(currentDate).subtract(filter, 'M').toJSON();
         }else{
             filterDate = moment(`${filter}-01-01`).toJSON();

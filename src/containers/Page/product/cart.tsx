@@ -35,12 +35,16 @@ function CartItemPage(props) {
             // console.log(cookieArray)
             // console.log(magentoCart);
 
-            let newCartData = cookieArray.reduce((a, { sku, quantity }) => {
-                if (sku) {
-                    a.push({ sku, qty: quantity, quote_id: localStorage.getItem('cartQuoteId') });
-                }
-                return a;
-            }, []);
+            let newCartData = [];
+            if (cookieArray && cookieArray.length > 0) {
+                newCartData = cookieArray.reduce((a, { sku, quantity }) => {
+                    if (sku) {
+                        a.push({ sku, qty: quantity, quote_id: localStorage.getItem('cartQuoteId') });
+                    }
+                    return a;
+                }, []);
+            }
+            console.log(newCartData)
             let obj = { cartItem: "" };
             let cartObject = Object.assign(obj, { cartItem: newCartData });
             //   console.log(cartObject)

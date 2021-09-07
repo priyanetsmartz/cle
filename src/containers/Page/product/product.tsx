@@ -8,6 +8,7 @@ import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import Promotion from "../../partials/promotion";
 import Recomendations from './product-details/recomendations';
+import Filter from './filter';
 const { addToCart, productList } = cartAction;
 
 
@@ -47,15 +48,16 @@ function Products(props) {
                     ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
                     ...itm
                 }));
-           
+
             productResult = mergeById(products, WhishlistData);
 
         }
         setOpacity(1);
-        // get product page filter
-        //let result1: any = await getProductFilter(9);
-        //   console.log(result1)
         props.productList(productResult);
+        // get product page filter
+        let result1: any = await getProductFilter(9);
+        console.log(result1)
+
     }
     const filtterData = (event) => {
         let lang = props.languages ? props.languages : language;
@@ -158,198 +160,9 @@ function Products(props) {
             <section>
                 <div className="container">
                     <div className="row">
-
-                        <div className="col-sm-3">
-                            <div className="pro_categry_sidebar">
-                                <div className="width-100">
-                                    <div className="results_show">1,206 results</div>
-                                </div>
-                                <div className="sidebar_nav">
-                                    <div className="flex-shrink-0 p-0 bg-white">
-
-                                        <ul className="list-unstyled ps-0">
-                                            <li className="mb-3">
-                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#home-collapse" aria-expanded="true">
-                                                    Category
-                                                </button>
-                                                <div className="collapse show" id="home-collapse">
-                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li className="mb-3">
-                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#dashboard-collapse" aria-expanded="false">
-                                                    Designers
-                                                </button>
-                                                <div className="collapse" id="dashboard-collapse">
-                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li className="mb-3">
-                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#orders-collapse" aria-expanded="false">
-                                                    Color
-                                                </button>
-                                                <div className="collapse" id="orders-collapse">
-                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li className="mb-3">
-                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#account-collapse" aria-expanded="false">
-                                                    Watches size
-                                                </button>
-                                                <div className="collapse" id="account-collapse">
-                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-
-                                            <li className="mb-3">
-                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#account-collapse" aria-expanded="false">
-                                                    Jewelry size
-                                                </button>
-                                                <div className="collapse" id="account-collapse">
-                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-
-                                            <li className="mb-3">
-                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#account-collapse" aria-expanded="false">
-                                                    Accessories size
-                                                </button>
-                                                <div className="collapse" id="account-collapse">
-                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-
-                                            <li className="mb-3">
-                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#account-collapse" aria-expanded="false">
-                                                    Clothes size
-                                                </button>
-                                                <div className="collapse" id="account-collapse">
-                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-
-                                            <li className="mb-3">
-                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#account-collapse" aria-expanded="false">
-                                                    Prices
-                                                </button>
-                                                <div className="collapse" id="account-collapse">
-                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li className="mb-3">
-                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                    data-bs-target="#account-collapse" aria-expanded="false">
-                                                    Release years
-                                                </button>
-                                                <div className="collapse" id="account-collapse">
-                                                    <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                        <li><Link to="#" className="link-dark rounded">All</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Watches</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Jewelry</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Bags</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Accessories</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Clothes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Lingerie</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Shoes</Link></li>
-                                                        <li><Link to="#" className="link-dark rounded">Sport</Link></li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        {/* Filter sidebar start*/}
+                        <Filter />
+                        {/* Filter sidebar end */}
                         <div className="col-sm-9">
                             <div className="resltspage_sec">
                                 <div className="paginatn_result">
@@ -377,31 +190,33 @@ function Products(props) {
                                     {props.items.map(item => {
                                         return (
                                             <div className="col-md-4" key={item.id}>
-                                                <div className="product py-4">
-                                                    {token && (
-                                                        <span className="off bg-favorite">
-                                                            {!item.wishlist_item_id && (
-                                                                <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                                            )}
-                                                            {item.wishlist_item_id && (
-                                                                <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                                            )}
-                                                        </span>
-                                                    )
-                                                    }
+                                                <Link to={'/product-details/' + item.sku}>
+                                                    <div className="product py-4">
+                                                        {token && (
+                                                            <span className="off bg-favorite">
+                                                                {!item.wishlist_item_id && (
+                                                                    <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                                )}
+                                                                {item.wishlist_item_id && (
+                                                                    <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                                )}
+                                                            </span>
+                                                        )
+                                                        }
 
-                                                    <div className="text-center"> <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} width="200" /> </div>
-                                                    <div className="about text-center">
-                                                        <h5>{item.name}</h5>
-                                                        <div className="tagname">{item.desc}</div>
-                                                        <div className="pricetag">${item.price}</div>
-                                                    </div>
-                                                    {/* {token && ( */}
+                                                        <div className="text-center"> <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} width="200" /> </div>
+                                                        <div className="about text-center">
+                                                            <h5>{item.name}</h5>
+                                                            <div className="tagname">{item.desc}</div>
+                                                            <div className="pricetag">${item.price}</div>
+                                                        </div>
+                                                        {/* {token && ( */}
                                                         <div className="cart-button mt-3 px-2"> <button onClick={() => { handleClick(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
                                                             <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
                                                         </div>
-                                                    {/* )} */}
-                                                </div>
+                                                        {/* )} */}
+                                                    </div>
+                                                </Link>
                                             </div>
                                         )
                                     })}

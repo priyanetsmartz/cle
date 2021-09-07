@@ -63,13 +63,15 @@ function HeaderMenu(props) {
             // get cart total 
             let cartTotal: any = await getCartTotal();
             total = cartTotal.data.grand_total;
-
-            let newCartData = cookieArray.reduce((a, { sku, quantity }) => {
-                if (sku) {
-                    a.push({ sku, qty: quantity, quote_id: localStorage.getItem('cartQuoteId') });
-                }
-                return a;
-            }, []);
+            let newCartData = [];
+            if (cookieArray && cookieArray.length > 0) {
+                newCartData = cookieArray.reduce((a, { sku, quantity }) => {
+                    if (sku) {
+                        a.push({ sku, qty: quantity, quote_id: localStorage.getItem('cartQuoteId') });
+                    }
+                    return a;
+                }, []);
+            }
             console.log(newCartData)
             // let obj = { cartItem: "" };
             // let cartObject = Object.assign(obj, { cartItem: newCartData });
@@ -130,12 +132,12 @@ function HeaderMenu(props) {
                                     {
                                         menuData.map(val => {
                                             return (
-                                                <li key={val.id}> <Link to={'products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                <li key={val.id}> <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
                                                         {val.child.map((childMenu) => {
                                                             return (
                                                                 <li className="nav-item col-6 col-md-auto" key={childMenu.id}>
-                                                                    <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} to={'products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
+                                                                    <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
                                                                 </li>
                                                             );
                                                         })}

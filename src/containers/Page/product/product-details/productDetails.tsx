@@ -7,7 +7,7 @@ import SizeGuide from './sizeGuide';
 import MeasuringGuide from './measuringGuide';
 import Recomendations from './recomendations';
 import ProductsMagazine from './magazine';
-
+import { useParams } from "react-router-dom";
 import ProductImages from './productImges';
 import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
@@ -19,17 +19,29 @@ import social5 from "../../../../image/checkout-social-5.png";
 import social6 from "../../../../image/checkout-social-6.png";
 import social7 from "../../../../image/checkout-social-7.png";
 import Promotion from '../../../partials/promotion';
-
+import { getProductDetails } from '../../../../redux/cart/productApi';
 
 function ProductDetails(props) {
+    const { sku } = useParams();
     const [isPriveuser, setIsPriveUser] = useState(false);
     const [productImages, setProductImages] = useState([
         social1, social2, social3, social4, social5, social6, social7
     ]);
+    const [productDetails, setproductDetails] = useState({ name: "" });
     const [sizeGuideModal, setSizeGuideModal] = useState(false);
     const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
+
     useEffect(() => {
-        console.log(props.items.Cart);
+        getProductDetailsFxn();
+
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
+    }, [])
+
+    useEffect(() => {
+        //  console.log(props.items.Cart);
         setSizeGuideModal(props.items.Cart.isOpenSizeGuide);
         setMeasuringGuideModal(props.items.Cart.isOpenMeasuringGuide);
     }, [props.items.Cart]);
@@ -37,7 +49,10 @@ function ProductDetails(props) {
     const sizeGuideModalHandler = () => {
         setSizeGuideModal(!sizeGuideModal);
     }
-
+    async function getProductDetailsFxn() {
+        let result: any = await getProductDetails(sku);
+        setproductDetails(result.data)
+    }
     return (
         <>
             <main>
@@ -66,7 +81,7 @@ function ProductDetails(props) {
                         <div className="row">
                             <div className="col-sm-8">
                                 <div className="product-slider">
-                                    <ProductImages  productImages = {productImages}/>
+                                    <ProductImages productImages={productImages} />
                                 </div>
                             </div>
                             <div className="col-sm-4">
@@ -82,7 +97,7 @@ function ProductDetails(props) {
                                         </div>}
                                     </div>
                                     <div className="product_details">
-                                        <h1>Bottega Veneta</h1>
+                                        <h1>{productDetails.name}</h1>
                                         <h2>18Kt Gold-Plated Sterling-Silver Chain Necklace</h2>
                                     </div>
                                     <div className="product-sale_off mt-4 mb-4">
@@ -240,22 +255,22 @@ function ProductDetails(props) {
                 </section>
 
                 <section>
-                   <Recomendations/>
+                    <Recomendations />
                 </section>
 
                 <section>
-                   <ProductsMagazine/>
+                    <ProductsMagazine />
                 </section>
             </main>
 
             {/* size guide modal starts here */}
             <Modal show={sizeGuideModal} size="lg">
-                <SizeGuide/>
+                <SizeGuide />
             </Modal>
             {/* size guide modal ends here */}
             {/* measuring guide modal starts here */}
-            <Modal show={measuringGuideModal}  size="lg">
-                <MeasuringGuide/>
+            <Modal show={measuringGuideModal} size="lg">
+                <MeasuringGuide />
             </Modal>
             {/* measuring guide modal ends here */}
         </>
