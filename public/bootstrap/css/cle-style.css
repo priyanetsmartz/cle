@@ -16,9 +16,11 @@ body {
 .form-control {
     padding: 0.6rem 0.78rem;
 }
+
 .bg-favorite {
     background-color: #2E2BAA!important;
 }
+
 .customcheckbox.form-check {
     margin: 0;
 }
@@ -393,7 +395,7 @@ p.promotion_alert {
 .alert_cross {
     position: absolute;
     right: 1%;
-    top: 17px;
+    top: 9px;
 }
 
 .search_input .form-control:focus {
@@ -1703,12 +1705,16 @@ span.maindatory {
     font-size: 16px;
 }
 
+.resltspage_sec .paginatn_result span {
+    color: #777777;
+}
+
 .resltspage_sec .paginatn_result {
     padding: 4px 0;
 }
 
 .pro_categry_sidebar {
-    width: 100%;
+    width: 80%;
     float: left;
 }
 
@@ -1733,6 +1739,7 @@ span.maindatory {
     text-decoration: none;
     color: #000;
     font-size: 16px;
+    font-size: #777777;
 }
 
 .paginatn_result ul li a.active {
@@ -1759,6 +1766,7 @@ span.maindatory {
     float: right;
     border: 0;
     box-shadow: none;
+    font-weight: 600;
 }
 
 /* sidebarnav starts */
@@ -1830,6 +1838,7 @@ span.maindatory {
     float: left;
     position: relative;
 }
+
 .product-listing .product:hover {
     border: 1px solid #000;
     cursor: pointer;
@@ -1892,7 +1901,10 @@ span.maindatory {
 .page-link {
     border: 0;
     color: #000;
-    padding: 0 12px;
+}
+
+.page-link {
+    padding: 0 5px;
 }
 
 .product-listing .product .about {
@@ -1930,6 +1942,295 @@ span.maindatory {
     opacity: 1;
 }
 
+.myorder_sidebar {
+    width: 100%;
+    float: left;
+}
+
+.myorder_sidebar ul {
+    margin: 0;
+    padding: 0;
+}
+
+.myorder_sidebar ul li:first-child {
+    margin-top: 20px;
+}
+
+.myorder_sidebar ul li {
+    padding: 16px 0px;
+    list-style: none;
+    display: block;
+    width: 100%;
+    float: left;
+}
+
+.myorder_sidebar ul li a img {
+    margin-right: 20px;
+}
+
+.myorder_sidebar ul li a {
+    color: #000;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.myorder_sidebar ul li a span {
+    font-weight: 600;
+}
+
+.myorder_sidebar ul li.active a {
+    color: #2E2BAA;
+}
+
+.user_show {
+    font-size: 16px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    font-weight: 400;
+    color: #2E2BAA;
+}
+
+.user_name {
+    font-size: 16px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    font-weight: 400;
+    color: #000;
+}
+
+.my-userdetails {
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid #707070;
+    padding-bottom: 24px;
+}
+
+.my_orders_returns_sec {
+    width: 100%;
+    float: left;
+}
+
+.my_orders_returns_sec h1 {
+    font-size: 36px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    font-weight: 400;
+}
+
+.my_orders_returns_sec h2 {
+    font-size: 18px;
+    width: 68%;
+    float: left;
+    line-height: 28px;
+}
+
+.range_slider {
+    width: 100%;
+    float: left;
+    margin-top: 60px;
+    margin-bottom: 30px;
+}
+
+.range_slider .range_inner {
+    width: 66%;
+    float: left;
+}
+
+.range_slider .range_inner .form-label {
+    font-weight: 600;
+}
+
+.range_slider .range_inner .search_results .form-control {
+    padding: 0.6rem 2.6rem;
+    background-color: #F7F7F7;
+    border: 1px solid #F7F7F7;
+}
+
+.range_slider .range_inner .search_results img.search_icn {
+    position: absolute;
+    top: 14px;
+    left: 10px;
+}
+
+.order_tab_sec {
+    width: 100%;
+    float: left;
+}
+
+.order_tab_sec .nav-tabs .nav-item.show .nav-link, .order_tab_sec .nav-tabs .nav-link.active {
+    color: #2E2BAA;
+    background-color: #fff;
+    border-color: transparent;
+    border-bottom: 2px solid #2E2BAA;
+}
+
+.order_tab_sec .nav-tabs {
+    border-bottom: 0;
+}
+
+.order_tab_sec .nav-link {
+    color: #000;
+    padding: .5rem 3rem;
+}
+
+.order_tab_sec .nav-tabs .nav-link {
+    font-size: 24px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    font-weight: 400;
+}
+
+.my_orders_returns_sec .sortbyeyearly_show {
+    width: 100%;
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.my_orders_returns_sec .sortbyeyearly_show h3 {
+    font-size: 24px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    font-weight: 400;
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid #707070;
+    padding-bottom: 20px;
+    margin-top: 20px;
+}
+
+.order_tab_sec .viewall_btn {
+    width: 100%;
+    float: left;
+    text-align: right;
+}
+
+.order_tab_sec .viewall_btn a {
+    font-size: 16px;
+    color: #2E2BAA;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    text-decoration: none;
+}
+
+.order_tab_sec h3.order_numbr {
+    font-size: 24px;
+    color: #000;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.order-viewsec {
+    width: 100%;
+    float: left;
+}
+
+.order-viewsec .order-details {
+    display: flex;
+    width: 100%;
+    float: left;
+    margin-bottom: 10px;
+}
+
+.order-viewsec .order-details .form-label {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+.order-viewsec .order-details .labl_text {
+    font-size: 16px;
+}
+
+.order-viewsec .order-shipped label {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.order-viewsec .order-shipped {
+    width: 100%;
+    float: left;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.order-viewsec .order-details .order-date, .order-viewsec .order-details .products {
+    width: 50%;
+    float: left;
+}
+
+.order_tab_sec .prodcut_catg {
+    width: 100%;
+    float: left;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.order_tab_sec .prodcut_catg .product_photo {
+    width: 106px;
+    float: left;
+    height: 155px;
+    position: relative;
+}
+
+.order_tab_sec .prodcut_catg .more_product {
+    width: 106px;
+    float: left;
+    height: 155px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.order_tab_sec .more_product img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.overlaygrey_img {
+    background-color: #000000;
+    opacity: 0.4;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.overlay_img {
+    background-color: #2E2BAA;
+    opacity: 0.4;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.order_tab_sec .more_product .more_pro {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    display: inline-block;
+    position: absolute;
+    top: 31%;
+    left: 0;
+    z-index: 999;
+}
+
+.blank_bdr {
+    border-top: 1px solid #707070;
+}
+
+.mobile_sidebar {
+    display: none;
+}
+
+.myorder_sidebar {
+    display: block;
+}
 
 /* All media screen below */
 
@@ -1997,6 +2298,12 @@ span.maindatory {
         height: auto;
         object-position: unset;
     }
+    .order_tab_sec .nav-tabs .nav-link {
+        font-size: 14px;
+        font-family: 'Monument Extended';
+        font-style: normal;
+        font-weight: 400;
+    }
 }
 
 /* Portrait and Landscape */
@@ -2007,13 +2314,72 @@ span.maindatory {
     }
 }
 
-@media only screen and (max-width: 768px) {}
+@media only screen and (max-width: 768px) {
+    .order_tab_sec .nav-tabs .nav-link {
+        font-size: 14px;
+        font-family: 'Monument Extended';
+        font-style: normal;
+        font-weight: 400;
+    }
+    .order_tab_sec .nav-tabs {
+        border-bottom: 0;
+        flex-wrap: nowrap;
+    }
+    .order_tab_sec h3.order_numbr {
+        font-size: 18px;
+    }
+    .order_tab_sec .viewall_btn a {
+        font-size: 14px;
+    }
+    .order_tab_sec .prodcut_catg {
+        margin-bottom: 15px;
+    }
+    .resltspage_sec.footer-pagints {
+        margin: 40px 0;
+        display: block;
+    }
+    .resltspage_sec.footer-pagints .paginatn_result, .resltspage_sec.footer-pagints .page_by {
+        width: 100%;
+        float: left;
+        display: block;
+    }
+    .resltspage_sec .paginatn_result span {
+        color: #777777;
+        float: left;
+    }
+    .range_slider .range_inner {
+        width: 100%;
+        float: left;
+    }
+    .mobile_sidebar {
+        display: block;
+    }
+    .myorder_sidebar {
+        display: none;
+    }
+    .pro_categry_sidebar {
+        width: 100%;
+        float: left;
+        margin-bottom: 20px;
+    }
+    .my_orders_returns_sec h2 {
+        width: 100%;
+        float: left;
+    }
+    .resltspage_sec {
+        display: block;
+    }
+    .resltspage_sec .paginatn_result {
+        display: block;
+    }
+}
 
 @media only screen and (max-width: 600px) {}
 
 @media only screen and (max-width: 480px) {}
 
 @media only screen and (max-width: 320px) {}
+
 
 /* product images slider and zoom in styles starts here */
 
@@ -2088,5 +2454,3 @@ span.maindatory {
 .whishlist-section span {
     cursor: pointer;
 }
-
-/* product images slider and zoom in styles ends here */
