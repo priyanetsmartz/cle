@@ -172,7 +172,16 @@
   "myaccount.checkAlso":"Check also",
   "myaccount.myOrdersReturns":"My Orders & Returns",
   "myaccount.orderDetails":"Order Details",
-  "myaccount.returnDetails":"Return details"
+  "myaccount.returnDetails":"Return details",
+  "customer.hi":"Hi",
+  "customer.dashboard":"Dashboard",
+  "customer.ordersAndReturns":"My Orders & Returns",
+  "customer.myTrades":"My Trades",
+  "customer.myWishlist":"My Wishlist",
+  "customer.myProfile":"My Profile",
+  "customer.myNotifications":"My Notifications",
+  "customer.mySupport":"My Support",
+  "customer.myReward":"My Rewards"
 
 
 }
