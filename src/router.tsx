@@ -21,7 +21,9 @@ import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 import PriveUser from './containers/Page/PriveUser';
 // import CustomerDetails from './containers/Page/customer/customerDetails';
 import MyAccount from './containers/Page/customer/myAccount';
-import CustomerOrders from './containers/Page/customer/customerOrders';
+// import CustomerOrders from './containers/Page/customer/customerOrders';
+// import OrdersAndReturns from './containers/Page/customer/ordersAndReturns';
+import Customer from './containers/Page/customer/customer';
 import OrderDetails from './containers/Page/customer/orderDetails';
 import WishList from './containers/Page/customer/wishList';
 import Categories from './containers/Page/categories/categories';
@@ -47,7 +49,8 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
         <PrivateRoute exact path="/myaccount" component={MyAccount} />
-        <PrivateRoute exact path="/customer-orders" component={CustomerOrders} />
+        {/* <PrivateRoute exact path="/customer-orders" component={CustomerOrders} /> */}
+        <PrivateRoute exact path="/customer/:tab" component={Customer} />
         <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
         <PrivateRoute exact path="/wishlist" component={WishList} />
 
