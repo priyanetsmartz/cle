@@ -56,8 +56,8 @@ function ProductDetails(props) {
     return (
         <>
             <main>
-                <Promotion />
-                <section>
+                {/* <Promotion /> */}
+                {/* <section>
                     <div className="container">
                         <div className="row">
                             <div className="col-sm-12">
@@ -74,7 +74,7 @@ function ProductDetails(props) {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
 
                 <section>
                     <div className="container">

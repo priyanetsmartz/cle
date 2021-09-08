@@ -22,6 +22,7 @@ import supportIcon from '../../../image/my_support.svg';
 
 
 function Customer(props) {
+    const [name, setName] = useState(localStorage.getItem('token_name'));
     const history = useHistory();
     const key = props.match.params.tab;
     const [activeTab, setActiveTab] = useState('');
@@ -43,21 +44,6 @@ function Customer(props) {
 
     return (
         <>
-            <section>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <nav aria-label="breadcrumb">
-                                <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item"><a href="#">My Account</a></li>
-                                    <li className="breadcrumb-item"><a href="#">My Orders and Returns</a></li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </section>
             <section className="mt-5">
                 <div className="container">
                     <div className="row">
@@ -65,7 +51,7 @@ function Customer(props) {
                             <div className="pro_categry_sidebar">
                                 <div className="my-userdetails">
                                     <div className="user_show"><IntlMessages id="customer.hi" /></div>
-                                    <div className="user_name">Ann Smith</div>
+                                    <div className="user_name">{name}</div>
                                 </div>
                                 <div className="mobile_sidebar">
                                     <select className="form-select" aria-label="Default select example" onChange={changeMobTab}>
@@ -87,9 +73,9 @@ function Customer(props) {
                                         <li className={activeTab == 'orders-and-returns' ? 'active' : ''}><a onClick={() => changeTab('orders-and-returns')}>
                                             <img src={ordersIcon} alt="" className="img-fluid" /> <span
                                                 className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span></a></li>
-                                        <li className={activeTab == 'mytrades' ? 'active' : ''}><a onClick={() => changeTab('mytrades')}>
+                                        {/* <li className={activeTab == 'mytrades' ? 'active' : ''}><a onClick={() => changeTab('mytrades')}>
                                             <img src={tradeIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                                <IntlMessages id="customer.myTrades" /></span></a></li>
+                                                <IntlMessages id="customer.myTrades" /></span></a></li> */}
                                         <li className={activeTab == 'rewards' ? 'active' : ''}><a onClick={() => changeTab('rewards')}>
                                             <img src={rewardIcon} alt="" className="img-fluid" /> <span className="pl-2">
                                             <IntlMessages id="customer.myReward" /></span></a></li>
@@ -111,7 +97,7 @@ function Customer(props) {
                         </div>
                         {activeTab == 'dashboard' ? <Dashboard /> :
                             activeTab == 'orders-and-returns' ? <OrdersAndReturns /> :
-                                activeTab == 'mytrades' ? <MyTrades /> :
+                                // activeTab == 'mytrades' ? <MyTrades /> :
                                     activeTab == 'profile' ? <MyProfile /> :
                                         activeTab == 'wish-list' ? <MyWishList /> :
                                             activeTab == 'rewards' ? <MyRewards /> :

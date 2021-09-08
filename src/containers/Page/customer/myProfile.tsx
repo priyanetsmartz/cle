@@ -4,7 +4,7 @@ import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
 import {
     getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference, changePassword,
-    updateCustEmail
+    updateCustEmail, deleteAddress
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
@@ -38,6 +38,7 @@ function MyProfile(props) {
         website_id: 1,
         addresses: []
     });
+
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: custId,
@@ -46,10 +47,10 @@ function MyProfile(props) {
         telephone: "",
         postcode: "",
         city: "",
-        region_id: 538,
         country_id: "",
         street: ""
     });
+    const [addIndex, setAddIndex] = useState(null);
 
     const [changePass, setChangePass] = useState({
         password: "",
@@ -81,12 +82,10 @@ function MyProfile(props) {
         async function getData() {
             let result: any = await getCustomerDetails(custId);
             setCustForm(result.data);
-            if (result.data.addresses.length > 0) {
-                result.data.addresses[0].street = result.data.addresses[0].street[0];
-                setCustAddForm(result.data.addresses[0]);
-                setCountry(result.data.addresses[0].country_id);
-                setTelephone(result.data.addresses[0].telephone);
-            }
+            // if (result.data.addresses.length > 0) {
+                // setCountry(result.data.addresses[0].country_id);
+                // setTelephone(result.data.addresses[0].telephone);
+            // }
         }
         getData();
         getCountries();
@@ -106,19 +105,106 @@ function MyProfile(props) {
         }))
     }
 
-    const handleSubmitClick = async (e) => {
+    const saveCustDetails = async (e) => {
         e.preventDefault();
-        custForm.dob = `${dob.day}/${dob.month}/${dob.year}`;
-        custForm.addresses[0] = custAddForm;
-        custForm.addresses[0].street = [custForm.addresses[0].street];
-        custForm.addresses[0].telephone = telephone;
-        console.log(custForm);
+        if(dob.day != '' && dob.month != '' && dob.year != ''){
+            custForm.dob = `${dob.day}/${dob.month}/${dob.year}`;
+        }
         let result: any = await saveCustomerDetails(custId, { customer: custForm });
         if (result) {
             setMyDetailsModel(false);
             notification("success", "", "Customer details Updated");
         }
     }
+
+    // for customer address popup window starts here
+    const saveCustAddress = async (e) => {
+        if(validateAddress()){
+            let obj:any = {...custAddForm};
+            obj.street = [obj.street];
+            if(obj.id == 0){
+                custForm.addresses.push(obj);
+            }else{
+                custForm.addresses[addIndex] = obj;
+            }
+            // console.log(custAddForm);
+            let result: any = await saveCustomerDetails(custId, { customer: custForm });
+            if (result) {
+                openAddressModal();
+                setCustAddForm({
+                    id: 0,
+                    customer_id: custId,
+                    firstname: "",
+                    lastname: "",
+                    telephone: "",
+                    postcode: "",
+                    city: "",
+                    country_id: "",
+                    street: ""
+                });
+                notification("success", "", "Customer Address Updated");
+            }
+        }
+    }
+
+    const validateAddress = () => {
+        let error = {};
+        let formIsValid = true;
+
+        if (!custAddForm.telephone) {
+            formIsValid = false;
+            error['telephone'] = 'Phone is required';
+        }
+        if (!custAddForm.postcode) {
+            formIsValid = false;
+            error["postcode"] = 'Post Code is required';
+        }
+        if (!custAddForm.city) {
+            formIsValid = false;
+            error["city"] = 'City is required';
+        }
+       
+        if (!custAddForm.country_id) {
+            formIsValid = false;
+            error['country_id'] = 'Country is required';
+        }
+        if (!custAddForm.street) {
+            formIsValid = false;
+            error["street"] = 'Address is required';
+        }
+        if (!custAddForm.firstname) {
+            formIsValid = false;
+            error["firstname"] = 'First Name is required';
+        }
+        if (!custAddForm.lastname) {
+            formIsValid = false;
+            error["lastname"] = 'Last Name is required';
+        }
+
+        setError({ errors: error });
+        return formIsValid;
+    }
+    // for customer address popup window ends here
+
+    //edit existing address starts here------------->
+    const editAddress = (index) => {
+        setAddIndex(index);
+        custForm.addresses[index].street = custForm.addresses[index].street[0];
+        setCustAddForm(custForm.addresses[index]) ;
+        openAddressModal();
+    }
+
+    const deleteAdd = async (index) => {
+        if(!custForm.addresses[index]) return;
+        let result: any = await deleteAddress(custForm.addresses[index].id);
+        if (result) {
+            custForm.addresses.splice(index, 1);
+            setCustForm(custForm);
+            notification("success", "", "Customer Address deleted!");
+        }
+    }
+    //edit existing address ends here--------------->
+
 
     //for customer address
     const handleAddChange = (e) => {
@@ -319,20 +405,20 @@ function MyProfile(props) {
                                         <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                                         <div className="field-name">{custForm.gender}</div>
                                     </div>
-                                    <div className="field_details">
+                                    {/* <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
                                         <div className="field-name">{custForm.addresses[0]?.telephone}</div>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
                                         <div className="field-name">{custForm.dob}</div>
                                     </div>
-                                    <div className="field_details">
+                                    {/* <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.country" /></label>
                                         <div className="field-name">{custForm.addresses[0]?.country_id}</div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -488,21 +574,21 @@ function MyProfile(props) {
                             </div>
                         </div>
 
-                        {custForm && custForm.addresses.map(address => {
-                            return (<div className="addressnew_addressbodr" key={address.street}>
+                        {custForm && custForm.addresses.map((address, i) => {
+                            return (<div className="addressnew_addressbodr" key={i}>
                                 <h3>Address</h3>
                                 <ul>
                                     <li>{address.firstname + ' ' + address.lastname}</li>
                                     <li>{address.street}</li>
-                                    {/* <li>40-333</li> */}
+                                    <li>{address.postcode}</li>
                                     <li>{address.city}</li>
                                     <li>{address.country_id}</li>
                                 </ul>
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
                                 <div className="address-action">
-                                    <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                    <Link className="edit_btn" onClick={openAddressModal}>
+                                    <Link onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
+                                    <Link className="edit_btn" onClick={() => editAddress(i)}>
                                         <IntlMessages id="myaccount.edit" />
                                     </Link>
                                 </div>
@@ -841,7 +927,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <div className="Frgt_paswd">
                                 <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={handleSubmitClick}>Confirm</button>
+                                    <button type="button" className="btn btn-secondary" onClick={saveCustDetails}>Confirm</button>
                                 </div>
                             </div>
                         </div>
@@ -1049,6 +1135,15 @@ function MyProfile(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Phone<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" id="telephone"
+                                placeholder="Phone"
+                                value={custAddForm.telephone}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["telephone"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
                             <label className="form-label">Address<span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="street"
                                 placeholder="Address"
@@ -1059,11 +1154,20 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">City*</label>
-                            <input type="number" className="form-control" id="city"
+                            <input type="text" className="form-control" id="city"
                                 placeholder="City"
                                 value={custAddForm.city}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["city"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Post Code*</label>
+                            <input type="text" className="form-control" id="postcode"
+                                placeholder="Post Code"
+                                value={custAddForm.postcode}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["postcode"]}</span>
 
                         </div>
                         <div className="width-100 mb-3 form-field">
@@ -1078,7 +1182,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <div className="Frgt_paswd">
                                 <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={handleSubmitClick}>Confirm</button>
+                                    <button type="button" className="btn btn-secondary" onClick={saveCustAddress}>Confirm</button>
                                 </div>
                             </div>
                         </div>

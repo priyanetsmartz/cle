@@ -138,8 +138,8 @@ function Products(props) {
 
     return (
         <main>
-            <Promotion />
-            <section>
+            {/* <Promotion /> */}
+            {/* <section>
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -154,7 +154,7 @@ function Products(props) {
                     </div>
                 </div>
 
-            </section>
+            </section> */}
 
 
             <section>

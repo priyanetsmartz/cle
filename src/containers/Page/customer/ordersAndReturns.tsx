@@ -106,7 +106,8 @@ function OrdersAndReturns(props) {
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
                                             <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder="Search..." className="form-control me-1" />
+                                            <input type="search" placeholder="Search..." value={orderId}
+                                                onChange={handleSearch} className="form-control me-1" />
                                         </div>
                                     </div>
                                 </div>
@@ -143,11 +144,10 @@ function OrdersAndReturns(props) {
                                             <div className="sort_by">
                                                 <div className="sortbyfilter">
 
-                                                    <select className="form-select customfliter" aria-label="Default select example">
-                                                        <option value="">Sort by </option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
+                                                    <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
+                                                    <option value="">SortBy</option>
+                                                    <option value="ASC">Price - High to low</option>
+                                                    <option value="DESC">Price - Low to high</option>
                                                     </select>
                                                 </div>
                                             </div>
