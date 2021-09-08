@@ -11,23 +11,14 @@ import { useParams } from "react-router-dom";
 import ProductImages from './productImges';
 import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
-import social1 from "../../../../image/checkout-social-1.png";
-import social2 from "../../../../image/checkout-social-2.png";
-import social3 from "../../../../image/checkout-social-3.png";
-import social4 from "../../../../image/checkout-social-4.png";
-import social5 from "../../../../image/checkout-social-5.png";
-import social6 from "../../../../image/checkout-social-6.png";
-import social7 from "../../../../image/checkout-social-7.png";
 import Promotion from '../../../partials/promotion';
 import { getProductDetails } from '../../../../redux/cart/productApi';
-
+import { formatprice } from '../../../../components/utility/allutils';
 function ProductDetails(props) {
     const { sku } = useParams();
     const [isPriveuser, setIsPriveUser] = useState(false);
-    const [productImages, setProductImages] = useState([
-        social1, social2, social3, social4, social5, social6, social7
-    ]);
-    const [productDetails, setproductDetails] = useState({ name: "" });
+    const [productImages, setProductImages] = useState([]);
+    const [productDetails, setproductDetails] = useState({ name: "", price: 0, extension_attributes: { stock_item: { qty: 1, is_in_stock: true } }, description: "", saleprice: 0, short_description: "", shipping_and_returns: "" });
     const [sizeGuideModal, setSizeGuideModal] = useState(false);
     const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
 
@@ -51,8 +42,28 @@ function ProductDetails(props) {
     }
     async function getProductDetailsFxn() {
         let result: any = await getProductDetails(sku);
-        setproductDetails(result.data)
+
+        let description = "", special_price: 0, short, shipping_and_returns: "";
+        result.data.custom_attributes.map((attributes) => {
+            if (attributes.attribute_code === "description") {
+                description = attributes.value;
+            }
+            if (attributes.attribute_code === "special_price") {
+                special_price = attributes.value;
+            }
+            if (attributes.attribute_code === "short_description") {
+                short = attributes.value;
+            }
+            if (attributes.attribute_code === "shipping_and_returns") {
+                shipping_and_returns = attributes.value;
+            }
+
+        })
+        setProductImages(result.data.media_gallery_entries)
+        setproductDetails({ ...productDetails, name: result.data.name, price: result.data.price, description: description, saleprice: special_price, short_description: short, shipping_and_returns: shipping_and_returns });
+
     }
+
     return (
         <>
             <main>
@@ -98,11 +109,11 @@ function ProductDetails(props) {
                                     </div>
                                     <div className="product_details">
                                         <h1>{productDetails.name}</h1>
-                                        <h2>18Kt Gold-Plated Sterling-Silver Chain Necklace</h2>
+                                        <h2><div dangerouslySetInnerHTML={{ __html: productDetails.short_description }} /></h2>
                                     </div>
                                     <div className="product-sale_off mt-4 mb-4">
-                                        <div className="product_saleoff"><span className="saleoff">$2,850</span> now 25% off</div>
-                                        <div className="product_price">$2,137</div>
+                                        <div className="product_saleoff">{productDetails.saleprice > 0 ? <><span className="saleoff">${formatprice(productDetails.price)}</span> now 25% off</> : <span>${formatprice(productDetails.price)}</span>}</div>
+                                        {productDetails.saleprice > 0 ? <div className="product_price">${formatprice(productDetails.saleprice)}</div> : ""}
                                     </div>
                                     <div className="selection-process mb-2">
                                         <div className="row">
@@ -110,10 +121,10 @@ function ProductDetails(props) {
                                                 <div className="form-group">
                                                     <span className="form-label">Quantity:</span>
                                                     <select className="form-select" aria-label="Default select example">
-                                                        <option value="">1</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
+                                                        {Array.from(Array(productDetails.extension_attributes.stock_item.qty), (e, i) => {
+                                                            return <option key={i + 1}>{i + 1}</option>
+                                                        })}
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -122,9 +133,11 @@ function ProductDetails(props) {
                                                     <span className="form-label">Size:</span>
                                                     <select className="form-select" aria-label="Default select example">
                                                         <option value="">One size</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
+
+                                                        {Array.from(Array(productDetails.extension_attributes.stock_item.qty), (e, i) => {
+                                                            return <option key={i}>{i}</option>
+                                                        })}
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -138,8 +151,9 @@ function ProductDetails(props) {
 
                                     <div className="width-100 my-3">
                                         <div className="d-grid">
-                                            <button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                            {productDetails.extension_attributes.stock_item.is_in_stock === true && (<button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
                                                 Add to Cart</button>
+                                            )}
                                         </div>
                                     </div>
 
@@ -164,12 +178,7 @@ function ProductDetails(props) {
                                             <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne"
                                                 data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">
-                                                    <p> Bottega Veneta’s 18kt gold-plated sterling-silver necklace is joined with marbled-brown
-                                                        picture jasper links – a semi-precious healing stone thought to bring tranquility to the wearer.
-                                                        It’s handcrafted by an Italian goldsmith with curb and irregular-chain links. Alternate between
-                                                        wearing it with the T-bar pendant at the front and back.</p>
-                                                    <p> Shown here with Bottega Veneta Gathered-back balloon-sleeve poplin shirt.</p>
-                                                    <p> Product number: 1396090</p>
+                                                    <div dangerouslySetInnerHTML={{ __html: productDetails.description }} />
                                                 </div>
                                             </div>
                                         </div>
@@ -229,20 +238,7 @@ function ProductDetails(props) {
                                                 aria-labelledby="flush-headingFourth" data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">
                                                     <div className="express_rate">
-                                                        <ul>
-                                                            <li>Express: EUR $25</li>
-                                                        </ul>
-                                                        <p>
-                                                            Delivery between 9am-5pm, Monday to Friday
-                                                            Receive your purchases in 2-3 working days after your order has been placed
-                                                        </p>
-                                                        <ul>
-                                                            <li>Standard: EUR $15</li>
-                                                        </ul>
-                                                        <p>
-                                                            Delivery between 9am-5pm, Monday to Friday
-                                                            Receive your purchases in 3-4 working days after your order has been placed
-                                                        </p>
+                                                        <div dangerouslySetInnerHTML={{ __html: productDetails.shipping_and_returns }} />
                                                     </div>
                                                 </div>
                                             </div>
