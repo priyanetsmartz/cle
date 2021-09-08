@@ -4,7 +4,7 @@ import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
 import { getWishList, removeItemFromWishList, wishListSearchSort } from '../../../redux/pages/customers';
 import product from '../product/product';
-
+import { formatprice } from '../../../components/utility/allutils';
 
 function WishList(props) {
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
@@ -28,6 +28,7 @@ function WishList(props) {
 
     const searchHandler = (e) => {
         setSearchName(e.target.value);
+        console.log(e.target.value)
         getData();
     }
 
@@ -47,42 +48,46 @@ function WishList(props) {
 
 
     return (
-        <div className="row" >
-            <div className="col-md-6 offset-md-3">
-                <div className="row">
-                    <div className="col-md-6">
-                        <input type="text"
-                            className="form-control"
-                            placeholder="Search"
-                            value={searchName}
-                            onChange={searchHandler}
-                        />
-                    </div>
-                    <div className="col-md-6">
-                        <select value={sortOrder} onChange={sortHandler} className="form-control">
-                            <option value="">SortBy</option>
-                            <option value="asc">Price - High to low</option>
-                            <option value="desc">Price - Low to high</option>
+        <main>
+            <section>
+                <div className="row" >
+                    <div className="col-md-6 offset-md-3">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <input type="text"
+                                    className="form-control"
+                                    placeholder="Search"
+                                    value={searchName}
+                                    onChange={searchHandler}
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <select value={sortOrder} onChange={sortHandler} className="form-control">
+                                    <option value="">SortBy</option>
+                                    <option value="asc">Price - High to low</option>
+                                    <option value="desc">Price - Low to high</option>
 
-                        </select>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12">
+                                {wishList && wishList.map(item => {
+                                    return (
+                                        <div className="row" key={item.product_id}>
+                                            <img src={item.img_src} alt={item.name} style={{ height: '100px', width: '100px' }} />
+                                            <p>Name : {item.name}</p>
+                                            <p>Product Price : {formatprice(item.price)}</p>
+                                            <button onClick={() => itemREmoveHandler(item.product_id)}>Remove</button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md-12">
-                        {wishList && wishList.map(item => {
-                            return (
-                                <div className="row" key={item.product_id}>
-                                    <img src={item.img_src} alt={item.name} style={{ height: '100px', width: '100px' }} />
-                                    <p>Name : {item.name}</p>
-                                    <p>Product Price : {item.price}</p>
-                                    <button onClick={() => itemREmoveHandler(item.product_id)}>Remove</button>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-        </div>
+            </section>
+        </main>
     );
 }
 

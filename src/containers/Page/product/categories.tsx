@@ -34,19 +34,21 @@ function Categories(props) {
 
 
     return (
-        <div className="container" style={{ "marginTop": "200px" }}>
-            <div className="row">
-               <h3 className="text-center" style={{ "marginBottom": "100px" }} >Explore New In</h3>
-               {catProducts.map(item => {
-                    return (
-                        <div className="col-md-4" key={item.id}>
-                           <b>{item.name}</b>
-                           <b>{item.price}</b>
-                        </div>
-                    )
-                })}
+        <main>
+            <div className="container" >
+                <div className="row">
+                    <h3 className="text-center" style={{ "marginBottom": "100px" }} >Explore New In</h3>
+                    {catProducts.map(item => {
+                        return (
+                            <div className="col-md-4" key={item.id}>
+                                <b>{item.name}</b>
+                                <b>{item.price}</b>
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
-        </div>
+        </main>
     )
 }
 const mapStateToProps = (state) => {

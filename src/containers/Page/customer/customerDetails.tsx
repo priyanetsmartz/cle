@@ -123,7 +123,7 @@ function CustomerDetails(props) {
 
     //for attributes
     const getAttributes = async () => {
-        let result: any = await getPreference(custId);
+        let result: any = await getPreference();
         // console.log(result);
         setAttributes(result.data[0]);
     }
@@ -671,7 +671,7 @@ function CustomerDetails(props) {
 
             {/* Gifting preference details modal */}
             <Modal show={giftingModal} size="lg">
-                <Modal.Header> 
+                <Modal.Header>
                     <h4>Gifting Preferences</h4>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={openGigitingModal} aria-label="Close"></button>
                 </Modal.Header>
@@ -679,7 +679,7 @@ function CustomerDetails(props) {
                     <b>My Birthday</b>
                     <p>01 May 1990</p>
                     <div className="col-md-6">
-                        
+
                     </div>
                 </div>
             </Modal>

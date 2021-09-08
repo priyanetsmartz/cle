@@ -146,3 +146,8 @@ export function getProductFilter(category_id: number) {
 export function getProductDetails(sku: string) {
     return APi.request(`rest/V1/products/${sku}`, "", "GET", "");
 }
+
+export function getProductExtras(productId: number) {
+    const localToken = localStorage.getItem('cust_id');
+    return APi.request(`rest/all/V1/product/recommendation?storeId=3&customerId=${localToken}&productId=${productId}`, "", "GET", "");
+}

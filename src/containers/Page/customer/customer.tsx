@@ -19,7 +19,7 @@ import wishlistIcon from '../../../image/mywish_list.svg';
 import profileIcon from '../../../image/my_profile.svg';
 import notificationIcon from '../../../image/my_notification.svg';
 import supportIcon from '../../../image/my_support.svg';
-
+import { Link } from "react-router-dom";
 
 function Customer(props) {
     const history = useHistory();
@@ -49,9 +49,9 @@ function Customer(props) {
                         <div className="col-sm-12">
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item"><a href="#">My Account</a></li>
-                                    <li className="breadcrumb-item"><a href="#">My Orders and Returns</a></li>
+                                    <li className="breadcrumb-item"><Link to="#">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="#">My Account</Link></li>
+                                    <li className="breadcrumb-item"><Link to="#">My Orders and Returns</Link></li>
                                 </ol>
                             </nav>
                         </div>
@@ -81,41 +81,41 @@ function Customer(props) {
                                 </div>
                                 <div className="myorder_sidebar">
                                     <ul>
-                                        <li className={activeTab == 'dashboard' ? 'active' : ''}><a onClick={() => changeTab('dashboard')}>
+                                        <li className={activeTab === 'dashboard' ? 'active' : ''}><Link to="#" onClick={() => changeTab('dashboard')}>
                                             <img src={dashboardIcon} alt="" className="img-fluid" /> <span
-                                                className="pl-2"><IntlMessages id="customer.dashboard" /></span></a></li>
-                                        <li className={activeTab == 'orders-and-returns' ? 'active' : ''}><a onClick={() => changeTab('orders-and-returns')}>
+                                                className="pl-2"><IntlMessages id="customer.dashboard" /></span></Link></li>
+                                        <li className={activeTab === 'orders-and-returns' ? 'active' : ''}><Link to="#" onClick={() => changeTab('orders-and-returns')}>
                                             <img src={ordersIcon} alt="" className="img-fluid" /> <span
-                                                className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span></a></li>
-                                        <li className={activeTab == 'mytrades' ? 'active' : ''}><a onClick={() => changeTab('mytrades')}>
+                                                className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span></Link></li>
+                                        <li className={activeTab === 'mytrades' ? 'active' : ''}><Link to="#" onClick={() => changeTab('mytrades')}>
                                             <img src={tradeIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                                <IntlMessages id="customer.myTrades" /></span></a></li>
-                                        <li className={activeTab == 'rewards' ? 'active' : ''}><a onClick={() => changeTab('rewards')}>
+                                                <IntlMessages id="customer.myTrades" /></span></Link></li>
+                                        <li className={activeTab === 'rewards' ? 'active' : ''}><Link to="#" onClick={() => changeTab('rewards')}>
                                             <img src={rewardIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                            <IntlMessages id="customer.myReward" /></span></a></li>
-                                        <li className={activeTab == 'wish-list' ? 'active' : ''}><a onClick={() => changeTab('wish-list')}>
+                                                <IntlMessages id="customer.myReward" /></span></Link></li>
+                                        <li className={activeTab === 'wish-list' ? 'active' : ''}><Link to="#" onClick={() => changeTab('wish-list')}>
                                             <img src={wishlistIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                            <IntlMessages id="customer.myWishlist" /></span></a></li>
-                                        <li className={activeTab == 'profile' ? 'active' : ''}><a onClick={() => changeTab('profile')}>
+                                                <IntlMessages id="customer.myWishlist" /></span></Link></li>
+                                        <li className={activeTab === 'profile' ? 'active' : ''}><Link to="#" onClick={() => changeTab('profile')}>
                                             <img src={profileIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                            <IntlMessages id="customer.myProfile" /></span></a></li>
-                                        <li className={activeTab == 'notifications' ? 'active' : ''}><a onClick={() => changeTab('notifications')}>
+                                                <IntlMessages id="customer.myProfile" /></span></Link></li>
+                                        <li className={activeTab === 'notifications' ? 'active' : ''}><Link to="#" onClick={() => changeTab('notifications')}>
                                             <img src={notificationIcon} alt="" className="img-fluid" /> <span
-                                                className="pl-2"><IntlMessages id="customer.myNotifications" /></span></a></li>
-                                        <li className={activeTab == 'support' ? 'active' : ''}><a onClick={() => changeTab('support')}>
+                                                className="pl-2"><IntlMessages id="customer.myNotifications" /></span></Link></li>
+                                        <li className={activeTab === 'support' ? 'active' : ''}><Link to="#" onClick={() => changeTab('support')}>
                                             <img src={supportIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                            <IntlMessages id="customer.mySupport" /></span></a></li>
+                                                <IntlMessages id="customer.mySupport" /></span></Link></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        {activeTab == 'dashboard' ? <Dashboard /> :
-                            activeTab == 'orders-and-returns' ? <OrdersAndReturns /> :
-                                activeTab == 'mytrades' ? <MyTrades /> :
-                                    activeTab == 'profile' ? <MyProfile /> :
-                                        activeTab == 'wish-list' ? <MyWishList /> :
-                                            activeTab == 'rewards' ? <MyRewards /> :
-                                                activeTab == 'notifications' ? <MyNotifications /> : <MySupport />}
+                        {activeTab === 'dashboard' ? <Dashboard /> :
+                            activeTab === 'orders-and-returns' ? <OrdersAndReturns /> :
+                                activeTab === 'mytrades' ? <MyTrades /> :
+                                    activeTab === 'profile' ? <MyProfile /> :
+                                        activeTab === 'wish-list' ? <MyWishList /> :
+                                            activeTab === 'rewards' ? <MyRewards /> :
+                                                activeTab === 'notifications' ? <MyNotifications /> : <MySupport />}
 
                     </div>
                 </div>

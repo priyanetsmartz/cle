@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import { connect } from 'react-redux'
 import cartAction from "../../../../redux/cart/productAction";
 const { openSizeGuide, openMeasuringGuide } = cartAction;
@@ -25,9 +25,9 @@ function SizeGuide(props) {
                 <div className="size_details">
                     <div className="size_tbl">
                         <h1>Size Guide</h1>
-                        <a className="cross_icn" onClick={sizeGuideModalHandler}> <i className="fas fa-times"></i></a>
+                        <Link className="cross_icn" to="#" onClick={sizeGuideModalHandler}> <i className="fas fa-times"></i></Link>
                         <div className="view_measuring">
-                            <a onClick={measuringGuideHanler}>View Measuring Guide </a>
+                            <Link to="#" onClick={measuringGuideHanler}>View Measuring Guide </Link>
                         </div>
                         <table>
 
@@ -91,10 +91,10 @@ function SizeGuide(props) {
 }
 const mapStateToProps = (state) => {
     return {
-        
+
     }
 }
 
 export default connect(
-    mapStateToProps,{ openSizeGuide, openMeasuringGuide }
+    mapStateToProps, { openSizeGuide, openMeasuringGuide }
 )(SizeGuide);

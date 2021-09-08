@@ -1,13 +1,11 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import notification from '../../../components/notification';
 import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 
 
 function OrdersAndReturns(props) {
-    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [orderId, setOrderId] = useState('');
     const [orderDate, setOrderDate] = useState('');
     const [sortOrder, setSortOrder] = useState('');
@@ -17,18 +15,19 @@ function OrdersAndReturns(props) {
 
     useEffect(() => {
         getData();
+
     }, []);
 
     const getData = async () => {
-        let result: any = await getCustomerOrders(custId);
+        let result: any = await getCustomerOrders();
         setOrders(result.data);
-        console.log(result);
+        //console.log(result);
     }
 
     const handleSearch = async (e) => {
         const val = e.target.value;
         setOrderId(val);
-        if (val == "") return getData();
+        if (val === "") return getData();
         let result: any = await searchOrders(val);
         if (result) {
             orders.items = [];
@@ -43,13 +42,13 @@ function OrdersAndReturns(props) {
         let currentDate = moment(new Date());
         if (!filter) {
             getData();
-        } else if (filter == 1 || filter == 3 || filter == 6) {
+        } else if (filter === 1 || filter === 3 || filter === 6) {
             filterDate = moment(currentDate).subtract(filter, 'M').toJSON();
         } else {
             filterDate = moment(`${filter}-01-01`).toJSON();
         }
         setOrderDate(filterDate);
-        let result: any = await getCustomerOrdersByDate(custId, filterDate);
+        let result: any = await getCustomerOrdersByDate(filterDate);
         if (result) {
             console.log(result.data);
             setOrders(result.data);
@@ -57,9 +56,8 @@ function OrdersAndReturns(props) {
     }
 
     const sortOrdersHandler = async (e) => {
-        console.log(e.target.value);
         setSortOrder(e.target.value);
-        let result: any = await sortCustomerOrders(custId, e.target.value);
+        let result: any = await sortCustomerOrders(e.target.value);
         if (result) {
             orders.items = result.data;
             console.log(orders);
@@ -135,9 +133,9 @@ function OrdersAndReturns(props) {
                                             <div className="paginatn_result">
                                                 <span>Results per page</span>
                                                 <ul>
-                                                    <li><a href="#" className="active">12</a></li>
-                                                    <li><a href="#">60</a></li>
-                                                    <li><a href="#">120</a></li>
+                                                    <li><Link to="#" className="active">12</Link></li>
+                                                    <li><Link to="#">60</Link></li>
+                                                    <li><Link to="#">120</Link></li>
                                                 </ul>
                                             </div>
                                             <div className="sort_by">
@@ -170,7 +168,7 @@ function OrdersAndReturns(props) {
                                                 <h3 className="order_numbr">Order number: 1010909060608080</h3>
                                             </div>
                                             <div className="col-sm-6">
-                                                <div className="viewall_btn"><a href="#" className="">View all</a></div>
+                                                <div className="viewall_btn"><Link to="#" className="">View all</Link></div>
                                             </div>
 
                                         </div>
@@ -217,11 +215,11 @@ function OrdersAndReturns(props) {
                                                 <div className="product_photo"><img src="./images/product-2.svg" className="img-fluid" alt="" />
                                                 </div>
                                                 <div className="more_product">
-                                                    <a href="#">
+                                                    <Link to="#">
                                                         <img src="./images/product-3.svg" className="img-fluid" alt="" />
                                                         <div className="overlay_img"></div>
                                                         <span className="more_pro">+7more products</span>
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -238,7 +236,7 @@ function OrdersAndReturns(props) {
                                                 <h3 className="order_numbr">Order number: 3010090606006000</h3>
                                             </div>
                                             <div className="col-sm-6">
-                                                <div className="viewall_btn"><a href="#" className="">View all</a></div>
+                                                <div className="viewall_btn"><Link to="#" className="">View all</Link></div>
                                             </div>
 
                                         </div>
@@ -313,7 +311,7 @@ function OrdersAndReturns(props) {
                                                 <h3 className="order_numbr">Order number: 3000009060608080</h3>
                                             </div>
                                             <div className="col-sm-6">
-                                                <div className="viewall_btn"><a href="#" className="">View all</a></div>
+                                                <div className="viewall_btn"><Link to="#" className="">View all</Link></div>
                                             </div>
 
                                         </div>
@@ -377,9 +375,9 @@ function OrdersAndReturns(props) {
                                     <div className="paginatn_result">
                                         <span>Results per page</span>
                                         <ul>
-                                            <li><a href="#" className="active">12</a></li>
-                                            <li><a href="#">60</a></li>
-                                            <li><a href="#">120</a></li>
+                                            <li><Link to="#" className="active">12</Link></li>
+                                            <li><Link to="#">60</Link></li>
+                                            <li><Link to="#">120</Link></li>
                                         </ul>
                                     </div>
                                     <div className="page_by">
@@ -388,17 +386,17 @@ function OrdersAndReturns(props) {
                                             <nav aria-label="Page navigation example">
                                                 <ul className="pagination">
                                                     <li className="page-item">
-                                                        <a className="page-link" href="#" aria-label="Previous">
-                                                        </a><a href="#"><img src="images/arrow-left.svg" className="img-fluid" alt="" /></a>
+                                                        <Link className="page-link" to="#" aria-label="Previous">
+                                                        </Link><Link to="#"><img src="images/arrow-left.svg" className="img-fluid" alt="" /></Link>
 
                                                     </li>
-                                                    <li className="page-item"><a className="page-link" href="#">Page</a></li>
-                                                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                                    <li className="page-item"><a className="page-link" href="#">of</a></li>
-                                                    <li className="page-item"><a className="page-link" href="#">3</a></li>
+                                                    <li className="page-item"><Link className="page-link" to="#">Page</Link></li>
+                                                    <li className="page-item"><Link className="page-link" to="#">1</Link></li>
+                                                    <li className="page-item"><Link className="page-link" to="#">of</Link></li>
+                                                    <li className="page-item"><Link className="page-link" to="#">3</Link></li>
                                                     <li className="page-item">
-                                                        <a className="page-link" href="#" aria-label="Next">
-                                                        </a><a href="#"><img src="images/arrow-right.svg" className="img-fluid" alt="" /></a>
+                                                        <Link className="page-link" to="#" aria-label="Next">
+                                                        </Link><Link to="#"><img src="images/arrow-right.svg" className="img-fluid" alt="" /></Link>
 
                                                     </li>
                                                 </ul>
