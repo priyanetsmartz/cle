@@ -13,39 +13,41 @@ import NewInDescription from './newInDescription';
 function Categories(props) {
 
     return (
-        <ReactFullpage
-            //fullpage options
-            scrollingSpeed={1200} /* Options here */
+        <main>
+            <ReactFullpage
+                //fullpage options
+                scrollingSpeed={1200} /* Options here */
 
-            render={({ state, fullpageApi }) => {
-                return (
-                    <ReactFullpage.Wrapper>
-                        <div className="section">
-                            <CategoryBanner />
-                        </div>
-                        <div className="section">
-                            <PriveExclusive />
-                        </div>
-                        <div className="section">
-                            <LatestProducts />
-                        </div>
-                        <div className="section">
-                            <BrandedProducts />
-                        </div>
-                        <div className="section">
-                            <Magazine />
-                        </div>
-                        <div className="section">
-                            <NewIn />
-                        </div>
-                        <div className="section">
-                            <NewInDescription />
-                        </div>
+                render={({ state, fullpageApi }) => {
+                    return (
+                        <ReactFullpage.Wrapper>
+                            <div className="section">
+                                <CategoryBanner />
+                            </div>
+                            <div className="section">
+                                <PriveExclusive />
+                            </div>
+                            <div className="section">
+                                <LatestProducts />
+                            </div>
+                            <div className="section">
+                                <BrandedProducts />
+                            </div>
+                            <div className="section">
+                                <Magazine />
+                            </div>
+                            <div className="section">
+                                <NewIn />
+                            </div>
+                            <div className="section">
+                                <NewInDescription />
+                            </div>
 
-                    </ReactFullpage.Wrapper>
-                );
-            }}
-        />
+                        </ReactFullpage.Wrapper>
+                    );
+                }}
+            />
+        </main>
     )
 }
 

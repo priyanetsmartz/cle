@@ -29,6 +29,7 @@ class API {
 
     const token = apiConfig.adminToken;
     authtoken = `Bearer ${token}`;
+   // console.log(token);
     return new Promise(function (resolve, reject) {
       var url = queryString === '' ? baseUrl + name : baseUrl + name + "?" + queryString;
       if (method === undefined) {

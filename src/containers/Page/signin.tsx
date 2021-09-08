@@ -38,7 +38,7 @@ function SignIn(props) {
     return () => {
       // componentwillunmount in functional component.
       // Anything in here is fired on component unmount.
-  }
+    }
   }, []);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function SignIn(props) {
     return () => {
       // componentwillunmount in functional component.
       // Anything in here is fired on component unmount.
-  }
+    }
   }, [props.showLogin])
 
   useEffect(() => {
@@ -61,7 +61,7 @@ function SignIn(props) {
     return () => {
       // componentwillunmount in functional component.
       // Anything in here is fired on component unmount.
-  }
+    }
   }, [props.loading])
 
   const handleChange = (e) => {

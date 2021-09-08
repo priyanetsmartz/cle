@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 
 
 function CustomerOrders(props) {
-    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [orderId, setOrderId] = useState('');
     const [orderDate, setOrderDate] = useState('');
     const [sortOrder, setSortOrder] = useState('');
@@ -20,7 +19,7 @@ function CustomerOrders(props) {
     }, []);
 
     const getData = async () => {
-        let result: any = await getCustomerOrders(custId);
+        let result: any = await getCustomerOrders();
         setOrders(result.data);
         console.log(result);
     }
@@ -41,15 +40,15 @@ function CustomerOrders(props) {
     const getOrdersByDate = async (filter) => {
         let filterDate;
         let currentDate = moment(new Date());
-        if(!filter){
+        if (!filter) {
             getData();
-        }else if(filter === 1 || filter === 3 || filter === 6){
+        } else if (filter === 1 || filter === 3 || filter === 6) {
             filterDate = moment(currentDate).subtract(filter, 'M').toJSON();
-        }else{
+        } else {
             filterDate = moment(`${filter}-01-01`).toJSON();
         }
         setOrderDate(filterDate);
-        let result: any = await getCustomerOrdersByDate(custId, filterDate);
+        let result: any = await getCustomerOrdersByDate(filterDate);
         if (result) {
             console.log(result.data);
             setOrders(result.data);
@@ -59,8 +58,8 @@ function CustomerOrders(props) {
     const sortOrdersHandler = async (e) => {
         console.log(e.target.value);
         setSortOrder(e.target.value);
-        let result: any = await sortCustomerOrders(custId, e.target.value);
-        if(result){
+        let result: any = await sortCustomerOrders(e.target.value);
+        if (result) {
             orders.items = result.data;
             console.log(orders);
             setOrders(orders);
@@ -119,7 +118,7 @@ function CustomerOrders(props) {
                                 </div>
                                 <div className="col-md-7">
                                     <Link className="menu-logo" to={`order-details/${item.increment_id}`}>View Details</Link>
-                                    <img src={item.extension_attributes.shipping_assignments[0].items[0].extension_attributes.item_image} alt="" height="100" width="100"/>
+                                    <img src={item.extension_attributes.shipping_assignments[0].items[0].extension_attributes.item_image} alt="" height="100" width="100" />
                                 </div>
                                 <hr />
                             </div>

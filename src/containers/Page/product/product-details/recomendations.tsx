@@ -1,15 +1,20 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { connect } from 'react-redux'
-import kbg8zolf from "../../../../image/kbg8zolf.png";
+import { useState, useEffect } from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-
-function Recommendations(props) {
+import { formatprice } from '../../../../components/utility/allutils';
+import { Link } from "react-router-dom";
+const Recommendations = (props) => {
+    const [recomendedProducts, setRecomendedProducts] = useState([]);
+    // console.log(recomendedProducts)
     useEffect(() => {
-    }, [])
+        setRecomendedProducts(props.recomendationsData)
+        //    console.log(typeof (recomendedProducts))
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
+    }, [props.recomendationsData])
     const settings = {
         dots: false,
         infinite: true,
@@ -25,63 +30,29 @@ function Recommendations(props) {
     return (
         <div className="container">
             <div className="col-sm-12">
-                <div className="recommendations-section text-center ">
-                    <h1>Recommendations</h1>
-                    <div className="recommed-slider" >
-                        <Slider className="regular slider" {...settings}>
-                            <div className="productcalr">
-                                <div className="product_img"><img src={kbg8zolf} className="image-fluid" alt="product_image" /> </div>
-                                <div className="product_name"> Bottega Veneta </div>
-                                <div className="product_price"> $2,803</div>
-                            </div>
-                            <div className="productcalr">
-                                <div className="product_img"><img src={kbg8zolf} className="image-fluid" alt="product_image" /> </div>
-                                <div className="product_name"> Bottega Veneta </div>
-                                <div className="product_price"> $2,803</div>
-                            </div>
-                            <div className="productcalr">
-                                <div className="product_img"><img src={kbg8zolf} className="image-fluid" alt="product_image" /> </div>
-                                <div className="product_name"> Bottega Veneta </div>
-                                <div className="product_price"> $2,803</div>
-                            </div>
-                            <div className="productcalr">
-                                <div className="product_img"><img src={kbg8zolf} className="image-fluid" alt="product_image" /> </div>
-                                <div className="product_name"> Bottega Veneta </div>
-                                <div className="product_price"> $2,803</div>
-                            </div>
-                            <div className="productcalr">
-                                <div className="product_img"><img src={kbg8zolf} className="image-fluid" alt="product_image" /> </div>
-                                <div className="product_name"> Bottega Veneta </div>
-                                <div className="product_price"> $2,803</div>
-                            </div>
-                            <div className="productcalr">
-                                <div className="product_img"><img src={kbg8zolf} className="image-fluid" alt="product_image" /> </div>
-                                <div className="product_name"> Bottega Veneta </div>
-                                <div className="product_price"> $2,803</div>
-                            </div>
-                            <div className="productcalr">
-                                <div className="product_img"><img src={kbg8zolf} className="image-fluid" alt="product_image" /> </div>
-                                <div className="product_name"> Bottega Veneta </div>
-                                <div className="product_price"> $2,803</div>
-                            </div>
-                            <div className="productcalr">
-                                <div className="product_img"><img src={kbg8zolf} className="image-fluid" alt="product_image" /> </div>
-                                <div className="product_name"> Bottega Veneta </div>
-                                <div className="product_price"> $2,803</div>
-                            </div>
-                        </Slider>
-                    </div>
-                </div>
+                {(recomendedProducts && recomendedProducts.length) && (
+
+                    <div className="recommendations-section text-center ">
+                        <h1>Recommendations</h1>
+                        <div className="recommed-slider" >
+                            <Slider className="regular slider" {...settings}>
+
+                                {recomendedProducts.slice(0, 8).map((product) => {
+                                    return (
+                                        <Link key={product.id} to={'/product-details/' + product.sku}><div className="productcalr" >
+                                            <div className="product_img" ><img src={product.img} className="image-fluid" alt={product.name} /> </div>
+                                            <div className="product_name"> {product.name} </div>
+                                            <div className="product_price"> ${formatprice(product.price)}</div>
+                                        </div>
+                                        </Link>
+                                    )
+                                })}
+                            </Slider>
+                        </div>
+                    </div>)}
             </div>
         </div>
     )
 }
-const mapStateToProps = (state) => {
-    return {
-        items: state.Cart.items
-    }
-}
 
-export default connect(
-    mapStateToProps
-)(Recommendations);
+export default Recommendations

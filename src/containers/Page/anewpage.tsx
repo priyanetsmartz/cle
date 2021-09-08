@@ -172,6 +172,7 @@ function Home(props) {
         <>
             <BrowserView>
                 <ReactFullpage
+                    // licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'
                     //fullpage options
                     // anchors={anchors}
                     scrollingSpeed={500} /* Options here */

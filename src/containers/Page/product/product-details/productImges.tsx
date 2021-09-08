@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 const ProductImages = (props) => {
     const [productImage, setProductImages] = useState(props.productImages);
     const [fullSizedImg, setFullSizedImg] = useState(productImage[0]);
+    useEffect(() => {
+        setProductImages(props.productImages)
+        setFullSizedImg(productImage[0]);
+    }, [])
     const changeImg = (i) => {
         setFullSizedImg(productImage[i]);
+        console.log(fullSizedImg)
     }
 
     const scrolldown = () => {
@@ -22,14 +27,14 @@ const ProductImages = (props) => {
                 <div className="product-img-slider" id="inner">
                     {productImage.map((img, i) => {
                         return (
-                            <img src={img} className="product-img" key={i} alt="" onClick={() => changeImg(i)} />
+                            <img src={img.file} className="product-img" key={i} alt="" onClick={() => changeImg(i)} />
                         );
                     })}
                 </div>
                 <button onClick={scrollup}>Next</button>
             </div>
             <div className="col-sm-10 img-container">
-                <img src={fullSizedImg} alt="" className="product-full-img" />
+                <img src={fullSizedImg ? fullSizedImg.file : ""} alt="" className="product-full-img" />
             </div>
         </div>
     )

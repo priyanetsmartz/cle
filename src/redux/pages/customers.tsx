@@ -3,7 +3,7 @@ import FORGOTPASS from "../../restApi/ForgotPassApi";
 import ADMINTOKEN from "../../restApi/AdminApi";
 const AdminApi = new ADMINAPI();
 const ForgotPassApi = new FORGOTPASS();
-const adminToken  = new ADMINTOKEN();
+const adminToken = new ADMINTOKEN();
 
 
 export function getCountriesList() {
@@ -34,22 +34,23 @@ export function updateCustAddress(custId, data) {
     return AdminApi.request(`rest/V1/customers/${custId}`, data, "POST", "");
 }
 
-export function getPreference(custId) {
+export function getPreference() {
+    const custId = localStorage.getItem('cust_id');
     return AdminApi.request(`rest/V1/customer/attributes?id=${custId}`, "", "GET", "");
 }
 
-export function getCustomerOrders(custId) {
-    custId = 114; //remove that 
-    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
+export function getCustomerOrders() {
+    const localToken = localStorage.getItem('cust_id');
+    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${localToken}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
 }
 
-export function getCustomerOrdersByDate(custId, date) {
-    custId = 114; //remove that 
-    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]=${date}&searchCriteria[filterGroups][0][filters][0][conditionType]=gteq`, "", "GET", "");
+export function getCustomerOrdersByDate(date) {
+    const localToken = localStorage.getItem('cust_id');
+    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${localToken}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]=${date}&searchCriteria[filterGroups][0][filters][0][conditionType]=gteq`, "", "GET", "");
 }
 
-export function sortCustomerOrders(custId, sort) {
-    custId = 114; //remove that 
+export function sortCustomerOrders(sort) {
+    const custId = localStorage.getItem('cust_id');
     const pageSize = 10;
     return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=${sort}`, "", "GET", "");
 }
@@ -58,8 +59,8 @@ export function searchOrders(orderId) {
     return AdminApi.request(`rest/V1/orders/${orderId}`, "", "GET", "");
 }
 
-export function getWishList(custId) {
-    custId = 114; //remove that 
+export function getWishList() {
+    const custId = localStorage.getItem('cust_id');
     return AdminApi.request(`rest/V1/wishlist/items?customerId=${custId}`, "", "GET", "");
 }
 
@@ -73,8 +74,8 @@ export function removeItemFromWishList(custId, wishlist_item_id) {
 }
 
 export function wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchName) {
-    custId = 114; //remove that
-    return AdminApi.request(`rest/V1/wishlist/items?customerId=${custId}&page_size=${pageSize}&soryByValue=${sortOrder}&sortBy=${sortBy}&name=${searchName}`, "", "GET", "");
+    const localToken = localStorage.getItem('cust_id');
+    return AdminApi.request(`rest/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&soryByValue=${sortOrder}&sortBy=${sortBy}&name=${searchName}`, "", "GET", "");
 }
 
 

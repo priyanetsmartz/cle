@@ -219,7 +219,7 @@ function MyProfile(props) {
 
     //for attributes
     const getAttributes = async () => {
-        let result: any = await getPreference(custId);
+        let result: any = await getPreference();
         setAttributes(result.data[0]);
     }
 
