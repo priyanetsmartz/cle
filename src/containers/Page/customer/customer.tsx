@@ -22,6 +22,7 @@ import supportIcon from '../../../image/my_support.svg';
 import { Link } from "react-router-dom";
 
 function Customer(props) {
+    const [name, setName] = useState(localStorage.getItem('token_name'));
     const history = useHistory();
     const key = props.match.params.tab;
     const [activeTab, setActiveTab] = useState('');
@@ -43,21 +44,6 @@ function Customer(props) {
 
     return (
         <>
-            <section>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <nav aria-label="breadcrumb">
-                                <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="#">Home</Link></li>
-                                    <li className="breadcrumb-item"><Link to="#">My Account</Link></li>
-                                    <li className="breadcrumb-item"><Link to="#">My Orders and Returns</Link></li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </section>
             <section className="mt-5">
                 <div className="container">
                     <div className="row">
@@ -65,7 +51,7 @@ function Customer(props) {
                             <div className="pro_categry_sidebar">
                                 <div className="my-userdetails">
                                     <div className="user_show"><IntlMessages id="customer.hi" /></div>
-                                    <div className="user_name">Ann Smith</div>
+                                    <div className="user_name">{name}</div>
                                 </div>
                                 <div className="mobile_sidebar">
                                     <select className="form-select" aria-label="Default select example" onChange={changeMobTab}>
@@ -87,9 +73,9 @@ function Customer(props) {
                                         <li className={activeTab === 'orders-and-returns' ? 'active' : ''}><Link to="#" onClick={() => changeTab('orders-and-returns')}>
                                             <img src={ordersIcon} alt="" className="img-fluid" /> <span
                                                 className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span></Link></li>
-                                        <li className={activeTab === 'mytrades' ? 'active' : ''}><Link to="#" onClick={() => changeTab('mytrades')}>
+                                        {/* <li className={activeTab === 'mytrades' ? 'active' : ''}><Link to="#" onClick={() => changeTab('mytrades')}>
                                             <img src={tradeIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                                <IntlMessages id="customer.myTrades" /></span></Link></li>
+                                                <IntlMessages id="customer.myTrades" /></span></Link></li> */}
                                         <li className={activeTab === 'rewards' ? 'active' : ''}><Link to="#" onClick={() => changeTab('rewards')}>
                                             <img src={rewardIcon} alt="" className="img-fluid" /> <span className="pl-2">
                                                 <IntlMessages id="customer.myReward" /></span></Link></li>
@@ -109,13 +95,13 @@ function Customer(props) {
                                 </div>
                             </div>
                         </div>
-                        {activeTab === 'dashboard' ? <Dashboard /> :
-                            activeTab === 'orders-and-returns' ? <OrdersAndReturns /> :
-                                activeTab === 'mytrades' ? <MyTrades /> :
-                                    activeTab === 'profile' ? <MyProfile /> :
-                                        activeTab === 'wish-list' ? <MyWishList /> :
-                                            activeTab === 'rewards' ? <MyRewards /> :
-                                                activeTab === 'notifications' ? <MyNotifications /> : <MySupport />}
+                        {activeTab == 'dashboard' ? <Dashboard /> :
+                            activeTab == 'orders-and-returns' ? <OrdersAndReturns /> :
+                                // activeTab == 'mytrades' ? <MyTrades /> :
+                                    activeTab == 'profile' ? <MyProfile /> :
+                                        activeTab == 'wish-list' ? <MyWishList /> :
+                                            activeTab == 'rewards' ? <MyRewards /> :
+                                                activeTab == 'notifications' ? <MyNotifications /> : <MySupport />}
 
                     </div>
                 </div>

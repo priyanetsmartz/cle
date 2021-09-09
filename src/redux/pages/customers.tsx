@@ -15,7 +15,11 @@ export function getCustomerDetails(custId) {
 }
 
 export function saveCustomerDetails(custId, data) {
-    return AdminApi.request(`default/rest/all/V1/customers/${custId}`, data, "PUT", "");
+    return adminToken.request(`default/rest/all/V1/customers/${custId}`, data, "PUT", "");
+}
+
+export function deleteAddress(addressId) {
+    return adminToken.request(`rest/all/V1/addresses/${addressId}`, "", "DELETE", "");
 }
 
 export function updateCustEmail(data) {
@@ -28,10 +32,6 @@ export function changePassword(data) {
 
 export function updateCustAddress(custId, data) {
     return AdminApi.request(`rest/V1/customers/${custId}`, data, "POST", "");
-}
-
-export function deleteAddress(addressId) {
-    return AdminApi.request(`rest/all/V1/addresses/${addressId}`, "", "DELETE", "");
 }
 
 export function getPreference() {

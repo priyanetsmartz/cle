@@ -13,6 +13,8 @@ import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import IntlMessages from "../../components/utility/intlMessages";
+import { AppBreadcrumbs } from "./breadCrumbs";
+
 const { logout } = authAction;
 const { showSignin, openSignUp } = appAction;
 function HeaderMenu(props) {
@@ -27,6 +29,8 @@ function HeaderMenu(props) {
     const [showAccount, SetShowAccount] = useState(false)
     const [cartItemsVal, setCartItems] = useState([{ id: '', item_id: 0, extension_attributes: { item_image: "" }, name: '', price: 0, quantity: 0, desc: '', qty: 0, sku: '' }]);
     const [cartTotal, setCartTotal] = useState(0);
+
+    // const [breadCrumbs, setBreadCrumbs] = useState(location.pathname.split('/'));
 
     useEffect(() => {
         async function fetchMyAPI() {
@@ -176,12 +180,12 @@ function HeaderMenu(props) {
                                         <div className="myaccount_details" style={{ "display": !showAccount ? "none" : "block" }}>
                                             <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
                                             <ul>
-                                                <li><Link to="/myaccount">Your Account</Link></li>
-                                                <li><Link to="#">Dashboard </Link></li>
-                                                <li><Link to="#">My orders & returns</Link></li>
-                                                <li><Link to="#">My trades </Link></li>
-                                                <li><Link to="#">My profile </Link></li>
-                                                <li><Link to="#">My support</Link> </li>
+                                                <li><Link to="/customer/dashboard">Your Account</Link></li>
+                                                <li><Link to="/customer/dashboard">Dashboard </Link></li>
+                                                <li><Link to="/customer/orders-and-returns">My orders & returns</Link></li>
+                                                {/* <li><Link to="/customer/mytrades">My trades </Link></li> */}
+                                                <li><Link to="/customer/profile">My profile </Link></li>
+                                                <li><Link to="/customer/support">My support</Link> </li>
                                             </ul>
                                             <div className="d-grid">
                                                 {
@@ -282,6 +286,30 @@ function HeaderMenu(props) {
 
 
             </header>
+
+            <section>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <nav aria-label="breadcrumb">
+                            <AppBreadcrumbs/>
+                                {/* <ol className="breadcrumb"> */}
+                                    {/* <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+
+                                    <li className="breadcrumb-item"><a href="#">My Account</a></li>
+                                    <li className="breadcrumb-item"><a href="#">My Orders and Returns</a></li> */}
+                                    {/* {breadCrumbs.map(item => {
+                                        return ( item == '' ? null :
+                                            <li className="breadcrumb-item" key={item}><Link to={item}>{item}</Link></li>
+                                            
+                                        );
+                                    })} */}
+                                {/* </ol> */}
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </>
     )
 }
