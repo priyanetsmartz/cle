@@ -40,8 +40,8 @@ export function getPreference() {
 }
 
 export function getCustomerOrders() {
-    const localToken = localStorage.getItem('cust_id');
-    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${localToken}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
+    const localToken = 114;
+    return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${localToken}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
 }
 
 export function getCustomerOrdersByDate(date) {
@@ -50,13 +50,13 @@ export function getCustomerOrdersByDate(date) {
 }
 
 export function sortCustomerOrders(sort) {
-    const custId = localStorage.getItem('cust_id');
+    const custId = 114;
     const pageSize = 10;
-    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=${sort}`, "", "GET", "");
+    return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=${sort}`, "", "GET", "");
 }
 
 export function searchOrders(orderId) {
-    return AdminApi.request(`rest/V1/orders/${orderId}`, "", "GET", "");
+    return adminToken.request(`rest/V1/orders/${orderId}`, "", "GET", "");
 }
 
 export function getWishList() {
@@ -78,4 +78,10 @@ export function wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchNa
     return AdminApi.request(`rest/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&soryByValue=${sortOrder}&sortBy=${sortBy}&name=${searchName}`, "", "GET", "");
 }
 
+//apis for the home page
+export function getHomePageProducts() {
+    const storeId = 2;
+    const customerId = 114;
+    return adminToken.request(`rest/all/V1/product/newin?storeId=${storeId}&customerId=${customerId}`, "", "GET", "");
+}
 

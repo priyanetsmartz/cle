@@ -24,6 +24,7 @@ import MyAccount from './containers/Page/customer/myAccount';
 // import CustomerOrders from './containers/Page/customer/customerOrders';
 // import OrdersAndReturns from './containers/Page/customer/ordersAndReturns';
 import Customer from './containers/Page/customer/customer';
+import HomePage from './containers/Page/home/home';
 import OrderDetails from './containers/Page/customer/orderDetails';
 import WishList from './containers/Page/customer/wishList';
 import Categories from './containers/Page/categories/categories';
@@ -42,6 +43,7 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
         <ProductRoutes exact path="/products/:category" component={Categories} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
+        <PrivateRoute exact path="/home" component={HomePage} />
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />
