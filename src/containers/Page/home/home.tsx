@@ -12,6 +12,7 @@ import NewIn from './newIn';
 import PreCategories from './preCategories';
 import WeChooseForYou from './weChooseForYou';
 import Welcome from './welcome';
+import Magazine from './magazine';
 
 
 function HomePage(props) {
@@ -79,6 +80,9 @@ function HomePage(props) {
                                 <div className="section">
                                     <BestSeller bestSellers={products.bestSellers}/>
                                 </div>
+                                <div className="section">
+                                    <Magazine/>
+                                </div>
                             </div>
                         )
                     }}
@@ -109,6 +113,9 @@ function HomePage(props) {
                     </div>
                     <div className="section">
                         <BestSeller bestSellers={products.bestSellers}/>
+                    </div>
+                    <div className="section">
+                        <Magazine/>
                     </div>
                 </div>
             </MobileView>

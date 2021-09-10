@@ -6,7 +6,7 @@ import CategoryBanner from './banner';
 import PriveExclusive from './priveExclusive';
 import LatestProducts from './latestProducts';
 import BrandedProducts from './brandedProducts';
-import Magazine from './Magazine';
+import Magazine from '../home/magazine';
 import NewIn from './newIn';
 import NewInDescription from './newInDescription';
 
@@ -16,6 +16,7 @@ function Categories(props) {
         <main>
             <ReactFullpage
                 //fullpage options
+                licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'
                 scrollingSpeed={1200} /* Options here */
 
                 render={({ state, fullpageApi }) => {

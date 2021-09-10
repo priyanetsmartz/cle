@@ -15,7 +15,7 @@ import Promotion from '../../../partials/promotion';
 import { getProductDetails, getProductExtras } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
-import Magazine from '../../categories/Magazine';
+import Magazine from '../../home/magazine';
 import product from '../product';
 function ProductDetails(props) {
     const { sku } = useParams();

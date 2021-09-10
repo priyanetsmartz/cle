@@ -3130,3 +3130,48 @@ span.maindatory {
 .whishlist-section span {
     cursor: pointer;
 }
+
+/* DC css */
+
+.DC-top-banner img{width:100%;}
+.DC-top-banner .DC-top-ban-inner{position:absolute; width:325px; margin:auto; left:100px; top:0; bottom:0;height: max-content;}
+.DC-top-banner .DC-top-ban-inner a.ban-btn{font-size: 12px; line-height: 16px;font-weight:500;font-family: 'Monument Extended';padding:10px;border:1px solid #fff; color:#fff; text-decoration:none;}
+.DC-top-banner .DC-top-ban-inner h2{font-size: 36px; line-height: 46px; color:#fff;margin-bottom:25px;font-family: 'Monument Extended';}
+.DC-top-banner .DC-top-ban-inner p{font-size: 18px; line-height: 27px; color:#fff;font-weight:500;margin-bottom:25px;}
+.new-breadcrumb .breadcrumb{margin:30px 0;}
+.new-breadcrumb .breadcrumb .breadcrumb-item{font-size: 16px; line-height: 17px;color:#777;}
+.new-breadcrumb .breadcrumb .breadcrumb-item a{font-size: 16px; line-height: 17px;color:#777;}
+
+.DC-section-title{font-size: 36px; line-height: 46px;margin-bottom:30px; text-align:center;font-family: 'Monument Extended';}
+.DC-carousel .carousel-item.active .product-dummy img{width:100%;}
+.product-details-new{text-align:center;}
+.product-details-new img{width:100%;}
+.product-details-new h4{font-size: 16px; line-height: 24px;font-weight:bold;}
+.product-details-new p{font-size: 16px; line-height: 24px;}
+.product-details-new .pro-price-btn{margin-top:20px;font-size: 14px; line-height: 18px;font-weight:500;font-family: 'Monument Extended';color:#017abb;width: 250px;text-align: center;margin: 20px auto 0;}
+.product-details-new .pro-price-btn a{background:#017abb; padding:6px 10px; color:#fff; text-decoration:none;margin-left: 10px; display:none;}
+.product-details-new:hover .pro-price-btn a{display:inline-block;}
+
+.exclusive-tab{margin-top:60px;}
+.D-brand-highlight{width:100%;position:relative;height:536px; overflow:hidden;}
+.D-brand-highlight img{width:100%; position:relative; height:max-content; top:0; bottom:0;right:0;left:0;margin:auto;}
+.D-brand-highlight .D-brand-Name{position:absolute; width:60%; height:max-content;top:0; bottom:0;right:0;left:0;margin:auto; background:#fff; color:#2E2BAA; padding:10px 15px;font-size: 20px; line-height: 25px;font-weight:500;font-family: 'Monument Extended';text-align: center;}
+.D-brand-highlight:hover .D-brand-Name{background:#2E2BAA; color:#fff;}
+
+.exclusive-tab ul.nav .nav-item .nav-link{border:none; font-size: 24px; line-height: 30px; color:#000;font-family: 'Monument Extended'; padding: 0 0 7px;margin: 0 10px 10px;}
+.exclusive-tab ul.nav .nav-item .nav-link.active{border:none; font-size: 24px; line-height: 30px; color:#2E2BAA;font-family: 'Monument Extended';font-weight:500;border-bottom:1px solid #2E2BAA;}
+.exclusive-tab ul.nav .nav-item .nav-link:hover{border:none; font-size: 24px; line-height: 30px; color:#2E2BAA;font-family: 'Monument Extended';font-weight:500;border-bottom:1px solid #2E2BAA;}
+.explore-alphabets {margin:20px auto; text-align:center;}
+.explore-alphabets a{font-size: 20px; line-height: 24px; color:#000;font-family: 'Monument Extended';font-weight:500;margin:0 8px;text-transform: uppercase;text-decoration: none;}
+
+.alphabet-list{list-style-type:none;margin:20px 0;padding:0;}
+.alphabet-list li{list-style-type:none;margin:0 0 10px;padding:0;}
+.alphabet-list a.alpha-list-title{font-size: 20px; line-height: 24px; color:#2E2BAA;font-family: 'Monument Extended';font-weight:500;text-transform: uppercase;text-decoration: none;}
+.alphabet-list a{font-size: 20px; line-height: 24px; color:#000;font-weight:500;text-decoration: none;}
+.alphabet-list a.alpha-viewALL{font-size: 16px; line-height: 20px; color:#2E2BAA;font-family: 'Monument Extended';text-decoration: none;}
+.view-all-btn {display: block; background: #2e2baa;  height: 79%;    margin: 20px 0;position:relative;}
+.view-all-btn a{position:absolute;bottom:20px;left:20px;color: #fff; text-decoration: none; text-align: center;font-size: 22px; line-height: 24px;font-family: 'Monument Extended';text-decoration: none;font-weight:500;}
+.cle-designer-desc{font-size: 16px; line-height: 24px; color:#000;}
+.cle-designer-info {
+    margin-top: 80px;
+}

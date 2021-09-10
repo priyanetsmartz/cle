@@ -85,3 +85,8 @@ export function getHomePageProducts() {
     return adminToken.request(`rest/all/V1/product/newin?storeId=${storeId}&customerId=${customerId}`, "", "GET", "");
 }
 
+export function getContent(language: string, indentifier) {
+    var storeId = language === 'english' ? 3 : 2;
+    return adminToken.request(`rest/V1/cmsBlock/search?searchCriteria[filterGroups][0][filters][0][field]=store_id&searchCriteria[filterGroups][0][filters][0][value]=${storeId}&searchCriteria[filterGroups][0][filters][0][condition_type]==&searchCriteria[filterGroups][1][filters][0][field]=identifier&searchCriteria[filterGroups][1][filters][0][value]=${indentifier}&searchCriteria[filterGroups][1][filters][0][condition_type]==`, "", "GET", "");
+}
+
