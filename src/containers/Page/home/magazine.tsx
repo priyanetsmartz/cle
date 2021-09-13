@@ -1,12 +1,28 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { getCookie } from "../../../helpers/session";
+import { MagazineList } from '../../../redux/pages/magazineList';
+import IntlMessages from "../../../components/utility/intlMessages";
+import { Link } from "react-router-dom";
 
 
 function Magazine(props) {
 
+    const [items, setItems] = useState([]);
+    const language = getCookie('currentLanguage');
     useEffect(() => {
-    }, []);
+        async function getData() {
+            let lang = props.languages ? props.languages : language;
+            let result: any = await MagazineList(lang);
+            setItems(result.data.slice(0, 2));
+        }
+        getData()
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
+    }, [props.languages])
 
 
     return (
@@ -16,42 +32,22 @@ function Magazine(props) {
                     <div className="magazine_article ">
                         <h1 className="mb-4">Magazine</h1>
                         <div className="row">
-                            <div className="col-sm-6">
-                                <div className="magzine_blog">
-                                    <div className="blog_img">
-                                        <img src="images/blog_1.jpg" alt="" className="img-fluid" />
+                            {items.map(item => {
+                                return (
+                                    <div className="col-sm-6">
+                                        <div className="magzine_blog">
+                                            <div className="blog_img">
+                                                <img src={item.post_thumbnail} alt="" className="img-fluid" />
+                                            </div>
+                                            <h3 className="text">{item.title}</h3>
+                                            <p className="text">{item.short_content}
+                                            </p>
+                                            <Link to={"/magazine/" + item.post_id} className="btn btn-secondary"><IntlMessages id="magazine.read_more" /></Link>
+                                        </div>
                                     </div>
-                                    <h3 className="text">Preppy style: how to wear the trend in 2021</h3>
-                                    <p className="text">This season’s runways were packed with preppy references, from V-neck
-                                        knitted sweaters
-                                        to socks with loafers. But what is preppy style and how do you cremplement your look,
-                                        jewellery is a
-                                        tremplement your look, jewellery is a tremplement your look, jewellery is a tremplement
-                                        your look,
-                                        jewellery is a tremplement your look, jewellery is a tremplement your look, jewellery is
-                                        a
-                                        tremplement your look, jewellery is a tremplement your look, jewellery is a treate a...
-                                    </p>
-                                    <button type="button" className="btn btn-secondary"> Read more</button>
-                                </div>
-                            </div>
+                                )
+                            })}
 
-                            <div className="col-sm-6">
-                                <div className="magzine_blog">
-                                    <div className="blog_img">
-                                        <img src="images/blog_1.jpg" alt="" className="img-fluid" />
-                                    </div>
-                                    <h3 className="text">Introducing... The Jewellery Guide</h3>
-                                    <p className="text">Adding the final touch to complement your look, jewellery is a treasured
-                                        accesmplement
-                                        your look, jewellery is a tremplement your look, jewellery is a tremplement your look,
-                                        jewellery is
-                                        a tremplement your look, jewellery is a tremplement your look, jewellery is a tresory
-                                        that varies
-                                        from the everyday to the collectible. Whether you are sourcing a logo...</p>
-                                    <button type="button" className="btn btn-secondary"> Read more</button>
-                                </div>
-                            </div>
 
                         </div>
                     </div>

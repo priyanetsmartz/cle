@@ -4,14 +4,11 @@ import { connect } from 'react-redux';
 import { BrowserView, MobileView } from 'react-device-detect';
 import ReactFullpage from '@fullpage/react-fullpage';
 import { getHomePageProducts } from '../../../redux/pages/customers';
+import HtmlContent from '../../partials/htmlContent';
 import Personal from './personal';
 import BestSeller from './bestSeller';
-import Designer from './designer';
-import DiscoverCategories from './discoverCategories';
 import NewIn from './newIn';
-import PreCategories from './preCategories';
 import WeChooseForYou from './weChooseForYou';
-import Welcome from './welcome';
 import Magazine from './magazine';
 
 
@@ -34,9 +31,9 @@ function HomePage(props) {
     }
 
 
-    const onLeave = () => {}
+    const onLeave = () => { }
 
-    const afterLoad = () => {}
+    const afterLoad = () => { }
 
     return (
         <>
@@ -57,31 +54,31 @@ function HomePage(props) {
                         return (
                             <div className="sectiosn" >
                                 <div className="section">
-                                    <Welcome />
+                                    <HtmlContent identifier="home_page_banner" />
                                 </div>
                                 <div className="section" >
                                     <Personal />
                                 </div>
                                 <div className="section" >
-                                    <DiscoverCategories />
+                                    <HtmlContent identifier="home_page_discover_categories" />
                                 </div>
                                 <div className="section" >
-                                    <NewIn newInProducts={products.newInProducts}/>
+                                    <NewIn newInProducts={products.newInProducts} />
                                 </div>
                                 <div className="section" >
-                                    <WeChooseForYou customerProducts={products.customerProducts}/>
+                                    <WeChooseForYou customerProducts={products.customerProducts} />
                                 </div>
                                 <div className="section" >
-                                    <PreCategories />
+                                    <HtmlContent identifier="home_page_pre-owned_category" />
                                 </div>
                                 <div className="section">
-                                    <Designer />
+                                    <HtmlContent identifier="home_page_brown_london_section" />
                                 </div>
                                 <div className="section">
-                                    <BestSeller bestSellers={products.bestSellers}/>
+                                    <BestSeller bestSellers={products.bestSellers} />
                                 </div>
                                 <div className="section">
-                                    <Magazine/>
+                                    <Magazine />
                                 </div>
                             </div>
                         )
@@ -91,31 +88,31 @@ function HomePage(props) {
             <MobileView>
                 <div className="sectiosn" >
                     <div className="section">
-                        <Welcome />
+                        <HtmlContent identifier="home_page_banner" />
                     </div>
                     <div className="section" >
                         <Personal />
                     </div>
                     <div className="section" >
-                        <DiscoverCategories />
+                        <HtmlContent identifier="home_page_discover_categories" />
                     </div>
                     <div className="section" >
-                        <NewIn newInProducts={products.newInProducts}/>
+                        <NewIn newInProducts={products.newInProducts} />
                     </div>
                     <div className="section" >
-                        <WeChooseForYou customerProducts={products.customerProducts}/>
+                        <WeChooseForYou customerProducts={products.customerProducts} />
                     </div>
                     <div className="section" >
-                        <PreCategories />
+                        <HtmlContent identifier="home_page_pre-owned_category" />
                     </div>
                     <div className="section">
-                        <Designer />
+                        <HtmlContent identifier="home_page_brown_london_section" />
                     </div>
                     <div className="section">
-                        <BestSeller bestSellers={products.bestSellers}/>
+                        <BestSeller bestSellers={products.bestSellers} />
                     </div>
                     <div className="section">
-                        <Magazine/>
+                        <Magazine />
                     </div>
                 </div>
             </MobileView>

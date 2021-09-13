@@ -1,51 +1,86 @@
 import { useState } from 'react';
-import { connect } from 'react-redux'
-import cartAction from "../../../redux/cart/productAction";
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { BrowserView, MobileView } from 'react-device-detect';
 import ReactFullpage from '@fullpage/react-fullpage';
+import { getHomePageProducts } from '../../../redux/pages/customers';
+import HtmlContent from '../../partials/htmlContent';
+import Magazine from '../home/magazine';
+import PriveExclusive from '../categories/priveExclusive';
+
 
 function DesignerCategories(props) {
 
+    const onLeave = () => { }
+
+    const afterLoad = () => { }
+
     return (
-        <h3>Designer Categories!</h3>
-        // <main>
-        //     <ReactFullpage
-        //         //fullpage options
-        //         licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'
-        //         scrollingSpeed={1200} /* Options here */
+        <>
+            <BrowserView>
+                <ReactFullpage
+                    licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'
+                    //fullpage options
+                    // anchors={anchors}
+                    scrollingSpeed={500} /* Options here */
+                    onLeave={onLeave}
+                    afterLoad={afterLoad}
 
-        //         render={({ state, fullpageApi }) => {
-        //             return (
-        //                 <ReactFullpage.Wrapper>
-        //                     <div className="section">
-        //                         <CategoryBanner />
-        //                     </div>
-        //                     <div className="section">
-        //                         <PriveExclusive />
-        //                     </div>
-        //                     <div className="section">
-        //                         <LatestProducts />
-        //                     </div>
-        //                     <div className="section">
-        //                         <BrandedProducts />
-        //                     </div>
-        //                     <div className="section">
-        //                         <Magazine />
-        //                     </div>
-        //                     <div className="section">
-        //                         <NewIn />
-        //                     </div>
-        //                     <div className="section">
-        //                         <NewInDescription />
-        //                     </div>
-
-        //                 </ReactFullpage.Wrapper>
-        //             );
-        //         }}
-        //     />
-        // </main>
+                    className="sectiosn"
+                    sectionClassName='section'
+                    //normalScrollElements='.checkus-out'
+                    scrollBar="true"
+                    render={({ state, fullpageApi }) => {
+                        return (
+                            <div className="sectiosn" >
+                                <div className="section">
+                                    <HtmlContent identifier="design_category_banner_image" />
+                                </div>
+                                <div className="section" >
+                                    <PriveExclusive />
+                                </div>
+                                <div className="section" >
+                                    <HtmlContent identifier="design_category_popular_designers" />
+                                </div>
+                                <div className="section" >
+                                    <HtmlContent identifier="design_category_explore_designers" />
+                                </div>
+                                <div className="section">
+                                    <Magazine />
+                                </div>
+                                <div className="section" >
+                                    <HtmlContent identifier="design_category_cle_designers" />
+                                </div>
+                            </div>
+                        )
+                    }}
+                />
+            </BrowserView>
+            <MobileView>
+                <div className="sectiosn" >
+                    <div className="section">
+                        <HtmlContent identifier="design_category_banner_image" />
+                    </div>
+                    <div className="section" >
+                        <PriveExclusive />
+                    </div>
+                    <div className="section" >
+                        <HtmlContent identifier="home_page_discover_categories" />
+                    </div>
+                    <div className="section" >
+                        <HtmlContent identifier="design_category_explore_designers" />
+                    </div>
+                    <div className="section">
+                        <Magazine />
+                    </div>
+                    <div className="section" >
+                        <HtmlContent identifier="design_category_cle_designers" />
+                    </div>
+                </div>
+            </MobileView>
+        </>
     )
 }
-
 const mapStateToProps = (state) => {
     return {
         items: state.Cart.items

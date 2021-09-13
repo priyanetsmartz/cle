@@ -25,6 +25,7 @@ import OrderDetails from './containers/Page/customer/orderDetails';
 import Categories from './containers/Page/categories/categories';
 import ProductDetails from './containers/Page/product/product-details/productDetails';
 import VendorLogin from './containers/Page/business/vendorLogin';
+import DesignerCategories from './containers/Page/designer/designer';
 // import New from './containers/Page/new';
 
 import Product from './containers/Page/product/product';
@@ -39,6 +40,7 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />        
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
         <PrivateRoute exact path="/home" component={HomePage} />
+        <PrivateRoute exact path="/designer-categories" component={DesignerCategories} />
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />
