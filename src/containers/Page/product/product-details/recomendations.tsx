@@ -9,7 +9,7 @@ const Recommendations = (props) => {
     // console.log(recomendedProducts)
     useEffect(() => {
         setRecomendedProducts(props.recomendationsData)
-        //    console.log(typeof (recomendedProducts))
+        console.log(recomendedProducts)
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
@@ -39,11 +39,14 @@ const Recommendations = (props) => {
 
                                 {recomendedProducts.slice(0, 8).map((product) => {
                                     return (
-                                        <Link key={product.id} to={'/product-details/' + product.sku}><div className="productcalr" >
-                                            <div className="product_img" ><img src={product.img} className="image-fluid" alt={product.name} /> </div>
-                                            <div className="product_name"> {product.name} </div>
-                                            <div className="product_price"> ${formatprice(product.price)}</div>
-                                        </div>
+                                        <Link key={product.id} to={'/product-details/' + product.sku}>
+                                            <div className="productcalr" >
+                                                <div className="product_img" style={{
+                                                    "width": "180px", "height": "192px"
+                                                }} ><img src={product.img} className="image-fluid" style={{ "width": "100%" }} alt={product.name} /> </div>
+                                                <div className="product_name"> {product.name} </div>
+                                                <div className="product_price"> ${formatprice(product.price)}</div>
+                                            </div>
                                         </Link>
                                     )
                                 })}

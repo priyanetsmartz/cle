@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import SizeGuide from './sizeGuide';
+import cartAction from "../../../../redux/cart/productAction";
 import MeasuringGuide from './measuringGuide';
 import Recomendations from './recomendations';
 import ProductsMagazine from './magazine';
@@ -12,22 +13,31 @@ import ProductImages from './productImges';
 import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
 import Promotion from '../../../partials/promotion';
-import { getProductDetails, getProductExtras } from '../../../../redux/cart/productApi';
+import { addToCartApi, getProductDetails, getProductExtras } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import Magazine from '../../categories/Magazine';
 import product from '../product';
+import notification from '../../../../components/notification';
+const { addToCart, addToCartTask } = cartAction;
+
 function ProductDetails(props) {
     const { sku } = useParams();
     const [shareUrl, setShareUrl] = useState('');
     const [isPriveuser, setIsPriveUser] = useState(false);
     const [isShare, setIsLoaded] = useState(false);
     const [productImages, setProductImages] = useState([]);
-    const [productDetails, setproductDetails] = useState({ name: "", price: 0, extension_attributes: { stock_item: { qty: 1, is_in_stock: true } }, description: "", saleprice: 0, short_description: "", shipping_and_returns: "" });
+    const [productDetails, setproductDetails] = useState({ id: 0, name: "", sku: "", type_id: "", price: 0, is_in_stock: false, description: "", saleprice: 0, short_description: "", shipping_and_returns: "" });
     const [sizeGuideModal, setSizeGuideModal] = useState(false);
     const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
     const [magezineData, setMagezineData] = useState({});
     const [recomendationsData, setRecomendations] = useState({});
+    const [configurableOptions, setConfigurableOptions] = useState([]);
+    const [slectedAttribute, setSlectedAttribute] = useState({
+        options: {}
+    });
+    const [extensionAttributes, setExtensionAttributes] = useState([]);
+    const [quantity, setQuantity] = useState(1);
     useEffect(() => {
         getProductDetailsFxn();
         setShareUrl(window.location.href);
@@ -36,11 +46,22 @@ function ProductDetails(props) {
             // Anything in here is fired on component unmount.
         }
     }, [])
+
     const handleClick = () => {
         setIsLoaded(true);
     }
     const hideModal = () => {
         setIsLoaded(false);
+    }
+    const handleChange = (event) => {
+        let option = {};
+        var index = event.target.selectedIndex;
+        let optionElement = event.target.childNodes[index]
+        let optionVal = optionElement.getAttribute('data-attribute');
+
+        option['option_id'] = optionVal;
+        option['option_value'] = event.target.value;
+        setSlectedAttribute({ options: option });
     }
     useEffect(() => {
         //  console.log(props.items.Cart);
@@ -54,11 +75,12 @@ function ProductDetails(props) {
     async function getProductDetailsFxn() {
         let result: any = await getProductDetails(sku);
         let productExtras: any = await getProductExtras(result.data.id);
-        //  console.log(productExtras.data[0].posts)
+        // console.log(result.data)
         setMagezineData(productExtras.data[0].posts)
         setRecomendations(productExtras.data[0].recommendation)
         //   console.log(recomendationsData)
         let description = "", special_price: 0, short, shipping_and_returns: "";
+
         result.data.custom_attributes.map((attributes) => {
             if (attributes.attribute_code === "description") {
                 description = attributes.value;
@@ -75,10 +97,62 @@ function ProductDetails(props) {
 
         })
         setProductImages(result.data.media_gallery_entries)
-        setproductDetails({ ...productDetails, name: result.data.name, price: result.data.price, description: description, saleprice: special_price, short_description: short, shipping_and_returns: shipping_and_returns });
+        setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
+        setExtensionAttributes(result.data.extension_attributes.stock_item.qty);
+        setproductDetails({ ...productDetails, id: result.data.id, type_id: result.data.type_id, sku: result.data.sku, name: result.data.name, price: result.data.price, description: description, saleprice: special_price, short_description: short, shipping_and_returns: shipping_and_returns, is_in_stock: result.data.extension_attributes.stock_item.is_in_stock });
+        console.log(extensionAttributes)
 
     }
 
+    function handleCart(id: number, sku: string) {
+        let cartData = {};
+        let cartQuoteId = localStorage.getItem('cartQuoteId');
+        // console.log(slectedAttribute.options)
+        if (productDetails.type_id === 'configurable') {
+            if (!slectedAttribute.options["option_id"]) {
+                notification("error", "", "Please select Size");
+                return false;
+            }
+            cartData = {
+                "cart_item": {
+                    "quote_id": cartQuoteId,
+                    "product_type": "configurable",
+                    "sku": productDetails.sku,
+                    "qty": quantity,
+                    "product_option": {
+                        "extension_attributes": {
+                            "configurable_item_options": [
+                                {
+                                    "option_id": slectedAttribute.options["option_id"],
+                                    "option_value": slectedAttribute.options["option_value"]
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        } else {
+            cartData = {
+                "cartItem": {
+                    "sku": productDetails.sku,
+                    "qty": quantity,
+                    "quote_id": cartQuoteId
+                }
+            }
+        }
+
+        let customer_id = localStorage.getItem('cust_id');
+        if (customer_id) {
+            addToCartApi(cartData, cartQuoteId)
+        }
+        //  props.addToCart(id);
+        props.addToCartTask(true);
+        notification("success", "", "Item added to cart");
+    }
+
+    const handleQuantity = (event) => {
+        setQuantity(event.target.value)
+    }
     return (
         <>
             <main>
@@ -135,25 +209,41 @@ function ProductDetails(props) {
                                             <div className="col-sm-4">
                                                 <div className="form-group">
                                                     <span className="form-label">Quantity:</span>
-                                                    <select className="form-select" aria-label="Default select example">
-                                                        {Array.from(Array(productDetails.extension_attributes.stock_item.qty), (e, i) => {
-                                                            return <option key={i + 1}>{i + 1}</option>
-                                                        })}
+                                                    {(extensionAttributes) ? (
+                                                        <select className="form-select" onChange={handleQuantity} aria-label="Default select example">
+                                                            {Array.from(Array(extensionAttributes).slice(0, 10), (e, i) => {
+                                                                return <option key={i + 1}>{i + 1}</option>
+                                                            })}
 
-                                                    </select>
+                                                        </select>
+                                                    ) : ""}
                                                 </div>
                                             </div>
                                             <div className="col-sm-4">
                                                 <div className="form-group">
-                                                    <span className="form-label">Size:</span>
-                                                    <select className="form-select" aria-label="Default select example">
-                                                        <option value="">One size</option>
+                                                    {(configurableOptions && configurableOptions.length) ? (
+                                                        <div>
+                                                            {
+                                                                configurableOptions.map((data, i) => {
+                                                                    return (
+                                                                        <div key={i}>
+                                                                            <span className="form-label">{data.label} </span>
+                                                                            {(data && data.values) && (
+                                                                                <select className="form-select" onChange={handleChange} aria-label="productattribute">
+                                                                                    <option>----</option>
+                                                                                    {
+                                                                                        data.values.map((val, i) => {
+                                                                                            return <option key={i} data-attribute={data.attribute_id} value={val.value_index} >{val.value_index}</option>
+                                                                                        })}
 
-                                                        {Array.from(Array(productDetails.extension_attributes.stock_item.qty), (e, i) => {
-                                                            return <option key={i}>{i}</option>
-                                                        })}
-
-                                                    </select>
+                                                                                </select>
+                                                                            )}
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                    ) : ""}
                                                 </div>
                                             </div>
                                             <div className="col-sm-4">
@@ -166,8 +256,9 @@ function ProductDetails(props) {
 
                                     <div className="width-100 my-3">
                                         <div className="d-grid">
-                                            {productDetails.extension_attributes.stock_item.is_in_stock === true && (<button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
-                                                Add to Cart</button>
+                                            {productDetails.is_in_stock === true && (
+                                                <button type="button" onClick={() => { handleCart(productDetails.id, productDetails.sku) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                                    Add to Cart</button>
                                             )}
                                         </div>
                                     </div>
@@ -336,11 +427,13 @@ function ProductDetails(props) {
 }
 
 const mapStateToProps = (state) => {
+    console.log(state)
     return {
         items: state
     }
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { addToCart, addToCartTask }
 )(ProductDetails);

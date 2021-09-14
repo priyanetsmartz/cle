@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
-import CLELogo from '../../image/CLIlogo.png'
-import avatar from '../../image/avtar.svg'
-import favorit from '../../image/favrot.svg'
-import cartIcon from '../../image/carticon.svg'
+import CLELogo from '../../image/CLIlogo.png';
+import avatar from '../../image/avtar.svg';
+import favorit from '../../image/favrot.svg';
 import IconZoomIn from '../../image/Icon_zoom_in.svg'
 import { Link, useParams } from "react-router-dom";
 import { menu } from '../../redux/pages/allPages';
 import { useLocation } from "react-router-dom";
-import { getCartItems, getCartTotal } from '../../redux/cart/productApi';
 import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import IntlMessages from "../../components/utility/intlMessages";
 import { AppBreadcrumbs } from "./breadCrumbs";
+import MiniCart from './mini-cart';
 
 const { logout } = authAction;
 const { showSignin, openSignUp } = appAction;
@@ -25,18 +24,12 @@ function HeaderMenu(props) {
     const { category, key_url } = useParams();
     const [menuData, SetMenuData] = useState([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
     const [activeCat, SetActiveCat] = useState('')
-    const [showCart, SetShowCart] = useState(false)
-    const [showAccount, SetShowAccount] = useState(false)
-    const [cartItemsVal, setCartItems] = useState([{ id: '', item_id: 0, extension_attributes: { item_image: "" }, name: '', price: 0, quantity: 0, desc: '', qty: 0, sku: '' }]);
-    const [cartTotal, setCartTotal] = useState(0);
-
-    // const [breadCrumbs, setBreadCrumbs] = useState(location.pathname.split('/'));
+    const [showAccount, SetShowAccount] = useState(false);
 
     useEffect(() => {
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
             var jsonData = result.data[0].parent.child;
-            //console.log(jsonData[0].url_key)
             let catMenu = category ? category : jsonData[0].url_key;
             SetMenuData(jsonData);
             SetActiveCat(catMenu);
@@ -47,58 +40,7 @@ function HeaderMenu(props) {
             // Anything in here is fired on component unmount.
         }
     }, [props.languages, location, category])
-    useEffect(() => {
-        callGetCartItems()
-        return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
-        }
-    }, [])
 
-    const callGetCartItems = async () => {
-        let cartData = [], total = 0;
-
-        if (customer_id) {
-            let cartItems: any = await getCartItems();
-            cartData = cartItems.data.items;
-            let cookieData = localStorage.getItem('cartItems');
-            let cookieArray = JSON.parse(cookieData);
-
-            // get cart total 
-            let cartTotal: any = await getCartTotal();
-            total = cartTotal.data.grand_total;
-            let newCartData = [];
-            if (cookieArray && cookieArray.length > 0) {
-                newCartData = cookieArray.reduce((a, { sku, quantity }) => {
-                    if (sku) {
-                        a.push({ sku, qty: quantity, quote_id: localStorage.getItem('cartQuoteId') });
-                    }
-                    return a;
-                }, []);
-            }
-          //  console.log(newCartData)
-            // let obj = { cartItem: "" };
-            // let cartObject = Object.assign(obj, { cartItem: newCartData });
-            // cartData = [...cookieArray, ...simpleArray]
-
-        } else {
-            const data = localStorage.getItem('cartItems')
-            total = parseInt(localStorage.getItem('cartTotal'));
-            cartData = data ? JSON.parse(data) : [];
-        }
-        // console.log(cartData)
-        setCartItems(cartData)
-        setCartTotal(total);
-
-    }
-    const hideCart = () => {
-        // console.log('close')
-        SetShowCart(false)
-    }
-    const showCartFxn = () => {
-        //console.log('here')
-        SetShowCart(true)
-    }
     const showAccountFxn = () => {
         SetShowAccount(true)
     }
@@ -136,8 +78,8 @@ function HeaderMenu(props) {
                                     {
                                         menuData.map((val, i) => {
                                             return (
-                                                <li key={i}> 
-                                                <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                <li key={i}>
+                                                    <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
                                                         {val.child.map((childMenu, i) => {
                                                             //  console.log(childMenu)
@@ -198,43 +140,7 @@ function HeaderMenu(props) {
 
                                     </li>
                                     <li> <Link to="/wishlist"><img src={favorit} alt="wishlist" /></Link> </li>
-                                    <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">({cartItemsVal.length})</span></Link>
-                                        <div className="miniaccount_details" style={{ "display": !showCart ? "none" : "block" }}>
-                                            <div className="cart_your">Your cart</div>
-                                            <Link to="#" className="cross_icn" onClick={() => { hideCart() }} > <i className="fas fa-times"></i></Link>
-                                            <ul>
-                                                {cartItemsVal.length ?
-                                                    (
-                                                        // <p></p>
-                                                        cartItemsVal.map(item => {
-                                                            return (
-                                                                <li key={item.id}>
-                                                                    <Link to={'product/' + item.sku}><span className="minicartprodt_img"><img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} className="imge-fluid" /></span>
-                                                                        <span className="minicartprodt_name">
-                                                                            <span className="minicart_pname">{item.name}</span>
-                                                                            <span className="minicart_prodt_tag">Manager pattern bag</span>
-                                                                        </span>
-                                                                    </Link>
-                                                                </li>
-                                                            )
-                                                        })
-                                                    ) :
-                                                    "Your cart is empty"
-                                                }
-                                            </ul>
-                                            <div className="minitotl_amnt">
-                                                <div className="minicart_label">Total</div>
-                                                <div className="minicart_amount">${cartTotal}</div>
-                                            </div>
-                                            <div className="width-100">
-                                                <div className="d-grid">
-                                                    <Link to="/my-cart" className="btn btn-secondary" type="button">Cart</Link>
-                                                    <br />
-                                                    <button className="btn btn-secondary" type="button">Checkout</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                    <MiniCart />
                                 </ul>
                             </div>
                         </div>
@@ -244,12 +150,7 @@ function HeaderMenu(props) {
             </div>
 
             <header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2">
-
-
-
                 <nav className="container-xxl flex-wrap flex-md-nowrap " aria-label="Main navigation">
-
-
                     <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
                         aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" className="bi" fill="currentColor"
@@ -258,13 +159,10 @@ function HeaderMenu(props) {
                                 d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
                             </path>
                         </svg>
-
                     </button>
 
                     <div className="navbar-collapse collapse mainmenu-bar" id="bdNavbar">
-
                         <hr className="d-md-none text-white-50" />
-
                         <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
                             <div className="search_input">
                                 <div className="search_top"><img src={IconZoomIn} alt="" className="me-1" />
@@ -292,13 +190,13 @@ function HeaderMenu(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <nav aria-label="breadcrumb">
-                            <AppBreadcrumbs/>
+                                <AppBreadcrumbs />
                                 {/* <ol className="breadcrumb"> */}
-                                    {/* <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                                {/* <li className="breadcrumb-item"><Link to="/">Home</Link></li>
 
                                     <li className="breadcrumb-item"><a href="#">My Account</a></li>
                                     <li className="breadcrumb-item"><a href="#">My Orders and Returns</a></li> */}
-                                    {/* {breadCrumbs.map(item => {
+                                {/* {breadCrumbs.map(item => {
                                         return ( item == '' ? null :
                                             <li className="breadcrumb-item" key={item}><Link to={item}>{item}</Link></li>
                                             

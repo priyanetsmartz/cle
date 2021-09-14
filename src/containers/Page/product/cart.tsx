@@ -121,8 +121,12 @@ function CartItemPage(props) {
                     "quote_id": localStorage.getItem('cartQuoteId')
                 }
             }
+            if (data.qty === 1) {
+                await removeItemFromCart(data.item_id);
 
-            await updateCartItem(data.item_id, cartData);
+            } else {
+                await updateCartItem(data.item_id, cartData);
+            }
             callGetCartItems()
             notification("success", "", "Cart Updated");
         } else {
@@ -168,10 +172,10 @@ function CartItemPage(props) {
                                             <b>Quantity: {item.quantity ? item.quantity : item.qty}</b>
                                         </p>
                                         <div className="add-remove">
-                                            <Link to="#"><i className="material-icons" onClick={() => { handleAddQuantity(item) }}>arrow_drop_up</i></Link>
-                                            <Link to="#"><i className="material-icons" onClick={() => { handleSubtractQuantity(item) }}>arrow_drop_down</i></Link>
+                                            <Link to="#"><i className="material-icons" onClick={() => { handleAddQuantity(item) }}><i className="fa fa-angle-up" aria-hidden="true"></i></i></Link>
+                                            <Link to="#"><i className="material-icons" onClick={() => { handleSubtractQuantity(item) }}><i className="fa fa-angle-down" aria-hidden="true"></i></i></Link>
                                         </div>
-                                        <button className="waves-effect waves-light btn pink remove" onClick={() => { handleRemove(item.id, item.item_id) }}>Remove</button>
+                                        <button className="waves-effect waves-light btn pink remove" onClick={() => { handleRemove(item.id, item.item_id) }}><i className="fa fa-times" aria-hidden="true"></i></button>
                                     </div>
                                 </li>
                             )
@@ -179,10 +183,10 @@ function CartItemPage(props) {
                     ) :
 
                     (
-                        <p>Nothing.</p>
+                        <p>Cart is Empty.</p>
                     )
                 }
-                {cartTotal ? cartTotal : 0}
+                {cartTotal ? cartTotal : ""}
             </div>
         </div>
     )

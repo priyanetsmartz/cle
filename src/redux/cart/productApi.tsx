@@ -27,8 +27,13 @@ export function getWhishlistItemsForUser() {
     return APi.request(`rest/all/V1/customer/wishlistItems?customerId=${localToken}`, "", "GET", "")
 }
 
-export function addToCartApi(cartData) {
-    return APi.request(`rest/V1/carts/mine/items`, cartData, "POST", "")
+export function addToCartApi(cartData, cartQuoteId) {
+    const localToken = localStorage.getItem('cust_id');
+    if (localToken) {
+        return APi.request(`rest/V1/carts/mine/items`, cartData, "POST", "")
+    } else {
+        return APi.request(`rest/V1/guest-carts/${cartQuoteId}​​​​​​/items`, cartData, "POST", "")
+    }
 }
 
 export function getCartItems() {
@@ -150,4 +155,14 @@ export function getProductDetails(sku: string) {
 export function getProductExtras(productId: number) {
     const localToken = localStorage.getItem('cust_id');
     return APi.request(`rest/all/V1/product/recommendation?storeId=3&customerId=${localToken}&productId=${productId}`, "", "GET", "");
+}
+
+export function getGuestCart() {
+    const localToken = localStorage.getItem('cust_id');
+    if (localToken) {
+        return APi.request(`rest/all/V1/carts/mine?customerId=${localToken}`, "", "POST", "")
+    } else {
+        return APi.request(`rest/all/V1/guest-carts`, "", "POST", "");
+    }
+
 }
