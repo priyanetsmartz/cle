@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux'
 
 
-function BrandedProducts(props) {
+function PromotedProducts(props) {
     return (
         <div className="container" style={{ "marginTop": "200px" }}>
-            <h3>Branded Products</h3>
+            <h3>Promoted Products</h3>
         </div>
     )
 }
@@ -18,4 +18,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps
-)(BrandedProducts);
+)(PromotedProducts);

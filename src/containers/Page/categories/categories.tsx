@@ -7,7 +7,7 @@ import { getHomePageProducts } from '../../../redux/pages/customers';
 import HtmlContent from '../../partials/htmlContent';
 import PriveExclusive from './priveExclusive';
 import LatestProducts from './latestProducts';
-import BrandedProducts from './brandedProducts';
+import PromotedProducts from './promotedProducts';
 import Magazine from '../home/magazine';
 import NewIn from './newIn';
 
@@ -64,7 +64,7 @@ function Categories(props) {
                                     <LatestProducts />
                                 </div>
                                 <div className="section" >
-                                    <BrandedProducts />
+                                    <PromotedProducts />
                                 </div>
                                 <div className="section">
                                     <Magazine />
@@ -95,7 +95,7 @@ function Categories(props) {
                         <LatestProducts />
                     </div>
                     <div className="section" >
-                        <BrandedProducts />
+                        <PromotedProducts />
                     </div>
                     <div className="section">
                         <Magazine />
