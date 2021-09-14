@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getContent } from '../../../redux/pages/customers';
+import { getContent } from '../../redux/pages/customers';
 
 
-function CategoryBanner(props) {
+function HtmlContent(props) {
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
 
     useEffect(() => {
@@ -12,8 +12,7 @@ function CategoryBanner(props) {
     }, [props.languages]);
 
     const getData = async () => {
-        let result: any = await getContent(props.languages, 'design_category_banner_image');
-        // console.log(result.data.items[0].content);
+        let result: any = await getContent(props.languages, props.identifier);
         if (result) {
             SetPagesData(result.data.items[0]);
         }
@@ -39,4 +38,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps
-)(CategoryBanner);
+)(HtmlContent);

@@ -81,10 +81,10 @@ function HeaderMenu(props) {
                                                 <li key={i}>
                                                     <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
-                                                        {val.child.map((childMenu, i) => {
+                                                        {val.child.map((childMenu, j) => {
                                                             //  console.log(childMenu)
                                                             return (
-                                                                <li className="nav-item col-6 col-md-auto" key={i}>
+                                                                <li className="nav-item col-6 col-md-auto" key={j}>
                                                                     <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
                                                                 </li>
                                                             );

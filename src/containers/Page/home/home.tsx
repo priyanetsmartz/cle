@@ -5,14 +5,14 @@ import { BrowserView, MobileView } from 'react-device-detect';
 import ReactFullpage from '@fullpage/react-fullpage';
 import { getHomePageProducts } from '../../../redux/pages/customers';
 import HtmlContent from '../../partials/htmlContent';
-import PriveExclusive from './priveExclusive';
-import LatestProducts from './latestProducts';
-import BrandedProducts from './brandedProducts';
-import Magazine from '../home/magazine';
+import Personal from './personal';
+import BestSeller from './bestSeller';
 import NewIn from './newIn';
+import WeChooseForYou from './weChooseForYou';
+import Magazine from './magazine';
 
 
-function Categories(props) {
+function HomePage(props) {
     const [products, setProducts] = useState({
         newInProducts: [],
         customerProducts: [],
@@ -39,7 +39,7 @@ function Categories(props) {
         <>
             <BrowserView>
                 <ReactFullpage
-                    licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'
+                    // licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'
                     //fullpage options
                     // anchors={anchors}
                     scrollingSpeed={500} /* Options here */
@@ -54,29 +54,32 @@ function Categories(props) {
                         return (
                             <div className="sectiosn" >
                                 <div className="section">
-                                    {/* change indentifier */}
                                     <HtmlContent identifier="home_page_banner" />
                                 </div>
                                 <div className="section" >
-                                    <PriveExclusive />
+                                    <Personal />
                                 </div>
                                 <div className="section" >
-                                    <LatestProducts />
+                                    <HtmlContent identifier="home_page_discover_categories" />
                                 </div>
                                 <div className="section" >
-                                    <BrandedProducts />
+                                    <NewIn newInProducts={products.newInProducts} />
+                                </div>
+                                <div className="section" >
+                                    <WeChooseForYou customerProducts={products.customerProducts} />
+                                </div>
+                                <div className="section" >
+                                    <HtmlContent identifier="home_page_pre-owned_category" />
+                                </div>
+                                <div className="section">
+                                    <HtmlContent identifier="home_page_brown_london_section" />
+                                </div>
+                                <div className="section">
+                                    <BestSeller bestSellers={products.bestSellers} />
                                 </div>
                                 <div className="section">
                                     <Magazine />
                                 </div>
-                                <div className="section">
-                                    <NewIn />
-                                </div>
-                                <div className="section">
-                                    {/* change indentifier */}
-                                    <HtmlContent identifier="home_page_banner" />
-                                </div>
-
                             </div>
                         )
                     }}
@@ -85,27 +88,31 @@ function Categories(props) {
             <MobileView>
                 <div className="sectiosn" >
                     <div className="section">
-                        {/* change indentifier */}
                         <HtmlContent identifier="home_page_banner" />
                     </div>
                     <div className="section" >
-                        <PriveExclusive />
+                        <Personal />
                     </div>
                     <div className="section" >
-                        <LatestProducts />
+                        <HtmlContent identifier="home_page_discover_categories" />
                     </div>
                     <div className="section" >
-                        <BrandedProducts />
+                        <NewIn newInProducts={products.newInProducts} />
+                    </div>
+                    <div className="section" >
+                        <WeChooseForYou customerProducts={products.customerProducts} />
+                    </div>
+                    <div className="section" >
+                        <HtmlContent identifier="home_page_pre-owned_category" />
+                    </div>
+                    <div className="section">
+                        <HtmlContent identifier="home_page_brown_london_section" />
+                    </div>
+                    <div className="section">
+                        <BestSeller bestSellers={products.bestSellers} />
                     </div>
                     <div className="section">
                         <Magazine />
-                    </div>
-                    <div className="section">
-                        <NewIn />
-                    </div>
-                    <div className="section">
-                        {/* change indentifier */}
-                        <HtmlContent identifier="home_page_banner" />
                     </div>
                 </div>
             </MobileView>
@@ -120,4 +127,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps
-)(Categories);
+)(HomePage);

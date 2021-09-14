@@ -25,7 +25,7 @@ const PriveRoute = ({ component: Component, auth, token, ...rest }) => (
 );
 
 function mapStateToProps(state) {
-    console.log(state.Auth.idToken)
+    // console.log(state.Auth.idToken)
     return {
         auth: state.Auth.idToken
     }

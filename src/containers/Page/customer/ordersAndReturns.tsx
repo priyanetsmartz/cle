@@ -9,9 +9,7 @@ function OrdersAndReturns(props) {
     const [orderId, setOrderId] = useState('');
     const [orderDate, setOrderDate] = useState('');
     const [sortOrder, setSortOrder] = useState('');
-    const [orders, setOrders] = useState({
-        items: []
-    });
+    const [orders, setOrders] = useState([]);
 
     useEffect(() => {
         getData();
@@ -20,8 +18,7 @@ function OrdersAndReturns(props) {
 
     const getData = async () => {
         let result: any = await getCustomerOrders();
-        setOrders(result.data);
-        //console.log(result);
+        setOrders(result.data.items);
     }
 
     const handleSearch = async (e) => {
@@ -30,12 +27,20 @@ function OrdersAndReturns(props) {
         if (val === "") return getData();
         let result: any = await searchOrders(val);
         if (result) {
-            orders.items = [];
-            orders.items[0] = result.data;
-            setOrders(orders);
-            console.log(orders);
+            setOrders([result.data]);
         }
     }
+
+    const dateFilter = (e) => {
+        const {value} = e.target;
+        console.log(value);
+    }
+
+    const priceFilter = (e) => {
+        const {value} = e.target;
+        console.log(value);
+    }
+
 
     const getOrdersByDate = async (filter) => {
         let filterDate;
@@ -59,9 +64,8 @@ function OrdersAndReturns(props) {
         setSortOrder(e.target.value);
         let result: any = await sortCustomerOrders(e.target.value);
         if (result) {
-            orders.items = result.data;
-            console.log(orders);
-            setOrders(orders);
+            console.log(result.data);
+            setOrders(result.data.items);
         }
     }
 
@@ -80,7 +84,7 @@ function OrdersAndReturns(props) {
                                 <div className="col-sm-4 mb-4">
                                     <div className="form-group">
                                         <span className="form-label">Date:</span>
-                                        <select className="form-select" aria-label="Default select example">
+                                        <select className="form-select" aria-label="Default select example" onChange={dateFilter}>
                                             <option value="">All</option>
                                             <option value="1">One</option>
                                             <option value="2">Two</option>
@@ -91,7 +95,7 @@ function OrdersAndReturns(props) {
                                 <div className="col-sm-4 mb-2">
                                     <div className="form-group">
                                         <span className="form-label">Price:</span>
-                                        <select className="form-select" aria-label="Default select example">
+                                        <select className="form-select" aria-label="Default select example" onChange={priceFilter}>
                                             <option value="">$3,550 - $150,550</option>
                                             <option value="1">$1,550 - $150,550</option>
                                             <option value="2">$3,050 - $150,550</option>
@@ -143,9 +147,9 @@ function OrdersAndReturns(props) {
                                                 <div className="sortbyfilter">
 
                                                     <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
-                                                    <option value="">SortBy</option>
-                                                    <option value="ASC">Price - High to low</option>
-                                                    <option value="DESC">Price - Low to high</option>
+                                                        <option value="">SortBy</option>
+                                                        <option value="ASC">Price - High to low</option>
+                                                        <option value="DESC">Price - Low to high</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -153,223 +157,91 @@ function OrdersAndReturns(props) {
                                     </div>
                                 </div>
 
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <div className="sortbyeyearly_show">
-                                            <h3>May 2021</h3>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="row my-3 ">
-                                    <div className="col-sm-12">
-                                        <div className="row mb-3">
-                                            <div className="col-sm-6">
-                                                <h3 className="order_numbr">Order number: 1010909060608080</h3>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <div className="viewall_btn"><Link to="#" className="">View all</Link></div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div className="d-md-flex">
-                                        <div className="col-sm-6">
-                                            <div className="order-viewsec">
-                                                <div className="order-details">
-                                                    <div className="order-date">
-                                                        <label className="form-label">Order date</label>
-                                                        <div className="labl_text">Mon, 10 May 2021</div>
+                                {orders && orders.map(item => {
+                                    return (
+                                        <>
+                                            <div className="row" key={item.increment_id}>
+                                                <div className="col-sm-12">
+                                                    <div className="sortbyeyearly_show">
+                                                        <h3>May 2021</h3>
                                                     </div>
+                                                </div>
+                                            </div>
 
-                                                    <div className="products">
-                                                        <label className="form-label"> Products</label>
-                                                        <div className="labl_text"> 101</div>
+                                            <div className="row my-3" key={`${item.increment_id}1`}>
+                                                <div className="col-sm-12">
+                                                    <div className="row mb-3">
+                                                        <div className="col-sm-6">
+                                                            <h3 className="order_numbr">Order number: {item.increment_id}</h3>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <div className="viewall_btn">
+                                                                <Link to={`/order-details/${item.increment_id}`} className="">View all</Link>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
 
-                                                <div className="order-details">
-                                                    <div className="order-date">
-                                                        <label className="form-label">Shipped date</label>
-                                                        <div className="labl_text">Mon, 31 May 2021</div>
+                                                <div className="d-md-flex">
+                                                    <div className="col-sm-6">
+                                                        <div className="order-viewsec">
+                                                            <div className="order-details">
+                                                                <div className="order-date">
+                                                                    <label className="form-label">Order date</label>
+                                                                    <div className="labl_text">{item.created_at}</div>
+                                                                </div>
+
+                                                                <div className="products">
+                                                                    <label className="form-label"> Products</label>
+                                                                    <div className="labl_text"> {item.items.length}</div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="order-details">
+                                                                <div className="order-date">
+                                                                    <label className="form-label">Shipped date</label>
+                                                                    <div className="labl_text">Mon, 31 May 2021</div>
+                                                                </div>
+
+                                                                <div className="products">
+                                                                    <label className="form-label"> Price</label>
+                                                                    <div className="labl_text"> {item.grand_total}</div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="order-shipped">
+                                                                <label className="form-label">We have shipped your order</label>
+                                                            </div>
+
+
+                                                        </div>
                                                     </div>
-
-                                                    <div className="products">
-                                                        <label className="form-label"> Price</label>
-                                                        <div className="labl_text"> &#36;25,230</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="order-shipped">
-                                                    <label className="form-label">We have shipped your order</label>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="prodcut_catg">
-                                                <div className="product_photo"><img src="./images/product-1.svg" className="img-fluid" alt="" />
-                                                </div>
-                                                <div className="product_photo"><img src="./images/product-2.svg" className="img-fluid" alt="" />
-                                                </div>
-                                                <div className="more_product">
-                                                    <Link to="#">
-                                                        <img src="./images/product-3.svg" className="img-fluid" alt="" />
-                                                        <div className="overlay_img"></div>
-                                                        <span className="more_pro">+7more products</span>
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12">
-                                        <div className="blank_bdr"></div>
-                                    </div>
-                                </div>
-
-                                <div className="row my-3">
-                                    <div className="col-sm-12">
-                                        <div className="row mb-3">
-                                            <div className="col-sm-6">
-                                                <h3 className="order_numbr">Order number: 3010090606006000</h3>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <div className="viewall_btn"><Link to="#" className="">View all</Link></div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div className="d-md-flex">
-                                        <div className="col-sm-6">
-                                            <div className="order-viewsec">
-                                                <div className="order-details">
-                                                    <div className="order-date">
-                                                        <label className="form-label">Order date</label>
-                                                        <div className="labl_text">Mon, 1 May 2021</div>
-                                                    </div>
-
-                                                    <div className="products">
-                                                        <label className="form-label"> Products</label>
-                                                        <div className="labl_text"> 3</div>
+                                                    <div className="col-sm-6">
+                                                        <div className="prodcut_catg">
+                                                            <div className="product_photo">
+                                                                <img src={item.items[0]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                            </div>
+                                                            <div className="product_photo">
+                                                                <img src={item.items[1]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                            </div>
+                                                            <div className="more_product">
+                                                                <Link to="#">
+                                                                    <img src={item.items[2]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                    <div className="overlay_img"></div>
+                                                                    <span className="more_pro">{item.items.length}</span>
+                                                                </Link>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <div className="order-details">
-                                                    <div className="order-date">
-                                                        <label className="form-label">Shipped date</label>
-                                                        <div className="labl_text">Mon, 20 May 2021</div>
-                                                    </div>
-
-                                                    <div className="products">
-                                                        <label className="form-label"> Price</label>
-                                                        <div className="labl_text"> &#36;15,230</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="order-shipped">
-                                                    <label className="form-label">We have shipped your order</label>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="prodcut_catg">
-                                                <div className="product_photo"><img src="./images/product-4.svg" className="img-fluid" alt="" />
-                                                </div>
-                                                <div className="product_photo">
-                                                    <img src="./images/product-5.svg" className="img-fluid" alt="" />
-                                                    <div className="overlaygrey_img"></div>
-                                                </div>
-                                                <div className="product_photo">
-                                                    <img src="./images/product-6.svg" className="img-fluid" alt="" />
-                                                    <div className="overlaygrey_img"></div>
+                                                <div className="col-sm-12">
+                                                    <div className="blank_bdr"></div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <div className="sortbyeyearly_show">
-                                            <h3>April 2021</h3>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div className="row my-3 ">
-                                    <div className="col-sm-12 bdr-bottom">
-                                        <div className="row mb-3">
-                                            <div className="col-sm-6">
-                                                <h3 className="order_numbr">Order number: 3000009060608080</h3>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <div className="viewall_btn"><Link to="#" className="">View all</Link></div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div className="d-md-flex">
-                                        <div className="col-sm-6">
-                                            <div className="order-viewsec">
-                                                <div className="order-details">
-                                                    <div className="order-date">
-                                                        <label className="form-label">Order date</label>
-                                                        <div className="labl_text">Mon, 1 May 2021</div>
-                                                    </div>
-
-                                                    <div className="products">
-                                                        <label className="form-label"> Products</label>
-                                                        <div className="labl_text"> 3</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="order-details">
-                                                    <div className="order-date">
-                                                        <label className="form-label">Shipped date</label>
-                                                        <div className="labl_text">Mon, 20 May 2021</div>
-                                                    </div>
-
-                                                    <div className="products">
-                                                        <label className="form-label"> Price</label>
-                                                        <div className="labl_text"> &#36;15,230</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="order-shipped">
-                                                    <label className="form-label">We have shipped your order</label>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="prodcut_catg">
-                                                <div className="product_photo"><img src="./images/product-4.svg" className="img-fluid" alt="" />
-                                                </div>
-                                                <div className="product_photo">
-                                                    <img src="./images/product-5.svg" className="img-fluid" alt="" />
-                                                    <div className="overlaygrey_img"></div>
-                                                </div>
-                                                <div className="product_photo">
-                                                    <img src="./images/product-6.svg" className="img-fluid" alt="" />
-                                                    <div className="overlaygrey_img"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12">
-                                        <div className="blank_bdr"></div>
-                                    </div>
-                                </div>
+                                        </>
+                                    );
+                                })}
 
                                 <div className="resltspage_sec footer-pagints">
                                     <div className="paginatn_result">

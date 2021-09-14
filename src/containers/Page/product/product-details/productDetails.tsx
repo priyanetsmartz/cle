@@ -16,7 +16,7 @@ import Promotion from '../../../partials/promotion';
 import { addToCartApi, getProductDetails, getProductExtras } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
-import Magazine from '../../categories/Magazine';
+import Magazine from '../../home/magazine';
 import product from '../product';
 import notification from '../../../../components/notification';
 const { addToCart, addToCartTask } = cartAction;

@@ -5,7 +5,6 @@ import { useHistory } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
 import Dashboard from './dashboard';
 import OrdersAndReturns from './ordersAndReturns';
-import MyTrades from './mytrades';
 import MyProfile from './myProfile';
 import MyWishList from './myWishlist';
 import MyRewards from './myRewards';
@@ -13,13 +12,14 @@ import MyNotifications from './myNotifications';
 import MySupport from './mySupport';
 import dashboardIcon from '../../../image/dashboard_icon.svg';
 import ordersIcon from '../../../image/myorder_icon.svg';
-import tradeIcon from '../../../image/my_trade.svg';
 import rewardIcon from '../../../image/my_reward.svg';
 import wishlistIcon from '../../../image/mywish_list.svg';
 import profileIcon from '../../../image/my_profile.svg';
 import notificationIcon from '../../../image/my_notification.svg';
 import supportIcon from '../../../image/my_support.svg';
 import { Link } from "react-router-dom";
+// import MyTrades from './mytrades';
+// import tradeIcon from '../../../image/my_trade.svg';
 
 function Customer(props) {
     const [name, setName] = useState(localStorage.getItem('token_name'));
