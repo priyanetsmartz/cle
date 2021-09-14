@@ -59,8 +59,19 @@ class Login {
   }
 
   genCartQuoteID(localToken) {
-    //const localToken = localStorage.getItem('cust_id');
-    return Api.request(`rest/all/V1/carts/mine?customerId=${localToken}`, "", "POST", "")
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    if (cartQuoteId) {
+      const cartQuoteId = localStorage.getItem('cartQuoteId');
+    //  var storeId = language === 'arabic' ? 2 : 3;
+      let cartData = {
+          "customerId":localToken,
+          "storeId": 3 // check for language input
+      }
+      return Api.request(`rest/V1/guest-carts/${cartQuoteId}`, cartData, "PUT", "")
+    } else {
+      return Api.request(`rest/all/V1/carts/mine?customerId=${localToken}`, "", "POST", "")
+    }
+
   }
 
 }

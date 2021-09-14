@@ -3,7 +3,7 @@ import IntlMessages from "../../components/utility/intlMessages";
 import notification from '../../components/notification';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { getCookie } from "../../helpers/session";
 import { getContactUsForm, SubmitContactUs } from '../../redux/pages/allPages';
 const { openSignUp } = appAction;

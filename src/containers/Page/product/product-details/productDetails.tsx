@@ -13,7 +13,7 @@ import ProductImages from './productImges';
 import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
 import Promotion from '../../../partials/promotion';
-import { addToCartApi, getProductDetails, getProductExtras } from '../../../../redux/cart/productApi';
+import { addToCartApi, addToCartApiGuest, getProductDetails, getProductExtras } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import Magazine from '../../home/magazine';
@@ -73,11 +73,14 @@ function ProductDetails(props) {
         setSizeGuideModal(!sizeGuideModal);
     }
     async function getProductDetailsFxn() {
+        let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductDetails(sku);
-        let productExtras: any = await getProductExtras(result.data.id);
-        // console.log(result.data)
-        setMagezineData(productExtras.data[0].posts)
-        setRecomendations(productExtras.data[0].recommendation)
+        if (customer_id) {
+            let productExtras: any = await getProductExtras(result.data.id);
+            // console.log(result.data)
+            setMagezineData(productExtras.data[0].posts)
+            setRecomendations(productExtras.data[0].recommendation)
+        }
         //   console.log(recomendationsData)
         let description = "", special_price: 0, short, shipping_and_returns: "";
 
@@ -143,7 +146,9 @@ function ProductDetails(props) {
 
         let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
-            addToCartApi(cartData, cartQuoteId)
+            addToCartApi(cartData)
+        } else {
+            addToCartApiGuest(cartData)
         }
         //  props.addToCart(id);
         props.addToCartTask(true);

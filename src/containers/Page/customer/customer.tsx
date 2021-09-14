@@ -95,13 +95,13 @@ function Customer(props) {
                                 </div>
                             </div>
                         </div>
-                        {activeTab == 'dashboard' ? <Dashboard /> :
-                            activeTab == 'orders-and-returns' ? <OrdersAndReturns /> :
-                                // activeTab == 'mytrades' ? <MyTrades /> :
-                                    activeTab == 'profile' ? <MyProfile /> :
-                                        activeTab == 'wish-list' ? <MyWishList /> :
-                                            activeTab == 'rewards' ? <MyRewards /> :
-                                                activeTab == 'notifications' ? <MyNotifications /> : <MySupport />}
+                        {activeTab === 'dashboard' ? <Dashboard /> :
+                            activeTab === 'orders-and-returns' ? <OrdersAndReturns /> :
+                                // activeTab === 'mytrades' ? <MyTrades /> :
+                                    activeTab === 'profile' ? <MyProfile /> :
+                                        activeTab === 'wish-list' ? <MyWishList /> :
+                                            activeTab === 'rewards' ? <MyRewards /> :
+                                                activeTab === 'notifications' ? <MyNotifications /> : <MySupport />}
 
                     </div>
                 </div>

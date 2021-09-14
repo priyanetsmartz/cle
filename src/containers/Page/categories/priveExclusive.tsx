@@ -1,12 +1,13 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getHomePageProducts } from '../../../redux/pages/customers';
+import { Link } from "react-router-dom";
+// import { getHomePageProducts } from '../../../redux/pages/customers';
 
 
 function PriveExclusive(props) {
 
-    const [products, setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
 
     useEffect(() => {
         getData();
@@ -36,7 +37,7 @@ function PriveExclusive(props) {
                                                 <img src="images/elvibswh.png" alt="" />
                                                 <h4>Product Name</h4>
                                                 <p></p>
-                                                <div className="pro-price-btn">$3,288<a href="">Add to Cart</a></div>
+                                                <div className="pro-price-btn">$3,288<Link to="#">Add to Cart</Link></div>
                                             </div>
                                         </div>
                                     </div>
@@ -49,7 +50,7 @@ function PriveExclusive(props) {
                                                 <img src="images/elvibswh.png" alt="" />
                                                 <h4>Product Name</h4>
                                                 <p></p>
-                                                <div className="pro-price-btn">$3,288<a href="">Add to Cart</a></div>
+                                                <div className="pro-price-btn">$3,288<Link to="#">Add to Cart</Link></div>
                                             </div>
                                         </div>
                                     </div>
@@ -62,7 +63,7 @@ function PriveExclusive(props) {
                                                 <img src="images/elvibswh.png" alt="" />
                                                 <h4>Product Name</h4>
                                                 <p></p>
-                                                <div className="pro-price-btn">$3,288<a href="">Add to Cart</a></div>
+                                                <div className="pro-price-btn">$3,288<Link to="#">Add to Cart</Link></div>
                                             </div>
                                         </div>
                                     </div>

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
-import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter, getGuestCart } from '../../../redux/cart/productApi';
+import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter, getGuestCart, addToCartApiGuest } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import Promotion from "../../partials/promotion";
@@ -54,6 +54,7 @@ function Products(props) {
 
         }
         setOpacity(1);
+        console.log(productResult)
         props.productList(productResult);
         // get product page filter
         //let result1: any = await getProductFilter(9);
@@ -88,16 +89,20 @@ function Products(props) {
             cartQuoteId = result.data
         }
         localStorage.setItem('cartQuoteId', cartQuoteId);
-     //   console.log( localStorage.getItem('cartQuoteId'))
+        // only simple product is added to cart because in design there are no option to show configuration product
         let cartData = {
             "cartItem": {
+                "quote_id": localStorage.getItem('cartQuoteId'),
                 "sku": sku,
-                "qty": 1,
-                "quote_id": localStorage.getItem('cartQuoteId')
+                "qty": 1
             }
         }
+        if (customer_id) {
+            addToCartApi(cartData)
+        } else {
+            addToCartApiGuest(cartData)
+        }
 
-        addToCartApi(cartData,cartQuoteId)
         // props.addToCart(id);
         props.addToCartTask(true);
         notification("success", "", "Item added to cart");
@@ -202,7 +207,7 @@ function Products(props) {
                                     {props.items.map(item => {
                                         return (
                                             <div className="col-md-4" key={item.id}>
-                                                {/* <Link to={'/product-details/' + item.sku}> */}
+                                                <Link to={'/product-details/' + item.sku}>
                                                 <div className="product py-4">
                                                     {token && (
                                                         <span className="off bg-favorite">
@@ -237,7 +242,7 @@ function Products(props) {
                                                     </div>
                                                     {/* )} */}
                                                 </div>
-                                                {/* </Link> */}
+                                                </Link>
                                             </div>
                                         )
                                     })}

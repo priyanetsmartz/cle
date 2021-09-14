@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react';
 import cartIcon from '../../image/carticon.svg';
 import { Link } from "react-router-dom";
-import { getCartItems, getCartTotal } from '../../redux/cart/productApi';
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../../redux/cart/productApi';
 import { connect } from 'react-redux';
 
 function MiniCart(props) {
-    let customer_id = localStorage.getItem('cust_id');
+    
     const [showCart, SetShowCart] = useState(false);
     const [cartItemsVal, setCartItems] = useState([{ id: '', item_id: 0, extension_attributes: { item_image: "" }, name: '', price: 0, quantity: 0, desc: '', qty: 0, sku: '' }]);
     const [cartTotal, setCartTotal] = useState(0);
 
     useEffect(() => {
-        if (props.items === true) {
-           // console.log('herere')
-            callGetCartItems()
-        }
         callGetCartItems()
         return () => {
             // componentwillunmount in functional component.
@@ -23,37 +19,22 @@ function MiniCart(props) {
     }, [props.items])
 
     const callGetCartItems = async () => {
-        let cartData = [], total = 0;
-
+        let cartData = [], total = 0, cartItems: any, cartTotal: any;
+        let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
-            let cartItems: any = await getCartItems();
+            cartItems = await getCartItems();
             cartData = cartItems.data.items;
-            let cookieData = localStorage.getItem('cartItems');
-            let cookieArray = JSON.parse(cookieData);
-
             // get cart total 
-            let cartTotal: any = await getCartTotal();
+            cartTotal = await getCartTotal();
             total = cartTotal.data.grand_total;
-            let newCartData = [];
-            if (cookieArray && cookieArray.length > 0) {
-                newCartData = cookieArray.reduce((a, { sku, quantity }) => {
-                    if (sku) {
-                        a.push({ sku, qty: quantity, quote_id: localStorage.getItem('cartQuoteId') });
-                    }
-                    return a;
-                }, []);
-            }
-            //  console.log(newCartData)
-            // let obj = { cartItem: "" };
-            // let cartObject = Object.assign(obj, { cartItem: newCartData });
-            // cartData = [...cookieArray, ...simpleArray]
 
         } else {
-            const data = localStorage.getItem('cartItems')
-            total = parseInt(localStorage.getItem('cartTotal'));
-            cartData = data ? JSON.parse(data) : [];
+            cartItems = await getGuestCart();
+            cartData = cartItems.data;
+            cartTotal = await getGuestCartTotal();
+            total = cartTotal.data.grand_total;
         }
-        //console.log(cartData)
+
         setCartItems(cartData)
         setCartTotal(total);
 
