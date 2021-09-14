@@ -3,16 +3,17 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
-import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter } from '../../../redux/cart/productApi';
+import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter, getGuestCart, addToCartApiGuest } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import Promotion from "../../partials/promotion";
 import Recomendations from './product-details/recomendations';
 import Filter from './filter';
-const { addToCart, productList } = cartAction;
+const { addToCart, productList, addToCartTask } = cartAction;
 
 
 function Products(props) {
+    let imageD = '';
     const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
@@ -53,10 +54,11 @@ function Products(props) {
 
         }
         setOpacity(1);
+        console.log(productResult)
         props.productList(productResult);
         // get product page filter
-        let result1: any = await getProductFilter(9);
-        console.log(result1)
+        //let result1: any = await getProductFilter(9);
+        // console.log(result1)
 
     }
     const filtterData = (event) => {
@@ -75,19 +77,34 @@ function Products(props) {
         setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
 
     }
-    function handleClick(id: number, sku: string) {
+    async function handleCart(id: number, sku: string) {
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        let customer_id = localStorage.getItem('cust_id');
+
+        let cartQuoteId = ''
+        if (cartQuoteIdLocal) {
+            cartQuoteId = cartQuoteIdLocal
+        } else {
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
+        // only simple product is added to cart because in design there are no option to show configuration product
         let cartData = {
             "cartItem": {
+                "quote_id": localStorage.getItem('cartQuoteId'),
                 "sku": sku,
-                "qty": 1,
-                "quote_id": localStorage.getItem('cartQuoteId')
+                "qty": 1
             }
         }
-        let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
             addToCartApi(cartData)
+        } else {
+            addToCartApiGuest(cartData)
         }
-        props.addToCart(id);
+
+        // props.addToCart(id);
+        props.addToCartTask(true);
         notification("success", "", "Item added to cart");
     }
 
@@ -191,31 +208,40 @@ function Products(props) {
                                         return (
                                             <div className="col-md-4" key={item.id}>
                                                 <Link to={'/product-details/' + item.sku}>
-                                                    <div className="product py-4">
-                                                        {token && (
-                                                            <span className="off bg-favorite">
-                                                                {!item.wishlist_item_id && (
-                                                                    <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                                                )}
-                                                                {item.wishlist_item_id && (
-                                                                    <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                                                )}
-                                                            </span>
-                                                        )
-                                                        }
+                                                <div className="product py-4">
+                                                    {token && (
+                                                        <span className="off bg-favorite">
+                                                            {!item.wishlist_item_id && (
+                                                                <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                            )}
+                                                            {item.wishlist_item_id && (
+                                                                <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                            )}
+                                                        </span>
+                                                    )
+                                                    }
 
-                                                        <div className="text-center"> <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} width="200" /> </div>
-                                                        <div className="about text-center">
-                                                            <h5>{item.name}</h5>
-                                                            <div className="tagname">{item.desc}</div>
-                                                            <div className="pricetag">${item.price}</div>
-                                                        </div>
-                                                        {/* {token && ( */}
-                                                        <div className="cart-button mt-3 px-2"> <button onClick={() => { handleClick(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
-                                                            <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
-                                                        </div>
-                                                        {/* )} */}
+                                                    <div className="text-center">
+                                                        {
+                                                            item.custom_attributes.map((attributes) => {
+                                                                if (attributes.attribute_code === 'image') {
+                                                                    imageD = attributes.value;
+                                                                }
+                                                            })
+                                                        }
+                                                        <img src={imageD} alt={item.name} width="200" />
                                                     </div>
+                                                    <div className="about text-center">
+                                                        <h5>{item.name}</h5>
+                                                        <div className="tagname">{item.desc}</div>
+                                                        <div className="pricetag">${item.price}</div>
+                                                    </div>
+                                                    {/* {token && ( */}
+                                                    <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
+                                                        <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
+                                                    </div>
+                                                    {/* )} */}
+                                                </div>
                                                 </Link>
                                             </div>
                                         )
@@ -334,5 +360,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList }
+    { addToCart, productList, addToCartTask }
 )(Products);

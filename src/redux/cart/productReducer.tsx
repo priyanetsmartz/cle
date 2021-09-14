@@ -3,8 +3,8 @@ const data = localStorage.getItem('cartItems')
 const initState = {
     items: data ? JSON.parse(data) : [],
     addedItems: [],
-    total: 0
-
+    total: 0,
+    addToCartTask: false
 }
 
 const cartReducer = (state = initState, action) => {
@@ -111,6 +111,13 @@ const cartReducer = (state = initState, action) => {
         return {
             ...state,
             isOpenMeasuringGuide: action.isOpen
+        }
+    }
+    if (action.type === actions.ADD_TO_CART_TASK) {
+        //   console.log(action)
+        return {
+            ...state,
+            addToCartTask: action.addToCartTask
         }
     }
     return state

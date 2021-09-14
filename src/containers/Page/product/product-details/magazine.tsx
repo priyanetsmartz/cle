@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 
 function ProductsMagazine(props) {
     const [relatedPosts, setRelatedPosts] = useState([]);
-    // console.log(recomendedProducts)
+
     useEffect(() => {
         setRelatedPosts(props.posts)
+        // console.log(relatedPosts)
         //    console.log(typeof (recomendedProducts))
         return () => {
             // componentwillunmount in functional component.
@@ -17,7 +18,7 @@ function ProductsMagazine(props) {
     return (
         <div className="container">
             <div className="col-sm-12">
-                {(relatedPosts && relatedPosts.length) && (
+                {(relatedPosts && relatedPosts.length) ? (
                     <div className="magazine_article ">
                         <h1 className="mb-4">Magazine</h1>
                         <div className="row">
@@ -38,7 +39,7 @@ function ProductsMagazine(props) {
 
                         </div>
                     </div>
-                )}
+                ) : ""}
             </div>
 
         </div>

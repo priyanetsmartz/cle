@@ -37,10 +37,6 @@ const ProductImages = (props) => {
             <div className="col-sm-10 img-container">
                 {
                     fullSizedImg && fullSizedImg.media_type === 'external-video' ? (
-                        // <video controls muted autoPlay={false} loop playsInline className="product-full-img">
-                        //     <source src={fullSizedImg.extension_attributes.video_content.video_url} type="video/mp4" />
-                        //     Your browser does not support HTML video.
-                        // </video>
                         <iframe className="product-full-img" title="product video" src={fullSizedImg.extension_attributes.video_content.video_url}>
                         </iframe>
                         
