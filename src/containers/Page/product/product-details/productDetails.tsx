@@ -19,13 +19,16 @@ import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "re
 import Magazine from '../../home/magazine';
 import product from '../product';
 import notification from '../../../../components/notification';
+import GiftMessage from './GiftMessage';
 const { addToCart, addToCartTask } = cartAction;
 
 function ProductDetails(props) {
     const { sku } = useParams();
     const [shareUrl, setShareUrl] = useState('');
+    const [prodId, setProdId] = useState('');
     const [isPriveuser, setIsPriveUser] = useState(false);
     const [isShare, setIsLoaded] = useState(false);
+    const [isGiftMessage, setIsGiftMessage] = useState(false);
     const [productImages, setProductImages] = useState([]);
     const [productDetails, setproductDetails] = useState({ id: 0, name: "", sku: "", type_id: "", price: 0, is_in_stock: false, description: "", saleprice: 0, short_description: "", shipping_and_returns: "" });
     const [sizeGuideModal, setSizeGuideModal] = useState(false);
@@ -49,6 +52,13 @@ function ProductDetails(props) {
 
     const handleClick = () => {
         setIsLoaded(true);
+    }
+    const handleGiftMEssage = () => {
+        setIsGiftMessage(true)
+    }
+
+    const hideGiftModalModal = () => {
+        setIsGiftMessage(false)
     }
     const hideModal = () => {
         setIsLoaded(false);
@@ -77,7 +87,7 @@ function ProductDetails(props) {
         let result: any = await getProductDetails(sku);
         if (customer_id) {
             let productExtras: any = await getProductExtras(result.data.id);
-            // console.log(result.data)
+            console.log(result.data)
             setMagezineData(productExtras.data[0].posts)
             setRecomendations(productExtras.data[0].recommendation)
         }
@@ -99,11 +109,12 @@ function ProductDetails(props) {
             }
 
         })
+        setProdId(result.data.id);
         setProductImages(result.data.media_gallery_entries)
         setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
         setExtensionAttributes(result.data.extension_attributes.stock_item.qty);
         setproductDetails({ ...productDetails, id: result.data.id, type_id: result.data.type_id, sku: result.data.sku, name: result.data.name, price: result.data.price, description: description, saleprice: special_price, short_description: short, shipping_and_returns: shipping_and_returns, is_in_stock: result.data.extension_attributes.stock_item.is_in_stock });
-        console.log(extensionAttributes)
+        console.log(prodId)
 
     }
 
@@ -270,7 +281,9 @@ function ProductDetails(props) {
 
                                     <div className="row my-3">
                                         <div className="d-grid gap-2 d-md-flex justify-content-start">
-                                            <Link to="my-cart" type="button" className="btn btn-outline-primary me-4">Send a Gift</Link>
+                                            <Link to="#" type="button" className="btn btn-outline-primary me-4" onClick={() => {
+                                                handleGiftMEssage();
+                                            }} >Send a Gift</Link>
                                             <button type="button" className="btn btn-outline-success" onClick={() => {
                                                 handleClick();
                                             }} ><img src={ShareIcon} alt=""
@@ -381,7 +394,14 @@ function ProductDetails(props) {
             <Modal show={measuringGuideModal} size="lg">
                 <MeasuringGuide />
             </Modal>
-
+            <Modal show={isGiftMessage} size="lg" data={prodId} >
+                <Modal.Header>
+                    <h5 className="modal-title">Add Gift Reciept</h5>
+                    <p>Feel Free to add a personalized note or whishes </p>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideGiftModalModal} aria-label="Close"></button>
+                </Modal.Header>
+                <GiftMessage />
+            </Modal>
             <Modal show={isShare} onHide={hideModal}>
                 <Modal.Header>
                     <h5 className="modal-title">Share this product</h5>

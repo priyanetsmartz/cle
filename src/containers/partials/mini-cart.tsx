@@ -3,18 +3,22 @@ import cartIcon from '../../image/carticon.svg';
 import { Link } from "react-router-dom";
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../../redux/cart/productApi';
 import { connect } from 'react-redux';
-
+import cartAction from "../../redux/cart/productAction";
+const { addToCartTask } = cartAction;
 function MiniCart(props) {
-    
+
     const [showCart, SetShowCart] = useState(false);
     const [cartItemsVal, setCartItems] = useState([{ id: '', item_id: 0, extension_attributes: { item_image: "" }, name: '', price: 0, quantity: 0, desc: '', qty: 0, sku: '' }]);
     const [cartTotal, setCartTotal] = useState(0);
 
     useEffect(() => {
-        callGetCartItems()
+        if (props.items || !props.items) {
+            //   console.log(props.items)
+            callGetCartItems()
+        }
+
         return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
+            props.addToCartTask(false);
         }
     }, [props.items])
 
@@ -29,10 +33,14 @@ function MiniCart(props) {
             total = cartTotal.data.grand_total;
 
         } else {
-            cartItems = await getGuestCart();
-            cartData = cartItems.data;
-            cartTotal = await getGuestCartTotal();
-            total = cartTotal.data.grand_total;
+            const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+            if (cartQuoteToken) {
+                cartItems = await getGuestCart();
+                cartData = cartItems.data.items;
+                cartTotal = await getGuestCartTotal();
+                total = cartTotal.data.grand_total;
+
+            }
         }
 
         setCartItems(cartData)
@@ -90,7 +98,7 @@ function MiniCart(props) {
 
 
 const mapStateToProps = (state) => {
-    console.log(state.Cart.addToCartTask);
+    // console.log(state.Cart.addToCartTask);
     return {
         items: state.Cart.addToCartTask
     }
@@ -98,5 +106,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    {}
+    { addToCartTask }
 )(MiniCart);

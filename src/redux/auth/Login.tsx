@@ -6,13 +6,13 @@ const AdminApi = new ADMINAPI();
 
 class Login {
 
-  getAdminToken() {
-    var payload = {
-      username: 'monikat',
-      password: 'monika@123'
-    };
-    return AdminApi.request("rest/V1/integration/admin/token", payload, "POST", "");
-  }
+  // getAdminToken() {
+  //   var payload = {
+  //     username: 'monikat',
+  //     password: 'monika@123'
+  //   };
+  //   return AdminApi.request("rest/V1/integration/admin/token", payload, "POST", "");
+  // }
   //Login
   login(email: string, password: string, type: string) {
     var payload = {
@@ -59,18 +59,18 @@ class Login {
   }
 
   genCartQuoteID(localToken) {
-    const cartQuoteId = localStorage.getItem('cartQuoteId');
-    if (cartQuoteId) {
-      const cartQuoteId = localStorage.getItem('cartQuoteId');
-    //  var storeId = language === 'arabic' ? 2 : 3;
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    if (cartQuoteToken) {
+      //  var storeId = language === 'arabic' ? 2 : 3;
       let cartData = {
-          "customerId":localToken,
-          "storeId": 3 // check for language input
+        "customerId": parseInt(localToken),
+        "storeId": 3 // check for language input
       }
-      return Api.request(`rest/V1/guest-carts/${cartQuoteId}`, cartData, "PUT", "")
+      return Api.request(`rest/V1/guest-carts/${cartQuoteToken}`, cartData, "PUT", "")
     } else {
       return Api.request(`rest/all/V1/carts/mine?customerId=${localToken}`, "", "POST", "")
     }
+
 
   }
 

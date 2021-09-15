@@ -30,11 +30,7 @@ export function getWhishlistItemsForUser() {
 export function addToCartApi(cartData) {
     return APi.request(`rest/V1/carts/mine/items`, cartData, "POST", "")
 }
-export function addToCartApiGuest(cartData) {
-    const cartQuoteId = localStorage.getItem('cartQuoteId');
-    return APi.request(`rest/V1/guest-carts/${cartQuoteId}/items`, cartData, "POST", "")
 
-}
 export function getCartItems() {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
     return APi.request(`rest/V1/carts/${cartQuoteId}`, "", "GET", "")
@@ -156,31 +152,49 @@ export function getProductExtras(productId: number) {
     return APi.request(`rest/all/V1/product/recommendation?storeId=3&customerId=${localToken}&productId=${productId}`, "", "GET", "");
 }
 
+export function addToCartApiGuest(cartData) {
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/items`, cartData, "POST", "")
+
+}
+export function createGuestToken() {
+    return APi.request(`rest/V1/guest-carts`, "", "POST", "")
+}
 export function getGuestCart() {
-    const cartQuoteId = localStorage.getItem('cartQuoteId');
-    return APi.request(`rest/all/V1/guest-carts/${cartQuoteId}/items`, "", "GET", "")
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    return APi.request(`rest/all/V1/guest-carts/${cartQuoteToken}`, "", "GET", "")
 }
 export function getGuestCartTotal() {
-    const cartQuoteId = localStorage.getItem('cartQuoteId');
-    return APi.request(`rest/all/V1/guest-carts/${cartQuoteId}/totals`, "", "GET", "")
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    return APi.request(`rest/all/V1/guest-carts/${cartQuoteToken}/totals`, "", "GET", "")
 }
 export function removeItemFromGuestCart(id: number) {
-    const cartQuoteId = localStorage.getItem('cartQuoteId');
-    return APi.request(`rest/V1/guest-carts/${cartQuoteId}/items/${id}`, "", "DELETE", "")
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/items/${id}`, "", "DELETE", "")
 }
 
 export function updateGuestCartItem(id, cartData) {
-    const cartQuoteId = localStorage.getItem('cartQuoteId');
-    return APi.request(`rest/V1/guest-carts/${cartQuoteId}/items/${id}`, cartData, "PUT", "")
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/items/${id}`, cartData, "PUT", "")
 }
 
 export function assignGuestCartToUSer(language) {
     const localToken = localStorage.getItem('cust_id');
-    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     var storeId = language === 'arabic' ? 2 : 3;
     let cartData = {
-        "customerId":localToken,
+        "customerId": localToken,
         "storeId": storeId
     }
-    return APi.request(`rest/V1/guest-carts/${cartQuoteId}`, cartData, "PUT", "")
+    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}`, cartData, "PUT", "")
+}
+// gift cart apis
+export function giftCart(giftData: any, itemId: number) {
+    //const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`rest/V1/carts/mine/gift-message/${itemId}`, giftData, "POST", "")
+}
+
+export function giftGuestCart(giftData: any, itemId: number) {
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}​​​​​​/gift-message/${itemId}`, giftData, "POST", "")
 }

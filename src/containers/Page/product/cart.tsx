@@ -30,10 +30,14 @@ function CartItemPage(props) {
             total = cartTotal.data.grand_total;
 
         } else {
-            cartItems = await getGuestCart();
-            cartData = cartItems.data;
-            cartTotal = await getGuestCartTotal();
-            total = cartTotal.data.grand_total;
+            const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+            if (cartQuoteToken) {
+                cartItems = await getGuestCart();
+                cartData = cartItems.data.items;
+                cartTotal = await getGuestCartTotal();
+                total = cartTotal.data.grand_total;
+
+            }
         }
 
         setCartItems(cartData)
@@ -66,11 +70,11 @@ function CartItemPage(props) {
             }
         }
         if (customer_id) {
-            await updateCartItem(data.item_id, cartData);           
+            await updateCartItem(data.item_id, cartData);
         } else {
             await updateGuestCartItem(data.item_id, cartData);
         }
-        
+
         callGetCartItems()
         props.addToCartTask(true);
         notification("success", "", "Cart Updated");
@@ -101,8 +105,8 @@ function CartItemPage(props) {
                 await updateGuestCartItem(data.item_id, cartData);
             }
         }
-        
-        
+
+
         callGetCartItems()
         props.addToCartTask(true);
         notification("success", "", "Cart Updated");
