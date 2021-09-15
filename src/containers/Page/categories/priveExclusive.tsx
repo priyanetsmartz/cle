@@ -5,15 +5,23 @@ import { getPriveExclusiveProducts } from '../../../redux/cart/productApi';
 import { addToCartApi } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import cartAction from "../../../redux/cart/productAction";
+import Slider from "react-slick";
 const { addToCart, productList } = cartAction;
 
 
 function PriveExclusive(props) {
     const [catId, setCatId] = useState(52);
-    const [activeSlide, setActiveSlide] = useState(0);
     const [products, setProducts] = useState({
         items: []
     });
+
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    };
 
     useEffect(() => {
         getData();
@@ -21,7 +29,7 @@ function PriveExclusive(props) {
 
     const getData = async () => {
         let result: any = await getPriveExclusiveProducts(catId);
-        console.log(result.data.items);
+        // console.log(result.data.items);
         if (result) {
             setProducts(result.data);
         }
@@ -44,22 +52,6 @@ function PriveExclusive(props) {
     }
 
 
-    const nextSlide = () => {
-        if (products.items[activeSlide + 1]) {
-            setActiveSlide(activeSlide + 1);
-        } else {
-            setActiveSlide(0);
-        }
-    }
-
-    const preSlide = () => {
-        if (products.items[activeSlide - 1]) {
-            setActiveSlide(activeSlide - 1);
-        } else {
-            setActiveSlide(products.items.length - 1);
-        }
-    }
-
 
     return (
         <section>
@@ -67,27 +59,27 @@ function PriveExclusive(props) {
                 <div className="row">
                     <div className="col-md-12">
                         <h2 className="DC-section-title">Privé Exclusives</h2>
-                        <button onClick={preSlide}>Pre</button>
-                        <button onClick={nextSlide}>Next</button>
                         <div className="carousel slide DC-carousel">
                             <div className="carousel-inner" >
-                                {products.items.map((item, i) => {
-                                    return (
-                                        <div className={`carousel-item ${i == activeSlide ? 'active' : ''}`} key={i}>
-                                            <div className="row">
-                                                <div className="col-md-6 product-dummy"><img src={item.custom_attributes[1]?.value} alt="" /></div>
-                                                <div className="col-md-6">
-                                                    <div className="product-details-new">
-                                                        <img src="images/elvibswh.png" alt="" />
-                                                        <h4>{item.name}</h4>
-                                                        <p></p>
-                                                        <div className="pro-price-btn">{item.price}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a></div>
+                                <Slider {...settings}>
+                                    {products.items.map((item, i) => {
+                                        return (
+                                            <div className="carousel-item" key={i}>
+                                                <div className="row">
+                                                    <div className="col-md-6 product-dummy"><img src={item.custom_attributes[1]?.value} alt="" /></div>
+                                                    <div className="col-md-6">
+                                                        <div className="product-details-new">
+                                                            <img src="images/elvibswh.png" alt="" />
+                                                            <h4>{item.name}</h4>
+                                                            <p></p>
+                                                            <div className="pro-price-btn">{item.price}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )
-                                })}
+                                        )
+                                    })}
+                                </Slider>
                             </div>
 
                             < button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"

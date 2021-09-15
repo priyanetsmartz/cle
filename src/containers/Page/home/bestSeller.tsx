@@ -1,9 +1,20 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import Slider from "react-slick";
 
 
 function BestSeller(props) {
+    const [categoriesList, setCategoriesList] = useState(['All Categories', 'Watches', 'Jewelry', 'Bags', 'Accessories', 'Clothes', 'Lingerie', 'Shoes', 'Sport']);
+
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 4
+    };
+
     useEffect(() => {
     }, [])
 
@@ -24,10 +35,9 @@ function BestSeller(props) {
                                 <div className="sortbyfilter">
                                     <h3>Show</h3>
                                     <select className="form-select customfliter" aria-label="Default select example">
-                                        <option value="">All categories </option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        {categoriesList.map((cat, i) => {
+                                            return (<option value={cat} key={i}>{cat} </option>)
+                                        })}
                                     </select>
                                 </div>
                             </div>
@@ -39,17 +49,18 @@ function BestSeller(props) {
                     <div className="col-sm-12">
                         <div className="new-in-slider">
                             <div className="regular slider">
-                                {props && props.bestSellers.map(item => {
-                                    return (
-                                        <div className="productcalr" key={item.id}>
-                                            <div className="product_img"><img src={item.img} className="image-fluid" /> </div>
-                                            <div className="product_name"> {item.name} </div>
-                                            <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
-                                            <div className="product_price"> {item.price}</div>
-                                        </div>
-                                    )
-                                })}
-
+                                <Slider {...settings}>
+                                    {props && props.bestSellers.map(item => {
+                                        return (
+                                            <div className="productcalr" key={item.id}>
+                                                <div className="product_img"><img src={item.img} className="image-fluid" /> </div>
+                                                <div className="product_name"> {item.name} </div>
+                                                <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
+                                                <div className="product_price"> {item.price}</div>
+                                            </div>
+                                        )
+                                    })}
+                                </Slider>
 
 
                             </div>

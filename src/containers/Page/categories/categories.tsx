@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { BrowserView, MobileView } from 'react-device-detect';
 import ReactFullpage from '@fullpage/react-fullpage';
 import { getHomePageProducts } from '../../../redux/pages/customers';
+import CategoryBanner from './banner';
 import HtmlContent from '../../partials/htmlContent';
 import PriveExclusive from './priveExclusive';
 import LatestProducts from './latestProducts';
@@ -13,6 +14,7 @@ import NewIn from './newIn';
 
 
 function Categories(props) {
+    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [products, setProducts] = useState({
         newInProducts: [],
         customerProducts: [],
@@ -24,7 +26,7 @@ function Categories(props) {
     }, []);
 
     const getData = async () => {
-        let result: any = await getHomePageProducts();
+        let result: any = await getHomePageProducts(props.languages, customerId);
         if (result) {
             setProducts(result.data[0]);
         }
@@ -55,7 +57,7 @@ function Categories(props) {
                             <div className="sectiosn" >
                                 <div className="section">
                                     {/* change indentifier */}
-                                    <HtmlContent identifier="home_page_banner" />
+                                    <CategoryBanner />
                                 </div>
                                 <div className="section" >
                                     <PriveExclusive />
@@ -86,7 +88,7 @@ function Categories(props) {
                 <div className="sectiosn" >
                     <div className="section">
                         {/* change indentifier */}
-                        <HtmlContent identifier="home_page_banner" />
+                        <CategoryBanner />
                     </div>
                     <div className="section" >
                         <PriveExclusive />
@@ -113,8 +115,14 @@ function Categories(props) {
     )
 }
 const mapStateToProps = (state) => {
+    let languages = '';
+
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+
     return {
-        items: state.Cart.items
+        languages: languages
     }
 }
 
