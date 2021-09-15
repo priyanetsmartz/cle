@@ -32,9 +32,9 @@ function Magazine(props) {
                     <div className="magazine_article ">
                         <h1 className="mb-4">Magazine</h1>
                         <div className="row">
-                            {items.map(item => {
+                            {items.map((item,i) => {
                                 return (
-                                    <div className="col-sm-6">
+                                    <div className="col-sm-6" key={i}>
                                         <div className="magzine_blog">
                                             <div className="blog_img">
                                                 <img src={item.post_thumbnail} alt="" className="img-fluid" />

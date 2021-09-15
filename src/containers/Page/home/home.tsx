@@ -10,6 +10,7 @@ import BestSeller from './bestSeller';
 import NewIn from './newIn';
 import WeChooseForYou from './weChooseForYou';
 import Magazine from './magazine';
+import BecomePartner from './becomePartner';
 
 
 function HomePage(props) {
@@ -80,6 +81,9 @@ function HomePage(props) {
                                 <div className="section">
                                     <Magazine />
                                 </div>
+                                <div className="section">
+                                    <BecomePartner />
+                                </div>
                             </div>
                         )
                     }}
@@ -113,6 +117,9 @@ function HomePage(props) {
                     </div>
                     <div className="section">
                         <Magazine />
+                    </div>
+                    <div className="section">
+                        <BecomePartner />
                     </div>
                 </div>
             </MobileView>

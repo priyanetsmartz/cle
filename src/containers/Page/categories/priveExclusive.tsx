@@ -1,23 +1,63 @@
-// import { useState } from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link } from "react-router-dom";
-// import { getHomePageProducts } from '../../../redux/pages/customers';
+import { getPriveExclusiveProducts } from '../../../redux/cart/productApi';
+import { addToCartApi } from '../../../redux/cart/productApi';
+import notification from "../../../components/notification";
+import cartAction from "../../../redux/cart/productAction";
+const { addToCart, productList } = cartAction;
 
 
 function PriveExclusive(props) {
-
-    // const [products, setProducts] = useState([]);
+    const [catId, setCatId] = useState(52);
+    const [activeSlide, setActiveSlide] = useState(0);
+    const [products, setProducts] = useState({
+        items: []
+    });
 
     useEffect(() => {
         getData();
     }, []);
 
     const getData = async () => {
-        // let result: any = await getPriveExclusiveProducts();
-        // if (result) {
-        //     setProducts(result.data[0]);
-        // }
+        let result: any = await getPriveExclusiveProducts(catId);
+        console.log(result.data.items);
+        if (result) {
+            setProducts(result.data);
+        }
+    }
+
+    function handleClick(id: number, sku: string) {
+        let cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": localStorage.getItem('cartQuoteId')
+            }
+        }
+        let customer_id = localStorage.getItem('cust_id');
+        if (customer_id) {
+            addToCartApi(cartData)
+        }
+        props.addToCart(id);
+        notification("success", "", "Item added to cart");
+    }
+
+
+    const nextSlide = () => {
+        if (products.items[activeSlide + 1]) {
+            setActiveSlide(activeSlide + 1);
+        } else {
+            setActiveSlide(0);
+        }
+    }
+
+    const preSlide = () => {
+        if (products.items[activeSlide - 1]) {
+            setActiveSlide(activeSlide - 1);
+        } else {
+            setActiveSlide(products.items.length - 1);
+        }
     }
 
 
@@ -27,49 +67,30 @@ function PriveExclusive(props) {
                 <div className="row">
                     <div className="col-md-12">
                         <h2 className="DC-section-title">Privé Exclusives</h2>
-                        <div id="carouselExampleInterval" className="carousel slide DC-carousel" data-bs-ride="carousel">
-                            <div className="carousel-inner">
-                                <div className="carousel-item active">
-                                    <div className="row">
-                                        <div className="col-md-6 product-dummy"><img src="images/v9lcsqfb.png" alt="" /></div>
-                                        <div className="col-md-6">
-                                            <div className="product-details-new">
-                                                <img src="images/elvibswh.png" alt="" />
-                                                <h4>Product Name</h4>
-                                                <p></p>
-                                                <div className="pro-price-btn">$3,288<Link to="#">Add to Cart</Link></div>
+                        <button onClick={preSlide}>Pre</button>
+                        <button onClick={nextSlide}>Next</button>
+                        <div className="carousel slide DC-carousel">
+                            <div className="carousel-inner" >
+                                {products.items.map((item, i) => {
+                                    return (
+                                        <div className={`carousel-item ${i == activeSlide ? 'active' : ''}`} key={i}>
+                                            <div className="row">
+                                                <div className="col-md-6 product-dummy"><img src={item.custom_attributes[1]?.value} alt="" /></div>
+                                                <div className="col-md-6">
+                                                    <div className="product-details-new">
+                                                        <img src="images/elvibswh.png" alt="" />
+                                                        <h4>{item.name}</h4>
+                                                        <p></p>
+                                                        <div className="pro-price-btn">{item.price}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a></div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="carousel-item">
-                                    <div className="row">
-                                        <div className="col-md-6 product-dummy"><img src="images/v9lcsqfb.png" alt="" /></div>
-                                        <div className="col-md-6">
-                                            <div className="product-details-new">
-                                                <img src="images/elvibswh.png" alt="" />
-                                                <h4>Product Name</h4>
-                                                <p></p>
-                                                <div className="pro-price-btn">$3,288<Link to="#">Add to Cart</Link></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="carousel-item">
-                                    <div className="row">
-                                        <div className="col-md-6 product-dummy"><img src="images/v9lcsqfb.png" alt="" /></div>
-                                        <div className="col-md-6">
-                                            <div className="product-details-new">
-                                                <img src="images/elvibswh.png" alt="" />
-                                                <h4>Product Name</h4>
-                                                <p></p>
-                                                <div className="pro-price-btn">$3,288<Link to="#">Add to Cart</Link></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                    )
+                                })}
                             </div>
-                            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
+
+                            < button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
                                 data-bs-slide="prev">
                                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span className="visually-hidden">Previous</span>
@@ -83,21 +104,17 @@ function PriveExclusive(props) {
                     </div>
                 </div>
             </div>
-        </section>
+        </section >
     )
 }
 const mapStateToProps = (state) => {
-    let languages = '';
-
-    if (state && state.LanguageSwitcher) {
-        languages = state.LanguageSwitcher.language
-    }
-
+    //  console.log(state);
     return {
-        languages: languages
+        items: state.Cart.items
     }
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { addToCart, productList }
 )(PriveExclusive);

@@ -3175,3 +3175,22 @@ span.maindatory {
 .cle-designer-info {
     margin-top: 80px;
 }
+
+/* home last section */
+
+.banner-content-2{background:#f7f7fc; padding: 100px 60px;position:relative;}
+.banner-content-2 h4{font-family: 'Monument Extended';font-size:36px; line-height:46px; color:#000;}
+.banner-content-2 .cat-date{font-size:13px; line-height:22px; color:#2e2baa;font-weight: 500; text-transform:uppercase;}
+.banner-content-2 .cat-date span{font-size:13; line-height:22px; color:#707070;font-weight: 500; text-transform:capitalize; margin-left:20px;}
+.banner-content-2 p{font-size:16; line-height:22px; color:#000;}
+
+.newsletter-signup{width:max-content; margin:auto;}
+.terms-text{font-size:12px; line-height:15px; color:#000;}
+.terms-text a{font-size:12px; line-height:15px; color:#000; text-decoration:underline;}
+.become-partner{background:#2e2baa; height:100%; position:relative;}
+.become-part-inner{position:absolute; height:max-content; margin:auto; top:0; bottom:0; left:0; right:0; text-align:left; color:#fff;width: 75%;}
+.become-part-inner h1{font-size: 36px; line-height: 46px;font-family: 'Monument Extended'; margin-bottom:10px;}
+.become-part-inner p{font-size: 18px; line-height: 24px; margin-bottom: 20px;}
+.become-part-inner a{font-size: 12px; line-height: 16px;font-family: 'Monument Extended';font-weight: 500;padding:10px;border:1px solid #fff; color:#fff; text-decoration:none;display: inline-block;}
+
+

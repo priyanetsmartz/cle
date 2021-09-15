@@ -1,11 +1,31 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { connect } from 'react-redux'
-
+import { connect } from 'react-redux';
+import { addToCartApi } from '../../../redux/cart/productApi';
+import notification from "../../../components/notification";
+import cartAction from "../../../redux/cart/productAction";
+const { addToCart, productList } = cartAction;
 
 function WeChooseForYou(props) {
     useEffect(() => {
     }, [])
+
+
+    function handleClick(id: number, sku: string) {
+        let cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": localStorage.getItem('cartQuoteId')
+            }
+        }
+        let customer_id = localStorage.getItem('cust_id');
+        if (customer_id) {
+            addToCartApi(cartData)
+        }
+        props.addToCart(id);
+        notification("success", "", "Item added to cart");
+    }
 
     return (
         <section className="width-100 my-5 choose-foryou-sec">
@@ -31,6 +51,7 @@ function WeChooseForYou(props) {
                                             <div className="product_name mt-2">{item.name} </div>
                                             <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
                                             <div className="product_price"> {item.price}</div>
+                                            <div className="pro-price-btn">{item.price}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a></div>
                                         </div>
                                     )
                                 })}
@@ -43,6 +64,8 @@ function WeChooseForYou(props) {
         </section>
     )
 }
+
+
 const mapStateToProps = (state) => {
     return {
         items: state.Cart.items
@@ -50,5 +73,6 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { addToCart, productList }
 )(WeChooseForYou);
