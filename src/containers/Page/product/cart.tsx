@@ -9,7 +9,7 @@ const { addToCartTask } = cartAction;
 
 function CartItemPage(props) {
 
-    const [cartItemsVal, setCartItems] = useState([{ id: '', item_id: 0, extension_attributes: { item_image: "" }, name: '', price: 0, quantity: 0, desc: '', qty: 0, sku: '' }]);
+    const [cartItemsVal, setCartItems] = useState({});
     const [cartTotal, setCartTotal] = useState(0);
     useEffect(() => {
         callGetCartItems()
@@ -40,8 +40,12 @@ function CartItemPage(props) {
             }
         }
 
-        setCartItems(cartData)
+        let cartValues = {};
+        cartValues['items'] = cartData;
+        console.log(cartValues);
+        setCartItems(cartValues)
         setCartTotal(total);
+
     }
 
     async function handleRemove(item_id) {
@@ -113,43 +117,48 @@ function CartItemPage(props) {
     }
 
     return (
-        <div className="container" >
-            <div className="row">
-                {cartItemsVal.length ?
-                    (
-                        // <p></p>
-                        cartItemsVal.map(item => {
-                            return (
+        <main>
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-8">
+                        {cartItemsVal['items'] && cartItemsVal['items'].length ?
+                            (
+                                // <p></p>
+                                cartItemsVal['items'].map(item => {
+                                    return (
 
-                                <li className="col-md-4" key={item.sku}>
-                                    <div className="item-img">
-                                        <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} />
-                                    </div>
-                                    <div className="item-desc">
-                                        <span className="title">{item.name}</span>
-                                        <p>{item.desc}</p>
-                                        <p><b>Price: {item.price}$</b></p>
-                                        <p>
-                                            <b>Quantity: {item.quantity ? item.quantity : item.qty}</b>
-                                        </p>
-                                        <div className="add-remove">
-                                            <Link to="#"><i className="material-icons" onClick={() => { handleAddQuantity(item) }}><i className="fa fa-angle-up" aria-hidden="true"></i></i></Link>
-                                            <Link to="#"><i className="material-icons" onClick={() => { handleSubtractQuantity(item) }}><i className="fa fa-angle-down" aria-hidden="true"></i></i></Link>
-                                        </div>
-                                        <button className="waves-effect waves-light btn pink remove" onClick={() => { handleRemove(item.item_id) }}><i className="fa fa-times" aria-hidden="true"></i></button>
-                                    </div>
-                                </li>
+                                        <li className="col-md-12" key={item.sku}>
+                                            <div className="item-img">
+                                                <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} />
+                                            </div>
+                                            <div className="item-desc">
+                                                <span className="title">{item.name}</span>
+                                                <p>{item.desc}</p>
+                                                <p><b>Price: {item.price}$</b></p>
+                                                <p>
+                                                    <b>Quantity: {item.quantity ? item.quantity : item.qty}</b>
+                                                </p>
+                                                <div className="add-remove">
+                                                    <Link to="#"><i className="material-icons" onClick={() => { handleAddQuantity(item) }}><i className="fa fa-angle-up" aria-hidden="true"></i></i></Link>
+                                                    <Link to="#"><i className="material-icons" onClick={() => { handleSubtractQuantity(item) }}><i className="fa fa-angle-down" aria-hidden="true"></i></i></Link>
+                                                </div>
+                                                <button className="waves-effect waves-light btn pink remove" onClick={() => { handleRemove(item.item_id) }}><i className="fa fa-times" aria-hidden="true"></i></button>
+                                            </div>
+                                        </li>
+                                    )
+                                })
+                            ) :
+
+                            (
+                                <p>Cart is Empty.</p>
                             )
-                        })
-                    ) :
+                        }
 
-                    (
-                        <p>Cart is Empty.</p>
-                    )
-                }
-                {cartTotal ? cartTotal : ""}
+                    </div>
+                    <div className="col-md-4">{cartTotal ? cartTotal : ""}</div>
+                </div>
             </div>
-        </div>
+        </main>
     )
 }
 

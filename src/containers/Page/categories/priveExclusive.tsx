@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
 import { getPriveExclusiveProducts } from '../../../redux/cart/productApi';
 import { addToCartApi } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
@@ -73,7 +73,7 @@ function PriveExclusive(props) {
                             <div className="carousel-inner" >
                                 {products.items.map((item, i) => {
                                     return (
-                                        <div className={`carousel-item ${i == activeSlide ? 'active' : ''}`} key={i}>
+                                        <div className={`carousel-item ${i === activeSlide ? 'active' : ''}`} key={i}>
                                             <div className="row">
                                                 <div className="col-md-6 product-dummy"><img src={item.custom_attributes[1]?.value} alt="" /></div>
                                                 <div className="col-md-6">
@@ -81,7 +81,7 @@ function PriveExclusive(props) {
                                                         <img src="images/elvibswh.png" alt="" />
                                                         <h4>{item.name}</h4>
                                                         <p></p>
-                                                        <div className="pro-price-btn">{item.price}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a></div>
+                                                        <div className="pro-price-btn">{item.price}<Link ro="#" onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</Link></div>
                                                     </div>
                                                 </div>
                                             </div>

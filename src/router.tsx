@@ -26,6 +26,7 @@ import Categories from './containers/Page/categories/categories';
 import ProductDetails from './containers/Page/product/product-details/productDetails';
 import VendorLogin from './containers/Page/business/vendorLogin';
 import DesignerCategories from './containers/Page/designer/designer';
+import Checkout from './containers/Page/product/checkout/checkout';
 // import New from './containers/Page/new';
 
 import Product from './containers/Page/product/product';
@@ -37,9 +38,9 @@ const PublicRoutes = ({ history }) => {
       <Switch>
         <ProductRoutes exact path="/products/:category/:subcat" component={Categories} />
         <ProductRoutes exact path="/products/:category" component={Categories} />
-        <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />        
+        <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
-        <PrivateRoute exact path="/home" component={HomePage} />
+        <ProductRoutes exact path="/home" component={HomePage} />
         <PrivateRoute exact path="/designer-categories" component={DesignerCategories} />
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
@@ -49,7 +50,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
         {/* <PrivateRoute exact path="/customer-orders" component={CustomerOrders} /> */}
-        
+
         <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
 
         <MainRoute exact path="/business-login" component={VendorLogin} />
@@ -63,6 +64,7 @@ const PublicRoutes = ({ history }) => {
         </Route>
         <ProductRoutes exact path="/products" component={Product} />
         <ProductRoutes exact path="/my-cart" component={Cart} />
+        <ProductRoutes exact path="/checkout" component={Checkout} />
         <MainRoute path="/:id" component={Pages} />
         {/* <Route exact path="/page-not-found" component={NotFound} /> */}
       </Switch>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import CLELogo from '../../image/CLIlogo.png';
+import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import avatar from '../../image/avtar.svg';
 import favorit from '../../image/favrot.svg';
 import IconZoomIn from '../../image/Icon_zoom_in.svg'
@@ -22,9 +23,14 @@ function HeaderMenu(props) {
     let customer_id = localStorage.getItem('cust_id');
     let customerName = localStorage.getItem('token_name')
     const { category, key_url } = useParams();
+    const [isLoaded, setIsLoaded] = useState(true);
     const [menuData, SetMenuData] = useState([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
     const [activeCat, SetActiveCat] = useState('')
     const [showAccount, SetShowAccount] = useState(false);
+
+    setTimeout(() => {
+        setIsLoaded(false);
+    }, 3000);
 
     useEffect(() => {
         async function fetchMyAPI() {
@@ -69,6 +75,11 @@ function HeaderMenu(props) {
     }
     return (
         <>
+            {isLoaded && (
+                <div className="CLE-loading" style={{ "position": "fixed" }}>
+                    <img className="loading-gif" src={loading} alt="loader" />
+                </div>
+            )}
             <div className="container">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
                     <div className="col-4 pt-1">

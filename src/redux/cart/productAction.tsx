@@ -8,6 +8,7 @@ const actions = {
     OPEN_SIZE_GUIDE: 'OPEN_SIZE_GUIDE',
     OPEN_MEASURING_GUIDE: 'OPEN_MEASURING_GUIDE',
     ADD_TO_CART_TASK: 'ADD_TO_CART_TASK',
+    OPEN_GIFT_BOX: 'OPEN_GIFT_BOX',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -39,6 +40,11 @@ const actions = {
     openMeasuringGuide: isOpen => ({
         type: actions.OPEN_MEASURING_GUIDE,
         isOpen: isOpen
+    }),
+    openGiftBoxes: isOpen => ({
+        type: actions.OPEN_GIFT_BOX,
+        isOpen: isOpen
     })
+
 };
 export default actions;

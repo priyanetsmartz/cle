@@ -20,7 +20,7 @@ import Magazine from '../../home/magazine';
 import product from '../product';
 import notification from '../../../../components/notification';
 import GiftMessage from './GiftMessage';
-const { addToCart, addToCartTask } = cartAction;
+const { addToCart, addToCartTask, openGiftBoxes } = cartAction;
 
 function ProductDetails(props) {
     const { sku } = useParams();
@@ -30,7 +30,7 @@ function ProductDetails(props) {
     const [isShare, setIsLoaded] = useState(false);
     const [isGiftMessage, setIsGiftMessage] = useState(false);
     const [productImages, setProductImages] = useState([]);
-    const [productDetails, setproductDetails] = useState({ id: 0, name: "", sku: "", type_id: "", price: 0, is_in_stock: false, description: "", saleprice: 0, short_description: "", shipping_and_returns: "" });
+    const [productDetails, setproductDetails] = useState({});
     const [sizeGuideModal, setSizeGuideModal] = useState(false);
     const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
     const [magezineData, setMagezineData] = useState({});
@@ -53,9 +53,7 @@ function ProductDetails(props) {
     const handleClick = () => {
         setIsLoaded(true);
     }
-    const handleGiftMEssage = () => {
-        setIsGiftMessage(true)
-    }
+
 
     const hideGiftModalModal = () => {
         setIsGiftMessage(false)
@@ -85,9 +83,10 @@ function ProductDetails(props) {
     async function getProductDetailsFxn() {
         let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductDetails(sku);
+        // console.log(result.data)
+        let projectSingle = {};
         if (customer_id) {
             let productExtras: any = await getProductExtras(result.data.id);
-            console.log(result.data)
             setMagezineData(productExtras.data[0].posts)
             setRecomendations(productExtras.data[0].recommendation)
         }
@@ -107,22 +106,39 @@ function ProductDetails(props) {
             if (attributes.attribute_code === "shipping_and_returns") {
                 shipping_and_returns = attributes.value;
             }
-
         })
-        setProdId(result.data.id);
+
+        projectSingle['id'] = result.data.id;
+        projectSingle['type_id'] = result.data.type_id;
+        projectSingle['sku'] = result.data.sku;
+        projectSingle['name'] = result.data.name;
+        projectSingle['price'] = result.data.price;
+        projectSingle['description'] = description;
+        projectSingle['saleprice'] = special_price;
+        projectSingle['short_description'] = short;
+        projectSingle['shipping_and_returns'] = shipping_and_returns;
+        projectSingle['is_in_stock'] = result.data.extension_attributes.stock_item.is_in_stock;
+
+        setProdId(projectSingle['id']);
         setProductImages(result.data.media_gallery_entries)
         setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
         setExtensionAttributes(result.data.extension_attributes.stock_item.qty);
-        setproductDetails({ ...productDetails, id: result.data.id, type_id: result.data.type_id, sku: result.data.sku, name: result.data.name, price: result.data.price, description: description, saleprice: special_price, short_description: short, shipping_and_returns: shipping_and_returns, is_in_stock: result.data.extension_attributes.stock_item.is_in_stock });
-        console.log(prodId)
+        setproductDetails(projectSingle);
+        //console.log(productDetails)
 
+    }
+
+    const handleGiftMEssage = () => {
+        //console.log(prodId)
+        props.openGiftBoxes(prodId);
+        setIsGiftMessage(true)
     }
 
     function handleCart(id: number, sku: string) {
         let cartData = {};
         let cartQuoteId = localStorage.getItem('cartQuoteId');
         // console.log(slectedAttribute.options)
-        if (productDetails.type_id === 'configurable') {
+        if (productDetails['type_id'] === 'configurable') {
             if (!slectedAttribute.options["option_id"]) {
                 notification("error", "", "Please select Size");
                 return false;
@@ -131,7 +147,7 @@ function ProductDetails(props) {
                 "cart_item": {
                     "quote_id": cartQuoteId,
                     "product_type": "configurable",
-                    "sku": productDetails.sku,
+                    "sku": productDetails['sku'],
                     "qty": quantity,
                     "product_option": {
                         "extension_attributes": {
@@ -148,7 +164,7 @@ function ProductDetails(props) {
         } else {
             cartData = {
                 "cartItem": {
-                    "sku": productDetails.sku,
+                    "sku": productDetails['sku'],
                     "qty": quantity,
                     "quote_id": cartQuoteId
                 }
@@ -213,12 +229,12 @@ function ProductDetails(props) {
                                         </div>}
                                     </div>
                                     <div className="product_details">
-                                        <h1>{productDetails.name}</h1>
-                                        <h2><div dangerouslySetInnerHTML={{ __html: productDetails.short_description }} /></h2>
+                                        <h1>{productDetails['name']}</h1>
+                                        <h2><div dangerouslySetInnerHTML={{ __html: productDetails['short_description'] }} /></h2>
                                     </div>
                                     <div className="product-sale_off mt-4 mb-4">
-                                        <div className="product_saleoff">{productDetails.saleprice > 0 ? <><span className="saleoff">${formatprice(productDetails.price)}</span> now 25% off</> : <span>${formatprice(productDetails.price)}</span>}</div>
-                                        {productDetails.saleprice > 0 ? <div className="product_price">${formatprice(productDetails.saleprice)}</div> : ""}
+                                        <div className="product_saleoff">{productDetails['saleprice'] > 0 ? <><span className="saleoff">${formatprice(productDetails['price'])}</span> now 25% off</> : <span>${formatprice(productDetails['price'])}</span>}</div>
+                                        {productDetails['saleprice'] > 0 ? <div className="product_price">${formatprice(productDetails['saleprice'])}</div> : ""}
                                     </div>
                                     <div className="selection-process mb-2">
                                         <div className="row">
@@ -272,8 +288,8 @@ function ProductDetails(props) {
 
                                     <div className="width-100 my-3">
                                         <div className="d-grid">
-                                            {productDetails.is_in_stock === true && (
-                                                <button type="button" onClick={() => { handleCart(productDetails.id, productDetails.sku) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                            {productDetails['is_in_stock'] === true && (
+                                                <button type="button" onClick={() => { handleCart(productDetails['id'], productDetails['sku']) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
                                                     Add to Cart</button>
                                             )}
                                         </div>
@@ -281,9 +297,9 @@ function ProductDetails(props) {
 
                                     <div className="row my-3">
                                         <div className="d-grid gap-2 d-md-flex justify-content-start">
-                                            <Link to="#" type="button" className="btn btn-outline-primary me-4" onClick={() => {
+                                            <button type="button" className="btn btn-outline-primary me-4" onClick={() => {
                                                 handleGiftMEssage();
-                                            }} >Send a Gift</Link>
+                                            }} >Send a Gift</button>
                                             <button type="button" className="btn btn-outline-success" onClick={() => {
                                                 handleClick();
                                             }} ><img src={ShareIcon} alt=""
@@ -304,7 +320,7 @@ function ProductDetails(props) {
                                             <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne"
                                                 data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">
-                                                    <div dangerouslySetInnerHTML={{ __html: productDetails.description }} />
+                                                    <div dangerouslySetInnerHTML={{ __html: productDetails['description'] }} />
                                                 </div>
                                             </div>
                                         </div>
@@ -364,7 +380,7 @@ function ProductDetails(props) {
                                                 aria-labelledby="flush-headingFourth" data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">
                                                     <div className="express_rate">
-                                                        <div dangerouslySetInnerHTML={{ __html: productDetails.shipping_and_returns }} />
+                                                        <div dangerouslySetInnerHTML={{ __html: productDetails['shipping_and_returns'] }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -394,7 +410,7 @@ function ProductDetails(props) {
             <Modal show={measuringGuideModal} size="lg">
                 <MeasuringGuide />
             </Modal>
-            <Modal show={isGiftMessage} size="lg" data={prodId} >
+            <Modal show={isGiftMessage} size="lg" data={productDetails['id']} >
                 <Modal.Header>
                     <h5 className="modal-title">Add Gift Reciept</h5>
                     <p>Feel Free to add a personalized note or whishes </p>
@@ -410,14 +426,14 @@ function ProductDetails(props) {
                     <li>
                         <FacebookShareButton
                             url={shareUrl}
-                            quote={productDetails.name}>
+                            quote={productDetails['name']}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="21.42" height="21.419" viewBox="0 0 21.42 21.419">
                                 <path id="facebook" d="M18.093,7.758A10.614,10.614,0,0,1,23.5,9.229,10.818,10.818,0,0,1,26.2,25.568a10.912,10.912,0,0,1-6.043,3.609v-7.7h2.1l.475-3.025h-3.18V16.472a1.722,1.722,0,0,1,.366-1.138,1.675,1.675,0,0,1,1.344-.511h1.921v-2.65q-.041-.013-.784-.105a15.591,15.591,0,0,0-1.692-.105,4.228,4.228,0,0,0-3.038,1.083,4.187,4.187,0,0,0-1.141,3.108v2.3H14.11v3.025h2.42v7.7a10.65,10.65,0,0,1-6.549-3.609,10.805,10.805,0,0,1,2.706-16.34,10.617,10.617,0,0,1,5.406-1.471Z" transform="translate(-7.383 -7.758)" fill="#2E2BAA" fillRule="evenodd" />
                             </svg>
                         </FacebookShareButton>
                         <LinkedinShareButton
                             url={shareUrl}
-                            title={productDetails.name}>
+                            title={productDetails['name']}>
                             <svg id="_x31_0.Linkedin" xmlns="http://www.w3.org/2000/svg" width="21.472" height="21.472" viewBox="0 0 21.472 21.472">
                                 <path id="Path_17" data-name="Path 17" d="M52.176,49.981V42.117c0-3.865-.832-6.817-5.341-6.817a4.66,4.66,0,0,0-4.214,2.308h-.054V35.649H38.3V49.981h4.455V42.869c0-1.879.349-3.677,2.657-3.677,2.281,0,2.308,2.12,2.308,3.784v6.978h4.455Z" transform="translate(-30.704 -28.51)" fill="#2E2BAA" />
                                 <path id="Path_18" data-name="Path 18" d="M11.3,36.6h4.455V50.932H11.3Z" transform="translate(-10.951 -29.461)" fill="#2E2BAA" />
@@ -427,7 +443,7 @@ function ProductDetails(props) {
 
                         <TwitterShareButton
                             url={shareUrl}
-                            title={productDetails.name}>
+                            title={productDetails['name']}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="85.393" height="22" viewBox="0 0 85.393 22">
                                 <g id="Group_727" data-name="Group 727" transform="translate(-785.223 -4492)">
                                     <g id="Group_728" data-name="Group 728">
@@ -452,7 +468,7 @@ function ProductDetails(props) {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
+    //  console.log(state)
     return {
         items: state
     }
@@ -460,5 +476,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, addToCartTask }
+    { addToCart, addToCartTask, openGiftBoxes }
 )(ProductDetails);

@@ -4,7 +4,8 @@ const initState = {
     items: data ? JSON.parse(data) : [],
     addedItems: [],
     total: 0,
-    addToCartTask: false
+    addToCartTask: false,
+    openGiftBox: 0
 }
 
 const cartReducer = (state = initState, action) => {
@@ -114,10 +115,17 @@ const cartReducer = (state = initState, action) => {
         }
     }
     if (action.type === actions.ADD_TO_CART_TASK) {
-        //   console.log(action)
         return {
             ...state,
             addToCartTask: action.addToCartTask
+        }
+    }
+    //  console.log(action)
+    if (action.type === actions.OPEN_GIFT_BOX) {
+        // console.log(actions)
+        return {
+            ...state,
+            openGiftBox: action.isOpen
         }
     }
     return state

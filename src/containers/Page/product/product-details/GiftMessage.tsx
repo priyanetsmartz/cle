@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
 import notification from '../../../../components/notification';
-import { giftCart, giftGuestCart } from "../../../../redux/cart/productApi";
+import { addToCartApi, addToCartApiGuest, giftCart, giftGuestCart } from "../../../../redux/cart/productApi";
 
 function GiftMessage(props) {
-    let product_id = props.data;
-    console.log(props)
+    // let product_id = props;
+    useEffect(() => {
+        console.log(props.product)
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
+    }, [])
+
     const [state, setState] = useState({
         for: "",
         from: "",
@@ -23,22 +31,67 @@ function GiftMessage(props) {
 
         e.preventDefault();
         if (handleValidation()) {
-            let customer_id = localStorage.getItem('cust_id');
-            const giftMEssageData = {
-                "giftMessage": {
-                    "gift_message_id": 0,
-                    "customer_id": customer_id ? parseInt(customer_id) : 0,
-                    "sender": state.from,
-                    "recipient": state.for,
-                    "message": state.message
+            let cartData = {};
+            let cartQuoteId = localStorage.getItem('cartQuoteId');
+            // console.log(slectedAttribute.options)
+            if (props.product[0].type_id === 'configurable') {
+                // if (!slectedAttribute.options["option_id"]) {
+                //     notification("error", "", "Please select Size");
+                //     return false;
+                // }
+                cartData = {
+                    // "cart_item": {
+                    //     "quote_id": cartQuoteId,
+                    //     "product_type": "configurable",
+                    //     "sku": props.product.sku,
+                    //     "qty": 1,
+                    //     "product_option": {
+                    //         "extension_attributes": {
+                    //             "configurable_item_options": [
+                    //                 {
+                    //                     "option_id": slectedAttribute.options["option_id"],
+                    //                     "option_value": slectedAttribute.options["option_value"]
+                    //                 }
+                    //             ]
+                    //         }
+                    //     }
+                    // }
+                }
+            } else {
+                cartData = {
+                    "cartItem": {
+                        "sku": props.product[0].sku,
+                        "qty": 1,
+                        "quote_id": cartQuoteId
+                    }
                 }
             }
-            console.log(giftMEssageData)
+
+            let customer_id = localStorage.getItem('cust_id');
+            let results: any;
             if (customer_id) {
-                result = await giftCart(giftMEssageData, 27)
+                results = await addToCartApi(cartData)
             } else {
-                result = await giftGuestCart(giftMEssageData, 27)
+                results = await addToCartApiGuest(cartData)
             }
+            if (results.data.item_id) {
+                const giftMEssageData = {
+                    "giftMessage": {
+                        "gift_message_id": 0,
+                        "customer_id": customer_id ? parseInt(customer_id) : 0,
+                        "sender": state.from,
+                        "recipient": state.for,
+                        "message": state.message
+                    }
+                }
+                if (customer_id) {
+                    result = await giftCart(giftMEssageData, results.data.item_id)
+                } else {
+                    result = await giftGuestCart(giftMEssageData, results.data.item_id)
+                }
+            }
+
+
             console.log(result)
         } else {
             setIsShow(false);
@@ -125,4 +178,15 @@ function GiftMessage(props) {
     )
 }
 
-export default GiftMessage;
+const mapStateToProps = (state) => {
+    //  console.log(state)
+    return {
+        items: state.Cart.openGiftBox,
+        product: state.Cart.items
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    {}
+)(GiftMessage);

@@ -8,7 +8,7 @@ const { addToCartTask } = cartAction;
 function MiniCart(props) {
 
     const [showCart, SetShowCart] = useState(false);
-    const [cartItemsVal, setCartItems] = useState([{ id: '', item_id: 0, extension_attributes: { item_image: "" }, name: '', price: 0, quantity: 0, desc: '', qty: 0, sku: '' }]);
+    const [cartItemsVal, setCartItems] = useState({});
     const [cartTotal, setCartTotal] = useState(0);
 
     useEffect(() => {
@@ -43,7 +43,10 @@ function MiniCart(props) {
             }
         }
 
-        setCartItems(cartData)
+        let cartValues = {};
+        cartValues['items'] = cartData;
+       // console.log(cartValues);
+        setCartItems(cartValues)
         setCartTotal(total);
 
     }
@@ -56,15 +59,15 @@ function MiniCart(props) {
         SetShowCart(false)
     }
     return (
-        <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">({cartItemsVal.length})</span></Link>
+        <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">({cartItemsVal && cartItemsVal['items'] ? cartItemsVal['items'].length : 0})</span></Link>
             <div className="miniaccount_details" style={{ "display": !showCart ? "none" : "block" }}>
                 <div className="cart_your">Your cart</div>
                 <Link to="#" className="cross_icn" onClick={() => { hideCart() }} > <i className="fas fa-times"></i></Link>
                 <ul>
-                    {cartItemsVal.length ?
+                    {cartItemsVal && cartItemsVal['items'] && cartItemsVal['items'].length ?
                         (
                             // <p></p>
-                            cartItemsVal.map((item, i) => {
+                            cartItemsVal['items'].map((item, i) => {
                                 return (
                                     <li key={i}>
                                         <Link to={'/product-details/' + item.sku}><span className="minicartprodt_img"><img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} className="imge-fluid" /></span>
@@ -88,7 +91,7 @@ function MiniCart(props) {
                     <div className="d-grid">
                         <Link to="/my-cart" className="btn btn-secondary" type="button">Cart</Link>
                         <br />
-                        <button className="btn btn-secondary" type="button">Checkout</button>
+                        <Link to="/checkout" className="btn btn-secondary" type="button">Checkout</Link>
                     </div>
                 </div>
             </div>

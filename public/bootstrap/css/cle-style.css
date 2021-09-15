@@ -3194,3 +3194,78 @@ span.maindatory {
 .become-part-inner a{font-size: 12px; line-height: 16px;font-family: 'Monument Extended';font-weight: 500;padding:10px;border:1px solid #fff; color:#fff; text-decoration:none;display: inline-block;}
 
 
+/* checkout page */
+
+.accordion-item {
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.125) !important;
+    border-radius: 0 !important;
+    margin-bottom: 20px;
+}
+.order-detail-sec{border:1px solid #000; padding:15px;}
+.Ordered-pro-list {
+    height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    list-style-type: none;
+    padding: 0;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+.Ordered-pro-list li {
+    width: 100%;
+}
+.Ordered-pro-list li a {
+    display: block;
+}
+.Ordered-pro-list li a:after {
+    display: block;
+	content:"";
+	clear:both;
+}
+.order-pro_img {
+    width: 120px;
+    float: left;
+}
+.order-pro_img img{width:100%;}
+.order-pro_name {
+    float: left;
+    width: 175px;
+    height: max-content;
+}
+.product-total-price p {
+    display: block;
+    width: 100%;
+}
+.product-total-price p span{
+    float:right;
+	color:#2e2baa;
+}
+.product-total-price p:after {
+    display: block;
+	content:"";
+	clear:both;
+}
+.final-price {
+    display: block;
+    width: 100%;
+}
+.final-price span{
+    float:right;
+	color:#2e2baa;
+}
+.final-price:after {
+    display: block;
+	content:"";
+	clear:both;
+}
+.checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link.active{font-family: 'Monument Extended';font-weight: 500; border-bottom:1px solid #2e2baa; color:#2e2baa;background: none;}
+.checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link {
+    font-family: 'Monument Extended';
+    color: #000;
+    padding: 0 0 10px;
+    margin-right: 30px;
+	border-radius: 0;
+}
+.choose-method p{text-align:center;}
+.add-ad-btn{font-family: 'Monument Extended';font-weight: 500; border:0px solid #2e2baa; color:#2e2baa;background: none; padding:0; margin-bottom:20px;text-decoration:none;}

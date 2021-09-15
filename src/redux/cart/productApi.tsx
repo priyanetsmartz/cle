@@ -202,3 +202,9 @@ export function giftGuestCart(giftData: any, itemId: number) {
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     return APi.request(`rest/V1/guest-carts/${cartQuoteToken}​​​​​​/gift-message/${itemId}`, giftData, "POST", "")
 }
+
+export function getCheckOutTotals() {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`/rest/V1/carts/${cartQuoteId}/totals`, "", "GET", "")
+
+}
