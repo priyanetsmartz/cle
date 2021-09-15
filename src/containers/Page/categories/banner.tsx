@@ -1,27 +1,33 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getContent } from '../../../redux/pages/customers';
+import { getCategoryDetails } from '../../../redux/pages/customers';
 
 
 function CategoryBanner(props) {
-    const [pagesData, SetPagesData] = useState({ title: '', content: '' })
+    const [category, setCategory] = useState({
+        custom_attributes:[]
+    })
+    const [catId, setCatId] = useState('52')
 
     useEffect(() => {
         getData();
     }, [props.languages]);
 
     const getData = async () => {
-        let result: any = await getContent(props.languages, 'design_category_banner_image');
-        // console.log(result.data.items[0].content);
+        let result: any = await getCategoryDetails(props.languages, catId);
+        // console.log(result);
         if (result) {
-            SetPagesData(result.data.items[0]);
+            setCategory(result.data);
         }
     }
 
     return (
         <>
-            {pagesData ? <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> : ""}
+            <div>
+                <img src={category.custom_attributes[1]?.value} alt="" />
+                {category.custom_attributes[0] ? <div dangerouslySetInnerHTML={{ __html: category.custom_attributes[0].value }} /> : ''}
+            </div>
         </>
     )
 }

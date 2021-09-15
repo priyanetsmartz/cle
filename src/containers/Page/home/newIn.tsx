@@ -1,11 +1,20 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import Slider from "react-slick";
 
 
 function NewIn(props) {
     useEffect(() => {
     }, [])
+
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 4
+    };
 
     return (
         <section className="width-100 mb-5">
@@ -22,25 +31,29 @@ function NewIn(props) {
                         <div className="col-sm-12">
                             <div className="new-in-slider">
                                 <div className="regular slider">
-                                    {props && props.newInProducts.map(item => {
-                                        return (
-                                            <div className="productcalr" key={item.id}>
-                                                <div className="product_img">
-                                                    <img src={item.img} className="image-fluid" />
+                                    <Slider {...settings}> 
+                                        {props && props.newInProducts.map(item => {
+                                            return (
+                                                <div className="productcalr" key={item.id}>
+                                                    <div className="product_img">
+                                                        <img src={item.img} className="image-fluid" />
+                                                    </div>
+                                                    <div className="product_name"> {item.name} </div>
+                                                    <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }} />
+                                                    {/* <div className="product_vrity">{item.short_description}</div> */}
+                                                    <div className="product_price"> {item.price}</div>
                                                 </div>
-                                                <div className="product_name"> {item.name} </div>
-                                                <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }} />
-                                                {/* <div className="product_vrity">{item.short_description}</div> */}
-                                                <div className="product_price"> {item.price}</div>
-                                            </div>
-                                        )
-                                    })}
+                                            )
+                                        })}
+                                    </Slider>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+        
+        
     )
 }
 const mapStateToProps = (state) => {

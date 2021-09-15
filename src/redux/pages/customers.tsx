@@ -79,14 +79,28 @@ export function wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchNa
 }
 
 //apis for the home page
-export function getHomePageProducts() {
-    const storeId = 2;
-    const customerId = 114;
+export function getHomePageProducts(language, customerId) {
+    const storeId = language === 'english' ? 3 : 2;
+    customerId = 114; //remove that
     return adminToken.request(`rest/all/V1/product/newin?storeId=${storeId}&customerId=${customerId}`, "", "GET", "");
 }
 
 export function getContent(language: string, indentifier) {
-    var storeId = language === 'english' ? 3 : 2;
+    const storeId = language === 'english' ? 3 : 2;
     return adminToken.request(`rest/V1/cmsBlock/search?searchCriteria[filterGroups][0][filters][0][field]=store_id&searchCriteria[filterGroups][0][filters][0][value]=${storeId}&searchCriteria[filterGroups][0][filters][0][condition_type]==&searchCriteria[filterGroups][1][filters][0][field]=identifier&searchCriteria[filterGroups][1][filters][0][value]=${indentifier}&searchCriteria[filterGroups][1][filters][0][condition_type]==`, "", "GET", "");
 }
 
+export function getCategoryDetails(language, catId) {
+    const storeId = language === 'english' ? 3 : 2;
+    return adminToken.request(`rest/V1/categories/${catId}?storeId=${storeId}`, "", "GET", "");
+}
+
+export function getWeChooseForYou(language, custId) {
+    custId = 114 //remove this
+    const storeId = language === 'english' ? 3 : 2;
+    return adminToken.request(`rest/all/V1/product/relevantProducts?storeId=${storeId}&customerId=${custId}`, "", "GET", "");
+}
+
+export function getHomePageBanner() {
+    return adminToken.request(`rest/V1/lof/bannerslider/getList?searchCriteria[filterGroups][0][filters][0][field]=tags&searchCriteria[filterGroups][0][filters][0][value]=home_page_slider`, "", "GET", "");
+}

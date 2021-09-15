@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { BrowserView, MobileView } from 'react-device-detect';
 import ReactFullpage from '@fullpage/react-fullpage';
 import { getHomePageProducts } from '../../../redux/pages/customers';
+import HomeBanner from './banner';
 import HtmlContent from '../../partials/htmlContent';
 import Personal from './personal';
 import BestSeller from './bestSeller';
@@ -14,6 +15,7 @@ import BecomePartner from './becomePartner';
 
 
 function HomePage(props) {
+    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [products, setProducts] = useState({
         newInProducts: [],
         customerProducts: [],
@@ -25,7 +27,7 @@ function HomePage(props) {
     }, []);
 
     const getData = async () => {
-        let result: any = await getHomePageProducts();
+        let result: any = await getHomePageProducts(props.languages, customerId);
         if (result) {
             setProducts(result.data[0]);
         }
@@ -55,7 +57,7 @@ function HomePage(props) {
                         return (
                             <div className="sectiosn" >
                                 <div className="section">
-                                    <HtmlContent identifier="home_page_banner" />
+                                    <HomeBanner />
                                 </div>
                                 <div className="section" >
                                     <Personal />
@@ -67,7 +69,7 @@ function HomePage(props) {
                                     <NewIn newInProducts={products.newInProducts} />
                                 </div>
                                 <div className="section" >
-                                    <WeChooseForYou customerProducts={products.customerProducts} />
+                                    <WeChooseForYou />
                                 </div>
                                 <div className="section" >
                                     <HtmlContent identifier="home_page_pre-owned_category" />
@@ -92,7 +94,7 @@ function HomePage(props) {
             <MobileView>
                 <div className="sectiosn" >
                     <div className="section">
-                        <HtmlContent identifier="home_page_banner" />
+                        <HomeBanner />
                     </div>
                     <div className="section" >
                         <Personal />
@@ -104,7 +106,7 @@ function HomePage(props) {
                         <NewIn newInProducts={products.newInProducts} />
                     </div>
                     <div className="section" >
-                        <WeChooseForYou customerProducts={products.customerProducts} />
+                        <WeChooseForYou />
                     </div>
                     <div className="section" >
                         <HtmlContent identifier="home_page_pre-owned_category" />
@@ -127,8 +129,14 @@ function HomePage(props) {
     )
 }
 const mapStateToProps = (state) => {
+    let languages = '';
+
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+
     return {
-        items: state.Cart.items
+        languages: languages
     }
 }
 
