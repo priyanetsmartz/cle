@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import cartAction from "../../../../redux/cart/productAction";
-import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, removeItemFromCart, removeItemFromGuestCart, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
+import { addWhishlist, getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
 import notification from "../../../../components/notification";
 const { addToCartTask } = cartAction;
 
 function CartItemPage(props) {
-
+    const [token, setToken] = useState('');
     const [cartItemsVal, setCartItems] = useState({});
     const [cartTotals, setCartTotal] = useState({});
     useEffect(() => {
+        const localToken = localStorage.getItem('token');
+        setToken(localToken)
         callGetCartItems()
         return () => {
             // componentwillunmount in functional component.
@@ -36,6 +38,7 @@ function CartItemPage(props) {
 
             }
         }
+        console.log(cartData)
         let cartPrices = {}
         cartPrices['discount'] = cartTotal.data.base_discount_amount;
         cartPrices['sub_total'] = cartTotal.data.base_subtotal;
@@ -46,7 +49,7 @@ function CartItemPage(props) {
         cartValues['items'] = cartData;
         setCartItems(cartValues)
         setCartTotal(cartPrices);
-       // console.log(cartItemsVal)
+        // console.log(cartItemsVal)
 
     }
 
@@ -117,6 +120,18 @@ function CartItemPage(props) {
         props.addToCartTask(true);
         notification("success", "", "Cart Updated");
     }
+    async function handleWhishlist(id: number) {
+        console.log(id)
+        let result: any = await addWhishlist(id);
+        notification("success", "", result.data[0].message);
+        callGetCartItems()
+
+    }
+    async function handleDelWhishlist(id: number) {
+        let del: any = await removeWhishlist(id);
+        notification("success", "", del.data[0].message);
+        callGetCartItems()
+    }
 
     return (
         <main>
@@ -148,17 +163,26 @@ function CartItemPage(props) {
                                                                         <p><strong>{item.name}</strong></p>
                                                                         <p>{item.desc}</p>
                                                                     </div>
-                                                                    <Link to="#" className="float-end text-end">Add to wishlist</Link>
+                                                                    {token && (
+                                                                        <span className="off bg-favorite">
+                                                                            {!item.wishlist_item_id && (
+                                                                                <Link to="#" onClick={() => { handleWhishlist(item['id']) }} className="float-end text-end">Add to wishlist</Link>
+                                                                            )}
+                                                                            {item.wishlist_item_id && (
+                                                                                <Link to="#" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} className="float-end text-end">Remove from wishlist</Link>
+                                                                            )}
+                                                                        </span>
+                                                                    )
+                                                                    }
                                                                     <div className="clearfix"></div>
                                                                 </div>
                                                                 <div className="qty-size">
                                                                     <div className="row mb-3">
                                                                         <label htmlFor="inputQty" className="col-sm-2 col-form-label">Qty</label>
-                                                                        <div className="col-sm-5">
-                                                                            <select id="inputQty" className="form-select">
-                                                                                <option>1</option>
-                                                                                <option>2</option>
-                                                                            </select>
+                                                                        <div className="col-sm-5 cartschanger">
+                                                                            <div className="value-button" id="decrease" onClick={() => { handleSubtractQuantity(item) }} >-</div>
+                                                                            <input type="number" id="number" value={item.qty} />
+                                                                            <div className="value-button" id="increase" onClick={() => { handleAddQuantity(item) }}>+</div>
                                                                         </div>
                                                                         <div className="col-sm-5">
                                                                             <select className="form-select">
@@ -171,7 +195,7 @@ function CartItemPage(props) {
                                                                 <div className="cart-pro-price">${item.price}</div>
                                                                 <div className="pro-name-tag">
                                                                     <p className="float-start">Ready tp ship to the contiguous SA in 1-14 days</p>
-                                                                    <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end">Remove</Link>
+                                                                    <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" >Remove</Link>
                                                                     <div className="clearfix"></div>
                                                                 </div>
                                                             </div>

@@ -76,7 +76,7 @@ function MyWishList(props) {
                                             <div className="row" key={item.product_id}>
                                                 <img src={item.img_src} alt={item.name} style={{ height: '100px', width: '100px' }} />
                                                 <p>Name : {item.name}</p>
-                                                <p>Product Price : {formatprice(item.price)}</p>
+                                                <p>Product Price :$ {formatprice(item.price)}</p>
                                                 <button onClick={() => itemREmoveHandler(item.product_id)}>Remove</button>
                                             </div>
                                         );

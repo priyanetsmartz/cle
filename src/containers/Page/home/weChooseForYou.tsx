@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import notification from "../../../components/notification";
 import cartAction from "../../../redux/cart/productAction";
 import { getWeChooseForYou } from '../../../redux/pages/customers';
-import { formatprice } from '../../../components/utility/allutils';
+import { Link } from 'react-router-dom'
 import {
     addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi,
     getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken
 } from '../../../redux/cart/productApi';
 import Slider from "react-slick";
+import { formatprice } from '../../../components/utility/allutils';
 
 
 const { addToCart, productList } = cartAction;
@@ -94,26 +95,15 @@ function WeChooseForYou(props) {
                                     {products.map((item, i) => {
                                         return (
                                             <div className="productcalr" key={i}>
-                                                {token && (
-                                                    <span className="off bg-favorite">
-                                                        {!item.wishlist_item_id && (
-                                                            <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                                        )}
-                                                        {item.wishlist_item_id && (
-                                                            <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                                        )}
-                                                    </span>
-                                                )
-                                                }
                                                 <div className="product_img">
-                                                    <img src={item.img} className="image-fluid" />
+                                                    <img src={item.img} alt="productimage" className="image-fluid" />
                                                 </div>
-                                                <div className="product_name mt-2">{item.name} </div>
+                                                <div className="product_name mt-2">  <Link to={'/product-details/' + item.sku}>{item.name} </Link></div>
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
-                                                <div className="product_price"> ${formatprice(item.price)}</div>
-                                                <div className="pro-price-btn">
-                                                    <a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a>
-                                                </div>
+                                                <div className="product_price">$ {formatprice(item.price)}</div>
+                                                {/* <div className="pro-price-btn">
+                                                    <Link onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</Link>
+                                                </div> */}
                                             </div>
                                         )
                                     })}
