@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import ProductImages from './productImges';
 import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
+import IntlMessages from "../../../../components/utility/intlMessages";
 import Promotion from '../../../partials/promotion';
 import { addToCartApi, addToCartApiGuest, getProductDetails, getProductExtras } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
@@ -24,6 +25,7 @@ const { addToCart, addToCartTask, openGiftBoxes } = cartAction;
 
 function ProductDetails(props) {
     const { sku } = useParams();
+    const [isShow, setIsShow] = useState(false);
     const [shareUrl, setShareUrl] = useState('');
     const [prodId, setProdId] = useState('');
     const [isPriveuser, setIsPriveUser] = useState(false);
@@ -89,8 +91,9 @@ function ProductDetails(props) {
             let productExtras: any = await getProductExtras(result.data.id);
             setMagezineData(productExtras.data[0].posts)
             setRecomendations(productExtras.data[0].recommendation)
+         //   console.log(productExtras.data)
         }
-        //   console.log(recomendationsData)
+       
         let description = "", special_price: 0, short, shipping_and_returns: "";
 
         result.data.custom_attributes.map((attributes) => {
@@ -134,8 +137,10 @@ function ProductDetails(props) {
         setIsGiftMessage(true)
     }
 
-    function handleCart(id: number, sku: string) {
+    async function handleCart(id: number, sku: string) {
+        setIsShow(true);
         let cartData = {};
+        let cartSucces: any;
         let cartQuoteId = localStorage.getItem('cartQuoteId');
         // console.log(slectedAttribute.options)
         if (productDetails['type_id'] === 'configurable') {
@@ -173,13 +178,18 @@ function ProductDetails(props) {
 
         let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
-            addToCartApi(cartData)
+            cartSucces = await addToCartApi(cartData)
         } else {
-            addToCartApiGuest(cartData)
+            cartSucces = await addToCartApiGuest(cartData)
         }
-        //  props.addToCart(id);
-        props.addToCartTask(true);
-        notification("success", "", "Item added to cart");
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(false);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(false);
+        }
     }
 
     const handleQuantity = (event) => {
@@ -289,8 +299,10 @@ function ProductDetails(props) {
                                     <div className="width-100 my-3">
                                         <div className="d-grid">
                                             {productDetails['is_in_stock'] === true && (
-                                                <button type="button" onClick={() => { handleCart(productDetails['id'], productDetails['sku']) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                                <>  <button type="button" style={{ "display": !isShow ? "inline-block" : "none" }} onClick={() => { handleCart(productDetails['id'], productDetails['sku']) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
                                                     Add to Cart</button>
+                                                    <button style={{ "display": isShow ? "inline-block" : "none" }} className="btn btn-primary"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></button>
+                                                </>
                                             )}
                                         </div>
                                     </div>

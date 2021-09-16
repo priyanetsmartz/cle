@@ -8,6 +8,8 @@ const { addToCartTask } = cartAction;
 
 function CartItemPage(props) {
     const [token, setToken] = useState('');
+    const [isShow, setIsShow] = useState(0);
+    const [isWishlist, setIsWishlist] = useState(0);
     const [cartItemsVal, setCartItems] = useState({});
     const [cartTotals, setCartTotal] = useState({});
     useEffect(() => {
@@ -38,7 +40,7 @@ function CartItemPage(props) {
 
             }
         }
-        console.log(cartData)
+        console.log(cartItems.data)
         let cartPrices = {}
         cartPrices['discount'] = cartTotal.data.base_discount_amount;
         cartPrices['sub_total'] = cartTotal.data.base_subtotal;
@@ -49,11 +51,12 @@ function CartItemPage(props) {
         cartValues['items'] = cartData;
         setCartItems(cartValues)
         setCartTotal(cartPrices);
-        // console.log(cartItemsVal)
+       // console.log(cartItemsVal)
 
     }
 
     async function handleRemove(item_id) {
+        setIsShow(item_id)
         let customer_id = localStorage.getItem('cust_id');
         let deleteCartItem: any
         if (customer_id) {
@@ -66,6 +69,10 @@ function CartItemPage(props) {
         if (deleteCartItem.data === true) {
             props.addToCartTask(true);
             callGetCartItems()
+            notification("success", "", "Item removed from cart!");
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(0)
         }
     }
     //to add the quantity
@@ -121,10 +128,17 @@ function CartItemPage(props) {
         notification("success", "", "Cart Updated");
     }
     async function handleWhishlist(id: number) {
-        console.log(id)
+        setIsWishlist(id)
         let result: any = await addWhishlist(id);
-        notification("success", "", result.data[0].message);
-        callGetCartItems()
+        if (result.data[0].message) {
+            setIsWishlist(0)
+            notification("success", "", result.data[0].message);
+            callGetCartItems()
+        } else {
+            setIsWishlist(0)
+            notification("error", "", "Something went wrong!");
+            callGetCartItems()
+        }
 
     }
     async function handleDelWhishlist(id: number) {
@@ -166,7 +180,7 @@ function CartItemPage(props) {
                                                                     {token && (
                                                                         <span className="off bg-favorite">
                                                                             {!item.wishlist_item_id && (
-                                                                                <Link to="#" onClick={() => { handleWhishlist(item['id']) }} className="float-end text-end">Add to wishlist</Link>
+                                                                                <Link to="#" onClick={() => { handleWhishlist(item['id']) }} className="float-end text-end">{isWishlist === item['id'] ? "Adding....." : "Add to wishlist"}</Link>
                                                                             )}
                                                                             {item.wishlist_item_id && (
                                                                                 <Link to="#" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} className="float-end text-end">Remove from wishlist</Link>
@@ -193,10 +207,9 @@ function CartItemPage(props) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="cart-pro-price">${item.price}</div>
-                                                                <div className="pro-name-tag">
-                                                                    <p className="float-start">Ready tp ship to the contiguous SA in 1-14 days</p>
-                                                                    <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" >Remove</Link>
-                                                                    <div className="clearfix"></div>
+                                                                <div className="pro-name-tag"  >
+                                                                    {/* <p className="float-start">Ready tp ship to the contiguous SA in 1-14 days</p> */}
+                                                                    <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" >{isShow === item.item_id ? "Removing....." : "Remove"}</Link>
                                                                 </div>
                                                             </div>
                                                         </div>

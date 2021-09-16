@@ -2,8 +2,49 @@ import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import CheckoutSidebar from './sidebar';
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../../../../redux/cart/productApi';
 function Checkout(props) {
+    const [itemsVal, SetItems] = useState({
+        checkData: {}, items: {}, address: {}
+    });
+    useEffect(() => {
+        checkoutScreen();
 
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
+    }, [props.posts])
+    async function checkoutScreen() {
+        let cartItems: any, cartTotal: any;
+        let customer_id = localStorage.getItem('cust_id');
+        if (customer_id) {
+            cartItems = await getCartItems();
+            // get cart total 
+            cartTotal = await getCartTotal();
+        } else {
+            const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+            if (cartQuoteToken) {
+                cartItems = await getGuestCart();
+                cartTotal = await getGuestCartTotal();
+
+
+            }
+        }
+        // let result: any = await getCheckOutTotals();
+        let checkoutData = {}, checkItems = {}, addresses = {}
+        checkoutData['discount'] = cartTotal.data.base_discount_amount;
+        checkoutData['sub_total'] = cartTotal.data.base_subtotal;
+        checkoutData['shipping_charges'] = cartTotal.data.base_shipping_amount;
+        checkoutData['total'] = cartTotal.data.base_grand_total;
+        checkoutData['tax'] = cartTotal.data.base_tax_amount;
+        checkoutData['total_items'] = cartTotal.data.items_qty;
+        checkItems['items'] = cartItems.data.items;
+        addresses['addresses'] = cartItems.data.customer.addresses;
+        // SetItems(result.data);
+        SetItems({ checkData: checkoutData, items: checkItems, address: addresses });
+        console.log(itemsVal.address['addresses'])
+    }
     return (
         <main>
             {/* <div className="container">
@@ -121,25 +162,35 @@ function Checkout(props) {
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
                                             <div className="row">
-                                                <div className="col-md-7">
-                                                    <div className="single-address">
-                                                        <label>Delivery address</label>
-                                                        <div>
-                                                            Anna Smith<br />
-                                                            Baker Street 105<br />
-                                                            40-333<br />
-                                                            London<br />
-                                                            Great Britain
-                                                        </div>
-                                                        <p className="text-muted">Default delivery address</p>
-                                                        <div className="form-check">
-                                                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                                            <label className="form-check-label" htmlFor="flexCheckDefault">
-                                                                use this as billing address
-                                                            </label>
-                                                        </div>
+
+                                                {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
+                                                    <div className="col-md-7">
+                                                        {itemsVal.address['addresses'].map((item, i) => {
+                                                            return (
+                                                                <div className="single-address" key={i}>
+                                                                    <label>Delivery address</label>
+                                                                    <div>
+                                                                        <p> {item.firstname} {item.lastname}</p>
+                                                                        {item.street.map((street, j) => {
+                                                                            <p key={j}>{street}</p>
+                                                                        })}
+                                                                        <p>{item.postcode}</p>
+                                                                        <p>{item.city}</p>
+                                                                        <p>{item.country_id}</p>
+                                                                    </div>
+                                                                    <p className="text-muted">Default delivery address</p>
+                                                                    <div className="form-check">
+                                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                                                                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                                            use this as billing address
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        })}
                                                     </div>
-                                                </div>
+                                                )}
+
                                                 <div className="col-md-5">
                                                     <div className="select-address">
                                                         <div className="select-address-inner">
@@ -420,7 +471,7 @@ function Checkout(props) {
                                 <p></p>
                             </div>
                         </div>
-                        <CheckoutSidebar />
+                        <CheckoutSidebar sidebarData={itemsVal} />
                     </div>
                 </div>
             </section>

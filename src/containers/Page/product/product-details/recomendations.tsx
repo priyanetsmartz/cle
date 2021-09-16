@@ -9,7 +9,7 @@ const Recommendations = (props) => {
     // console.log(recomendedProducts)
     useEffect(() => {
         setRecomendedProducts(props.recomendationsData)
-        console.log(recomendedProducts)
+       // console.log(recomendedProducts)
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.

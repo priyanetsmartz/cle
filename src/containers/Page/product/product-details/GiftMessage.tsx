@@ -92,7 +92,10 @@ function GiftMessage(props) {
             }
 
 
-            console.log(result)
+           if(result.data === true){
+            setIsShow(false);
+            notification("success", "", "Item added as a gift!");  
+           }
         } else {
             setIsShow(false);
             notification("warning", "", "Please enter valid email and password");

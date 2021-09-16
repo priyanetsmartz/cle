@@ -194,8 +194,8 @@ export function assignGuestCartToUSer(language) {
 }
 // gift cart apis
 export function giftCart(giftData: any, itemId: number) {
-    //const cartQuoteId = localStorage.getItem('cartQuoteId');
-    return APi.request(`rest/V1/carts/mine/gift-message/${itemId}`, giftData, "POST", "")
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`rest/V1/carts/${cartQuoteId}/gift-message/${itemId}`, giftData, "POST", "")
 }
 
 export function giftGuestCart(giftData: any, itemId: number) {

@@ -28,7 +28,7 @@ function HomePage(props) {
 
     const getData = async () => {
         let result: any = await getHomePageProducts(props.languages, customerId);
-        console.log(result.data)
+      //  console.log(result.data)
         if (result) {
             setProducts(result.data[0]);
         }

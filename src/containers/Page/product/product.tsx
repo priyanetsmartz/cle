@@ -54,7 +54,7 @@ function Products(props) {
 
         }
         setOpacity(1);
-        //console.log(productResult)
+        //  console.log(productResult)
         props.productList(productResult);
         // get product page filter
         //let result1: any = await getProductFilter(9);
@@ -242,7 +242,7 @@ function Products(props) {
                                                         </div>
                                                         {/* {token && ( */}
                                                         <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
-                                                            <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
+                                                            {/* <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div> */}
                                                         </div>
                                                         {/* )} */}
                                                     </div>
