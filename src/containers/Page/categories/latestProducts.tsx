@@ -9,10 +9,12 @@ import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import cartAction from "../../../redux/cart/productAction";
 import { Link } from "react-router-dom";
+import Slider from "react-slick";
 const { addToCart, productList } = cartAction;
 
 
 function LatestProducts(props) {
+    let imageD = '';
     const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
@@ -21,6 +23,13 @@ function LatestProducts(props) {
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
     const [sort, setSort] = useState(0);
     const language = getCookie('currentLanguage');
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 4
+    };
 
     useEffect(() => {
         getProducts();
@@ -91,39 +100,50 @@ function LatestProducts(props) {
         <div className="product-listing" style={{ 'opacity': opacity }}>
             <h3>Latest Products</h3>
             <div className="row g-2">
-                {props.items.map(item => {
-                    return (
-                        <div className="col-md-4" key={item.id}>
-                            <Link to={'/product-details/' + item.sku}>
-                                <div className="product py-4">
-                                    {token && (
-                                        <span className="off bg-favorite">
-                                            {!item.wishlist_item_id && (
-                                                <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                            )}
-                                            {item.wishlist_item_id && (
-                                                <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                            )}
-                                        </span>
-                                    )
-                                    }
+                <Slider {...settings}>
+                    {props.items.map(item => {
+                        return (
+                            <div className="col-md-4" key={item.id}>
+                                <Link to={'/product-details/' + item.sku}>
+                                    <div className="product py-4">
+                                        {token && (
+                                            <span className="off bg-favorite">
+                                                {!item.wishlist_item_id && (
+                                                    <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                )}
+                                                {item.wishlist_item_id && (
+                                                    <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                )}
+                                            </span>
+                                        )
+                                        }
 
-                                    <div className="text-center"> <img src={item.custom_attributes ? item.custom_attributes[0].value : item} alt={item.name} width="200" /> </div>
-                                    <div className="about text-center">
-                                        <h5>{item.name}</h5>
-                                        <div className="tagname">{item.desc}</div>
-                                        <div className="pricetag">${item.price}</div>
+                                        <div className="text-center">
+                                            {
+                                                item.custom_attributes.map((attributes) => {
+                                                    if (attributes.attribute_code === 'image') {
+                                                        imageD = attributes.value;
+                                                    }
+                                                })
+                                            }
+                                            <img src={imageD} alt={item.name} width="200" />
+                                        </div>
+                                        <div className="about text-center">
+                                            <h5>{item.name}</h5>
+                                            <div className="tagname">{item.desc}</div>
+                                            <div className="pricetag">${item.price}</div>
+                                        </div>
+                                        {/* {token && ( */}
+                                        <div className="cart-button mt-3 px-2"> <button onClick={() => { handleClick(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
+                                            <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
+                                        </div>
+                                        {/* )} */}
                                     </div>
-                                    {/* {token && ( */}
-                                    <div className="cart-button mt-3 px-2"> <button onClick={() => { handleClick(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
-                                        <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
-                                    </div>
-                                    {/* )} */}
-                                </div>
-                            </Link>
-                        </div>
-                    )
-                })}
+                                </Link>
+                            </div>
+                        )
+                    })}
+                </Slider>
             </div>
         </div>
     )
