@@ -21,7 +21,7 @@ function Categories(props) {
     }, [])
 
     const getProducts = async () => {
-        let result: any = await getNewInCategories('DESC', 7);
+        let result: any = await getNewInCategories('DESC', 7, catId);
         console.log(result);
         setCatProducts(result.data.items);
     }

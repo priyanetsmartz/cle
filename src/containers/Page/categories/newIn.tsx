@@ -18,7 +18,7 @@ function NewIn(props) {
     }, [])
 
     const getProducts = async () => {
-        let result: any = await getNewInCategories('DESC', 10);
+        let result: any = await getNewInCategories('DESC', 10, catId);
         console.log(result);
         setCatProducts(result.data.items);
     }
