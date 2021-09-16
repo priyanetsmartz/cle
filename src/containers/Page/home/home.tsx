@@ -42,16 +42,13 @@ function HomePage(props) {
         <>
             <BrowserView>
                 <ReactFullpage
-                    // licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'
-                    //fullpage options
-                    // anchors={anchors}
-                    scrollingSpeed={500} /* Options here */
+                    // licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'              
+                    scrollingSpeed={1500} /* Options here */
                     onLeave={onLeave}
                     afterLoad={afterLoad}
 
                     className="sectiosn"
                     sectionClassName='section'
-                    //normalScrollElements='.checkus-out'
                     scrollBar="true"
                     render={({ state, fullpageApi }) => {
                         return (

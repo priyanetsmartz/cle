@@ -30,7 +30,7 @@ import Checkout from './containers/Page/product/checkout/checkout';
 // import New from './containers/Page/new';
 
 import Product from './containers/Page/product/product';
-import Cart from './containers/Page/product/cart';
+import Cart from './containers/Page/product/cart/cart';
 
 const PublicRoutes = ({ history }) => {
   return (

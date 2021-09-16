@@ -3269,3 +3269,52 @@ span.maindatory {
 }
 .choose-method p{text-align:center;}
 .add-ad-btn{font-family: 'Monument Extended';font-weight: 500; border:0px solid #2e2baa; color:#2e2baa;background: none; padding:0; margin-bottom:20px;text-decoration:none;}
+
+
+/* cart page design */
+
+.my-cart-left-sec h2{font-family: 'Monument Extended';font-weight: 500;margin:20px 0;}
+.save-cart-btns a{font-family: 'Monument Extended'; color:#000; margin-right:20px; text-decoration:none; margin-bottom:30px; display:inline-block;}
+.cart-pro-list {
+    padding: 0;
+    list-style-type: none;
+	margin: 0 0 20px;
+}
+.cart-pro-list li{
+padding: 20px;
+border: 1px solid #000;
+}
+.product-image img{width:100%;}
+.pro-name-tag p{margin:0;}
+.pro-name-tag a{font-family: 'Monument Extended'; color:#aaa;text-decoration:none; font-size:12px;}
+.qty-size {
+    width: 60%;
+    margin:30px 0 0;
+}
+.cart-pro-price{font-family: 'Monument Extended';font-weight: 500; color:#2e2baa;margin:0 0 10px;}
+
+.cart-total-price p {
+    display: block;
+    width: 100%;
+}
+.cart-total-price p span{
+    float:right;
+	color:#2e2baa;
+}
+.cart-total-price p:after {
+    display: block;
+	content:"";
+	clear:both;
+}
+.cart-total-price a{font-family: 'Monument Extended';font-weight: 500; color:#fff;background:#000; padding: 10px 20px;text-align: center;margin: auto auto 15px;display: block;text-decoration: none;}
+.qus-contactUs {
+    margin: 25px 0 0;
+}
+.qus-contactUs a{font-family: 'Monument Extended';font-weight: 500; color:#000;border:1px solid #000; padding: 10px 20px;text-align: center;display: block;text-decoration: none;}
+.cart-total-price {
+    border-top: 1px solid #000;
+    margin-top: 20px;
+    padding-top: 10px;
+}
+
+
