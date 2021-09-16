@@ -28,6 +28,7 @@ function HomePage(props) {
 
     const getData = async () => {
         let result: any = await getHomePageProducts(props.languages, customerId);
+        console.log(result.data)
         if (result) {
             setProducts(result.data[0]);
         }
@@ -55,10 +56,11 @@ function HomePage(props) {
                             <div className="sectiosn" >
                                 <div className="section">
                                     <HomeBanner />
-                                </div>
-                                <div className="section" >
                                     <Personal />
                                 </div>
+                                {/* <div className="section" >
+                                    <Personal />
+                                </div> */}
                                 <div className="section" >
                                     <HtmlContent identifier="home_page_discover_categories" />
                                 </div>

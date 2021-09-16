@@ -104,6 +104,7 @@ body {
 .btn-link-grey:hover {
     color: #000;
 }
+
 .btn-greenview {
     color: #fff;
     background-color: #018C75;
@@ -115,11 +116,13 @@ body {
     font-size: 12px;
     padding: 8px 20px;
 }
+
 .btn-greenview:hover {
     color: #fff;
     background-color: transparent;
     border-color: #018C75;
 }
+
 .btn-secondary {
     color: #fff;
     background-color: #2E2BAA;
@@ -131,6 +134,7 @@ body {
     font-size: 12px;
     padding: 12px 40px;
 }
+
 .btn-white-outline {
     color: #fff;
     border-color: #fff;
@@ -177,6 +181,7 @@ body {
     font-size: 12px;
     padding: 12px 20px;
 }
+
 .btn-outline-primary:hover {
     color: #fff;
     background-color: #000;
@@ -352,7 +357,6 @@ body {
     font-display: swap;
 }
 
-
 .notification {
     background-color: #2E2BAA;
     width: 100%;
@@ -362,7 +366,6 @@ body {
     position: relative;
     z-index: 999;
 }
-
 
 .notification .promotion_alert {
     position: relative;
@@ -2999,7 +3002,6 @@ span.maindatory {
     .resltspage_sec .paginatn_result {
         display: block;
     }
-    
     .welcome_inner {
         width: 100%;
         margin-top: 26px;
@@ -3133,76 +3135,395 @@ span.maindatory {
 
 /* DC css */
 
-.DC-top-banner img{width:100%;}
-.DC-top-banner .DC-top-ban-inner{position:absolute; width:325px; margin:auto; left:100px; top:0; bottom:0;height: max-content;}
-.DC-top-banner .DC-top-ban-inner a.ban-btn{font-size: 12px; line-height: 16px;font-weight:500;font-family: 'Monument Extended';padding:10px;border:1px solid #fff; color:#fff; text-decoration:none;}
-.DC-top-banner .DC-top-ban-inner h2{font-size: 36px; line-height: 46px; color:#fff;margin-bottom:25px;font-family: 'Monument Extended';}
-.DC-top-banner .DC-top-ban-inner p{font-size: 18px; line-height: 27px; color:#fff;font-weight:500;margin-bottom:25px;}
-.new-breadcrumb .breadcrumb{margin:30px 0;}
-.new-breadcrumb .breadcrumb .breadcrumb-item{font-size: 16px; line-height: 17px;color:#777;}
-.new-breadcrumb .breadcrumb .breadcrumb-item a{font-size: 16px; line-height: 17px;color:#777;}
+.DC-top-banner img {
+    width: 100%;
+}
 
-.DC-section-title{font-size: 36px; line-height: 46px;margin-bottom:30px; text-align:center;font-family: 'Monument Extended';}
-.DC-carousel .carousel-item.active .product-dummy img{width:100%;}
-.product-details-new{text-align:center;}
-.product-details-new img{width:100%;}
-.product-details-new h4{font-size: 16px; line-height: 24px;font-weight:bold;}
-.product-details-new p{font-size: 16px; line-height: 24px;}
-.product-details-new .pro-price-btn{margin-top:20px;font-size: 14px; line-height: 18px;font-weight:500;font-family: 'Monument Extended';color:#017abb;width: 250px;text-align: center;margin: 20px auto 0;}
-.product-details-new .pro-price-btn a{background:#017abb; padding:6px 10px; color:#fff; text-decoration:none;margin-left: 10px; display:none;}
-.product-details-new:hover .pro-price-btn a{display:inline-block;}
+.DC-top-banner .DC-top-ban-inner {
+    position: absolute;
+    width: 325px;
+    margin: auto;
+    left: 100px;
+    top: 0;
+    bottom: 0;
+    height: max-content;
+}
 
-.exclusive-tab{margin-top:60px;}
-.D-brand-highlight{width:100%;position:relative;height:536px; overflow:hidden;}
-.D-brand-highlight img{width:100%; position:relative; height:max-content; top:0; bottom:0;right:0;left:0;margin:auto;}
-.D-brand-highlight .D-brand-Name{position:absolute; width:60%; height:max-content;top:0; bottom:0;right:0;left:0;margin:auto; background:#fff; color:#2E2BAA; padding:10px 15px;font-size: 20px; line-height: 25px;font-weight:500;font-family: 'Monument Extended';text-align: center;}
-.D-brand-highlight:hover .D-brand-Name{background:#2E2BAA; color:#fff;}
+.DC-top-banner .DC-top-ban-inner a.ban-btn {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    font-family: 'Monument Extended';
+    padding: 10px;
+    border: 1px solid #fff;
+    color: #fff;
+    text-decoration: none;
+}
 
-.exclusive-tab ul.nav .nav-item .nav-link{border:none; font-size: 24px; line-height: 30px; color:#000;font-family: 'Monument Extended'; padding: 0 0 7px;margin: 0 10px 10px;}
-.exclusive-tab ul.nav .nav-item .nav-link.active{border:none; font-size: 24px; line-height: 30px; color:#2E2BAA;font-family: 'Monument Extended';font-weight:500;border-bottom:1px solid #2E2BAA;}
-.exclusive-tab ul.nav .nav-item .nav-link:hover{border:none; font-size: 24px; line-height: 30px; color:#2E2BAA;font-family: 'Monument Extended';font-weight:500;border-bottom:1px solid #2E2BAA;}
-.explore-alphabets {margin:20px auto; text-align:center;}
-.explore-alphabets a{font-size: 20px; line-height: 24px; color:#000;font-family: 'Monument Extended';font-weight:500;margin:0 8px;text-transform: uppercase;text-decoration: none;}
+.DC-top-banner .DC-top-ban-inner h2 {
+    font-size: 36px;
+    line-height: 46px;
+    color: #fff;
+    margin-bottom: 25px;
+    font-family: 'Monument Extended';
+}
 
-.alphabet-list{list-style-type:none;margin:20px 0;padding:0;}
-.alphabet-list li{list-style-type:none;margin:0 0 10px;padding:0;}
-.alphabet-list a.alpha-list-title{font-size: 20px; line-height: 24px; color:#2E2BAA;font-family: 'Monument Extended';font-weight:500;text-transform: uppercase;text-decoration: none;}
-.alphabet-list a{font-size: 20px; line-height: 24px; color:#000;font-weight:500;text-decoration: none;}
-.alphabet-list a.alpha-viewALL{font-size: 16px; line-height: 20px; color:#2E2BAA;font-family: 'Monument Extended';text-decoration: none;}
-.view-all-btn {display: block; background: #2e2baa;  height: 79%;    margin: 20px 0;position:relative;}
-.view-all-btn a{position:absolute;bottom:20px;left:20px;color: #fff; text-decoration: none; text-align: center;font-size: 22px; line-height: 24px;font-family: 'Monument Extended';text-decoration: none;font-weight:500;}
-.cle-designer-desc{font-size: 16px; line-height: 24px; color:#000;}
+.DC-top-banner .DC-top-ban-inner p {
+    font-size: 18px;
+    line-height: 27px;
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+.new-breadcrumb .breadcrumb {
+    margin: 30px 0;
+}
+
+.new-breadcrumb .breadcrumb .breadcrumb-item {
+    font-size: 16px;
+    line-height: 17px;
+    color: #777;
+}
+
+.new-breadcrumb .breadcrumb .breadcrumb-item a {
+    font-size: 16px;
+    line-height: 17px;
+    color: #777;
+}
+
+.DC-section-title {
+    font-size: 36px;
+    line-height: 46px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-family: 'Monument Extended';
+}
+
+.DC-carousel .carousel-item.active .product-dummy img {
+    width: 100%;
+}
+
+.product-details-new {
+    text-align: center;
+}
+
+.product-details-new img {
+    width: 100%;
+}
+
+.product-details-new h4 {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: bold;
+}
+
+.product-details-new p {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.product-details-new .pro-price-btn {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
+    font-family: 'Monument Extended';
+    color: #017abb;
+    width: 250px;
+    text-align: center;
+    margin: 20px auto 0;
+}
+
+.product-details-new .pro-price-btn a {
+    background: #017abb;
+    padding: 6px 10px;
+    color: #fff;
+    text-decoration: none;
+    margin-left: 10px;
+    display: none;
+}
+
+.product-details-new:hover .pro-price-btn a {
+    display: inline-block;
+}
+
+.exclusive-tab {
+    margin-top: 60px;
+}
+
+.D-brand-highlight {
+    width: 100%;
+    position: relative;
+    height: 536px;
+    overflow: hidden;
+}
+
+.D-brand-highlight img {
+    width: 100%;
+    position: relative;
+    height: max-content;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+}
+
+.D-brand-highlight .D-brand-Name {
+    position: absolute;
+    width: 60%;
+    height: max-content;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    background: #fff;
+    color: #2E2BAA;
+    padding: 10px 15px;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 500;
+    font-family: 'Monument Extended';
+    text-align: center;
+}
+
+.D-brand-highlight:hover .D-brand-Name {
+    background: #2E2BAA;
+    color: #fff;
+}
+
+.exclusive-tab ul.nav .nav-item .nav-link {
+    border: none;
+    font-size: 24px;
+    line-height: 30px;
+    color: #000;
+    font-family: 'Monument Extended';
+    padding: 0 0 7px;
+    margin: 0 10px 10px;
+}
+
+.exclusive-tab ul.nav .nav-item .nav-link.active {
+    border: none;
+    font-size: 24px;
+    line-height: 30px;
+    color: #2E2BAA;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    border-bottom: 1px solid #2E2BAA;
+}
+
+.exclusive-tab ul.nav .nav-item .nav-link:hover {
+    border: none;
+    font-size: 24px;
+    line-height: 30px;
+    color: #2E2BAA;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    border-bottom: 1px solid #2E2BAA;
+}
+
+.explore-alphabets {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.explore-alphabets a {
+    font-size: 20px;
+    line-height: 24px;
+    color: #000;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    margin: 0 8px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.alphabet-list {
+    list-style-type: none;
+    margin: 20px 0;
+    padding: 0;
+}
+
+.alphabet-list li {
+    list-style-type: none;
+    margin: 0 0 10px;
+    padding: 0;
+}
+
+.alphabet-list a.alpha-list-title {
+    font-size: 20px;
+    line-height: 24px;
+    color: #2E2BAA;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.alphabet-list a {
+    font-size: 20px;
+    line-height: 24px;
+    color: #000;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.alphabet-list a.alpha-viewALL {
+    font-size: 16px;
+    line-height: 20px;
+    color: #2E2BAA;
+    font-family: 'Monument Extended';
+    text-decoration: none;
+}
+
+.view-all-btn {
+    display: block;
+    background: #2e2baa;
+    height: 79%;
+    margin: 20px 0;
+    position: relative;
+}
+
+.view-all-btn a {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    font-size: 22px;
+    line-height: 24px;
+    font-family: 'Monument Extended';
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.cle-designer-desc {
+    font-size: 16px;
+    line-height: 24px;
+    color: #000;
+}
+
 .cle-designer-info {
     margin-top: 80px;
 }
 
 /* home last section */
 
-.banner-content-2{background:#f7f7fc; padding: 100px 60px;position:relative;}
-.banner-content-2 h4{font-family: 'Monument Extended';font-size:36px; line-height:46px; color:#000;}
-.banner-content-2 .cat-date{font-size:13px; line-height:22px; color:#2e2baa;font-weight: 500; text-transform:uppercase;}
-.banner-content-2 .cat-date span{font-size:13; line-height:22px; color:#707070;font-weight: 500; text-transform:capitalize; margin-left:20px;}
-.banner-content-2 p{font-size:16; line-height:22px; color:#000;}
+.banner-content-2 {
+    background: #f7f7fc;
+    padding: 100px 60px;
+    position: relative;
+}
 
-.newsletter-signup{width:max-content; margin:auto;}
-.terms-text{font-size:12px; line-height:15px; color:#000;}
-.terms-text a{font-size:12px; line-height:15px; color:#000; text-decoration:underline;}
-.become-partner{background:#2e2baa; height:100%; position:relative;}
-.become-part-inner{position:absolute; height:max-content; margin:auto; top:0; bottom:0; left:0; right:0; text-align:left; color:#fff;width: 75%;}
-.become-part-inner h1{font-size: 36px; line-height: 46px;font-family: 'Monument Extended'; margin-bottom:10px;}
-.become-part-inner p{font-size: 18px; line-height: 24px; margin-bottom: 20px;}
-.become-part-inner a{font-size: 12px; line-height: 16px;font-family: 'Monument Extended';font-weight: 500;padding:10px;border:1px solid #fff; color:#fff; text-decoration:none;display: inline-block;}
+.banner-content-2 h4 {
+    font-family: 'Monument Extended';
+    font-size: 36px;
+    line-height: 46px;
+    color: #000;
+}
 
+.banner-content-2 .cat-date {
+    font-size: 13px;
+    line-height: 22px;
+    color: #2e2baa;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.banner-content-2 .cat-date span {
+    font-size: 13;
+    line-height: 22px;
+    color: #707070;
+    font-weight: 500;
+    text-transform: capitalize;
+    margin-left: 20px;
+}
+
+.banner-content-2 p {
+    font-size: 16;
+    line-height: 22px;
+    color: #000;
+}
+
+.newsletter-signup {
+    width: max-content;
+    margin: auto;
+}
+
+.terms-text {
+    font-size: 12px;
+    line-height: 15px;
+    color: #000;
+}
+
+.terms-text a {
+    font-size: 12px;
+    line-height: 15px;
+    color: #000;
+    text-decoration: underline;
+}
+
+.become-partner {
+    background: #2e2baa;
+    height: 100%;
+    position: relative;
+}
+
+.become-part-inner {
+    position: absolute;
+    height: max-content;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: left;
+    color: #fff;
+    width: 75%;
+}
+
+.become-part-inner h1 {
+    font-size: 36px;
+    line-height: 46px;
+    font-family: 'Monument Extended';
+    margin-bottom: 10px;
+}
+
+.become-part-inner p {
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 20px;
+}
+
+.become-part-inner a {
+    font-size: 12px;
+    line-height: 16px;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    padding: 10px;
+    border: 1px solid #fff;
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+}
 
 /* checkout page */
 
 .accordion-item {
     background-color: #fff;
-    border: 1px solid rgba(0,0,0,.125) !important;
+    border: 1px solid rgba(0, 0, 0, .125) !important;
     border-radius: 0 !important;
     margin-bottom: 20px;
 }
-.order-detail-sec{border:1px solid #000; padding:15px;}
+
+.order-detail-sec {
+    border: 1px solid #000;
+    padding: 15px;
+}
+
 .Ordered-pro-list {
     height: 200px;
     overflow-y: scroll;
@@ -3212,109 +3533,241 @@ span.maindatory {
     border-top: 1px solid #000;
     border-bottom: 1px solid #000;
 }
+
 .Ordered-pro-list li {
     width: 100%;
 }
+
 .Ordered-pro-list li a {
     display: block;
 }
+
 .Ordered-pro-list li a:after {
     display: block;
-	content:"";
-	clear:both;
+    content: "";
+    clear: both;
 }
+
 .order-pro_img {
     width: 120px;
     float: left;
 }
-.order-pro_img img{width:100%;}
+
+.order-pro_img img {
+    width: 100%;
+}
+
 .order-pro_name {
     float: left;
     width: 175px;
     height: max-content;
 }
+
 .product-total-price p {
     display: block;
     width: 100%;
 }
-.product-total-price p span{
-    float:right;
-	color:#2e2baa;
+
+.product-total-price p span {
+    float: right;
+    color: #2e2baa;
 }
+
 .product-total-price p:after {
     display: block;
-	content:"";
-	clear:both;
+    content: "";
+    clear: both;
 }
+
 .final-price {
     display: block;
     width: 100%;
 }
-.final-price span{
-    float:right;
-	color:#2e2baa;
+
+.final-price span {
+    float: right;
+    color: #2e2baa;
 }
+
 .final-price:after {
     display: block;
-	content:"";
-	clear:both;
+    content: "";
+    clear: both;
 }
-.checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link.active{font-family: 'Monument Extended';font-weight: 500; border-bottom:1px solid #2e2baa; color:#2e2baa;background: none;}
+
+.checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link.active {
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    border-bottom: 1px solid #2e2baa;
+    color: #2e2baa;
+    background: none;
+}
+
 .checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link {
     font-family: 'Monument Extended';
     color: #000;
     padding: 0 0 10px;
     margin-right: 30px;
-	border-radius: 0;
+    border-radius: 0;
 }
-.choose-method p{text-align:center;}
-.add-ad-btn{font-family: 'Monument Extended';font-weight: 500; border:0px solid #2e2baa; color:#2e2baa;background: none; padding:0; margin-bottom:20px;text-decoration:none;}
 
+.choose-method p {
+    text-align: center;
+}
+
+.add-ad-btn {
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    border: 0px solid #2e2baa;
+    color: #2e2baa;
+    background: none;
+    padding: 0;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
 
 /* cart page design */
 
-.my-cart-left-sec h2{font-family: 'Monument Extended';font-weight: 500;margin:20px 0;}
-.save-cart-btns a{font-family: 'Monument Extended'; color:#000; margin-right:20px; text-decoration:none; margin-bottom:30px; display:inline-block;}
+.my-cart-left-sec h2 {
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    margin: 20px 0;
+}
+
+.save-cart-btns a {
+    font-family: 'Monument Extended';
+    color: #000;
+    margin-right: 20px;
+    text-decoration: none;
+    margin-bottom: 30px;
+    display: inline-block;
+}
+
 .cart-pro-list {
     padding: 0;
     list-style-type: none;
-	margin: 0 0 20px;
+    margin: 0 0 20px;
 }
-.cart-pro-list li{
-padding: 20px;
-border: 1px solid #000;
+
+.cart-pro-list li {
+    padding: 20px;
+    border: 1px solid #000;
 }
-.product-image img{width:100%;}
-.pro-name-tag p{margin:0;}
-.pro-name-tag a{font-family: 'Monument Extended'; color:#aaa;text-decoration:none; font-size:12px;}
+
+.product-image img {
+    width: 100%;
+}
+
+.pro-name-tag p {
+    margin: 0;
+}
+
+.pro-name-tag a {
+    font-family: 'Monument Extended';
+    color: #aaa;
+    text-decoration: none;
+    font-size: 12px;
+}
+
 .qty-size {
     width: 60%;
-    margin:30px 0 0;
+    margin: 30px 0 0;
 }
-.cart-pro-price{font-family: 'Monument Extended';font-weight: 500; color:#2e2baa;margin:0 0 10px;}
+
+.cart-pro-price {
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    color: #2e2baa;
+    margin: 0 0 10px;
+}
 
 .cart-total-price p {
     display: block;
     width: 100%;
 }
-.cart-total-price p span{
-    float:right;
-	color:#2e2baa;
+
+.cart-total-price p span {
+    float: right;
+    color: #2e2baa;
 }
+
 .cart-total-price p:after {
     display: block;
-	content:"";
-	clear:both;
+    content: "";
+    clear: both;
 }
-.cart-total-price a{font-family: 'Monument Extended';font-weight: 500; color:#fff;background:#000; padding: 10px 20px;text-align: center;margin: auto auto 15px;display: block;text-decoration: none;}
+
+.cart-total-price a {
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    color: #fff;
+    background: #000;
+    padding: 10px 20px;
+    text-align: center;
+    margin: auto auto 15px;
+    display: block;
+    text-decoration: none;
+}
+
 .qus-contactUs {
     margin: 25px 0 0;
 }
-.qus-contactUs a{font-family: 'Monument Extended';font-weight: 500; color:#000;border:1px solid #000; padding: 10px 20px;text-align: center;display: block;text-decoration: none;}
+
+.qus-contactUs a {
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    color: #000;
+    border: 1px solid #000;
+    padding: 10px 20px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
 .cart-total-price {
     border-top: 1px solid #000;
     margin-top: 20px;
     padding-top: 10px;
 }
 
+.cartschanger .value-button {
+    display: inline-block;
+    border: 1px solid #ddd;
+    margin: 0px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px 0;
+    background: #eee;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
+.cartschanger .value-button:hover {
+    cursor: pointer;
+}
+
+.cartschanger #input-wrap {
+    margin: 0px;
+    padding: 0px;
+}
+
+.cartschanger input#number {
+    text-align: center;
+    border: none;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    margin: 0px;
+    width: 40px;
+    height: 40px;
+}
+
+.cartschanger input[type=number]::-webkit-inner-spin-button, .cartschanger input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

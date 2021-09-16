@@ -150,7 +150,7 @@ function HeaderMenu(props) {
                                         </div>
 
                                     </li>
-                                    <li> <Link to="/wishlist"><img src={favorit} alt="wishlist" /></Link> </li>
+                                    <li> <Link to="/customer/wish-list"><img src={favorit} alt="wishlist" /></Link> </li>
                                     <MiniCart />
                                 </ul>
                             </div>

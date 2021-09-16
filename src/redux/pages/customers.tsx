@@ -75,7 +75,7 @@ export function removeItemFromWishList(custId, wishlist_item_id) {
 
 export function wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchName) {
     const localToken = localStorage.getItem('cust_id');
-    return AdminApi.request(`rest/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&soryByValue=${sortOrder}&sortBy=${sortBy}&name=${searchName}`, "", "GET", "");
+    return adminToken.request(`rest/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&soryByValue=${sortOrder}&sortBy=${sortBy}&name=${searchName}`, "", "GET", "");
 }
 
 //apis for the home page
