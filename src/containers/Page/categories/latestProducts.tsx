@@ -8,8 +8,10 @@ import {
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import cartAction from "../../../redux/cart/productAction";
+import WeChooseForYou from '../home/weChooseForYou';
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
+import { formatprice } from '../../../components/utility/allutils';
 const { addToCart, productList } = cartAction;
 
 
@@ -97,55 +99,80 @@ function LatestProducts(props) {
     }
 
     return (
-        <div className="product-listing" style={{ 'opacity': opacity }}>
-            <h3>Latest Products</h3>
-            <div className="row g-2">
-                <Slider {...settings}>
-                    {props.items.map(item => {
-                        return (
-                            <div className="col-md-4" key={item.id}>
-                                <Link to={'/product-details/' + item.sku}>
-                                    <div className="product py-4">
-                                        {token && (
-                                            <span className="off bg-favorite">
-                                                {!item.wishlist_item_id && (
-                                                    <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                                )}
-                                                {item.wishlist_item_id && (
-                                                    <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                                )}
-                                            </span>
-                                        )
-                                        }
+        <section className="exclusive-tab">
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-12">
+                        <ul className="nav nav-tabs justify-content-center" id="DesignerTab" role="tablist">
+                            <li className="nav-item" role="presentation">
+                                <a className="nav-link active" id="PD-tab" data-bs-toggle="tab" data-bs-target="#PD" type="button"
+                                    role="tab" aria-controls="PD" aria-selected="true">Latest Products</a>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <a className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
+                                    role="tab" aria-controls="D-maylike" aria-selected="false">We Choose for you</a>
+                            </li>
 
-                                        <div className="text-center">
-                                            {
-                                                item.custom_attributes.map((attributes) => {
-                                                    if (attributes.attribute_code === 'image') {
-                                                        imageD = attributes.value;
-                                                    }
-                                                })
-                                            }
-                                            <img src={imageD} alt={item.name} width="200" />
-                                        </div>
-                                        <div className="about text-center">
-                                            <h5>{item.name}</h5>
-                                            <div className="tagname">{item.desc}</div>
-                                            <div className="pricetag">${item.price}</div>
-                                        </div>
-                                        {/* {token && ( */}
-                                        <div className="cart-button mt-3 px-2"> <button onClick={() => { handleClick(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
-                                            <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
-                                        </div>
-                                        {/* )} */}
-                                    </div>
-                                </Link>
+                        </ul>
+                        <div className="tab-content" id="DesignerTabContent">
+                            <div className="tab-pane fade show active" id="PD" role="tabpanel" aria-labelledby="PD-tab">
+                                <div className="row">
+                                    <Slider {...settings}>
+                                        {props.items.map(item => {
+                                            return (
+                                                <div className="col-md-4" key={item.id}>
+                                                    <Link to={'/product-details/' + item.sku}>
+                                                        <div className="product py-4">
+                                                            {token && (
+                                                                <span className="off bg-favorite">
+                                                                    {!item.wishlist_item_id && (
+                                                                        <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                                    )}
+                                                                    {item.wishlist_item_id && (
+                                                                        <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                                    )}
+                                                                </span>
+                                                            )
+                                                            }
+
+                                                            <div className="text-center">
+                                                                {
+                                                                    item.custom_attributes.map((attributes) => {
+                                                                        if (attributes.attribute_code === 'image') {
+                                                                            imageD = attributes.value;
+                                                                        }
+                                                                    })
+                                                                }
+                                                                <img src={imageD} alt={item.name} width="200" />
+                                                            </div>
+                                                            <div className="about text-center">
+                                                                <h5>{item.name}</h5>
+                                                                <div className="tagname">{item.desc}</div>
+                                                                <div className="pricetag">${formatprice(item.price)}</div>
+                                                            </div>
+                                                            {/* {token && ( */}
+                                                            <div className="cart-button mt-3 px-2"> <button onClick={() => { handleClick(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
+                                                                <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
+                                                            </div>
+                                                            {/* )} */}
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            )
+                                        })}
+                                    </Slider>
+                                </div>
                             </div>
-                        )
-                    })}
-                </Slider>
+                            <div className="tab-pane fade" id="D-maylike" role="tabpanel" aria-labelledby="D-maylike-tab">
+                                <div className="row">
+                                    <WeChooseForYou/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
     )
 }
 

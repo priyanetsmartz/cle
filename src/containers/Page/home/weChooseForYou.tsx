@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import notification from "../../../components/notification";
 import cartAction from "../../../redux/cart/productAction";
 import { getWeChooseForYou } from '../../../redux/pages/customers';
+import { formatprice } from '../../../components/utility/allutils';
 import {
     addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi,
     getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken
@@ -109,9 +110,9 @@ function WeChooseForYou(props) {
                                                 </div>
                                                 <div className="product_name mt-2">{item.name} </div>
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
-                                                <div className="product_price"> {item.price}</div>
+                                                <div className="product_price"> ${formatprice(item.price)}</div>
                                                 <div className="pro-price-btn">
-                                                    {item.price}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a>
+                                                    <a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a>
                                                 </div>
                                             </div>
                                         )

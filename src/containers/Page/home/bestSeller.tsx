@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Slider from "react-slick";
+import { formatprice } from '../../../components/utility/allutils';
 
 
 function BestSeller(props) {
@@ -56,7 +57,7 @@ function BestSeller(props) {
                                                 <div className="product_img"><img src={item.img} className="image-fluid" /> </div>
                                                 <div className="product_name"> {item.name} </div>
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
-                                                <div className="product_price"> {item.price}</div>
+                                                <div className="product_price"> ${formatprice(item.price)}</div>
                                             </div>
                                         )
                                     })}

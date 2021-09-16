@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Slider from "react-slick";
+import { formatprice } from '../../../components/utility/allutils';
 
 
 function NewIn(props) {
@@ -41,7 +42,7 @@ function NewIn(props) {
                                                     <div className="product_name"> {item.name} </div>
                                                     <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }} />
                                                     {/* <div className="product_vrity">{item.short_description}</div> */}
-                                                    <div className="product_price"> {item.price}</div>
+                                                    <div className="product_price"> ${formatprice(item.price)}</div>
                                                 </div>
                                             )
                                         })}
