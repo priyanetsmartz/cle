@@ -1,48 +1,21 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
-import { getCartItems, getCartTotal, getCheckOutTotals, getGuestCart, getGuestCartTotal } from '../../../../redux/cart/productApi';
 function CheckoutSidebar(props) {
     const [itemsVal, SetItems] = useState({
         checkData: {}, items: {}
     });
     useEffect(() => {
-        checkoutScreen();
+       // console.log(props.sidebarData.checkData, props.sidebarData.items)
+        SetItems({ checkData: props.sidebarData.checkData, items: props.sidebarData.items });
+        // checkoutScreen();
 
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [props.posts])
-    async function checkoutScreen() {
-        let cartItems: any, cartTotal: any;
-        let customer_id = localStorage.getItem('cust_id');
-        if (customer_id) {
-            cartItems = await getCartItems();
-            // get cart total 
-            cartTotal = await getCartTotal();
-        } else {
-            const cartQuoteToken = localStorage.getItem('cartQuoteToken');
-            if (cartQuoteToken) {
-                cartItems = await getGuestCart();
+    }, [props.sidebarData])
 
-                cartTotal = await getGuestCartTotal();
-
-
-            }
-        }
-        // let result: any = await getCheckOutTotals();
-        let checkoutData = {}, checkItems = {}
-        checkoutData['discount'] = cartTotal.data.base_discount_amount;
-        checkoutData['sub_total'] = cartTotal.data.base_subtotal;
-        checkoutData['shipping_charges'] = cartTotal.data.base_shipping_amount;
-        checkoutData['total'] = cartTotal.data.base_grand_total;
-        checkoutData['tax'] = cartTotal.data.base_tax_amount;
-        checkoutData['total_items'] = cartTotal.data.items_qty;
-        checkItems['items'] = cartItems.data.items;
-        // SetItems(result.data);
-        SetItems({ checkData: checkoutData, items: checkItems });
-    }
     return (
         <div className="col-md-4">
             <div className="order-detail-sec">

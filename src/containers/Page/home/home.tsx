@@ -28,7 +28,7 @@ function HomePage(props) {
 
     const getData = async () => {
         let result: any = await getHomePageProducts(props.languages, customerId);
-        console.log(result.data)
+        //  console.log(result.data)
         if (result) {
             setProducts(result.data[0]);
         }
@@ -44,10 +44,10 @@ function HomePage(props) {
             <BrowserView>
                 <ReactFullpage
                     // licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'              
-                    scrollingSpeed={1500} /* Options here */
+                    scrollingSpeed={500} /* Options here */
                     onLeave={onLeave}
                     afterLoad={afterLoad}
-
+                    //normalScrollElements='.checkus-out'
                     className="sectiosn"
                     sectionClassName='section'
                     scrollBar="true"
