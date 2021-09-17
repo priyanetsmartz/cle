@@ -40,8 +40,9 @@ function CartItemPage(props) {
 
             }
         }
-        console.log(cartItems.data)
+        //  console.log(cartItems.data)
         let cartPrices = {}
+        if(cartTotal){
         cartPrices['discount'] = cartTotal.data.base_discount_amount;
         cartPrices['sub_total'] = cartTotal.data.base_subtotal;
         cartPrices['shipping_charges'] = cartTotal.data.base_shipping_amount;
@@ -51,7 +52,8 @@ function CartItemPage(props) {
         cartValues['items'] = cartData;
         setCartItems(cartValues)
         setCartTotal(cartPrices);
-       // console.log(cartItemsVal)
+        }
+        // console.log(cartItemsVal)
 
     }
 

@@ -8,6 +8,7 @@ import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
 import MainRoute from "./components/all-route/MainRoute";
 import ProductRoutes from "./components/all-route/ProductRoutes";
+import ProductHome from "./components/all-route/productHomeRoute"
 import PrivateRoute from "./components/all-route/LoggedinRoute";
 import HomeRoute from './components/all-route/HomeRoute';
 import PriveRoute from "./components/all-route/priveRoute";
@@ -36,11 +37,12 @@ const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Switch>
+        <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
         <ProductRoutes exact path="/products/:category/:subcat" component={Categories} />
         <ProductRoutes exact path="/products/:category" component={Categories} />
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
-        <ProductRoutes exact path="/home" component={HomePage} />
+        <ProductHome exact path="/home" component={HomePage} />
         <PrivateRoute exact path="/designer-categories" component={DesignerCategories} />
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
@@ -51,7 +53,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/contact-us" component={contact} />
         {/* <PrivateRoute exact path="/customer-orders" component={CustomerOrders} /> */}
 
-        <MainRoute exact path="/order-details/:orderId" component={OrderDetails} />
+
 
         <MainRoute exact path="/business-login" component={VendorLogin} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />

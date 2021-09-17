@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
-import { addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
+import { addWhishlist, getAllProducts, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import Promotion from "../../partials/promotion";
@@ -14,6 +14,7 @@ const { addToCart, productList, addToCartTask } = cartAction;
 
 function Products(props) {
     let imageD = '';
+    const [isShow, setIsShow] = useState(0);
     const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
@@ -36,7 +37,7 @@ function Products(props) {
     async function getProducts() {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory(page, pageSize, 'category', sortValue.sortBy, sortValue.sortByValue);
+        let result: any = await getAllProducts(page, pageSize, sortValue.sortBy, sortValue.sortByValue);
         //  console.log(Math.ceil(result.data.total_count / 9))
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
@@ -78,9 +79,9 @@ function Products(props) {
 
     }
     async function handleCart(id: number, sku: string) {
+        setIsShow(id);
         let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        let customer_id = localStorage.getItem('cust_id');
-
+        let cartSucces: any;
         let cartQuoteId = ''
         if (cartQuoteIdLocal) {
             cartQuoteId = cartQuoteIdLocal
@@ -90,7 +91,7 @@ function Products(props) {
             localStorage.setItem('cartQuoteToken', guestToken.data);
             let result: any = await getGuestCart();
             cartQuoteId = result.data.id
-            console.log(result.data)
+            //  console.log(result.data)
         }
         localStorage.setItem('cartQuoteId', cartQuoteId);
         // only simple product is added to cart because in design there are no option to show configuration product
@@ -101,15 +102,20 @@ function Products(props) {
                 "qty": 1
             }
         }
+        let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
-            addToCartApi(cartData)
+            cartSucces = await addToCartApi(cartData)
         } else {
-            addToCartApiGuest(cartData)
+            cartSucces = await addToCartApiGuest(cartData)
         }
-
-        // props.addToCart(id);
-        props.addToCartTask(true);
-        notification("success", "", "Item added to cart");
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(0);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(0);
+        }
     }
 
     async function handleWhishlist(id: number) {
@@ -211,42 +217,42 @@ function Products(props) {
                                     {props.items.map(item => {
                                         return (
                                             <div className="col-md-4" key={item.id}>
-                                                <Link to={'/product-details/' + item.sku}>
-                                                    <div className="product py-4">
-                                                        {token && (
-                                                            <span className="off bg-favorite">
-                                                                {!item.wishlist_item_id && (
-                                                                    <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                                                )}
-                                                                {item.wishlist_item_id && (
-                                                                    <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                                                )}
-                                                            </span>
-                                                        )
-                                                        }
+                                                {/* <Link to={'/product-details/' + item.sku}> */}
+                                                <div className="product py-4">
+                                                    {token && (
+                                                        <span className="off bg-favorite">
+                                                            {!item.wishlist_item_id && (
+                                                                <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                            )}
+                                                            {item.wishlist_item_id && (
+                                                                <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                            )}
+                                                        </span>
+                                                    )
+                                                    }
 
-                                                        <div className="text-center">
-                                                            {
-                                                                item.custom_attributes.map((attributes) => {
-                                                                    if (attributes.attribute_code === 'image') {
-                                                                        imageD = attributes.value;
-                                                                    }
-                                                                })
-                                                            }
-                                                            <img src={imageD} alt={item.name} width="200" />
-                                                        </div>
-                                                        <div className="about text-center">
-                                                            <h5>{item.name}</h5>
-                                                            <div className="tagname">{item.desc}</div>
-                                                            <div className="pricetag">${item.price}</div>
-                                                        </div>
-                                                        {/* {token && ( */}
-                                                        <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
-                                                            {/* <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div> */}
-                                                        </div>
-                                                        {/* )} */}
+                                                    <div className="text-center">
+                                                        {
+                                                            item.custom_attributes.map((attributes) => {
+                                                                if (attributes.attribute_code === 'image') {
+                                                                    imageD = attributes.value;
+                                                                }
+                                                            })
+                                                        }
+                                                        <Link to={'/product-details/' + item.sku}><img src={imageD} alt={item.name} width="200" /></Link>
                                                     </div>
-                                                </Link>
+                                                    <div className="about text-center">
+                                                        <h5>{item.name}</h5>
+                                                        <div className="tagname">{item.desc}</div>
+                                                        <div className="pricetag">${item.price}</div>
+                                                    </div>
+                                                    {/* {token && ( */}
+                                                    <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>
+                                                        {/* <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div> */}
+                                                    </div>
+                                                    {/* )} */}
+                                                </div>
+                                                {/* </Link> */}
                                             </div>
                                         )
                                     })}

@@ -1,6 +1,11 @@
 import AdminApi from "../../restApi/AdminApi";
 const APi = new AdminApi();
 
+export function getAllProducts(page, pageSize, sortBy, sortByValue) {
+    const localToken = localStorage.getItem('token');
+    let priveQuery = parseInt(localToken) === 4 ? 1 : 0;
+    return APi.request(`rest/all/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=prive&searchCriteria[filter_groups][0][filters][0][value]=${priveQuery}&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}`, "", "GET", "");
+}
 
 export function getProductByCategory(page, pageSize, category, sortBy, sortByValue) {
     category = 2;
