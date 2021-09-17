@@ -3,9 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
+import IntlMessages from "../../../components/utility/intlMessages";
+
 
 
 function OrdersAndReturns(props) {
+    const [custId, setCustomerId] = useState(localStorage.getItem('cust_id'));
+    const [pageSize, setPageSize] = useState(10);
     const [orderId, setOrderId] = useState('');
     const [orderDate, setOrderDate] = useState('');
     const [sortOrder, setSortOrder] = useState('');
@@ -62,7 +66,7 @@ function OrdersAndReturns(props) {
 
     const sortOrdersHandler = async (e) => {
         setSortOrder(e.target.value);
-        let result: any = await sortCustomerOrders(e.target.value);
+        let result: any = await sortCustomerOrders(e.target.value, custId, pageSize);
         if (result) {
             console.log(result.data);
             setOrders(result.data.items);
@@ -74,9 +78,8 @@ function OrdersAndReturns(props) {
             <div className="col-sm-9">
                 <div className="my_orders_returns_sec">
                     <div className="width-100">
-                        <h1>My Orders and Returns</h1>
-                        <h2>Save payment and shipping details, view your order history, return items, and track
-                            and share favourite pieces in wishlist.</h2>
+                        <h1><IntlMessages id="order.myOrders" /></h1>
+                        <h2><IntlMessages id="order.savePaymentAndShipping" /></h2>
                     </div>
                     <div className="range_slider">
                         <div className="range_inner">
@@ -125,7 +128,7 @@ function OrdersAndReturns(props) {
                             </li>
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
-                                    type="button" role="tab" aria-controls="profile" aria-selected="false">Returns</button>
+                                    type="button" role="tab" aria-controls="profile" aria-selected="false"><IntlMessages id="order.returns" /></button>
                             </li>
 
                         </ul>
@@ -136,7 +139,7 @@ function OrdersAndReturns(props) {
                                     <div className="col-sm-12 mt-4">
                                         <div className="resltspage_sec">
                                             <div className="paginatn_result">
-                                                <span>Results per page</span>
+                                                <span><IntlMessages id="order.resultPerPage" /></span>
                                                 <ul>
                                                     <li><Link to="#" className="active">12</Link></li>
                                                     <li><Link to="#">60</Link></li>
@@ -172,11 +175,11 @@ function OrdersAndReturns(props) {
                                                 <div className="col-sm-12">
                                                     <div className="row mb-3">
                                                         <div className="col-sm-6">
-                                                            <h3 className="order_numbr">Order number: {item.increment_id}</h3>
+                                                            <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item.increment_id}</h3>
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <div className="viewall_btn">
-                                                                <Link to={`/order-details/${item.increment_id}`} className="">View all</Link>
+                                                                <Link to={`/order-details/${item.increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
                                                             </div>
                                                         </div>
 
@@ -188,30 +191,30 @@ function OrdersAndReturns(props) {
                                                         <div className="order-viewsec">
                                                             <div className="order-details">
                                                                 <div className="order-date">
-                                                                    <label className="form-label">Order date</label>
+                                                                    <label className="form-label"><IntlMessages id="order.orderDate" /></label>
                                                                     <div className="labl_text">{item.created_at}</div>
                                                                 </div>
 
                                                                 <div className="products">
-                                                                    <label className="form-label"> Products</label>
+                                                                    <label className="form-label"> <IntlMessages id="order.products" /></label>
                                                                     <div className="labl_text"> {item.items.length}</div>
                                                                 </div>
                                                             </div>
 
                                                             <div className="order-details">
                                                                 <div className="order-date">
-                                                                    <label className="form-label">Shipped date</label>
+                                                                    <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
                                                                     <div className="labl_text">Mon, 31 May 2021</div>
                                                                 </div>
 
                                                                 <div className="products">
-                                                                    <label className="form-label"> Price</label>
+                                                                    <label className="form-label"> <IntlMessages id="order.price" /></label>
                                                                     <div className="labl_text"> {item.grand_total}</div>
                                                                 </div>
                                                             </div>
 
                                                             <div className="order-shipped">
-                                                                <label className="form-label">We have shipped your order</label>
+                                                                <label className="form-label"><IntlMessages id="order.weHaveShipped" /></label>
                                                             </div>
 
 
@@ -245,7 +248,7 @@ function OrdersAndReturns(props) {
 
                                 <div className="resltspage_sec footer-pagints">
                                     <div className="paginatn_result">
-                                        <span>Results per page</span>
+                                        <span><IntlMessages id="order.resultPerPage" /></span>
                                         <ul>
                                             <li><Link to="#" className="active">12</Link></li>
                                             <li><Link to="#">60</Link></li>
@@ -278,7 +281,7 @@ function OrdersAndReturns(props) {
                                 </div>
 
                             </div>
-                            <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">bgfbgfg</div>
+                            <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">Returns</div>
 
                         </div>
 

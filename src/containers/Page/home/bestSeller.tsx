@@ -3,10 +3,16 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
+import IntlMessages from "../../../components/utility/intlMessages";
+import { menu } from '../../../redux/pages/allPages';
+import { getHomePageProducts } from '../../../redux/pages/customers';
 
 
 function BestSeller(props) {
-    const [categoriesList, setCategoriesList] = useState(['All Categories', 'Watches', 'Jewelry', 'Bags', 'Accessories', 'Clothes', 'Lingerie', 'Shoes', 'Sport']);
+    const [categoriesList, setCategoriesList] = useState([]);
+    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
+    const [bestseller, setBestseller] = useState([]);
+    const [catId, setCatId] = useState(52); //set default category here
 
     const settings = {
         dots: false,
@@ -17,7 +23,36 @@ function BestSeller(props) {
     };
 
     useEffect(() => {
-    }, [])
+        getData(catId);
+
+        getCategories()
+    }, [props.languages]);
+
+    const getData = async (catId) => {
+        let result: any = await getHomePageProducts(props.languages, customerId, catId);
+        //  console.log(result.data)
+        if (result) {
+            setBestseller(result.data[0].bestSellers);
+        }
+    }
+
+    //get categories for the filter dropdown
+    const getCategories = async () => {
+        let result: any = await menu(props.languages);
+        console.log(result);
+        let catList = [];
+        if (result && result.data[0] && result.data[0].parent.child[0].child) {
+            result.data[0].parent.child[0].child.forEach(el => {
+                catList.push(el);
+            })
+        }
+        setCategoriesList(catList);
+    }
+
+    const changeCategory = (e) => {
+        setCatId(e.target.value);
+        getData(e.target.value);
+    }
 
     return (
         <section className="width-100 my-5">
@@ -28,16 +63,16 @@ function BestSeller(props) {
                         <div className="resltspage_sec bestseller-sec">
                             <div className="paginatn_result">
                                 <div className="new-in-title">
-                                    <h1>Bestsellers</h1>
+                                    <h1><IntlMessages id="home.bestseller" /></h1>
                                 </div>
 
                             </div>
                             <div className="sort_by">
                                 <div className="sortbyfilter">
-                                    <h3>Show</h3>
-                                    <select className="form-select customfliter" aria-label="Default select example">
+                                    <h3><IntlMessages id="home.show" /></h3>
+                                    <select className="form-select customfliter" value={catId} aria-label="Default select example" onChange={changeCategory}>
                                         {categoriesList.map((cat, i) => {
-                                            return (<option value={cat} key={i}>{cat} </option>)
+                                            return (<option value={cat.id} key={i}>{cat.name} </option>)
                                         })}
                                     </select>
                                 </div>
@@ -51,7 +86,7 @@ function BestSeller(props) {
                         <div className="new-in-slider">
                             <div className="regular slider">
                                 <Slider {...settings}>
-                                    {props && props.bestSellers.map(item => {
+                                    {bestseller && bestseller.map(item => {
                                         return (
                                             <div className="productcalr" key={item.id}>
                                                 <div className="product_img"><img src={item.img} className="image-fluid" /> </div>
@@ -75,7 +110,8 @@ function BestSeller(props) {
 }
 const mapStateToProps = (state) => {
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        languages: state.LanguageSwitcher.language
     }
 }
 

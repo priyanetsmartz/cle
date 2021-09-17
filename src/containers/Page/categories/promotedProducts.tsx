@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux'
+import { Link } from "react-router-dom";
+import IntlMessages from "../../../components/utility/intlMessages";
 
 
 function PromotedProducts(props) {
@@ -17,7 +19,8 @@ function PromotedProducts(props) {
                             <div className="col-sm-5">
                                 <div className="new-in-brandMainPic">
                                     <img src="images/blog_1.jpg" alt="" className="img-fluid" />
-                                    <a href="" className="BrandMainPic-btn">View all</a>
+                                    <Link to="/products/promoted" className="BrandMainPic-btn">
+                                        <IntlMessages id="category.viewAll" /></Link>
                                 </div>
                             </div>
 

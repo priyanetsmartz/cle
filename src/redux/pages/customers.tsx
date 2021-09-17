@@ -49,13 +49,13 @@ export function getCustomerOrdersByDate(date) {
     return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${localToken}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]=${date}&searchCriteria[filterGroups][0][filters][0][conditionType]=gteq`, "", "GET", "");
 }
 
-export function sortCustomerOrders(sort) {
-    const custId = 114;
-    const pageSize = 10;
+export function sortCustomerOrders(sort, custId, pageSize) {
+    custId = 114; //remove this
     return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=${sort}`, "", "GET", "");
 }
 
 export function searchOrders(orderId) {
+    orderId = 6 //remove this
     return adminToken.request(`rest/V1/orders/${orderId}`, "", "GET", "");
 }
 
@@ -79,10 +79,10 @@ export function wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchNa
 }
 
 //apis for the home page
-export function getHomePageProducts(language, customerId) {
+export function getHomePageProducts(language, customerId, catId) {
     const storeId = language === 'english' ? 3 : 2;
     customerId = 114; //remove that
-    return adminToken.request(`rest/all/V1/product/newin?storeId=${storeId}&customerId=${customerId}`, "", "GET", "");
+    return adminToken.request(`rest/all/V1/product/newin?storeId=${storeId}&customerId=${customerId}&catId=${catId}`, "", "GET", "");
 }
 
 export function getContent(language: string, indentifier) {
