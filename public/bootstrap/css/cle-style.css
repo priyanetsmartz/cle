@@ -749,7 +749,6 @@ p.promotion_alert {
 
 .magazine_article {
     width: 100%;
-    float: left;
     margin-top: 70px;
 }
 
@@ -3398,107 +3397,75 @@ span.maindatory {
 
 /* cart page design */
 
-.my-cart-left-sec h2 {
-    font-family: 'Monument Extended';
-    font-weight: 500;
-    margin: 20px 0;
-}
-
-.save-cart-btns a {
-    font-family: 'Monument Extended';
-    color: #000;
-    margin-right: 20px;
-    text-decoration: none;
-    margin-bottom: 30px;
-    display: inline-block;
-}
-
+.my-cart-left-sec h2{font-family: 'Monument Extended';font-weight: 500;margin:20px 0;}
+.save-cart-btns a{font-family: 'Monument Extended'; color:#000; margin-right:20px; text-decoration:none; margin-bottom:30px; display:inline-block;}
 .cart-pro-list {
     padding: 0;
     list-style-type: none;
-    margin: 0 0 20px;
+	margin: 0 0 20px;
 }
-
-.cart-pro-list li {
-    padding: 20px;
-    border: 1px solid #000;
+.cart-pro-list li{
+padding: 20px;
+border: 1px solid #000;
 }
-
-.product-image img {
-    width: 100%;
-}
-
-.pro-name-tag p {
-    margin: 0;
-}
-
-.pro-name-tag a {
-    font-family: 'Monument Extended';
-    color: #aaa;
-    text-decoration: none;
-    font-size: 12px;
-}
-
+.product-image img{width:100%;}
+.pro-name-tag p{margin:0;}
+.pro-name-tag a{font-family: 'Monument Extended'; color:#aaa;text-decoration:none; font-size:12px;}
 .qty-size {
     width: 60%;
-    margin: 30px 0 0;
+    margin:30px 0 0;
 }
-
-.cart-pro-price {
-    font-family: 'Monument Extended';
-    font-weight: 500;
-    color: #2e2baa;
-    margin: 0 0 10px;
-}
+.cart-pro-price{font-family: 'Monument Extended';font-weight: 500; color:#2e2baa;margin:0 0 10px;}
 
 .cart-total-price p {
     display: block;
     width: 100%;
 }
-
-.cart-total-price p span {
-    float: right;
-    color: #2e2baa;
+.cart-total-price p span{
+    float:right;
+	color:#2e2baa;
 }
-
 .cart-total-price p:after {
     display: block;
-    content: "";
-    clear: both;
+	content:"";
+	clear:both;
 }
-
-.cart-total-price a {
-    font-family: 'Monument Extended';
-    font-weight: 500;
-    color: #fff;
-    background: #000;
-    padding: 10px 20px;
-    text-align: center;
-    margin: auto auto 15px;
-    display: block;
-    text-decoration: none;
-}
-
+.cart-total-price a{font-family: 'Monument Extended';font-weight: 500; color:#fff;background:#000; padding: 10px 20px;text-align: center;margin: auto auto 15px;display: block;text-decoration: none;}
 .qus-contactUs {
     margin: 25px 0 0;
 }
-
-.qus-contactUs a {
-    font-family: 'Monument Extended';
-    font-weight: 500;
-    color: #000;
-    border: 1px solid #000;
-    padding: 10px 20px;
-    text-align: center;
-    display: block;
-    text-decoration: none;
-}
-
+.qus-contactUs a{font-family: 'Monument Extended';font-weight: 500; color:#000;border:1px solid #000; padding: 10px 20px;text-align: center;display: block;text-decoration: none;}
 .cart-total-price {
     border-top: 1px solid #000;
     margin-top: 20px;
     padding-top: 10px;
 }
+
+/* order details page */
+
+.order-detail-head{margin:40px 0;}
+.order-detail-head h2{font-family: 'Monument Extended';font-weight: 500;margin:0px 0 20px;}
+.order-detail-head p{font-weight: 500;margin:0px; font-size:16px;}
+
+.delivery-bar{background:#eee; padding:50px 0; margin-bottom:40px;}
+.order-number p{margin-bottom:0;}
+.order-number h4{margin-bottom:30px;}
+.order-delivery-address{border:1px solid #000; padding:20px;height:100%;}
+.order-number{margin-bottom:40px;}
+
+.order-pro-list {padding: 0; list-style-type: none;margin: 0 0 20px;}
+.order-pro-list li{padding: 20px;border-bottom: 1px solid #000;}
+.order-pro-list li:first-child{border-top: 1px solid #000;}
+.order-pro-list .product-image img{width:50%;}
+.order-pro-list .pro-name-tag{}
+.order-pro-list .pro-name-tag p{margin:0;}
+.order-pro-list .order-pro-price{font-family: 'Monument Extended';font-weight: 500; color:#2e2baa;margin:0 0 10px;font-size:16px;}
+.show-more-btn {width: max-content; margin: auto;}
+.Address-title span {font-weight: bold; margin-bottom: 20px;display: block;}
+.Address-title a{font-family: 'Monument Extended';font-weight: 500; color:#2e2baa;font-size:16px;}
+.return-complaint-btns a{font-family: 'Monument Extended';font-weight: 500; color:#000;font-size:16px;text-decoration: none; margin-right:30px;} 
+.return-complaint-btns a:hover{color:#2e2baa;border-bottom: 1px solid #2e2baa;padding-bottom: 2px;}
+.return-complaint-btns .btn-link.dropdown-toggle{color:#000; text-decoration:none;}
 
 .cartschanger .value-button {
     display: inline-block;
