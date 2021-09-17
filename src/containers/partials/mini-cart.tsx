@@ -25,7 +25,8 @@ function MiniCart(props) {
     const callGetCartItems = async () => {
         let cartData = [], total = 0, cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
-        if (customer_id) {
+        const cartQuoteId = localStorage.getItem('cartQuoteId');
+        if (customer_id && cartQuoteId) {
             cartItems = await getCartItems();
             cartData = cartItems.data.items;
             // get cart total 

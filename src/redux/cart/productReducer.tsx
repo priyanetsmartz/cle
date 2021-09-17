@@ -5,7 +5,8 @@ const initState = {
     addedItems: [],
     total: 0,
     addToCartTask: false,
-    openGiftBox: 0
+    openGiftBox: 0,
+    addToWishlist: false
 }
 
 const cartReducer = (state = initState, action) => {
@@ -120,12 +121,17 @@ const cartReducer = (state = initState, action) => {
             addToCartTask: action.addToCartTask
         }
     }
-    //  console.log(action)
     if (action.type === actions.OPEN_GIFT_BOX) {
-        // console.log(actions)
         return {
             ...state,
             openGiftBox: action.isOpen
+        }
+    }
+    console.log(action.addToWishlist)
+    if (action.type === actions.ADD_TO_WISHLIST_TASK) {
+        return {
+            ...state,
+            addToWishlist: action.addToWishlist
         }
     }
     return state
