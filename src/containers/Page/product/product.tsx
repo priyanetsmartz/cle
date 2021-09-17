@@ -9,12 +9,14 @@ import { getCookie } from '../../../helpers/session';
 import Promotion from "../../partials/promotion";
 import Recomendations from './product-details/recomendations';
 import Filter from './filter';
-const { addToCart, productList, addToCartTask } = cartAction;
+const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 
 
 function Products(props) {
     let imageD = '';
     const [isShow, setIsShow] = useState(0);
+    const [isWishlist, setIsWishlist] = useState(0);
+    const [delWishlist, setDelWishlist] = useState(0);
     const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
@@ -119,18 +121,33 @@ function Products(props) {
     }
 
     async function handleWhishlist(id: number) {
+        setIsWishlist(id)
         let result: any = await addWhishlist(id);
-        notification("success", "", result.data[0].message);
-        getProducts()
+        if (result.data[0].message) {
+            setIsWishlist(0)
+            props.addToWishlistTask(true);
+            notification("success", "", result.data[0].message);
+            getProducts()
+        } else {
+            setIsWishlist(0)
+            props.addToWishlistTask(true);
+            notification("error", "", "Something went wrong!");
+            getProducts()
+        }
 
     }
     async function handleDelWhishlist(id: number) {
-        //need to get whishlist id first
-        // console.log(id);
+        setDelWishlist(id)
         let del: any = await removeWhishlist(id);
-        //  console.log(del);
-        notification("success", "", del.data[0].message);
-        getProducts()
+        if (del.data[0].message) {
+            setDelWishlist(0)
+            notification("success", "", del.data[0].message);
+            getProducts()
+        } else {
+            setDelWishlist(0)
+            notification("error", "", "Something went wrong!");
+            getProducts()
+        }
     }
     const handlePageSize = (page) => {
         setPageSize(page)
@@ -222,10 +239,13 @@ function Products(props) {
                                                     {token && (
                                                         <span className="off bg-favorite">
                                                             {!item.wishlist_item_id && (
-                                                                <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                                <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
+                                                                </div>
                                                             )}
+
                                                             {item.wishlist_item_id && (
-                                                                <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                                <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
+                                                                </div>
                                                             )}
                                                         </span>
                                                     )
@@ -370,5 +390,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList, addToCartTask }
+    { addToCart, productList, addToCartTask, addToWishlistTask }
 )(Products);

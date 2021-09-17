@@ -9,6 +9,7 @@ const actions = {
     OPEN_MEASURING_GUIDE: 'OPEN_MEASURING_GUIDE',
     ADD_TO_CART_TASK: 'ADD_TO_CART_TASK',
     OPEN_GIFT_BOX: 'OPEN_GIFT_BOX',
+    ADD_TO_WISHLIST_TASK: 'ADD_TO_WISHLIST_TASK',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -44,6 +45,10 @@ const actions = {
     openGiftBoxes: isOpen => ({
         type: actions.OPEN_GIFT_BOX,
         isOpen: isOpen
+    }),
+    addToWishlistTask: addToWishlist => ({
+        type: actions.ADD_TO_WISHLIST_TASK,
+        addToWishlist
     })
 
 };
