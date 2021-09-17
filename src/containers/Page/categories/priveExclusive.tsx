@@ -6,6 +6,7 @@ import { addToCartApi } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import cartAction from "../../../redux/cart/productAction";
 import Slider from "react-slick";
+import { formatprice } from '../../../components/utility/allutils';
 const { addToCart, productList } = cartAction;
 
 
@@ -72,7 +73,7 @@ function PriveExclusive(props) {
                                                             <img src="images/elvibswh.png" alt="" />
                                                             <h4>{item.name}</h4>
                                                             <p></p>
-                                                            <div className="pro-price-btn">{item.price}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a></div>
+                                                            <div className="pro-price-btn">${formatprice(item.price)}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a></div>
                                                         </div>
                                                     </div>
                                                 </div>

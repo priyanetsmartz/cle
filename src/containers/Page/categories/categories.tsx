@@ -11,6 +11,7 @@ import LatestProducts from './latestProducts';
 import PromotedProducts from './promotedProducts';
 import Magazine from '../home/magazine';
 import NewIn from './newIn';
+import Description from './description';
 
 
 function Categories(props) {
@@ -56,12 +57,11 @@ function Categories(props) {
                         return (
                             <div className="sectiosn" >
                                 <div className="section">
-                                    {/* change indentifier */}
                                     <CategoryBanner />
                                 </div>
-                                <div className="section" >
+                                {localStorage.getItem('token') == '4' && <div className="section" >
                                     <PriveExclusive />
-                                </div>
+                                </div>}
                                 <div className="section" >
                                     <LatestProducts />
                                 </div>
@@ -75,8 +75,7 @@ function Categories(props) {
                                     <NewIn />
                                 </div>
                                 <div className="section">
-                                    {/* change indentifier */}
-                                    <HtmlContent identifier="home_page_banner" />
+                                    <Description />
                                 </div>
 
                             </div>
@@ -87,12 +86,11 @@ function Categories(props) {
             <MobileView>
                 <div className="sectiosn" >
                     <div className="section">
-                        {/* change indentifier */}
                         <CategoryBanner />
                     </div>
-                    <div className="section" >
+                    {localStorage.getItem('token') == '4' && <div className="section" >
                         <PriveExclusive />
-                    </div>
+                    </div>}
                     <div className="section" >
                         <LatestProducts />
                     </div>
@@ -106,8 +104,7 @@ function Categories(props) {
                         <NewIn />
                     </div>
                     <div className="section">
-                        {/* change indentifier */}
-                        <HtmlContent identifier="home_page_banner" />
+                        <Description />
                     </div>
                 </div>
             </MobileView>

@@ -19,6 +19,12 @@ function MyProfile(props) {
     const [giftingModal, setGiftingModal] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState(false);
     const [addCard, setAddCard] = useState(false);
+    const [passMask, setPassMask] = useState({
+        password: true,
+        newPassword: true,
+        confirmNewPassword: true,
+        emailPass: true
+    })
 
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [telephone, setTelephone] = useState("");
@@ -83,8 +89,8 @@ function MyProfile(props) {
             let result: any = await getCustomerDetails(custId);
             setCustForm(result.data);
             // if (result.data.addresses.length > 0) {
-                // setCountry(result.data.addresses[0].country_id);
-                // setTelephone(result.data.addresses[0].telephone);
+            // setCountry(result.data.addresses[0].country_id);
+            // setTelephone(result.data.addresses[0].telephone);
             // }
         }
         getData();
@@ -107,7 +113,7 @@ function MyProfile(props) {
 
     const saveCustDetails = async (e) => {
         e.preventDefault();
-        if(dob.day != '' && dob.month != '' && dob.year != ''){
+        if (dob.day != '' && dob.month != '' && dob.year != '') {
             custForm.dob = `${dob.day}/${dob.month}/${dob.year}`;
         }
         let result: any = await saveCustomerDetails(custId, { customer: custForm });
@@ -119,12 +125,12 @@ function MyProfile(props) {
 
     // for customer address popup window starts here
     const saveCustAddress = async (e) => {
-        if(validateAddress()){
-            let obj:any = {...custAddForm};
+        if (validateAddress()) {
+            let obj: any = { ...custAddForm };
             obj.street = [obj.street];
-            if(obj.id == 0){
+            if (obj.id == 0) {
                 custForm.addresses.push(obj);
-            }else{
+            } else {
                 custForm.addresses[addIndex] = obj;
             }
             // console.log(custAddForm);
@@ -163,7 +169,7 @@ function MyProfile(props) {
             formIsValid = false;
             error["city"] = 'City is required';
         }
-       
+
         if (!custAddForm.country_id) {
             formIsValid = false;
             error['country_id'] = 'Country is required';
@@ -190,12 +196,12 @@ function MyProfile(props) {
     const editAddress = (index) => {
         setAddIndex(index);
         custForm.addresses[index].street = custForm.addresses[index].street[0];
-        setCustAddForm(custForm.addresses[index]) ;
+        setCustAddForm(custForm.addresses[index]);
         openAddressModal();
     }
 
     const deleteAdd = async (index) => {
-        if(!custForm.addresses[index]) return;
+        if (!custForm.addresses[index]) return;
         let result: any = await deleteAddress(custForm.addresses[index].id);
         if (result) {
             custForm.addresses.splice(index, 1);
@@ -374,6 +380,14 @@ function MyProfile(props) {
         setDob(prevState => ({
             ...prevState,
             [id]: value
+        }));
+    }
+
+    const togglePasswordVisiblity = (id) => {
+        const val = !passMask[id];
+        setPassMask(pre => ({
+            ...pre,
+            [id]: val
         }));
     }
 
@@ -668,30 +682,37 @@ function MyProfile(props) {
                                 <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" /></label>
-                                    <input type="password" className="form-control" placeholder="000"
+                                    <input type={passMask.password ? 'password' : 'text'} className="form-control" placeholder="000"
                                         id="password"
                                         value={changePass.password}
                                         onChange={handlePassword} />
-                                    <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
+                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('password')}>
+                                        {passMask.password ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                    </span>
                                     <span className="error">{errors.errors["password"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="myaccount.newPassword" /> <span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000" id="newPassword"
+                                    <input type={passMask.newPassword ? 'password' : 'text'} className="form-control" placeholder="000" id="newPassword"
                                         value={changePass.newPassword}
                                         onChange={handlePassword} />
-                                    <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
+                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('newPassword')}>
+                                        {passMask.newPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                    </span>
+
                                     <span className="error">{errors.errors["newPassword"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /> <span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000"
+                                    <input type={passMask.confirmNewPassword ? 'password' : 'text'} className="form-control" placeholder="000"
                                         id="confirmNewPassword"
                                         value={changePass.confirmNewPassword}
                                         onChange={handlePassword} />
-                                    <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
+                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('confirmNewPassword')}>
+                                        {passMask.confirmNewPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                    </span>
                                     <span className="error">{errors.errors["confirmNewPassword"]}</span>
                                 </div>
                                 <div className="forgot_paswd">
@@ -729,11 +750,13 @@ function MyProfile(props) {
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" /><span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="password" className="form-control" placeholder="000"
+                                    <input type={passMask.emailPass ? 'password' : 'text'} className="form-control" placeholder="000"
                                         id="password"
                                         value={changeEmail.password}
                                         onChange={handleEmail} />
-                                    <span className="hidden-pass"> <i className="far fa-eye-slash"></i></span>
+                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
+                                        {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                    </span>
                                     <span className="error">{errors.errors["password"]}</span>
                                 </div>
                                 <div className="forgot_paswd">

@@ -36,9 +36,9 @@ function DesignerCategories(props) {
                                 <div className="section">
                                     <HtmlContent identifier="design_category_banner_image" />
                                 </div>
-                                <div className="section" >
+                                {localStorage.getItem('token') == '4' && <div className="section" >
                                     <PriveExclusive />
-                                </div>
+                                </div>}
                                 <div className="section" >
                                     <HtmlContent identifier="design_category_popular_designers" />
                                 </div>
@@ -61,9 +61,9 @@ function DesignerCategories(props) {
                     <div className="section">
                         <HtmlContent identifier="design_category_banner_image" />
                     </div>
-                    <div className="section" >
+                    {localStorage.getItem('token') == '4' && <div className="section" >
                         <PriveExclusive />
-                    </div>
+                    </div>}
                     <div className="section" >
                         <HtmlContent identifier="home_page_discover_categories" />
                     </div>
