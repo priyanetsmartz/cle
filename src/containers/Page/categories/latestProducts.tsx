@@ -12,6 +12,7 @@ import WeChooseForYou from '../home/weChooseForYou';
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
+import IntlMessages from "../../../components/utility/intlMessages";
 const { addToCart, productList } = cartAction;
 
 
@@ -105,12 +106,12 @@ function LatestProducts(props) {
                     <div className="col-md-12">
                         <ul className="nav nav-tabs justify-content-center" id="DesignerTab" role="tablist">
                             <li className="nav-item" role="presentation">
-                                <Link to="#" className="nav-link active" id="PD-tab" data-bs-toggle="tab" data-bs-target="#PD" type="button"
-                                    role="tab" aria-controls="PD" aria-selected="true">Latest Products</Link>
+                                <a className="nav-link active" id="PD-tab" data-bs-toggle="tab" data-bs-target="#PD" type="button"
+                                    role="tab" aria-controls="PD" aria-selected="true"><IntlMessages id="category.latestProducts" /></a>
                             </li>
                             <li className="nav-item" role="presentation">
-                                <Link  to="#" className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
-                                    role="tab" aria-controls="D-maylike" aria-selected="false">We Choose for you</Link>
+                                <a className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
+                                    role="tab" aria-controls="D-maylike" aria-selected="false"><IntlMessages id="home.weChooseForYou" /></a>
                             </li>
 
                         </ul>

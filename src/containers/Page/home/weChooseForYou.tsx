@@ -11,6 +11,7 @@ import {
 } from '../../../redux/cart/productApi';
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
+import IntlMessages from "../../../components/utility/intlMessages";
 
 
 const { addToCart, productList } = cartAction;
@@ -82,7 +83,7 @@ function WeChooseForYou(props) {
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="new-in-title">
-                            <h1>We choose for you</h1>
+                            <h1><IntlMessages id="home.weChooseForYou" /></h1>
                         </div>
                     </div>
                 </div>

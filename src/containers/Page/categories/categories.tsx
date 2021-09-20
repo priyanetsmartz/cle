@@ -16,6 +16,7 @@ import Description from './description';
 
 function Categories(props) {
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
+    const [catId, setCatId] = useState(52); //set default category here
     const [products, setProducts] = useState({
         newInProducts: [],
         customerProducts: [],
@@ -27,7 +28,7 @@ function Categories(props) {
     }, []);
 
     const getData = async () => {
-        let result: any = await getHomePageProducts(props.languages, customerId);
+        let result: any = await getHomePageProducts(props.languages, customerId, catId);
         if (result) {
             setProducts(result.data[0]);
         }

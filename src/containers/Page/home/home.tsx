@@ -16,10 +16,10 @@ import BecomePartner from './becomePartner';
 
 function HomePage(props) {
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
+    const [catId, setCatId] = useState(52); //set default category here
     const [products, setProducts] = useState({
         newInProducts: [],
-        customerProducts: [],
-        bestSellers: []
+        customerProducts: []
     });
 
     useEffect(() => {
@@ -27,10 +27,9 @@ function HomePage(props) {
     }, []);
 
     const getData = async () => {
-        let result: any = await getHomePageProducts(props.languages, customerId);
-        //  console.log(result.data)
+        let result: any = await getHomePageProducts(props.languages, customerId, catId);
         if (result) {
-            setProducts(result.data[0]);
+            setProducts(result.data[0].bestSellers);
         }
     }
 
@@ -77,7 +76,7 @@ function HomePage(props) {
                                     <HtmlContent identifier="home_page_brown_london_section" />
                                 </div>
                                 <div className="section">
-                                    <BestSeller bestSellers={products.bestSellers} />
+                                    <BestSeller />
                                 </div>
                                 <div className="section">
                                     <Magazine />
@@ -114,7 +113,7 @@ function HomePage(props) {
                         <HtmlContent identifier="home_page_brown_london_section" />
                     </div>
                     <div className="section">
-                        <BestSeller bestSellers={products.bestSellers} />
+                        <BestSeller />
                     </div>
                     <div className="section">
                         <Magazine />

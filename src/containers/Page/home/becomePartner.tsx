@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 import { SendNewsletter} from '../../../redux/pages/magazineList';
 import notification from '../../../components/notification';
 import { getCookie } from "../../../helpers/session";
+import { Link } from "react-router-dom";
 
 
 function BecomePartner(props) {
@@ -94,8 +95,8 @@ function BecomePartner(props) {
                     </div>
                     <div className="col-md-8">
                         <div className="banner-content-2 text-center">
-                            <h4>Shop the sale first</h4>
-                            <p>Sign up for exclusive early Sale access and tailored new arrivals.</p>
+                            <h4><IntlMessages id="home.shopFirst" /></h4>
+                            <p><IntlMessages id="home.signUpForExclusive" /></p>
                             <div className="wear-ckeckbox">
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="radio" checked={radio === "Womenswear"} onChange={onValueChange} name="inlineRadioOptions" id="inlineRadio1" value="Womenswear" />
@@ -110,7 +111,7 @@ function BecomePartner(props) {
                             </div>
                             <form className="row g-3 newsletter-signup">
                                 <div className="col-auto">
-                                    <label htmlFor="inputEmail" className="visually-hidden">Your Email</label>
+                                    <label htmlFor="inputEmail" className="visually-hidden"><IntlMessages id="home.yourMail" /></label>
                                     <input type="text"
                                             id="email"
                                             aria-describedby="emailHelp"
@@ -126,7 +127,8 @@ function BecomePartner(props) {
                                 <span className="error">{errors.errors["email"]}</span>
                             </form>
                             <div className="terms-text text-center">
-                                By signing up you agree with our <a href="">Terms & Conditions</a> and <a href="">Privacy Policy</a>. To opt out, click Unsubscribe in our emails.
+                                <IntlMessages id="newsletter.foot" /> <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link>
+                                <IntlMessages id="signup.and" />  <Link to="/privacy-policy"><IntlMessages id="signup.privacy_policy" /></Link><IntlMessages id="newsletter.optout" />
                             </div>
                         </div>
                     </div>

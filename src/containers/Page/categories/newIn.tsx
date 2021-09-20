@@ -12,6 +12,7 @@ import {
 import { Pages1 } from '../../../redux/pages/allPages';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
+import IntlMessages from "../../../components/utility/intlMessages";
 const { addToCart, productList } = cartAction;
 
 function NewIn(props) {
@@ -185,7 +186,7 @@ function NewIn(props) {
                 })}
                 <div className="col-md-3">
                     <div className="view-all-btn">
-                    <a href="">View all</a>
+                    <Link to="/products/new-in"><IntlMessages id="category.viewAll" /></Link>
                     </div>
                 </div>
             </div>

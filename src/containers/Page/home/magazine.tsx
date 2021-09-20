@@ -30,7 +30,7 @@ function Magazine(props) {
             <div className="container">
                 <div className="col-sm-12">
                     <div className="magazine_article ">
-                        <h1 className="mb-4">Magazine</h1>
+                        <h1 className="mb-4"><IntlMessages id="menu_Magazine" /></h1>
                         <div className="row">
                             {items.map((item,i) => {
                                 return (
