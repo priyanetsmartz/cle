@@ -40,8 +40,8 @@ export function getPreference() {
 }
 
 export function getCustomerOrders() {
-    const localToken = 114;
-    return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${localToken}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
+    const custId = localStorage.getItem('cust_id');;
+    return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
 }
 
 export function getCustomerOrdersByDate(date) {
@@ -55,7 +55,7 @@ export function sortCustomerOrders(sort, custId, pageSize) {
 }
 
 export function searchOrders(orderId) {
-    orderId = 6 //remove this
+    // orderId = 15 //remove this
     return adminToken.request(`rest/V1/orders/${orderId}`, "", "GET", "");
 }
 

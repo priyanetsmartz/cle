@@ -37,7 +37,7 @@ function NewIn(props) {
                                         return (
                                             <div className="productcalr" key={item.id}>
                                                 <div className="product_img">
-                                                    <img src={item.img} alt="productimage" className="image-fluid" />
+                                                    <img src={item.img} alt="productimage" className="image-fluid" height="150"/>
                                                 </div>
                                                 <div className="product_name"> {item.name} </div>
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }} />

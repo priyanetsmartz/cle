@@ -1172,7 +1172,7 @@ function MyProfile(props) {
                                 placeholder="Address"
                                 value={custAddForm.street}
                                 onChange={handleAddChange} />
-                            <span className="error">{errors.errors["address"]}</span>
+                            <span className="error">{errors.errors["street"]}</span>
 
                         </div>
                         <div className="width-100 mb-3 form-field">
@@ -1200,7 +1200,7 @@ function MyProfile(props) {
                                     return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
                                 })}
                             </select>
-                            <span className="error">{errors.errors["country"]}</span>
+                            <span className="error">{errors.errors["country_id"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <div className="Frgt_paswd">
