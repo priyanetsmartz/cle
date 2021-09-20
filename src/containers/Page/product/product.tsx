@@ -25,14 +25,17 @@ function Products(props) {
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
     const [sort, setSort] = useState(0);
     const language = getCookie('currentLanguage');
+
+
     useEffect(() => {
+        console.log(props.wishlist)
         const localToken = localStorage.getItem('token');
         setToken(localToken)
         getProducts();
 
         return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
+            props.addToCartTask(false);
+            props.addToWishlistTask(true);
         }
     }, [sortValue, page, pageSize])
 
@@ -57,11 +60,7 @@ function Products(props) {
 
         }
         setOpacity(1);
-        //  console.log(productResult)
         props.productList(productResult);
-        // get product page filter
-        //let result1: any = await getProductFilter(9);
-        // console.log(result1)
 
     }
     const filtterData = (event) => {
@@ -141,10 +140,12 @@ function Products(props) {
         let del: any = await removeWhishlist(id);
         if (del.data[0].message) {
             setDelWishlist(0)
+            props.addToWishlistTask(true);
             notification("success", "", del.data[0].message);
             getProducts()
         } else {
             setDelWishlist(0)
+            props.addToWishlistTask(true);
             notification("error", "", "Something went wrong!");
             getProducts()
         }
@@ -266,11 +267,16 @@ function Products(props) {
                                                         <div className="tagname">{item.desc}</div>
                                                         <div className="pricetag">${item.price}</div>
                                                     </div>
-                                                    {/* {token && ( */}
-                                                    <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>
-                                                        {/* <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div> */}
-                                                    </div>
-                                                    {/* )} */}
+                                                    {item.type_id === 'simple' && (
+                                                        <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>
+                                                        </div>
+                                                    )}
+                                                    {item.type_id === 'configurable' && (
+                                                        <div className="cart-button mt-3 px-2">
+                                                            <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
+                                                        </div>
+                                                    )}
+
                                                 </div>
                                                 {/* </Link> */}
                                             </div>
@@ -382,9 +388,10 @@ function Products(props) {
     )
 }
 const mapStateToProps = (state) => {
-    //  console.log(state);
+    // console.log( state.Cart.addToWishlistTask);
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        wishlist: state.Cart.addToWishlistTask
     }
 }
 

@@ -85,7 +85,7 @@ function ProductDetails(props) {
     async function getProductDetailsFxn() {
         let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductDetails(sku);
-        // console.log(result.data)
+        console.log(result.data)
         let projectSingle = {};
         if (customer_id) {
             let productExtras: any = await getProductExtras(result.data.id);
@@ -145,6 +145,7 @@ function ProductDetails(props) {
         // console.log(slectedAttribute.options)
         if (productDetails['type_id'] === 'configurable') {
             if (!slectedAttribute.options["option_id"]) {
+                setIsShow(false);
                 notification("error", "", "Please select Size");
                 return false;
             }
@@ -404,9 +405,9 @@ function ProductDetails(props) {
                     </div>
                 </section>
 
-                <section>
+                {/* <section> */}
                     <Recomendations recomendationsData={recomendationsData} />
-                </section>
+                {/* </section> */}
 
                 <section>
                     <ProductsMagazine posts={magezineData} />

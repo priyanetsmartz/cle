@@ -98,10 +98,10 @@ function Customer(props) {
                         {activeTab === 'dashboard' ? <Dashboard /> :
                             activeTab === 'orders-and-returns' ? <OrdersAndReturns /> :
                                 // activeTab === 'mytrades' ? <MyTrades /> :
-                                    activeTab === 'profile' ? <MyProfile /> :
-                                        activeTab === 'wish-list' ? <MyWishList /> :
-                                            activeTab === 'rewards' ? <MyRewards /> :
-                                                activeTab === 'notifications' ? <MyNotifications /> : <MySupport />}
+                                activeTab === 'profile' ? <MyProfile /> :
+                                    activeTab === 'wish-list' ? <MyWishList /> :
+                                        activeTab === 'rewards' ? <MyRewards /> :
+                                            activeTab === 'notifications' ? <MyNotifications /> : <MySupport />}
 
                     </div>
                 </div>
@@ -110,9 +110,8 @@ function Customer(props) {
     )
 }
 const mapStateToProps = (state) => {
-    return {
-        items: state.Cart.items
-    }
+    // console.log(state)
+    return {}
 }
 
 export default connect(

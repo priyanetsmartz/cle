@@ -102,7 +102,7 @@ function MiniCart(props) {
 
 
 const mapStateToProps = (state) => {
-    // console.log(state.Cart.addToCartTask);
+//    / console.log(state);
     return {
         items: state.Cart.addToCartTask
     }

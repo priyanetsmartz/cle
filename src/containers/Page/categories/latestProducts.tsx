@@ -105,12 +105,12 @@ function LatestProducts(props) {
                     <div className="col-md-12">
                         <ul className="nav nav-tabs justify-content-center" id="DesignerTab" role="tablist">
                             <li className="nav-item" role="presentation">
-                                <a className="nav-link active" id="PD-tab" data-bs-toggle="tab" data-bs-target="#PD" type="button"
-                                    role="tab" aria-controls="PD" aria-selected="true">Latest Products</a>
+                                <Link to="#" className="nav-link active" id="PD-tab" data-bs-toggle="tab" data-bs-target="#PD" type="button"
+                                    role="tab" aria-controls="PD" aria-selected="true">Latest Products</Link>
                             </li>
                             <li className="nav-item" role="presentation">
-                                <a className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
-                                    role="tab" aria-controls="D-maylike" aria-selected="false">We Choose for you</a>
+                                <Link  to="#" className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
+                                    role="tab" aria-controls="D-maylike" aria-selected="false">We Choose for you</Link>
                             </li>
 
                         </ul>

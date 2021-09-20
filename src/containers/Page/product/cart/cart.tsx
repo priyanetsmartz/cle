@@ -170,7 +170,7 @@ function CartItemPage(props) {
                                                         <div className="row">
                                                             <div className="col-md-3">
                                                                 <div className="product-image">
-                                                                    <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} />
+                                                                <Link to={'/product-details/' + item.sku}> <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} /></Link>
                                                                 </div>
                                                             </div>
                                                             <div className="col-md-9">
@@ -200,12 +200,12 @@ function CartItemPage(props) {
                                                                             <input type="number" id="number" value={item.qty} />
                                                                             <div className="value-button" id="increase" onClick={() => { handleAddQuantity(item) }}>+</div>
                                                                         </div>
-                                                                        <div className="col-sm-5">
+                                                                        {/* <div className="col-sm-5">
                                                                             <select className="form-select">
                                                                                 <option>One size</option>
                                                                                 <option>Two size</option>
                                                                             </select>
-                                                                        </div>
+                                                                        </div> */}
                                                                     </div>
                                                                 </div>
                                                                 <div className="cart-pro-price">${item.price}</div>

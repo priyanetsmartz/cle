@@ -4,7 +4,7 @@ import notification from '../../../components/notification';
 import { Link } from 'react-router-dom'
 import { wishListSearchSort } from '../../../redux/pages/customers';
 import { formatprice } from '../../../components/utility/allutils';
-import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, removeWhishlist } from '../../../redux/cart/productApi';
+import { removeWhishlist } from '../../../redux/cart/productApi';
 import cartAction from "../../../redux/cart/productAction";
 const { addToWishlistTask } = cartAction;
 function MyWishList(props) {
@@ -15,17 +15,17 @@ function MyWishList(props) {
     const [sortOrder, setSortOrder] = useState('asc');
     const [sortBy, setSortBy] = useState('price');
     const [pageSize, setPageSize] = useState(10);
+
     useEffect(() => {
-     //   console.log(props.items)
         if (props.items || !props.items) {
             //   console.log(props.items)
             getData();
         }
+
         return () => {
             props.addToWishlistTask(false);
         }
-    }, [props.items]);
-
+    })
 
     const getData = async () => {
         let result: any = await wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchName);
@@ -47,10 +47,12 @@ function MyWishList(props) {
         let del: any = await removeWhishlist(id);
         if (del.data[0].message) {
             setDelWishlist(0)
+            props.addToWishlistTask(true);
             getData()
             notification("success", "", del.data[0].message);
         } else {
             setDelWishlist(0)
+            props.addToWishlistTask(true);
             getData()
             notification("error", "", "Something went wrong!");
 
@@ -118,12 +120,12 @@ function MyWishList(props) {
     );
 }
 
-function mapStateToProps(state) {
-    console.log(state)
+const mapStateToProps = (state) => {
     return {
-        items: state.Cart.addToWishlist
+        items: state.Cart.addToWishlistTask
     }
-};
+}
+
 export default connect(
     mapStateToProps,
     { addToWishlistTask }

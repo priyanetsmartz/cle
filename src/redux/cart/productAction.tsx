@@ -18,6 +18,10 @@ const actions = {
         type: actions.ADD_TO_CART_TASK,
         addToCartTask
     }),
+    addToWishlistTask: addToWishlistTask => ({
+        type: actions.ADD_TO_WISHLIST_TASK,
+        addToWishlistTask
+    }),
     removeItem: (id: number) => ({
         type: actions.REMOVE_ITEM,
         id
@@ -45,10 +49,6 @@ const actions = {
     openGiftBoxes: isOpen => ({
         type: actions.OPEN_GIFT_BOX,
         isOpen: isOpen
-    }),
-    addToWishlistTask: addToWishlist => ({
-        type: actions.ADD_TO_WISHLIST_TASK,
-        addToWishlist
     })
 
 };
