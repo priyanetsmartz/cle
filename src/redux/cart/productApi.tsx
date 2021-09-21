@@ -1,10 +1,11 @@
 import AdminApi from "../../restApi/AdminApi";
 const APi = new AdminApi();
 
-export function getAllProducts(page, pageSize, sortBy, sortByValue) {
+export function getAllProducts(language, page, pageSize, sortBy, sortByValue) {
     const localToken = localStorage.getItem('token');
+    var storeId = language === 'english' ? 3 : 2;
     let priveQuery = localToken && parseInt(localToken) === 4 ? '' : `searchCriteria[filter_groups][1][filters][0][field]=prive&searchCriteria[filter_groups][1][filters][0][value]=0&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&`;
-    return APi.request(`rest/all/V1/products/?${priveQuery}searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}`, "", "GET", "");
+    return APi.request(`rest/all/V1/products/?${priveQuery}searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "");
 }
 
 export function getProductByCategory(page, pageSize, category, sortBy, sortByValue) {
@@ -211,5 +212,19 @@ export function giftGuestCart(giftData: any, itemId: number) {
 export function getCheckOutTotals() {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
     return APi.request(`/rest/V1/carts/${cartQuoteId}/totals`, "", "GET", "")
+}
 
+export function getCartRelevantProducts(productIds: number, language: string) {
+    var storeId = language === 'arabic' ? 2 : 3;
+    const customerId = localStorage.getItem('cust_id');
+    return APi.request(`/rest/V1/product/relevantProducts?customerId=${customerId}&storeId=${storeId}&productIds=${productIds}`, "", "GET", "")
+}
+
+export function getGuestShippingMethods() {
+    // const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`/rest/V1/guest-carts/:cartId/shipping-methods`, "", "GET", "")
+}
+
+export function getShippingMethods() {
+    return APi.request(`/rest/V1/carts/mine/shipping-methods `, "", "GET", "")
 }

@@ -106,12 +106,12 @@ function LatestProducts(props) {
                     <div className="col-md-12">
                         <ul className="nav nav-tabs justify-content-center" id="DesignerTab" role="tablist">
                             <li className="nav-item" role="presentation">
-                                <a className="nav-link active" id="PD-tab" data-bs-toggle="tab" data-bs-target="#PD" type="button"
-                                    role="tab" aria-controls="PD" aria-selected="true"><IntlMessages id="category.latestProducts" /></a>
+                                <Link to="#" className="nav-link active" id="PD-tab" data-bs-toggle="tab" data-bs-target="#PD" type="button"
+                                    role="tab" aria-controls="PD" aria-selected="true"><IntlMessages id="category.latestProducts" /></Link>
                             </li>
                             <li className="nav-item" role="presentation">
-                                <a className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
-                                    role="tab" aria-controls="D-maylike" aria-selected="false"><IntlMessages id="home.weChooseForYou" /></a>
+                                <Link to="#" className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
+                                    role="tab" aria-controls="D-maylike" aria-selected="false"><IntlMessages id="home.weChooseForYou" /></Link>
                             </li>
 
                         </ul>
@@ -166,7 +166,7 @@ function LatestProducts(props) {
                             </div>
                             <div className="tab-pane fade" id="D-maylike" role="tabpanel" aria-labelledby="D-maylike-tab">
                                 <div className="row">
-                                    <WeChooseForYou/>
+                                    <WeChooseForYou />
                                 </div>
                             </div>
                         </div>

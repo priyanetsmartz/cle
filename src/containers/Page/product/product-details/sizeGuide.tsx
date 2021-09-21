@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux'
 import cartAction from "../../../../redux/cart/productAction";
+import IntlMessages from "../../../../components/utility/intlMessages";
 const { openSizeGuide, openMeasuringGuide } = cartAction;
 
 function SizeGuide(props) {
@@ -27,7 +28,7 @@ function SizeGuide(props) {
                         <h1>Size Guide</h1>
                         <Link className="cross_icn" to="#" onClick={sizeGuideModalHandler}> <i className="fas fa-times"></i></Link>
                         <div className="view_measuring">
-                            <Link to="#" onClick={measuringGuideHanler}>View Measuring Guide </Link>
+                            <Link to="#" onClick={measuringGuideHanler}><IntlMessages id="product.measuringGuide" /> </Link>
                         </div>
                         <table>
 

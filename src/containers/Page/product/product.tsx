@@ -6,6 +6,7 @@ import cartAction from "../../../redux/cart/productAction";
 import { addWhishlist, getAllProducts, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
+import IntlMessages from "../../../components/utility/intlMessages";
 import Promotion from "../../partials/promotion";
 import Recomendations from './product-details/recomendations';
 import Filter from './filter';
@@ -28,7 +29,6 @@ function Products(props) {
 
 
     useEffect(() => {
-        console.log(props.wishlist)
         const localToken = localStorage.getItem('token');
         setToken(localToken)
         getProducts();
@@ -37,12 +37,13 @@ function Products(props) {
             props.addToCartTask(false);
             props.addToWishlistTask(true);
         }
-    }, [sortValue, page, pageSize])
+    }, [sortValue, page, pageSize, props.languages])
 
     async function getProducts() {
+        let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getAllProducts(page, pageSize, sortValue.sortBy, sortValue.sortByValue);
+        let result: any = await getAllProducts(lang, page, pageSize, sortValue.sortBy, sortValue.sortByValue);
         //  console.log(Math.ceil(result.data.total_count / 9))
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
@@ -211,7 +212,7 @@ function Products(props) {
                         <div className="col-sm-9">
                             <div className="resltspage_sec">
                                 <div className="paginatn_result">
-                                    <span>Results per page</span>
+                                    <span><IntlMessages id="product.results" /></span>
                                     <ul>
                                         <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
                                         <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
@@ -388,10 +389,14 @@ function Products(props) {
     )
 }
 const mapStateToProps = (state) => {
-    // console.log( state.Cart.addToWishlistTask);
+    let languages = '';
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
     return {
         items: state.Cart.items,
-        wishlist: state.Cart.addToWishlistTask
+        wishlist: state.Cart.addToWishlistTask,
+        languages: languages
     }
 }
 
