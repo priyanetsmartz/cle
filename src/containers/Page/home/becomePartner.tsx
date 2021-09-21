@@ -86,10 +86,10 @@ function BecomePartner(props) {
                     <div className="col-md-4">
                         <div className="become-partner">
                             <div className="become-part-inner">
-                                <h1>How to become a partner</h1>
-                                <p>Here's How it works!</p>
-                                <p>See more information in our Terms and Conditions.</p>
-                                <a href="">Check out</a>
+                                <h1><IntlMessages id="home.becomePartner" /></h1>
+                                <p><IntlMessages id="home.howItWorks" /></p>
+                                <p><IntlMessages id="home.seeMoreInfo" /></p>
+                                <a href=""><IntlMessages id="home.checkout" /></a>
                             </div>
                         </div>
                     </div>

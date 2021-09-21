@@ -590,7 +590,7 @@ function MyProfile(props) {
 
                         {custForm && custForm.addresses.map((address, i) => {
                             return (<div className="addressnew_addressbodr" key={i}>
-                                <h3>Address</h3>
+                                <h3><IntlMessages id="myaccount.address" /></h3>
                                 <ul>
                                     <li>{address.firstname + ' ' + address.lastname}</li>
                                     <li>{address.street}</li>
@@ -778,15 +778,9 @@ function MyProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>Delete Account</h1>
-                            <p>
-                                We're sorry to see you go - remember, your CLé account is free and enables you to shop easily without
-                                having to enter your details each time. With it, you're able to take advantage of the exclusive discounts
-                                and promos on site.
-                            </p>
-                            <p>
-                                If you'd still like to deactivate your CLé account, follow the below steps
-                            </p>
+                            <h1><IntlMessages id="myaccount.deleteAccount" /></h1>
+                            <p><IntlMessages id="myaccount.weAreSorryToSee" /> </p>
+                            <p><IntlMessages id="myaccount.ifYouStillLike" /> </p>
                         </div>
                     </div>
                     <div className="row">
@@ -1136,11 +1130,11 @@ function MyProfile(props) {
             {/* my details modal */}
             <Modal show={myAddressModal}>
                 <div className="CLE_pf_details">
-                    <h1>My Address</h1>
+                    <h1><IntlMessages id="myaccount.myAddress" /></h1>
                     <Link className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></Link>
                     <div className="">
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">First name<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Ann"
                                 id="firstname"
                                 value={custAddForm.firstname}
@@ -1149,7 +1143,7 @@ function MyProfile(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Surname<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="lastname"
                                 placeholder="Surname"
                                 value={custAddForm.lastname}
@@ -1158,7 +1152,7 @@ function MyProfile(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Phone<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="telephone"
                                 placeholder="Phone"
                                 value={custAddForm.telephone}
@@ -1167,7 +1161,7 @@ function MyProfile(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Address<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="street"
                                 placeholder="Address"
                                 value={custAddForm.street}
@@ -1176,7 +1170,7 @@ function MyProfile(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">City*</label>
+                            <label className="form-label"><IntlMessages id="myaccount.city" /></label>
                             <input type="text" className="form-control" id="city"
                                 placeholder="City"
                                 value={custAddForm.city}
@@ -1185,7 +1179,7 @@ function MyProfile(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Post Code*</label>
+                            <label className="form-label"><IntlMessages id="myaccount.postCode" /></label>
                             <input type="text" className="form-control" id="postcode"
                                 placeholder="Post Code"
                                 value={custAddForm.postcode}
@@ -1194,7 +1188,7 @@ function MyProfile(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Country<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                             <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
                                 {countries && countries.map(opt => {
                                     return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
@@ -1205,7 +1199,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <div className="Frgt_paswd">
                                 <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={saveCustAddress}>Confirm</button>
+                                    <button type="button" className="btn btn-secondary" onClick={saveCustAddress}><IntlMessages id="myaccount.confirm" /></button>
                                 </div>
                             </div>
                         </div>
@@ -1424,20 +1418,21 @@ function MyProfile(props) {
             {/* add payment method modal */}
             <Modal show={paymentMethod}>
                 <div className="CLE_pf_details">
-                    <h1 className="mb-3">Payment Methods</h1>
+                    <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
                     <Link onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     <div className="payment_medt">
                         <div className="width-100">
                             <div className="d-grid gap-2 mx-auto">
-                                <button type="button" className="btn btn-outline-primary" onClick={OpenCardModal}>Add credit / debit card</button>
+                                <button type="button" className="btn btn-outline-primary" onClick={OpenCardModal}>
+                                    <IntlMessages id="checkout.addCards" /></button>
                             </div>
                             <div className="or_diivdr">
-                                OR
+                                <IntlMessages id="signup.or" />
                             </div>
                         </div>
                         <div className="width-100">
                             <div className="d-grid gap-2 mx-auto">
-                                <button type="button" className="btn btn-outline-primary"> Add PayPal</button>
+                                <button type="button" className="btn btn-outline-primary"> <IntlMessages id="checkout.addpaypal" /></button>
                             </div>
                         </div>
                     </div>
@@ -1447,16 +1442,16 @@ function MyProfile(props) {
             {/* add credit card modal */}
             <Modal show={addCard}>
                 <div className="CLE_pf_detahils">
-                    <h1 className="mb-3">Payment Methods</h1>
+                    <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
                     <Link onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     <div className="payment_mode">
-                        <h2>Add credit / debit card</h2>
+                        <h2><IntlMessages id="checkout.addCards" /></h2>
                         <div className="width-100 mb-3 form-field">
-                            <label htmlFor="exampleInputEmail1" className="form-label">Card number*<span className="maindatory">*</span></label>
+                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.cardNumber" />*<span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="XXXX XXXX XXXX XXXX" />
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label htmlFor="exampleInputEmail1" className="form-label">Expiry date*</label>
+                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.expiryDate" />*</label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" aria-label="Default select example">
                                     <option value="">Month</option>
@@ -1473,7 +1468,7 @@ function MyProfile(props) {
                             </div>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label htmlFor="exampleInputEmail1" className="form-label">Name on card*<span className="maindatory">*</span></label>
+                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.nameOnCard" />*<span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Baker Street 105" />
                         </div>
                         <div className="width-100 mb-3 form-field">
@@ -1484,13 +1479,13 @@ function MyProfile(props) {
                             <div className="form-check">
                                 <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
                                 <label className="form-check-label" htmlFor="flexCheckDefault">
-                                    Save card details for next time
+                                    <IntlMessages id="myaccount.saveCardDetails" />
                                 </label>
                             </div>
                         </div>
                         <div className="width-100 mb-4">
                             <div className="float-end">
-                                <button type="button" className="btn btn-secondary">Confirm</button>
+                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.confirm" /></button>
                             </div>
                         </div>
                     </div>

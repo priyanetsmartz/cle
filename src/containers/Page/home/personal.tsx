@@ -162,7 +162,7 @@ function Personal(props) {
                                                     </>}
 
                                                 <div className="no-worries">
-                                                    <h3>No worries, you can re-manage the preference settings in your profile account later.</h3>
+                                                    <h3><IntlMessages id="home.noWorries" /></h3>
                                                 </div>
                                             </div>
                                             <div className="alert_cross">

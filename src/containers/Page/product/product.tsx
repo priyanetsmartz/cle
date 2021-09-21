@@ -338,7 +338,7 @@ function Products(props) {
 
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1 className="text-center mb-4">Explore more</h1>
+                            <h1 className="text-center mb-4"><IntlMessages id="products.exploreMore" /></h1>
                         </div>
                     </div>
 

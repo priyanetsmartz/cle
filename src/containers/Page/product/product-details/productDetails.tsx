@@ -429,7 +429,7 @@ function ProductDetails(props) {
             </Modal>
             <Modal show={isShare} onHide={hideModal}>
                 <Modal.Header>
-                    <h5 className="modal-title">Share this product</h5>
+                    <h5 className="modal-title"><IntlMessages id="products.shareProduct" /></h5>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
                 <Modal.Body className="arabic-rtl-direction">
                     <li>
