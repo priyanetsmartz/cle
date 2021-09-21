@@ -26,6 +26,7 @@ function HeaderMenu(props) {
     const [isLoaded, setIsLoaded] = useState(true);
     const [menuData, SetMenuData] = useState([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
     const [activeCat, SetActiveCat] = useState('')
+    const [activeOne, SetActiveOne] = useState('');
     const [showAccount, SetShowAccount] = useState(false);
 
     setTimeout(() => {
@@ -38,6 +39,7 @@ function HeaderMenu(props) {
             var jsonData = result.data[0].parent.child;
             let catMenu = category ? category : jsonData[0].url_key;
             SetMenuData(jsonData);
+            SetActiveOne(catMenu)
             SetActiveCat(catMenu);
         }
         fetchMyAPI()
@@ -54,6 +56,13 @@ function HeaderMenu(props) {
         SetShowAccount(false)
     }
 
+    const setMenu = (urlKey) => {
+        SetActiveCat(urlKey)
+    }
+
+    const resetMenu = () => {
+        SetActiveCat(activeOne)
+    }
     const logout = () => {
         // Clear access token and ID token from local storage
         // props.toggleOpenDrawer(false);
@@ -73,6 +82,7 @@ function HeaderMenu(props) {
         e.preventDefault();
         props.showSignin(true);
     }
+
     return (
         <>
             {isLoaded && (
@@ -90,7 +100,7 @@ function HeaderMenu(props) {
                                         menuData.map((val, i) => {
                                             return (
                                                 <li key={i}>
-                                                    <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                    <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""} onMouseEnter={() => { setMenu(val.url_key) }} onMouseLeave={() => resetMenu()}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
                                                         {val.child.map((childMenu, j) => {
                                                             //  console.log(childMenu)
@@ -133,16 +143,16 @@ function HeaderMenu(props) {
                                         <div className="myaccount_details" style={{ "display": !showAccount ? "none" : "block" }}>
                                             <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
                                             <ul>
-                                                <li><Link to="/customer/dashboard">Your Account</Link></li>
-                                                <li><Link to="/customer/dashboard">Dashboard </Link></li>
-                                                <li><Link to="/customer/orders-and-returns">My orders & returns</Link></li>
+                                                <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li>
+                                                <li><Link to="/customer/dashboard"><IntlMessages id="dashboard" /> </Link></li>
+                                                <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
                                                 {/* <li><Link to="/customer/mytrades">My trades </Link></li> */}
-                                                <li><Link to="/customer/profile">My profile </Link></li>
-                                                <li><Link to="/customer/support">My support</Link> </li>
+                                                <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
+                                                <li><Link to="/customer/support"><IntlMessages id="myspport" /></Link> </li>
                                             </ul>
                                             <div className="d-grid">
                                                 {
-                                                    customer_id ? <button className="btn btn-secondary" onClick={() => { logout(); }} type="button">Logout</button> :
+                                                    customer_id ? <button className="btn btn-secondary" onClick={() => { logout(); }} type="button"><IntlMessages id="logout" /></button> :
                                                         <button className="btn btn-secondary" type="button" onClick={(e) => { handlesigninClick(e); }} ><IntlMessages id="menu_Sign_in" /></button>
                                                 }
 

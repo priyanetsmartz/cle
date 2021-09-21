@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import notification from '../../../../components/notification';
 import { addToCartApi, addToCartApiGuest, giftCart, giftGuestCart } from "../../../../redux/cart/productApi";
-
+import IntlMessages from "../../../../components/utility/intlMessages";
+import { useIntl } from 'react-intl';
 function GiftMessage(props) {
-    // let product_id = props;
+    const intl = useIntl();
     useEffect(() => {
-        console.log(props.product)
+        //  console.log(props.product)
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
@@ -92,10 +93,10 @@ function GiftMessage(props) {
             }
 
 
-           if(result.data === true){
-            setIsShow(false);
-            notification("success", "", "Item added as a gift!");  
-           }
+            if (result.data === true) {
+                setIsShow(false);
+                notification("success", "", "Item added as a gift!");
+            }
         } else {
             setIsShow(false);
             notification("warning", "", "Please enter valid email and password");
@@ -139,23 +140,23 @@ function GiftMessage(props) {
                 <form>
                     <div className="row">
                         <div className="col">
-                            <label >For</label>
+                            <label > <IntlMessages id="gift.for" /></label>
                             <input
                                 type="text"
                                 id="for"
                                 className="form-control"
-                                placeholder="For"
+                                placeholder={intl.formatMessage({ id: "gift.for" })}
                                 value={state.for}
                                 onChange={handleChange}
                                 required />
                         </div>
                         <div className="col">
-                            <label >From</label>
+                            <label ><IntlMessages id="gift.from" /></label>
                             <input
                                 type="text"
                                 id="from"
                                 className="form-control"
-                                placeholder="From"
+                                placeholder={intl.formatMessage({ id: "gift.from" })}
                                 value={state.from}
                                 onChange={handleChange}
                                 required />
@@ -163,19 +164,19 @@ function GiftMessage(props) {
                     </div>
                     <div className="row">
                         <div className="col">
-                            <label>Add note or wishes</label>
+                            <label><IntlMessages id="gift.wish-note" /></label>
                             <textarea
                                 className="form-control"
                                 id="message"
                                 value={state.message}
                                 onChange={handleChange}
-                                placeholder="I wish.."
+                                placeholder={intl.formatMessage({ id: "gift.wish" })}
                                 required></textarea>
                         </div>
                     </div>
                 </form>
             </Modal.Body>
-            <Modal.Footer> <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}>Confirm</Link>
+            <Modal.Footer> <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}><IntlMessages id="gift.confirm" /></Link>
                 <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>Loading.</div></Modal.Footer>
         </div>
     )

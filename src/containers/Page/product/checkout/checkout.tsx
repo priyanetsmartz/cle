@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import CheckoutSidebar from './sidebar';
+import IntlMessages from "../../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode } from '../../../../redux/cart/productApi';
@@ -38,7 +39,7 @@ function Checkout(props) {
         website_id: 1,
         addresses: []
     });
-    
+
     const [errors, setError] = useState({
         errors: {}
     });
@@ -67,23 +68,18 @@ function Checkout(props) {
             if (cartQuoteToken) {
                 cartItems = await getGuestCart();
                 cartTotal = await getGuestCartTotal();
-
-
             }
         }
-        // let result: any = await getCheckOutTotals();
         let checkoutData = {}, checkItems = {}, addresses = {}
-        checkoutData['discount'] = cartTotal.data.base_discount_amount;
-        checkoutData['sub_total'] = cartTotal.data.base_subtotal;
-        checkoutData['shipping_charges'] = cartTotal.data.base_shipping_amount;
-        checkoutData['total'] = cartTotal.data.base_grand_total;
-        checkoutData['tax'] = cartTotal.data.base_tax_amount;
-        checkoutData['total_items'] = cartTotal.data.items_qty;
-        checkItems['items'] = cartItems.data.items;
-        addresses['addresses'] = cartItems.data.customer.addresses;
-        // SetItems(result.data);
+        checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
+        checkoutData['sub_total'] = cartTotal && cartTotal.data ? cartTotal.data.base_subtotal : 0;
+        checkoutData['shipping_charges'] = cartTotal && cartTotal.data ? cartTotal.data.base_shipping_amount : 0;
+        checkoutData['total'] = cartTotal && cartTotal.data ? cartTotal.data.base_grand_total : 0;
+        checkoutData['tax'] = cartTotal && cartTotal.data ? cartTotal.data.base_tax_amount : 0;
+        checkoutData['total_items'] = cartTotal && cartTotal.data ? cartTotal.data.items_qty : 0;
+        checkItems['items'] = cartTotal && cartTotal.data ? cartItems.data.items : [];
+        addresses['addresses'] = cartTotal && cartTotal.data ? cartItems.data.customer.addresses : '';
         SetItems({ checkData: checkoutData, items: checkItems, address: addresses });
-        // console.log(itemsVal.address['addresses'])
     }
 
     //customer address functinonality start here
@@ -115,7 +111,7 @@ function Checkout(props) {
             let obj: any = { ...custAddForm };
             obj.street = [obj.street];
             custForm.addresses.push(obj);
-            
+
             // console.log(custAddForm);
             let result: any = await saveCustomerDetails(custId, { customer: custForm });
             if (result) {
@@ -134,7 +130,7 @@ function Checkout(props) {
                 toggleAddressModal();
                 notification("success", "", "Customer Address Updated");
             }
-        }else{
+        } else {
 
             console.log(errors)
         }
@@ -214,7 +210,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHOne">
                                         <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#CheckoutOne"
                                             aria-expanded="true" aria-controls="CheckoutOne">
-                                            Promo code or voucher
+                                            <IntlMessages id="checkout.promoTitle" />
                                         </button>
                                     </h2>
                                     <div id="CheckoutOne" className="accordion-collapse collapse show" aria-labelledby="CheckoutH	One"
@@ -224,20 +220,20 @@ function Checkout(props) {
                                                 <li className="nav-item" role="presentation">
                                                     <button className="nav-link active" id="pills-promo-tab" data-bs-toggle="pill"
                                                         data-bs-target="#pills-promo" type="button" role="tab" aria-controls="pills-promo"
-                                                        aria-selected="true">Promo code</button>
+                                                        aria-selected="true"> <IntlMessages id="promo" /></button>
                                                 </li>
                                                 <li className="nav-item" role="presentation">
                                                     <button className="nav-link" id="pills-voucher-tab" data-bs-toggle="pill"
                                                         data-bs-target="#pills-voucher" type="button" role="tab" aria-controls="pills-voucher"
-                                                        aria-selected="false">Voucher</button>
+                                                        aria-selected="false"><IntlMessages id="voucher" /></button>
                                                 </li>
                                             </ul>
                                             <div className="tab-content" id="pills-tabContent">
                                                 <div className="tab-pane fade show active" id="pills-promo" role="tabpanel"
                                                     aria-labelledby="pills-promo-tab">
-                                                    <p>Add a Promo Code</p>
+                                                    <p><IntlMessages id="addPromo" /></p>
                                                     <div>
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label">Promo code</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label"><IntlMessages id="promoCode" /></label>
                                                     </div>
                                                     <div className="row g-3">
                                                         <div className="col-auto">
@@ -248,20 +244,19 @@ function Checkout(props) {
                                                              id="input1234ABCD" placeholder="1234ABCD" />
                                                         </div>
                                                         <div className="col-auto">
-                                                            <button type="submit" className="btn btn-primary mb-3" onClick={applyPromo}>Apply code</button>
+                                                            <button type="submit" className="btn btn-primary mb-3" onClick={applyPromo}><IntlMessages id="applyCode" /></button>
                                                         </div>
                                                     </div>
-                                                    <p>Need to know</p>
+                                                    <p><IntlMessages id="needtoknow" /></p>
                                                     <ul>
-                                                        <li>you can only use one discount / promo code per order. This applies to our free-delivery
-                                                            codes, too.</li>
-                                                        <li>Discount / promo codes cannot be used while buying gift vouchers.</li>
+                                                        <li><IntlMessages id="needtoknow1" /></li>
+                                                        <li><IntlMessages id="needtoknow2" /></li>
                                                     </ul>
                                                 </div>
                                                 <div className="tab-pane fade" id="pills-voucher" role="tabpanel" aria-labelledby="pills-voucher-tab">
-                                                    <p>Add a Voucher</p>
+                                                    <p><IntlMessages id="addvoucher" /></p>
                                                     <div>
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label">16-digit voucher code</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label"><IntlMessages id="add16voucher" /></label>
                                                     </div>
                                                     <div className="row g-3">
                                                         <div className="col-auto">
@@ -270,13 +265,12 @@ function Checkout(props) {
                                                                 placeholder="1234 5678 9101 2131" />
                                                         </div>
                                                         <div className="col-auto">
-                                                            <button type="submit" className="btn btn-primary mb-3">Apply code</button>
+                                                            <button type="submit" className="btn btn-primary mb-3"><IntlMessages id="applyCode" /></button>
                                                         </div>
                                                     </div>
-                                                    <p>Need to know</p>
+                                                    <p><IntlMessages id="needtoknow" /></p>
                                                     <ul>
-                                                        <li>you can use more than one voucher at once. After applying the code, a new input will
-                                                            appear.</li>
+                                                        <li><IntlMessages id="needtoknowvoucher" /></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -288,13 +282,13 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHTwo">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutTwo" aria-expanded="false" aria-controls="CheckoutTwo">
-                                            Email address
+                                            <IntlMessages id="email_address" />
                                         </button>
                                     </h2>
                                     <div id="CheckoutTwo" className="accordion-collapse collapse" aria-labelledby="CheckoutHTwo"
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
-                                            <label>Email</label>
+                                            <label><IntlMessages id="profile.email" /></label>
                                             <p>{localStorage.getItem('token_email') ? localStorage.getItem('token_email') : ""}</p>
                                         </div>
                                     </div>
@@ -303,7 +297,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHThree">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutThree" aria-expanded="false" aria-controls="CheckoutThree">
-                                            Delivery address
+                                            <IntlMessages id="deliveryAddress" />
                                         </button>
                                     </h2>
                                     <div id="CheckoutThree" className="accordion-collapse collapse" aria-labelledby="CheckoutHThree"
@@ -330,7 +324,7 @@ function Checkout(props) {
                                                                     <div className="form-check">
                                                                         <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
                                                                         <label className="form-check-label" htmlFor="flexCheckDefault">
-                                                                            use this as billing address
+                                                                            <IntlMessages id="usethisAddress" />
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -350,7 +344,7 @@ function Checkout(props) {
                                             </div>
                                             <div className="add-address-btn">
                                                 <hr />
-                                                <button className="add-ad-btn btn btn-link" onClick={toggleAddressModal}>Add new address</button>
+                                                <button className="add-ad-btn btn btn-link" onClick={toggleAddressModal}><IntlMessages id="myaccount.addNewAddress" /></button>
                                             </div>
                                             <div className="address-form" style={{ "display": "none" }}>
                                                 <div className="row g-3">
@@ -401,7 +395,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfour">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfour" aria-expanded="false" aria-controls="Checkoutfour">
-                                            Delivery Option
+                                            <IntlMessages id="deliveryOption" />
                                         </button>
                                     </h2>
                                     <div id="Checkoutfour" className="accordion-collapse collapse" aria-labelledby="CheckoutHfour"
@@ -459,7 +453,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfive">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfive" aria-expanded="false" aria-controls="Checkoutfive">
-                                            Payment
+                                            <IntlMessages id="payment" />
                                         </button>
                                     </h2>
                                     <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"
@@ -615,7 +609,7 @@ function Checkout(props) {
                             </div>
 
                             <div className="d-grid gap-2 col-8 mx-auto">
-                                <button className="btn btn-secondary" type="button">Place Order</button>
+                                <button className="btn btn-secondary" type="button"><IntlMessages id="place-Order" /> </button>
                                 <p></p>
                             </div>
                         </div>
@@ -623,85 +617,85 @@ function Checkout(props) {
                     </div>
                 </div>
 
-                 {/* change delivery address modalc */}
-            <Modal show={addNewAddressModal}>
-                <div className="CLE_pf_details">
-                    <h1>My Address</h1>
-                    <a className="cross_icn" onClick={toggleAddressModal}> <i className="fas fa-times"></i></a>
-                    <div className="">
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">First name<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Ann"
-                                id="firstname"
-                                value={custAddForm.firstname}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["firstname"]}</span>
+                {/* change delivery address modalc */}
+                <Modal show={addNewAddressModal}>
+                    <div className="CLE_pf_details">
+                        <h1>My Address</h1>
+                        <Link className="cross_icn" to="#" onClick={toggleAddressModal}> <i className="fas fa-times"></i></Link>
+                        <div className="">
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">First name<span className="maindatory">*</span></label>
+                                <input type="text" className="form-control" placeholder="Ann"
+                                    id="firstname"
+                                    value={custAddForm.firstname}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["firstname"]}</span>
 
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Surname<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="lastname"
-                                placeholder="Surname"
-                                value={custAddForm.lastname}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["lastname"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Surname<span className="maindatory">*</span></label>
+                                <input type="text" className="form-control" id="lastname"
+                                    placeholder="Surname"
+                                    value={custAddForm.lastname}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["lastname"]}</span>
 
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Phone<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="telephone"
-                                placeholder="Phone"
-                                value={custAddForm.telephone}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["telephone"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Phone<span className="maindatory">*</span></label>
+                                <input type="text" className="form-control" id="telephone"
+                                    placeholder="Phone"
+                                    value={custAddForm.telephone}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["telephone"]}</span>
 
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Address<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="street"
-                                placeholder="Address"
-                                value={custAddForm.street}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["street"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Address<span className="maindatory">*</span></label>
+                                <input type="text" className="form-control" id="street"
+                                    placeholder="Address"
+                                    value={custAddForm.street}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["street"]}</span>
 
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">City*</label>
-                            <input type="text" className="form-control" id="city"
-                                placeholder="City"
-                                value={custAddForm.city}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["city"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">City*</label>
+                                <input type="text" className="form-control" id="city"
+                                    placeholder="City"
+                                    value={custAddForm.city}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["city"]}</span>
 
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Post Code*</label>
-                            <input type="text" className="form-control" id="postcode"
-                                placeholder="Post Code"
-                                value={custAddForm.postcode}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["postcode"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Post Code*</label>
+                                <input type="text" className="form-control" id="postcode"
+                                    placeholder="Post Code"
+                                    value={custAddForm.postcode}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["postcode"]}</span>
 
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Country<span className="maindatory">*</span></label>
-                            <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
-                                {countries && countries.map(opt => {
-                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
-                                })}
-                            </select>
-                            <span className="error">{errors.errors["country_id"]}</span>
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <div className="Frgt_paswd">
-                                <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={saveCustAddress}>Confirm</button>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Country<span className="maindatory">*</span></label>
+                                <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
+                                    {countries && countries.map(opt => {
+                                        return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                    })}
+                                </select>
+                                <span className="error">{errors.errors["country_id"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <div className="Frgt_paswd">
+                                    <div className="confirm-btn">
+                                        <button type="button" className="btn btn-secondary" onClick={saveCustAddress}>Confirm</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </Modal>
+                </Modal>
 
 
             </section>

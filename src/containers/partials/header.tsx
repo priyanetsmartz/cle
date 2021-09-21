@@ -228,7 +228,7 @@ function Header(props) {
                                             </Link>
                                         </div>
                                     </li>
-                                    {/* <LanguageSwitcher /> */}
+                                    <LanguageSwitcher />
                                 </ul>
                             </div>
                         </div>

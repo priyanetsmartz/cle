@@ -4,12 +4,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { formatprice } from '../../../../components/utility/allutils';
 import { Link } from "react-router-dom";
+import IntlMessages from "../../../../components/utility/intlMessages";
 const Recommendations = (props) => {
     const [recomendedProducts, setRecomendedProducts] = useState([]);
     // console.log(recomendedProducts)
     useEffect(() => {
         setRecomendedProducts(props.recomendationsData)
-       // console.log(recomendedProducts)
+        // console.log(recomendedProducts)
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
@@ -33,7 +34,7 @@ const Recommendations = (props) => {
                 {(recomendedProducts && recomendedProducts.length) && (
 
                     <div className="recommendations-section text-center ">
-                        <h1>Recommendations</h1>
+                        <h1> <IntlMessages id="product.recommendations" /></h1>
                         <div className="recommed-slider" >
                             <Slider className="regular slider" {...settings}>
 

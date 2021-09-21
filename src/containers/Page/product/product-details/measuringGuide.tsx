@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { connect } from 'react-redux'
 import minicart_p1 from "../../../../image/minicart_p1.png";
 import cartAction from "../../../../redux/cart/productAction";
+import IntlMessages from "../../../../components/utility/intlMessages";
 const { openMeasuringGuide } = cartAction;
 
 
@@ -27,7 +28,7 @@ function MeasuringGuide(props) {
                         <div className="measur_guide">
                             <h1 className="measuring_guide">Measuring Guide</h1>
                             <Link to="#" onClick={measuringGuideHanler} className="cross_icn"> <i className="fas fa-times"></i></Link>
-                            <div className="view_size"><Link to="#" onClick={measuringGuideHanler}>View Size Guide</Link></div>
+                            <div className="view_size"><Link to="#" onClick={measuringGuideHanler}><IntlMessages id="product.sizeguide" /></Link></div>
                             <h2>The Attico</h2>
                             <p>Padded-shoulders logo-jacquard satin shirt</p>
                             <p className="mb-0"><span className="chest_meas">Chest:</span> Measured flat across from underarm seam to

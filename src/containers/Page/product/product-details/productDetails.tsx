@@ -17,8 +17,6 @@ import Promotion from '../../../partials/promotion';
 import { addToCartApi, addToCartApiGuest, getProductDetails, getProductExtras } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
-import Magazine from '../../home/magazine';
-import product from '../product';
 import notification from '../../../../components/notification';
 import GiftMessage from './GiftMessage';
 const { addToCart, addToCartTask, openGiftBoxes } = cartAction;
@@ -85,15 +83,15 @@ function ProductDetails(props) {
     async function getProductDetailsFxn() {
         let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductDetails(sku);
-        console.log(result.data)
+        //  console.log(result.data)
         let projectSingle = {};
         if (customer_id) {
             let productExtras: any = await getProductExtras(result.data.id);
             setMagezineData(productExtras.data[0].posts)
             setRecomendations(productExtras.data[0].recommendation)
-         //   console.log(productExtras.data)
+            //   console.log(productExtras.data)
         }
-       
+
         let description = "", special_price: 0, short, shipping_and_returns: "";
 
         result.data.custom_attributes.map((attributes) => {
@@ -127,8 +125,6 @@ function ProductDetails(props) {
         setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
         setExtensionAttributes(result.data.extension_attributes.stock_item.qty);
         setproductDetails(projectSingle);
-        //console.log(productDetails)
-
     }
 
     const handleGiftMEssage = () => {
@@ -251,7 +247,7 @@ function ProductDetails(props) {
                                         <div className="row">
                                             <div className="col-sm-4">
                                                 <div className="form-group">
-                                                    <span className="form-label">Quantity:</span>
+                                                    <span className="form-label"><IntlMessages id="product.quantity" />:</span>
                                                     {(extensionAttributes) ? (
                                                         <select className="form-select" onChange={handleQuantity} aria-label="Default select example">
                                                             {Array.from(Array(extensionAttributes).slice(0, 10), (e, i) => {
@@ -291,7 +287,7 @@ function ProductDetails(props) {
                                             </div>
                                             <div className="col-sm-4">
                                                 <div className="form-group">
-                                                    <Link className="" to="#" onClick={sizeGuideModalHandler}>Size Guide</Link>
+                                                    <Link className="" to="#" onClick={sizeGuideModalHandler}> <IntlMessages id="product.sizeguide" /></Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -301,7 +297,7 @@ function ProductDetails(props) {
                                         <div className="d-grid">
                                             {productDetails['is_in_stock'] === true && (
                                                 <>  <button type="button" style={{ "display": !isShow ? "inline-block" : "none" }} onClick={() => { handleCart(productDetails['id'], productDetails['sku']) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
-                                                    Add to Cart</button>
+                                                    <IntlMessages id="product.addToCart" /></button>
                                                     <button style={{ "display": isShow ? "inline-block" : "none" }} className="btn btn-primary"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></button>
                                                 </>
                                             )}
@@ -312,7 +308,7 @@ function ProductDetails(props) {
                                         <div className="d-grid gap-2 d-md-flex justify-content-start">
                                             <button type="button" className="btn btn-outline-primary me-4" onClick={() => {
                                                 handleGiftMEssage();
-                                            }} >Send a Gift</button>
+                                            }} > <IntlMessages id="product.sendAGift" /></button>
                                             <button type="button" className="btn btn-outline-success" onClick={() => {
                                                 handleClick();
                                             }} ><img src={ShareIcon} alt=""
@@ -327,7 +323,7 @@ function ProductDetails(props) {
                                             <h2 className="accordion-header" id="flush-headingOne">
                                                 <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                                    Description
+                                                    <IntlMessages id="product.description" />
                                                 </button>
                                             </h2>
                                             <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne"
@@ -341,7 +337,7 @@ function ProductDetails(props) {
                                             <h2 className="accordion-header" id="flush-headingTwo">
                                                 <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                                    Details
+                                                    <IntlMessages id="product.details" />
                                                 </button>
                                             </h2>
                                             <div id="flush-collapseTwo" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
@@ -365,7 +361,7 @@ function ProductDetails(props) {
                                             <h2 className="accordion-header" id="flush-headingThree">
                                                 <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                    Size
+                                                    <IntlMessages id="product.size" />
                                                 </button>
                                             </h2>
                                             <div id="flush-collapseThree" className="accordion-collapse collapse" aria-labelledby="flush-headingThree"
@@ -377,7 +373,7 @@ function ProductDetails(props) {
                                                             <li> Max feature width 1.4in/3.8cm</li>
                                                             <li> Max feature length 0.7in/1.3cm</li>
                                                         </ul>
-                                                        <Link to="#" className="sizeguid">Size Guide</Link>
+                                                        <Link to="#" className="sizeguid"> <IntlMessages id="product.sizeguide" /></Link>
                                                     </div>
                                                 </div>
                                             </div>
@@ -386,7 +382,7 @@ function ProductDetails(props) {
                                             <h2 className="accordion-header" id="flush-headingFourth">
                                                 <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#flush-collapseFourth" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                    Shipping and returns
+                                                    <IntlMessages id="product.shipingAndReturn" />
                                                 </button>
                                             </h2>
                                             <div id="flush-collapseFourth" className="accordion-collapse collapse"
@@ -406,7 +402,7 @@ function ProductDetails(props) {
                 </section>
 
                 {/* <section> */}
-                    <Recomendations recomendationsData={recomendationsData} />
+                <Recomendations recomendationsData={recomendationsData} />
                 {/* </section> */}
 
                 <section>
@@ -425,8 +421,8 @@ function ProductDetails(props) {
             </Modal>
             <Modal show={isGiftMessage} size="lg" data={productDetails['id']} >
                 <Modal.Header>
-                    <h5 className="modal-title">Add Gift Reciept</h5>
-                    <p>Feel Free to add a personalized note or whishes </p>
+                    <h5 className="modal-title"><IntlMessages id="gift.title" /></h5>
+                    <div><IntlMessages id="gift.subTitle" /> </div>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideGiftModalModal} aria-label="Close"></button>
                 </Modal.Header>
                 <GiftMessage />

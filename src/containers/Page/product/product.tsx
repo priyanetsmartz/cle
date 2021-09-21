@@ -6,6 +6,7 @@ import cartAction from "../../../redux/cart/productAction";
 import { addWhishlist, getAllProducts, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
+import IntlMessages from "../../../components/utility/intlMessages";
 import Promotion from "../../partials/promotion";
 import Recomendations from './product-details/recomendations';
 import Filter from './filter';
@@ -13,7 +14,7 @@ const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 
 
 function Products(props) {
-    let imageD = '';
+    let imageD = '', description = '';
     const [isShow, setIsShow] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
@@ -28,7 +29,6 @@ function Products(props) {
 
 
     useEffect(() => {
-        console.log(props.wishlist)
         const localToken = localStorage.getItem('token');
         setToken(localToken)
         getProducts();
@@ -37,12 +37,13 @@ function Products(props) {
             props.addToCartTask(false);
             props.addToWishlistTask(true);
         }
-    }, [sortValue, page, pageSize])
+    }, [sortValue, page, pageSize, props.languages])
 
     async function getProducts() {
+        let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getAllProducts(page, pageSize, sortValue.sortBy, sortValue.sortByValue);
+        let result: any = await getAllProducts(lang, page, pageSize, sortValue.sortBy, sortValue.sortByValue);
         //  console.log(Math.ceil(result.data.total_count / 9))
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
@@ -211,7 +212,7 @@ function Products(props) {
                         <div className="col-sm-9">
                             <div className="resltspage_sec">
                                 <div className="paginatn_result">
-                                    <span>Results per page</span>
+                                    <span><IntlMessages id="product.results" /></span>
                                     <ul>
                                         <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
                                         <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
@@ -258,24 +259,27 @@ function Products(props) {
                                                                 if (attributes.attribute_code === 'image') {
                                                                     imageD = attributes.value;
                                                                 }
+                                                                if (attributes.attribute_code === 'short_description') {
+                                                                    description = attributes.value;
+                                                                }
                                                             })
                                                         }
                                                         <Link to={'/product-details/' + item.sku}><img src={imageD} alt={item.name} width="200" /></Link>
                                                     </div>
                                                     <div className="about text-center">
                                                         <h5>{item.name}</h5>
-                                                        <div className="tagname">{item.desc}</div>
+                                                        <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
                                                         <div className="pricetag">${item.price}</div>
                                                     </div>
-                                                    {item.type_id === 'simple' && (
+                                                    {/* {item.type_id === 'simple' && (
                                                         <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>
                                                         </div>
                                                     )}
-                                                    {item.type_id === 'configurable' && (
-                                                        <div className="cart-button mt-3 px-2">
-                                                            <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
-                                                        </div>
-                                                    )}
+                                                    {item.type_id === 'configurable' && ( */}
+                                                    <div className="cart-button mt-3 px-2">
+                                                        <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
+                                                    </div>
+                                                    {/* )} */}
 
                                                 </div>
                                                 {/* </Link> */}
@@ -388,10 +392,14 @@ function Products(props) {
     )
 }
 const mapStateToProps = (state) => {
-    // console.log( state.Cart.addToWishlistTask);
+    let languages = '';
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
     return {
         items: state.Cart.items,
-        wishlist: state.Cart.addToWishlistTask
+        wishlist: state.Cart.addToWishlistTask,
+        languages: languages
     }
 }
 

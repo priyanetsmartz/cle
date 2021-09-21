@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../../redux/cart/productApi';
 import { connect } from 'react-redux';
 import cartAction from "../../redux/cart/productAction";
+import IntlMessages from "../../components/utility/intlMessages";
 const { addToCartTask } = cartAction;
 function MiniCart(props) {
 
@@ -62,7 +63,7 @@ function MiniCart(props) {
     return (
         <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">({cartItemsVal && cartItemsVal['items'] ? cartItemsVal['items'].length : 0})</span></Link>
             <div className="miniaccount_details" style={{ "display": !showCart ? "none" : "block" }}>
-                <div className="cart_your">Your cart</div>
+                <div className="cart_your"><IntlMessages id="yourcart" /></div>
                 <Link to="#" className="cross_icn" onClick={() => { hideCart() }} > <i className="fas fa-times"></i></Link>
                 <ul>
                     {cartItemsVal && cartItemsVal['items'] && cartItemsVal['items'].length ?
@@ -85,14 +86,14 @@ function MiniCart(props) {
                     }
                 </ul>
                 <div className="minitotl_amnt">
-                    <div className="minicart_label">Total</div>
+                    <div className="minicart_label"><IntlMessages id="total" /></div>
                     <div className="minicart_amount">${cartTotal}</div>
                 </div>
                 <div className="width-100">
                     <div className="d-grid">
-                        <Link to="/my-cart" className="btn btn-secondary" type="button">Cart</Link>
+                        <Link to="/my-cart" className="btn btn-secondary" type="button"><IntlMessages id="cart.menu" /></Link>
                         <br />
-                        <Link to="/checkout" className="btn btn-secondary" type="button">Checkout</Link>
+                        <Link to="/checkout" className="btn btn-secondary" type="button"><IntlMessages id="checkout.menu" /></Link>
                     </div>
                 </div>
             </div>
