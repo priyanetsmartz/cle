@@ -373,7 +373,7 @@ function ProductDetails(props) {
                                                             <li> Max feature width 1.4in/3.8cm</li>
                                                             <li> Max feature length 0.7in/1.3cm</li>
                                                         </ul>
-                                                        <Link to="#" className="sizeguid"> <IntlMessages id="product.sizeGuide" /></Link>
+                                                        <Link to="#" className="sizeguid"> <IntlMessages id="product.sizeguide" /></Link>
                                                     </div>
                                                 </div>
                                             </div>

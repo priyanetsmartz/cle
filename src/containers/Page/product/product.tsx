@@ -14,7 +14,7 @@ const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 
 
 function Products(props) {
-    let imageD = '';
+    let imageD = '', description = '';
     const [isShow, setIsShow] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
@@ -259,24 +259,27 @@ function Products(props) {
                                                                 if (attributes.attribute_code === 'image') {
                                                                     imageD = attributes.value;
                                                                 }
+                                                                if (attributes.attribute_code === 'short_description') {
+                                                                    description = attributes.value;
+                                                                }
                                                             })
                                                         }
                                                         <Link to={'/product-details/' + item.sku}><img src={imageD} alt={item.name} width="200" /></Link>
                                                     </div>
                                                     <div className="about text-center">
                                                         <h5>{item.name}</h5>
-                                                        <div className="tagname">{item.desc}</div>
+                                                        <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
                                                         <div className="pricetag">${item.price}</div>
                                                     </div>
-                                                    {item.type_id === 'simple' && (
+                                                    {/* {item.type_id === 'simple' && (
                                                         <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>
                                                         </div>
                                                     )}
-                                                    {item.type_id === 'configurable' && (
-                                                        <div className="cart-button mt-3 px-2">
-                                                            <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
-                                                        </div>
-                                                    )}
+                                                    {item.type_id === 'configurable' && ( */}
+                                                    <div className="cart-button mt-3 px-2">
+                                                        <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
+                                                    </div>
+                                                    {/* )} */}
 
                                                 </div>
                                                 {/* </Link> */}

@@ -160,10 +160,10 @@ function OrdersAndReturns(props) {
                                     </div>
                                 </div>
 
-                                {orders && orders.map(item => {
+                                {orders && orders.map((item,i) => {
                                     return (
                                         <>
-                                            <div className="row" key={item.increment_id}>
+                                            <div className="row" key={i}>
                                                 <div className="col-sm-12">
                                                     <div className="sortbyeyearly_show">
                                                         <h3>May 2021</h3>
@@ -171,7 +171,7 @@ function OrdersAndReturns(props) {
                                                 </div>
                                             </div>
 
-                                            <div className="row my-3" key={`${item.increment_id}1`}>
+                                            <div className="row my-3" key={`${i}1`}>
                                                 <div className="col-sm-12">
                                                     <div className="row mb-3">
                                                         <div className="col-sm-6">

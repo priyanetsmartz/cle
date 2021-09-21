@@ -3,13 +3,51 @@ import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import CheckoutSidebar from './sidebar';
 import IntlMessages from "../../../../components/utility/intlMessages";
+import Modal from "react-bootstrap/Modal";
+import notification from '../../../../components/notification';
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../../../../redux/cart/productApi';
+import { getCustomerDetails, saveCustomerDetails, getCountriesList } from '../../../../redux/pages/customers';
 function Checkout(props) {
     const [itemsVal, SetItems] = useState({
         checkData: {}, items: {}, address: {}
     });
+
+    //for customer address starts here------
+    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
+    const [countries, setCountries] = useState([]); // for countries dropdown
+    const [addNewAddressModal, setAddNewAddressModal] = useState(false);
+    const [custAddForm, setCustAddForm] = useState({
+        id: 0,
+        customer_id: custId,
+        firstname: "",
+        lastname: "",
+        telephone: "",
+        postcode: "",
+        city: "",
+        country_id: "",
+        street: ""
+    });
+
+    const [custForm, setCustForm] = useState({
+        id: custId,
+        email: "",
+        firstname: "",
+        lastname: "",
+        gender: "",
+        dob: "",
+        website_id: 1,
+        addresses: []
+    });
+
+    const [errors, setError] = useState({
+        errors: {}
+    });
+    //for customer address ends here-------
+
     useEffect(() => {
         checkoutScreen();
+        getCutomerDetails();
+        getCountries();
 
         return () => {
             // componentwillunmount in functional component.
@@ -28,24 +66,113 @@ function Checkout(props) {
             if (cartQuoteToken) {
                 cartItems = await getGuestCart();
                 cartTotal = await getGuestCartTotal();
-
-
             }
         }
-        // let result: any = await getCheckOutTotals();
         let checkoutData = {}, checkItems = {}, addresses = {}
-        checkoutData['discount'] = cartTotal.data.base_discount_amount;
-        checkoutData['sub_total'] = cartTotal.data.base_subtotal;
-        checkoutData['shipping_charges'] = cartTotal.data.base_shipping_amount;
-        checkoutData['total'] = cartTotal.data.base_grand_total;
-        checkoutData['tax'] = cartTotal.data.base_tax_amount;
-        checkoutData['total_items'] = cartTotal.data.items_qty;
-        checkItems['items'] = cartItems.data.items;
-        addresses['addresses'] = cartItems.data.customer.addresses;
-        // SetItems(result.data);
+        checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
+        checkoutData['sub_total'] = cartTotal && cartTotal.data ? cartTotal.data.base_subtotal : 0;
+        checkoutData['shipping_charges'] = cartTotal && cartTotal.data ? cartTotal.data.base_shipping_amount : 0;
+        checkoutData['total'] = cartTotal && cartTotal.data ? cartTotal.data.base_grand_total : 0;
+        checkoutData['tax'] = cartTotal && cartTotal.data ? cartTotal.data.base_tax_amount : 0;
+        checkoutData['total_items'] = cartTotal && cartTotal.data ? cartTotal.data.items_qty : 0;
+        checkItems['items'] = cartTotal && cartTotal.data ? cartItems.data.items : [];
+        addresses['addresses'] = cartTotal && cartTotal.data ? cartItems.data.customer.addresses : '';
         SetItems({ checkData: checkoutData, items: checkItems, address: addresses });
-        console.log(itemsVal.address['addresses'])
     }
+
+    //customer address functinonality start here
+    const getCutomerDetails = async () => {
+        let result: any = await getCustomerDetails(custId);
+        setCustForm(result.data);
+    }
+
+    const getCountries = async () => {
+        let result: any = await getCountriesList();
+        setCountries(result.data);
+    }
+
+    const toggleAddressModal = () => {
+        setAddNewAddressModal(!addNewAddressModal);
+    }
+
+    const handleAddChange = (e) => {
+        const { id, value } = e.target;
+        setCustAddForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
+    }
+
+    // for customer address popup window starts here
+    const saveCustAddress = async () => {
+        if (validateAddress()) {
+            let obj: any = { ...custAddForm };
+            obj.street = [obj.street];
+            custForm.addresses.push(obj);
+
+            // console.log(custAddForm);
+            let result: any = await saveCustomerDetails(custId, { customer: custForm });
+            if (result) {
+                checkoutScreen();
+                setCustAddForm({
+                    id: 0,
+                    customer_id: custId,
+                    firstname: "",
+                    lastname: "",
+                    telephone: "",
+                    postcode: "",
+                    city: "",
+                    country_id: "",
+                    street: ""
+                });
+                toggleAddressModal();
+                notification("success", "", "Customer Address Updated");
+            }
+        } else {
+
+            console.log(errors)
+        }
+    }
+
+    const validateAddress = () => {
+        let error = {};
+        let formIsValid = true;
+
+        if (!custAddForm.telephone) {
+            formIsValid = false;
+            error['telephone'] = 'Phone is required';
+        }
+        if (!custAddForm.postcode) {
+            formIsValid = false;
+            error["postcode"] = 'Post Code is required';
+        }
+        if (!custAddForm.city) {
+            formIsValid = false;
+            error["city"] = 'City is required';
+        }
+
+        if (!custAddForm.country_id) {
+            formIsValid = false;
+            error['country_id'] = 'Country is required';
+        }
+        if (!custAddForm.street) {
+            formIsValid = false;
+            error["street"] = 'Address is required';
+        }
+        if (!custAddForm.firstname) {
+            formIsValid = false;
+            error["firstname"] = 'First Name is required';
+        }
+        if (!custAddForm.lastname) {
+            formIsValid = false;
+            error["lastname"] = 'Last Name is required';
+        }
+
+        setError({ errors: error });
+        return formIsValid;
+    }
+
+
     return (
         <main>
             {/* <div className="container">
@@ -201,7 +328,7 @@ function Checkout(props) {
                                             </div>
                                             <div className="add-address-btn">
                                                 <hr />
-                                                <button className="add-ad-btn btn btn-link"><IntlMessages id="myaccount.addNewAddress" /></button>
+                                                <button className="add-ad-btn btn btn-link" onClick={toggleAddressModal}><IntlMessages id="myaccount.addNewAddress" /></button>
                                             </div>
                                             <div className="address-form" style={{ "display": "none" }}>
                                                 <div className="row g-3">
@@ -473,6 +600,88 @@ function Checkout(props) {
                         <CheckoutSidebar sidebarData={itemsVal} />
                     </div>
                 </div>
+
+                {/* change delivery address modalc */}
+                <Modal show={addNewAddressModal}>
+                    <div className="CLE_pf_details">
+                        <h1>My Address</h1>
+                        <Link className="cross_icn" to="#" onClick={toggleAddressModal}> <i className="fas fa-times"></i></Link>
+                        <div className="">
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">First name<span className="maindatory">*</span></label>
+                                <input type="text" className="form-control" placeholder="Ann"
+                                    id="firstname"
+                                    value={custAddForm.firstname}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["firstname"]}</span>
+
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Surname<span className="maindatory">*</span></label>
+                                <input type="text" className="form-control" id="lastname"
+                                    placeholder="Surname"
+                                    value={custAddForm.lastname}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["lastname"]}</span>
+
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Phone<span className="maindatory">*</span></label>
+                                <input type="text" className="form-control" id="telephone"
+                                    placeholder="Phone"
+                                    value={custAddForm.telephone}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["telephone"]}</span>
+
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Address<span className="maindatory">*</span></label>
+                                <input type="text" className="form-control" id="street"
+                                    placeholder="Address"
+                                    value={custAddForm.street}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["street"]}</span>
+
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">City*</label>
+                                <input type="text" className="form-control" id="city"
+                                    placeholder="City"
+                                    value={custAddForm.city}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["city"]}</span>
+
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Post Code*</label>
+                                <input type="text" className="form-control" id="postcode"
+                                    placeholder="Post Code"
+                                    value={custAddForm.postcode}
+                                    onChange={handleAddChange} />
+                                <span className="error">{errors.errors["postcode"]}</span>
+
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">Country<span className="maindatory">*</span></label>
+                                <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
+                                    {countries && countries.map(opt => {
+                                        return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                    })}
+                                </select>
+                                <span className="error">{errors.errors["country_id"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <div className="Frgt_paswd">
+                                    <div className="confirm-btn">
+                                        <button type="button" className="btn btn-secondary" onClick={saveCustAddress}>Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Modal>
+
+
             </section>
 
 

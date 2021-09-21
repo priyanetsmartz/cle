@@ -89,7 +89,7 @@ function BestSeller(props) {
                                     {bestseller && bestseller.map(item => {
                                         return (
                                             <div className="productcalr" key={item.id}>
-                                                <div className="product_img"><img src={item.img} className="image-fluid" /> </div>
+                                                <div className="product_img"><img src={item.img} className="image-fluid" height="150"/> </div>
                                                 <div className="product_name"> {item.name} </div>
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
                                                 <div className="product_price"> ${formatprice(item.price)}</div>

@@ -196,6 +196,7 @@
   "order.delivered":"Delivered",
   "order.yourParcelDelivered":"Your parcel has been delivered. We hope you love it!",
   "order.orderNo":"Order number",
+  "order.orderDate":"Order Date",
   "order.purchaseDate":"Purchase Date",
   "order.shippingDate":"Shipping Date",
   "order.paymentMethod":"Payment Method",

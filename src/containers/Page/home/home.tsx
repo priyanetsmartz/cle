@@ -29,7 +29,7 @@ function HomePage(props) {
     const getData = async () => {
         let result: any = await getHomePageProducts(props.languages, customerId, catId);
         if (result) {
-            setProducts(result.data[0].bestSellers);
+            setProducts(result.data[0]);
         }
     }
 
