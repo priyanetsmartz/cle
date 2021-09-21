@@ -1,4 +1,5 @@
 import AdminApi from "../../restApi/AdminApi";
+import { language } from "../../settings";
 const APi = new AdminApi();
 
 export function getAllProducts(page, pageSize, sortBy, sortByValue) {
@@ -212,4 +213,10 @@ export function getCheckOutTotals() {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
     return APi.request(`/rest/V1/carts/${cartQuoteId}/totals`, "", "GET", "")
 
+}
+
+export function applyPromoCode(couponCode, language) {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    const lang = language === 'arabic' ? 'ar' : 'en';
+    return APi.request(`rest/${lang}/V1/carts/${cartQuoteId}/coupons/${couponCode}`, "", "PUT", "")
 }

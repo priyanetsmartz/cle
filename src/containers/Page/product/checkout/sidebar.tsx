@@ -6,7 +6,7 @@ function CheckoutSidebar(props) {
         checkData: {}, items: {}
     });
     useEffect(() => {
-       // console.log(props.sidebarData.checkData, props.sidebarData.items)
+        // console.log(props.sidebarData.checkData, props.sidebarData.items)
         SetItems({ checkData: props.sidebarData.checkData, items: props.sidebarData.items });
         // checkoutScreen();
 
@@ -42,7 +42,7 @@ function CheckoutSidebar(props) {
                     <p>Shipping<span className="text-end">${itemsVal.checkData['shipping_charges'] ? itemsVal.checkData['shipping_charges'] : 0}</span></p>
                     <p>Tax<span className="text-end">${itemsVal.checkData['tax'] ? itemsVal.checkData['tax'] : 0}</span></p>
                     <hr />
-                    <div className="final-price">Total<span>${itemsVal.checkData['total'] ? itemsVal.checkData['total'] : 0}</span></div>
+                    <div className="final-price">Total<span>${itemsVal.checkData['total'] ? itemsVal.checkData['total'] - itemsVal.checkData['discount'] : 0}</span></div>
                 </div>
             </div>
         </div>

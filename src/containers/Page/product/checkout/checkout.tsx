@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import CheckoutSidebar from './sidebar';
 import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
-import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../../../../redux/cart/productApi';
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, saveCustomerDetails, getCountriesList } from '../../../../redux/pages/customers';
 function Checkout(props) {
     const [itemsVal, SetItems] = useState({
         checkData: {}, items: {}, address: {}
     });
+    const [promoCode, setPromoCode] = useState('');
 
     //for customer address starts here------
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
@@ -53,6 +54,7 @@ function Checkout(props) {
             // Anything in here is fired on component unmount.
         }
     }, [props.posts])
+
     async function checkoutScreen() {
         let cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
@@ -176,10 +178,21 @@ function Checkout(props) {
         return formIsValid;
     }
 
+    const applyPromo = async () => {
+        if (promoCode == '') return notification("error", "", "Promo code is required!");
+        const result: any = await applyPromoCode(promoCode, props.languages);
+        if (result) {
+            checkoutScreen();
+            notification("success", "", "Promo code applied.");
+        } else {
+            return notification("error", "", "Invalid Promo code!");
+        }
+    }
+
     
     return (
         <main>
-            {/* <div className="container">
+            {/* <div className="container">44
                 <div className="row">
                     <div className="col-md-12">
                         <nav aria-label="breadcrumb" className="new-breadcrumb">
@@ -229,10 +242,13 @@ function Checkout(props) {
                                                     <div className="row g-3">
                                                         <div className="col-auto">
                                                             <label htmlFor="input1234ABCD" className="visually-hidden">1234ABCD</label>
-                                                            <input type="text" className="form-control" id="input1234ABCD" placeholder="1234ABCD" />
+                                                            <input type="text" className="form-control"
+                                                                value={promoCode}
+                                                                onChange={(e) => setPromoCode(e.target.value) }
+                                                             id="input1234ABCD" placeholder="1234ABCD" />
                                                         </div>
                                                         <div className="col-auto">
-                                                            <button type="submit" className="btn btn-primary mb-3">Apply code</button>
+                                                            <button type="submit" className="btn btn-primary mb-3" onClick={applyPromo}>Apply code</button>
                                                         </div>
                                                     </div>
                                                     <p>Need to know</p>
@@ -695,8 +711,14 @@ function Checkout(props) {
     )
 }
 const mapStateToProps = (state) => {
-    return {
+    let languages = '';
 
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+
+    return {
+        languages: languages
     }
 }
 
