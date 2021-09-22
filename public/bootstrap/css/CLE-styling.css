@@ -705,6 +705,12 @@ small.text-primary {
     border: 1px solid #2e2baa;
 }
 /* product images slider and zoom in styles ends here */
+
+/* styles for prive user my profile */
+
+.prive-txt {
+    color: #017ABB !important;
+}
 	
 
 
