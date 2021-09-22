@@ -6,7 +6,6 @@ import social5 from "../../image/checkout-social-5.png";
 import social6 from "../../image/checkout-social-6.png";
 import social7 from "../../image/checkout-social-7.png";
 import { Link } from "react-router-dom";
-import { useEffect } from 'react';
 import { siteConfig } from '../../settings/';
 import IntlMessages from "../../components/utility/intlMessages";
 import { connect } from "react-redux";

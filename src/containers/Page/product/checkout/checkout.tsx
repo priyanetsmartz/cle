@@ -17,6 +17,7 @@ function Checkout(props) {
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [addNewAddressModal, setAddNewAddressModal] = useState(false);
+    const [errorPromo, setErrorPromo] = useState('');
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: custId,
@@ -175,17 +176,22 @@ function Checkout(props) {
     }
 
     const applyPromo = async () => {
-        if (promoCode == '') return notification("error", "", "Promo code is required!");
+        if (promoCode === '') {
+            setErrorPromo("Promo code is required!");
+            return false;
+        }
         const result: any = await applyPromoCode(promoCode, props.languages);
         if (result) {
+            setErrorPromo("");
             checkoutScreen();
             notification("success", "", "Promo code applied.");
         } else {
+            setErrorPromo("");
             return notification("error", "", "Invalid Promo code!");
         }
     }
 
-    
+
     return (
         <main>
             {/* <div className="container">44
@@ -240,8 +246,9 @@ function Checkout(props) {
                                                             <label htmlFor="input1234ABCD" className="visually-hidden">1234ABCD</label>
                                                             <input type="text" className="form-control"
                                                                 value={promoCode}
-                                                                onChange={(e) => setPromoCode(e.target.value) }
-                                                             id="input1234ABCD" placeholder="1234ABCD" />
+                                                                onChange={(e) => setPromoCode(e.target.value)}
+                                                                id="input1234ABCD" placeholder="1234ABCD" />
+                                                            <span className="error">{errorPromo}</span>
                                                         </div>
                                                         <div className="col-auto">
                                                             <button type="submit" className="btn btn-primary mb-3" onClick={applyPromo}><IntlMessages id="applyCode" /></button>
@@ -492,8 +499,8 @@ function Checkout(props) {
                                             <div className="add-address-btn">
                                                 <hr />
                                                 <button className="add-ad-btn btn btn-link">
-                                                <IntlMessages id="myaccount.addNewBillingAdd" />
-                                                    </button>
+                                                    <IntlMessages id="checkout.addNewBillingAdd" />
+                                                </button>
                                             </div>
 
                                             <div className="row">

@@ -1,6 +1,4 @@
 import Notification from "../components/notification";
-import { apiConfig } from '../settings';
-import { getCookie } from "../helpers/session";
 import CommonFunctions from "../commonFunctions/CommonFunctions";
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();

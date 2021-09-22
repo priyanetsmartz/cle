@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
 import Dashboard from './dashboard';
-import OrdersAndReturns from './ordersAndReturns';
+import OrdersAndReturns from './allOrders';
 import MyProfile from './myProfile';
 import MyWishList from './myWishlist';
 import MyRewards from './myRewards';

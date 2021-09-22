@@ -12,7 +12,7 @@ import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import IntlMessages from "../../components/utility/intlMessages";
-import { AppBreadcrumbs } from "./breadCrumbs";
+import AppBreadcrumbs from './breadCrumbs';
 import MiniCart from './mini-cart';
 
 const { logout } = authAction;
@@ -34,6 +34,7 @@ function HeaderMenu(props) {
     }, 3000);
 
     useEffect(() => {
+        // console.log(location)
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
             var jsonData = result.data[0].parent.child;
@@ -138,6 +139,7 @@ function HeaderMenu(props) {
                             <div className="cartuser-info">
                                 <ul>
                                     <li><Link to="#">{customerName ? customerName : ""} </Link></li>
+                                    <li> <Link to="/notifications"><img src={favorit} alt="notification" /></Link> </li>
                                     <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }}  ><img src={avatar} alt="user" /> </Link>
 
                                         <div className="myaccount_details" style={{ "display": !showAccount ? "none" : "block" }}>

@@ -1,4 +1,3 @@
-import { getCookie } from "../helpers/session";
 import Notification from "../components/notification";
 import { apiConfig } from '../settings';
 import CommonFunctions from "../commonFunctions/CommonFunctions";

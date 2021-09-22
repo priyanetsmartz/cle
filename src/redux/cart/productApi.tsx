@@ -1,5 +1,4 @@
 import AdminApi from "../../restApi/AdminApi";
-import { language } from "../../settings";
 const APi = new AdminApi();
 
 export function getAllProducts(language, page, pageSize, sortBy, sortByValue) {

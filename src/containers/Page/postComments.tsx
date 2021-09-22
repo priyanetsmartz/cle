@@ -15,7 +15,7 @@ function PostComment(props) {
         email: localStorage.getItem('token_email'),
         post_id: props.postId,
         message: "",
-        store_id: props.auth.LanguageSwitcher.language == 'english' ? 3 : 2,
+        store_id: props.auth.LanguageSwitcher.language === 'english' ? 3 : 2,
         customer_id: localStorage.getItem('cust_id'),
         reply_to: null
     })
