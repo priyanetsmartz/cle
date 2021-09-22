@@ -123,10 +123,11 @@ function Products(props) {
     async function handleWhishlist(id: number) {
         setIsWishlist(id)
         let result: any = await addWhishlist(id);
-        if (result.data[0].message) {
+        console.log(result);
+        if (result.data) {
             setIsWishlist(0)
             props.addToWishlistTask(true);
-            notification("success", "", result.data[0].message);
+            notification("success", "", 'Added to Whishlist');
             getProducts()
         } else {
             setIsWishlist(0)
