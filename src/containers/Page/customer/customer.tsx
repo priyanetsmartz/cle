@@ -22,6 +22,8 @@ import { Link } from "react-router-dom";
 // import tradeIcon from '../../../image/my_trade.svg';
 
 function Customer(props) {
+    const userGroup = localStorage.getItem('token')
+    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [name, setName] = useState(localStorage.getItem('token_name'));
     const history = useHistory();
     const key = props.match.params.tab;
@@ -67,9 +69,14 @@ function Customer(props) {
                                 </div>
                                 <div className="myorder_sidebar">
                                     <ul>
-                                        <li className={activeTab === 'dashboard' ? 'active' : ''}><Link to="#" onClick={() => changeTab('dashboard')}>
-                                            <img src={dashboardIcon} alt="" className="img-fluid" /> <span
-                                                className="pl-2"><IntlMessages id="customer.dashboard" /></span></Link></li>
+                                        <li className={activeTab === 'dashboard' ? 'active' : ''} >
+                                            <Link to="#" onClick={() => changeTab('dashboard')} className={activeTab === 'dashboard' ? 'prive-txt' : ''}>
+                                                <img src={dashboardIcon} alt="" className="img-fluid" />
+                                                <span className="pl-2">
+                                                    <IntlMessages id="customer.dashboard" />
+                                                </span>
+                                            </Link>
+                                        </li>
                                         <li className={activeTab === 'orders-and-returns' ? 'active' : ''}><Link to="#" onClick={() => changeTab('orders-and-returns')}>
                                             <img src={ordersIcon} alt="" className="img-fluid" /> <span
                                                 className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span></Link></li>

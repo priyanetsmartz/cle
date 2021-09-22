@@ -462,18 +462,18 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.mostlyInterested" /></label>
                                         <div className="field-name">
-                                            {Object.values(attributes.mostly_intersted_in).map((type) => {
+                                            {Object.values(attributes.mostly_intersted_in).map((type, i) => {
                                                 return (
-                                                    <span key={type}>{type},</span>
+                                                    <span key={i}>{type},</span>
                                                 )
                                             })}
                                         </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.clothingSize" /></label>
-                                        <div className="field-name">{Object.values(attributes.clothing_size).map((s) => {
+                                        <div className="field-name">{Object.values(attributes.clothing_size).map((s, j) => {
                                             return (
-                                                <span key={s}>{s}/</span>
+                                                <span key={j}>{s}/</span>
                                             )
                                         })}</div>
                                     </div>
@@ -482,9 +482,9 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.shoeSize" /></label>
                                         <div className="field-name">
-                                            {Object.values(attributes.clothing_size).map((s) => {
+                                            {Object.values(attributes.clothing_size).map((s,k) => {
                                                 return (
-                                                    <span>{s}/</span>
+                                                    <span key={k}>/{s}</span>
                                                 )
                                             })}
                                         </div>
@@ -492,9 +492,9 @@ function MyProfile(props) {
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteDesigners" /></label>
                                         <div className="field-name">
-                                            {Object.values(attributes.favourite_designers).map((d) => {
+                                            {Object.values(attributes.favourite_designers).map((d, l) => {
                                                 return (
-                                                    <span key={d}>{d},</span>
+                                                    <span key={l}>{d},</span>
                                                 )
                                             })}
                                         </div>
@@ -504,9 +504,9 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteCategories" /></label>
                                         <div className="field-name">
-                                            {Object.values(attributes.favourite_designers).map((type) => {
+                                            {Object.values(attributes.favourite_designers).map((type, m) => {
                                                 return (
-                                                    <span>{type},</span>
+                                                    <span key={m}>{type},</span>
                                                 )
                                             })}
                                         </div>
@@ -601,10 +601,10 @@ function MyProfile(props) {
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
                                 <div className="address-action">
-                                    <Link onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                    <Link className="edit_btn" onClick={() => editAddress(i)}>
+                                    <a onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
+                                    <a className="edit_btn" onClick={() => editAddress(i)}>
                                         <IntlMessages id="myaccount.edit" />
-                                    </Link>
+                                    </a>
                                 </div>
                             </div>);
                         })}
@@ -877,7 +877,7 @@ function MyProfile(props) {
             <Modal show={myDetailsModel} >
                 <div className="CLE_pf_details">
                     <h1>My Details</h1>
-                    <Link onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                    <a onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></a>
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Frist name<span className="maindatory">*</span></label>
@@ -956,13 +956,13 @@ function MyProfile(props) {
             <Modal show={myPreferenceModel} size="lg">
                 <div className="CLE_pf_details">
                     <h1>My Preferences</h1>
-                    <Link onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                    <a onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></a>
                     <div className="Mosty_interested_in">
                         <h2>Mosty interested in</h2>
                         <div className="interestd_check">
-                            {Object.values(attributes.mostly_intersted_in).map((interest) => {
+                            {Object.values(attributes.mostly_intersted_in).map((interest, i) => {
                                 return (interest && interest !== '' &&
-                                    <div className="form-check" key={interest}>
+                                    <div className="form-check" key={i}>
                                         <input className="form-check-input" type="checkbox" value="" id={interest}
                                             checked={attributes.mostly_intersted_in.slected === interest ? true : false} />
                                         <label className="form-check-label" htmlFor={interest}>
@@ -983,7 +983,7 @@ function MyProfile(props) {
                                         <ul>
                                             {Object.values(attributes.clothing_size).map((clothingSize, i) => {
                                                 return (clothingSize && clothingSize !== '' &&
-                                                    <li><Link key={i} className={attributes.clothing_size.slected ? 'active' : 'null'}>{clothingSize}</Link></li>
+                                                    <li><a key={i} className={attributes.clothing_size.slected ? 'active' : 'null'}>{clothingSize}</a></li>
                                                 )
                                             })}
                                         </ul>
@@ -999,9 +999,9 @@ function MyProfile(props) {
                                     <h2>Shoes size</h2>
                                     <div className="cl_size_sec">
                                         <ul>
-                                            {Object.values(attributes.shoes_size).map((shoeSize) => {
+                                            {Object.values(attributes.shoes_size).map((shoeSize, n) => {
                                                 return (shoeSize && shoeSize !== '' &&
-                                                    <li><Link key={shoeSize} className={attributes.clothing_size.slected ? 'active' : 'null'}>{shoeSize}</Link></li>
+                                                    <li><a key={n} className={attributes.clothing_size.slected ? 'active' : 'null'}>{shoeSize}</a></li>
                                                 )
                                             })}
                                         </ul>
@@ -1034,9 +1034,9 @@ function MyProfile(props) {
                             <div className="col-sm-6">
                                 <div className="favt_section">
                                     <ul>
-                                        {Object.values(attributes.favourite_designers).map((designer) => {
+                                        {Object.values(attributes.favourite_designers).map((designer, o) => {
                                             return (designer && designer !== '' &&
-                                                <li key={designer}>
+                                                <li key={o}>
                                                     <div className="form-check">
                                                         <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
                                                             checked={attributes.favourite_designers.slected === designer ? true : false} />
@@ -1085,9 +1085,9 @@ function MyProfile(props) {
                             <div className="col-sm-6">
                                 <div className="favt_section">
                                     <ul>
-                                        {Object.values(attributes.favourite_categories).map((category) => {
+                                        {Object.values(attributes.favourite_categories).map((category, p) => {
                                             return (category && category !== '' &&
-                                                <li key={category}>
+                                                <li key={p}>
                                                     <div className="form-check">
                                                         <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
                                                             checked={attributes.favourite_categories.slected === category ? true : false} />
@@ -1131,7 +1131,7 @@ function MyProfile(props) {
             <Modal show={myAddressModal}>
                 <div className="CLE_pf_details">
                     <h1><IntlMessages id="myaccount.myAddress" /></h1>
-                    <Link className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></Link>
+                    <a className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></a>
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
@@ -1212,7 +1212,7 @@ function MyProfile(props) {
                 <div className="gifting_pref">
                     <div className="girft_details">
                         <h1>Gifting Preferences</h1>
-                        <Link onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                        <a onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></a>
                         <div className="my_birthday mb-3">
                             <label className="form-label">My birthday</label>
                             <div className="birthdate">01 May 1990</div>
@@ -1419,7 +1419,7 @@ function MyProfile(props) {
             <Modal show={paymentMethod}>
                 <div className="CLE_pf_details">
                     <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
-                    <Link onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                    <a onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></a>
                     <div className="payment_medt">
                         <div className="width-100">
                             <div className="d-grid gap-2 mx-auto">
@@ -1443,7 +1443,7 @@ function MyProfile(props) {
             <Modal show={addCard}>
                 <div className="CLE_pf_detahils">
                     <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
-                    <Link onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                    <a onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></a>
                     <div className="payment_mode">
                         <h2><IntlMessages id="checkout.addCards" /></h2>
                         <div className="width-100 mb-3 form-field">
