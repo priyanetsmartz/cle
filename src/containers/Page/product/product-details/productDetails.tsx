@@ -23,6 +23,7 @@ const { addToCart, addToCartTask, openGiftBoxes } = cartAction;
 
 function ProductDetails(props) {
     const { sku } = useParams();
+    const [opacity, setOpacity] = useState(1);
     const [isShow, setIsShow] = useState(false);
     const [shareUrl, setShareUrl] = useState('');
     const [prodId, setProdId] = useState('');
@@ -42,13 +43,13 @@ function ProductDetails(props) {
     const [extensionAttributes, setExtensionAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
     useEffect(() => {
-        getProductDetailsFxn();
+        getProductDetailsFxn(sku);
         setShareUrl(window.location.href);
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [])
+    }, [sku])
 
     const handleClick = () => {
         setIsLoaded(true);
@@ -80,9 +81,10 @@ function ProductDetails(props) {
     const sizeGuideModalHandler = () => {
         setSizeGuideModal(!sizeGuideModal);
     }
-    async function getProductDetailsFxn() {
+    async function getProductDetailsFxn(skuUrl) {
+        setOpacity(0.3)
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductDetails(sku);
+        let result: any = await getProductDetails(skuUrl);
         //  console.log(result.data)
         let projectSingle = {};
         if (customer_id) {
@@ -119,7 +121,7 @@ function ProductDetails(props) {
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = result.data.extension_attributes.stock_item.is_in_stock;
-
+        setOpacity(1)
         setProdId(projectSingle['id']);
         setProductImages(result.data.media_gallery_entries)
         setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
@@ -215,7 +217,7 @@ function ProductDetails(props) {
                     </div>
                 </section> */}
 
-                <section>
+                <section style={{ 'opacity': opacity }}>
                     <div className="container">
                         <div className="row">
                             <div className="col-sm-8">

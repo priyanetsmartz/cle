@@ -8,12 +8,13 @@ import RelevantProducts from './relevantProducts';
 import Modal from "react-bootstrap/Modal";
 import GiftMessage from "../product-details/GiftMessage";
 import IntlMessages from "../../../../components/utility/intlMessages";
-const { openGiftBoxes } = cartAction;
+const { openGiftBoxes, addToCartTask } = cartAction;
 
 function CartItemPage(props) {
     const [token, setToken] = useState('');
     const [isShow, setIsShow] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
+    const [value, setValue] = useState(0);
     const [prodId, setProdId] = useState('');
     const [cartItemsVal, setCartItems] = useState({});
     const [cartTotals, setCartTotal] = useState({});
@@ -55,8 +56,8 @@ function CartItemPage(props) {
             cartPrices['total'] = cartTotal.data.base_grand_total;
             cartPrices['tax'] = cartTotal.data.base_tax_amount;
             cartValues['items'] = cartData;
-            cartRelevant = cartValues['items'][0].item_id;
-            console.log(cartRelevant)
+            cartRelevant = cartValues['items'].length ? cartValues['items'][0].item_id : 0;
+            //console.log(cartRelevant)
             setCartRelevants(cartRelevant);
             setCartItems(cartValues)
             setCartTotal(cartPrices);
@@ -209,7 +210,7 @@ function CartItemPage(props) {
                                                                             <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
                                                                             <div className="col-sm-5 cartschanger">
                                                                                 <div className="value-button" id="decrease" onClick={() => { handleSubtractQuantity(item) }} >-</div>
-                                                                                <input type="number" id="number" value={item.qty} />
+                                                                                <input type="number" id="number" disabled value={item.qty} />
                                                                                 <div className="value-button" id="increase" onClick={() => { handleAddQuantity(item) }}>+</div>
                                                                             </div>
                                                                             {/* <div className="col-sm-5">
@@ -293,5 +294,5 @@ const mapStateToProps = (state) => {
 }
 export default connect(
     mapStateToProps,
-    { openGiftBoxes }
+    { openGiftBoxes, addToCartTask }
 )(CartItemPage);

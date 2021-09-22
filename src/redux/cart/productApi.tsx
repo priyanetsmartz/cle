@@ -51,7 +51,7 @@ export function removeItemFromCart(id: number) {
     return APi.request(`rest/V1/carts/${cartQuoteId}/items/${id}`, "", "DELETE", "")
 }
 
-export function updateCartItem(id, cartData) {
+export function updateCartItem(id:number, cartData:object) {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
     return APi.request(`rest/V1/carts/${cartQuoteId}/items/${id}`, cartData, "PUT", "")
 }
