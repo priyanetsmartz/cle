@@ -34,6 +34,7 @@ function HeaderMenu(props) {
     }, 3000);
 
     useEffect(() => {
+        console.log(location)
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
             var jsonData = result.data[0].parent.child;
