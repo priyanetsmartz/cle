@@ -18,10 +18,12 @@ import profileIcon from '../../../image/my_profile.svg';
 import notificationIcon from '../../../image/my_notification.svg';
 import supportIcon from '../../../image/my_support.svg';
 import { Link } from "react-router-dom";
+import { useIntl } from 'react-intl';
 // import MyTrades from './mytrades';
 // import tradeIcon from '../../../image/my_trade.svg';
 
 function Customer(props) {
+    const intl = useIntl();
     const userGroup = localStorage.getItem('token')
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [name, setName] = useState(localStorage.getItem('token_name'));
@@ -57,7 +59,7 @@ function Customer(props) {
                                 </div>
                                 <div className="mobile_sidebar">
                                     <select className="form-select" aria-label="Default select example" onChange={changeMobTab}>
-                                        <option value="dashboard"><IntlMessages id="customer.dashboard" /></option>
+                                        <option value="dashboard">{intl.formatMessage({ id: 'register.email' })}</option>
                                         <option value="orders-and-returns"><IntlMessages id="customer.ordersAndReturns" /></option>
                                         <option value="mytrades"><IntlMessages id="customer.myTrades" /></option>
                                         <option value="rewards"><IntlMessages id="customer.myReward" /></option>
@@ -70,34 +72,52 @@ function Customer(props) {
                                 <div className="myorder_sidebar">
                                     <ul>
                                         <li className={activeTab === 'dashboard' ? 'active' : ''} >
-                                            <Link to="#" onClick={() => changeTab('dashboard')} className={activeTab === 'dashboard' ? 'prive-txt' : ''}>
+                                            <Link to="#" onClick={() => changeTab('dashboard')} className={isPriveUser  ? 'prive-txt' : ''}>
                                                 <img src={dashboardIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2">
                                                     <IntlMessages id="customer.dashboard" />
                                                 </span>
                                             </Link>
                                         </li>
-                                        <li className={activeTab === 'orders-and-returns' ? 'active' : ''}><Link to="#" onClick={() => changeTab('orders-and-returns')}>
-                                            <img src={ordersIcon} alt="" className="img-fluid" /> <span
-                                                className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span></Link></li>
+                                        <li className={activeTab === 'orders-and-returns' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('orders-and-returns')} className={isPriveUser ? 'prive-txt' : ''}>
+                                                <img src={ordersIcon} alt="" className="img-fluid" /> 
+                                                <span className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span>
+                                            </Link>
+                                        </li>
                                         {/* <li className={activeTab === 'mytrades' ? 'active' : ''}><Link to="#" onClick={() => changeTab('mytrades')}>
                                             <img src={tradeIcon} alt="" className="img-fluid" /> <span className="pl-2">
                                                 <IntlMessages id="customer.myTrades" /></span></Link></li> */}
-                                        <li className={activeTab === 'rewards' ? 'active' : ''}><Link to="#" onClick={() => changeTab('rewards')}>
-                                            <img src={rewardIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                                <IntlMessages id="customer.myReward" /></span></Link></li>
-                                        <li className={activeTab === 'wish-list' ? 'active' : ''}><Link to="#" onClick={() => changeTab('wish-list')}>
-                                            <img src={wishlistIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                                <IntlMessages id="customer.myWishlist" /></span></Link></li>
-                                        <li className={activeTab === 'profile' ? 'active' : ''}><Link to="#" onClick={() => changeTab('profile')}>
-                                            <img src={profileIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                                <IntlMessages id="customer.myProfile" /></span></Link></li>
-                                        <li className={activeTab === 'notifications' ? 'active' : ''}><Link to="#" onClick={() => changeTab('notifications')}>
-                                            <img src={notificationIcon} alt="" className="img-fluid" /> <span
-                                                className="pl-2"><IntlMessages id="customer.myNotifications" /></span></Link></li>
-                                        <li className={activeTab === 'support' ? 'active' : ''}><Link to="#" onClick={() => changeTab('support')}>
-                                            <img src={supportIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                                <IntlMessages id="customer.mySupport" /></span></Link></li>
+                                        <li className={activeTab === 'rewards' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('rewards')} className={isPriveUser ? 'prive-txt' : ''}>
+                                                <img src={rewardIcon} alt="" className="img-fluid" /> 
+                                                <span className="pl-2"> <IntlMessages id="customer.myReward" /></span>
+                                            </Link>
+                                        </li>
+                                        <li className={activeTab === 'wish-list' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('wish-list')} className={isPriveUser ? 'prive-txt' : ''}>
+                                                <img src={wishlistIcon} alt="" className="img-fluid" /> 
+                                                <span className="pl-2"><IntlMessages id="customer.myWishlist" /></span>
+                                            </Link>
+                                        </li>
+                                        <li className={activeTab === 'profile' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('profile')} className={isPriveUser ? 'prive-txt' : ''}>
+                                                <img src={profileIcon} alt="" className="img-fluid" />
+                                                <span className="pl-2"> <IntlMessages id="customer.myProfile" /></span>
+                                            </Link>
+                                        </li>
+                                        <li className={activeTab === 'notifications' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('notifications')} className={isPriveUser ? 'prive-txt' : ''}>
+                                                <img src={notificationIcon} alt="" className="img-fluid" /> 
+                                                <span className="pl-2"><IntlMessages id="customer.myNotifications" /></span>
+                                            </Link>
+                                        </li>
+                                        <li className={activeTab === 'support' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('support')} className={isPriveUser ? 'prive-txt' : ''}>
+                                                <img src={supportIcon} alt="" className="img-fluid" />
+                                                <span className="pl-2"><IntlMessages id="customer.mySupport" /></span>
+                                            </Link>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
