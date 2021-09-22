@@ -241,7 +241,7 @@ function CartItemPage(props) {
                                         </ul>) :
 
                                     (
-                                        <p>Cart is Empty.</p>
+                                        <p><IntlMessages id="cart.cartEmpty" /></p>
                                     )}
 
                                 {token && (<RelevantProducts cartItem={cartRelevants} />)}

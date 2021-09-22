@@ -5,12 +5,13 @@ import CheckoutSidebar from './sidebar';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
-import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../../../../redux/cart/productApi';
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, saveCustomerDetails, getCountriesList } from '../../../../redux/pages/customers';
 function Checkout(props) {
     const [itemsVal, SetItems] = useState({
         checkData: {}, items: {}, address: {}
     });
+    const [promoCode, setPromoCode] = useState('');
 
     //for customer address starts here------
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
@@ -54,6 +55,7 @@ function Checkout(props) {
             // Anything in here is fired on component unmount.
         }
     }, [props.posts])
+
     async function checkoutScreen() {
         let cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
@@ -172,10 +174,21 @@ function Checkout(props) {
         return formIsValid;
     }
 
+    const applyPromo = async () => {
+        if (promoCode == '') return notification("error", "", "Promo code is required!");
+        const result: any = await applyPromoCode(promoCode, props.languages);
+        if (result) {
+            checkoutScreen();
+            notification("success", "", "Promo code applied.");
+        } else {
+            return notification("error", "", "Invalid Promo code!");
+        }
+    }
 
+    
     return (
         <main>
-            {/* <div className="container">
+            {/* <div className="container">44
                 <div className="row">
                     <div className="col-md-12">
                         <nav aria-label="breadcrumb" className="new-breadcrumb">
@@ -225,10 +238,13 @@ function Checkout(props) {
                                                     <div className="row g-3">
                                                         <div className="col-auto">
                                                             <label htmlFor="input1234ABCD" className="visually-hidden">1234ABCD</label>
-                                                            <input type="text" className="form-control" id="input1234ABCD" placeholder="1234ABCD" />
+                                                            <input type="text" className="form-control"
+                                                                value={promoCode}
+                                                                onChange={(e) => setPromoCode(e.target.value) }
+                                                             id="input1234ABCD" placeholder="1234ABCD" />
                                                         </div>
                                                         <div className="col-auto">
-                                                            <button type="submit" className="btn btn-primary mb-3"><IntlMessages id="applyCode" /></button>
+                                                            <button type="submit" className="btn btn-primary mb-3" onClick={applyPromo}><IntlMessages id="applyCode" /></button>
                                                         </div>
                                                     </div>
                                                     <p><IntlMessages id="needtoknow" /></p>
@@ -294,7 +310,7 @@ function Checkout(props) {
                                                         {itemsVal.address['addresses'].map((item, i) => {
                                                             return (
                                                                 <div className="single-address" key={i}>
-                                                                    <label>Delivery address</label>
+                                                                    <label><IntlMessages id="order.deliveryAddress" /></label>
                                                                     <div>
                                                                         <p> {item.firstname} {item.lastname}</p>
                                                                         {item.street.map((street, j) => {
@@ -304,7 +320,8 @@ function Checkout(props) {
                                                                         <p>{item.city}</p>
                                                                         <p>{item.country_id}</p>
                                                                     </div>
-                                                                    <p className="text-muted">Default delivery address</p>
+                                                                    <p className="text-muted">
+                                                                        <IntlMessages id="myaccount.defaultDeliveryAddress" /></p>
                                                                     <div className="form-check">
                                                                         <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
                                                                         <label className="form-check-label" htmlFor="flexCheckDefault">
@@ -333,23 +350,23 @@ function Checkout(props) {
                                             <div className="address-form" style={{ "display": "none" }}>
                                                 <div className="row g-3">
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputFname" className="form-label">First name*</label>
+                                                        <label htmlFor="inputFname" className="form-label"><IntlMessages id="register.first_name" /></label>
                                                         <input type="text" className="form-control" id="inputFname" />
                                                     </div>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputSurname" className="form-label">Surname*</label>
+                                                        <label htmlFor="inputSurname" className="form-label"><IntlMessages id="myaccount.surName" />*</label>
                                                         <input type="text" className="form-control" id="inputSurname" />
                                                     </div>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputAddress" className="form-label">Address*</label>
+                                                        <label htmlFor="inputAddress" className="form-label"><IntlMessages id="myaccount.address" />*</label>
                                                         <input type="text" className="form-control" id="inputAddress" />
                                                     </div>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputCity" className="form-label">City*</label>
+                                                        <label htmlFor="inputCity" className="form-label"><IntlMessages id="myaccount.city" />*</label>
                                                         <input type="text" className="form-control" id="inputCity" />
                                                     </div>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputCountry" className="form-label">Country*</label>
+                                                        <label htmlFor="inputCountry" className="form-label"><IntlMessages id="myaccount.country" />*</label>
                                                         <select id="inputCountry" className="form-select">
                                                             <option>Choose Country</option>
                                                             <option>India</option>
@@ -361,13 +378,13 @@ function Checkout(props) {
                                                         <div className="form-check">
                                                             <input className="form-check-input" type="checkbox" id="gridCheck" />
                                                             <label className="form-check-label" htmlFor="gridCheck">
-                                                                Save this as billing address
+                                                                <IntlMessages id="checkout.saveThisAsBilling" />
                                                             </label>
                                                         </div>
                                                     </div>
                                                     <div className="col-12">
-                                                        <button type="button" className="btn btn-link float-start">Save</button>
-                                                        <button type="button" className="btn btn-link float-end">Cancel</button>
+                                                        <button type="button" className="btn btn-link float-start"><IntlMessages id="checkout.save" /></button>
+                                                        <button type="button" className="btn btn-link float-end"><IntlMessages id="checkout.cancel" /></button>
                                                         <div className="clearfix"></div>
                                                     </div>
                                                 </div>
@@ -390,7 +407,7 @@ function Checkout(props) {
                                                     <div className="delivery-charges">$5.99</div>
                                                 </div>
                                                 <div className="col-md-5">
-                                                    <label>Standard</label>
+                                                    <label><IntlMessages id="checkout.standard" /></label>
                                                     <p></p>Delivery on or before Mon, 31 May 2021
                                                 </div>
                                                 <div className="col-md-4">
@@ -405,7 +422,7 @@ function Checkout(props) {
                                                     <div className="delivery-charges">$10.99</div>
                                                 </div>
                                                 <div className="col-md-5">
-                                                    <label>Express</label>
+                                                    <label><IntlMessages id="checkout.express" /></label>
                                                     <p></p>Delivery on or before Friday, 25 May 2021
                                                 </div>
                                                 <div className="col-md-4">
@@ -420,7 +437,7 @@ function Checkout(props) {
                                                     <div className="delivery-charges">$19.99</div>
                                                 </div>
                                                 <div className="col-md-5">
-                                                    <label>Next Day</label>
+                                                    <label><IntlMessages id="checkout.nextDay" /></label>
                                                     <p></p>Delivery on or before Mon, 15 May 2021
                                                 </div>
                                                 <div className="col-md-4">
@@ -446,7 +463,7 @@ function Checkout(props) {
                                             <div className="row">
                                                 <div className="col-md-7">
                                                     <div className="single-address">
-                                                        <label>Billing address</label>
+                                                        <label><IntlMessages id="checkout.billingAdd" /></label>
                                                         <div>
                                                             Anna Smith<br />
                                                             Baker Street 105<br />
@@ -454,11 +471,11 @@ function Checkout(props) {
                                                             London<br />
                                                             Great Britain
                                                         </div>
-                                                        <p className="text-muted">Default billing address</p>
+                                                        <p className="text-muted"><IntlMessages id="myaccount.defaultBillingAddress" /></p>
                                                         <div className="form-check">
                                                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
                                                             <label className="form-check-label" htmlFor="flexCheckDefault">
-                                                                Issue an invoice
+                                                                <IntlMessages id="checkout.issueInvoice" />
                                                             </label>
                                                         </div>
                                                     </div>
@@ -474,24 +491,26 @@ function Checkout(props) {
                                             </div>
                                             <div className="add-address-btn">
                                                 <hr />
-                                                <button className="add-ad-btn btn btn-link">Add new billing address</button>
+                                                <button className="add-ad-btn btn btn-link">
+                                                <IntlMessages id="myaccount.addNewBillingAdd" />
+                                                    </button>
                                             </div>
 
                                             <div className="row">
                                                 <div className="col-md-7">
                                                     <div className="single-address">
-                                                        <label>Payment Type</label>
+                                                        <label><IntlMessages id="checkout.payType" /></label>
                                                         <div>
                                                             Mastercard<br />
                                                             **** **** **** 0356<br />
                                                             Exp: 06/25<br />
                                                             Anna Smith<br />
                                                         </div>
-                                                        <p className="text-muted">Default payment method</p>
+                                                        <p className="text-muted"><IntlMessages id="checkout.defaultPayMethod" /></p>
                                                         <div className="form-check">
                                                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
                                                             <label className="form-check-label" htmlFor="flexCheckDefault">
-                                                                Issue an invoice
+                                                                <IntlMessages id="checkout.issueInvoice" />
                                                             </label>
                                                         </div>
                                                     </div>
@@ -508,32 +527,32 @@ function Checkout(props) {
                                             <div className="choose-method">
                                                 <hr />
                                                 <div className="d-grid gap-2 col-6">
-                                                    <button type="button" className="btn btn-outline-dark">Add Credit / Debit Card</button>
-                                                    <p>Or</p>
-                                                    <button type="button" className="btn btn-outline-dark">Add Paypal</button>
+                                                    <button type="button" className="btn btn-outline-dark"><IntlMessages id="checkout.addCards" /></button>
+                                                    <p><IntlMessages id="signup.or" /></p>
+                                                    <button type="button" className="btn btn-outline-dark"><IntlMessages id="checkout.addpaypal" /></button>
                                                 </div>
                                             </div>
 
                                             <div className="address-form" style={{ "display": "none" }}>
                                                 <div className="row g-3">
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputFname" className="form-label">First name*</label>
+                                                        <label htmlFor="inputFname" className="form-label"><IntlMessages id="register.first_name" /></label>
                                                         <input type="text" className="form-control" id="inputFname" />
                                                     </div>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputSurname" className="form-label">Surname*</label>
+                                                        <label htmlFor="inputSurname" className="form-label"><IntlMessages id="myaccount.surName" />*</label>
                                                         <input type="text" className="form-control" id="inputSurname" />
                                                     </div>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputAddress" className="form-label">Address*</label>
+                                                        <label htmlFor="inputAddress" className="form-label"><IntlMessages id="myaccount.address" />*</label>
                                                         <input type="text" className="form-control" id="inputAddress" />
                                                     </div>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputCity" className="form-label">City*</label>
+                                                        <label htmlFor="inputCity" className="form-label"><IntlMessages id="myaccount.city" />*</label>
                                                         <input type="text" className="form-control" id="inputCity" />
                                                     </div>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputCountry" className="form-label">Country*</label>
+                                                        <label htmlFor="inputCountry" className="form-label"><IntlMessages id="myaccount.country" />*</label>
                                                         <select id="inputCountry" className="form-select">
                                                             <option>Choose Country</option>
                                                             <option>India</option>
@@ -542,19 +561,19 @@ function Checkout(props) {
                                                         </select>
                                                     </div>
                                                     <div className="col-12">
-                                                        <button type="button" className="btn btn-link float-start">Save</button>
-                                                        <button type="button" className="btn btn-link float-end">Cancel</button>
+                                                        <button type="button" className="btn btn-link float-start"><IntlMessages id="checkout.save" /></button>
+                                                        <button type="button" className="btn btn-link float-end"><IntlMessages id="checkout.cancel" /></button>
                                                         <div className="clearfix"></div>
                                                     </div>
                                                 </div>
                                                 <div className="row g-3">
-                                                    <label>Billing address</label>
+                                                    <label><IntlMessages id="checkout.billingAdd" /></label>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputCard" className="form-label">Card Number*</label>
+                                                        <label htmlFor="inputCard" className="form-label"><IntlMessages id="checkout.cardNumber" />*</label>
                                                         <input type="text" className="form-control" id="inputCard" />
                                                     </div>
                                                     <div className="col-md-4">
-                                                        <label htmlFor="inputExpiry" className="form-label">Expiry Date*</label>
+                                                        <label htmlFor="inputExpiry" className="form-label"><IntlMessages id="checkout.expiryDate" />*</label>
                                                         <select id="inputExpiry" className="form-select">
                                                             <option>Month</option>
                                                             <option>Jan</option>
@@ -573,7 +592,7 @@ function Checkout(props) {
                                                     </div>
                                                     <div className="col-md-4"></div>
                                                     <div className="col-md-12">
-                                                        <label htmlFor="inputCardN" className="form-label">Name on card*</label>
+                                                        <label htmlFor="inputCardN" className="form-label"><IntlMessages id="checkout.nameOnCard" />*</label>
                                                         <input type="text" className="form-control" id="inputCardN" />
                                                     </div>
                                                     <div className="col-md-4">
@@ -581,8 +600,8 @@ function Checkout(props) {
                                                         <input type="text" className="form-control" id="inputSurname" />
                                                     </div>
                                                     <div className="col-12">
-                                                        <button type="button" className="btn btn-link float-start">Save</button>
-                                                        <button type="button" className="btn btn-link float-end">Cancel</button>
+                                                        <button type="button" className="btn btn-link float-start"><IntlMessages id="checkout.save" /></button>
+                                                        <button type="button" className="btn btn-link float-end"><IntlMessages id="checkout.cancel" /></button>
                                                         <div className="clearfix"></div>
                                                     </div>
                                                 </div>
@@ -604,11 +623,11 @@ function Checkout(props) {
                 {/* change delivery address modalc */}
                 <Modal show={addNewAddressModal}>
                     <div className="CLE_pf_details">
-                        <h1>My Address</h1>
+                        <h1><IntlMessages id="myaccount.myAddress" /></h1>
                         <Link className="cross_icn" to="#" onClick={toggleAddressModal}> <i className="fas fa-times"></i></Link>
                         <div className="">
                             <div className="width-100 mb-3 form-field">
-                                <label className="form-label">First name<span className="maindatory">*</span></label>
+                                <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
                                 <input type="text" className="form-control" placeholder="Ann"
                                     id="firstname"
                                     value={custAddForm.firstname}
@@ -617,7 +636,7 @@ function Checkout(props) {
 
                             </div>
                             <div className="width-100 mb-3 form-field">
-                                <label className="form-label">Surname<span className="maindatory">*</span></label>
+                                <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                                 <input type="text" className="form-control" id="lastname"
                                     placeholder="Surname"
                                     value={custAddForm.lastname}
@@ -626,7 +645,7 @@ function Checkout(props) {
 
                             </div>
                             <div className="width-100 mb-3 form-field">
-                                <label className="form-label">Phone<span className="maindatory">*</span></label>
+                                <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
                                 <input type="text" className="form-control" id="telephone"
                                     placeholder="Phone"
                                     value={custAddForm.telephone}
@@ -635,7 +654,7 @@ function Checkout(props) {
 
                             </div>
                             <div className="width-100 mb-3 form-field">
-                                <label className="form-label">Address<span className="maindatory">*</span></label>
+                                <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
                                 <input type="text" className="form-control" id="street"
                                     placeholder="Address"
                                     value={custAddForm.street}
@@ -644,7 +663,7 @@ function Checkout(props) {
 
                             </div>
                             <div className="width-100 mb-3 form-field">
-                                <label className="form-label">City*</label>
+                                <label className="form-label"><IntlMessages id="myaccount.city" /></label>
                                 <input type="text" className="form-control" id="city"
                                     placeholder="City"
                                     value={custAddForm.city}
@@ -653,7 +672,7 @@ function Checkout(props) {
 
                             </div>
                             <div className="width-100 mb-3 form-field">
-                                <label className="form-label">Post Code*</label>
+                                <label className="form-label"><IntlMessages id="myaccount.postCode" /></label>
                                 <input type="text" className="form-control" id="postcode"
                                     placeholder="Post Code"
                                     value={custAddForm.postcode}
@@ -662,7 +681,7 @@ function Checkout(props) {
 
                             </div>
                             <div className="width-100 mb-3 form-field">
-                                <label className="form-label">Country<span className="maindatory">*</span></label>
+                                <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                                 <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
                                     {countries && countries.map(opt => {
                                         return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
@@ -673,7 +692,7 @@ function Checkout(props) {
                             <div className="width-100 mb-3 form-field">
                                 <div className="Frgt_paswd">
                                     <div className="confirm-btn">
-                                        <button type="button" className="btn btn-secondary" onClick={saveCustAddress}>Confirm</button>
+                                        <button type="button" className="btn btn-secondary" onClick={saveCustAddress}><IntlMessages id="myaccount.confirm" /></button>
                                     </div>
                                 </div>
                             </div>
@@ -689,8 +708,14 @@ function Checkout(props) {
     )
 }
 const mapStateToProps = (state) => {
-    return {
+    let languages = '';
 
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+
+    return {
+        languages: languages
     }
 }
 

@@ -7,6 +7,7 @@ import notification from "../../../components/notification";
 import cartAction from "../../../redux/cart/productAction";
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
+import IntlMessages from "../../../components/utility/intlMessages";
 const { addToCart, productList } = cartAction;
 
 
@@ -59,7 +60,7 @@ function PriveExclusive(props) {
             <div className="container">
                 <div className="row">
                     <div className="col-md-12">
-                        <h2 className="DC-section-title">Privé Exclusives</h2>
+                        <h2 className="DC-section-title"><IntlMessages id="category.priceExclusive" /></h2>
                         <div className="carousel slide DC-carousel">
                             <div className="carousel-inner" >
                                 <Slider {...settings}>

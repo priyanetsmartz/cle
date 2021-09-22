@@ -43,7 +43,7 @@ function CheckoutSidebar(props) {
                     <p> <IntlMessages id="shipping" /><span className="text-end">${itemsVal.checkData['shipping_charges'] ? itemsVal.checkData['shipping_charges'] : 0}</span></p>
                     <p> <IntlMessages id="tax" /><span className="text-end">${itemsVal.checkData['tax'] ? itemsVal.checkData['tax'] : 0}</span></p>
                     <hr />
-                    <div className="final-price"><IntlMessages id="total" /> <span>${itemsVal.checkData['total'] ? itemsVal.checkData['total'] : 0}</span></div>
+                    <div className="final-price"><IntlMessages id="total" /> <span>${itemsVal.checkData['total'] ? itemsVal.checkData['total'] - itemsVal.checkData['discount'] : 0}</span></div>
                 </div>
             </div>
         </div>
