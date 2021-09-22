@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
+import ReturnSection from './allReturns';
 import IntlMessages from "../../../components/utility/intlMessages";
 
 
@@ -124,7 +125,7 @@ function OrdersAndReturns(props) {
                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
-                                    type="button" role="tab" aria-controls="home" aria-selected="true"><IntlMessages id="order.returns" /></button>
+                                    type="button" role="tab" aria-controls="home" aria-selected="true"><IntlMessages id="order.orders" /></button>
                             </li>
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
@@ -282,7 +283,9 @@ function OrdersAndReturns(props) {
 
                             </div>
                             <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <IntlMessages id="order.returns" /></div>
+                            <IntlMessages id="order.returns" />
+                            
+                            </div>
 
                         </div>
 

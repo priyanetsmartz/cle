@@ -20,7 +20,9 @@ import profile from './containers/Page/profile';
 import contact from "./containers/Page/contact";
 import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 import PriveUser from './containers/Page/PriveUser';
-import Customer from './containers/Page/customer/customer';
+import Customer from './containers/Page/customer/customerSidebar';
+import ReturnPage from './containers/Page/customer/allReturns';
+import Notifications from './containers/Page/customer/notifications';
 import HomePage from './containers/Page/home/home';
 import OrderDetails from './containers/Page/customer/orderDetails';
 import Categories from './containers/Page/categories/categories';
@@ -41,8 +43,10 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/products/:category/:subcat" component={Categories} />
         <ProductRoutes exact path="/products/:category" component={Categories} />
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
+        <PrivateRoute exact path="/notifications" component={Notifications} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
         <ProductHome exact path="/home" component={HomePage} />
+        <ProductHome exact path="/return-order" component={ReturnPage} />
         <PrivateRoute exact path="/designer-categories" component={DesignerCategories} />
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />

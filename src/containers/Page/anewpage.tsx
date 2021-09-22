@@ -1,7 +1,7 @@
 import HomePage from './home';
 import Partnership from './partnerShip';
 import AboutUs from './about';
-import Magazine from './magazine';
+// import Magazine from './magazine';
 import MagazineNew from './magazine-new';
 import HelpUs from './helpUs';
 import SocailCheckout from './SocialCheckout';
@@ -19,7 +19,7 @@ function Home(props) {
             //   console.log(location.hash)
             let elem = document.getElementById(location.hash.slice(1) + '1')
             //  let elemClass =  document.getElementsByClassName(location.hash.slice(1))
-            console.log(elem)
+            //   console.log(elem)
             if (elem) {
                 elem.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
             }
@@ -167,7 +167,7 @@ function Home(props) {
             home[0].classList.add("active");
         }
     };
-    const anchors = ["home", "our-story", "magazine", "work-with-us", "tell-us-more", "checkus-out", "footer"];
+    // const anchors = ["home", "our-story", "magazine", "work-with-us", "tell-us-more", "checkus-out", "footer"];
     return (
         <>
             <BrowserView>

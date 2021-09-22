@@ -60,7 +60,7 @@ function Categories(props) {
                                 <div className="section">
                                     <CategoryBanner />
                                 </div>
-                                {localStorage.getItem('token') == '4' && <div className="section" >
+                                {localStorage.getItem('token') === '4' && <div className="section" >
                                     <PriveExclusive />
                                 </div>}
                                 <div className="section" >
@@ -89,7 +89,7 @@ function Categories(props) {
                     <div className="section">
                         <CategoryBanner />
                     </div>
-                    {localStorage.getItem('token') == '4' && <div className="section" >
+                    {localStorage.getItem('token') === '4' && <div className="section" >
                         <PriveExclusive />
                     </div>}
                     <div className="section" >
