@@ -14,19 +14,22 @@ import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Promotion from '../../../partials/promotion';
-import { addToCartApi, addToCartApiGuest, getProductDetails, getProductExtras } from '../../../../redux/cart/productApi';
+import { addToCartApi, addToCartApiGuest, addWhishlist, createGuestToken, getGuestCart, getProductDetails, getProductExtras, removeWhishlist } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import notification from '../../../../components/notification';
 import GiftMessage from './GiftMessage';
-const { addToCart, addToCartTask, openGiftBoxes } = cartAction;
+const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask } = cartAction;
 
 function ProductDetails(props) {
     const { sku } = useParams();
     const [opacity, setOpacity] = useState(1);
     const [isShow, setIsShow] = useState(false);
     const [shareUrl, setShareUrl] = useState('');
-    const [prodId, setProdId] = useState('');
+    const [isWishlist, setIsWishlist] = useState(0);
+    const [delWishlist, setDelWishlist] = useState(0);
+    const [prodId, setProdId] = useState(0);
+    const [token, setToken] = useState('');
     const [isPriveuser, setIsPriveUser] = useState(false);
     const [isShare, setIsLoaded] = useState(false);
     const [isGiftMessage, setIsGiftMessage] = useState(false);
@@ -43,6 +46,8 @@ function ProductDetails(props) {
     const [extensionAttributes, setExtensionAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
     useEffect(() => {
+        const localToken = localStorage.getItem('token');
+        setToken(localToken)
         getProductDetailsFxn(sku);
         setShareUrl(window.location.href);
         return () => {
@@ -139,7 +144,19 @@ function ProductDetails(props) {
         setIsShow(true);
         let cartData = {};
         let cartSucces: any;
-        let cartQuoteId = localStorage.getItem('cartQuoteId');
+        let cartQuoteId = '';
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        if (cartQuoteIdLocal) {
+            cartQuoteId = cartQuoteIdLocal
+        } else {
+            // create customer token
+            let guestToken: any = await createGuestToken();
+            localStorage.setItem('cartQuoteToken', guestToken.data);
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data.id
+            //  console.log(result.data)
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
         // console.log(slectedAttribute.options)
         if (productDetails['type_id'] === 'configurable') {
             if (!slectedAttribute.options["option_id"]) {
@@ -194,34 +211,63 @@ function ProductDetails(props) {
     const handleQuantity = (event) => {
         setQuantity(event.target.value)
     }
+
+    async function handleWhishlist(id: number) {
+        setIsWishlist(id)
+        let result: any = await addWhishlist(id);
+        console.log(result);
+        if (result.data) {
+            setIsWishlist(0)
+            props.addToWishlistTask(true);
+            notification("success", "", 'Added to Whishlist');
+            getProductDetailsFxn(sku)
+        } else {
+            setIsWishlist(0)
+            props.addToWishlistTask(true);
+            notification("error", "", "Something went wrong!");
+            getProductDetailsFxn(sku)
+        }
+
+    }
+    async function handleDelWhishlist(id: number) {
+        setDelWishlist(id)
+        let del: any = await removeWhishlist(id);
+        if (del.data[0].message) {
+            setDelWishlist(0)
+            props.addToWishlistTask(true);
+            notification("success", "", del.data[0].message);
+            getProductDetailsFxn(sku)
+        } else {
+            setDelWishlist(0)
+            props.addToWishlistTask(true);
+            notification("error", "", "Something went wrong!");
+            getProductDetailsFxn(sku)
+        }
+    }
     return (
         <>
             <main>
                 {/* <Promotion /> */}
-                {/* <section>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-sm-12">
-                                <nav aria-label="breadcrumb">
-                                    <ol className="breadcrumb">
-                                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
-                                        <li className="breadcrumb-item"><Link to="#">Women</Link></li>
-                                        <li className="breadcrumb-item"><Link to="#">Designers</Link></li>
-                                        <li className="breadcrumb-item"><Link to="#">Bottega Veneta</Link></li>
-                                        <li className="breadcrumb-item"><Link to="#">Jewelry</Link></li>
-                                        <li className="breadcrumb-item active" aria-current="page">Necklaces</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </section> */}
-
                 <section style={{ 'opacity': opacity }}>
                     <div className="container">
                         <div className="row">
                             <div className="col-sm-8">
                                 <div className="product-slider">
+                                    {token && (
+                                        <span className="pdp-favorite">
+                                            <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i>
+                                            {/* {!item.wishlist_item_id && (
+                                                <div>{isWishlist === prodId ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i>}
+                                                </div>
+                                            )}
+
+                                            {item.wishlist_item_id && (
+                                                <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
+                                                </div>
+                                            )} */}
+                                        </span>
+                                    )
+                                    }
                                     <ProductImages productImages={productImages} />
                                 </div>
                             </div>
@@ -487,5 +533,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, addToCartTask, openGiftBoxes }
+    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask }
 )(ProductDetails);
