@@ -11,7 +11,8 @@ import { Link } from "react-router-dom";
 
 
 function MyProfile(props) {
-    //for customer details
+    const userGroup = localStorage.getItem('token');
+    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [myDetailsModel, setMyDetailsModel] = useState(false);
     const [myPreferenceModel, setMyPreferenceModel] = useState(false);
@@ -582,7 +583,7 @@ function MyProfile(props) {
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        <div className="addnew_address" onClick={openAddressModal}>
+                        <div className={`addnew_address ${isPriveUser ? 'prive-bg': ''}`} onClick={openAddressModal}>
                             <div className="addressnew_addressblue">
                                 <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
                             </div>
@@ -602,7 +603,7 @@ function MyProfile(props) {
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
                                 <div className="address-action">
                                     <a onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
-                                    <a className="edit_btn" onClick={() => editAddress(i)}>
+                                    <a className={`edit_btn ${isPriveUser ? 'prive-txt': ''}`} onClick={() => editAddress(i)}>
                                         <IntlMessages id="myaccount.edit" />
                                     </a>
                                 </div>
@@ -623,7 +624,7 @@ function MyProfile(props) {
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        <div className="addnew_address" onClick={openPaymentMethodModal}>
+                        <div className={`addnew_address ${isPriveUser ? 'prive-bg': ''}`} onClick={openPaymentMethodModal}>
                             <div className="addressnew_addressblue">
                                 <span> <IntlMessages id="myaccount.addNewPayment" /> </span>
                             </div>
@@ -639,7 +640,7 @@ function MyProfile(props) {
                             <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action bank_card">
                                 <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></Link>
+                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt': ''}`}><IntlMessages id="myaccount.edit" /></Link>
                             </div>
                         </div>
                         <div className="addressnew_addressbodr">
@@ -651,7 +652,7 @@ function MyProfile(props) {
                             <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action paypal_card">
                                 <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></Link>
+                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt': ''}`}><IntlMessages id="myaccount.edit" /></Link>
                             </div>
                         </div>
                     </div>
@@ -854,19 +855,19 @@ function MyProfile(props) {
                     <div className="row">
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className="btn btn-secondary">
+                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg': ''}`}>
                                     <IntlMessages id="myaccount.myOrdersReturns" /></Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className="btn btn-secondary">
+                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg': ''}`}>
                                     <IntlMessages id="myaccount.orderDetails" /></Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.returnDetails" /></button>
+                                <button type="button" className={`btn btn-secondary ${isPriveUser ? 'prive-bg': ''}`}><IntlMessages id="myaccount.returnDetails" /></button>
                             </div>
                         </div>
                     </div>

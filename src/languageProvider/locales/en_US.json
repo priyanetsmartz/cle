@@ -18,7 +18,7 @@
   "login.subtitle": "& be the first one to know about our launch",
   "register.first_name": "First Name*",
   "register.last_name": "Last Name*",
-  "register.email": "Email Address*",
+  "register.email": "Email Address",
   "register.password": "Create Password* (Min 8 Character)",
   "register.confirmPassword": "Confirm Password*",
   "register.button": "Signup",
@@ -315,6 +315,9 @@
   "home.howItWorks":"Here's How it works!",
   "home.seeMoreInfo":"See more information in our Terms and Conditions.",
   "home.checkout":"Check out",
-  "home.noWorries":"No worries, you can re-manage the preference settings in your profile account later."
+  "home.noWorries":"No worries, you can re-manage the preference settings in your profile account later.",
+  "mysupport.weWantToBe":"We want to be there for you whenever you need us. Here's how you can get in touch.",
+  "mysupport.checkHelp":"Check Help Center",
+  "mysupport.findTheAnswer":"Find the answer you need in our FAQs section."
 
 }
