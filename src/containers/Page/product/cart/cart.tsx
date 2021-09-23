@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import cartAction from "../../../../redux/cart/productAction";
-import { addWhishlist, getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
+import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
 import notification from "../../../../components/notification";
 import RelevantProducts from './relevantProducts';
 import Modal from "react-bootstrap/Modal";
@@ -132,9 +132,9 @@ function CartItemPage(props) {
         props.addToCartTask(true);
         notification("success", "", "Cart Updated");
     }
-    async function handleWhishlist(id: number) {
-        setIsWishlist(id)
-        let result: any = await addWhishlist(id);
+    async function handleWhishlist(sku: any) {
+        setIsWishlist(sku)
+        let result: any = await addWhishlistBySku(sku);
         if (result.data[0].message) {
             setIsWishlist(0)
             notification("success", "", result.data[0].message);
@@ -177,6 +177,7 @@ function CartItemPage(props) {
                                     (
                                         <ul className="cart-pro-list">
                                             {cartItemsVal['items'].map((item, i) => {
+                                                console.log(item)
                                                 return (
                                                     <div key={i}>
                                                         <li >
@@ -195,7 +196,7 @@ function CartItemPage(props) {
                                                                         {token && (
                                                                             <span className="off bg-favorite">
                                                                                 {!item.wishlist_item_id && (
-                                                                                    <Link to="#" onClick={() => { handleWhishlist(item['id']) }} className="float-end text-end">{isWishlist === item['id'] ? "Adding....." : <IntlMessages id="cart.addWishlist" />}</Link>
+                                                                                    <Link to="#" onClick={() => { handleWhishlist(item['sku']) }} className="float-end text-end">{isWishlist === item['sku'] ? "Adding....." : <IntlMessages id="cart.addWishlist" />}</Link>
                                                                                 )}
                                                                                 {item.wishlist_item_id && (
                                                                                     <Link to="#" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} className="float-end text-end"><IntlMessages id="cart.removeWishlist" /></Link>

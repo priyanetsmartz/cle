@@ -4,6 +4,7 @@ import CLELogo from '../../image/CLIlogo.png';
 import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import avatar from '../../image/avtar.svg';
 import favorit from '../../image/favrot.svg';
+import bell from '../../image/bell-solid.svg';
 import IconZoomIn from '../../image/Icon_zoom_in.svg'
 import { Link, useParams } from "react-router-dom";
 import { menu } from '../../redux/pages/allPages';
@@ -12,14 +13,14 @@ import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import IntlMessages from "../../components/utility/intlMessages";
-import AppBreadcrumbs from './breadCrumbs';
+// import AppBreadcrumbs from './breadCrumbs';
+import Breadcrumbs from './locationBreadcrumbs';
 import MiniCart from './mini-cart';
 
 const { logout } = authAction;
 const { showSignin, openSignUp } = appAction;
 function HeaderMenu(props) {
     let history = useHistory();
-    const location = useLocation()
     let customer_id = localStorage.getItem('cust_id');
     let customerName = localStorage.getItem('token_name')
     const { category, key_url } = useParams();
@@ -29,9 +30,11 @@ function HeaderMenu(props) {
     const [activeOne, SetActiveOne] = useState('');
     const [showAccount, SetShowAccount] = useState(false);
 
+
     setTimeout(() => {
         setIsLoaded(false);
     }, 3000);
+
 
     useEffect(() => {
         // console.log(location)
@@ -48,7 +51,7 @@ function HeaderMenu(props) {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [props.languages, location, category])
+    }, [props.languages, category])
 
     const showAccountFxn = () => {
         SetShowAccount(true)
@@ -139,7 +142,7 @@ function HeaderMenu(props) {
                             <div className="cartuser-info">
                                 <ul>
                                     <li><Link to="#">{customerName ? customerName : ""} </Link></li>
-                                    <li> <Link to="/notifications"><img src={favorit} alt="notification" /></Link> </li>
+                                    <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li>
                                     <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }}  ><img src={avatar} alt="user" /> </Link>
 
                                         <div className="myaccount_details" style={{ "display": !showAccount ? "none" : "block" }}>
@@ -212,21 +215,8 @@ function HeaderMenu(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <nav aria-label="breadcrumb">
-                                <AppBreadcrumbs />
-                                {/* <ol className="breadcrumb"> */}
-                                {/* <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-
-                                    <li className="breadcrumb-item"><a href="#">My Account</a></li>
-                                    <li className="breadcrumb-item"><a href="#">My Orders and Returns</a></li> */}
-                                {/* {breadCrumbs.map(item => {
-                                        return ( item == '' ? null :
-                                            <li className="breadcrumb-item" key={item}><Link to={item}>{item}</Link></li>
-                                            
-                                        );
-                                    })} */}
-                                {/* </ol> */}
-                            </nav>
+                            {/* <AppBreadcrumbs />  */}
+                            <Breadcrumbs />
                         </div>
                     </div>
                 </div>

@@ -17,6 +17,10 @@ export function addWhishlist(id: number) {
     const localToken = localStorage.getItem('cust_id');
     return APi.request(`rest/V1/wishlist/add/${id}?customerId=${localToken}`, "", "POST", "")
 }
+export function addWhishlistBySku(sku: String) {
+    const localToken = localStorage.getItem('cust_id')
+    return APi.request(`rest/V1/wishlist/addBySku/${sku}?customerId=${localToken}`, "", "POST", "");
+}
 
 export function removeWhishlist(wishlist_item_id: number) {
     const localToken = localStorage.getItem('cust_id');
@@ -51,7 +55,7 @@ export function removeItemFromCart(id: number) {
     return APi.request(`rest/V1/carts/${cartQuoteId}/items/${id}`, "", "DELETE", "")
 }
 
-export function updateCartItem(id:number, cartData:object) {
+export function updateCartItem(id: number, cartData: object) {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
     return APi.request(`rest/V1/carts/${cartQuoteId}/items/${id}`, cartData, "PUT", "")
 }

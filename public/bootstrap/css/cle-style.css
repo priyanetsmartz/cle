@@ -3877,4 +3877,7 @@ h4.arrow-change:after {
 	color:#fff;
 }
 
-
+.pdp-favorite {
+    float: right;
+    font-size: 24px;
+}
