@@ -9,7 +9,7 @@ export function getAllProducts(language, page, pageSize, sortBy, sortByValue) {
 }
 
 export function getProductByCategory(page, pageSize, category, sortBy, sortByValue) {
-    category = 2;
+    category = 52;
     return APi.request(`rest/all/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=category_id&searchCriteria[filter_groups][1][filters][0][value]=${category}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}`, "", "GET", "");
 }
 

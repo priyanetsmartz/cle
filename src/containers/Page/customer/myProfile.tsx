@@ -8,6 +8,7 @@ import {
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
+import { language } from '../../../settings';
 
 
 function MyProfile(props) {
@@ -76,23 +77,14 @@ function MyProfile(props) {
     });
 
     //for attributes details
-    const [attributes, setAttributes] = useState({
-        clothing_size: { slected: null },
-        favourite_categories: { slected: null },
-        favourite_designers: { slected: null },
-        mostly_intersted_in: { slected: null },
-        shoes_size: { slected: null }
-    });
+    const [attributes, setAttributes]:any = useState({});
 
 
     useEffect(() => {
         async function getData() {
             let result: any = await getCustomerDetails(custId);
+            console.log(result.data);
             setCustForm(result.data);
-            // if (result.data.addresses.length > 0) {
-            // setCountry(result.data.addresses[0].country_id);
-            // setTelephone(result.data.addresses[0].telephone);
-            // }
         }
         getData();
         getCountries();
@@ -226,8 +218,12 @@ function MyProfile(props) {
 
     //for attributes
     const getAttributes = async () => {
-        let result: any = await getPreference();
-        setAttributes(result.data[0]);
+        let lang = props.languages ? props.languages : language;
+        let result: any = await getPreference(lang);
+        console.log(result.data[0].preference);
+        if(result.data[0].preference){
+            setAttributes(result.data[0].preference);
+        }
     }
 
     //change password starts here----------------------------------------->
@@ -463,41 +459,43 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.mostlyInterested" /></label>
                                         <div className="field-name">
-                                            {Object.values(attributes.mostly_intersted_in).map((type, i) => {
+                                            {/* {Object.values(attributes.mostly_intersted_in).map((type, i) => {
                                                 return (
                                                     <span key={i}>{type},</span>
                                                 )
-                                            })}
+                                            })} */}
                                         </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.clothingSize" /></label>
-                                        <div className="field-name">{Object.values(attributes.clothing_size).map((s, j) => {
-                                            return (
-                                                <span key={j}>{s}/</span>
-                                            )
-                                        })}</div>
+                                        <div className="field-name">
+                                            {/* {Object.values(attributes.clothing_size).map((s, j) => {
+                                                return (
+                                                    <span key={j}>{s}/</span>
+                                                )
+                                            })} */}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.shoeSize" /></label>
                                         <div className="field-name">
-                                            {Object.values(attributes.clothing_size).map((s,k) => {
+                                            {/* {Object.values(attributes.clothing_size).map((s,k) => {
                                                 return (
                                                     <span key={k}>/{s}</span>
                                                 )
-                                            })}
+                                            })} */}
                                         </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteDesigners" /></label>
                                         <div className="field-name">
-                                            {Object.values(attributes.favourite_designers).map((d, l) => {
+                                            {/* {Object.values(attributes.favourite_designers).map((d, l) => {
                                                 return (
                                                     <span key={l}>{d},</span>
                                                 )
-                                            })}
+                                            })} */}
                                         </div>
                                     </div>
                                 </div>
@@ -505,11 +503,11 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteCategories" /></label>
                                         <div className="field-name">
-                                            {Object.values(attributes.favourite_designers).map((type, m) => {
+                                            {/* {Object.values(attributes.favourite_designers).map((type, m) => {
                                                 return (
                                                     <span key={m}>{type},</span>
                                                 )
-                                            })}
+                                            })} */}
                                         </div>
                                     </div>
                                     <div className="field_details">
@@ -961,30 +959,33 @@ function MyProfile(props) {
                     <div className="Mosty_interested_in">
                         <h2>Mosty interested in</h2>
                         <div className="interestd_check">
-                            {Object.values(attributes.mostly_intersted_in).map((interest, i) => {
-                                return (interest && interest !== '' &&
-                                    <div className="form-check" key={i}>
-                                        <input className="form-check-input" type="checkbox" value="" id={interest}
-                                            checked={attributes.mostly_intersted_in.slected === interest ? true : false} />
-                                        <label className="form-check-label" htmlFor={interest}>
-                                            {interest}
+                            {attributes.mostly_intersted && attributes.mostly_intersted.map((interest) => {
+                                return (
+                                    <div className="form-check" key={interest.id}>
+                                        <input className="form-check-input" type="checkbox" value="" id={interest.name}
+                                            checked={false} />
+                                        <label className="form-check-label" htmlFor={interest.name}>
+                                            {interest.name}
                                         </label>
                                     </div>
                                 )
                             })}
-
                         </div>
 
                         <div className="row">
-
                             <div className="col-sm-6">
                                 <div className="clothing_size mb-4">
                                     <h2>Clothing size</h2>
                                     <div className="cl_size_sec">
                                         <ul>
-                                            {Object.values(attributes.clothing_size).map((clothingSize, i) => {
-                                                return (clothingSize && clothingSize !== '' &&
-                                                    <li><a key={i} className={attributes.clothing_size.slected ? 'active' : 'null'}>{clothingSize}</a></li>
+                                            {attributes.clothing_size && attributes.clothing_size.map(clothingSize => {
+                                                return (clothingSize && clothingSize.value !== '' &&
+                                                    <li key={clothingSize.value}>
+                                                        {/* class active */}
+                                                        <a key={clothingSize.value}>
+                                                            {clothingSize.label}
+                                                        </a>
+                                                    </li>
                                                 )
                                             })}
                                         </ul>
@@ -1000,9 +1001,9 @@ function MyProfile(props) {
                                     <h2>Shoes size</h2>
                                     <div className="cl_size_sec">
                                         <ul>
-                                            {Object.values(attributes.shoes_size).map((shoeSize, n) => {
-                                                return (shoeSize && shoeSize !== '' &&
-                                                    <li><a key={n} className={attributes.clothing_size.slected ? 'active' : 'null'}>{shoeSize}</a></li>
+                                            {attributes.shoes_size && attributes.shoes_size.map(shoeSize => {
+                                                return (shoeSize && shoeSize.value !== '' &&
+                                                    <li><a key={shoeSize.value}>{shoeSize.label}</a></li>
                                                 )
                                             })}
                                         </ul>
@@ -1031,18 +1032,16 @@ function MyProfile(props) {
 
                         </div>
                         <div className="row">
-
                             <div className="col-sm-6">
                                 <div className="favt_section">
                                     <ul>
-                                        {Object.values(attributes.favourite_designers).map((designer, o) => {
-                                            return (designer && designer !== '' &&
-                                                <li key={o}>
+                                        {attributes.designers && attributes.designers.map(design => {
+                                            return (design && design.value !== '' &&
+                                                <li key={design.value}>
                                                     <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                                            checked={attributes.favourite_designers.slected === designer ? true : false} />
+                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
                                                         <label className="form-check-label">
-                                                            {designer}
+                                                            {design.label}
                                                         </label>
                                                     </div>
                                                 </li>
@@ -1086,14 +1085,14 @@ function MyProfile(props) {
                             <div className="col-sm-6">
                                 <div className="favt_section">
                                     <ul>
-                                        {Object.values(attributes.favourite_categories).map((category, p) => {
-                                            return (category && category !== '' &&
-                                                <li key={p}>
+                                        {attributes.categories && attributes.categories.map(cat => {
+                                            return (
+                                                <li key={cat.id}>
                                                     <div className="form-check">
                                                         <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                                            checked={attributes.favourite_categories.slected === category ? true : false} />
+                                                            checked={ false} />
                                                         <label className="form-check-label">
-                                                            {category}
+                                                            {cat.name}
                                                         </label>
                                                     </div>
                                                 </li>
@@ -1496,8 +1495,14 @@ function MyProfile(props) {
     )
 }
 const mapStateToProps = (state) => {
+    let languages = '';
+
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+
     return {
-        items: state.Cart.items
+        languages: languages
     }
 }
 
