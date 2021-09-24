@@ -47,8 +47,11 @@ function Checkout(props) {
     //for customer address ends here-------
 
     useEffect(() => {
+        let customer_id = localStorage.getItem('cust_id');
         checkoutScreen();
-        getCutomerDetails();
+        if (customer_id) {
+            getCutomerDetails();
+        }
         getCountries();
 
         return () => {

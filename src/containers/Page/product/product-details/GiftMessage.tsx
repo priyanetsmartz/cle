@@ -3,13 +3,15 @@ import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import notification from '../../../../components/notification';
+import cartAction from "../../../../redux/cart/productAction";
 import { addToCartApi, addToCartApiGuest, giftCart, giftGuestCart } from "../../../../redux/cart/productApi";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
+const { openGiftBoxes } = cartAction;
 function GiftMessage(props) {
     const intl = useIntl();
     useEffect(() => {
-        //  console.log(props.product)
+       // console.log(props)
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
@@ -27,74 +29,105 @@ function GiftMessage(props) {
     const [isShow, setIsShow] = useState(false);
 
     const handleSubmitClick = async (e) => {
-        setIsShow(true);
         let result: any;
 
         e.preventDefault();
         if (handleValidation()) {
+            setIsShow(true);
             let cartData = {};
             let cartQuoteId = localStorage.getItem('cartQuoteId');
-            // console.log(slectedAttribute.options)
-            if (props.product[0].type_id === 'configurable') {
-                // if (!slectedAttribute.options["option_id"]) {
-                //     notification("error", "", "Please select Size");
-                //     return false;
-                // }
-                cartData = {
-                    // "cart_item": {
-                    //     "quote_id": cartQuoteId,
-                    //     "product_type": "configurable",
-                    //     "sku": props.product.sku,
-                    //     "qty": 1,
-                    //     "product_option": {
-                    //         "extension_attributes": {
-                    //             "configurable_item_options": [
-                    //                 {
-                    //                     "option_id": slectedAttribute.options["option_id"],
-                    //                     "option_value": slectedAttribute.options["option_value"]
-                    //                 }
-                    //             ]
-                    //         }
-                    //     }
-                    // }
-                }
-            } else {
-                cartData = {
-                    "cartItem": {
-                        "sku": props.product[0].sku,
-                        "qty": 1,
-                        "quote_id": cartQuoteId
-                    }
-                }
-            }
-
             let customer_id = localStorage.getItem('cust_id');
-            let results: any;
-            if (customer_id) {
-                results = await addToCartApi(cartData)
-            } else {
-                results = await addToCartApiGuest(cartData)
-            }
-            if (results.data.item_id) {
-                const giftMEssageData = {
-                    "giftMessage": {
-                        "gift_message_id": 0,
-                        "customer_id": customer_id ? parseInt(customer_id) : 0,
-                        "sender": state.from,
-                        "recipient": state.for,
-                        "message": state.message
+            //  console.log(props)
+            if (props.items.id) {
+                if (props.items.type_id === 'configurable') {
+                    // if (!slectedAttribute.options["option_id"]) {
+                    //     notification("error", "", "Please select Size");
+                    //     return false;
+                    // }
+                    cartData = {
+                        // "cart_item": {
+                        //     "quote_id": cartQuoteId,
+                        //     "product_type": "configurable",
+                        //     "sku": props.product.sku,
+                        //     "qty": 1,
+                        //     "product_option": {
+                        //         "extension_attributes": {
+                        //             "configurable_item_options": [
+                        //                 {
+                        //                     "option_id": slectedAttribute.options["option_id"],
+                        //                     "option_value": slectedAttribute.options["option_value"]
+                        //                 }
+                        //             ]
+                        //         }
+                        //     }
+                        // }
+                    }
+                } else {
+                    cartData = {
+                        "cartItem": {
+                            "sku": props.items.sku,
+                            "qty": 1,
+                            "quote_id": cartQuoteId
+                        }
                     }
                 }
+
+
+
+                let results: any;
                 if (customer_id) {
-                    result = await giftCart(giftMEssageData, results.data.item_id)
+                    results = await addToCartApi(cartData)
                 } else {
-                    result = await giftGuestCart(giftMEssageData, results.data.item_id)
+                    results = await addToCartApiGuest(cartData)
+                }
+                if (results.data.item_id) {
+                    const giftMEssageData = {
+                        "giftMessage": {
+                            "gift_message_id": 0,
+                            "customer_id": customer_id ? parseInt(customer_id) : 0,
+                            "sender": state.from,
+                            "recipient": state.for,
+                            "message": state.message
+                        }
+                    }
+
+
+                    if (customer_id) {
+                        result = await giftCart(giftMEssageData, results.data.item_id)
+                    } else {
+                        result = await giftGuestCart(giftMEssageData, results.data.item_id)
+                    }
+                }
+            } else {
+                if (props.items) {
+                    const giftMEssageData = {
+                        "giftMessage": {
+                            "gift_message_id": 0,
+                            "customer_id": customer_id ? parseInt(customer_id) : 0,
+                            "sender": state.from,
+                            "recipient": state.for,
+                            "message": state.message
+                        }
+                    }
+
+
+                    if (customer_id) {
+                        result = await giftCart(giftMEssageData, props.items)
+                    } else {
+                        result = await giftGuestCart(giftMEssageData, props.items)
+                    }
                 }
             }
-
 
             if (result.data === true) {
+
                 setIsShow(false);
+                setState({
+                    for: "",
+                    from: "",
+                    message: ""
+                })
+                props.openGiftBoxes(0);
                 notification("success", "", "Item added as a gift!");
             }
         } else {
@@ -192,5 +225,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    {}
+    { openGiftBoxes }
 )(GiftMessage);

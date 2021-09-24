@@ -210,7 +210,7 @@ export function giftCart(giftData: any, itemId: number) {
 
 export function giftGuestCart(giftData: any, itemId: number) {
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
-    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}​​​​​​/gift-message/${itemId}`, giftData, "POST", "")
+    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/gift-message/${itemId}`, giftData, "POST", "")
 }
 
 export function getCheckOutTotals() {

@@ -2,43 +2,70 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import cartAction from "../../../../redux/cart/productAction";
-import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
+import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, getWhishlistItemsForUser, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
 import notification from "../../../../components/notification";
 import RelevantProducts from './relevantProducts';
 import Modal from "react-bootstrap/Modal";
 import GiftMessage from "../product-details/GiftMessage";
 import IntlMessages from "../../../../components/utility/intlMessages";
-const { openGiftBoxes, addToCartTask } = cartAction;
+const { openGiftBoxes, addToCartTask, addToWishlistTask } = cartAction;
 
 function CartItemPage(props) {
     const [token, setToken] = useState('');
     const [isShow, setIsShow] = useState(0);
+    const [delWishlist, setDelWishlist] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [value, setValue] = useState(0);
+    const [qty, setQty] = useState(0);
     const [prodId, setProdId] = useState('');
     const [cartItemsVal, setCartItems] = useState({});
     const [cartTotals, setCartTotal] = useState({});
     const [cartRelevants, setCartRelevants] = useState({});
     const [isGiftMessage, setIsGiftMessage] = useState(false);
+
+
+
     useEffect(() => {
+        //  console.log(props)
         const localToken = localStorage.getItem('token');
         setToken(localToken)
-        callGetCartItems()
+        if (props.cart || !props.cart) {
+            callGetCartItems()
+        }
+        return () => {
+            props.addToCartTask(false);
+        }
+    }, [props.cart])
+
+    useEffect(() => {
+        //  console.log(props.items.Cart);
+        let giftBox = props.giftCart.Cart.openGiftBox === 0 ? false : true;
+        setIsGiftMessage(giftBox)
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [])
-
+    }, [props.giftCart.Cart]);
     const callGetCartItems = async () => {
         let cartData = [], cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
             cartItems = await getCartItems();
-            cartData = cartItems.data.items;
+            let products = cartItems.data.items;
             // get cart total 
             cartTotal = await getCartTotal();
+            let whishlist: any = await getWhishlistItemsForUser();
+            // let products = result.data.items;
+            let WhishlistData = whishlist.data;
+            //   console.log(WhishlistData)
+            const mergeById = (a1, a2) =>
+                a1.map(itm => ({
+                    ...a2.find((item) => (item.sku === itm.sku) && item),
+                    ...itm
+                }));
 
+            cartData = mergeById(products, WhishlistData);
+            // console.log(cartData)
         } else {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
@@ -48,6 +75,7 @@ function CartItemPage(props) {
 
             }
         }
+
         let cartPrices = {}, cartValues = {}, cartRelevant = {}
         if (cartTotal) {
             cartPrices['discount'] = cartTotal.data.base_discount_amount;
@@ -84,6 +112,9 @@ function CartItemPage(props) {
     }
     //to add the quantity
     async function handleAddQuantity(data) {
+        // console.log(data)
+        setValue(data.item_id);
+        setQty(data.qty + 1);
         let customer_id = localStorage.getItem('cust_id');
         let cartData = {
             "cartItem": {
@@ -105,6 +136,8 @@ function CartItemPage(props) {
 
     //to substruct from the quantity
     async function handleSubtractQuantity(data) {
+        setValue(data.item_id);
+        setQty(data.qty - 1);
         let customer_id = localStorage.getItem('cust_id');
         let cartData = {
             "cartItem": {
@@ -137,25 +170,36 @@ function CartItemPage(props) {
         let result: any = await addWhishlistBySku(sku);
         if (result.data[0].message) {
             setIsWishlist(0)
+            props.addToWishlistTask(true);
             notification("success", "", result.data[0].message);
             callGetCartItems()
         } else {
             setIsWishlist(0)
+            props.addToWishlistTask(true);
             notification("error", "", "Something went wrong!");
             callGetCartItems()
         }
 
     }
     async function handleDelWhishlist(id: number) {
+        setDelWishlist(id)
         let del: any = await removeWhishlist(id);
-        notification("success", "", del.data[0].message);
-        callGetCartItems()
+        if (del.data[0].message) {
+            setDelWishlist(0)
+            props.addToWishlistTask(true);
+            notification("success", "", del.data[0].message);
+            callGetCartItems()
+        } else {
+            setDelWishlist(0)
+            props.addToWishlistTask(true);
+            notification("error", "", "Something went wrong!");
+            callGetCartItems()
+        }
     }
-
     const handleGiftMEssage = (pId) => {
-        console.log(pId)
+        // console.log(pId)
         setProdId(pId)
-        props.openGiftBoxes(prodId);
+        props.openGiftBoxes(pId);
         setIsGiftMessage(true)
     }
     const hideGiftModalModal = () => {
@@ -177,7 +221,7 @@ function CartItemPage(props) {
                                     (
                                         <ul className="cart-pro-list">
                                             {cartItemsVal['items'].map((item, i) => {
-                                                console.log(item)
+                                                //    console.log(item)
                                                 return (
                                                     <div key={i}>
                                                         <li >
@@ -199,7 +243,7 @@ function CartItemPage(props) {
                                                                                     <Link to="#" onClick={() => { handleWhishlist(item['sku']) }} className="float-end text-end">{isWishlist === item['sku'] ? "Adding....." : <IntlMessages id="cart.addWishlist" />}</Link>
                                                                                 )}
                                                                                 {item.wishlist_item_id && (
-                                                                                    <Link to="#" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} className="float-end text-end"><IntlMessages id="cart.removeWishlist" /></Link>
+                                                                                    <Link to="#" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} className="float-end text-end">{delWishlist === parseInt(item.wishlist_item_id) ? "Removing....." : <IntlMessages id="cart.removeWishlist" />}</Link>
                                                                                 )}
                                                                             </span>
                                                                         )
@@ -211,7 +255,7 @@ function CartItemPage(props) {
                                                                             <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
                                                                             <div className="col-sm-5 cartschanger">
                                                                                 <div className="value-button" id="decrease" onClick={() => { handleSubtractQuantity(item) }} >-</div>
-                                                                                <input type="number" id="number" disabled value={item.qty} />
+                                                                                <input type="number" id="number" disabled defaultValue={item.qty} value={value === item.item_id ? qty : item.qty} />
                                                                                 <div className="value-button" id="increase" onClick={() => { handleAddQuantity(item) }}>+</div>
                                                                             </div>
                                                                             {/* <div className="col-sm-5">
@@ -232,7 +276,7 @@ function CartItemPage(props) {
                                                         </li>
                                                         <div className="save-cart-btns">
                                                             <Link to="#" onClick={() => {
-                                                                handleGiftMEssage(item['id']);
+                                                                handleGiftMEssage(item.item_id);
                                                             }}><IntlMessages id="cart.addGift" /> </Link>
                                                             <Link to="#" className=""><IntlMessages id="cart.removeGift" /></Link>
                                                         </div>
@@ -288,12 +332,14 @@ function CartItemPage(props) {
 
 
 const mapStateToProps = (state) => {
-    //   console.log(state)
+    // console.log(state)
     return {
-        items: state.Cart.addedItems
+        items: state.Cart.addedItems,
+        giftCart: state,
+        cart: state.Cart.addToCartTask
     }
 }
 export default connect(
     mapStateToProps,
-    { openGiftBoxes, addToCartTask }
+    { openGiftBoxes, addToCartTask, addToWishlistTask }
 )(CartItemPage);
