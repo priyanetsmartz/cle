@@ -40,6 +40,11 @@ export function getPreference(language) {
     return adminToken.request(`rest/all/V1/customer/preferences?storeId=${storeId}`, "", "GET", "");
 }
 
+
+export function savePreference(data) {
+    return adminToken.request(`rest/V1/customer/preferences`, data, "PUT", "");
+}
+
 export function getCustomerOrders() {
     const custId = localStorage.getItem('cust_id');;
     return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");

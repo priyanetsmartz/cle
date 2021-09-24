@@ -3,18 +3,22 @@ import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
 import {
-    getCustomerDetails, saveCustomerDetails, getCountriesList, getPreference, changePassword,
-    updateCustEmail, deleteAddress
+    getCustomerDetails, saveCustomerDetails, getCountriesList, changePassword,
+    updateCustEmail, deleteAddress, getPreference
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { language } from '../../../settings';
+import { spawn } from 'redux-saga/effects';
+import MyPreferences from './myProfile/myPreferences';
 
 
 function MyProfile(props) {
     const userGroup = localStorage.getItem('token');
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
+    const [attributes, setAttributes]: any = useState({});
+    const [customerPrefer, etCustomerPrefer]: any = useState({});
     const [myDetailsModel, setMyDetailsModel] = useState(false);
     const [myPreferenceModel, setMyPreferenceModel] = useState(false);
     const [myAddressModal, setMyAddressModal] = useState(false);
@@ -44,7 +48,8 @@ function MyProfile(props) {
         gender: "",
         dob: "",
         website_id: 1,
-        addresses: []
+        addresses: [],
+        custom_attributes:[]
     });
 
     const [custAddForm, setCustAddForm] = useState({
@@ -76,20 +81,39 @@ function MyProfile(props) {
         errors: {}
     });
 
-    //for attributes details
-    const [attributes, setAttributes]:any = useState({});
-
-
     useEffect(() => {
         async function getData() {
             let result: any = await getCustomerDetails(custId);
-            console.log(result.data);
-            setCustForm(result.data);
+            if(result){
+                setCustForm(result.data);
+                getAttributes(result.data);
+            }
         }
         getData();
+        
         getCountries();
-        getAttributes();
     }, []);
+
+    const getAttributes = async (custData) => {
+        let lang = props.languages ? props.languages : language;
+        let result: any = await getPreference(lang);
+        setAttributes(result);
+        // if (result.data[0].preference) {
+        //     custData.custom_attributes.forEach(el => {
+        //         if (el.attribute_code == 'mostly_intersted_in') {
+        //             result.data[0].preference.mostly_intersted.forEach(intested => {
+        //                 el.value.split(',').forEach(element => {
+        //                     if (intested.id == element) {
+        //                         customerPrefer.interestedIn.push(intested.name)
+        //                     }
+        //                 });
+        //             })
+        //         }
+        //     });
+        // }
+
+        console.log(customerPrefer);
+    }
 
     const getCountries = async () => {
         let result: any = await getCountriesList();
@@ -212,18 +236,6 @@ function MyProfile(props) {
             ...prevState,
             [id]: value
         }))
-
-
-    }
-
-    //for attributes
-    const getAttributes = async () => {
-        let lang = props.languages ? props.languages : language;
-        let result: any = await getPreference(lang);
-        console.log(result.data[0].preference);
-        if(result.data[0].preference){
-            setAttributes(result.data[0].preference);
-        }
     }
 
     //change password starts here----------------------------------------->
@@ -459,11 +471,7 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.mostlyInterested" /></label>
                                         <div className="field-name">
-                                            {/* {Object.values(attributes.mostly_intersted_in).map((type, i) => {
-                                                return (
-                                                    <span key={i}>{type},</span>
-                                                )
-                                            })} */}
+                                            
                                         </div>
                                     </div>
                                     <div className="field_details">
@@ -956,174 +964,7 @@ function MyProfile(props) {
                 <div className="CLE_pf_details">
                     <h1>My Preferences</h1>
                     <a onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></a>
-                    <div className="Mosty_interested_in">
-                        <h2>Mosty interested in</h2>
-                        <div className="interestd_check">
-                            {attributes.mostly_intersted && attributes.mostly_intersted.map((interest) => {
-                                return (
-                                    <div className="form-check" key={interest.id}>
-                                        <input className="form-check-input" type="checkbox" value="" id={interest.name}
-                                            checked={false} />
-                                        <label className="form-check-label" htmlFor={interest.name}>
-                                            {interest.name}
-                                        </label>
-                                    </div>
-                                )
-                            })}
-                        </div>
-
-                        <div className="row">
-                            <div className="col-sm-6">
-                                <div className="clothing_size mb-4">
-                                    <h2>Clothing size</h2>
-                                    <div className="cl_size_sec">
-                                        <ul>
-                                            {attributes.clothing_size && attributes.clothing_size.map(clothingSize => {
-                                                return (clothingSize && clothingSize.value !== '' &&
-                                                    <li key={clothingSize.value}>
-                                                        {/* class active */}
-                                                        <a key={clothingSize.value}>
-                                                            {clothingSize.label}
-                                                        </a>
-                                                    </li>
-                                                )
-                                            })}
-                                        </ul>
-                                    </div>
-                                    <div className="sizebtn clothnmrgin">
-                                        <div className="save-btn"><Link to="#" className="btn-link-blue">Save</Link></div>
-                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-sm-6">
-                                <div className="clothing_size">
-                                    <h2>Shoes size</h2>
-                                    <div className="cl_size_sec">
-                                        <ul>
-                                            {attributes.shoes_size && attributes.shoes_size.map(shoeSize => {
-                                                return (shoeSize && shoeSize.value !== '' &&
-                                                    <li><a key={shoeSize.value}>{shoeSize.label}</a></li>
-                                                )
-                                            })}
-                                        </ul>
-                                    </div>
-                                    <div className="sizebtn">
-                                        <div className="save-btn"><Link to="#" className="btn-link-blue">Save</Link></div>
-                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div className="favorite_designers mb-4">
-                        <h2>Favorite designers</h2>
-                        <div className="row">
-
-                            <div className="col-sm-6">
-                                <div className="search_results">
-                                    <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
-                                    <input type="search" placeholder="Search..." className="form-control me-1" />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-6">
-                                <div className="favt_section">
-                                    <ul>
-                                        {attributes.designers && attributes.designers.map(design => {
-                                            return (design && design.value !== '' &&
-                                                <li key={design.value}>
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                                        <label className="form-check-label">
-                                                            {design.label}
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            )
-                                        })}
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="col-sm-6">
-                                <div className="favt_dragdrop">
-                                    <div className="favdesignr_size_sec">
-                                        <ul>
-                                            <li><Link to="#">À La Garçonne</Link></li>
-                                            <li><Link to="#">ADAMO</Link></li>
-                                            <li><Link to="#">A.EMERY</Link></li>
-                                            <li><Link to="#" className="active">Dodo Bar Or</Link></li>
-                                        </ul>
-                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div className="favorite_designers mb-4">
-                        <h2>Favorite categories</h2>
-                        <div className="row">
-
-                            <div className="col-sm-6">
-                                <div className="search_results">
-                                    <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
-                                    <input type="search" placeholder="Search..." className="form-control me-1" />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="row">
-
-                            <div className="col-sm-6">
-                                <div className="favt_section">
-                                    <ul>
-                                        {attributes.categories && attributes.categories.map(cat => {
-                                            return (
-                                                <li key={cat.id}>
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                                            checked={ false} />
-                                                        <label className="form-check-label">
-                                                            {cat.name}
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            )
-                                        })}
-
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="col-sm-6">
-                                <div className="favt_dragdrop">
-                                    <div className="favdesignr_size_sec">
-                                        <ul>
-
-                                            <li><Link to="#">Belts</Link></li>
-                                            <li><Link to="#">Necklaces</Link></li>
-                                            <li><Link to="#">Scarves</Link></li>
-                                            <li><Link to="#" className="active">Watches</Link></li>
-
-                                        </ul>
-                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="width-100 mb-4">
-                        <div className="float-end">
-                            <button type="button" className="btn btn-secondary">Confirm</button>
-                        </div>
-                    </div>
+                    <MyPreferences custData={custForm} preferences={attributes}/>
                 </div>
             </Modal>
 
