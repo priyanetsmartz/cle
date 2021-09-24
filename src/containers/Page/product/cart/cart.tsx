@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import cartAction from "../../../../redux/cart/productAction";
-import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
+import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, getWhishlistItemsForUser, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
 import notification from "../../../../components/notification";
 import RelevantProducts from './relevantProducts';
 import Modal from "react-bootstrap/Modal";
@@ -35,10 +35,19 @@ function CartItemPage(props) {
         let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
             cartItems = await getCartItems();
-            cartData = cartItems.data.items;
+            let products = cartItems.data.items;
             // get cart total 
             cartTotal = await getCartTotal();
+            let whishlist: any = await getWhishlistItemsForUser();
+            // let products = result.data.items;
+            let WhishlistData = whishlist.data;
+            const mergeById = (a1, a2) =>
+                a1.map(itm => ({
+                    ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
+                    ...itm
+                }));
 
+            cartData = mergeById(products, WhishlistData);
         } else {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
@@ -48,6 +57,7 @@ function CartItemPage(props) {
 
             }
         }
+        console.log(cartData)
         let cartPrices = {}, cartValues = {}, cartRelevant = {}
         if (cartTotal) {
             cartPrices['discount'] = cartTotal.data.base_discount_amount;
