@@ -14,7 +14,7 @@ import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Promotion from '../../../partials/promotion';
-import { addToCartApi, addToCartApiGuest, addWhishlist, createGuestToken, getGuestCart, getProductDetails, getProductExtras, removeWhishlist } from '../../../../redux/cart/productApi';
+import { addToCartApi, addToCartApiGuest, addWhishlist, createGuestToken, getGuestCart, getProductDetails, getProductExtras, getWhishlistItemsForUser, removeWhishlist } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import notification from '../../../../components/notification';
@@ -26,6 +26,8 @@ function ProductDetails(props) {
     const [opacity, setOpacity] = useState(1);
     const [isShow, setIsShow] = useState(false);
     const [shareUrl, setShareUrl] = useState('');
+
+    const [iteminWhishlist, setItemInWhishlist] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [prodId, setProdId] = useState(0);
@@ -45,7 +47,6 @@ function ProductDetails(props) {
     });
     const [extensionAttributes, setExtensionAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
-
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
@@ -56,19 +57,28 @@ function ProductDetails(props) {
             // Anything in here is fired on component unmount.
         }
     }, [sku])
+    useEffect(() => {
+        //  console.log(props.items.Cart);
+        let giftBox = props.items.Cart.openGiftBox === 0 ? false : true;
+        setIsGiftMessage(giftBox)
+        setSizeGuideModal(props.items.Cart.isOpenSizeGuide);
+        setMeasuringGuideModal(props.items.Cart.isOpenMeasuringGuide);
+    }, [props.items.Cart]);
 
+    //     useEffect(() => {
+    //    //     console.log(props);
+    //     }, [props]);
     const handleClick = () => {
         setIsLoaded(true);
     }
 
+
     const hideGiftModalModal = () => {
         setIsGiftMessage(false)
     }
-
     const hideModal = () => {
         setIsLoaded(false);
     }
-
     const handleChange = (event) => {
         let option = {};
         var index = event.target.selectedIndex;
@@ -80,24 +90,26 @@ function ProductDetails(props) {
         setSlectedAttribute({ options: option });
     }
 
-    useEffect(() => {
-         console.log(props.items.Cart.isOpenSizeGuide);
-         console.log(props.items.Cart.isOpenMeasuringGuide);
-        setSizeGuideModal(props.items.Cart.isOpenSizeGuide);
-        setMeasuringGuideModal(props.items.Cart.isOpenMeasuringGuide);
-    }, [props.items.Cart.isOpenSizeGuide, props.items.Cart.isOpenMeasuringGuide]);
 
     const sizeGuideModalHandler = () => {
         setSizeGuideModal(!sizeGuideModal);
     }
-
     async function getProductDetailsFxn(skuUrl) {
         setOpacity(0.3)
         let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductDetails(skuUrl);
-        //  console.log(result.data)
+
+      
         let projectSingle = {};
         if (customer_id) {
+            let whishlist: any = await getWhishlistItemsForUser();
+            // let products = result.data.items;
+            let WhishlistData = whishlist.data;
+    
+            const inWhishlist = WhishlistData.find(element => element.sku === skuUrl);
+            if (inWhishlist) {
+                setItemInWhishlist(inWhishlist.wishlist_item_id)
+            }
             let productExtras: any = await getProductExtras(result.data.id);
             setMagezineData(productExtras.data[0].posts)
             setRecomendations(productExtras.data[0].recommendation)
@@ -140,8 +152,7 @@ function ProductDetails(props) {
     }
 
     const handleGiftMEssage = () => {
-        //console.log(prodId)
-        props.openGiftBoxes(prodId);
+        props.openGiftBoxes(productDetails);
         setIsGiftMessage(true)
     }
 
@@ -220,7 +231,7 @@ function ProductDetails(props) {
     async function handleWhishlist(id: number) {
         setIsWishlist(id)
         let result: any = await addWhishlist(id);
-        console.log(result);
+        //  console.log(result);
         if (result.data) {
             setIsWishlist(0)
             props.addToWishlistTask(true);
@@ -234,11 +245,14 @@ function ProductDetails(props) {
         }
 
     }
-    async function handleDelWhishlist(id: number) {
+    async function handleDelWhishlist(id: any) {
         setDelWishlist(id)
+        //console.log(delWishlist, iteminWhishlist)
         let del: any = await removeWhishlist(id);
+        // console.log(del)
         if (del.data[0].message) {
             setDelWishlist(0)
+            setItemInWhishlist(0)
             props.addToWishlistTask(true);
             notification("success", "", del.data[0].message);
             getProductDetailsFxn(sku)
@@ -260,16 +274,12 @@ function ProductDetails(props) {
                                 <div className="product-slider">
                                     {token && (
                                         <span className="pdp-favorite">
-                                            <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i>
-                                            {/* {!item.wishlist_item_id && (
+                                            {/* <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i> */}
+                                            {iteminWhishlist === 0 ? (
                                                 <div>{isWishlist === prodId ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i>}
                                                 </div>
-                                            )}
-
-                                            {item.wishlist_item_id && (
-                                                <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
-                                                </div>
-                                            )} */}
+                                            ) : <div>{delWishlist === iteminWhishlist ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(iteminWhishlist) }} aria-hidden="true"></i>}
+                                            </div>}
                                         </span>
                                     )
                                     }
@@ -472,7 +482,7 @@ function ProductDetails(props) {
             <Modal show={measuringGuideModal} size="lg">
                 <MeasuringGuide />
             </Modal>
-            <Modal show={isGiftMessage} size="lg" data={productDetails['id']} >
+            <Modal show={isGiftMessage} size="lg" data={productDetails} >
                 <Modal.Header>
                     <h5 className="modal-title"><IntlMessages id="gift.title" /></h5>
                     <div><IntlMessages id="gift.subTitle" /> </div>
