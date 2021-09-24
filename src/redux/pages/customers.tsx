@@ -34,9 +34,10 @@ export function updateCustAddress(custId, data) {
     return AdminApi.request(`rest/V1/customers/${custId}`, data, "POST", "");
 }
 
-export function getPreference() {
-    const custId = localStorage.getItem('cust_id');
-    return AdminApi.request(`rest/V1/customer/attributes?id=${custId}`, "", "GET", "");
+export function getPreference(language) {
+    const storeId = language === 'english' ? 3 : 2;
+    // return adminToken.request(`rest/V1/customer/attributes?id=${custId}`, "", "GET", "");
+    return adminToken.request(`rest/all/V1/customer/preferences?storeId=${storeId}`, "", "GET", "");
 }
 
 export function getCustomerOrders() {

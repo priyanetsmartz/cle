@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import minicart_p1 from "../../../../image/minicart_p1.png";
 import cartAction from "../../../../redux/cart/productAction";
 import IntlMessages from "../../../../components/utility/intlMessages";
-const { openMeasuringGuide } = cartAction;
+const { openMeasuringGuide, openSizeGuide } = cartAction;
 
 
 function MeasuringGuide(props) {
@@ -13,8 +13,9 @@ function MeasuringGuide(props) {
     }, []);
 
     const measuringGuideHanler = () => {
-        const { openMeasuringGuide } = props;
+        const { openMeasuringGuide, openSizeGuide } = props;
         openMeasuringGuide(false);
+        openSizeGuide(true);
     }
 
     return (
@@ -49,5 +50,5 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(
-    mapStateToProps,{openMeasuringGuide}
+    mapStateToProps,{openMeasuringGuide, openSizeGuide}
 )(MeasuringGuide);

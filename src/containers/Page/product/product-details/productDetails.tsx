@@ -45,6 +45,7 @@ function ProductDetails(props) {
     });
     const [extensionAttributes, setExtensionAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
+
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
@@ -60,13 +61,14 @@ function ProductDetails(props) {
         setIsLoaded(true);
     }
 
-
     const hideGiftModalModal = () => {
         setIsGiftMessage(false)
     }
+
     const hideModal = () => {
         setIsLoaded(false);
     }
+
     const handleChange = (event) => {
         let option = {};
         var index = event.target.selectedIndex;
@@ -77,15 +79,18 @@ function ProductDetails(props) {
         option['option_value'] = event.target.value;
         setSlectedAttribute({ options: option });
     }
+
     useEffect(() => {
-        //  console.log(props.items.Cart);
+         console.log(props.items.Cart.isOpenSizeGuide);
+         console.log(props.items.Cart.isOpenMeasuringGuide);
         setSizeGuideModal(props.items.Cart.isOpenSizeGuide);
         setMeasuringGuideModal(props.items.Cart.isOpenMeasuringGuide);
-    }, [props.items.Cart]);
+    }, [props.items.Cart.isOpenSizeGuide, props.items.Cart.isOpenMeasuringGuide]);
 
     const sizeGuideModalHandler = () => {
         setSizeGuideModal(!sizeGuideModal);
     }
+
     async function getProductDetailsFxn(skuUrl) {
         setOpacity(0.3)
         let customer_id = localStorage.getItem('cust_id');

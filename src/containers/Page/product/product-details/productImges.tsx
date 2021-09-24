@@ -9,7 +9,7 @@ const ProductImages = (props) => {
         setFullSizedImg(props.productImages[0]);
     }, [props.productImages])
     const changeImg = (i) => {
-        console.log(productImage[i])
+        // console.log(productImage[i])
         setFullSizedImg(productImage[i]);
         // console.log(fullSizedImg.extension_attributes.video_content.video_url)
     }

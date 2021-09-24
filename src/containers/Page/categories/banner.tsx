@@ -2,11 +2,18 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getCategoryDetails } from '../../../redux/pages/customers';
+import { Link } from "react-router-dom";
 
 
 function CategoryBanner(props) {
+    const baseUrl = process.env.REACT_APP_API_URL;
     const [category, setCategory] = useState({
-        custom_attributes:[]
+        name:'',
+        custom_attributes: [],
+        custom:{
+            image:'',
+            desc:''
+        }
     })
     const [catId, setCatId] = useState('52')
 
@@ -16,18 +23,37 @@ function CategoryBanner(props) {
 
     const getData = async () => {
         let result: any = await getCategoryDetails(props.languages, catId);
-        // console.log(result);
+       
         if (result) {
+            let obj:any = {};
+            result.data.custom_attributes.forEach(el => {
+                if(el.attribute_code == "image") {
+                    obj.image = baseUrl+el.value;
+                }else if(el.attribute_code == "description"){
+                    obj.desc = el.value;
+                } 
+                result.data.custom = obj;
+            });
             setCategory(result.data);
         }
     }
 
     return (
         <>
-            <div>
-                <img src={category.custom_attributes[1]?.value} alt="" />
-                {category.custom_attributes[0] ? <div dangerouslySetInnerHTML={{ __html: category.custom_attributes[0].value }} /> : ''}
-            </div>
+            <section className="DC-top-banner">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12 position-relative">
+                            <img src={category.custom.image} alt="" />
+                            <div className="DC-top-ban-inner">
+                                <h2>{category.name}</h2>
+                                <div dangerouslySetInnerHTML={{ __html: category.custom.desc }} />
+                                <Link to={"category/"+catId} className="ban-btn">Check all designers</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </>
     )
 }

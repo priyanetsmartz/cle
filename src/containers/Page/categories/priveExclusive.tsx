@@ -12,6 +12,7 @@ const { addToCart, productList } = cartAction;
 
 
 function PriveExclusive(props) {
+    let image = '', thumbnail = '';
     const [catId, setCatId] = useState(52);
     const [products, setProducts] = useState({
         items: []
@@ -31,8 +32,13 @@ function PriveExclusive(props) {
 
     const getData = async () => {
         let result: any = await getPriveExclusiveProducts(catId);
-        // console.log(result.data.items);
+        console.log(result.data);
         if (result) {
+            result.data.items.forEach(el => {
+                if(el.attribute_code == 'image'){
+
+                }
+            })
             setProducts(result.data);
         }
     }
@@ -68,10 +74,22 @@ function PriveExclusive(props) {
                                         return (
                                             <div className="carousel-item" key={i}>
                                                 <div className="row">
-                                                    <div className="col-md-6 product-dummy"><img src={item.custom_attributes[1]?.value} alt="" /></div>
+                                                    <div className="col-md-6 product-dummy">
+                                                        {
+                                                            item.custom_attributes.map((attributes) => {
+                                                                if (attributes.attribute_code === 'image') {
+                                                                    image = attributes.value;
+                                                                }
+                                                                if (attributes.attribute_code === 'thumbnail') {
+                                                                    thumbnail = attributes.value;
+                                                                }
+                                                            })
+                                                        }
+                                                        <img src={image} alt="" />
+                                                    </div>
                                                     <div className="col-md-6">
                                                         <div className="product-details-new">
-                                                            <img src="images/elvibswh.png" alt="" />
+                                                            <img src={thumbnail} alt="" />
                                                             <h4>{item.name}</h4>
                                                             <p></p>
                                                             <div className="pro-price-btn">${formatprice(item.price)}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a></div>
