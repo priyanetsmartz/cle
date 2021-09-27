@@ -6,7 +6,7 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode } from '../../../../redux/cart/productApi';
-import { getCustomerDetails, saveCustomerDetails, getCountriesList } from '../../../../redux/pages/customers';
+import { getCustomerDetails, saveCustomerDetails, getCountriesList, getRegionsByCountryID  } from '../../../../redux/pages/customers';
 function Checkout(props) {
     const [itemsVal, SetItems] = useState({
         checkData: {}, items: {}, address: {}
@@ -18,6 +18,7 @@ function Checkout(props) {
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [addNewAddressModal, setAddNewAddressModal] = useState(false);
     const [errorPromo, setErrorPromo] = useState('');
+    const [regions, setRegions] = useState([]); // for regions dropdown
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: custId,
@@ -27,6 +28,7 @@ function Checkout(props) {
         postcode: "",
         city: "",
         country_id: "",
+        region_id:"",
         street: ""
     });
 
@@ -103,15 +105,30 @@ function Checkout(props) {
 
     const handleAddChange = (e) => {
         const { id, value } = e.target;
-        console.log(e.target.value)
         setCustAddForm(prevState => ({
             ...prevState,
             [id]: value
         }))
     }
 
+    const handleCountryChange= async (e) => {
+        const { id, value } = e.target;
+        setCustAddForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }));
+
+        const res:any = await getRegionsByCountryID(value);
+        if(res.data.available_regions){
+            setRegions(res.data.available_regions);
+        }
+        console.log(res.data.available_regions);
+
+    }
+
     // for customer address popup window starts here
     const saveCustAddress = async () => {
+        console.log(custAddForm)
         if (validateAddress()) {
             let obj: any = { ...custAddForm };
             obj.street = [obj.street];
@@ -130,6 +147,7 @@ function Checkout(props) {
                     postcode: "",
                     city: "",
                     country_id: "",
+                    region_id:"",
                     street: ""
                 });
                 toggleAddressModal();
@@ -696,13 +714,24 @@ function Checkout(props) {
                             </div>
                             <div className="width-100 mb-3 form-field">
                                 <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-                                <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
+                                <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
                                     {countries && countries.map(opt => {
                                         return (<option key={opt.id} value={opt.id} >{opt.full_name_english? opt.full_name_english:opt.id}</option>);
                                     })}
                                 </select>
                                 <span className="error">{errors.errors["country_id"]}</span>
                             </div>
+                            {regions.length > 0 && <div className="width-100 mb-3 form-field">
+                                <label className="form-label">
+                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
+                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                    {regions && regions.map(opt => {
+                                        return (<option key={opt.id} value={opt.id} >
+                                            {opt.name}</option>);
+                                    })}
+                                </select>
+                                <span className="error">{errors.errors["region_id"]}</span>
+                            </div>}
                             <div className="width-100 mb-3 form-field">
                                 <div className="Frgt_paswd">
                                     <div className="confirm-btn">

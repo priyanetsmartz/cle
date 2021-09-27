@@ -4,7 +4,7 @@ import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
 import {
     getCustomerDetails, saveCustomerDetails, getCountriesList, changePassword,
-    updateCustEmail, deleteAddress, getPreference
+    updateCustEmail, deleteAddress, getPreference, getRegionsByCountryID
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
@@ -35,6 +35,7 @@ function MyProfile(props) {
     })
 
     const [countries, setCountries] = useState([]); // for countries dropdown
+    const [regions, setRegions] = useState([]); // for regions dropdown
     const [telephone, setTelephone] = useState("");
     const [dob, setDob] = useState({
         day: '',
@@ -53,7 +54,7 @@ function MyProfile(props) {
         addresses: [],
         custom_attributes:[]
     });
-
+    
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: custId,
@@ -63,6 +64,7 @@ function MyProfile(props) {
         postcode: "",
         city: "",
         country_id: "",
+        region_id:"",
         street: ""
     });
     const [addIndex, setAddIndex] = useState(null);
@@ -169,6 +171,7 @@ function MyProfile(props) {
                     postcode: "",
                     city: "",
                     country_id: "",
+                    region_id:"",
                     street: ""
                 });
                 notification("success", "", "Customer Address Updated");
@@ -242,6 +245,21 @@ function MyProfile(props) {
             ...prevState,
             [id]: value
         }))
+    }
+
+    const handleCountryChange= async (e) => {
+        const { id, value } = e.target;
+        setCustAddForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }));
+
+        const res:any = await getRegionsByCountryID(value);
+        if(res.data.available_regions){
+            setRegions(res.data.available_regions);
+        }
+        console.log(res.data.available_regions);
+
     }
 
     //change password starts here----------------------------------------->
@@ -1037,13 +1055,24 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-                            <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
+                            <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
                                 {countries && countries.map(opt => {
                                     return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
                                 })}
                             </select>
                             <span className="error">{errors.errors["country_id"]}</span>
                         </div>
+                        {regions.length > 0 && <div className="width-100 mb-3 form-field">
+                                <label className="form-label">
+                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
+                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                    {regions && regions.map(opt => {
+                                        return (<option key={opt.id} value={opt.id} >
+                                            {opt.name}</option>);
+                                    })}
+                                </select>
+                                <span className="error">{errors.errors["region_id"]}</span>
+                            </div>}
                         <div className="width-100 mb-3 form-field">
                             <div className="Frgt_paswd">
                                 <div className="confirm-btn">

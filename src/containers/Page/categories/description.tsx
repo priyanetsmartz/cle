@@ -1,7 +1,38 @@
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
-
+import { getCategoryDetails } from '../../../redux/pages/customers';
+import { Link } from "react-router-dom";
 
 function Description(props) {
+    const baseUrl = process.env.REACT_APP_API_URL;
+    const [category, setCategory] = useState({
+        name:'',
+        custom_attributes: [],
+        custom:{
+            desc:''
+        }
+    })
+    const [catId, setCatId] = useState('52')
+
+    useEffect(() => {
+        getData();
+    }, [props.languages]);
+
+    const getData = async () => {
+        let result: any = await getCategoryDetails(props.languages, catId);
+       
+        if (result) {
+            let obj:any = {};
+            result.data.custom_attributes.forEach(el => {
+                if(el.attribute_code == "bottom_description") {
+                    obj.desc = el.value;
+                } 
+                result.data.custom = obj;
+            });
+            setCategory(result.data);
+        }
+    }
 
     return (
         <section className="cle-designer-info">
