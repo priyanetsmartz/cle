@@ -18,7 +18,9 @@ function MyProfile(props) {
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [attributes, setAttributes]: any = useState({});
-    const [customerPrefer, etCustomerPrefer]: any = useState({});
+    const [customerPrefer, setCustomerPrefer]: any = useState({
+        interestedIn:''
+    });
     const [myDetailsModel, setMyDetailsModel] = useState(false);
     const [myPreferenceModel, setMyPreferenceModel] = useState(false);
     const [myAddressModal, setMyAddressModal] = useState(false);
@@ -90,7 +92,6 @@ function MyProfile(props) {
             }
         }
         getData();
-        
         getCountries();
     }, []);
 
@@ -98,20 +99,25 @@ function MyProfile(props) {
         let lang = props.languages ? props.languages : language;
         let result: any = await getPreference(lang);
         setAttributes(result);
-        // if (result.data[0].preference) {
-        //     custData.custom_attributes.forEach(el => {
-        //         if (el.attribute_code == 'mostly_intersted_in') {
-        //             result.data[0].preference.mostly_intersted.forEach(intested => {
-        //                 el.value.split(',').forEach(element => {
-        //                     if (intested.id == element) {
-        //                         customerPrefer.interestedIn.push(intested.name)
-        //                     }
-        //                 });
-        //             })
-        //         }
-        //     });
-        // }
+        if (result.data[0].preference) {
+            custData.custom_attributes.forEach(el => {
+                if (el.attribute_code == 'mostly_intersted_in') {
+                    result.data[0].preference.mostly_intersted.forEach(intested => {
+                        el.value.split(',').forEach(element => {
+                            if (intested.id == element) {
+                                if(customerPrefer.interestedIn == ''){
+                                    customerPrefer.interestedIn = intested.name
+                                }else{
+                                    customerPrefer.interestedIn = `${customerPrefer.interestedIn},${intested.name}`;
+                                }
+                            }
+                        });
+                    })
+                }
+            });
+        }
 
+        setCustomerPrefer(customerPrefer);
         console.log(customerPrefer);
     }
 
@@ -365,6 +371,7 @@ function MyProfile(props) {
     }
 
     const openMyPreferences = () => {
+        getAttributes(custForm);
         setMyPreferenceModel(!myPreferenceModel);
     }
 
@@ -471,7 +478,7 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.mostlyInterested" /></label>
                                         <div className="field-name">
-                                            
+                                            {customerPrefer.interestedIn}
                                         </div>
                                     </div>
                                     <div className="field_details">

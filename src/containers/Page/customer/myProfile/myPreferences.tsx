@@ -150,13 +150,14 @@ function MyPreferences(props) {
     }
 
     const filterCategories = (e) => {
-        console.log(e.target.value)
+        console.log(attributesAll)
         setCatFilter(e.target.value)
-        let bigCities = attributesAll.categories[1].filter(eq => {
+        let newObj  = {...attributesAll}
+        let filterd = newObj.categories[1].filter(eq => {
             return eq.name.toLowerCase().includes(e.target.value.toLowerCase());
         });
 
-        attributes.categories[1] = bigCities;
+        attributes.categories[1] = filterd;
 
         setAttributes(prevState => ({
             ...prevState,
