@@ -19,6 +19,7 @@ function CartItemPage(props) {
     const [qty, setQty] = useState(0);
     const [prodId, setProdId] = useState('');
     const [cartItemsVal, setCartItems] = useState({});
+    const [opacity, setOpacity] = useState(1);
     const [cartTotals, setCartTotal] = useState({});
     const [cartRelevants, setCartRelevants] = useState({});
     const [isGiftMessage, setIsGiftMessage] = useState(false);
@@ -47,6 +48,7 @@ function CartItemPage(props) {
         }
     }, [props.giftCart.Cart]);
     const callGetCartItems = async () => {
+        setOpacity(0.3);
         let cartData = [], cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
@@ -89,6 +91,7 @@ function CartItemPage(props) {
             setCartRelevants(cartRelevant);
             setCartItems(cartValues)
             setCartTotal(cartPrices);
+            setOpacity(1);
         }
     }
 
@@ -211,7 +214,7 @@ function CartItemPage(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8">
-                            <div className="my-cart-left-sec">
+                            <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                 <h2><IntlMessages id="cart.Title" /></h2>
                                 <div className="save-cart-btns">
                                     <Link to="#"><IntlMessages id="cart.saveCart" /></Link>

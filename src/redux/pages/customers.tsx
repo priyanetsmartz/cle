@@ -10,6 +10,10 @@ export function getCountriesList() {
     return AdminApi.request(`rest/all/V1/directory/countries`, "", "GET", "");
 }
 
+export function getRegionsByCountryID(countryId: string) {
+    return AdminApi.request(`rest/all/V1/directory/countries/${countryId}`, "", "GET", "");
+}
+
 export function getCustomerDetails(custId) {
     return adminToken.request(`rest/V1/customers/${custId}`, "", "GET", "");
 }

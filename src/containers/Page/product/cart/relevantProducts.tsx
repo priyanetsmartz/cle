@@ -43,7 +43,7 @@ function RelevantProducts(props) {
     }
     return (
         <>
-            {(relevs && relevs.length) && (
+            {(relevs && relevs.length)? (
                 <div className="also-like ">
                     <h2><IntlMessages id="youMayLike" /> </h2>
                     <div className="releveant-slider" >
@@ -64,7 +64,7 @@ function RelevantProducts(props) {
                         </Slider>
                     </div>
                 </div>
-            )}
+            ):""}
         </>
     )
 }

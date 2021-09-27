@@ -103,6 +103,7 @@ function Checkout(props) {
 
     const handleAddChange = (e) => {
         const { id, value } = e.target;
+        console.log(e.target.value)
         setCustAddForm(prevState => ({
             ...prevState,
             [id]: value
@@ -299,7 +300,10 @@ function Checkout(props) {
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
                                             <label><IntlMessages id="profile.email" /></label>
-                                            <p>{localStorage.getItem('token_email') ? localStorage.getItem('token_email') : ""}</p>
+                                            <p>{localStorage.getItem('token_email') ?
+                                                localStorage.getItem('token_email') :
+                                                <input type="email" className="form-control" id="emailAddress" />}</p>
+
                                         </div>
                                     </div>
                                 </div>
@@ -694,7 +698,7 @@ function Checkout(props) {
                                 <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                                 <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
                                     {countries && countries.map(opt => {
-                                        return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                        return (<option key={opt.id} value={opt.id} >{opt.full_name_english? opt.full_name_english:opt.id}</option>);
                                     })}
                                 </select>
                                 <span className="error">{errors.errors["country_id"]}</span>
