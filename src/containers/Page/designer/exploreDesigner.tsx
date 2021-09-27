@@ -1,12 +1,26 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { getDesginers } from '../../../redux/pages/customers';
 
 
 function ExploreDesigner(props) {
+    const [catId, setCatId] = useState(153);
+    const [designers, setDesigners] = useState({
+        banners: []
+    });
 
+    useEffect(() => {
+        getData();
+    }, []);
 
-
+    const getData = async () => {
+        let result: any = await getDesginers(props.languages, catId);
+        console.log(result.data.items);
+        if (result) {
+            // setDesigners(result.data.items[0]);
+        }
+    }
     return (
         <section className="designer-alphabet-list">
             <div className="container">
@@ -119,8 +133,14 @@ function ExploreDesigner(props) {
     )
 }
 const mapStateToProps = (state) => {
+    let languages = '';
+
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+
     return {
-        items: state.Cart.items
+        languages: languages
     }
 }
 

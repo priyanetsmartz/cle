@@ -31,6 +31,8 @@ import VendorLogin from './containers/Page/business/vendorLogin';
 import DesignerCategories from './containers/Page/designer/designer';
 import Checkout from './containers/Page/product/checkout/checkout';
 import ExploreDesigner from './containers/Page/designer/exploreDesigner';
+import Faq from './containers/Page/faq/faq';
+import FaqListing from './containers/Page/faq/faqListing';
 // import New from './containers/Page/new';
 
 import Product from './containers/Page/product/product';
@@ -57,6 +59,8 @@ const PublicRoutes = ({ history }) => {
         <HomeRoute exact path="/" component={NewHome} />
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
+        <ProductRoutes exact path="/faq" component={Faq} />
+        <ProductRoutes exact path="/faq-listing" component={FaqListing} />
         {/* <PrivateRoute exact path="/customer-orders" component={CustomerOrders} /> */}
 
 
