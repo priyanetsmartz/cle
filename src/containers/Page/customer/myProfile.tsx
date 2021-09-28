@@ -11,15 +11,17 @@ import { Link } from "react-router-dom";
 import { language } from '../../../settings';
 import { spawn } from 'redux-saga/effects';
 import MyPreferences from './myProfile/myPreferences';
+import { DROPDOWN } from '../../../config/constants';
 
 
 function MyProfile(props) {
+
     const userGroup = localStorage.getItem('token');
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [attributes, setAttributes]: any = useState({});
     const [customerPrefer, setCustomerPrefer]: any = useState({
-        interestedIn:''
+        interestedIn: ''
     });
     const [myDetailsModel, setMyDetailsModel] = useState(false);
     const [myPreferenceModel, setMyPreferenceModel] = useState(false);
@@ -52,9 +54,9 @@ function MyProfile(props) {
         dob: "",
         website_id: 1,
         addresses: [],
-        custom_attributes:[]
+        custom_attributes: []
     });
-    
+
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: custId,
@@ -64,7 +66,7 @@ function MyProfile(props) {
         postcode: "",
         city: "",
         country_id: "",
-        region_id:"",
+        region_id: "",
         street: ""
     });
     const [addIndex, setAddIndex] = useState(null);
@@ -88,8 +90,13 @@ function MyProfile(props) {
     useEffect(() => {
         async function getData() {
             let result: any = await getCustomerDetails(custId);
-            if(result){
+            if (result) {
                 setCustForm(result.data);
+                const d = result.data.dob.split("-")
+                dob.day = d[2];
+                dob.month = d[1];
+                dob.year = d[0];
+                setDob(dob);
                 getAttributes(result.data);
             }
         }
@@ -107,9 +114,9 @@ function MyProfile(props) {
                     result.data[0].preference.mostly_intersted.forEach(intested => {
                         el.value.split(',').forEach(element => {
                             if (intested.id == element) {
-                                if(customerPrefer.interestedIn == ''){
+                                if (customerPrefer.interestedIn == '') {
                                     customerPrefer.interestedIn = intested.name
-                                }else{
+                                } else {
                                     customerPrefer.interestedIn = `${customerPrefer.interestedIn},${intested.name}`;
                                 }
                             }
@@ -171,7 +178,7 @@ function MyProfile(props) {
                     postcode: "",
                     city: "",
                     country_id: "",
-                    region_id:"",
+                    region_id: "",
                     street: ""
                 });
                 notification("success", "", "Customer Address Updated");
@@ -247,15 +254,15 @@ function MyProfile(props) {
         }))
     }
 
-    const handleCountryChange= async (e) => {
+    const handleCountryChange = async (e) => {
         const { id, value } = e.target;
         setCustAddForm(prevState => ({
             ...prevState,
             [id]: value
         }));
 
-        const res:any = await getRegionsByCountryID(value);
-        if(res.data.available_regions){
+        const res: any = await getRegionsByCountryID(value);
+        if (res.data.available_regions) {
             setRegions(res.data.available_regions);
         }
         console.log(res.data.available_regions);
@@ -451,7 +458,11 @@ function MyProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
-                                        <div className="field-name">{custForm.gender}</div>
+                                        <div className="field-name">
+                                            {DROPDOWN.gender.map(el => {
+                                                return el.id == custForm.gender ? (<span>{el.name}</span>) : null
+                                            })}
+                                        </div>
                                     </div>
                                     {/* <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
@@ -614,7 +625,7 @@ function MyProfile(props) {
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        <div className={`addnew_address ${isPriveUser ? 'prive-bg': ''}`} onClick={openAddressModal}>
+                        <div className={`addnew_address ${isPriveUser ? 'prive-bg' : ''}`} onClick={openAddressModal}>
                             <div className="addressnew_addressblue">
                                 <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
                             </div>
@@ -634,7 +645,7 @@ function MyProfile(props) {
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
                                 <div className="address-action">
                                     <a onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
-                                    <a className={`edit_btn ${isPriveUser ? 'prive-txt': ''}`} onClick={() => editAddress(i)}>
+                                    <a className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`} onClick={() => editAddress(i)}>
                                         <IntlMessages id="myaccount.edit" />
                                     </a>
                                 </div>
@@ -655,7 +666,7 @@ function MyProfile(props) {
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        <div className={`addnew_address ${isPriveUser ? 'prive-bg': ''}`} onClick={openPaymentMethodModal}>
+                        <div className={`addnew_address ${isPriveUser ? 'prive-bg' : ''}`} onClick={openPaymentMethodModal}>
                             <div className="addressnew_addressblue">
                                 <span> <IntlMessages id="myaccount.addNewPayment" /> </span>
                             </div>
@@ -671,7 +682,7 @@ function MyProfile(props) {
                             <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action bank_card">
                                 <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt': ''}`}><IntlMessages id="myaccount.edit" /></Link>
+                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`}><IntlMessages id="myaccount.edit" /></Link>
                             </div>
                         </div>
                         <div className="addressnew_addressbodr">
@@ -683,7 +694,7 @@ function MyProfile(props) {
                             <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action paypal_card">
                                 <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt': ''}`}><IntlMessages id="myaccount.edit" /></Link>
+                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`}><IntlMessages id="myaccount.edit" /></Link>
                             </div>
                         </div>
                     </div>
@@ -886,19 +897,19 @@ function MyProfile(props) {
                     <div className="row">
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg': ''}`}>
+                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg' : ''}`}>
                                     <IntlMessages id="myaccount.myOrdersReturns" /></Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg': ''}`}>
+                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg' : ''}`}>
                                     <IntlMessages id="myaccount.orderDetails" /></Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <button type="button" className={`btn btn-secondary ${isPriveUser ? 'prive-bg': ''}`}><IntlMessages id="myaccount.returnDetails" /></button>
+                                <button type="button" className={`btn btn-secondary ${isPriveUser ? 'prive-bg' : ''}`}><IntlMessages id="myaccount.returnDetails" /></button>
                             </div>
                         </div>
                     </div>
@@ -928,9 +939,15 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Gender</label>
-                            <input type="text" className="form-control" placeholder="Woman" id="gender"
+                            {/* <input type="text" className="form-control" placeholder="Woman" id="gender"
                                 value={custForm.gender}
-                                onChange={handleChange} />
+                                onChange={handleChange} /> */}
+                            <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
+                                <option value="">Select</option>
+                                {DROPDOWN.gender.map(opt => {
+                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                })}
+                            </select>
                             <span className="error">{errors.errors["gender"]}</span>
                         </div>
                         {/* <div className="width-100 mb-3 form-field">
@@ -944,23 +961,24 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
-                                <select className="form-select me-3" aria-label="Default select example" onChange={dobHandler} id="day">
+                                <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">Select</option>
-                                    <option value="01">01</option>
-                                    <option value="02">02</option>
-                                    <option value="03">03</option>
+                                    {DROPDOWN.dates.map(opt => {
+                                        return (<option value={opt} key={opt}>{opt}</option>);
+                                    })}
+
                                 </select>
-                                <select className="form-select me-3" aria-label="Default select example" onChange={dobHandler} id="month">
+                                <select className="form-select me-3" value={dob.month} aria-label="Default select example" onChange={dobHandler} id="month">
                                     <option value="">Select</option>
-                                    <option value="05">May</option>
-                                    <option value="06">June</option>
-                                    <option value="07">July</option>
+                                    {DROPDOWN.months.map(opt => {
+                                        return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                    })}
                                 </select>
-                                <select className="form-select" aria-label="Default select example" onChange={dobHandler} id="year">
+                                <select className="form-select" value={dob.year} aria-label="Default select example" onChange={dobHandler} id="year">
                                     <option value="">Select</option>
-                                    <option value="1990">1990</option>
-                                    <option value="1991">1991</option>
-                                    <option value="1993">1993</option>
+                                    {DROPDOWN.years.map(opt => {
+                                        return (<option value={opt} key={opt}>{opt}</option>);
+                                    })}
                                 </select>
                             </div>
                         </div>
@@ -989,7 +1007,7 @@ function MyProfile(props) {
                 <div className="CLE_pf_details">
                     <h1>My Preferences</h1>
                     <a onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></a>
-                    <MyPreferences custData={custForm} preferences={attributes}/>
+                    <MyPreferences custData={custForm} preferences={attributes} />
                 </div>
             </Modal>
 
@@ -1063,16 +1081,16 @@ function MyProfile(props) {
                             <span className="error">{errors.errors["country_id"]}</span>
                         </div>
                         {regions.length > 0 && <div className="width-100 mb-3 form-field">
-                                <label className="form-label">
-                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
-                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-                                    {regions && regions.map(opt => {
-                                        return (<option key={opt.id} value={opt.id} >
-                                            {opt.name}</option>);
-                                    })}
-                                </select>
-                                <span className="error">{errors.errors["region_id"]}</span>
-                            </div>}
+                            <label className="form-label">
+                                <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
+                            <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                {regions && regions.map(opt => {
+                                    return (<option key={opt.id} value={opt.id} >
+                                        {opt.name}</option>);
+                                })}
+                            </select>
+                            <span className="error">{errors.errors["region_id"]}</span>
+                        </div>}
                         <div className="width-100 mb-3 form-field">
                             <div className="Frgt_paswd">
                                 <div className="confirm-btn">
