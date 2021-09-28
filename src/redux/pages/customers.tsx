@@ -14,7 +14,8 @@ export function getRegionsByCountryID(countryId: string) {
     return AdminApi.request(`rest/all/V1/directory/countries/${countryId}`, "", "GET", "");
 }
 
-export function getCustomerDetails(custId) {
+export function getCustomerDetails() {
+    const custId = localStorage.getItem('cust_id');
     return adminToken.request(`rest/V1/customers/${custId}`, "", "GET", "");
 }
 
@@ -50,7 +51,7 @@ export function savePreference(data) {
 }
 
 export function getCustomerOrders() {
-    const custId = localStorage.getItem('cust_id');;
+    const custId = localStorage.getItem('cust_id');
     return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
 }
 
