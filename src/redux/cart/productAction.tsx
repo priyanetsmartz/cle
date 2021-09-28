@@ -10,6 +10,8 @@ const actions = {
     ADD_TO_CART_TASK: 'ADD_TO_CART_TASK',
     OPEN_GIFT_BOX: 'OPEN_GIFT_BOX',
     ADD_TO_WISHLIST_TASK: 'ADD_TO_WISHLIST_TASK',
+    ACCOUNT_SECTION:'ACCOUNT_SECTION',
+    MINICART_SECTION:'MINICART_SECTION',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -49,6 +51,14 @@ const actions = {
     openGiftBoxes: isOpen => ({
         type: actions.OPEN_GIFT_BOX,
         isOpen: isOpen
+    }),
+    accountPopup : isShow =>({
+        type: actions.ACCOUNT_SECTION,
+        isShow:isShow
+    }),
+    miniCartPopup : isShow =>({
+        type: actions.MINICART_SECTION,
+        isShow:isShow
     })
 
 };

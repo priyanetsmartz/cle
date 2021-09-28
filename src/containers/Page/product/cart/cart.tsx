@@ -35,12 +35,14 @@ function CartItemPage(props) {
         }
         return () => {
             props.addToCartTask(false);
+            props.openGiftBoxes(0);
         }
     }, [props.cart])
 
     useEffect(() => {
-        //  console.log(props.items.Cart);
+        // console.log(props.items.Cart);
         let giftBox = props.giftCart.Cart.openGiftBox === 0 ? false : true;
+       // console.log(giftBox)
         setIsGiftMessage(giftBox)
         return () => {
             // componentwillunmount in functional component.
@@ -206,6 +208,7 @@ function CartItemPage(props) {
         setIsGiftMessage(true)
     }
     const hideGiftModalModal = () => {
+        props.openGiftBoxes(0);
         setIsGiftMessage(false)
     }
     return (

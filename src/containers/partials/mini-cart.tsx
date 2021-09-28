@@ -5,7 +5,7 @@ import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../
 import { connect } from 'react-redux';
 import cartAction from "../../redux/cart/productAction";
 import IntlMessages from "../../components/utility/intlMessages";
-const { addToCartTask } = cartAction;
+const { addToCartTask, accountPopup, miniCartPopup } = cartAction;
 function MiniCart(props) {
 
     const [showCart, SetShowCart] = useState(false);
@@ -20,6 +20,7 @@ function MiniCart(props) {
 
         return () => {
             props.addToCartTask(false);
+            props.miniCartPopup(false)
         }
     }, [props.items])
 
@@ -47,22 +48,22 @@ function MiniCart(props) {
 
         let cartValues = {};
         cartValues['items'] = cartData;
-       // console.log(cartValues);
+        // console.log(cartValues);
         setCartItems(cartValues)
         setCartTotal(total);
 
     }
     const showCartFxn = () => {
-        //console.log('here')
-        SetShowCart(true)
+        props.accountPopup(false)
+        props.miniCartPopup(true)
     }
     const hideCart = () => {
         // console.log('close')
-        SetShowCart(false)
+        props.miniCartPopup(false)
     }
     return (
         <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">({cartItemsVal && cartItemsVal['items'] ? cartItemsVal['items'].length : 0})</span></Link>
-            <div className="miniaccount_details" style={{ "display": !showCart ? "none" : "block" }}>
+            <div className="miniaccount_details" style={{ "display": !props.showMiniCart ? "none" : "block" }}>
                 <div className="cart_your"><IntlMessages id="yourcart" /></div>
                 <Link to="#" className="cross_icn" onClick={() => { hideCart() }} > <i className="fas fa-times"></i></Link>
                 <ul>
@@ -103,13 +104,14 @@ function MiniCart(props) {
 
 
 const mapStateToProps = (state) => {
-//    / console.log(state);
+   // console.log(state);
     return {
-        items: state.Cart.addToCartTask
+        items: state.Cart.addToCartTask,
+        showMiniCart: state.Cart.openMiniCartPop
     }
 }
 
 export default connect(
     mapStateToProps,
-    { addToCartTask }
+    { addToCartTask, accountPopup, miniCartPopup }
 )(MiniCart);

@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
+import cartAction from "../../redux/cart/productAction";
 import IntlMessages from "../../components/utility/intlMessages";
 // import AppBreadcrumbs from './breadCrumbs';
 import Breadcrumbs from './locationBreadcrumbs';
@@ -19,6 +20,7 @@ import MiniCart from './mini-cart';
 
 const { logout } = authAction;
 const { showSignin, openSignUp } = appAction;
+const { accountPopup, miniCartPopup } = cartAction;
 function HeaderMenu(props) {
     let history = useHistory();
     let customer_id = localStorage.getItem('cust_id');
@@ -28,7 +30,6 @@ function HeaderMenu(props) {
     const [menuData, SetMenuData] = useState([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
     const [activeCat, SetActiveCat] = useState('')
     const [activeOne, SetActiveOne] = useState('');
-    const [showAccount, SetShowAccount] = useState(false);
 
 
     setTimeout(() => {
@@ -48,16 +49,18 @@ function HeaderMenu(props) {
         }
         fetchMyAPI()
         return () => {
+            props.accountPopup(false)
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
     }, [props.languages, category])
 
     const showAccountFxn = () => {
-        SetShowAccount(true)
+        props.accountPopup(true)
+        props.miniCartPopup(false)
     }
     const hideAccountFxn = () => {
-        SetShowAccount(false)
+        props.accountPopup(false)
     }
 
     const setMenu = (urlKey) => {
@@ -145,13 +148,12 @@ function HeaderMenu(props) {
                                     <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li>
                                     <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }}  ><img src={avatar} alt="user" /> </Link>
 
-                                        <div className="myaccount_details" style={{ "display": !showAccount ? "none" : "block" }}>
+                                        <div className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
                                             <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
                                             <ul>
                                                 <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li>
                                                 <li><Link to="/customer/dashboard"><IntlMessages id="dashboard" /> </Link></li>
                                                 <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
-                                                {/* <li><Link to="/customer/mytrades">My trades </Link></li> */}
                                                 <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
                                                 <li><Link to="/customer/support"><IntlMessages id="myspport" /></Link> </li>
                                             </ul>
@@ -226,13 +228,15 @@ function HeaderMenu(props) {
 }
 
 const mapStateToProps = (state) => {
+    //console.log(state)
     return {
         items: state.Cart.items,
-        languages: state.LanguageSwitcher.language
+        languages: state.LanguageSwitcher.language,
+        openAccountPop: state.Cart.openAccountPop
     }
 }
 
 export default connect(
     mapStateToProps,
-    { logout, showSignin, openSignUp }
+    { logout, showSignin, openSignUp, accountPopup, miniCartPopup }
 )(HeaderMenu);
