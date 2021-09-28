@@ -90,7 +90,7 @@ function Checkout(props) {
 
     //customer address functinonality start here
     const getCutomerDetails = async () => {
-        let result: any = await getCustomerDetails(custId);
+        let result: any = await getCustomerDetails();
         setCustForm(result.data);
     }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
@@ -9,7 +9,6 @@ import {
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { language } from '../../../settings';
-import { spawn } from 'redux-saga/effects';
 import MyPreferences from './myProfile/myPreferences';
 import { DROPDOWN } from '../../../config/constants';
 
@@ -89,7 +88,7 @@ function MyProfile(props) {
 
     useEffect(() => {
         async function getData() {
-            let result: any = await getCustomerDetails(custId);
+            let result: any = await getCustomerDetails();
             if (result) {
                 setCustForm(result.data);
                 const d = result.data.dob.split("-")
@@ -97,37 +96,104 @@ function MyProfile(props) {
                 dob.month = d[1];
                 dob.year = d[0];
                 setDob(dob);
-                getAttributes(result.data);
+                getAttributes();
             }
         }
         getData();
         getCountries();
+        return () => {
+            //
+        }
     }, []);
 
-    const getAttributes = async (custData) => {
+    async function getData() {
+        let lang = props.languages ? props.languages : language;
+        // to get cutomer preferences
+        let result: any = await getCustomerDetails();
+        let custom_attributes = result.data.custom_attributes;
+
+        let clothing_size = 0, shoes_size = 0, mostly_intersted_in = 0, favourite_categories = [], favourite_designers = [];
+        let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [];
+
+        // match keys and extract values//
+        custom_attributes.map((attributes) => {
+            if (attributes.attribute_code === "clothing_size") {
+                clothing_size = attributes.value;
+            }
+            if (attributes.attribute_code === "shoes_size") {
+                shoes_size = attributes.value;
+            }
+            if (attributes.attribute_code === "mostly_intersted_in") {
+                mostly_intersted_in = attributes.value;
+            }
+            if (attributes.attribute_code === "favourite_categories") {
+                let favs = attributes.value
+                favourite_categories = favs.split(",");
+            }
+            if (attributes.attribute_code === "favourite_designers") {
+                let favDesigns = attributes.value
+                favourite_designers = favDesigns.split(",");
+            }
+        })
+
+        // to get all the preferences list
+        let preference: any = await getPreference(lang);
+        setAttributes(preference);
+        mostly_intersted_inArray = preference.data[0].preference.mostly_intersted;
+        shoes_size_inArray = preference.data[0].preference.shoes_size;
+        clothing_size_inArray = preference.data[0].preference.clothing_size;
+        categories_array = preference.data[0].preference.categories;
+        designer_array = preference.data[0].preference.designers;
+        console.log(categories_array)
+        let intersted_in = mostly_intersted_inArray.filter((eq) => {
+            return eq.id === mostly_intersted_in;
+        });
+        let shoes_sizeData = shoes_size_inArray.filter((eq) => {
+            return eq.value === shoes_size;
+        });
+        let clothing_sizeData = clothing_size_inArray.filter((eq) => {
+            return eq.value === clothing_size;
+        });
+        // console.log(preference.data[0].preference)
+
+        if (intersted_in[0].name === "kid") {
+            catToShow = categories_array[2];
+        } else if (intersted_in[0].name === "women") {
+            catToShow = categories_array[1];
+        } else {
+            catToShow = categories_array[0];
+        }
+        var favCategoryArray = catToShow.filter(function (o1) {
+            return favourite_categories.some(function (o2) {
+                return o1.id === o2; // return the ones with equal id
+            });
+        });
+
+        var favDesignerArray = designer_array[0].filter(function (o1) {
+            return favourite_designers.some(function (o2) {
+                return o1.id === o2; // return the ones with equal id
+            });
+        });
+
+        setCustomerPrefer(prevState => ({
+            ...prevState,
+            interestedIn: intersted_in[0].name,
+            shoes_size: shoes_sizeData[0].label,
+            clothing_size: clothing_sizeData[0].label,
+            favCat: favCategoryArray,
+            favDesigner: favDesignerArray
+        }));
+
+
+        if (result) {
+            setCustForm(result.data);
+            //  getAttributes(result.data);
+        }
+    }
+    const getAttributes = async () => {
         let lang = props.languages ? props.languages : language;
         let result: any = await getPreference(lang);
         setAttributes(result);
-        if (result.data[0].preference) {
-            custData.custom_attributes.forEach(el => {
-                if (el.attribute_code == 'mostly_intersted_in') {
-                    result.data[0].preference.mostly_intersted.forEach(intested => {
-                        el.value.split(',').forEach(element => {
-                            if (intested.id == element) {
-                                if (customerPrefer.interestedIn == '') {
-                                    customerPrefer.interestedIn = intested.name
-                                } else {
-                                    customerPrefer.interestedIn = `${customerPrefer.interestedIn},${intested.name}`;
-                                }
-                            }
-                        });
-                    })
-                }
-            });
-        }
-
-        setCustomerPrefer(customerPrefer);
-        console.log(customerPrefer);
     }
 
     const getCountries = async () => {
@@ -145,7 +211,7 @@ function MyProfile(props) {
 
     const saveCustDetails = async (e) => {
         e.preventDefault();
-        if (dob.day != '' && dob.month != '' && dob.year != '') {
+        if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
             custForm.dob = `${dob.day}/${dob.month}/${dob.year}`;
         }
         let result: any = await saveCustomerDetails(custId, { customer: custForm });
@@ -160,7 +226,7 @@ function MyProfile(props) {
         if (validateAddress()) {
             let obj: any = { ...custAddForm };
             obj.street = [obj.street];
-            if (obj.id == 0) {
+            if (obj.id === 0) {
                 custForm.addresses.push(obj);
             } else {
                 custForm.addresses[addIndex] = obj;
@@ -396,7 +462,7 @@ function MyProfile(props) {
     }
 
     const openMyPreferences = () => {
-        getAttributes(custForm);
+        getAttributes();
         setMyPreferenceModel(!myPreferenceModel);
     }
 
@@ -513,11 +579,7 @@ function MyProfile(props) {
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.clothingSize" /></label>
                                         <div className="field-name">
-                                            {/* {Object.values(attributes.clothing_size).map((s, j) => {
-                                                return (
-                                                    <span key={j}>{s}/</span>
-                                                )
-                                            })} */}
+                                            {customerPrefer.clothing_size}
                                         </div>
                                     </div>
                                 </div>
@@ -525,21 +587,17 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.shoeSize" /></label>
                                         <div className="field-name">
-                                            {/* {Object.values(attributes.clothing_size).map((s,k) => {
-                                                return (
-                                                    <span key={k}>/{s}</span>
-                                                )
-                                            })} */}
+                                            {customerPrefer.shoes_size}
                                         </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteDesigners" /></label>
                                         <div className="field-name">
-                                            {/* {Object.values(attributes.favourite_designers).map((d, l) => {
-                                                return (
-                                                    <span key={l}>{d},</span>
-                                                )
-                                            })} */}
+                                            {
+                                                customerPrefer.favDesigner.map((favs, i) => {
+                                                    return (<span key={i}>{favs.name}, </span>)
+                                                })
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -547,11 +605,11 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteCategories" /></label>
                                         <div className="field-name">
-                                            {/* {Object.values(attributes.favourite_designers).map((type, m) => {
-                                                return (
-                                                    <span key={m}>{type},</span>
-                                                )
-                                            })} */}
+                                            {
+                                                customerPrefer.favCat.map((favs, i) => {
+                                                    return (<span key={favs.id} >{favs.name}, </span>)
+                                                })
+                                            }
                                         </div>
                                     </div>
                                     <div className="field_details">
@@ -644,10 +702,10 @@ function MyProfile(props) {
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
                                 <div className="address-action">
-                                    <a onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></a>
-                                    <a className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`} onClick={() => editAddress(i)}>
+                                    <Link to="#" onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
+                                    <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`} onClick={() => editAddress(i)}>
                                         <IntlMessages id="myaccount.edit" />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>);
                         })}
@@ -920,7 +978,7 @@ function MyProfile(props) {
             <Modal show={myDetailsModel} >
                 <div className="CLE_pf_details">
                     <h1>My Details</h1>
-                    <a onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <Link to="#" onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Frist name<span className="maindatory">*</span></label>
@@ -1004,18 +1062,20 @@ function MyProfile(props) {
 
             {/* my preference details modal */}
             <Modal show={myPreferenceModel} size="lg">
-                <div className="CLE_pf_details">
-                    <h1>My Preferences</h1>
-                    <a onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></a>
-                    <MyPreferences custData={custForm} preferences={attributes} />
-                </div>
+                <Modal.Header>
+                    <div className="CLE_pf_details">
+                        <h1>My Preferences</h1>
+                        <Link to="#" onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                        <MyPreferences custData={custForm} preferences={attributes} />
+                    </div>
+                </Modal.Header>
             </Modal>
 
             {/* my details modal */}
             <Modal show={myAddressModal}>
                 <div className="CLE_pf_details">
                     <h1><IntlMessages id="myaccount.myAddress" /></h1>
-                    <a className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></a>
+                    <Link to="#" className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></Link>
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>

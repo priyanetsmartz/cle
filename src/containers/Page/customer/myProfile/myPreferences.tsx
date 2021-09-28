@@ -1,67 +1,83 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
+import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-import { getPreference, savePreference } from '../../../../redux/pages/customers';
-import { language } from '../../../../settings';
+import { savePreference } from '../../../../redux/pages/customers';
 
 
 function MyPreferences(props) {
+    let result: any = props.preferences;
+    let preference = result.data && result.data[0] ? result.data[0].preference : "";
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
-    const [attributesAll, setAttributesAll]: any = useState({});
-    const [attributes, setAttributes]: any = useState({});
+    const [attributesAll, setAttributesAll]: any = useState(preference);
+    const [attributes, setAttributes]: any = useState(preference);
     const [catFilter, setCatFilter]: any = useState('');
-    const [designFilter, setDesignFilter]: any = useState('');
-
+    const [favCat, setFavCat]: any = useState({});
 
     useEffect(() => {
-        console.log(props)
         getAttributes();
-    }, []);
-
+        return () => {
+            //
+        }
+    });
+    useEffect(() => {
+      //  console.log(favCat)
+        attributes.categories[1] = favCat;
+        setAttributes(prevState => ({
+            ...prevState,
+            categories: attributes.categories
+        }));
+    }, [favCat])
     const getAttributes = async () => {
         let result: any = props.preferences;
-        if (result.data[0].preference) {
+        let preference = result.data && result.data[0] ? result.data[0].preference : ""
+        setAttributes(preference);
+        setAttributesAll(preference);
+        if (preference && props.custData && props.custData.custom_attributes) {
             props.custData.custom_attributes.forEach(el => {
-                if (el.attribute_code == 'mostly_intersted_in') {
-                    result.data[0].preference.mostly_intersted.forEach(intested => {
+                if (el.attribute_code === 'mostly_intersted_in') {
+                    preference.mostly_intersted.forEach(intested => {
                         el.value.split(',').forEach(element => {
-                            if (intested.id == element) {
+                            if (intested.id === element) {
                                 intested.isChecked = true;
                             }
                         });
                     })
                 }
-                if (el.attribute_code == 'clothing_size') {
-                    result.data[0].preference.clothing_size.forEach(cloth => {
+                if (el.attribute_code === 'clothing_size') {
+                    preference.clothing_size.forEach(cloth => {
                         el.value.split(',').forEach(element => {
-                            if (cloth.value == element) {
+                            if (cloth.value === element) {
                                 cloth.isChecked = true;
                             }
                         });
                     })
                 }
-                if (el.attribute_code == 'shoes_size') {
-                    result.data[0].preference.shoes_size.forEach(cloth => {
+                if (el.attribute_code === 'shoes_size') {
+                    preference.shoes_size.forEach(cloth => {
                         el.value.split(',').forEach(element => {
-                            if (cloth.value == element) {
+                            if (cloth.value === element) {
                                 cloth.isChecked = true;
                             }
                         });
                     })
                 }
 
-                if (el.attribute_code == 'favourite_categories') {
-                    result.data[0].preference.categories[1].forEach(favCat => {
-                        el.value.split(',').forEach(element => {
-                            if (favCat.id == element) {
-                                favCat.isChecked = true;
-                            }
-                        });
-                    })
+                if (el.attribute_code === 'favourite_categories') {
+                    let favcategoryArray = preference.categories && preference.categories[1] ? preference.categories[1] : [];
+                    if (favcategoryArray.length > 0) {
+                        favcategoryArray.forEach(favCat => {
+                            el.value.split(',').forEach(element => {
+                                if (favCat.id === element) {
+                                    favCat.isChecked = true;
+                                }
+                            });
+                        })
+                    }
+
                 }
             });
-            setAttributes(result.data[0].preference);
-            setAttributesAll(result.data[0].preference);
+
         }
     }
 
@@ -150,21 +166,19 @@ function MyPreferences(props) {
     }
 
     const filterCategories = (e) => {
-        console.log(attributesAll)
-        setCatFilter(e.target.value)
-        let newObj  = {...attributesAll}
-        let filterd = newObj.categories[1].filter(eq => {
+        let value = e.target.value.toLowerCase();
+        let result = [];
+        let newObj = { ...attributesAll }
+        setCatFilter(value)
+        result = newObj.categories[1].filter((eq) => {
             return eq.name.toLowerCase().includes(e.target.value.toLowerCase());
         });
-
-        attributes.categories[1] = filterd;
-
-        setAttributes(prevState => ({
-            ...prevState,
-            categories:attributes.categories
-        }));
+        setFilter(result)
     }
 
+    function setFilter(result) {
+        setFavCat(result);
+    }
     const saveMyPreferences = async () => {
         let data = {
             customerId: custId,
@@ -177,7 +191,7 @@ function MyPreferences(props) {
 
         attributes.mostly_intersted.forEach(mi => {
             if (mi.isChecked) {
-                if (data.mostly_intersted_in == '') {
+                if (data.mostly_intersted_in === '') {
                     data.mostly_intersted_in = mi.id
                 } else {
                     data.mostly_intersted_in = `${data.mostly_intersted_in},${mi.id}`
@@ -187,7 +201,7 @@ function MyPreferences(props) {
 
         attributes.shoes_size.forEach(ss => {
             if (ss.isChecked) {
-                if (data.shoes_size == '') {
+                if (data.shoes_size === '') {
                     data.shoes_size = ss.value
                 } else {
                     data.shoes_size = `${data.shoes_size},${ss.value}`
@@ -197,7 +211,7 @@ function MyPreferences(props) {
 
         attributes.clothing_size.forEach(cs => {
             if (cs.isChecked) {
-                if (data.clothing_size == '') {
+                if (data.clothing_size === '') {
                     data.clothing_size = cs.value
                 } else {
                     data.clothing_size = `${data.clothing_size},${cs.value}`
@@ -207,7 +221,7 @@ function MyPreferences(props) {
 
         attributes.categories[1].forEach(c => {
             if (c.isChecked) {
-                if (data.fav_categories == '') {
+                if (data.fav_categories === '') {
                     data.fav_categories = c.id
                 } else {
                     data.fav_categories = `${data.fav_categories},${c.id}`
@@ -217,7 +231,7 @@ function MyPreferences(props) {
 
         attributes.designers[0].forEach(d => {
             if (d.isChecked) {
-                if (data.fav_designers == '') {
+                if (data.fav_designers === '') {
                     data.fav_designers = d.id
                 } else {
                     data.fav_designers = `${data.fav_designers},${d.id}`
@@ -226,13 +240,13 @@ function MyPreferences(props) {
         });
 
         const res = await savePreference(data);
-        if(res){
-            console.log(res);
+        if (res) {
+            //console.log(res);
         }
     }
 
     return (
-        <>
+        <Modal.Body className="arabic-rtl-direction">
             <div className="Mosty_interested_in">
                 <h2>Mosty interested in</h2>
                 <div className="interestd_check">
@@ -258,9 +272,9 @@ function MyPreferences(props) {
                                     {attributes.clothing_size && attributes.clothing_size.map((cs, i) => {
                                         return (cs && cs.value !== '' &&
                                             <li key={cs.value}>
-                                                <a key={cs.value} onClick={() => selectClothingSize(i)} className={cs.isChecked ? 'active' : ''}>
+                                                <Link to="#" key={cs.value} onClick={() => selectClothingSize(i)} className={cs.isChecked ? 'active' : ''}>
                                                     {cs.label}
-                                                </a>
+                                                </Link>
                                             </li>
                                         )
                                     })}
@@ -269,7 +283,7 @@ function MyPreferences(props) {
                             <div className="sizebtn clothnmrgin">
                                 <div className="save-btn"><Link to="#" className="btn-link-blue">Save</Link></div>
                                 <div className="save-btn removel_allbtn">
-                                    <a onClick={removeAllCloth} className="btn-link-grey">Remove all</a></div>
+                                    <Link to="#" onClick={removeAllCloth} className="btn-link-grey">Remove all</Link></div>
                             </div>
                         </div>
                     </div>
@@ -281,7 +295,7 @@ function MyPreferences(props) {
                                     {attributes.shoes_size && attributes.shoes_size.map((ss, i) => {
                                         return (ss && ss.value !== '' &&
                                             <li key={ss.value}>
-                                                <a onClick={() => selectShoeSize(i)} className={ss.isChecked ? 'active' : ''} key={ss.value}>{ss.label}</a></li>
+                                                <Link to="#" onClick={() => selectShoeSize(i)} className={ss.isChecked ? 'active' : ''} key={ss.value}>{ss.label}</Link></li>
                                         )
                                     })}
                                 </ul>
@@ -289,7 +303,7 @@ function MyPreferences(props) {
                             <div className="sizebtn">
                                 <div className="save-btn"><Link to="#" className="btn-link-blue">Save</Link></div>
                                 <div className="save-btn removel_allbtn">
-                                    <a onClick={removeAllShoe} className="btn-link-grey">Remove all</a></div>
+                                    <Link to="#" onClick={removeAllShoe} className="btn-link-grey">Remove all</Link></div>
                             </div>
                         </div>
                     </div>
@@ -336,11 +350,11 @@ function MyPreferences(props) {
                                 <ul>
                                     {attributes.designers && attributes.designers[0].map(dg => {
                                         return dg.isChecked &&
-                                            (<li key={dg.id}><a>{dg.name}</a></li>)
+                                            (<li key={dg.id}><Link to="#" >{dg.name}</Link></li>)
                                     })}
                                 </ul>
                                 <div className="save-btn removel_allbtn">
-                                    <a onClick={removeAllDesign} className="btn-link-grey">Remove all</a></div>
+                                    <Link to="#" onClick={removeAllDesign} className="btn-link-grey">Remove all</Link></div>
                             </div>
 
                         </div>
@@ -356,18 +370,17 @@ function MyPreferences(props) {
                     <div className="col-sm-6">
                         <div className="search_results">
                             <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
-                            <input type="search" placeholder="Search..." className="form-control me-1" 
-                            value={catFilter} onChange={filterCategories} />
+                            <input type="search" placeholder="Search..." className="form-control me-1"
+                                value={catFilter} onChange={filterCategories} />
                         </div>
                     </div>
 
                 </div>
                 <div className="row">
-
                     <div className="col-sm-6">
                         <div className="favt_section">
                             <ul>
-                                {attributes.categories && attributes.categories[1].map((cat, i) => {
+                                {attributes.categories && attributes.categories[1] && attributes.categories[1].length > 0 && attributes.categories[1].map((cat, i) => {
                                     return (
                                         // <li key={cat.id}>
                                         <div className="form-check" key={cat.id}>
@@ -387,13 +400,13 @@ function MyPreferences(props) {
                         <div className="favt_dragdrop">
                             <div className="favdesignr_size_sec">
                                 <ul>
-                                    {attributes.categories && attributes.categories[1].map(cat => {
+                                    {attributes.categories && attributes.categories[1] && attributes.categories[1].length && attributes.categories[1].map(cat => {
                                         return cat.isChecked &&
-                                            (<li key={cat.id}><a>{cat.name}</a></li>)
+                                            (<li key={cat.id}><Link to="#"> {cat.name}</Link></li>)
                                     })}
                                 </ul>
                                 <div className="save-btn removel_allbtn">
-                                    <a onClick={removeAllCat} className="btn-link-grey">Remove all</a></div>
+                                    <Link to="#" onClick={removeAllCat} className="btn-link-grey">Remove all</Link></div>
                             </div>
                         </div>
                     </div>
@@ -404,7 +417,7 @@ function MyPreferences(props) {
                     <button type="button" className="btn btn-secondary" onClick={saveMyPreferences}>Confirm</button>
                 </div>
             </div>
-        </>
+        </Modal.Body>
     )
 }
 
