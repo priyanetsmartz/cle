@@ -10,9 +10,11 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { language } from '../../../settings';
 import MyPreferences from './myProfile/myPreferences';
+import { DROPDOWN } from '../../../config/constants';
 
 
 function MyProfile(props) {
+
     const userGroup = localStorage.getItem('token');
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
@@ -90,6 +92,18 @@ function MyProfile(props) {
     });
 
     useEffect(() => {
+        async function getData() {
+            let result: any = await getCustomerDetails();
+            if (result) {
+                setCustForm(result.data);
+                const d = result.data.dob.split("-")
+                dob.day = d[2];
+                dob.month = d[1];
+                dob.year = d[0];
+                setDob(dob);
+                getAttributes();
+            }
+        }
         getData();
         getCountries();
         return () => {
@@ -523,7 +537,11 @@ function MyProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
-                                        <div className="field-name">{custForm.gender}</div>
+                                        <div className="field-name">
+                                            {DROPDOWN.gender.map(el => {
+                                                return el.id == custForm.gender ? (<span>{el.name}</span>) : null
+                                            })}
+                                        </div>
                                     </div>
                                     {/* <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
@@ -1002,9 +1020,15 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Gender</label>
-                            <input type="text" className="form-control" placeholder="Woman" id="gender"
+                            {/* <input type="text" className="form-control" placeholder="Woman" id="gender"
                                 value={custForm.gender}
-                                onChange={handleChange} />
+                                onChange={handleChange} /> */}
+                            <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
+                                <option value="">Select</option>
+                                {DROPDOWN.gender.map(opt => {
+                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                })}
+                            </select>
                             <span className="error">{errors.errors["gender"]}</span>
                         </div>
                         {/* <div className="width-100 mb-3 form-field">
@@ -1018,23 +1042,24 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
-                                <select className="form-select me-3" aria-label="Default select example" onChange={dobHandler} id="day">
+                                <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">Select</option>
-                                    <option value="01">01</option>
-                                    <option value="02">02</option>
-                                    <option value="03">03</option>
+                                    {DROPDOWN.dates.map(opt => {
+                                        return (<option value={opt} key={opt}>{opt}</option>);
+                                    })}
+
                                 </select>
-                                <select className="form-select me-3" aria-label="Default select example" onChange={dobHandler} id="month">
+                                <select className="form-select me-3" value={dob.month} aria-label="Default select example" onChange={dobHandler} id="month">
                                     <option value="">Select</option>
-                                    <option value="05">May</option>
-                                    <option value="06">June</option>
-                                    <option value="07">July</option>
+                                    {DROPDOWN.months.map(opt => {
+                                        return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                    })}
                                 </select>
-                                <select className="form-select" aria-label="Default select example" onChange={dobHandler} id="year">
+                                <select className="form-select" value={dob.year} aria-label="Default select example" onChange={dobHandler} id="year">
                                     <option value="">Select</option>
-                                    <option value="1990">1990</option>
-                                    <option value="1991">1991</option>
-                                    <option value="1993">1993</option>
+                                    {DROPDOWN.years.map(opt => {
+                                        return (<option value={opt} key={opt}>{opt}</option>);
+                                    })}
                                 </select>
                             </div>
                         </div>
