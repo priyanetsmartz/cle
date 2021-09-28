@@ -14,13 +14,17 @@ import { DROPDOWN } from '../../../config/constants';
 
 
 function MyProfile(props) {
-
     const userGroup = localStorage.getItem('token');
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [attributes, setAttributes]: any = useState({});
     const [customerPrefer, setCustomerPrefer]: any = useState({
-        interestedIn: ''
+        interestedIn: '',
+        shoes_size: '',
+        clothing_size: '',
+        favCat: [],
+        favDesigner: []
+
     });
     const [myDetailsModel, setMyDetailsModel] = useState(false);
     const [myPreferenceModel, setMyPreferenceModel] = useState(false);
@@ -87,18 +91,6 @@ function MyProfile(props) {
     });
 
     useEffect(() => {
-        async function getData() {
-            let result: any = await getCustomerDetails();
-            if (result) {
-                setCustForm(result.data);
-                const d = result.data.dob.split("-")
-                dob.day = d[2];
-                dob.month = d[1];
-                dob.year = d[0];
-                setDob(dob);
-                getAttributes();
-            }
-        }
         getData();
         getCountries();
         return () => {
@@ -110,6 +102,11 @@ function MyProfile(props) {
         let lang = props.languages ? props.languages : language;
         // to get cutomer preferences
         let result: any = await getCustomerDetails();
+        const d = result.data.dob.split("-")
+        dob.day = d[2];
+        dob.month = d[1];
+        dob.year = d[0];
+        setDob(dob);
         let custom_attributes = result.data.custom_attributes;
 
         let clothing_size = 0, shoes_size = 0, mostly_intersted_in = 0, favourite_categories = [], favourite_designers = [];
@@ -178,8 +175,8 @@ function MyProfile(props) {
         setCustomerPrefer(prevState => ({
             ...prevState,
             interestedIn: intersted_in[0].name,
-            shoes_size: shoes_sizeData[0].label,
-            clothing_size: clothing_sizeData[0].label,
+            shoes_size: shoes_sizeData[0] ? shoes_sizeData[0].label : "",
+            clothing_size: clothing_sizeData[0] ? clothing_sizeData[0].label :"",
             favCat: favCategoryArray,
             favDesigner: favDesignerArray
         }));
@@ -526,7 +523,7 @@ function MyProfile(props) {
                                         <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                                         <div className="field-name">
                                             {DROPDOWN.gender.map(el => {
-                                                return el.id == custForm.gender ? (<span>{el.name}</span>) : null
+                                                return el.id == custForm.gender ? (<span key={el.id}>{el.name}</span>) : null
                                             })}
                                         </div>
                                     </div>
@@ -977,9 +974,11 @@ function MyProfile(props) {
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
                 <div className="CLE_pf_details">
-                    <h1>My Details</h1>
-                    <Link to="#" onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></Link>
-                    <div className="">
+                    <Modal.Header>
+                        <h1>My Details</h1>
+                        <Link to="#" onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                    </Modal.Header>
+                    <Modal.Body className="arabic-rtl-direction">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Frist name<span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Ann"
@@ -997,9 +996,6 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Gender</label>
-                            {/* <input type="text" className="form-control" placeholder="Woman" id="gender"
-                                value={custForm.gender}
-                                onChange={handleChange} /> */}
                             <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">Select</option>
                                 {DROPDOWN.gender.map(opt => {
@@ -1019,7 +1015,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
-                                <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
+                            <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">Select</option>
                                     {DROPDOWN.dates.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
@@ -1049,14 +1045,15 @@ function MyProfile(props) {
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
                         </div> */}
-                        <div className="width-100 mb-3 form-field">
-                            <div className="Frgt_paswd">
-                                <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={saveCustDetails}>Confirm</button>
-                                </div>
+                    </Modal.Body>
+                    <Modal.Footer className="width-100 mb-3 form-field">
+                        <div className="Frgt_paswd">
+                            <div className="confirm-btn">
+                                <button type="button" className="btn btn-secondary" onClick={saveCustDetails}>Confirm</button>
                             </div>
                         </div>
-                    </div>
+                    </Modal.Footer>
+
                 </div>
             </Modal>
 
@@ -1164,15 +1161,18 @@ function MyProfile(props) {
 
             {/* Gifting preference details modal */}
             <Modal show={giftingModal} size="lg">
-                <div className="gifting_pref">
+                <Modal.Body className="gifting_pref">
                     <div className="girft_details">
-                        <h1>Gifting Preferences</h1>
-                        <a onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                        <Modal.Header>
+                            <h1>Gifting Preferences</h1>
+                            <Link to="#" onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                        </Modal.Header>
                         <div className="my_birthday mb-3">
                             <label className="form-label">My birthday</label>
                             <div className="birthdate">01 May 1990</div>
                         </div>
                     </div>
+                    {/* <Modal.Body> */}
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="width-100">
@@ -1330,10 +1330,6 @@ function MyProfile(props) {
 
                                     </div>
                                 </div>
-
-
-
-
                             </div>
                         </div>
                         <div className="col-sm-6">
@@ -1341,33 +1337,29 @@ function MyProfile(props) {
                                 <div className="width-100">
                                     <h2>List of added birthdays</h2>
                                 </div>
-
                                 <div className="favt_dragdrop  mt-3">
-
                                     <div className="favdesignr_size_sec">
                                         <ul>
-
                                             <li><Link to="#">John / 20 May 1988</Link></li>
                                             <li><Link to="#">Mom / 20 June 1964</Link></li>
                                             <li><Link to="#">Dad / 20 July 1962</Link></li>
-
                                         </ul>
                                         <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
-                        <div className="width-100 mb-4">
-                            <div className="float-end">
-                                <button type="button" className="btn btn-secondary">Confirm</button>
+                        <Modal.Footer>
+                            <div className="width-100 mb-4">
+                                <div className="float-end">
+                                    <button type="button" className="btn btn-secondary">Confirm</button>
+                                </div>
                             </div>
-                        </div>
+                        </Modal.Footer>
 
                     </div>
+                </Modal.Body>
 
-                </div>
             </Modal>
 
             {/* add payment method modal */}
