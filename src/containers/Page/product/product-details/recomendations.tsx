@@ -31,13 +31,11 @@ const Recommendations = (props) => {
     return (
         <div className="container">
             <div className="col-sm-12">
-                {(recomendedProducts && recomendedProducts.length) && (
-
+                {(recomendedProducts && recomendedProducts.length) ? (
                     <div className="recommendations-section text-center ">
                         <h1> <IntlMessages id="product.recommendations" /></h1>
                         <div className="recommed-slider" >
                             <Slider className="regular slider" {...settings}>
-
                                 {recomendedProducts.slice(0, 8).map((product) => {
                                     return (
                                         <Link key={product.id} to={'/product-details/' + product.sku}>
@@ -53,7 +51,7 @@ const Recommendations = (props) => {
                                 })}
                             </Slider>
                         </div>
-                    </div>)}
+                    </div>) : "" }
             </div>
         </div>
     )

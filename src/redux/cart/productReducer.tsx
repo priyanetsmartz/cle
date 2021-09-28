@@ -6,7 +6,9 @@ const initState = {
     total: 0,
     addToCartTask: false,
     openGiftBox: 0,
-    addToWishlistTask: false
+    addToWishlistTask: false,
+    openAccountPop: false,
+    openMiniCartPop: false
 }
 
 const cartReducer = (state = initState, action) => {
@@ -23,6 +25,11 @@ const cartReducer = (state = initState, action) => {
             return { ...state, openGiftBox: action.isOpen };
         case actions.ADD_TO_WISHLIST_TASK:
             return { ...state, addToWishlistTask: action.addToWishlistTask };
+        case actions.ACCOUNT_SECTION:
+            return { ...state, openAccountPop: action.isShow };
+        case actions.MINICART_SECTION:
+            return { ...state, openMiniCartPop: action.isShow };
+
         default:
             return state;
     }

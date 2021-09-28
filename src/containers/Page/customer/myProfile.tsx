@@ -19,8 +19,8 @@ function MyProfile(props) {
     const [attributes, setAttributes]: any = useState({});
     const [customerPrefer, setCustomerPrefer]: any = useState({
         interestedIn: '',
-        shoes_size: '',
-        clothing_size: '',
+        shoes_size: [],
+        clothing_size: [],
         favCat: [],
         favDesigner: []
 
@@ -58,7 +58,7 @@ function MyProfile(props) {
         addresses: [],
         custom_attributes: []
     });
-    
+
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: custId,
@@ -68,7 +68,7 @@ function MyProfile(props) {
         postcode: "",
         city: "",
         country_id: "",
-        region_id:"",
+        region_id: "",
         street: ""
     });
     const [addIndex, setAddIndex] = useState(null);
@@ -103,16 +103,18 @@ function MyProfile(props) {
         let result: any = await getCustomerDetails();
         let custom_attributes = result.data.custom_attributes;
 
-        let clothing_size = 0, shoes_size = 0, mostly_intersted_in = 0, favourite_categories = [], favourite_designers = [];
+        let clothing_size = [], shoes_size = [], mostly_intersted_in = 0, favourite_categories = [], favourite_designers = [];
         let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [];
-
+        //console.log(custom_attributes)
         // match keys and extract values//
         custom_attributes.map((attributes) => {
             if (attributes.attribute_code === "clothing_size") {
-                clothing_size = attributes.value;
+                let cloths = attributes.value
+                clothing_size = cloths.split(",");
             }
             if (attributes.attribute_code === "shoes_size") {
-                shoes_size = attributes.value;
+                let shoes = attributes.value
+                shoes_size = shoes.split(",");
             }
             if (attributes.attribute_code === "mostly_intersted_in") {
                 mostly_intersted_in = attributes.value;
@@ -126,7 +128,6 @@ function MyProfile(props) {
                 favourite_designers = favDesigns.split(",");
             }
         })
-
         // to get all the preferences list
         let preference: any = await getPreference(lang);
         setAttributes(preference);
@@ -135,17 +136,22 @@ function MyProfile(props) {
         clothing_size_inArray = preference.data[0].preference.clothing_size;
         categories_array = preference.data[0].preference.categories;
         designer_array = preference.data[0].preference.designers;
-        console.log(categories_array)
+
         let intersted_in = mostly_intersted_inArray.filter((eq) => {
             return eq.id === mostly_intersted_in;
         });
-        let shoes_sizeData = shoes_size_inArray.filter((eq) => {
-            return eq.value === shoes_size;
+
+        let shoes_sizeData = shoes_size_inArray.filter(function (o1) {
+            return shoes_size.some(function (o2) {
+                return o1.value === o2; // return the ones with equal id
+            });
         });
-        let clothing_sizeData = clothing_size_inArray.filter((eq) => {
-            return eq.value === clothing_size;
+
+        let clothing_sizeData = clothing_size_inArray.filter(function (o1) {
+            return clothing_size.some(function (o2) {
+                return o1.value === o2; // return the ones with equal id
+            });
         });
-        // console.log(preference.data[0].preference)
 
         if (intersted_in[0].name === "kid") {
             catToShow = categories_array[2];
@@ -154,6 +160,8 @@ function MyProfile(props) {
         } else {
             catToShow = categories_array[0];
         }
+
+        //  console.log(catToShow)
         var favCategoryArray = catToShow.filter(function (o1) {
             return favourite_categories.some(function (o2) {
                 return o1.id === o2; // return the ones with equal id
@@ -168,9 +176,9 @@ function MyProfile(props) {
 
         setCustomerPrefer(prevState => ({
             ...prevState,
-            interestedIn: intersted_in[0].name,
-            shoes_size: shoes_sizeData[0].label,
-            clothing_size: clothing_sizeData[0].label,
+            interestedIn: intersted_in[0] ? intersted_in[0].name : "",
+            shoes_size: shoes_sizeData,
+            clothing_size: clothing_sizeData,
             favCat: favCategoryArray,
             favDesigner: favDesignerArray
         }));
@@ -235,7 +243,7 @@ function MyProfile(props) {
                     postcode: "",
                     city: "",
                     country_id: "",
-                    region_id:"",
+                    region_id: "",
                     street: ""
                 });
                 notification("success", "", "Customer Address Updated");
@@ -311,15 +319,15 @@ function MyProfile(props) {
         }))
     }
 
-    const handleCountryChange= async (e) => {
+    const handleCountryChange = async (e) => {
         const { id, value } = e.target;
         setCustAddForm(prevState => ({
             ...prevState,
             [id]: value
         }));
 
-        const res:any = await getRegionsByCountryID(value);
-        if(res.data.available_regions){
+        const res: any = await getRegionsByCountryID(value);
+        if (res.data.available_regions) {
             setRegions(res.data.available_regions);
         }
         console.log(res.data.available_regions);
@@ -566,7 +574,11 @@ function MyProfile(props) {
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.clothingSize" /></label>
                                         <div className="field-name">
-                                            {customerPrefer.clothing_size}
+                                            {
+                                                customerPrefer.clothing_size.map((favs, i) => {
+                                                    return (<span key={i}>{favs.label}, </span>)
+                                                })
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -574,7 +586,11 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.shoeSize" /></label>
                                         <div className="field-name">
-                                            {customerPrefer.shoes_size}
+                                            {
+                                                customerPrefer.shoes_size.map((favs, i) => {
+                                                    return (<span key={i}>{favs.label}, </span>)
+                                                })
+                                            }
                                         </div>
                                     </div>
                                     <div className="field_details">
@@ -964,9 +980,11 @@ function MyProfile(props) {
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
                 <div className="CLE_pf_details">
-                    <h1>My Details</h1>
-                    <Link to="#" onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></Link>
-                    <div className="">
+                    <Modal.Header>
+                        <h1>My Details</h1>
+                        <Link to="#" onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                    </Modal.Header>
+                    <Modal.Body className="arabic-rtl-direction">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Frist name<span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Ann"
@@ -1029,14 +1047,15 @@ function MyProfile(props) {
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
                         </div> */}
-                        <div className="width-100 mb-3 form-field">
-                            <div className="Frgt_paswd">
-                                <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={saveCustDetails}>Confirm</button>
-                                </div>
+                    </Modal.Body>
+                    <Modal.Footer className="width-100 mb-3 form-field">
+                        <div className="Frgt_paswd">
+                            <div className="confirm-btn">
+                                <button type="button" className="btn btn-secondary" onClick={saveCustDetails}>Confirm</button>
                             </div>
                         </div>
-                    </div>
+                    </Modal.Footer>
+
                 </div>
             </Modal>
 
@@ -1053,9 +1072,10 @@ function MyProfile(props) {
 
             {/* my details modal */}
             <Modal show={myAddressModal}>
-                <div className="CLE_pf_details">
-                    <h1><IntlMessages id="myaccount.myAddress" /></h1>
-                    <Link to="#" className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></Link>
+                <Modal.Body className="CLE_pf_details">
+                    <Modal.Header><h1><IntlMessages id="myaccount.myAddress" /></h1>
+                        <Link to="#" className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></Link>
+                    </Modal.Header>
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
@@ -1121,38 +1141,43 @@ function MyProfile(props) {
                             <span className="error">{errors.errors["country_id"]}</span>
                         </div>
                         {regions.length > 0 && <div className="width-100 mb-3 form-field">
-                                <label className="form-label">
-                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
-                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-                                    {regions && regions.map(opt => {
-                                        return (<option key={opt.id} value={opt.id} >
-                                            {opt.name}</option>);
-                                    })}
-                                </select>
-                                <span className="error">{errors.errors["region_id"]}</span>
-                            </div>}
-                        <div className="width-100 mb-3 form-field">
-                            <div className="Frgt_paswd">
-                                <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={saveCustAddress}><IntlMessages id="myaccount.confirm" /></button>
+                            <label className="form-label">
+                                <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
+                            <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                {regions && regions.map(opt => {
+                                    return (<option key={opt.id} value={opt.id} >
+                                        {opt.name}</option>);
+                                })}
+                            </select>
+                            <span className="error">{errors.errors["region_id"]}</span>
+                        </div>}
+                        <Modal.Footer>
+                            <div className="width-100 mb-3 form-field">
+                                <div className="Frgt_paswd">
+                                    <div className="confirm-btn">
+                                        <button type="button" className="btn btn-secondary" onClick={saveCustAddress}><IntlMessages id="myaccount.confirm" /></button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Modal.Footer>
                     </div>
-                </div>
+                </Modal.Body>
             </Modal>
 
             {/* Gifting preference details modal */}
             <Modal show={giftingModal} size="lg">
-                <div className="gifting_pref">
+                <Modal.Body className="gifting_pref">
                     <div className="girft_details">
-                        <h1>Gifting Preferences</h1>
-                        <a onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                        <Modal.Header>
+                            <h1>Gifting Preferences</h1>
+                            <Link to="#" onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                        </Modal.Header>
                         <div className="my_birthday mb-3">
                             <label className="form-label">My birthday</label>
                             <div className="birthdate">01 May 1990</div>
                         </div>
                     </div>
+                    {/* <Modal.Body> */}
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="width-100">
@@ -1310,10 +1335,6 @@ function MyProfile(props) {
 
                                     </div>
                                 </div>
-
-
-
-
                             </div>
                         </div>
                         <div className="col-sm-6">
@@ -1321,40 +1342,38 @@ function MyProfile(props) {
                                 <div className="width-100">
                                     <h2>List of added birthdays</h2>
                                 </div>
-
                                 <div className="favt_dragdrop  mt-3">
-
                                     <div className="favdesignr_size_sec">
                                         <ul>
-
                                             <li><Link to="#">John / 20 May 1988</Link></li>
                                             <li><Link to="#">Mom / 20 June 1964</Link></li>
                                             <li><Link to="#">Dad / 20 July 1962</Link></li>
-
                                         </ul>
                                         <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
-                        <div className="width-100 mb-4">
-                            <div className="float-end">
-                                <button type="button" className="btn btn-secondary">Confirm</button>
+                        <Modal.Footer>
+                            <div className="width-100 mb-4">
+                                <div className="float-end">
+                                    <button type="button" className="btn btn-secondary">Confirm</button>
+                                </div>
                             </div>
-                        </div>
+                        </Modal.Footer>
 
                     </div>
+                </Modal.Body>
 
-                </div>
             </Modal>
 
             {/* add payment method modal */}
             <Modal show={paymentMethod}>
-                <div className="CLE_pf_details">
-                    <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
-                    <a onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                <Modal.Body className="CLE_pf_details">
+                    <Modal.Header>
+                        <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
+                        <Link to="#" onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                    </Modal.Header>
                     <div className="payment_medt">
                         <div className="width-100">
                             <div className="d-grid gap-2 mx-auto">
@@ -1371,7 +1390,7 @@ function MyProfile(props) {
                             </div>
                         </div>
                     </div>
-                </div>
+                </Modal.Body>
             </Modal>
 
             {/* add credit card modal */}
