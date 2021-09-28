@@ -6,6 +6,7 @@ import { formatprice } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { menu } from '../../../redux/pages/allPages';
 import { getHomePageProducts } from '../../../redux/pages/customers';
+import { Link } from "react-router-dom";
 
 
 function BestSeller(props) {
@@ -88,17 +89,15 @@ function BestSeller(props) {
                                 <Slider {...settings}>
                                     {bestseller && bestseller.map(item => {
                                         return (
-                                            <div className="productcalr" key={item.id}>
+                                            <Link className="productcalr" key={item.id} to={'/product-details/' + item.name}>
                                                 <div className="product_img"><img src={item.img} className="image-fluid" height="150"/> </div>
                                                 <div className="product_name"> {item.name} </div>
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
                                                 <div className="product_price"> ${formatprice(item.price)}</div>
-                                            </div>
+                                            </Link>
                                         )
                                     })}
                                 </Slider>
-
-
                             </div>
                         </div>
                     </div>

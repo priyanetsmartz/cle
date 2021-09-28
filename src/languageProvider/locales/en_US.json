@@ -318,6 +318,7 @@
   "home.noWorries":"No worries, you can re-manage the preference settings in your profile account later.",
   "mysupport.weWantToBe":"We want to be there for you whenever you need us. Here's how you can get in touch.",
   "mysupport.checkHelp":"Check Help Center",
-  "mysupport.findTheAnswer":"Find the answer you need in our FAQs section."
+  "mysupport.findTheAnswer":"Find the answer you need in our FAQs section.",
+  "myaccount.region":"Region"
 
 }

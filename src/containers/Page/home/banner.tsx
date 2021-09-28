@@ -36,7 +36,8 @@ function HomeBanner(props) {
                     <div key={i} dangerouslySetInnerHTML={{ __html: item.resource_path }} />
                 ) : item.resource_type == "local_image" ? (<img src={`https://4a83875b65.nxcli.net/${item.resource_path}`} alt="" />) :
                     item.resource_type == "external_image" ? (<img src={item.resource_path} alt="" />) :
-                        (<img src={item.resource_path} alt="" />)
+                        (<iframe className="product-full-img" title="product video" src={item.resource_path}>
+                        </iframe>)
             })}
         </Slider>
     )

@@ -7,6 +7,7 @@ import { getHomePageProducts } from '../../../redux/pages/customers';
 import HtmlContent from '../../partials/htmlContent';
 import Magazine from '../home/magazine';
 import PriveExclusive from '../categories/priveExclusive';
+import Description from '../categories/description';
 
 
 function DesignerCategories(props) {
@@ -49,7 +50,7 @@ function DesignerCategories(props) {
                                     <Magazine />
                                 </div>
                                 <div className="section" >
-                                    <HtmlContent identifier="design_category_cle_designers" />
+                                    <Description />
                                 </div>
                             </div>
                         )
@@ -74,7 +75,7 @@ function DesignerCategories(props) {
                         <Magazine />
                     </div>
                     <div className="section" >
-                        <HtmlContent identifier="design_category_cle_designers" />
+                        <Description />
                     </div>
                 </div>
             </MobileView>

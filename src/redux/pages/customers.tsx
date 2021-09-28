@@ -107,11 +107,15 @@ export function getCategoryDetails(language, catId) {
 }
 
 export function getWeChooseForYou(language, custId) {
-    custId = 114 //remove this
     const storeId = language === 'english' ? 3 : 2;
     return adminToken.request(`rest/all/V1/product/relevantProducts?storeId=${storeId}&customerId=${custId}`, "", "GET", "");
 }
 
 export function getHomePageBanner() {
     return adminToken.request(`rest/V1/lof/bannerslider/getList?searchCriteria[filterGroups][0][filters][0][field]=tags&searchCriteria[filterGroups][0][filters][0][value]=home_page_slider`, "", "GET", "");
+}
+
+export function getDesginers(language, catId) {
+    const storeId = language === 'english' ? 3 : 2;
+    return adminToken.request(`rest/all/V1/designerCategories/collection?storeId=${storeId}&catId=${catId}`, "", "GET", "");
 }

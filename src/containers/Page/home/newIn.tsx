@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
+import { Link } from "react-router-dom";
 
 
 function NewIn(props) {
@@ -35,7 +36,7 @@ function NewIn(props) {
                                 <Slider {...settings}>
                                     {props && props.newInProducts && props.newInProducts.map(item => {
                                         return (
-                                            <div className="productcalr" key={item.id}>
+                                            <Link className="productcalr" key={item.id} to={'/product-details/' + item.name}>
                                                 <div className="product_img">
                                                     <img src={item.img} alt="productimage" className="image-fluid" height="150"/>
                                                 </div>
@@ -43,7 +44,7 @@ function NewIn(props) {
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }} />
                                                 {/* <div className="product_vrity">{item.short_description}</div> */}
                                                 <div className="product_price">$ {formatprice(item.price)}</div>
-                                            </div>
+                                            </Link>
                                         )
                                     })}
                                 </Slider>
