@@ -14,7 +14,6 @@ import { DROPDOWN } from '../../../config/constants';
 
 
 function MyProfile(props) {
-
     const userGroup = localStorage.getItem('token');
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
@@ -92,18 +91,6 @@ function MyProfile(props) {
     });
 
     useEffect(() => {
-        async function getData() {
-            let result: any = await getCustomerDetails();
-            if (result) {
-                setCustForm(result.data);
-                const d = result.data.dob.split("-")
-                dob.day = d[2];
-                dob.month = d[1];
-                dob.year = d[0];
-                setDob(dob);
-                getAttributes();
-            }
-        }
         getData();
         getCountries();
         return () => {
@@ -115,6 +102,11 @@ function MyProfile(props) {
         let lang = props.languages ? props.languages : language;
         // to get cutomer preferences
         let result: any = await getCustomerDetails();
+        const d = result.data.dob.split("-")
+        dob.day = d[2];
+        dob.month = d[1];
+        dob.year = d[0];
+        setDob(dob);
         let custom_attributes = result.data.custom_attributes;
 
         let clothing_size = [], shoes_size = [], mostly_intersted_in = 0, favourite_categories = [], favourite_designers = [];
@@ -539,7 +531,7 @@ function MyProfile(props) {
                                         <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                                         <div className="field-name">
                                             {DROPDOWN.gender.map(el => {
-                                                return el.id == custForm.gender ? (<span>{el.name}</span>) : null
+                                                return el.id == custForm.gender ? (<span key={el.id}>{el.name}</span>) : null
                                             })}
                                         </div>
                                     </div>
@@ -1020,9 +1012,6 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Gender</label>
-                            {/* <input type="text" className="form-control" placeholder="Woman" id="gender"
-                                value={custForm.gender}
-                                onChange={handleChange} /> */}
                             <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">Select</option>
                                 {DROPDOWN.gender.map(opt => {
@@ -1042,7 +1031,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
-                                <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
+                            <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">Select</option>
                                     {DROPDOWN.dates.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
@@ -1219,10 +1208,10 @@ function MyProfile(props) {
                                     <div className="col-sm-4">
                                         <label className="form-label">&nbsp;</label>
                                         <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">May</option>
-                                            <option value="1">May</option>
-                                            <option value="2">June</option>
-                                            <option value="3">July</option>
+                                            <option value="">Select</option>
+                                            {DROPDOWN.months.map(opt => {
+                                                return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                            })}
                                         </select>
                                     </div>
                                     <div className="col-sm-4">
