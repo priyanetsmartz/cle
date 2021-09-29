@@ -8,10 +8,8 @@ import IntlMessages from "../../components/utility/intlMessages";
 const { addToCartTask, accountPopup, miniCartPopup } = cartAction;
 function MiniCart(props) {
 
-    const [showCart, SetShowCart] = useState(false);
     const [cartItemsVal, setCartItems] = useState({});
     const [cartTotal, setCartTotal] = useState(0);
-
     useEffect(() => {
         if (props.items || !props.items) {
             //   console.log(props.items)
@@ -23,6 +21,7 @@ function MiniCart(props) {
             props.miniCartPopup(false)
         }
     }, [props.items])
+
 
     const callGetCartItems = async () => {
         let cartData = [], total = 0, cartItems: any, cartTotal: any;
@@ -54,8 +53,9 @@ function MiniCart(props) {
 
     }
     const showCartFxn = () => {
-        props.accountPopup(false)
         props.miniCartPopup(true)
+        props.accountPopup(false)
+
     }
     const hideCart = () => {
         // console.log('close')
@@ -104,7 +104,7 @@ function MiniCart(props) {
 
 
 const mapStateToProps = (state) => {
-   // console.log(state);
+    // console.log(state);
     return {
         items: state.Cart.addToCartTask,
         showMiniCart: state.Cart.openMiniCartPop
