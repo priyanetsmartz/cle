@@ -3136,7 +3136,7 @@ span.maindatory {
 .select-wearing ul li:hover ul {
     margin: 0;
     padding: 0;
-    display: block;
+    /* display: block; */
 }
 
 .select-wearing ul li ul li {
@@ -4366,4 +4366,12 @@ h4.arrow-change:after {
     float: right;
     text-align: left;
     line-height: 17px;
+}
+
+.active_megamenu:hover .megamenu_bar {
+    display: block;
+}
+
+.active_megamenu .megamenu_bar {
+    display: none;
 }

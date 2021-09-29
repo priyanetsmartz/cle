@@ -57,12 +57,17 @@ function MiniCart(props) {
         props.accountPopup(false)
         props.miniCartPopup(true)
     }
+    const showCartFxnBlur = () => {
+        setTimeout(() => {
+            props.miniCartPopup(false)
+        }, 200)
+    }
     const hideCart = () => {
         // console.log('close')
         props.miniCartPopup(false)
     }
     return (
-        <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">({cartItemsVal && cartItemsVal['items'] ? cartItemsVal['items'].length : 0})</span></Link>
+        <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }} onBlur={() => { showCartFxnBlur() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">({cartItemsVal && cartItemsVal['items'] ? cartItemsVal['items'].length : 0})</span></Link>
             <div className="miniaccount_details" style={{ "display": !props.showMiniCart ? "none" : "block" }}>
                 <div className="cart_your"><IntlMessages id="yourcart" /></div>
                 <Link to="#" className="cross_icn" onClick={() => { hideCart() }} > <i className="fas fa-times"></i></Link>
