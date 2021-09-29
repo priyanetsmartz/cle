@@ -1208,10 +1208,10 @@ function MyProfile(props) {
                                     <div className="col-sm-4">
                                         <label className="form-label">&nbsp;</label>
                                         <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">May</option>
-                                            <option value="1">May</option>
-                                            <option value="2">June</option>
-                                            <option value="3">July</option>
+                                            <option value="">Select</option>
+                                            {DROPDOWN.months.map(opt => {
+                                                return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                            })}
                                         </select>
                                     </div>
                                     <div className="col-sm-4">

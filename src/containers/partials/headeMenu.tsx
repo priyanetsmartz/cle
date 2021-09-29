@@ -106,8 +106,8 @@ function HeaderMenu(props) {
                                     {
                                         menuData.map((val, i) => {
                                             return (
-                                                <li key={i}>
-                                                    <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""} onMouseEnter={() => { setMenu(val.url_key) }} onMouseLeave={() => resetMenu()}>{val.name}</Link >
+                                                <li key={i} onMouseEnter={() => { setMenu(val.url_key) }} onMouseLeave={() => resetMenu()}>
+                                                    <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
                                                         {val.child.map((childMenu, j) => {
                                                             //  console.log(childMenu)
