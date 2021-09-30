@@ -49,7 +49,6 @@ function HeaderMenu(props) {
             let result: any = await menu(props.languages);
             var jsonData = result.data[0].parent.child;
             let catMenu = category ? category : jsonData[0].url_key;
-            console.log(jsonData);
             SetMenuData(jsonData);
             SetActiveOne(catMenu)
             SetActiveCat(catMenu);
@@ -133,7 +132,7 @@ function HeaderMenu(props) {
                                                 <li key={i}>
                                                     <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
-                                                        {val.child.map((childMenu, j) => {
+                                                        {val.child.map((childMenu: any, j) => {
                                                             //  console.log(childMenu)
                                                             return (
                                                                 <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
@@ -141,57 +140,15 @@ function HeaderMenu(props) {
                                                                     <span className="megamenu_bar">
                                                                         <Link to="#" className="cross_icn"> <i className="fas fa-times"></i></Link>
                                                                         <ul className="megamenugrid">
-                                                                            <h3>Fashion Jewelery</h3>
-                                                                            <li> <Link to="#">New in jewelery</Link></li>
-                                                                            <li><Link to="#">All fashion jewelry</Link></li>
-                                                                            <li> <Link to="#">Bracelets</Link></li>
-                                                                            <li> <Link to="#">Earnings</Link></li>
-                                                                            <li> <Link to="#">Necklaces</Link></li>
-                                                                            <li> <Link to="#">Rings</Link></li>
-                                                                            <li> <Link to="#">Pro-owned jewelry</Link></li>
-                                                                            <li><Link to="#">Sale jewelry</Link></li>
-                                                                        </ul>
-                                                                        <ul className="megamenugrid">
-                                                                            <h3>Fine Jewelery</h3>
-                                                                            <li> <Link to="#">New in jewelery</Link></li>
-                                                                            <li><Link to="#">All fashion jewelry</Link></li>
-                                                                            <li> <Link to="#">Bracelets</Link></li>
-                                                                            <li> <Link to="#">Earnings</Link></li>
-                                                                            <li> <Link to="#">Necklaces</Link></li>
-                                                                            <li> <Link to="#">Rings</Link></li>
-                                                                            <li> <Link to="#">Pro-owned jewelry</Link></li>
-                                                                            <li><Link to="#">Sale jewelry</Link></li>
-                                                                        </ul>
-                                                                        <ul className="megamenugrid">
-                                                                            <h3>Dicover</h3>
-                                                                            <li> <Link to="#">New in jewelery</Link></li>
-                                                                            <li><Link to="#">All fashion jewelry</Link></li>
-                                                                            <li> <Link to="#">Bracelets</Link></li>
-                                                                            <li> <Link to="#">Earnings</Link></li>
-                                                                            <li> <Link to="#">Necklaces</Link></li>
-                                                                            <li> <Link to="#">Rings</Link></li>
-                                                                            <li> <Link to="#">Pro-owned jewelry</Link></li>
-                                                                            <li><Link to="#">Sale jewelry</Link></li>
-                                                                        </ul>
-                                                                        <ul className="megamenugrid">
-                                                                            <h3>Feature Designer</h3>
-                                                                            <li> <Link to="#">New in jewelery</Link></li>
-                                                                            <li><Link to="#">All fashion jewelry</Link></li>
-                                                                            <li> <Link to="#">Bracelets</Link></li>
-                                                                            <li> <Link to="#">Earnings</Link></li>
-                                                                            <li> <Link to="#">Necklaces</Link></li>
-                                                                            <li> <Link to="#">Rings</Link></li>
-                                                                            <li> <Link to="#">Pro-owned jewelry</Link></li>
-                                                                            <li><Link to="#">Sale jewelry</Link></li>
+                                                                            <h3>{childMenu.name}</h3>
+                                                                            {childMenu.child && childMenu.child.map((grandChild, k) => {
+                                                                                return (<li key={k}>
+                                                                                    <Link to={`/products/${val.url_key}/${grandChild.url_key}`}>{grandChild.name}</Link>
+                                                                                </li>)
+                                                                            })}
+
                                                                         </ul>
 
-                                                                        <ul className="megamenugrid">
-
-                                                                            <li> <Link to="#"><img src="images/minicart_p1.png" className="img-fluid" alt="" /></Link></li>
-                                                                            <li><Link to="#">spotlight one</Link></li>
-                                                                            <li><Link to="#" className="produt_type">Necklace</Link></li>
-                                                                            <li><Link to="#" className="shopnow_btn">Shop now</Link></li>
-                                                                        </ul>
                                                                     </span>
                                                                 </li>
                                                             );

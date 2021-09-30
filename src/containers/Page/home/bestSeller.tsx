@@ -7,10 +7,15 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { menu } from '../../../redux/pages/allPages';
 import { getHomePageProducts } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
+import notification from "../../../components/notification";
+import { addWhishlist, removeWhishlist } from '../../../redux/cart/productApi';
 
 
 function BestSeller(props) {
+    const [token, setToken] = useState('');
     const [categoriesList, setCategoriesList] = useState([]);
+    const [isWishlist, setIsWishlist] = useState(0);
+    const [delWishlist, setDelWishlist] = useState(0);
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [bestseller, setBestseller] = useState([]);
     const [catId, setCatId] = useState(52); //set default category here
@@ -19,11 +24,13 @@ function BestSeller(props) {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 4
+        slidesToShow: 3,
+        slidesToScroll: 3
     };
 
     useEffect(() => {
+        const localToken = localStorage.getItem('token');
+        setToken(localToken)
         getData(catId);
 
         getCategories()
@@ -53,6 +60,22 @@ function BestSeller(props) {
     const changeCategory = (e) => {
         setCatId(e.target.value);
         getData(e.target.value);
+    }
+
+    async function handleWhishlist(id: number) {
+        let result: any = await addWhishlist(id);
+        notification("success", "", result.data[0].message);
+        // getProducts()
+
+    }
+
+    async function handleDelWhishlist(id: number) {
+        //need to get whishlist id first
+        // console.log(id);
+        let del: any = await removeWhishlist(id);
+        //  console.log(del);
+        notification("success", "", del.data[0].message);
+        // getProducts()
     }
 
     return (
@@ -90,7 +113,7 @@ function BestSeller(props) {
                                     {bestseller && bestseller.map(item => {
                                         return (
                                             <Link className="productcalr" key={item.id} to={'/product-details/' + item.name}>
-                                                <div className="product_img"><img src={item.img} className="image-fluid" height="150"/> </div>
+                                                <div className="product_img"><img src={item.img} className="image-fluid" height="150" /> </div>
                                                 <div className="product_name"> {item.name} </div>
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
                                                 <div className="product_price"> ${formatprice(item.price)}</div>

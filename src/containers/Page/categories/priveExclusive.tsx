@@ -92,7 +92,9 @@ function PriveExclusive(props) {
                                                             <img src={thumbnail} alt="" />
                                                             <h4>{item.name}</h4>
                                                             <p></p>
-                                                            <div className="pro-price-btn">${formatprice(item.price)}<a onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</a></div>
+                                                            <div className="pro-price-btn">
+                                                                ${formatprice(item.price)}
+                                                                <Link to={'/product-details/' + item.name}>View Product</Link></div>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -15,6 +15,7 @@ import BecomePartner from './becomePartner';
 
 
 function HomePage(props) {
+    const [token, setToken] = useState('');
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [catId, setCatId] = useState(52); //set default category here
     const [products, setProducts] = useState({
@@ -23,6 +24,8 @@ function HomePage(props) {
     });
 
     useEffect(() => {
+        const localToken = localStorage.getItem('token');
+        setToken(localToken)
         getData();
     }, []);
 
@@ -63,9 +66,9 @@ function HomePage(props) {
                                 <div className="section" >
                                     <NewIn newInProducts={products.newInProducts} />
                                 </div>
-                                <div className="section" >
+                                {token && <div className="section" >
                                     <WeChooseForYou />
-                                </div>
+                                </div>}
                                 <div className="section" >
                                     <HtmlContent identifier="home_page_pre-owned_category" />
                                 </div>
@@ -98,9 +101,9 @@ function HomePage(props) {
                     <div className="section" >
                         <NewIn newInProducts={products.newInProducts} />
                     </div>
-                    <div className="section" >
+                    {token && <div className="section" >
                         <WeChooseForYou />
-                    </div>
+                    </div>}
                     <div className="section" >
                         <HtmlContent identifier="home_page_pre-owned_category" />
                     </div>
