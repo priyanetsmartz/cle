@@ -205,7 +205,7 @@ function OrdersAndReturns(props) {
                                                             <div className="order-details">
                                                                 <div className="order-date">
                                                                     <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
-                                                                    <div className="labl_text">Mon, 31 May 2021</div>
+                                                                    <div className="labl_text">{item.shipment_date}</div>
                                                                 </div>
 
                                                                 <div className="products">
@@ -215,7 +215,10 @@ function OrdersAndReturns(props) {
                                                             </div>
 
                                                             <div className="order-shipped">
-                                                                <label className="form-label"><IntlMessages id="order.weHaveShipped" /></label>
+                                                                <label className="form-label">
+                                                                    {/* <IntlMessages id="order.weHaveShipped" /> */}
+                                                                    {item.status}
+                                                                </label>
                                                             </div>
 
 

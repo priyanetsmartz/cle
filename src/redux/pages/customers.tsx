@@ -66,7 +66,6 @@ export function sortCustomerOrders(sort, custId, pageSize) {
 }
 
 export function searchOrders(orderId) {
-    // orderId = 15 //remove this
     return adminToken.request(`rest/V1/orders/${orderId}`, "", "GET", "");
 }
 
