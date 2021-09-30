@@ -9,7 +9,8 @@ const siteConfig = {
   facebookLink: 'https://www.facebook.com/werecle',
   instagram: 'https://www.instagram.com/werecle',
   linkedin: 'https://sa.linkedin.com/company/werecle',
-  twitter : 'https://www.twitter.com/'
+  twitter : 'https://www.twitter.com/',
+  pageSize:12
 };
 const apiConfig = {
   fetchUrl: '',

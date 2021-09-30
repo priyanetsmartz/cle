@@ -1,28 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux'
 import CLELogo from '../../image/CLIlogo.png';
 import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import avatar from '../../image/avtar.svg';
 import favorit from '../../image/favrot.svg';
 import bell from '../../image/bell-solid.svg';
-import IconZoomIn from '../../image/Icon_zoom_in.svg'
 import { Link, useParams } from "react-router-dom";
 import { menu } from '../../redux/pages/allPages';
-import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import cartAction from "../../redux/cart/productAction";
 import IntlMessages from "../../components/utility/intlMessages";
-// import AppBreadcrumbs from './breadCrumbs';
 import Breadcrumbs from './locationBreadcrumbs';
 import MiniCart from './mini-cart';
+import SearchBar from './searchBar';
 
 const { logout } = authAction;
 const { showSignin, openSignUp } = appAction;
 const { accountPopup, miniCartPopup } = cartAction;
 function HeaderMenu(props) {
     let history = useHistory();
+    const node = useRef(null);
     let customer_id = localStorage.getItem('cust_id');
     let customerName = localStorage.getItem('token_name')
     const { category, key_url } = useParams();
@@ -36,6 +35,13 @@ function HeaderMenu(props) {
         setIsLoaded(false);
     }, 3000);
 
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, []);
 
     useEffect(() => {
         // console.log(location)
@@ -55,6 +61,17 @@ function HeaderMenu(props) {
         }
     }, [props.languages, category])
 
+
+    const handleClick = e => {
+        if (node.current.contains(e.target)) {
+            // inside click
+            //console.log('here inside')
+            return;
+        }
+        // outside click
+        props.accountPopup(false)
+
+    };
     const showAccountFxn = () => {
         props.accountPopup(true)
         props.miniCartPopup(false)
@@ -148,15 +165,17 @@ function HeaderMenu(props) {
                                     <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li>
                                     <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }}  ><img src={avatar} alt="user" /> </Link>
 
-                                        <div className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
+                                        <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
                                             <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
-                                            <ul>
-                                                <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li>
-                                                <li><Link to="/customer/dashboard"><IntlMessages id="dashboard" /> </Link></li>
-                                                <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
-                                                <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
-                                                <li><Link to="/customer/support"><IntlMessages id="myspport" /></Link> </li>
-                                            </ul>
+                                            {customer_id && (
+                                                <ul>
+                                                    <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li>
+                                                    <li><Link to="/customer/dashboard"><IntlMessages id="dashboard" /> </Link></li>
+                                                    <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
+                                                    <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
+                                                    <li><Link to="/customer/support"><IntlMessages id="myspport" /></Link> </li>
+                                                </ul>
+                                            )}
                                             <div className="d-grid">
                                                 {
                                                     customer_id ? <button className="btn btn-secondary" onClick={() => { logout(); }} type="button"><IntlMessages id="logout" /></button> :
@@ -188,26 +207,7 @@ function HeaderMenu(props) {
                             </path>
                         </svg>
                     </button>
-
-                    <div className="navbar-collapse collapse mainmenu-bar" id="bdNavbar">
-                        <hr className="d-md-none text-white-50" />
-                        <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
-                            <div className="search_input">
-                                <div className="search_top"><img src={IconZoomIn} alt="" className="me-1" />
-                                    <input type="search" placeholder="Search..." className="form-control me-1" />
-                                    <select className="form-select" aria-label="Default select example">
-                                        <option value="">Select category</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-
-                                </div>
-                            </div>
-                        </ul>
-
-
-                    </div>
+                    <SearchBar />
                 </nav>
 
 

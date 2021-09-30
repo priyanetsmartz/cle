@@ -3,11 +3,10 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
-import { addWhishlist, getAllProducts, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
+import { addWhishlist, getAllProducts, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
-import Promotion from "../../partials/promotion";
 import Recomendations from './product-details/recomendations';
 import Filter from './filter';
 const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
@@ -123,7 +122,7 @@ function Products(props) {
     async function handleWhishlist(id: number) {
         setIsWishlist(id)
         let result: any = await addWhishlist(id);
-   //     console.log(result);
+        //     console.log(result);
         if (result.data) {
             setIsWishlist(0)
             props.addToWishlistTask(true);
@@ -211,7 +210,7 @@ function Products(props) {
                         <Filter />
                         {/* Filter sidebar end */}
                         <div className="col-sm-9">
-                            <div className="resltspage_sec">
+                            <div className="resltspage_sec">                               
                                 <div className="paginatn_result">
                                     <span><IntlMessages id="product.results" /></span>
                                     <ul>

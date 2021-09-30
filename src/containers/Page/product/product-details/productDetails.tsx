@@ -13,7 +13,6 @@ import ProductImages from './productImges';
 import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
-import Promotion from '../../../partials/promotion';
 import { addToCartApi, addToCartApiGuest, addWhishlist, createGuestToken, getGuestCart, getProductDetails, getProductExtras, getWhishlistItemsForUser, removeWhishlist } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";

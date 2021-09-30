@@ -219,10 +219,6 @@ function CartItemPage(props) {
                         <div className="col-md-8">
                             <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                 <h2><IntlMessages id="cart.Title" /></h2>
-                                <div className="save-cart-btns">
-                                    <Link to="#"><IntlMessages id="cart.saveCart" /></Link>
-                                    <Link to="#"><IntlMessages id="cart.savedCart" /> </Link>
-                                </div>
                                 {cartItemsVal['items'] && cartItemsVal['items'].length ?
                                     (
                                         <ul className="cart-pro-list">

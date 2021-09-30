@@ -33,6 +33,7 @@ import Checkout from './containers/Page/product/checkout/checkout';
 import ExploreDesigner from './containers/Page/designer/exploreDesigner';
 import Faq from './containers/Page/faq/faq';
 import FaqListing from './containers/Page/faq/faqListing';
+import Search from './containers/Page/search';
 // import New from './containers/Page/new';
 
 import Product from './containers/Page/product/product';
@@ -42,6 +43,7 @@ const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Switch>
+        <ProductRoutes exact path="/search/:searchText" component={Search} />
         <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
         <ProductRoutes exact path="/products/:category/:subcat" component={Categories} />
         <ProductRoutes exact path="/products/:category" component={Categories} />
@@ -61,6 +63,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/contact-us" component={contact} />
         <ProductRoutes exact path="/faq" component={Faq} />
         <ProductRoutes exact path="/faq-listing" component={FaqListing} />
+
         {/* <PrivateRoute exact path="/customer-orders" component={CustomerOrders} /> */}
 
 

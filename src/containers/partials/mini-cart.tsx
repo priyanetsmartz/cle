@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import cartIcon from '../../image/carticon.svg';
 import { Link } from "react-router-dom";
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../../redux/cart/productApi';
@@ -7,9 +7,18 @@ import cartAction from "../../redux/cart/productAction";
 import IntlMessages from "../../components/utility/intlMessages";
 const { addToCartTask, accountPopup, miniCartPopup } = cartAction;
 function MiniCart(props) {
-
+    const node = useRef(null);
     const [cartItemsVal, setCartItems] = useState({});
     const [cartTotal, setCartTotal] = useState(0);
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, []);
+
     useEffect(() => {
         if (props.items || !props.items) {
             //   console.log(props.items)
@@ -22,7 +31,16 @@ function MiniCart(props) {
         }
     }, [props.items])
 
+    const handleClick = e => {
+        if (node.current.contains(e.target)) {
+            // inside click
+            console.log('here inside')
+            return;
+        }
+        // outside click
+        props.miniCartPopup(false)
 
+    };
     const callGetCartItems = async () => {
         let cartData = [], total = 0, cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
@@ -63,7 +81,7 @@ function MiniCart(props) {
     }
     return (
         <li className="your_cart"> <Link to="#" onClick={() => { showCartFxn() }}  ><img src={cartIcon} alt="cart-icon" /> <span className="cart-number">({cartItemsVal && cartItemsVal['items'] ? cartItemsVal['items'].length : 0})</span></Link>
-            <div className="miniaccount_details" style={{ "display": !props.showMiniCart ? "none" : "block" }}>
+            <div ref={node} className="miniaccount_details" style={{ "display": !props.showMiniCart ? "none" : "block" }}>
                 <div className="cart_your"><IntlMessages id="yourcart" /></div>
                 <Link to="#" className="cross_icn" onClick={() => { hideCart() }} > <i className="fas fa-times"></i></Link>
                 <ul>

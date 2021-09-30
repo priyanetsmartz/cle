@@ -803,7 +803,7 @@ p.promotion_alert {
     -webkit-box-orient: vertical;
 }
 
-.user_cart ul li.your_cart, .user_cart ul li.my_account {
+.user_cart ul li.your_cart, .user_cart ul li.my_account, .search_top {
     position: relative;
 }
 
@@ -819,13 +819,24 @@ p.promotion_alert {
     border: 1px solid #f0f0f0;
 }
 
-.miniaccount_details ul, .myaccount_details ul {
+.serach-results {
+    width: 240px;
+    float: left;
+    background-color: #fff;
+    padding: 10px;
+    position: absolute;
+    top: 43px;
+    z-index: 99;
+    border: 1px solid #f0f0f0;
+}
+
+.miniaccount_details ul, .myaccount_details ul, .serach-results ul {
     margin: 0;
     padding: 0;
     text-align: left;
 }
 
-.miniaccount_details ul li, .myaccount_details ul li {
+.miniaccount_details ul li, .myaccount_details ul li, .serach-results ul li {
     list-style: none;
     padding: 0px 0px;
     display: inline-block;
@@ -836,7 +847,7 @@ p.promotion_alert {
     border-bottom: 1px solid #f0f0f0;
 }
 
-.miniaccount_details ul li a, .myaccount_details ul li a {
+.miniaccount_details ul li a, .myaccount_details ul li a, .serach-results ul li a {
     color: #000;
     text-decoration: none;
     padding: 2px 0px;
@@ -862,6 +873,18 @@ p.promotion_alert {
     float: left;
     text-align: left;
     font-size: 14px;
+}
+
+.serach-results ul li a span.minicartprodt_img {
+    width: 40px;
+    height: 40px;
+    float: left;
+}
+
+.serach-results ul li a span.minicartprodt_img img {
+    max-width: 100%;
+    width: 40px;
+    height: 40px;
 }
 
 .miniaccount_details ul li a span.minicartprodt_img {
@@ -4307,32 +4330,122 @@ h4.arrow-change:after {
 
 /* FAQ */
 
-.FAQ-top-banner{position:relative; width:100%;}
-.FAQ-top-banner img {width: 100%;}
-.FAQ-banner-content{position:absolute; height:max-content; bottom:0px; right:0; left:0; top:0; margin:auto;}
-.FAQ-banner-content h2{font-size: 36px; line-height: 46px; font-family: 'Monument Extended'; color:#fff;font-weight: normal;}
-.FAQ-banner-content p{font-size: 18px; line-height: 27px; color:#fff;font-weight: 500;}
-.search_input img {width: 20px !important; float: left !important;}
-.search_input{padding:0px 15px !important;}
-.FAQ-head{font-size: 24px; line-height: 30px; font-family: 'Monument Extended'; color:#000;font-weight: 500; margin-bottom:20px;}
-.FAQ-qus-sec{margin:0px 0 50px;}
-.FAQ-qus-sec h5 {font-size: 16px; font-weight: bold;border-bottom:1px solid #707070; margin-bottom:20px; padding-bottom:20px;}
-.FAQ-qus-sec h5 i{margin-right:25px;}
-.FAQ-qus-sec h5 span{}
-.FAQ-qus-sec ul{margin:0 0 20px; padding:0; list-style-type:none;}
-.FAQ-qus-sec ul li{font-size: 16px;margin-bottom:10px;line-height: 20px;}
-.faq-view-all a{font-size: 16px; line-height: 20px; font-family: 'Monument Extended'; color:#2e2baa;font-weight: normal;}
+.FAQ-top-banner {
+    position: relative;
+    width: 100%;
+}
+
+.FAQ-top-banner img {
+    width: 100%;
+}
+
+.FAQ-banner-content {
+    position: absolute;
+    height: max-content;
+    bottom: 0px;
+    right: 0;
+    left: 0;
+    top: 0;
+    margin: auto;
+}
+
+.FAQ-banner-content h2 {
+    font-size: 36px;
+    line-height: 46px;
+    font-family: 'Monument Extended';
+    color: #fff;
+    font-weight: normal;
+}
+
+.FAQ-banner-content p {
+    font-size: 18px;
+    line-height: 27px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.search_input img {
+    width: 20px !important;
+    float: left !important;
+}
+
+.search_input {
+    padding: 0px 15px !important;
+}
+
+.FAQ-head {
+    font-size: 24px;
+    line-height: 30px;
+    font-family: 'Monument Extended';
+    color: #000;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.FAQ-qus-sec {
+    margin: 0px 0 50px;
+}
+
+.FAQ-qus-sec h5 {
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 1px solid #707070;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+
+.FAQ-qus-sec h5 i {
+    margin-right: 25px;
+}
+
+.FAQ-qus-sec h5 span {}
+
+.FAQ-qus-sec ul {
+    margin: 0 0 20px;
+    padding: 0;
+    list-style-type: none;
+}
+
+.FAQ-qus-sec ul li {
+    font-size: 16px;
+    margin-bottom: 10px;
+    line-height: 20px;
+}
+
+.faq-view-all a {
+    font-size: 16px;
+    line-height: 20px;
+    font-family: 'Monument Extended';
+    color: #2e2baa;
+    font-weight: normal;
+}
+
 .helpCenter-ViewAll .accordion-item {
     margin-bottom: 0;
     border: none !important;
-        border-bottom-color: currentcolor;
-        border-bottom-style: none;
-        border-bottom-width: medium;
+    border-bottom-color: currentcolor;
+    border-bottom-style: none;
+    border-bottom-width: medium;
     border-bottom: 1px solid #707070 !important;
-	padding:15px 15px 15px 0;
+    padding: 15px 15px 15px 0;
 }
-.helpCenter-ViewAll .accordion-item:first-child {border-top: 1px solid #707070 !important;}
-.helpCenter-ViewAll .accordion-item .accordion-button {border-radius: 0 !important;background: #fff !important;font-size: 16px; line-height: 20px; font-family: 'Monument Extended'; color:#000;font-weight: 500;padding: 0;box-shadow: none !important;}
+
+.helpCenter-ViewAll .accordion-item:first-child {
+    border-top: 1px solid #707070 !important;
+}
+
+.helpCenter-ViewAll .accordion-item .accordion-button {
+    border-radius: 0 !important;
+    background: #fff !important;
+    font-size: 16px;
+    line-height: 20px;
+    font-family: 'Monument Extended';
+    color: #000;
+    font-weight: 500;
+    padding: 0;
+    box-shadow: none !important;
+}
+
 .helpCenter-ViewAll .accordion-item .accordion-body {
     padding: 0;
     margin-top: 15px;
@@ -4340,27 +4453,65 @@ h4.arrow-change:after {
     line-height: 24px;
     color: #000;
 }
+
 .helpCenter-ViewAll {
     margin-bottom: 60px;
 }
 
-
-
 /* Login / register */
 
-.login-desc{font-size: 18px; line-height: 27px; color:#000;font-weight: 500; text-align:center; padding:0 100px;}
+.login-desc {
+    font-size: 18px;
+    line-height: 27px;
+    color: #000;
+    font-weight: 500;
+    text-align: center;
+    padding: 0 100px;
+}
+
 .login-sec {
     padding: 0 55px;
 }
-.or-bg{width:100%; height:2px;  margin:40px 0; position:relative;}
-.or-bg .or-text{background:#fff; padding:0 15px; width:max-content; margin:auto;font-size:16px;}
-.social-login a{width:100%; display:block; border:1px solid; padding:10px; text-align:center; color:#000; font-size:16px;margin-bottom: 10px;text-decoration: none;}
-.social-login a:after{content: ""; clear: both;display: block;}
+
+.or-bg {
+    width: 100%;
+    height: 2px;
+    margin: 40px 0;
+    position: relative;
+}
+
+.or-bg .or-text {
+    background: #fff;
+    padding: 0 15px;
+    width: max-content;
+    margin: auto;
+    font-size: 16px;
+}
+
+.social-login a {
+    width: 100%;
+    display: block;
+    border: 1px solid;
+    padding: 10px;
+    text-align: center;
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.social-login a:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
 .social-login a svg {
     margin-left: 25%;
     float: left;
     text-align: right;
 }
+
 .social-login a span {
     width: 65%;
     float: right;
