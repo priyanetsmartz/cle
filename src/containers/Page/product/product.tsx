@@ -4,11 +4,12 @@ import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import appAction from "../../../redux/app/actions";
-import { addWhishlist, getAllProducts, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
+import { addWhishlist, getAllProducts, getWhishlistItemsForUser, getProductByCategory, removeWhishlist, addToCartApi, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Recomendations from './product-details/recomendations';
+import Description from '../categories/description';
 import Filter from './filter';
 const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 const { showSignin } = appAction;
@@ -17,6 +18,8 @@ const { showSignin } = appAction;
 function Products(props) {
     let imageD = '', description = '';
     const [isShow, setIsShow] = useState(0);
+    const [isCategory, setIsCategory] = useState(props.match.path.split('/')[2] ? true : false);
+    const [catId, setCatId] = useState(52);// change to dynamic id
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [pageSize, setPageSize] = useState(12);
@@ -44,7 +47,14 @@ function Products(props) {
         let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getAllProducts(lang, page, pageSize, sortValue.sortBy, sortValue.sortByValue);
+        let result: any;
+        if(isCategory){
+            console.log("CAtegory api")
+            result = await getProductByCategory(page, pageSize, catId, sortValue.sortBy, sortValue.sortByValue);
+        }else{
+            console.log('product api')
+            result = await getAllProducts(lang, page, pageSize, sortValue.sortBy, sortValue.sortByValue);
+        }
         //  console.log(Math.ceil(result.data.total_count / 9))
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
@@ -369,8 +379,7 @@ function Products(props) {
                 </div>
             </section>
 
-
-            <section className="my-5">
+            {/* <section className="my-5">
                 <div className="container">
                     <div className="row">
                         <div className="versace_sec">
@@ -387,10 +396,8 @@ function Products(props) {
                         </div>
                     </div>
                 </div>
-            </section>
-
-
-
+            </section> */}
+            <Description catId={153}/>
 
         </main>
     )

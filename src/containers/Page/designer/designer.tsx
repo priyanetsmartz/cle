@@ -11,7 +11,7 @@ import Description from '../categories/description';
 
 
 function DesignerCategories(props) {
-
+    const [catId, setCatId] = useState(52); //set default category here
     const onLeave = () => { }
 
     const afterLoad = () => { }
@@ -50,7 +50,7 @@ function DesignerCategories(props) {
                                     <Magazine />
                                 </div>
                                 <div className="section" >
-                                    <Description />
+                                    <Description catId={153}/>
                                 </div>
                             </div>
                         )
@@ -75,7 +75,7 @@ function DesignerCategories(props) {
                         <Magazine />
                     </div>
                     <div className="section" >
-                        <Description />
+                        <Description catId={153}/>
                     </div>
                 </div>
             </MobileView>

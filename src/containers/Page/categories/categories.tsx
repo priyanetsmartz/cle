@@ -76,7 +76,7 @@ function Categories(props) {
                                     <NewIn />
                                 </div>
                                 <div className="section">
-                                    <Description />
+                                    <Description catId={153}/>
                                 </div>
 
                             </div>
@@ -105,7 +105,7 @@ function Categories(props) {
                         <NewIn />
                     </div>
                     <div className="section">
-                        <Description />
+                        <Description catId={153}/>
                     </div>
                 </div>
             </MobileView>

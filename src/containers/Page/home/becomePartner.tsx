@@ -89,7 +89,7 @@ function BecomePartner(props) {
                                 <h1><IntlMessages id="home.becomePartner" /></h1>
                                 <p><IntlMessages id="home.howItWorks" /></p>
                                 <p><IntlMessages id="home.seeMoreInfo" /></p>
-                                <a href=""><IntlMessages id="home.checkout" /></a>
+                                <Link to="/#work-with-us"><IntlMessages id="home.checkout" /></Link>
                             </div>
                         </div>
                     </div>

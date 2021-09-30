@@ -176,8 +176,14 @@ function NewIn(props) {
                                         <div className="pricetag">${formatprice(item.price)}</div>
                                     </div>
                                     {/* {token && ( */}
-                                    <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">Add to cart</button>
-                                        <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
+                                    <div className="cart-button mt-3 px-2"> 
+                                        <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase">
+                                            View Product</Link>
+                                        <div className="add"> 
+                                            <span className="product_fav">
+                                                <i className="fa fa-heart-o"></i></span> 
+                                            <span className="product_fav"><i className="fa fa-opencart"></i></span> 
+                                        </div>
                                     </div>
                                     {/* )} */}
                                 </div>
@@ -187,7 +193,7 @@ function NewIn(props) {
                 })}
                 <div className="col-md-3">
                     <div className="view-all-btn">
-                    <Link to="/products/new-in"><IntlMessages id="category.viewAll" /></Link>
+                    <Link to="/products/new-in/all"><IntlMessages id="category.viewAll" /></Link>
                     </div>
                 </div>
             </div>

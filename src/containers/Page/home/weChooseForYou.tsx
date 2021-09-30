@@ -5,19 +5,17 @@ import notification from "../../../components/notification";
 import cartAction from "../../../redux/cart/productAction";
 import { getWeChooseForYou } from '../../../redux/pages/customers';
 import { Link } from 'react-router-dom'
-import {
-    addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi,
-    getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken
-} from '../../../redux/cart/productApi';
+import { addWhishlist, removeWhishlist } from '../../../redux/cart/productApi';
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
-
 
 const { addToCart, productList } = cartAction;
 
 function WeChooseForYou(props) {
     const [token, setToken] = useState('');
+    const [isWishlist, setIsWishlist] = useState(0);
+    const [delWishlist, setDelWishlist] = useState(0);
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [products, setProducts] = useState([]);
 
@@ -28,7 +26,6 @@ function WeChooseForYou(props) {
         slidesToShow: 4,
         slidesToScroll: 4
     };
-
 
     useEffect(() => {
         const localToken = localStorage.getItem('token');
@@ -41,23 +38,6 @@ function WeChooseForYou(props) {
         if (result) {
             setProducts(result.data[0].relevantProducts);
         }
-    }
-
-
-    function handleClick(id: number, sku: string) {
-        let cartData = {
-            "cartItem": {
-                "sku": sku,
-                "qty": 1,
-                "quote_id": localStorage.getItem('cartQuoteId')
-            }
-        }
-        let customer_id = localStorage.getItem('cust_id');
-        if (customer_id) {
-            addToCartApi(cartData)
-        }
-        props.addToCart(id);
-        notification("success", "", "Item added to cart");
     }
 
     async function handleWhishlist(id: number) {
@@ -94,17 +74,14 @@ function WeChooseForYou(props) {
                                 <Slider {...settings}>
                                     {products.map((item, i) => {
                                         return (
-                                            <div className="productcalr" key={i}>
+                                            <Link className="productcalr" key={i} to={'/product-details/' + item.name}>
                                                 <div className="product_img">
                                                     <img src={item.img} alt="productimage" className="image-fluid" />
                                                 </div>
                                                 <div className="product_name mt-2">  <Link to={'/product-details/' + item.sku}>{item.name} </Link></div>
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
                                                 <div className="product_price">$ {formatprice(item.price)}</div>
-                                                {/* <div className="pro-price-btn">
-                                                    <Link onClick={() => { handleClick(item.id, item.sku) }}>Add to Cart</Link>
-                                                </div> */}
-                                            </div>
+                                            </Link>
                                         )
                                     })}
                                 </Slider>
