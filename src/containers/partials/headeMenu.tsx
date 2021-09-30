@@ -49,6 +49,7 @@ function HeaderMenu(props) {
             let result: any = await menu(props.languages);
             var jsonData = result.data[0].parent.child;
             let catMenu = category ? category : jsonData[0].url_key;
+            console.log(jsonData);
             SetMenuData(jsonData);
             SetActiveOne(catMenu)
             SetActiveCat(catMenu);
@@ -75,6 +76,11 @@ function HeaderMenu(props) {
     const showAccountFxn = () => {
         props.accountPopup(true)
         props.miniCartPopup(false)
+    }
+    const showAccountFxnBlur = () => {
+        setTimeout(() => {
+            props.accountPopup(false)
+        }, 200)
     }
     const hideAccountFxn = () => {
         props.accountPopup(false)
@@ -116,21 +122,77 @@ function HeaderMenu(props) {
             )}
             <div className="container">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
-                    <div className="col-4 pt-1">
+                    <div className="col-6 pt-1">
                         <div className="select-wearing">
                             {menuData.length > 0 && (
                                 <ul>
                                     {
                                         menuData.map((val, i) => {
                                             return (
-                                                <li key={i} onMouseEnter={() => { setMenu(val.url_key) }} onMouseLeave={() => resetMenu()}>
+                                                // <li key={i} onMouseEnter={() => { setMenu(val.url_key) }} onMouseLeave={() => resetMenu()}>
+                                                <li key={i}>
                                                     <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
                                                         {val.child.map((childMenu, j) => {
                                                             //  console.log(childMenu)
                                                             return (
-                                                                <li className="nav-item col-6 col-md-auto" key={j}>
+                                                                <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
                                                                     <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
+                                                                    <span className="megamenu_bar">
+                                                                        <Link to="#" className="cross_icn"> <i className="fas fa-times"></i></Link>
+                                                                        <ul className="megamenugrid">
+                                                                            <h3>Fashion Jewelery</h3>
+                                                                            <li> <Link to="#">New in jewelery</Link></li>
+                                                                            <li><Link to="#">All fashion jewelry</Link></li>
+                                                                            <li> <Link to="#">Bracelets</Link></li>
+                                                                            <li> <Link to="#">Earnings</Link></li>
+                                                                            <li> <Link to="#">Necklaces</Link></li>
+                                                                            <li> <Link to="#">Rings</Link></li>
+                                                                            <li> <Link to="#">Pro-owned jewelry</Link></li>
+                                                                            <li><Link to="#">Sale jewelry</Link></li>
+                                                                        </ul>
+                                                                        <ul className="megamenugrid">
+                                                                            <h3>Fine Jewelery</h3>
+                                                                            <li> <Link to="#">New in jewelery</Link></li>
+                                                                            <li><Link to="#">All fashion jewelry</Link></li>
+                                                                            <li> <Link to="#">Bracelets</Link></li>
+                                                                            <li> <Link to="#">Earnings</Link></li>
+                                                                            <li> <Link to="#">Necklaces</Link></li>
+                                                                            <li> <Link to="#">Rings</Link></li>
+                                                                            <li> <Link to="#">Pro-owned jewelry</Link></li>
+                                                                            <li><Link to="#">Sale jewelry</Link></li>
+                                                                        </ul>
+                                                                        <ul className="megamenugrid">
+                                                                            <h3>Dicover</h3>
+                                                                            <li> <Link to="#">New in jewelery</Link></li>
+                                                                            <li><Link to="#">All fashion jewelry</Link></li>
+                                                                            <li> <Link to="#">Bracelets</Link></li>
+                                                                            <li> <Link to="#">Earnings</Link></li>
+                                                                            <li> <Link to="#">Necklaces</Link></li>
+                                                                            <li> <Link to="#">Rings</Link></li>
+                                                                            <li> <Link to="#">Pro-owned jewelry</Link></li>
+                                                                            <li><Link to="#">Sale jewelry</Link></li>
+                                                                        </ul>
+                                                                        <ul className="megamenugrid">
+                                                                            <h3>Feature Designer</h3>
+                                                                            <li> <Link to="#">New in jewelery</Link></li>
+                                                                            <li><Link to="#">All fashion jewelry</Link></li>
+                                                                            <li> <Link to="#">Bracelets</Link></li>
+                                                                            <li> <Link to="#">Earnings</Link></li>
+                                                                            <li> <Link to="#">Necklaces</Link></li>
+                                                                            <li> <Link to="#">Rings</Link></li>
+                                                                            <li> <Link to="#">Pro-owned jewelry</Link></li>
+                                                                            <li><Link to="#">Sale jewelry</Link></li>
+                                                                        </ul>
+
+                                                                        <ul className="megamenugrid">
+
+                                                                            <li> <Link to="#"><img src="images/minicart_p1.png" className="img-fluid" alt="" /></Link></li>
+                                                                            <li><Link to="#">spotlight one</Link></li>
+                                                                            <li><Link to="#" className="produt_type">Necklace</Link></li>
+                                                                            <li><Link to="#" className="shopnow_btn">Shop now</Link></li>
+                                                                        </ul>
+                                                                    </span>
                                                                 </li>
                                                             );
                                                         })}
@@ -143,7 +205,7 @@ function HeaderMenu(props) {
                             )}
                         </div>
                     </div>
-                    <div className="col-4">
+                    <div className="col-2">
                         <div className="cli_logo">
                             <Link className=" me-2" to="/">
                                 <img src={CLELogo} className="img-fluid" alt="logo" />
@@ -163,7 +225,7 @@ function HeaderMenu(props) {
                                 <ul>
                                     <li><Link to="#">{customerName ? customerName : ""} </Link></li>
                                     <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li>
-                                    <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }}  ><img src={avatar} alt="user" /> </Link>
+                                    <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 
                                         <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
                                             <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>

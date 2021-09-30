@@ -6,14 +6,14 @@ function Breadcrumbs(props) {
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     useEffect(() => {
-        //console.log(location)
+        console.log(location)
         let breads = location.pathname.split('\/');
         setBreadcrumsState(breads)
     }, [location]);
 
     return (
         <nav aria-label="breadcrumb" className="new-breadcrumb">
-            <ol className="breadcrumb">
+            {(location.pathname !== "/home") && (<ol className="breadcrumb">
                 <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                 {breadcrumsState.map((local, j) => {
                     if (j === breadcrumsState.length - 1) {
@@ -31,6 +31,7 @@ function Breadcrumbs(props) {
                     }
                 })}
             </ol>
+            )}
         </nav>
     );
 }

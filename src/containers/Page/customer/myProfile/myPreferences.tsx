@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
 import { savePreference } from '../../../../redux/pages/customers';
-
+import notification from '../../../../components/notification';
 
 function MyPreferences(props) {
     let result: any = props.preferences;
@@ -13,26 +13,29 @@ function MyPreferences(props) {
     const [attributes, setAttributes]: any = useState(preference);
     const [catFilter, setCatFilter]: any = useState('');
     const [favCat, setFavCat]: any = useState({});
+    const [activeDesigner, setActiveDesigner] = useState(0);
+    const [activeCategory, setActiveCategory] = useState(0);
 
     useEffect(() => {
         getAttributes();
         return () => {
             //
         }
-    });
+    },[]);
+    
     useEffect(() => {
       //  console.log(favCat)
-        attributes.categories[1] = favCat;
+        attributes.categories[activeCategory] = favCat;
         setAttributes(prevState => ({
             ...prevState,
             categories: attributes.categories
         }));
     }, [favCat])
+
     const getAttributes = async () => {
         let result: any = props.preferences;
         let preference = result.data && result.data[0] ? result.data[0].preference : ""
-        setAttributes(preference);
-        setAttributesAll(preference);
+        
         if (preference && props.custData && props.custData.custom_attributes) {
             props.custData.custom_attributes.forEach(el => {
                 if (el.attribute_code === 'mostly_intersted_in') {
@@ -62,9 +65,8 @@ function MyPreferences(props) {
                         });
                     })
                 }
-
                 if (el.attribute_code === 'favourite_categories') {
-                    let favcategoryArray = preference.categories && preference.categories[1] ? preference.categories[1] : [];
+                    let favcategoryArray = preference.categories && preference.categories[activeCategory] ? preference.categories[activeCategory] : [];
                     if (favcategoryArray.length > 0) {
                         favcategoryArray.forEach(favCat => {
                             el.value.split(',').forEach(element => {
@@ -79,14 +81,29 @@ function MyPreferences(props) {
             });
 
         }
+        setAttributes(preference);
+        setAttributesAll(preference);
     }
 
     const selectMostlyIntersted = (i) => {
-        attributes.mostly_intersted[i].isChecked = !attributes.mostly_intersted[i].isChecked;
+        setActiveIndex(i);
+        // attributes.mostly_intersted[i].isChecked = !attributes.mostly_intersted[i].isChecked;
+        attributes.mostly_intersted.forEach(el => {
+            if(el.id == attributes.mostly_intersted[i].id){
+                el.isChecked = true;
+            }else{
+                el.isChecked = false;
+            }
+        })
         setAttributes(prevState => ({
             ...prevState,
             mostly_intersted: attributes.mostly_intersted
         }));
+    }
+
+    const setActiveIndex = (index:number) => {
+        setActiveCategory(index)
+        setActiveDesigner(index)
     }
 
     const selectClothingSize = (i) => {
@@ -127,7 +144,7 @@ function MyPreferences(props) {
 
     //for selecting categories in the my prefernce modal
     const selectCategories = (i) => {
-        attributes.categories[1][i].isChecked = !attributes.categories[1][i].isChecked;
+        attributes.categories[activeCategory][i].isChecked = !attributes.categories[activeCategory][i].isChecked;
         setAttributes(prevState => ({
             ...prevState,
             categories: attributes.categories
@@ -136,7 +153,7 @@ function MyPreferences(props) {
 
     //remove all selected categores in my preference modal
     const removeAllCat = () => {
-        attributes.categories[1].forEach(el => {
+        attributes.categories[activeCategory].forEach(el => {
             el.isChecked = false;
         });
         setAttributes(prevState => ({
@@ -147,7 +164,7 @@ function MyPreferences(props) {
 
     //for selecting categories in the my prefernce modal
     const selectDesigner = (i) => {
-        attributes.designers[0][i].isChecked = !attributes.designers[0][i].isChecked;
+        attributes.designers[activeDesigner][i].isChecked = !attributes.designers[activeDesigner][i].isChecked;
         setAttributes(prevState => ({
             ...prevState,
             designers: attributes.designers
@@ -156,7 +173,7 @@ function MyPreferences(props) {
 
     //remove all selected categores in my preference modal
     const removeAllDesign = () => {
-        attributes.designers[0].forEach(el => {
+        attributes.designers[activeDesigner].forEach(el => {
             el.isChecked = false;
         });
         setAttributes(prevState => ({
@@ -170,15 +187,16 @@ function MyPreferences(props) {
         let result = [];
         let newObj = { ...attributesAll }
         setCatFilter(value)
-        result = newObj.categories[1].filter((eq) => {
+        result = newObj.categories[activeCategory].filter((eq) => {
             return eq.name.toLowerCase().includes(e.target.value.toLowerCase());
         });
         setFilter(result)
     }
 
-    function setFilter(result) {
+    const setFilter = (result) => {
         setFavCat(result);
     }
+
     const saveMyPreferences = async () => {
         let data = {
             customerId: custId,
@@ -219,29 +237,33 @@ function MyPreferences(props) {
             }
         });
 
-        attributes.categories[1].forEach(c => {
-            if (c.isChecked) {
-                if (data.fav_categories === '') {
-                    data.fav_categories = c.id
-                } else {
-                    data.fav_categories = `${data.fav_categories},${c.id}`
+        if(attributes.categories[activeCategory].length > 0){
+            attributes.categories[activeCategory].forEach(c => {
+                if (c.isChecked) {
+                    if (data.fav_categories === '') {
+                        data.fav_categories = c.id
+                    } else {
+                        data.fav_categories = `${data.fav_categories},${c.id}`
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        attributes.designers[0].forEach(d => {
-            if (d.isChecked) {
-                if (data.fav_designers === '') {
-                    data.fav_designers = d.id
-                } else {
-                    data.fav_designers = `${data.fav_designers},${d.id}`
+        if(attributes.designers[activeDesigner] && attributes.designers[activeDesigner].length > 0){
+            attributes.designers[activeDesigner].forEach(d => {
+                if (d.isChecked) {
+                    if (data.fav_designers === '') {
+                        data.fav_designers = d.id
+                    } else {
+                        data.fav_designers = `${data.fav_designers},${d.id}`
+                    }
                 }
-            }
-        });
+            });
+        }
 
         const res = await savePreference(data);
         if (res) {
-            //console.log(res);
+            notification("success", "", "Customer Preferences Updated");
         }
     }
 
@@ -250,13 +272,13 @@ function MyPreferences(props) {
             <div className="Mosty_interested_in">
                 <h2>Mosty interested in</h2>
                 <div className="interestd_check">
-                    {attributes.mostly_intersted && attributes.mostly_intersted.map((interest, i) => {
+                    {attributes.mostly_intersted && attributes.mostly_intersted.map((inter, i) => {
                         return (
-                            <div className="form-check" key={interest.id}>
-                                <input className="form-check-input" type="checkbox" value="" id={interest.name}
-                                    checked={interest.isChecked} onChange={() => selectMostlyIntersted(i)} />
-                                <label className="form-check-label" htmlFor={interest.name}>
-                                    {interest.name}
+                            <div className="form-check" key={inter.id}>
+                                <input className="form-check-input" type="checkbox" id={inter.name}
+                                    checked={inter.isChecked} onChange={() => selectMostlyIntersted(i)} />
+                                <label className="form-check-label" htmlFor={inter.name}>
+                                    {inter.name}
                                 </label>
                             </div>
                         )
@@ -281,7 +303,7 @@ function MyPreferences(props) {
                                 </ul>
                             </div>
                             <div className="sizebtn clothnmrgin">
-                                <div className="save-btn"><Link to="#" className="btn-link-blue">Save</Link></div>
+                                <div className="save-btn"><Link to="#" className="btn-link-blue" onClick={saveMyPreferences}>Save</Link></div>
                                 <div className="save-btn removel_allbtn">
                                     <Link to="#" onClick={removeAllCloth} className="btn-link-grey">Remove all</Link></div>
                             </div>
@@ -301,7 +323,7 @@ function MyPreferences(props) {
                                 </ul>
                             </div>
                             <div className="sizebtn">
-                                <div className="save-btn"><Link to="#" className="btn-link-blue">Save</Link></div>
+                                <div className="save-btn"><Link to="#" className="btn-link-blue" onClick={saveMyPreferences}>Save</Link></div>
                                 <div className="save-btn removel_allbtn">
                                     <Link to="#" onClick={removeAllShoe} className="btn-link-grey">Remove all</Link></div>
                             </div>
@@ -328,7 +350,7 @@ function MyPreferences(props) {
                     <div className="col-sm-6">
                         <div className="favt_section">
                             <ul>
-                                {attributes.designers && attributes.designers[0].map((design, i) => {
+                                {attributes.designers[activeDesigner] && attributes.designers[activeDesigner].map((design, i) => {
                                     return (
                                         // <li key={design.id}>
                                         <div className="form-check" key={design.id} >
@@ -348,7 +370,7 @@ function MyPreferences(props) {
                         <div className="favt_dragdrop">
                             <div className="favdesignr_size_sec">
                                 <ul>
-                                    {attributes.designers && attributes.designers[0].map(dg => {
+                                    {attributes.designers[activeDesigner] && attributes.designers[activeDesigner].map(dg => {
                                         return dg.isChecked &&
                                             (<li key={dg.id}><Link to="#" >{dg.name}</Link></li>)
                                     })}
@@ -380,7 +402,7 @@ function MyPreferences(props) {
                     <div className="col-sm-6">
                         <div className="favt_section">
                             <ul>
-                                {attributes.categories && attributes.categories[1] && attributes.categories[1].length > 0 && attributes.categories[1].map((cat, i) => {
+                                {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length > 0 && attributes.categories[activeCategory].map((cat, i) => {
                                     return (
                                         // <li key={cat.id}>
                                         <div className="form-check" key={cat.id}>
@@ -400,7 +422,7 @@ function MyPreferences(props) {
                         <div className="favt_dragdrop">
                             <div className="favdesignr_size_sec">
                                 <ul>
-                                    {attributes.categories && attributes.categories[1] && attributes.categories[1].length && attributes.categories[1].map(cat => {
+                                    {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length && attributes.categories[activeCategory].map(cat => {
                                         return cat.isChecked &&
                                             (<li key={cat.id}><Link to="#"> {cat.name}</Link></li>)
                                     })}

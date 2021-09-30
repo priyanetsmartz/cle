@@ -5,14 +5,14 @@ import { useParams } from "react-router-dom";
 import { getCookie } from '../../helpers/session';
 import { siteConfig } from '../../settings/index';
 import IntlMessages from "../../components/utility/intlMessages";
-import cartAction from "../../redux/cart/productAction";
 import notification from "../../components/notification";
 import Filter from '../Page/product/filter';
-import { searchFields, addWhishlist, getAllProducts, getWhishlistItemsForUser, removeWhishlist } from '../../redux/cart/productApi';
+import { searchFields, addWhishlist, getWhishlistItemsForUser, removeWhishlist } from '../../redux/cart/productApi';
 import { capitalize } from '../../components/utility/allutils';
-const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
+import appAction from "../../redux/app/actions";
+const { showSignin } = appAction;
 
-function SearchBar(props) {
+function SearchResults(props) {
     let pageSizeNumber = siteConfig.pageSize;
     const { searchText } = useParams();
     const [isWishlist, setIsWishlist] = useState(0);
@@ -45,7 +45,7 @@ function SearchBar(props) {
         let lang = props.languages ? props.languages : language;
         let results: any = await searchFields(searchText, pageSizeNumber, lang, sortValue.sortBy, sortValue.sortByValue);
         setPagination(Math.ceil(results.data.total_count / pageSize));
-        let productResult = results.data;
+        let productResult = results.data.items;
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
             let products = results.data.items;
@@ -57,7 +57,7 @@ function SearchBar(props) {
                 }));
 
             productResult = mergeById(products, WhishlistData);
-           // console.log(productResult)
+            // console.log(productResult)
 
         }
         setOpacity(1);
@@ -83,22 +83,26 @@ function SearchBar(props) {
 
 
     async function handleWhishlist(id: number) {
-        setIsWishlist(id)
-        let result: any = await addWhishlist(id);
-        //     console.log(result);
-        if (result.data) {
-            setIsWishlist(0)
-            props.addToWishlistTask(true);
-            notification("success", "", 'Added to Whishlist');
-            getData(searchText)
+        if (token) {
+            setIsWishlist(id)
+            let result: any = await addWhishlist(id);
+            //     console.log(result);
+            if (result.data) {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("success", "", 'Your product has been successfully added to your wishlist');
+                getData(searchText)
+            } else {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("error", "", "Something went wrong!");
+                getData(searchText)
+            }
         } else {
-            setIsWishlist(0)
-            props.addToWishlistTask(true);
-            notification("error", "", "Something went wrong!");
-            getData(searchText)
+            props.showSignin(true);
         }
-
     }
+
     async function handleDelWhishlist(id: number) {
         setDelWishlist(id)
         let del: any = await removeWhishlist(id);
@@ -181,20 +185,17 @@ function SearchBar(props) {
                                         <div className="col-md-4" key={item.id}>
                                             {/* <Link to={'/product-details/' + item.sku}> */}
                                             <div className="product py-4">
-                                                {token && (
-                                                    <span className="off bg-favorite">
-                                                        {!item.wishlist_item_id && (
-                                                            <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
-                                                            </div>
-                                                        )}
+                                                <span className="off bg-favorite">
+                                                    {!item.wishlist_item_id && (
+                                                        <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
+                                                        </div>
+                                                    )}
 
-                                                        {item.wishlist_item_id && (
-                                                            <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
-                                                            </div>
-                                                        )}
-                                                    </span>
-                                                )
-                                                }
+                                                    {item.wishlist_item_id && (
+                                                        <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
+                                                        </div>
+                                                    )}
+                                                </span>
 
                                                 <div className="text-center">
                                                     {
@@ -283,5 +284,5 @@ const mapStateToProps = (state) => {
 }
 export default connect(
     mapStateToProps,
-    {}
-)(SearchBar);
+    { showSignin }
+)(SearchResults);

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
+import appAction from "../../../redux/app/actions";
 import { addWhishlist, getAllProducts, getWhishlistItemsForUser, removeWhishlist, addToCartApi, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
@@ -10,6 +11,7 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import Recomendations from './product-details/recomendations';
 import Filter from './filter';
 const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
+const { showSignin } = appAction;
 
 
 function Products(props) {
@@ -120,22 +122,26 @@ function Products(props) {
     }
 
     async function handleWhishlist(id: number) {
-        setIsWishlist(id)
-        let result: any = await addWhishlist(id);
-        //     console.log(result);
-        if (result.data) {
-            setIsWishlist(0)
-            props.addToWishlistTask(true);
-            notification("success", "", 'Added to Whishlist');
-            getProducts()
+        if (token) {
+            setIsWishlist(id)
+            let result: any = await addWhishlist(id);
+            //     console.log(result);
+            if (result.data) {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("success", "", 'Your product has been successfully added to your wishlist');
+                getProducts()
+            } else {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("error", "", "Something went wrong!");
+                getProducts()
+            }
         } else {
-            setIsWishlist(0)
-            props.addToWishlistTask(true);
-            notification("error", "", "Something went wrong!");
-            getProducts()
+            props.showSignin(true);
         }
-
     }
+
     async function handleDelWhishlist(id: number) {
         setDelWishlist(id)
         let del: any = await removeWhishlist(id);
@@ -210,7 +216,7 @@ function Products(props) {
                         <Filter />
                         {/* Filter sidebar end */}
                         <div className="col-sm-9">
-                            <div className="resltspage_sec">                               
+                            <div className="resltspage_sec">
                                 <div className="paginatn_result">
                                     <span><IntlMessages id="product.results" /></span>
                                     <ul>
@@ -238,20 +244,18 @@ function Products(props) {
                                             <div className="col-md-4" key={item.id}>
                                                 {/* <Link to={'/product-details/' + item.sku}> */}
                                                 <div className="product py-4">
-                                                    {token && (
-                                                        <span className="off bg-favorite">
-                                                            {!item.wishlist_item_id && (
-                                                                <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
-                                                                </div>
-                                                            )}
 
-                                                            {item.wishlist_item_id && (
-                                                                <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
-                                                                </div>
-                                                            )}
-                                                        </span>
-                                                    )
-                                                    }
+                                                    <span className="off bg-favorite">
+                                                        {!item.wishlist_item_id && (
+                                                            <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
+                                                            </div>
+                                                        )}
+
+                                                        {item.wishlist_item_id && (
+                                                            <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
+                                                            </div>
+                                                        )}
+                                                    </span>
 
                                                     <div className="text-center">
                                                         {
@@ -405,5 +409,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList, addToCartTask, addToWishlistTask }
+    { addToCart, productList, addToCartTask, addToWishlistTask, showSignin }
 )(Products);

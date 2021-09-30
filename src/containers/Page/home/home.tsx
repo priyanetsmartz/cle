@@ -57,9 +57,6 @@ function HomePage(props) {
                                     <HomeBanner />
                                     <Personal />
                                 </div>
-                                {/* <div className="section" >
-                                    <Personal />
-                                </div> */}
                                 <div className="section" >
                                     <HtmlContent identifier="home_page_discover_categories" />
                                 </div>
@@ -93,8 +90,6 @@ function HomePage(props) {
                 <div className="sectiosn" >
                     <div className="section">
                         <HomeBanner />
-                    </div>
-                    <div className="section" >
                         <Personal />
                     </div>
                     <div className="section" >
