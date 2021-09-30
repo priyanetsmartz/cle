@@ -7,6 +7,7 @@ const { openSizeGuide, openMeasuringGuide } = cartAction;
 
 function SizeGuide(props) {
     useEffect(() => {
+      //  console.log(props.sizeDetails)
     }, []);
 
 
@@ -30,60 +31,8 @@ function SizeGuide(props) {
                         <div className="view_measuring">
                             <Link to="#" onClick={measuringGuideHanler}><IntlMessages id="product.measuringGuide" /> </Link>
                         </div>
-                        <table>
-
-                            <thead>
-                                <tr>
-                                    <td></td>
-                                    <th scope="col">XS</th>
-                                    <th scope="col">S</th>
-                                    <th scope="col">M</th>
-                                    <th scope="col">L</th>
-                                    <th scope="col">XL</th>
-                                    <th scope="col">XXL</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">US/UX Chest</th>
-                                    <td>190</td>
-                                    <td>160</td>
-                                    <td>40</td>
-                                    <td>120</td>
-                                    <td>30</td>
-                                    <td>70</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">US/UK Waist</th>
-                                    <td>3</td>
-                                    <td>40</td>
-                                    <td>30</td>
-                                    <td>45</td>
-                                    <td>35</td>
-                                    <td>49</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Europe</th>
-                                    <td>10</td>
-                                    <td>180</td>
-                                    <td>10</td>
-                                    <td>85</td>
-                                    <td>25</td>
-                                    <td>79</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Asian</th>
-                                    <td>40</td>
-                                    <td>80</td>
-                                    <td>90</td>
-                                    <td>25</td>
-                                    <td>15</td>
-                                    <td>119</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div dangerouslySetInnerHTML={{ __html: props.sizeDetails }} />
                     </div>
-
 
                 </div>
             </div>

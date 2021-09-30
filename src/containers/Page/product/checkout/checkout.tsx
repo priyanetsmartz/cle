@@ -6,7 +6,7 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode } from '../../../../redux/cart/productApi';
-import { getCustomerDetails, saveCustomerDetails, getCountriesList, getRegionsByCountryID  } from '../../../../redux/pages/customers';
+import { getCustomerDetails, saveCustomerDetails, getCountriesList, getRegionsByCountryID } from '../../../../redux/pages/customers';
 function Checkout(props) {
     const [itemsVal, SetItems] = useState({
         checkData: {}, items: {}, address: {}
@@ -28,7 +28,7 @@ function Checkout(props) {
         postcode: "",
         city: "",
         country_id: "",
-        region_id:"",
+        region_id: "",
         street: ""
     });
 
@@ -111,15 +111,18 @@ function Checkout(props) {
         }))
     }
 
-    const handleCountryChange= async (e) => {
+    const handleAddressChange = (e) => {
+        console.log(e.target.value)
+    }
+    const handleCountryChange = async (e) => {
         const { id, value } = e.target;
         setCustAddForm(prevState => ({
             ...prevState,
             [id]: value
         }));
 
-        const res:any = await getRegionsByCountryID(value);
-        if(res.data.available_regions){
+        const res: any = await getRegionsByCountryID(value);
+        if (res.data.available_regions) {
             setRegions(res.data.available_regions);
         }
         console.log(res.data.available_regions);
@@ -147,7 +150,7 @@ function Checkout(props) {
                     postcode: "",
                     city: "",
                     country_id: "",
-                    region_id:"",
+                    region_id: "",
                     street: ""
                 });
                 toggleAddressModal();
@@ -355,7 +358,12 @@ function Checkout(props) {
                                                                     <p className="text-muted">
                                                                         <IntlMessages id="myaccount.defaultDeliveryAddress" /></p>
                                                                     <div className="form-check">
-                                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            defaultValue={item.id}
+                                                                            onChange={handleAddressChange}
+                                                                            className="form-check-input"
+                                                                        />
                                                                         <label className="form-check-label" htmlFor="flexCheckDefault">
                                                                             <IntlMessages id="usethisAddress" />
                                                                         </label>
@@ -716,7 +724,7 @@ function Checkout(props) {
                                 <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                                 <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
                                     {countries && countries.map(opt => {
-                                        return (<option key={opt.id} value={opt.id} >{opt.full_name_english? opt.full_name_english:opt.id}</option>);
+                                        return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                     })}
                                 </select>
                                 <span className="error">{errors.errors["country_id"]}</span>

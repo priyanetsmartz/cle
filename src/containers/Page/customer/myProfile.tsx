@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { language } from '../../../settings';
 import MyPreferences from './myProfile/myPreferences';
 import { DROPDOWN } from '../../../config/constants';
-
+import moment from 'moment';
 
 function MyProfile(props) {
     const userGroup = localStorage.getItem('token');
@@ -102,7 +102,9 @@ function MyProfile(props) {
         let lang = props.languages ? props.languages : language;
         // to get cutomer preferences
         let result: any = await getCustomerDetails();
-        const d = result.data.dob.split("-")
+        // const today = moment();
+        // console.log(today.format());
+        const d = result.data.dob ? result.data.dob.split("-") : moment().format("YYYY-MM-DD").split("-");
         dob.day = d[2];
         dob.month = d[1];
         dob.year = d[0];
@@ -1031,7 +1033,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
-                            <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
+                                <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">Select</option>
                                     {DROPDOWN.dates.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);

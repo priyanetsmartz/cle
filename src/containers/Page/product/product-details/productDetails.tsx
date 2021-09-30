@@ -41,6 +41,8 @@ function ProductDetails(props) {
     const [magezineData, setMagezineData] = useState({});
     const [recomendationsData, setRecomendations] = useState({});
     const [configurableOptions, setConfigurableOptions] = useState([]);
+    const [productSizeDetails, setProductSizeDetails] = useState({});
+    const [tagsState, setTagsState] = useState([]);
     const [slectedAttribute, setSlectedAttribute] = useState({
         options: {}
     });
@@ -98,13 +100,13 @@ function ProductDetails(props) {
         let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductDetails(skuUrl);
 
-      
+
         let projectSingle = {};
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
             // let products = result.data.items;
             let WhishlistData = whishlist.data;
-    
+
             const inWhishlist = WhishlistData.find(element => element.sku === skuUrl);
             if (inWhishlist) {
                 setItemInWhishlist(inWhishlist.wishlist_item_id)
@@ -115,7 +117,7 @@ function ProductDetails(props) {
             //   console.log(productExtras.data)
         }
 
-        let description = "", special_price: 0, short, shipping_and_returns: "";
+        let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
 
         result.data.custom_attributes.map((attributes) => {
             if (attributes.attribute_code === "description") {
@@ -130,8 +132,20 @@ function ProductDetails(props) {
             if (attributes.attribute_code === "shipping_and_returns") {
                 shipping_and_returns = attributes.value;
             }
+            if (attributes.attribute_code === "popular" && attributes.value === "1") {
+                tags.push("Popular");
+            }
+            if (attributes.attribute_code === "new_designer" && attributes.value === "1") {
+                tags.push("New Designers");
+            }
+            if (attributes.attribute_code === "sale" && attributes.value === "1") {
+                tags.push("Sale");
+            }
+
         })
 
+        // console.log(tags);
+        // console.log(result.data.extension_attributes)
         projectSingle['id'] = result.data.id;
         projectSingle['type_id'] = result.data.type_id;
         projectSingle['sku'] = result.data.sku;
@@ -144,10 +158,12 @@ function ProductDetails(props) {
         projectSingle['is_in_stock'] = result.data.extension_attributes.stock_item.is_in_stock;
         setOpacity(1)
         setProdId(projectSingle['id']);
+        setTagsState(tags)
         setProductImages(result.data.media_gallery_entries)
         setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
         setExtensionAttributes(result.data.extension_attributes.stock_item.qty);
         setproductDetails(projectSingle);
+        setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
     }
 
     const handleGiftMEssage = () => {
@@ -228,21 +244,24 @@ function ProductDetails(props) {
     }
 
     async function handleWhishlist(id: number) {
-        setIsWishlist(id)
-        let result: any = await addWhishlist(id);
-        //  console.log(result);
-        if (result.data) {
-            setIsWishlist(0)
-            props.addToWishlistTask(true);
-            notification("success", "", 'Added to Whishlist');
-            getProductDetailsFxn(sku)
+        if (token) {
+            setIsWishlist(id)
+            let result: any = await addWhishlist(id);
+            //     console.log(result);
+            if (result.data) {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("success", "", 'Your product has been successfully added to your wishlist');
+                getProductDetailsFxn(sku)
+            } else {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("error", "", "Something went wrong!");
+                getProductDetailsFxn(sku)
+            }
         } else {
-            setIsWishlist(0)
-            props.addToWishlistTask(true);
-            notification("error", "", "Something went wrong!");
-            getProductDetailsFxn(sku)
+            props.showSignin(true);
         }
-
     }
     async function handleDelWhishlist(id: any) {
         setDelWishlist(id)
@@ -271,28 +290,28 @@ function ProductDetails(props) {
                         <div className="row">
                             <div className="col-sm-8">
                                 <div className="product-slider">
-                                    {token && (
-                                        <span className="pdp-favorite">
-                                            {/* <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i> */}
-                                            {iteminWhishlist === 0 ? (
-                                                <div>{isWishlist === prodId ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i>}
-                                                </div>
-                                            ) : <div>{delWishlist === iteminWhishlist ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(iteminWhishlist) }} aria-hidden="true"></i>}
-                                            </div>}
-                                        </span>
-                                    )
-                                    }
+                                    <span className="pdp-favorite">
+                                        {iteminWhishlist === 0 ? (
+                                            <div>{isWishlist === prodId ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i>}
+                                            </div>
+                                        ) : <div>{delWishlist === iteminWhishlist ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(iteminWhishlist) }} aria-hidden="true"></i>}
+                                        </div>}
+                                    </span>
                                     <ProductImages productImages={productImages} />
                                 </div>
                             </div>
                             <div className="col-sm-4">
                                 <div className="product_description">
                                     <div className="list_accordon">
-                                        <ul>
-                                            <li><Link to="#" className="active">Sale</Link></li>
-                                            <li><Link to="#">New Designers</Link></li>
-                                            <li><Link to="#">Popular</Link></li>
-                                        </ul>
+                                        {tagsState.length > 0 && (
+                                            <ul>
+                                                {tagsState.map((tag, i) => {
+                                                    return (<li key={i}><Link to="#" className="active">{tag}</Link></li>)
+                                                })}
+
+                                            </ul>
+                                        )
+                                        }
                                         {isPriveuser && <div className="logo_stampg">
                                             <Link to="#"><img src={cleWork} alt="" className="img-fluid" /></Link>
                                         </div>}
@@ -473,8 +492,8 @@ function ProductDetails(props) {
             </main>
 
             {/* size guide modal starts here */}
-            <Modal show={sizeGuideModal} size="lg">
-                <SizeGuide />
+            <Modal show={sizeGuideModal} size="lg" >
+                <SizeGuide sizeDetails={productSizeDetails} />
             </Modal>
             {/* size guide modal ends here */}
             {/* measuring guide modal starts here */}
