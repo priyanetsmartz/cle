@@ -29,7 +29,7 @@ function Checkout(props) {
         postcode: "",
         city: "",
         country_id: "",
-        region_id: "",
+        region_id:0,
         street: ""
     });
 
@@ -137,6 +137,7 @@ function Checkout(props) {
         if (res.data.available_regions) {
             setRegions(res.data.available_regions);
         }
+     
         //console.log(res.data.available_regions);
 
     }
@@ -162,7 +163,7 @@ function Checkout(props) {
                     postcode: "",
                     city: "",
                     country_id: "",
-                    region_id: "",
+                    region_id: 0,
                     street: ""
                 });
                 toggleAddressModal();

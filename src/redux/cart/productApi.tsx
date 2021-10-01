@@ -257,3 +257,4 @@ export function setDefaultShippingAddress(addressId) {
 export function getPaymentMethods() {
     return CUSTOMER.request(`rest/V1/carts/mine/payment-methods`, "", "GET", "")
 }
+
