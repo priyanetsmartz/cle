@@ -217,7 +217,7 @@ function OrderDetails(props) {
                             <div className="product-total-price">
                                 <p><IntlMessages id="order.subTotal" /><span className="text-end">${order.base_subtotal}</span></p>
                                 <p><IntlMessages id="order.shipping" /><span className="text-end">${order.base_shipping_amount}</span></p>
-                                <p><IntlMessages id="order.tax" /><span className="text-end">$0</span></p>
+                                <p><IntlMessages id="order.tax" /><span className="text-end">${order.shipping_amount}</span></p>
                                 <hr />
                                 <div className="final-price"><IntlMessages id="order.total" /><span>${order.grand_total}</span></div>
                             </div>
