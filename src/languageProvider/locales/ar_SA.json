@@ -263,8 +263,12 @@
   "order.orderDetails":"تفاصيل الطلب",
   "order.thanksForOrder":"شكرا لطلبك! تحقق من التفاصيل أدناه.",
   "order.itsDelivered":"تم تسليمها",
+  "order.itsPending":"إنه معلق",
+  "order.itsProcessing":"انها معالجة",
   "order.delivered":"تم التوصيل",
   "order.yourParcelDelivered":"تم تسليم الطرد الخاص بك. نأمل أن تحبه!",
+  "order.yourParcelPending":"الطرد الخاص بك معلق",
+  "order.yourParcelProcessing":"الطرد الخاص بك قيد المعالجة",
   "order.orderNo":"رقم الأمر",
   "order.orderDate":"تاريخ الطلب",
   "order.purchaseDate":"تاريخ الشراء",
@@ -318,5 +322,12 @@
   "mysupport.weWantToBe":"نريد أن نكون هناك من أجلك متى احتجت إلينا. إليك كيف يمكنك التواصل",
   "mysupport.checkHelp":"تحقق من مركز المساعدة",
   "mysupport.findTheAnswer":"ابحث عن الإجابة التي تحتاجها في قسم الأسئلة الشائعة.",
-  "myaccount.region":"منطقة"
+  "myaccount.region":"منطقة",
+  "preferences.mostlyInterested":"معظمهم مهتمون بـ",
+  "preferences.clothingSize":"حجم الملابس",
+  "preferences.removeAll":"حذف الكل",
+  "preferences.favCategory":"الفئات المفضلة",
+  "preferences.favDesigner":"المصممين المفضلين",
+  "preferences.shoeSize":"قياس الحذاء",
+  "order.date":"تاريخ"
 }

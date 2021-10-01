@@ -200,8 +200,12 @@
   "order.orderDetails":"Order details",
   "order.thanksForOrder":"Thanks for your order! Check out the details below.",
   "order.itsDelivered":"It's Delivered",
+  "order.itsPending":"It's Pending",
+  "order.itsProcessing":"It's Processing",
   "order.delivered":"Delivered",
   "order.yourParcelDelivered":"Your parcel has been delivered. We hope you love it!",
+  "order.yourParcelPending":"Your parcel is pending.",
+  "order.yourParcelProcessing":"Your parcel is under processing.",
   "order.orderNo":"Order number",
   "order.orderDate":"Order Date",
   "order.purchaseDate":"Purchase Date",
@@ -319,6 +323,12 @@
   "mysupport.weWantToBe":"We want to be there for you whenever you need us. Here's how you can get in touch.",
   "mysupport.checkHelp":"Check Help Center",
   "mysupport.findTheAnswer":"Find the answer you need in our FAQs section.",
-  "myaccount.region":"Region"
-
+  "myaccount.region":"Region",
+  "preferences.mostlyInterested":"Mostly interested In",
+  "preferences.clothingSize":"Clothing size",
+  "preferences.removeAll":"Remove all",
+  "preferences.favCategory":"Favorite categories",
+  "preferences.favDesigner":"Favorite designers",
+  "preferences.shoeSize":"Shoes size",
+  "order.date":"Date"
 }

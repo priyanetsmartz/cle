@@ -55,13 +55,13 @@ export function getCustomerOrders() {
     return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
 }
 
-export function getCustomerOrdersByDate(date) {
-    const localToken = localStorage.getItem('cust_id');
-    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${localToken}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]=${date}&searchCriteria[filterGroups][0][filters][0][conditionType]=gteq`, "", "GET", "");
+export function getCustomerOrdersByDate(fromDate, toDate) {
+    const custId = localStorage.getItem('cust_id');
+    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][1][filters][0][field]=created_at&searchCriteria[filterGroups][1][filters][0][value]=${toDate}&searchCriteria[filterGroups][1][filters][0][conditionType]=from&searchCriteria[filterGroups][1][filters][1][field]=created_at&searchCriteria[filterGroups][1][filters][1][value]=${fromDate}&searchCriteria[filterGroups][1][filters][1][conditionType]=to`, "", "GET", "");
 }
 
-export function sortCustomerOrders(sort, custId, pageSize) {
-    custId = 114; //remove this
+export function sortCustomerOrders(sort, pageSize) {
+    const custId = localStorage.getItem('cust_id');
     return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=${sort}`, "", "GET", "");
 }
 

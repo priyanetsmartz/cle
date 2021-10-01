@@ -12,6 +12,7 @@ function OrderDetails(props) {
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [orderId, setOrderId] = useState(props.match.params.orderId);
     const [maxItems, setMaxitems] = useState(10);
+    const [orderProgress, setOrderProgress] = useState(0);
     const [order, setOrder]: any = useState({});
     const [changeAddressModal, setChangeAddressModal] = useState(false);
     const [custAddForm, setCustAddForm] = useState({
@@ -39,6 +40,9 @@ function OrderDetails(props) {
     const getData = async () => {
         let result: any = await searchOrders(orderId);
         setOrder(result.data);
+        //change this after clarification
+        const p = result.data.status == 'processing' ? 10 : result.data.status == 'complete' ? 100 : result.data.status == 'pending' ? 25 : 10;
+        setOrderProgress(p)
     }
 
     const getCountries = async () => {
@@ -110,7 +114,7 @@ function OrderDetails(props) {
     const sortHandler = (sortOrder) => {
         order.items.sort(compareValues(sortOrder))
         setOrder(order);
-        console.log(order.items);
+        // console.log(order.items);
     }
 
 
@@ -149,15 +153,23 @@ function OrderDetails(props) {
                     <div className="row">
                         <div className="col-md-8 offset-md-2">
                             <div className="order-detail-head">
-                                <p><strong><IntlMessages id="order.itsDelivered" /></strong></p>
-                                <p><IntlMessages id="order.delivered" /> Mon, 31 May 2021</p>
+                                {/* change this after clarification */}
+                                <p><strong>
+                                    {order.status == 'complete' ? <IntlMessages id="order.itsDelivered" /> : order.status == 'pending' ?
+                                    <IntlMessages id="order.itsPending" />: order.status == 'processing' ? <IntlMessages id="order.itsProcessing" />
+                                : order.status}
+                                </strong></p>
+                                {order.status == 'complete' && <p><IntlMessages id="order.delivered" /> {order.shipping_amount}</p>}
                                 <div className="progress-bar-area">
                                     <div className="progress">
                                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                            aria-valuenow={75} aria-valuemin={0} aria-valuemax={100} style={{ width: '75%' }}></div>
+                                            aria-valuenow={orderProgress} aria-valuemin={0} aria-valuemax={100} style={{ width: `${orderProgress}%` }}></div>
                                     </div>
                                 </div>
-                                <p><IntlMessages id="order.yourParcelDelivered" /></p>
+                                <p>
+                                {order.status == 'complete' ? <IntlMessages id="order.yourParcelDelivered" /> : order.status == 'pending' ?
+                                    <IntlMessages id="order.yourParcelPending" />: order.status == 'processing' ? <IntlMessages id="order.yourParcelProcessing" />
+                                : order.status}</p>
                             </div>
                         </div>
                     </div>
@@ -167,7 +179,7 @@ function OrderDetails(props) {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="order-number">
-                            <h4><IntlMessages id="order.orderNo" />: 101098675674686434</h4>
+                            <h4><IntlMessages id="order.orderNo" />: {order.sku}</h4>
                             <div className="row">
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.purchaseDate" /></strong></p>
@@ -175,7 +187,7 @@ function OrderDetails(props) {
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.shippingDate" /></strong></p>
-                                    <p>Mon, 10 May 2021</p>
+                                    <p>{moment(order.shipment_date).format('ddd, D MMMM YYYY')}</p>
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.paymentMethod" /></strong></p>

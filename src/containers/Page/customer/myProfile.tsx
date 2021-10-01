@@ -15,6 +15,7 @@ import moment from 'moment';
 
 function MyProfile(props) {
     const userGroup = localStorage.getItem('token');
+    const [isShow, setIsShow] = useState(false);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [attributes, setAttributes]: any = useState({});
@@ -231,14 +232,16 @@ function MyProfile(props) {
     // for customer address popup window starts here
     const saveCustAddress = async (e) => {
         if (validateAddress()) {
+            setIsShow(true);
             let obj: any = { ...custAddForm };
+            if (obj.region_id == '') delete obj.region_id;
             obj.street = [obj.street];
             if (obj.id === 0) {
                 custForm.addresses.push(obj);
             } else {
                 custForm.addresses[addIndex] = obj;
             }
-            // console.log(custAddForm);
+            console.log(custAddForm);
             let result: any = await saveCustomerDetails(custId, { customer: custForm });
             if (result) {
                 openAddressModal();
@@ -255,6 +258,7 @@ function MyProfile(props) {
                     street: ""
                 });
                 notification("success", "", "Customer Address Updated");
+                setIsShow(false);
             }
         }
     }
@@ -300,6 +304,8 @@ function MyProfile(props) {
 
     //edit existing address starts here------------->
     const editAddress = (index) => {
+        delete custForm.addresses[index].region;
+        getRegions(custForm.addresses[index].country_id, index);
         setAddIndex(index);
         custForm.addresses[index].street = custForm.addresses[index].street[0];
         setCustAddForm(custForm.addresses[index]);
@@ -333,15 +339,22 @@ function MyProfile(props) {
             ...prevState,
             [id]: value
         }));
+        getRegions(value);
+    }
 
+    const getRegions = async (value, i?) => {
         const res: any = await getRegionsByCountryID(value);
         if (res.data.available_regions === undefined) {
             setRegions([]);
+            if (i) {
+                setCustAddForm(prevState => ({
+                    ...prevState,
+                    region_id: ''
+                }));
+            }
         } else {
             setRegions(res.data.available_regions);
         }
-        //  console.log(res.data.available_regions);
-
     }
 
     //change password starts here----------------------------------------->
@@ -716,8 +729,8 @@ function MyProfile(props) {
                                     <li>{address.city}</li>
                                     <li>{address.country_id}</li>
                                 </ul>
-                                <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                                <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
+                                {i== 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
+                                <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
                                 <div className="address-action">
                                     <Link to="#" onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
                                     <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`} onClick={() => editAddress(i)}>
@@ -1132,7 +1145,7 @@ function MyProfile(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.city" /></label>
+                            <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="city"
                                 placeholder="City"
                                 value={custAddForm.city}
@@ -1141,7 +1154,7 @@ function MyProfile(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.postCode" /></label>
+                            <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="postcode"
                                 placeholder="Post Code"
                                 value={custAddForm.postcode}
@@ -1161,8 +1174,9 @@ function MyProfile(props) {
                         {regions.length > 0 &&
                             <div className="width-100 mb-3 form-field">
                                 <label className="form-label">
-                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
+                                    <IntlMessages id="myaccount.region" /></label>
                                 <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                    <option value="">Select</option>
                                     {regions && regions.map(opt => {
                                         return (<option key={opt.id} value={opt.id} >
                                             {opt.name}</option>);
@@ -1174,7 +1188,13 @@ function MyProfile(props) {
                             <div className="width-100 mb-3 form-field">
                                 <div className="Frgt_paswd">
                                     <div className="confirm-btn">
-                                        <button type="button" className="btn btn-secondary" onClick={saveCustAddress}><IntlMessages id="myaccount.confirm" /></button>
+                                        <button type="button" className="btn btn-secondary" onClick={saveCustAddress} style={{ "display": !isShow ? "inline-block" : "none" }}>
+                                            <IntlMessages id="myaccount.confirm" />
+                                        </button>
+                                        <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}>
+                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                            <IntlMessages id="loading" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
