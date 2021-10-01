@@ -5,7 +5,7 @@ import CheckoutSidebar from './sidebar';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
-import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode } from '../../../../redux/cart/productApi';
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, setDefaultShippingAddress, getPaymentMethods } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, saveCustomerDetails, getCountriesList, getRegionsByCountryID } from '../../../../redux/pages/customers';
 function Checkout(props) {
     const [itemsVal, SetItems] = useState({
@@ -18,6 +18,7 @@ function Checkout(props) {
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [addNewAddressModal, setAddNewAddressModal] = useState(false);
     const [errorPromo, setErrorPromo] = useState('');
+    const [paymentMethodsList, SetPaymentMethodsList] = useState({})
     const [regions, setRegions] = useState([]); // for regions dropdown
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
@@ -40,7 +41,8 @@ function Checkout(props) {
         gender: "",
         dob: "",
         website_id: 1,
-        addresses: []
+        addresses: [],
+        default_shipping: ''
     });
 
     const [errors, setError] = useState({
@@ -53,6 +55,7 @@ function Checkout(props) {
         checkoutScreen();
         if (customer_id) {
             getCutomerDetails();
+
         }
         getCountries();
 
@@ -92,6 +95,8 @@ function Checkout(props) {
     const getCutomerDetails = async () => {
         let result: any = await getCustomerDetails();
         setCustForm(result.data);
+        let paymentsMethods: any = await getPaymentMethods();
+        SetPaymentMethodsList(paymentsMethods)
     }
 
     const getCountries = async () => {
@@ -111,8 +116,15 @@ function Checkout(props) {
         }))
     }
 
-    const handleAddressChange = (e) => {
-        console.log(e.target.value)
+    const handleAddressChange = async (e) => {
+        let addId = e.target.value;
+        let checked = e.target.checked;
+        if (checked) {
+            const res: any = await setDefaultShippingAddress(addId)
+            if (res.data === true) {
+                notification("success", "", "Addres added successfully!");
+            }
+        }
     }
     const handleCountryChange = async (e) => {
         const { id, value } = e.target;
@@ -125,13 +137,13 @@ function Checkout(props) {
         if (res.data.available_regions) {
             setRegions(res.data.available_regions);
         }
-        console.log(res.data.available_regions);
+        //console.log(res.data.available_regions);
 
     }
 
     // for customer address popup window starts here
     const saveCustAddress = async () => {
-        console.log(custAddForm)
+        //  console.log(custAddForm)
         if (validateAddress()) {
             let obj: any = { ...custAddForm };
             obj.street = [obj.street];
@@ -363,6 +375,7 @@ function Checkout(props) {
                                                                             defaultValue={item.id}
                                                                             onChange={handleAddressChange}
                                                                             className="form-check-input"
+                                                                            checked={item.id === parseInt(custForm.default_shipping) ? true : false}
                                                                         />
                                                                         <label className="form-check-label" htmlFor="flexCheckDefault">
                                                                             <IntlMessages id="usethisAddress" />

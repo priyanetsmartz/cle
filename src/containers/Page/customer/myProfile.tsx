@@ -335,10 +335,12 @@ function MyProfile(props) {
         }));
 
         const res: any = await getRegionsByCountryID(value);
-        if (res.data.available_regions) {
+        if (res.data.available_regions === undefined) {
+            setRegions([]);
+        } else {
             setRegions(res.data.available_regions);
         }
-        console.log(res.data.available_regions);
+        //  console.log(res.data.available_regions);
 
     }
 
@@ -1151,22 +1153,23 @@ function MyProfile(props) {
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                             <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
                                 {countries && countries.map(opt => {
-                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                    return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
                             <span className="error">{errors.errors["country_id"]}</span>
                         </div>
-                        {regions.length > 0 && <div className="width-100 mb-3 form-field">
-                            <label className="form-label">
-                                <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
-                            <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-                                {regions && regions.map(opt => {
-                                    return (<option key={opt.id} value={opt.id} >
-                                        {opt.name}</option>);
-                                })}
-                            </select>
-                            <span className="error">{errors.errors["region_id"]}</span>
-                        </div>}
+                        {regions.length > 0 &&
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">
+                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
+                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                    {regions && regions.map(opt => {
+                                        return (<option key={opt.id} value={opt.id} >
+                                            {opt.name}</option>);
+                                    })}
+                                </select>
+                                <span className="error">{errors.errors["region_id"]}</span>
+                            </div>}
                         <Modal.Footer>
                             <div className="width-100 mb-3 form-field">
                                 <div className="Frgt_paswd">

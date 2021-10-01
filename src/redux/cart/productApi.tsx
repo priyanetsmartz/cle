@@ -1,5 +1,7 @@
 import AdminApi from "../../restApi/AdminApi";
+import CustomerApi from "../../restApi/Api";
 const APi = new AdminApi();
+const CUSTOMER = new CustomerApi();
 
 export function getAllProducts(language, page, pageSize, sortBy, sortByValue) {
     const localToken = localStorage.getItem('token');
@@ -224,6 +226,7 @@ export function getCartRelevantProducts(productIds: number, language: string) {
     return APi.request(`/rest/V1/product/relevantProducts?customerId=${customerId}&storeId=${storeId}&productIds=${productIds}`, "", "GET", "")
 }
 
+
 export function getGuestShippingMethods() {
     // const cartQuoteId = localStorage.getItem('cartQuoteId');
     return APi.request(`/rest/V1/guest-carts/:cartId/shipping-methods`, "", "GET", "")
@@ -239,4 +242,18 @@ export function applyPromoCode(couponCode, language) {
 export function searchFields(search: string, page: number, language: string, sortBy, sortByValue) {
     var storeId = language === 'arabic' ? 2 : 3;
     return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=name&searchCriteria[filter_groups][1][filters][0][value]=%${search}%&searchCriteria[filter_groups][1][filters][0][condition_type]=like&searchCriteria[filter_groups][1][filters][1][field]=short_description&searchCriteria[filter_groups][1][filters][1][value]=%${search}%&searchCriteria[filter_groups][1][filters][1][condition_type]=like&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=1&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
+}
+
+export function setDefaultShippingAddress(addressId) {
+    const customerId = localStorage.getItem('cust_id');
+    let cartData = {
+        "customerId": customerId,
+        "addressId": addressId
+    }
+    return APi.request(`rest/V1/customer/setDefaultShippingAddress`, cartData, "PUT", "")
+}
+
+
+export function getPaymentMethods() {
+    return CUSTOMER.request(`rest/V1/carts/mine/payment-methods`, "", "GET", "")
 }
