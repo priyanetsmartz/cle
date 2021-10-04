@@ -38,6 +38,7 @@ import Search from './containers/Page/search';
 
 import Product from './containers/Page/product/product';
 import Cart from './containers/Page/product/cart/cart';
+import Payment from './containers/Page/payments/payment';
 
 const PublicRoutes = ({ history }) => {
   return (
@@ -48,6 +49,7 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/products/new-in/all" component={Product} />
         <ProductRoutes exact path="/products/:category/:subcat" component={Categories} />
         <ProductRoutes exact path="/products/:category" component={Categories} />
+        <ProductRoutes exact path="/pay" component={Payment} />
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
         <PrivateRoute exact path="/notifications" component={Notifications} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
