@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
 import { savePreference } from '../../../../redux/pages/customers';
 import notification from '../../../../components/notification';
+import IntlMessages from "../../../../components/utility/intlMessages";
 
 function MyPreferences(props) {
     let result: any = props.preferences;
@@ -15,16 +16,17 @@ function MyPreferences(props) {
     const [favCat, setFavCat]: any = useState({});
     const [activeDesigner, setActiveDesigner] = useState(0);
     const [activeCategory, setActiveCategory] = useState(0);
+    const [isShow, setIsShow] = useState(false);
 
     useEffect(() => {
         getAttributes();
         return () => {
             //
         }
-    },[]);
-    
+    }, []);
+
     useEffect(() => {
-      //  console.log(favCat)
+        //  console.log(favCat)
         attributes.categories[activeCategory] = favCat;
         setAttributes(prevState => ({
             ...prevState,
@@ -35,7 +37,7 @@ function MyPreferences(props) {
     const getAttributes = async () => {
         let result: any = props.preferences;
         let preference = result.data && result.data[0] ? result.data[0].preference : ""
-        
+
         if (preference && props.custData && props.custData.custom_attributes) {
             props.custData.custom_attributes.forEach(el => {
                 if (el.attribute_code === 'mostly_intersted_in') {
@@ -89,9 +91,9 @@ function MyPreferences(props) {
         setActiveIndex(i);
         // attributes.mostly_intersted[i].isChecked = !attributes.mostly_intersted[i].isChecked;
         attributes.mostly_intersted.forEach(el => {
-            if(el.id == attributes.mostly_intersted[i].id){
+            if (el.id == attributes.mostly_intersted[i].id) {
                 el.isChecked = true;
-            }else{
+            } else {
                 el.isChecked = false;
             }
         })
@@ -101,7 +103,7 @@ function MyPreferences(props) {
         }));
     }
 
-    const setActiveIndex = (index:number) => {
+    const setActiveIndex = (index: number) => {
         setActiveCategory(index)
         setActiveDesigner(index)
     }
@@ -198,6 +200,7 @@ function MyPreferences(props) {
     }
 
     const saveMyPreferences = async () => {
+        setIsShow(true);
         let data = {
             customerId: custId,
             mostly_intersted_in: "",
@@ -237,7 +240,7 @@ function MyPreferences(props) {
             }
         });
 
-        if(attributes.categories[activeCategory].length > 0){
+        if (attributes.categories[activeCategory].length > 0) {
             attributes.categories[activeCategory].forEach(c => {
                 if (c.isChecked) {
                     if (data.fav_categories === '') {
@@ -249,7 +252,7 @@ function MyPreferences(props) {
             });
         }
 
-        if(attributes.designers[activeDesigner] && attributes.designers[activeDesigner].length > 0){
+        if (attributes.designers[activeDesigner] && attributes.designers[activeDesigner].length > 0) {
             attributes.designers[activeDesigner].forEach(d => {
                 if (d.isChecked) {
                     if (data.fav_designers === '') {
@@ -263,6 +266,7 @@ function MyPreferences(props) {
 
         const res = await savePreference(data);
         if (res) {
+            setIsShow(false);
             notification("success", "", "Customer Preferences Updated");
         }
     }
@@ -270,7 +274,7 @@ function MyPreferences(props) {
     return (
         <Modal.Body className="arabic-rtl-direction">
             <div className="Mosty_interested_in">
-                <h2>Mosty interested in</h2>
+                <h2><IntlMessages id="preferences.mostlyInterested" /></h2>
                 <div className="interestd_check">
                     {attributes.mostly_intersted && attributes.mostly_intersted.map((inter, i) => {
                         return (
@@ -288,7 +292,7 @@ function MyPreferences(props) {
                 <div className="row">
                     <div className="col-sm-6">
                         <div className="clothing_size mb-4">
-                            <h2>Clothing size</h2>
+                            <h2><IntlMessages id="preferences.clothingSize" /></h2>
                             <div className="cl_size_sec">
                                 <ul>
                                     {attributes.clothing_size && attributes.clothing_size.map((cs, i) => {
@@ -303,15 +307,15 @@ function MyPreferences(props) {
                                 </ul>
                             </div>
                             <div className="sizebtn clothnmrgin">
-                                <div className="save-btn"><Link to="#" className="btn-link-blue" onClick={saveMyPreferences}>Save</Link></div>
+                                <div className="save-btn"><Link to="#" className="btn-link-blue" onClick={saveMyPreferences}><IntlMessages id="checkout.save" /></Link></div>
                                 <div className="save-btn removel_allbtn">
-                                    <Link to="#" onClick={removeAllCloth} className="btn-link-grey">Remove all</Link></div>
+                                    <Link to="#" onClick={removeAllCloth} className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div>
                             </div>
                         </div>
                     </div>
                     <div className="col-sm-6">
                         <div className="clothing_size">
-                            <h2>Shoes size</h2>
+                            <h2>e<IntlMessages id="preferences.shoeSize" /></h2>
                             <div className="cl_size_sec">
                                 <ul>
                                     {attributes.shoes_size && attributes.shoes_size.map((ss, i) => {
@@ -323,9 +327,9 @@ function MyPreferences(props) {
                                 </ul>
                             </div>
                             <div className="sizebtn">
-                                <div className="save-btn"><Link to="#" className="btn-link-blue" onClick={saveMyPreferences}>Save</Link></div>
+                                <div className="save-btn"><Link to="#" className="btn-link-blue" onClick={saveMyPreferences}><IntlMessages id="checkout.save" /></Link></div>
                                 <div className="save-btn removel_allbtn">
-                                    <Link to="#" onClick={removeAllShoe} className="btn-link-grey">Remove all</Link></div>
+                                    <Link to="#" onClick={removeAllShoe} className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div>
                             </div>
                         </div>
                     </div>
@@ -335,7 +339,7 @@ function MyPreferences(props) {
             </div>
 
             <div className="favorite_designers mb-4">
-                <h2>Favorite designers</h2>
+                <h2><IntlMessages id="preferences.favDesigner" /></h2>
                 <div className="row">
 
                     <div className="col-sm-6">
@@ -376,7 +380,7 @@ function MyPreferences(props) {
                                     })}
                                 </ul>
                                 <div className="save-btn removel_allbtn">
-                                    <Link to="#" onClick={removeAllDesign} className="btn-link-grey">Remove all</Link></div>
+                                    <Link to="#" onClick={removeAllDesign} className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div>
                             </div>
 
                         </div>
@@ -386,7 +390,7 @@ function MyPreferences(props) {
             </div>
 
             <div className="favorite_designers mb-4">
-                <h2>Favorite categories</h2>
+                <h2><IntlMessages id="preferences.favCategory" /></h2>
                 <div className="row">
 
                     <div className="col-sm-6">
@@ -428,7 +432,7 @@ function MyPreferences(props) {
                                     })}
                                 </ul>
                                 <div className="save-btn removel_allbtn">
-                                    <Link to="#" onClick={removeAllCat} className="btn-link-grey">Remove all</Link></div>
+                                    <Link to="#" onClick={removeAllCat} className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div>
                             </div>
                         </div>
                     </div>
@@ -436,7 +440,12 @@ function MyPreferences(props) {
             </div>
             <div className="width-100 mb-4">
                 <div className="float-end">
-                    <button type="button" className="btn btn-secondary" onClick={saveMyPreferences}>Confirm</button>
+                    <button type="button" className="btn btn-secondary" onClick={saveMyPreferences} style={{ "display": !isShow ? "inline-block" : "none" }}>
+                        <IntlMessages id="myaccount.confirm" /></button>
+                    <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}>
+                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                        <IntlMessages id="loading" />
+                    </div>
                 </div>
             </div>
         </Modal.Body>

@@ -9,7 +9,6 @@ import IntlMessages from "../../../components/utility/intlMessages";
 
 
 function OrdersAndReturns(props) {
-    const [custId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [pageSize, setPageSize] = useState(10);
     const [orderId, setOrderId] = useState('');
     const [orderDate, setOrderDate] = useState('');
@@ -36,40 +35,38 @@ function OrdersAndReturns(props) {
         }
     }
 
-    const dateFilter = (e) => {
-        const {value} = e.target;
-        console.log(value);
-    }
-
     const priceFilter = (e) => {
-        const {value} = e.target;
+        const { value } = e.target;
         console.log(value);
     }
 
 
-    const getOrdersByDate = async (filter) => {
-        let filterDate;
+    const getOrdersByDate = async (e) => {
+        const { value } = e.target;
+        let filter = parseInt(value);
+        let fromDate;
         let currentDate = moment(new Date());
         if (!filter) {
-            getData();
+            return getData();
         } else if (filter === 1 || filter === 3 || filter === 6) {
-            filterDate = moment(currentDate).subtract(filter, 'M').toJSON();
+            fromDate = moment(currentDate).subtract(filter, 'M').toJSON();
         } else {
-            filterDate = moment(`${filter}-01-01`).toJSON();
+            fromDate = moment(`${filter}-01-01`).toJSON();
         }
-        setOrderDate(filterDate);
-        let result: any = await getCustomerOrdersByDate(filterDate);
+        setOrderDate(fromDate);
+
+        let result: any = await getCustomerOrdersByDate(fromDate, currentDate.toJSON());
         if (result) {
-            console.log(result.data);
+            // console.log(result.data);
             setOrders(result.data);
         }
     }
 
     const sortOrdersHandler = async (e) => {
         setSortOrder(e.target.value);
-        let result: any = await sortCustomerOrders(e.target.value, custId, pageSize);
+        let result: any = await sortCustomerOrders(e.target.value, pageSize);
         if (result) {
-            console.log(result.data);
+            // console.log(result.data);
             setOrders(result.data.items);
         }
     }
@@ -87,18 +84,19 @@ function OrdersAndReturns(props) {
                             <div className="row">
                                 <div className="col-sm-4 mb-4">
                                     <div className="form-group">
-                                        <span className="form-label">Date:</span>
-                                        <select className="form-select" aria-label="Default select example" onChange={dateFilter}>
-                                            <option value="">All</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                        <span className="form-label"><IntlMessages id="order.date" />:</span>
+                                        <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
+                                            <option value="">Select</option>
+                                            <option value="1">Last Month</option>
+                                            <option value="3">Last 3 Months</option>
+                                            <option value="6">Last 6 Months</option>
+                                            <option value="2021">2021</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div className="col-sm-4 mb-2">
                                     <div className="form-group">
-                                        <span className="form-label">Price:</span>
+                                        <span className="form-label"><IntlMessages id="order.price" />:</span>
                                         <select className="form-select" aria-label="Default select example" onChange={priceFilter}>
                                             <option value="">$3,550 - $150,550</option>
                                             <option value="1">$1,550 - $150,550</option>
@@ -161,7 +159,7 @@ function OrdersAndReturns(props) {
                                     </div>
                                 </div>
 
-                                {orders && orders.map((item,i) => {
+                                {orders && orders.map((item, i) => {
                                     return (
                                         <>
                                             <div className="row" key={i}>
@@ -172,7 +170,7 @@ function OrdersAndReturns(props) {
                                                 </div>
                                             </div>
 
-                                            <div className="row my-3" key={`${i}1`}>
+                                            <div className="row my-3" key={item.increment_id}>
                                                 <div className="col-sm-12">
                                                     <div className="row mb-3">
                                                         <div className="col-sm-6">
@@ -286,8 +284,8 @@ function OrdersAndReturns(props) {
 
                             </div>
                             <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <IntlMessages id="order.returns" />
-                            
+                                <IntlMessages id="order.returns" />
+
                             </div>
 
                         </div>
