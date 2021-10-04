@@ -27,9 +27,9 @@ function CategoryBanner(props) {
         if (result) {
             let obj:any = {};
             result.data.custom_attributes.forEach(el => {
-                if(el.attribute_code == "image") {
+                if(el.attribute_code === "image") {
                     obj.image = baseUrl+el.value;
-                }else if(el.attribute_code == "description"){
+                }else if(el.attribute_code === "description"){
                     obj.desc = el.value;
                 } 
                 result.data.custom = obj;

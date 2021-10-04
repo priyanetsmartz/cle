@@ -5,25 +5,48 @@ import CheckoutSidebar from './sidebar';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
-import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, setDefaultShippingAddress, getPaymentMethods, getShippinMethods } from '../../../../redux/cart/productApi';
+import { useIntl } from 'react-intl';
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, setDefaultShippingAddress, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setDefaultBillngAddress, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, saveCustomerDetails, getCountriesList, getRegionsByCountryID } from '../../../../redux/pages/customers';
 function Checkout(props) {
+    const intl = useIntl();
     const [itemsVal, SetItems] = useState({
         checkData: {}, items: {}, address: {}
     });
     const [promoCode, setPromoCode] = useState('');
-
+    const [state, setState] = useState({
+        email: ""
+    })
     //for customer address starts here------
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
+    const [addressTypes, setAddressTypes] = useState('address');
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [addNewAddressModal, setAddNewAddressModal] = useState(false);
     const [errorPromo, setErrorPromo] = useState('');
     const [paymentMethodsList, SetPaymentMethodsList] = useState({})
     const [shippingMethods, SetShippingMethods] = useState([])
     const [regions, setRegions] = useState([]); // for regions dropdown
+    const [orderButton, setOrderButton] = useState({
+        email: false,
+        shippingAddress: false,
+        billingAddress: false,
+        shippingMethod: false,
+        paymentMethod: false
+    });
+    const [emailError, setEmailError] = useState({
+        errors: {}
+    });
+
+    const [orderError, setOrderError] = useState({
+        email: "",
+        shippingAddress: "",
+        billingAddress: "",
+        shippingMethod: "",
+        paymentMethod: ""
+    })
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
-        customer_id: custId,
+        customer_id: custId ? custId : 0,
         firstname: "",
         lastname: "",
         telephone: "",
@@ -31,7 +54,9 @@ function Checkout(props) {
         city: "",
         country_id: "",
         region_id: 0,
-        street: ""
+        street: "",
+        default_shipping: true,
+        default_billing: true,
     });
 
     const [custForm, setCustForm] = useState({
@@ -96,7 +121,37 @@ function Checkout(props) {
             items: checkItems
         }))
     }
+    const handleChange = (e) => {
+        const { id, value } = e.target
+        setState(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
+        setOrderButton(prevState => ({
+            ...prevState,
+            email: true
+        }))
+    }
+    const handleBlur = (e) => {
+        console.log('herer')
+        let error = {};
+        let formIsValid = true;
 
+        //Email   
+        if (typeof state["email"] !== "undefined") {
+
+            if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
+                formIsValid = false;
+                error["email"] = "Email is not valid";
+            }
+        }
+        if (!state["email"]) {
+            formIsValid = false;
+            error["email"] = "Email is required";
+        }
+        setEmailError({ errors: error });
+        return formIsValid;
+    }
     //customer address functinonality start here
     const getCutomerDetails = async () => {
         let addresses = {};
@@ -118,7 +173,8 @@ function Checkout(props) {
         setCountries(result.data);
     }
 
-    const toggleAddressModal = () => {
+    const toggleAddressModal = (addressType) => {
+        setAddressTypes(addressType)
         setAddNewAddressModal(!addNewAddressModal);
     }
 
@@ -137,6 +193,17 @@ function Checkout(props) {
             const res: any = await setDefaultShippingAddress(addId)
             if (res.data === true) {
                 notification("success", "", "Addres added successfully!");
+            }
+        }
+    }
+
+    const handleBillingChange = async (e) => {
+        let addId = e.target.value;
+        let checked = e.target.checked;
+        if (checked) {
+            const res: any = await setDefaultBillngAddress(addId)
+            if (res.data === true) {
+                notification("success", "", "Biling address added successfully!");
             }
         }
     }
@@ -163,19 +230,50 @@ function Checkout(props) {
 
     // for customer address popup window starts here
     const saveCustAddress = async () => {
-        //  console.log(custAddForm)
+        let result: any
         if (validateAddress()) {
-            let obj: any = { ...custAddForm };
-            obj.street = [obj.street];
-            custForm.addresses.push(obj);
+            let billngInfo = addressTypes === 'billing' ? false : true;
+            let customer_id = localStorage.getItem('cust_id');
+            if (customer_id) {
 
-            // console.log(custAddForm);
-            let result: any = await saveCustomerDetails(custId, { customer: custForm });
+                let obj: any = { ...custAddForm, default_shipping: billngInfo };
+                obj.street = [obj.street];
+                custForm.addresses.push(obj);
+                // console.log(obj)
+                result = await saveCustomerDetails(custId, { customer: custForm });
+
+            } else {
+                let address: any = {};
+                let addressInformation: any = {};
+                // let billngInfo = addressTypes === 'billing' ? 'billingAddress' : 'shippingAddress';
+                let obj: any = { ...custAddForm, default_shipping: billngInfo };
+                obj.street = [obj.street];
+                obj.email = state.email;
+                if (addressTypes === 'billing') {
+                    let billingAddress = obj;
+                    delete billingAddress['default_shipping'];
+                    delete billingAddress['default_billing'];
+                    delete billingAddress['customer_id'];
+                    delete billingAddress['id'];
+                    addressInformation.billingAddress = billingAddress;
+                } else {
+                    let shippingAddress = obj;
+                    delete shippingAddress['default_shipping'];
+                    delete shippingAddress['default_billing'];
+                    delete shippingAddress['customer_id'];
+                    delete shippingAddress['id'];
+                    addressInformation.shippingAddress = shippingAddress;
+                }
+
+                address.addressInformation = addressInformation;
+                console.log(address)
+                result = await setGuestUserDeliveryAddress(address);
+            }
             if (result) {
                 checkoutScreen();
                 setCustAddForm({
                     id: 0,
-                    customer_id: custId,
+                    customer_id: custId ? custId : 0,
                     firstname: "",
                     lastname: "",
                     telephone: "",
@@ -183,9 +281,11 @@ function Checkout(props) {
                     city: "",
                     country_id: "",
                     region_id: 0,
-                    street: ""
+                    street: "",
+                    default_billing: true,
+                    default_shipping: true
                 });
-                toggleAddressModal();
+                toggleAddressModal('address');
                 notification("success", "", "Customer Address Updated");
             }
         } else {
@@ -233,11 +333,17 @@ function Checkout(props) {
     }
 
     const applyPromo = async () => {
+        let result: any;
         if (promoCode === '') {
             setErrorPromo("Promo code is required!");
             return false;
         }
-        const result: any = await applyPromoCode(promoCode, props.languages);
+        let customer_id = localStorage.getItem('cust_id');
+        if (customer_id) {
+            result = await applyPromoCode(promoCode, props.languages);
+        } else {
+            result = await applyPromoCodeGuest(promoCode, props.languages)
+        }
         if (result) {
             setErrorPromo("");
             checkoutScreen();
@@ -250,15 +356,77 @@ function Checkout(props) {
 
     //PLACE ORDER CODE GOES HERE
     const placeOrder = async () => {
-        console.log('place order!');
+        console.log('place order')
+        let customer_id = localStorage.getItem('cust_id');
+        let orderPlace: any;
+        if (customer_id) {
+            orderPlace = await placeUserOrder();
+        } else {
+            orderPlace = await placeGuestOrder();
+
+        }
+        console.log(orderPlace);
+        // console.log(orderButton);
+        // if (!orderButton.email) {
+        //     setOrderError(prevState => ({
+        //         ...prevState,
+        //         email: "Email addres is required"
+        //     }))
+        //     return false;
+        // }
+        // if (!orderButton.billingAddress) {
+        //     setOrderError(prevState => ({
+        //         ...prevState,
+        //         billingAddress: "Billing addres is required"
+        //     }))
+        //     return false;
+        // }
+
+        // if (!orderButton.shippingAddress) {
+        //     setOrderError(prevState => ({
+        //         ...prevState,
+        //         shippingAddress: "Delivery addres is required"
+        //     }))
+        //     return false;
+        // }
+        // if (!orderButton.shippingMethod) {
+        //     setOrderError(prevState => ({
+        //         ...prevState,
+        //         shippingMethod: "Choose valid shipping method"
+        //     }))
+        //     return false;
+        // }
+
+        // if (!orderButton.paymentMethod) {
+        //     setOrderError(prevState => ({
+        //         ...prevState,
+        //         paymentMethod: "Choose valid payment method"
+        //     }))
+        //     return false;
+        // }
+
+        // console.log(typeof (orderError))
+
     }
 
     return (
         <main>
             <section className="checkout-main">
-                <div className="container">
+                <div className="container">ccc
+                    {/* {Object.keys(orderError).forEach((key) => {
+                     //   console.log(orderError[key])
+                        return (
+                            <div className="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Error</strong> {orderError[key]}
+                                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        )
+                    })} */}
                     <div className="row">
                         <div className="col-md-8">
+
                             <div className="accordion" id="accordionExample">
                                 <div className="accordion-item">
                                     <h2 className="accordion-header" id="CheckoutHOne">
@@ -346,9 +514,16 @@ function Checkout(props) {
                                             <label><IntlMessages id="profile.email" /></label>
                                             <p>{localStorage.getItem('token_email') ?
                                                 localStorage.getItem('token_email') :
-                                                <input type="email" className="form-control" id="emailAddress" />}</p>
+                                                <input type="email"
+                                                    className="form-control"
+                                                    placeholder={intl.formatMessage({ id: "login.email" })}
+                                                    id="email"
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                />}</p>
 
                                         </div>
+                                        <span className="error">{emailError.errors["email"]}</span>
                                     </div>
                                 </div>
                                 <div className="accordion-item">
@@ -388,9 +563,9 @@ function Checkout(props) {
                                                                             <input
                                                                                 type="checkbox"
                                                                                 defaultValue={item.id}
-                                                                                onChange={handleAddressChange}
+                                                                                onChange={handleBillingChange}
                                                                                 className="form-check-input"
-                                                                                checked={item.id === parseInt(custForm.default_billing) ? true : false}
+                                                                                defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
                                                                             />
                                                                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                                                                 <IntlMessages id="usethisAddress" />
@@ -406,7 +581,7 @@ function Checkout(props) {
                                                                                 defaultValue={item.id}
                                                                                 onChange={handleAddressChange}
                                                                                 className="form-check-input"
-                                                                                checked={item.id === parseInt(custForm.default_shipping) ? true : false}
+                                                                                defaultChecked={item.id === parseInt(custForm.default_shipping) ? true : false}
                                                                             />
                                                                             {item.id === parseInt(custForm.default_shipping) ? <label className="lable-text">Great</label> : ""}
 
@@ -421,48 +596,6 @@ function Checkout(props) {
                                             <div className="add-address-btn">
                                                 <hr />
                                                 <button className="add-ad-btn btn btn-link" onClick={toggleAddressModal}><IntlMessages id="myaccount.addNewAddress" /></button>
-                                            </div>
-                                            <div className="address-form" style={{ "display": "none" }}>
-                                                <div className="row g-3">
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputFname" className="form-label"><IntlMessages id="register.first_name" /></label>
-                                                        <input type="text" className="form-control" id="inputFname" />
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputSurname" className="form-label"><IntlMessages id="myaccount.surName" />*</label>
-                                                        <input type="text" className="form-control" id="inputSurname" />
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputAddress" className="form-label"><IntlMessages id="myaccount.address" />*</label>
-                                                        <input type="text" className="form-control" id="inputAddress" />
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputCity" className="form-label"><IntlMessages id="myaccount.city" />*</label>
-                                                        <input type="text" className="form-control" id="inputCity" />
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputCountry" className="form-label"><IntlMessages id="myaccount.country" />*</label>
-                                                        <select id="inputCountry" className="form-select">
-                                                            <option>Choose Country</option>
-                                                            <option>India</option>
-                                                            <option>UAE</option>
-                                                            <option>USA</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="col-12">
-                                                        <div className="form-check">
-                                                            <input className="form-check-input" type="checkbox" id="gridCheck" />
-                                                            <label className="form-check-label" htmlFor="gridCheck">
-                                                                <IntlMessages id="checkout.saveThisAsBilling" />
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-12">
-                                                        <button type="button" className="btn btn-link float-start"><IntlMessages id="checkout.save" /></button>
-                                                        <button type="button" className="btn btn-link float-end"><IntlMessages id="checkout.cancel" /></button>
-                                                        <div className="clearfix"></div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -556,7 +689,7 @@ function Checkout(props) {
                                                                             defaultValue={item.id}
                                                                             //onChange={handleAddressChange}
                                                                             className="form-check-input"
-                                                                            checked={item.id === parseInt(custForm.default_billing) ? true : false}
+                                                                            defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
                                                                         />
                                                                         {item.id === parseInt(custForm.default_billing) ? <label className="lable-text" htmlFor="btn-check-2">Great</label> : ""}
 
@@ -570,7 +703,9 @@ function Checkout(props) {
                                             }
                                             <div className="add-address-btn">
                                                 <hr />
-                                                <button className="add-ad-btn btn btn-link">
+                                                <button className="add-ad-btn btn btn-link" onClick={() => {
+                                                    toggleAddressModal('billing');
+                                                }} >
                                                     <IntlMessages id="checkout.addNewBillingAdd" />
                                                 </button>
                                             </div>
@@ -609,80 +744,6 @@ function Checkout(props) {
                                                     <button type="button" className="btn btn-outline-dark"><IntlMessages id="checkout.addCards" /></button>
                                                     <p><IntlMessages id="signup.or" /></p>
                                                     <button type="button" className="btn btn-outline-dark"><IntlMessages id="checkout.addpaypal" /></button>
-                                                </div>
-                                            </div>
-
-                                            <div className="address-form" style={{ "display": "none" }}>
-                                                <div className="row g-3">
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputFname" className="form-label"><IntlMessages id="register.first_name" /></label>
-                                                        <input type="text" className="form-control" id="inputFname" />
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputSurname" className="form-label"><IntlMessages id="myaccount.surName" />*</label>
-                                                        <input type="text" className="form-control" id="inputSurname" />
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputAddress" className="form-label"><IntlMessages id="myaccount.address" />*</label>
-                                                        <input type="text" className="form-control" id="inputAddress" />
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputCity" className="form-label"><IntlMessages id="myaccount.city" />*</label>
-                                                        <input type="text" className="form-control" id="inputCity" />
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputCountry" className="form-label"><IntlMessages id="myaccount.country" />*</label>
-                                                        <select id="inputCountry" className="form-select">
-                                                            <option>Choose Country</option>
-                                                            <option>India</option>
-                                                            <option>UAE</option>
-                                                            <option>USA</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="col-12">
-                                                        <button type="button" className="btn btn-link float-start"><IntlMessages id="checkout.save" /></button>
-                                                        <button type="button" className="btn btn-link float-end"><IntlMessages id="checkout.cancel" /></button>
-                                                        <div className="clearfix"></div>
-                                                    </div>
-                                                </div>
-                                                <div className="row g-3">
-                                                    <label><IntlMessages id="checkout.billingAdd" /></label>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputCard" className="form-label"><IntlMessages id="checkout.cardNumber" />*</label>
-                                                        <input type="text" className="form-control" id="inputCard" />
-                                                    </div>
-                                                    <div className="col-md-4">
-                                                        <label htmlFor="inputExpiry" className="form-label"><IntlMessages id="checkout.expiryDate" />*</label>
-                                                        <select id="inputExpiry" className="form-select">
-                                                            <option>Month</option>
-                                                            <option>Jan</option>
-                                                            <option>Feb</option>
-                                                            <option>March</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="col-md-4">
-                                                        <label htmlFor="" className="form-label"></label>
-                                                        <select id="" className="form-select">
-                                                            <option >Year</option>
-                                                            <option>2021</option>
-                                                            <option>2022</option>
-                                                            <option>2023</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="col-md-4"></div>
-                                                    <div className="col-md-12">
-                                                        <label htmlFor="inputCardN" className="form-label"><IntlMessages id="checkout.nameOnCard" />*</label>
-                                                        <input type="text" className="form-control" id="inputCardN" />
-                                                    </div>
-                                                    <div className="col-md-4">
-                                                        <label htmlFor="inputSurname" className="form-label">CVV*</label>
-                                                        <input type="text" className="form-control" id="inputSurname" />
-                                                    </div>
-                                                    <div className="col-12">
-                                                        <button type="button" className="btn btn-link float-start"><IntlMessages id="checkout.save" /></button>
-                                                        <button type="button" className="btn btn-link float-end"><IntlMessages id="checkout.cancel" /></button>
-                                                        <div className="clearfix"></div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

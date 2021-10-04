@@ -239,6 +239,13 @@ export function applyPromoCode(couponCode, language) {
     return APi.request(`rest/${lang}/V1/carts/${cartQuoteId}/coupons/${couponCode}`, "", "PUT", "")
 }
 
+export function applyPromoCodeGuest(couponCode, language) {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    const lang = language === 'arabic' ? 'ar' : 'en';
+    return APi.request(`rest/${lang}/V1/guest-carts/${cartQuoteId}/coupons/${couponCode}`, "", "PUT", "")
+}
+
+
 export function searchFields(search: string, page: number, language: string, sortBy, sortByValue) {
     var storeId = language === 'arabic' ? 2 : 3;
     return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=name&searchCriteria[filter_groups][1][filters][0][value]=%${search}%&searchCriteria[filter_groups][1][filters][0][condition_type]=like&searchCriteria[filter_groups][1][filters][1][field]=short_description&searchCriteria[filter_groups][1][filters][1][value]=%${search}%&searchCriteria[filter_groups][1][filters][1][condition_type]=like&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=1&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
@@ -253,13 +260,46 @@ export function setDefaultShippingAddress(addressId) {
     return APi.request(`rest/V1/customer/setDefaultShippingAddress`, cartData, "PUT", "")
 }
 
+export function setDefaultBillngAddress(addressId) {
+    const customerId = localStorage.getItem('cust_id');
+    let cartData = {
+        "customerId": customerId,
+        "addressId": addressId
+    }
+    return APi.request(`rest/V1/customer/setDefaulBillingAddress`, cartData, "PUT", "")
+}
 
 export function getPaymentMethods() {
     return CUSTOMER.request(`rest/V1/carts/mine/payment-methods`, "", "GET", "")
 }
 
 export function getShippinMethods() {
-    // const cartQuoteId = localStorage.getItem('cartQuoteId');
-    const cartQuoteId = 35;
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    // const cartQuoteId = 35;
     return APi.request(`rest/V1/carts/${cartQuoteId}/shipping-methods`, "", "GET", "");
+}
+
+export function setGuestUserDeliveryAddress(data) {
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/shipping-information`, data, "POST", "");
+}
+
+export function placeGuestOrder() {
+    let data = {
+        "paymentMethod": {
+            "method": "checkmo"
+        }
+    }
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/order`, data, "PUT", "");
+}
+
+
+export function placeUserOrder() {
+    let data = {
+        "paymentMethod": {
+            "method": "checkmo"
+        }
+    }
+    return CUSTOMER.request(`rest/en/V1/carts/mine/order`, data, "PUT", "");
 }
