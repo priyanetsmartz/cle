@@ -258,3 +258,8 @@ export function getPaymentMethods() {
     return CUSTOMER.request(`rest/V1/carts/mine/payment-methods`, "", "GET", "")
 }
 
+export function getShippinMethods() {
+    // const cartQuoteId = localStorage.getItem('cartQuoteId');
+    const cartQuoteId = 35;
+    return APi.request(`rest/V1/carts/${cartQuoteId}/shipping-methods`, "", "GET", "");
+}
