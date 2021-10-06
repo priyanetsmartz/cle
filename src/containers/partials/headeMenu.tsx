@@ -213,9 +213,7 @@ function HeaderMenu(props) {
 
                     </div>
                 </div>
-            </div>
-
-            <header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2">
+				<header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2">
                 <nav className="container-xxl flex-wrap flex-md-nowrap " aria-label="Main navigation">
                     <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
                         aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -231,6 +229,9 @@ function HeaderMenu(props) {
 
 
             </header>
+            </div>
+
+            
 
             <section>
                 <div className="container">

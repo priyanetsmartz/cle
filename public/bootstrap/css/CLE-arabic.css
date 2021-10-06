@@ -1,17 +1,20 @@
-body, a{font-family: "Greta Arabic Regular" !important;}
+body, a{
+	/* font-family: "Greta Arabic Regular" !important; */
+	font-family: 'Conv_Meshki' !important;
+	}
 .hamburger-close {float: left;}
 .hamburger a span{float:left;}
 .menu-logo{float:right;}
 .hamburger {float: left;}
 .main-logo{float:right;}
 .main-logo-white{float:right}
-.about-content h3{text-align:right;} 
-.about-content p{text-align:right;} 
-.arabic-rtl-direction{direction:rtl;}
+.about-content h3{text-align:right;font-family: 'Conv_Meshki';} 
+.about-content p{text-align:right;font-family: 'Conv_Meshki';} 
+.arabic-rtl-direction{direction:rtl;font-family: 'Conv_Meshki';}
 .blue-back-image{top: -6%;
-right: 22%;}
+right: 18%;}
 .about-inner-pic{left: auto;
-right: -16%;}
+right: -11%;}
 .blue-rotated-box{left: auto;
 right: 0;}
 .about-signup-btn {
@@ -21,12 +24,13 @@ right: 0;}
     left: -14%;
     margin: auto;
     width: max-content;
-    bottom:10%;
+    bottom:10%;font-family: 'Conv_Meshki';
 }
 #our-story .about-inner .arabic-rtl-direction .col-md-4.offset-md-1{margin-left: 0;margin-right: 8.33333333%;}
 .see-more-sec{margin-left:0; margin-right:120px;}
 .container.about-inner .squares{right: 10%;left: auto;}
-.see-more-sec .see-more-text{float:right;}
+.see-more-sec .see-more-text{float:right;font-size: 24px;font-family: 'Conv_Meshki';}
+.see-more-sec .see-more-text a{font-size: 20px;font-family: 'Conv_Meshki';}
 .partner-pic{left: 0;right: auto;}
 .join-cle-bottom{left: 0;right: auto;}
 .counter-list li:first-child:after{display:none;}
@@ -34,18 +38,24 @@ right: 0;}
 .counter-list li:last-child:after{display:block;}
 .counter-list li:last-child {width: 53px;}
 
+.help-us-content h3{font-size: 28px;font-weight: bold;font-family: 'Conv_Meshki';}
+.question-sec h4{font-size: 20px;font-family: 'Conv_Meshki';}
+.question-sec .select-answer button{font-size: 20px;font-family: 'Conv_Meshki';}
+
 .left-main-menu{order:1;margin-left: 11%;}
 .left-main-menu ul{border-right:0px solid; border-left:4px solid #2e2baa;width: 60%;padding: 40px 0px 40px 70px;}
 .right-main-menu{order:0; text-align:right;}
 .left-menu-content a.main-menu{font-size: 35px;font-weight: bold;}
 .left-menu-content li{margin-bottom: 20px;height: 50px;font-size: 24px;}
-.left-menu-content a.menu-btn{font-size: 14px;}
+.left-menu-content a.menu-btn{font-size: 16px;}
+.left-menu-content a.create-account{font-size:24px;}
 .right-menu-content li{margin-bottom: 20px;height: 50px;font-size: 24px;}
 .right-menu-content a.main-menu{font-size: 35px;font-weight: bold;}
 .social-menu-icons {
     margin-top: 0px;
 }
 .partner-main-div h1{margin-right: 20px;}
+.partner-main-div{height: 430px;}
 .mag-list-head ul{direction:rtl;}
 .back-home {
     direction: rtl;
@@ -60,6 +70,10 @@ right: 0;}
     border-right: 0px solid #000;
     border-left: 1px solid #000;
 }
+.home-inner-text figure.time-is-now svg text#New_luxury_marketplace {
+    font-size: 40px;
+}
+.sign-up-btn a{padding:12px 0; font-size: 24px;font-family: 'Conv_Meshki';}
 .about-inner .page-head svg text{transform: translate(105%,90px);font-size: 110px;}
 .magazine-inner .page-head svg text{transform: translate(115%,90px);font-size: 110px;}
 .partnership-title.page-head svg text{transform: translate(115%,90px);font-size: 110px;}
@@ -78,8 +92,8 @@ top: 30%;
 .cms-content {
     direction: rtl;
 }
-.footer-links li.fl-title{font-size:18px;}
-.footer-links li a{font-size:18px;}
+.footer-links li.fl-title{font-size:20px;}
+.footer-links li a{font-size:20px;}
 @media (min-width: 360px) and (max-width: 579px){
 	.container {
     padding-left: 15px;
