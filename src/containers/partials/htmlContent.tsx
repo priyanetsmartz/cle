@@ -13,7 +13,7 @@ function HtmlContent(props) {
 
     const getData = async () => {
         let result: any = await getContent(props.languages, props.identifier);
-        if (result) {
+        if (result.data && result.data.items && result.data.items.length > 0) {
             SetPagesData(result.data.items[0]);
         }
     }

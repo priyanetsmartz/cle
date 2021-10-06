@@ -42,7 +42,7 @@ function CartItemPage(props) {
     useEffect(() => {
         // console.log(props.items.Cart);
         let giftBox = props.giftCart.Cart.openGiftBox === 0 ? false : true;
-       // console.log(giftBox)
+        // console.log(giftBox)
         setIsGiftMessage(giftBox)
         return () => {
             // componentwillunmount in functional component.
@@ -53,7 +53,8 @@ function CartItemPage(props) {
         setOpacity(0.3);
         let cartData = [], cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
-        if (customer_id) {
+        const cartQuoteId = localStorage.getItem('cartQuoteId');
+        if (customer_id && cartQuoteId) {
             cartItems = await getCartItems();
             let products = cartItems.data.items;
             // get cart total 
@@ -93,6 +94,8 @@ function CartItemPage(props) {
             setCartRelevants(cartRelevant);
             setCartItems(cartValues)
             setCartTotal(cartPrices);
+            setOpacity(1);
+        } else {
             setOpacity(1);
         }
     }

@@ -12,8 +12,8 @@ import NewIn from './newIn';
 import WeChooseForYou from './weChooseForYou';
 import Magazine from './magazine';
 import BecomePartner from './becomePartner';
-
-
+import Footer from '../../../containers/partials/footer-new';
+import Header from '../../../containers/partials/headerMenu';
 function HomePage(props) {
     const [token, setToken] = useState('');
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
@@ -50,12 +50,13 @@ function HomePage(props) {
                     onLeave={onLeave}
                     afterLoad={afterLoad}
                     //normalScrollElements='.checkus-out'
+                    fixedElements='.header-cle, .cle-footer'
                     className="sectiosn"
                     sectionClassName='section'
                     scrollBar="true"
                     render={({ state, fullpageApi }) => {
                         return (
-                            <div className="sectiosn" >
+                            <div className="sectiosn" >                               
                                 <div className="section">
                                     <HomeBanner />
                                     <Personal />
@@ -84,6 +85,9 @@ function HomePage(props) {
                                 <div className="section">
                                     <BecomePartner />
                                 </div>
+                                <div className="section footer">
+                                    <Footer />
+                                </div>
                             </div>
                         )
                     }}
@@ -91,6 +95,9 @@ function HomePage(props) {
             </BrowserView>
             <MobileView>
                 <div className="sectiosn" >
+                    <div className="section header-cle" >
+                        <Header />
+                    </div>
                     <div className="section">
                         <HomeBanner />
                         <Personal />
@@ -118,6 +125,9 @@ function HomePage(props) {
                     </div>
                     <div className="section">
                         <BecomePartner />
+                    </div>
+                    <div className="section footer">
+                        <Footer />
                     </div>
                 </div>
             </MobileView>

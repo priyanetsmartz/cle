@@ -34,6 +34,7 @@ import ExploreDesigner from './containers/Page/designer/exploreDesigner';
 import Faq from './containers/Page/faq/faq';
 import FaqListing from './containers/Page/faq/faqListing';
 import Search from './containers/Page/search';
+import orderThankyou from './containers/Page/product/orderThankyou';
 // import New from './containers/Page/new';
 
 import Product from './containers/Page/product/product';
@@ -45,6 +46,7 @@ const PublicRoutes = ({ history }) => {
     <ConnectedRouter history={history}>
       <Switch>
         <ProductRoutes exact path="/search/:searchText" component={Search} />
+        <ProductRoutes exact path="/thankyou/:id" component={orderThankyou} />
         <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
         <ProductRoutes exact path="/products/new-in/all" component={Product} />
         <ProductRoutes exact path="/products/:category/:subcat" component={Categories} />
