@@ -270,7 +270,8 @@ export function setDefaultBillngAddress(addressId) {
 }
 
 export function getPaymentMethods() {
-    return CUSTOMER.request(`rest/V1/carts/mine/payment-methods`, "", "GET", "")
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`rest/V1/carts/${cartQuoteId}/payment-methods`, "", "GET", "")
 }
 
 export function getShippinMethods() {
@@ -282,6 +283,11 @@ export function getShippinMethods() {
 export function setGuestUserDeliveryAddress(data) {
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/shipping-information`, data, "POST", "");
+}
+
+export function setUserDeliveryAddress(data) {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`rest/V1/carts/${cartQuoteId}/shipping-information`, data, "POST", "");
 }
 
 export function placeGuestOrder() {
@@ -296,10 +302,25 @@ export function placeGuestOrder() {
 
 
 export function placeUserOrder() {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
     let data = {
         "paymentMethod": {
             "method": "checkmo"
         }
     }
-    return CUSTOMER.request(`rest/en/V1/carts/mine/order`, data, "PUT", "");
+    return APi.request(`rest/V1/carts/${cartQuoteId}/order`, data, "PUT", "");
+}
+
+export function getAddressById(addId: number) {
+    return APi.request(`rest/V1/customers/addresses/${addId}`, "", "GET", "");
+}
+
+export function getGiftMessage(itemId: number) {
+    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    return APi.request(`/rest/V1/carts/${cartQuoteId}/gift-message/{itemId}`, "", "GET", "")
+}
+
+export function getGuestGiftMessage(itemId: number) {
+    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    return APi.request(`/rest/V1/guest-carts/${cartQuoteToken}/gift-message/${itemId}`, "", "GET", "")
 }

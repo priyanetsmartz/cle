@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom';
 // import Header from '../../containers/partials/header';
 import Footer from '../../containers/partials/footer-new';
-import Header from '../../containers/partials/headeMenu';
+import Header from '../../containers/partials/headerMenu';
 const localToken = localStorage.getItem('id_token');
 
 

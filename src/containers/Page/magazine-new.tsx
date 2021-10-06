@@ -33,7 +33,7 @@ function Magazine(props) {
                         </text> </svg>
                 </figure>
                 <div className="row my-3 mag-first-sec arabic-rtl-direction">
-                    <div className="mag-come-soon">Coming Soon</div>
+                    <div className="mag-come-soon"><IntlMessages id="magazine.comingsoon" /></div>
                     {/* {items.slice(0, 4).map((item, i) => {
                         return (
                             <div className={"col-md-5 " + (((i % 2) === 0) ? 'offset-md-1' : 'mt-5')} key={i}>

@@ -15,6 +15,7 @@ import IntlMessages from "../../components/utility/intlMessages";
 import Breadcrumbs from './locationBreadcrumbs';
 import MiniCart from './mini-cart';
 import SearchBar from './searchBar';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 const { logout } = authAction;
 const { showSignin, openSignUp } = appAction;
@@ -181,6 +182,7 @@ function HeaderMenu(props) {
                             <div className="cartuser-info">
                                 <ul>
                                     <li><Link to="#">{customerName ? customerName : ""} </Link></li>
+                                    <LanguageSwitcher />
                                     <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li>
                                     <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 

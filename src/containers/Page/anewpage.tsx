@@ -209,9 +209,9 @@ function Home(props) {
                                 <div id="checkus-out1" className="section checkus-out" >
                                     <SocailCheckout />
                                 </div>
-                                <div className="section footer">
+                                {/* <div className="section footer">
                                     <Footer />
-                                </div>
+                                </div> */}
                             </div>
                         )
                     }}
@@ -242,9 +242,9 @@ function Home(props) {
                     <div id="checkus-out1" className="section checkus-out" >
                         <SocailCheckout />
                     </div>
-                    <div className="section footer">
+                    {/* <div className="section footer">
                         <Footer />
-                    </div>
+                    </div> */}
                 </div>
             </MobileView>
         </>

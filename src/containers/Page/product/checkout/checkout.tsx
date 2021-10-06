@@ -6,12 +6,16 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
 import { useIntl } from 'react-intl';
-import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, setDefaultShippingAddress, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setDefaultBillngAddress, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder } from '../../../../redux/cart/productApi';
-import { getCustomerDetails, saveCustomerDetails, getCountriesList, getRegionsByCountryID } from '../../../../redux/pages/customers';
+import { useHistory } from "react-router";
+import cartAction from "../../../../redux/cart/productAction";
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById } from '../../../../redux/cart/productApi';
+import { getCustomerDetails, getCountriesList, getRegionsByCountryID } from '../../../../redux/pages/customers';
+const { addToCartTask } = cartAction;
 function Checkout(props) {
     const intl = useIntl();
+    let history = useHistory();
     const [itemsVal, SetItems] = useState({
-        checkData: {}, items: {}, address: {}
+        checkData: {}, items: {}, address: {}, shippingAddress: 0, shippingData: {}
     });
     const [promoCode, setPromoCode] = useState('');
     const [state, setState] = useState({
@@ -19,20 +23,20 @@ function Checkout(props) {
     })
     //for customer address starts here------
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
-    const [addressTypes, setAddressTypes] = useState('address');
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [addNewAddressModal, setAddNewAddressModal] = useState(false);
+    const [addBillingAddress, setAddBillingAddress] = useState(false);
     const [errorPromo, setErrorPromo] = useState('');
-    const [paymentMethodsList, SetPaymentMethodsList] = useState({})
+    // const [paymentMethodsList, SetPaymentMethodsList] = useState({})
     const [shippingMethods, SetShippingMethods] = useState([])
     const [regions, setRegions] = useState([]); // for regions dropdown
-    const [orderButton, setOrderButton] = useState({
-        email: false,
-        shippingAddress: false,
-        billingAddress: false,
-        shippingMethod: false,
-        paymentMethod: false
-    });
+    // const [orderButton, setOrderButton] = useState({
+    //     email: false,
+    //     shippingAddress: false,
+    //     billingAddress: false,
+    //     shippingMethod: false,
+    //     paymentMethod: false
+    // });
     const [emailError, setEmailError] = useState({
         errors: {}
     });
@@ -52,12 +56,28 @@ function Checkout(props) {
         telephone: "",
         postcode: "",
         city: "",
-        country_id: "",
+        country_id: "AD",
         region_id: 0,
         street: "",
         default_shipping: true,
         default_billing: true,
     });
+
+    const [billingAddressData, setBillingAddress] = useState({
+        id: 0,
+        customer_id: custId ? custId : 0,
+        firstname: "",
+        lastname: "",
+        telephone: "",
+        postcode: "",
+        city: "",
+        country_id: "AD",
+        region_id: 0,
+        street: "",
+        default_shipping: true,
+        default_billing: true,
+    });
+
 
     const [custForm, setCustForm] = useState({
         id: custId,
@@ -73,6 +93,9 @@ function Checkout(props) {
     });
 
     const [errors, setError] = useState({
+        errors: {}
+    });
+    const [billingError, setBillingError] = useState({
         errors: {}
     });
     //for customer address ends here-------
@@ -106,19 +129,39 @@ function Checkout(props) {
                 cartTotal = await getGuestCartTotal();
             }
         }
-        let checkoutData = {}, checkItems = {};
+        let checkoutData = {}, checkItems = {}, ship = {};
         checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
         checkoutData['sub_total'] = cartTotal && cartTotal.data ? cartTotal.data.base_subtotal : 0;
         checkoutData['shipping_charges'] = cartTotal && cartTotal.data ? cartTotal.data.base_shipping_amount : 0;
         checkoutData['total'] = cartTotal && cartTotal.data ? cartTotal.data.base_grand_total : 0;
         checkoutData['tax'] = cartTotal && cartTotal.data ? cartTotal.data.base_tax_amount : 0;
         checkoutData['total_items'] = cartTotal && cartTotal.data ? cartTotal.data.items_qty : 0;
-        checkItems['items'] = cartTotal && cartTotal.data ? cartItems.data.items : [];
+        checkItems['items'] = cartItems && cartItems.data ? cartItems.data.items : [];
+        //  console.log(cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.id)
+        let shipingAdd = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.id : 0;
+
+        ship['firstname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.firstname : '';
+
+        ship['lastname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.lastname : '';
+
+        ship['telephone'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.telephone : '';
+
+        ship['postcode'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.postcode : '';
+
+        ship['city'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.city : '';
+
+        ship['country_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.country_id : '';
+
+        ship['region_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.region_id : '';
+
+        ship['street'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.street : '';
 
         SetItems(prevState => ({
             ...prevState,
             checkData: checkoutData,
-            items: checkItems
+            items: checkItems,
+            shippingAddress: shipingAdd,
+            shippingData: ship
         }))
     }
     const handleChange = (e) => {
@@ -127,13 +170,9 @@ function Checkout(props) {
             ...prevState,
             [id]: value
         }))
-        setOrderButton(prevState => ({
-            ...prevState,
-            email: true
-        }))
     }
     const handleBlur = (e) => {
-        console.log('herer')
+        //console.log('herer')
         let error = {};
         let formIsValid = true;
 
@@ -157,7 +196,7 @@ function Checkout(props) {
         let addresses = {};
         let result: any = await getCustomerDetails();
         setCustForm(result.data);
-        console.log(result.data)
+        // console.log(result.data)
         addresses['addresses'] = result.data ? result.data.addresses : '';
         SetItems(prevState => ({
             ...prevState,
@@ -165,7 +204,7 @@ function Checkout(props) {
         }))
         // console.log(itemsVal.billingAddress)
         let paymentsMethods: any = await getPaymentMethods();
-        SetPaymentMethodsList(paymentsMethods)
+        // SetPaymentMethodsList(paymentsMethods)
     }
 
     const getCountries = async () => {
@@ -173,14 +212,23 @@ function Checkout(props) {
         setCountries(result.data);
     }
 
-    const toggleAddressModal = (addressType) => {
-        setAddressTypes(addressType)
+    const toggleAddressModal = () => {
         setAddNewAddressModal(!addNewAddressModal);
     }
-
+    const toggleBillingAddressModal = () => {
+        setAddBillingAddress(!addBillingAddress);
+    }
     const handleAddChange = (e) => {
         const { id, value } = e.target;
         setCustAddForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
+    }
+
+    const handleBillingAddressChange = (e) => {
+        const { id, value } = e.target;
+        setBillingAddress(prevState => ({
             ...prevState,
             [id]: value
         }))
@@ -190,9 +238,36 @@ function Checkout(props) {
         let addId = e.target.value;
         let checked = e.target.checked;
         if (checked) {
-            const res: any = await setDefaultShippingAddress(addId)
-            if (res.data === true) {
-                notification("success", "", "Addres added successfully!");
+            const address: any = await getAddressById(addId);
+            if (address.data) {
+                let addressData: any = {};
+                let addressInformation: any = {};
+
+                let shippingAddress = {
+                    customer_id: custId ? custId : 0,
+                    firstname: address.data.firstname,
+                    lastname: address.data.lastname,
+                    telephone: address.data.telephone,
+                    postcode: address.data.postcode,
+                    city: address.data.city,
+                    country_id: address.data.country_id,
+                    region_id: address.data.region_id,
+                    street: address.data.street,
+                    // email: localStorage.getItem('token_email')
+                };
+                addressInformation.shippingAddress = shippingAddress;
+                addressData.addressInformation = addressInformation;
+                //console.log(addressData)
+                let saveDelivery: any = await setUserDeliveryAddress(addressData);
+                if (saveDelivery.data) {
+                    checkoutScreen()
+                    notification("success", "", "Customer Address Updated");
+                } else {
+                    notification("error", "", "Select Correct Address!");
+                }
+
+            } else {
+                notification("error", "", "Select Correct Address!");
             }
         }
     }
@@ -200,10 +275,49 @@ function Checkout(props) {
     const handleBillingChange = async (e) => {
         let addId = e.target.value;
         let checked = e.target.checked;
+        // console.log(itemsVal.shippingData['firstname'])
         if (checked) {
-            const res: any = await setDefaultBillngAddress(addId)
-            if (res.data === true) {
-                notification("success", "", "Biling address added successfully!");
+            const address: any = await getAddressById(addId);
+            if (address.data) {
+                let addressData: any = {};
+                let addressInformation: any = {};
+
+                let billingAddress = {
+                    customer_id: custId ? custId : 0,
+                    firstname: address.data.firstname,
+                    lastname: address.data.lastname,
+                    telephone: address.data.telephone,
+                    postcode: address.data.postcode,
+                    city: address.data.city,
+                    country_id: address.data.country_id,
+                    region_id: address.data.region_id,
+                    street: address.data.street
+                };
+
+                let shippingAddress = {
+                    customer_id: custId ? custId : 0,
+                    firstname: itemsVal.shippingData['firstname'],
+                    lastname: itemsVal.shippingData['lastname'],
+                    telephone: itemsVal.shippingData['telephone'],
+                    postcode: itemsVal.shippingData['postcode'],
+                    city: itemsVal.shippingData['city'],
+                    country_id: itemsVal.shippingData['country_id'],
+                    region_id: itemsVal.shippingData['region_id'],
+                    street: itemsVal.shippingData['street']
+                }
+                addressInformation.shippingAddress = shippingAddress;
+                addressInformation.billingAddress = billingAddress;
+                addressData.addressInformation = addressInformation;
+                console.log(addressData)
+                let saveDelivery: any = await setUserDeliveryAddress(addressData);
+                if (saveDelivery.data) {
+                    notification("success", "", "Customer Address Updated");
+                } else {
+                    notification("error", "", "Select Correct Address!");
+                }
+
+            } else {
+                notification("error", "", "Select Correct Address!");
             }
         }
     }
@@ -232,45 +346,113 @@ function Checkout(props) {
     const saveCustAddress = async () => {
         let result: any
         if (validateAddress()) {
-            let billngInfo = addressTypes === 'billing' ? false : true;
+
             let customer_id = localStorage.getItem('cust_id');
+            let address: any = {};
+            let addressInformation: any = {};
+
+            let obj: any = { ...custAddForm };
+            obj.street = [obj.street];
+            if (!customer_id) {
+                obj.email = state.email;
+            }
+            let shippingAddress = obj;
+            addressInformation.shippingAddress = shippingAddress;
+            address.addressInformation = addressInformation;
+            delete shippingAddress['default_shipping'];
+            delete shippingAddress['default_billing'];
+            delete shippingAddress['customer_id'];
+            delete shippingAddress['id'];
             if (customer_id) {
 
-                let obj: any = { ...custAddForm, default_shipping: billngInfo };
-                obj.street = [obj.street];
+                // let obj: any = { ...custAddForm };
+                // obj.street = [obj.street];
                 custForm.addresses.push(obj);
                 // console.log(obj)
-                result = await saveCustomerDetails(custId, { customer: custForm });
+                result = await setUserDeliveryAddress(address);
 
             } else {
-                let address: any = {};
-                let addressInformation: any = {};
-                // let billngInfo = addressTypes === 'billing' ? 'billingAddress' : 'shippingAddress';
-                let obj: any = { ...custAddForm, default_shipping: billngInfo };
-                obj.street = [obj.street];
-                obj.email = state.email;
-                if (addressTypes === 'billing') {
-                    let billingAddress = obj;
-                    delete billingAddress['default_shipping'];
-                    delete billingAddress['default_billing'];
-                    delete billingAddress['customer_id'];
-                    delete billingAddress['id'];
-                    addressInformation.billingAddress = billingAddress;
-                } else {
-                    let shippingAddress = obj;
-                    delete shippingAddress['default_shipping'];
-                    delete shippingAddress['default_billing'];
-                    delete shippingAddress['customer_id'];
-                    delete shippingAddress['id'];
-                    addressInformation.shippingAddress = shippingAddress;
-                }
-
                 address.addressInformation = addressInformation;
-                console.log(address)
+                // console.log(address)
                 result = await setGuestUserDeliveryAddress(address);
             }
             if (result) {
                 checkoutScreen();
+                // setCustAddForm({
+                //     id: 0,
+                //     customer_id: custId ? custId : 0,
+                //     firstname: "",
+                //     lastname: "",
+                //     telephone: "",
+                //     postcode: "",
+                //     city: "",
+                //     country_id: "",
+                //     region_id: 0,
+                //     street: "",
+                //     default_billing: true,
+                //     default_shipping: true
+                // });
+                toggleAddressModal();
+                notification("success", "", "Customer Address Updated");
+            }
+        } else {
+
+            console.log(errors)
+        }
+    }
+
+    const saveBillingAddress = async () => {
+        let result: any
+        if (validateBillingAddress()) {
+
+            let customer_id = localStorage.getItem('cust_id');
+            let address: any = {};
+            let addressInformation: any = {};
+
+            let obj: any = { ...custAddForm };
+            obj.street = [obj.street];
+            if (!customer_id) {
+                obj.email = state.email;
+            }
+            let shippingAddress = obj;
+            addressInformation.shippingAddress = shippingAddress;
+
+            delete shippingAddress['default_shipping'];
+            delete shippingAddress['default_billing'];
+            delete shippingAddress['customer_id'];
+            delete shippingAddress['id'];
+            let billingObj: any = { ...billingAddressData };
+            billingObj.street = [billingObj.street];
+            if (!customer_id) {
+                billingObj.email = state.email;
+            }
+            let billingAddress = billingObj;
+            delete billingAddress['default_shipping'];
+            delete billingAddress['default_billing'];
+            delete billingAddress['customer_id'];
+            delete billingAddress['id'];
+            addressInformation.billingAddress = billingAddress;
+            address.addressInformation = addressInformation;
+            //console.log(address)
+            if (customer_id) {
+
+                result = await setUserDeliveryAddress(address);
+            } else {
+                delete billingAddress['default_shipping'];
+                delete billingAddress['default_billing'];
+                delete billingAddress['customer_id'];
+                delete billingAddress['id'];
+                delete shippingAddress['default_shipping'];
+                delete shippingAddress['default_billing'];
+                delete shippingAddress['customer_id'];
+                delete shippingAddress['id'];
+                result = await setGuestUserDeliveryAddress(address);
+            }
+
+            if (result) {
+                checkoutScreen();
+                toggleBillingAddressModal()
+                notification("success", "", "Customer Address Updated");
                 setCustAddForm({
                     id: 0,
                     customer_id: custId ? custId : 0,
@@ -285,12 +467,28 @@ function Checkout(props) {
                     default_billing: true,
                     default_shipping: true
                 });
-                toggleAddressModal('address');
-                notification("success", "", "Customer Address Updated");
+
+                setBillingAddress({
+                    id: 0,
+                    customer_id: custId ? custId : 0,
+                    firstname: "",
+                    lastname: "",
+                    telephone: "",
+                    postcode: "",
+                    city: "",
+                    country_id: "AD",
+                    region_id: 0,
+                    street: "",
+                    default_shipping: true,
+                    default_billing: true,
+                });
+            } else {
+                notification("success", "", "Error occured!!");
             }
         } else {
 
             console.log(errors)
+            notification("success", "", "Error occured!!");
         }
     }
 
@@ -332,6 +530,43 @@ function Checkout(props) {
         return formIsValid;
     }
 
+    const validateBillingAddress = () => {
+        let error = {};
+        let formIsValid = true;
+
+        if (!billingAddressData.telephone) {
+            formIsValid = false;
+            error['telephone'] = 'Phone is required';
+        }
+        if (!billingAddressData.postcode) {
+            formIsValid = false;
+            error["postcode"] = 'Post Code is required';
+        }
+        if (!billingAddressData.city) {
+            formIsValid = false;
+            error["city"] = 'City is required';
+        }
+
+        if (!billingAddressData.country_id) {
+            formIsValid = false;
+            error['country_id'] = 'Country is required';
+        }
+        if (!billingAddressData.street) {
+            formIsValid = false;
+            error["street"] = 'Address is required';
+        }
+        if (!billingAddressData.firstname) {
+            formIsValid = false;
+            error["firstname"] = 'First Name is required';
+        }
+        if (!billingAddressData.lastname) {
+            formIsValid = false;
+            error["lastname"] = 'Last Name is required';
+        }
+
+        setBillingError({ errors: error });
+        return formIsValid;
+    }
     const applyPromo = async () => {
         let result: any;
         if (promoCode === '') {
@@ -365,7 +600,14 @@ function Checkout(props) {
             orderPlace = await placeGuestOrder();
 
         }
-        console.log(orderPlace);
+        if (orderPlace.data) {
+            props.addToCartTask(true);
+            localStorage.removeItem('cartQuoteId');
+            localStorage.removeItem('cartQuoteToken');
+            let orderId = parseInt(orderPlace.data);
+            //return <Redirect to={'/thankyou/' + orderId} />
+            history.push('/thankyou/' + orderId);
+        }
         // console.log(orderButton);
         // if (!orderButton.email) {
         //     setOrderError(prevState => ({
@@ -565,7 +807,7 @@ function Checkout(props) {
                                                                                 defaultValue={item.id}
                                                                                 onChange={handleBillingChange}
                                                                                 className="form-check-input"
-                                                                                defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
+                                                                            // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
                                                                             />
                                                                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                                                                 <IntlMessages id="usethisAddress" />
@@ -581,9 +823,9 @@ function Checkout(props) {
                                                                                 defaultValue={item.id}
                                                                                 onChange={handleAddressChange}
                                                                                 className="form-check-input"
-                                                                                defaultChecked={item.id === parseInt(custForm.default_shipping) ? true : false}
+                                                                            // defaultChecked={item.id === itemsVal.shippingAddress ? true : false}
                                                                             />
-                                                                            {item.id === parseInt(custForm.default_shipping) ? <label className="lable-text">Great</label> : ""}
+                                                                            {item.id === itemsVal.shippingAddress ? <label className="lable-text">Great</label> : ""}
 
                                                                         </div>
                                                                     </div>
@@ -687,7 +929,7 @@ function Checkout(props) {
                                                                         <input
                                                                             type="checkbox"
                                                                             defaultValue={item.id}
-                                                                            //onChange={handleAddressChange}
+                                                                            onChange={handleBillingChange}
                                                                             className="form-check-input"
                                                                             defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
                                                                         />
@@ -704,7 +946,7 @@ function Checkout(props) {
                                             <div className="add-address-btn">
                                                 <hr />
                                                 <button className="add-ad-btn btn btn-link" onClick={() => {
-                                                    toggleAddressModal('billing');
+                                                    toggleBillingAddressModal();
                                                 }} >
                                                     <IntlMessages id="checkout.addNewBillingAdd" />
                                                 </button>
@@ -857,6 +1099,101 @@ function Checkout(props) {
                     </div>
                 </Modal>
 
+                <Modal show={addBillingAddress}>
+                    <div className="CLE_pf_details">
+                        <Modal.Header>
+                            <h1><IntlMessages id="myaccount.myBillingAddress" /></h1>
+                            <Link className="cross_icn" to="#" onClick={addBillingAddress}> <i className="fas fa-times"></i></Link>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <div className="">
+                                <div className="width-100 mb-3 form-field">
+                                    <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
+                                    <input type="text" className="form-control" placeholder="Ann"
+                                        id="firstname"
+                                        value={billingAddressData.firstname}
+                                        onChange={handleBillingAddressChange} />
+                                    <span className="error">{billingError.errors["firstname"]}</span>
+
+                                </div>
+                                <div className="width-100 mb-3 form-field">
+                                    <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
+                                    <input type="text" className="form-control" id="lastname"
+                                        placeholder="Surname"
+                                        value={billingAddressData.lastname}
+                                        onChange={handleBillingAddressChange} />
+                                    <span className="error">{billingError.errors["lastname"]}</span>
+
+                                </div>
+                                <div className="width-100 mb-3 form-field">
+                                    <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
+                                    <input type="text" className="form-control" id="telephone"
+                                        placeholder="Phone"
+                                        value={billingAddressData.telephone}
+                                        onChange={handleBillingAddressChange} />
+                                    <span className="error">{billingError.errors["telephone"]}</span>
+
+                                </div>
+                                <div className="width-100 mb-3 form-field">
+                                    <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
+                                    <input type="text" className="form-control" id="street"
+                                        placeholder="Address"
+                                        value={billingAddressData.street}
+                                        onChange={handleBillingAddressChange} />
+                                    <span className="error">{billingError.errors["street"]}</span>
+
+                                </div>
+                                <div className="width-100 mb-3 form-field">
+                                    <label className="form-label"><IntlMessages id="myaccount.city" /></label>
+                                    <input type="text" className="form-control" id="city"
+                                        placeholder="City"
+                                        value={billingAddressData.city}
+                                        onChange={handleBillingAddressChange} />
+                                    <span className="error">{billingError.errors["city"]}</span>
+
+                                </div>
+                                <div className="width-100 mb-3 form-field">
+                                    <label className="form-label"><IntlMessages id="myaccount.postCode" /></label>
+                                    <input type="text" className="form-control" id="postcode"
+                                        placeholder="Post Code"
+                                        value={billingAddressData.postcode}
+                                        onChange={handleBillingAddressChange} />
+                                    <span className="error">{billingError.errors["postcode"]}</span>
+
+                                </div>
+                                <div className="width-100 mb-3 form-field">
+                                    <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
+                                    <select value={billingAddressData.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
+                                        {countries && countries.map(opt => {
+                                            return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
+                                        })}
+                                    </select>
+                                    <span className="error">{billingError.errors["country_id"]}</span>
+                                </div>
+                                {regions.length > 0 && <div className="width-100 mb-3 form-field">
+                                    <label className="form-label">
+                                        <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
+                                    <select value={billingAddressData.region_id} onChange={handleBillingAddressChange} id="region_id" className="form-select">
+                                        {regions && regions.map(opt => {
+                                            return (<option key={opt.id} value={opt.id} >
+                                                {opt.name}</option>);
+                                        })}
+                                    </select>
+                                    <span className="error">{billingError.errors["region_id"]}</span>
+                                </div>}
+                                <Modal.Footer>
+                                    <div className="width-100 mb-3 form-field">
+                                        <div className="Frgt_paswd">
+                                            <div className="confirm-btn">
+                                                <button type="button" className="btn btn-secondary" onClick={saveBillingAddress}><IntlMessages id="myaccount.confirm" /></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Modal.Footer>
+                            </div>
+                        </Modal.Body>
+                    </div>
+                </Modal>
 
             </section >
 
@@ -877,5 +1214,6 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { addToCartTask }
 )(Checkout);
