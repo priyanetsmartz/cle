@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Checkbox } from 'antd';
 import { Link } from "react-router-dom";
+import IntlMessages from "../../../components/utility/intlMessages";
+import notification from '../../../components/notification';
+import { connect } from "react-redux";
+import authAction from "../../../redux/auth/actions";
+const { login, logout } = authAction;
 
 function VendorLogin(props) {
   const [loginForm, setLoginForm] = useState({
@@ -9,6 +15,8 @@ function VendorLogin(props) {
   const [errors, setError] = useState({
     errors: {}
   });
+  const [isShow, setIsShow] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
   }, [])
@@ -23,7 +31,18 @@ function VendorLogin(props) {
 
   const loginHadler = () => {
     if (handleValidation()) {
+      setIsShow(true);
+      const { login } = props;
       console.log(loginForm);
+      const userInfo = {
+        "type": "user",
+        "email": loginForm.email,
+        "password": loginForm.password,
+        "rememberme": rememberMe
+      }
+      login({ userInfo });
+    }else{
+      notification("warning", "", "Please enter valid email and password");
     }
   }
 
@@ -52,6 +71,15 @@ function VendorLogin(props) {
     setError({ errors: error });
     return formIsValid;
   }
+
+  const handleOnChange = checkedValues => {
+    const isChecked = checkedValues.target.checked;
+    if (isChecked === true) {
+      setRememberMe(true);
+    } else {
+      setRememberMe(false);
+    }
+  };
 
   return (
     <section className="designer-alphabet-list">
@@ -84,15 +112,23 @@ function VendorLogin(props) {
               <div className="row g-3">
                 <div className="col-6">
                   <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="gridCheck" />
-                    <label className="form-check-label" htmlFor="gridCheck">
-                      Remember me
-                    </label>
+                  <Checkbox
+                    onChange={handleOnChange}
+                    checked={rememberMe}
+                  >
+                    <IntlMessages id="login.RememberMe" />
+                  </Checkbox>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="float-end">
-                    <button type="submit" className="btn btn-secondary float-end" onClick={loginHadler}>Sign in</button>
+                    <button className="btn btn-secondary float-end" onClick={loginHadler} style={{ "display": !isShow ? "inline-block" : "none" }}>
+                      <IntlMessages id="login.button" />
+                    </button>
+                    <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}>
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                      <IntlMessages id="loading" />
+                    </div>
                     <Link to="#" className="forgot-pswd-new float-end">forgot your password?</Link>
                   </div>
                   <div className="clearfix"></div>
@@ -195,4 +231,14 @@ function VendorLogin(props) {
 }
 
 
-export default VendorLogin;
+function mapStateToProps(state) {
+  return {
+    auth: state.Auth.idToken,
+    loading: state.Auth.loading,
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  { login }
+)(VendorLogin);
