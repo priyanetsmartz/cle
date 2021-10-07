@@ -58,7 +58,7 @@ right:0;
 left: 0;
 bottom: 10%;
 }
-.sign-up-btn a{width: max-content;padding: 12px 20px;font-size: 12px;}
+.sign-up-btn a{width: max-content;padding: 12px 20px !important;font-size: 12px;}
 #about-us .container.about-inner figure svg{width:80%; height:auto;}
 .blue-back-image {
     background: #2e2baa;
