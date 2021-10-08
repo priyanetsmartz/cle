@@ -10,8 +10,12 @@ const actions = {
     ADD_TO_CART_TASK: 'ADD_TO_CART_TASK',
     OPEN_GIFT_BOX: 'OPEN_GIFT_BOX',
     ADD_TO_WISHLIST_TASK: 'ADD_TO_WISHLIST_TASK',
-    ACCOUNT_SECTION:'ACCOUNT_SECTION',
-    MINICART_SECTION:'MINICART_SECTION',
+    ACCOUNT_SECTION: 'ACCOUNT_SECTION',
+    MINICART_SECTION: 'MINICART_SECTION',
+    PAYMENT_METHODS: 'PAYMENT_METHODS',
+    SHIPPING_ADDRESS: 'SHIPPING_ADDRESS',
+    BILLING_ADDRESS: 'BILLING_ADDRESS',
+    RECOMENDED_PRODUCTS: 'RECOMENDED_PRODUCTS',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -52,13 +56,29 @@ const actions = {
         type: actions.OPEN_GIFT_BOX,
         isOpen: isOpen
     }),
-    accountPopup : isShow =>({
+    accountPopup: isShow => ({
         type: actions.ACCOUNT_SECTION,
-        isShow:isShow
+        isShow: isShow
     }),
-    miniCartPopup : isShow =>({
+    miniCartPopup: isShow => ({
         type: actions.MINICART_SECTION,
-        isShow:isShow
+        isShow: isShow
+    }),
+    showPaymentMethods: payload => ({
+        type: actions.PAYMENT_METHODS,
+        payload
+    }),
+    shippingAddressState: payload => ({
+        type: actions.SHIPPING_ADDRESS,
+        payload
+    }),
+    billingAddressState: payload => ({
+        type: actions.BILLING_ADDRESS,
+        payload
+    }),
+    recomendedProducts: payload => ({
+        type: actions.RECOMENDED_PRODUCTS,
+        payload
     })
 
 };

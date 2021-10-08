@@ -8,9 +8,10 @@ import notification from '../../../../components/notification';
 import { useIntl } from 'react-intl';
 import { useHistory } from "react-router";
 import cartAction from "../../../../redux/cart/productAction";
-import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById } from '../../../../redux/cart/productApi';
-import { getCustomerDetails, getCountriesList, getRegionsByCountryID } from '../../../../redux/pages/customers';
-const { addToCartTask } = cartAction;
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora } from '../../../../redux/cart/productApi';
+import { getCustomerDetails, getCountriesList, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
+import { language } from '../../../../settings';
+const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState } = cartAction;
 function Checkout(props) {
     const intl = useIntl();
     let history = useHistory();
@@ -27,8 +28,9 @@ function Checkout(props) {
     const [addNewAddressModal, setAddNewAddressModal] = useState(false);
     const [addBillingAddress, setAddBillingAddress] = useState(false);
     const [errorPromo, setErrorPromo] = useState('');
-    // const [paymentMethodsList, SetPaymentMethodsList] = useState({})
+    // const [paymentMethodsList, SetPaymentMethodsList] = useState([])
     const [shippingMethods, SetShippingMethods] = useState([])
+    const [isShow, setIsShow] = useState(false);
     const [regions, setRegions] = useState([]); // for regions dropdown
     // const [orderButton, setOrderButton] = useState({
     //     email: false,
@@ -110,10 +112,11 @@ function Checkout(props) {
         getCountries();
 
         return () => {
+            //   props.showPaymentMethods([]);
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [props.posts])
+    }, [props.languages, props.payTrue, props.guestShipp, props.guestBilling])
 
     async function checkoutScreen() {
         let cartItems: any, cartTotal: any;
@@ -188,6 +191,10 @@ function Checkout(props) {
             formIsValid = false;
             error["email"] = "Email is required";
         }
+        const acc = document.getElementById("accordion-buttonacc");
+        const CheckoutTwo = document.getElementById("CheckoutTwo");
+        acc.classList.remove("show");
+        CheckoutTwo.classList.remove("show");
         setEmailError({ errors: error });
         return formIsValid;
     }
@@ -203,9 +210,26 @@ function Checkout(props) {
             address: addresses
         }))
         // console.log(itemsVal.billingAddress)
-        let paymentsMethods: any = await getPaymentMethods();
-        // SetPaymentMethodsList(paymentsMethods)
+        //    let paymentsMethods: any = await getPaymentMethods();
+        //SetPaymentMethodsList(paymentsMethods)
     }
+
+    const checkEmailData = async () => {
+        if (state.email === "" && custId === "") {
+            const acc = document.getElementById("accordion-buttonacc");
+            const CheckoutTwo = document.getElementById("CheckoutTwo");
+
+            acc.classList.add("show");
+            CheckoutTwo.classList.add("show");
+            acc.classList.remove("collapsed");
+            let error = {};
+            error["email"] = "Email is required";
+            setEmailError({ errors: error });
+        } else {
+            console.log('no here')
+        }
+    }
+
 
     const getCountries = async () => {
         let result: any = await getCountriesList();
@@ -232,6 +256,20 @@ function Checkout(props) {
             ...prevState,
             [id]: value
         }))
+    }
+
+
+    const selectPayment = async (code) => {
+        console.log(code)
+        if (code === 'myfatoorah_gateway') {
+            const payment: any = await myFatoora();
+           if(payment.data[0].IsSuccess){
+              let url =  payment.data[0].Data.PaymentURL;
+              if(url){
+                history.push(url);
+              }
+           }
+        }
     }
 
     const handleAddressChange = async (e) => {
@@ -310,7 +348,8 @@ function Checkout(props) {
                 addressData.addressInformation = addressInformation;
                 console.log(addressData)
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
-                if (saveDelivery.data) {
+                if (saveDelivery.data.payment_methods) {
+                    props.showPaymentMethods(saveDelivery.data.payment_methods);
                     notification("success", "", "Customer Address Updated");
                 } else {
                     notification("error", "", "Select Correct Address!");
@@ -357,21 +396,36 @@ function Checkout(props) {
                 obj.email = state.email;
             }
             let shippingAddress = obj;
-            addressInformation.shippingAddress = shippingAddress;
-            address.addressInformation = addressInformation;
-            delete shippingAddress['default_shipping'];
-            delete shippingAddress['default_billing'];
-            delete shippingAddress['customer_id'];
-            delete shippingAddress['id'];
-            if (customer_id) {
 
-                // let obj: any = { ...custAddForm };
-                // obj.street = [obj.street];
+
+            delete shippingAddress['default_billing'];
+            if (customer_id) {
                 custForm.addresses.push(obj);
+
+                let newAddress: any = await saveCustomerDetails(custId, { customer: custForm });
+                console.log(newAddress.data)
+                delete shippingAddress['default_shipping'];
+
+                delete shippingAddress['customer_id'];
+                delete shippingAddress['id'];
+                // delete shippingAddress['save_in_address_book'];
+                addressInformation.shippingAddress = shippingAddress;
+                address.addressInformation = addressInformation;
+
                 // console.log(obj)
                 result = await setUserDeliveryAddress(address);
+                if (newAddress.data) {
+                    getCutomerDetails();
+                }
+
 
             } else {
+                //dkdkdk
+                props.shippingAddressState(shippingAddress)
+                delete shippingAddress['customer_id'];
+                delete shippingAddress['id'];
+                delete shippingAddress['default_shipping'];
+                addressInformation.shippingAddress = shippingAddress;
                 address.addressInformation = addressInformation;
                 // console.log(address)
                 result = await setGuestUserDeliveryAddress(address);
@@ -414,42 +468,61 @@ function Checkout(props) {
             if (!customer_id) {
                 obj.email = state.email;
             }
-            let shippingAddress = obj;
+            // let shippingAddress = obj;
+            let shippingAddress = {
+                customer_id: custId ? custId : 0,
+                firstname: itemsVal.shippingData['firstname'],
+                lastname: itemsVal.shippingData['lastname'],
+                telephone: itemsVal.shippingData['telephone'],
+                postcode: itemsVal.shippingData['postcode'],
+                city: itemsVal.shippingData['city'],
+                country_id: itemsVal.shippingData['country_id'],
+                region_id: itemsVal.shippingData['region_id'],
+                street: itemsVal.shippingData['street']
+            }
             addressInformation.shippingAddress = shippingAddress;
 
-            delete shippingAddress['default_shipping'];
-            delete shippingAddress['default_billing'];
-            delete shippingAddress['customer_id'];
-            delete shippingAddress['id'];
             let billingObj: any = { ...billingAddressData };
             billingObj.street = [billingObj.street];
             if (!customer_id) {
                 billingObj.email = state.email;
             }
             let billingAddress = billingObj;
-            delete billingAddress['default_shipping'];
-            delete billingAddress['default_billing'];
-            delete billingAddress['customer_id'];
-            delete billingAddress['id'];
+            delete billingAddress['default_shipping']
             addressInformation.billingAddress = billingAddress;
             address.addressInformation = addressInformation;
             //console.log(address)
             if (customer_id) {
 
-                result = await setUserDeliveryAddress(address);
-            } else {
-                delete billingAddress['default_shipping'];
+                custForm.addresses.push(billingObj);
+                console.log(custForm)
+                let newAddress: any = await saveCustomerDetails(custId, { customer: custForm });
+                console.log(newAddress.data)
+                // delete billingAddress['default_shipping'];
                 delete billingAddress['default_billing'];
-                delete billingAddress['customer_id'];
-                delete billingAddress['id'];
-                delete shippingAddress['default_shipping'];
-                delete shippingAddress['default_billing'];
                 delete shippingAddress['customer_id'];
                 delete shippingAddress['id'];
+
+                addressInformation.shippingAddress = shippingAddress;
+                address.addressInformation = addressInformation;
+
+                // console.log(obj)
+                result = await setUserDeliveryAddress(address);
+            } else {
+                props.billingAddressState(billingAddress)
+                delete billingAddress['customer_id'];
+                delete billingAddress['id'];
+                delete billingAddress['default_billing'];
+
+                delete shippingAddress['customer_id'];
+                delete shippingAddress['id'];
+                delete shippingAddress['default_shipping'];
                 result = await setGuestUserDeliveryAddress(address);
             }
 
-            if (result) {
+            if (result.data) {
+                // here 
+                props.showPaymentMethods(result.data.payment_methods);
                 checkoutScreen();
                 toggleBillingAddressModal()
                 notification("success", "", "Customer Address Updated");
@@ -591,7 +664,21 @@ function Checkout(props) {
 
     //PLACE ORDER CODE GOES HERE
     const placeOrder = async () => {
-        console.log('place order')
+
+        if (!props.guestBilling.firstname) {
+            console.log('here')
+            return notification("error", "", "Please Add Biiling Address!");
+            // return false;
+        }
+
+        if (!props.guestShipp.firstname) {
+            return notification("error", "", "Please Add Shipping Address!");
+        }
+
+        if (!state.email) {
+            return notification("error", "", "Please Add email Address!");
+        }
+        setIsShow(true)
         let customer_id = localStorage.getItem('cust_id');
         let orderPlace: any;
         if (customer_id) {
@@ -600,54 +687,18 @@ function Checkout(props) {
             orderPlace = await placeGuestOrder();
 
         }
-        if (orderPlace.data) {
+        if (orderPlace.data.message) {
+            setIsShow(false)
             props.addToCartTask(true);
             localStorage.removeItem('cartQuoteId');
             localStorage.removeItem('cartQuoteToken');
             let orderId = parseInt(orderPlace.data);
             //return <Redirect to={'/thankyou/' + orderId} />
             history.push('/thankyou/' + orderId);
+        } else {
+            console.log('herere')
+            setIsShow(false)
         }
-        // console.log(orderButton);
-        // if (!orderButton.email) {
-        //     setOrderError(prevState => ({
-        //         ...prevState,
-        //         email: "Email addres is required"
-        //     }))
-        //     return false;
-        // }
-        // if (!orderButton.billingAddress) {
-        //     setOrderError(prevState => ({
-        //         ...prevState,
-        //         billingAddress: "Billing addres is required"
-        //     }))
-        //     return false;
-        // }
-
-        // if (!orderButton.shippingAddress) {
-        //     setOrderError(prevState => ({
-        //         ...prevState,
-        //         shippingAddress: "Delivery addres is required"
-        //     }))
-        //     return false;
-        // }
-        // if (!orderButton.shippingMethod) {
-        //     setOrderError(prevState => ({
-        //         ...prevState,
-        //         shippingMethod: "Choose valid shipping method"
-        //     }))
-        //     return false;
-        // }
-
-        // if (!orderButton.paymentMethod) {
-        //     setOrderError(prevState => ({
-        //         ...prevState,
-        //         paymentMethod: "Choose valid payment method"
-        //     }))
-        //     return false;
-        // }
-
-        // console.log(typeof (orderError))
 
     }
 
@@ -746,7 +797,7 @@ function Checkout(props) {
                                 <div className="accordion-item">
                                     <h2 className="accordion-header" id="CheckoutHTwo">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#CheckoutTwo" aria-expanded="false" aria-controls="CheckoutTwo">
+                                            data-bs-target="#CheckoutTwo" id="accordion-buttonacc" aria-expanded="false" aria-controls="CheckoutTwo">
                                             <IntlMessages id="email_address" />
                                         </button>
                                     </h2>
@@ -770,7 +821,7 @@ function Checkout(props) {
                                 </div>
                                 <div className="accordion-item">
                                     <h2 className="accordion-header" id="CheckoutHThree">
-                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        <button className="accordion-button collapsed" onClick={checkEmailData} type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutThree" aria-expanded="false" aria-controls="CheckoutThree">
                                             <IntlMessages id="deliveryAddress" />
                                         </button>
@@ -779,6 +830,26 @@ function Checkout(props) {
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
                                             <b><IntlMessages id="order.deliveryAddress" /></b>
+
+                                            {props.guestShipp && (
+
+                                                <div className="row" >
+                                                    <div className="col-md-7">
+                                                        <div className="single-address">
+                                                            <div>
+                                                                <p> {props.guestShipp.firstname} {props.guestShipp.lastname}</p>
+                                                                {props.guestShipp.street ? props.guestShipp.street.map((street, j) => {
+                                                                    <p key={j}>{street}</p>
+                                                                }) : ""}
+                                                                <p>{props.guestShipp.postcode}</p>
+                                                                <p>{props.guestShipp.city}</p>
+                                                                <p>{props.guestShipp.country_id}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            )}
                                             {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
                                                 <>
                                                     {itemsVal.address['addresses'].map((item, i) => {
@@ -825,7 +896,7 @@ function Checkout(props) {
                                                                                 className="form-check-input"
                                                                             // defaultChecked={item.id === itemsVal.shippingAddress ? true : false}
                                                                             />
-                                                                            {item.id === itemsVal.shippingAddress ? <label className="lable-text">Great</label> : ""}
+                                                                            {/* {item.id === itemsVal.shippingAddress ? <label className="lable-text">Great</label> : ""} */}
 
                                                                         </div>
                                                                     </div>
@@ -893,8 +964,28 @@ function Checkout(props) {
                                     <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
+                                            {props.guestBilling && (
+
+                                                <div className="row" >
+                                                    <div className="col-md-7">
+                                                        <div className="single-address">
+                                                            <div>
+                                                                <p> {props.guestBilling.firstname} {props.guestBilling.lastname}</p>
+                                                                {props.guestBilling.street ? props.guestBilling.street.map((street, j) => {
+                                                                    <p key={j}>{street}</p>
+                                                                }) : ""}
+                                                                <p>{props.guestBilling.postcode}</p>
+                                                                <p>{props.guestBilling.city}</p>
+                                                                <p>{props.guestBilling.country_id}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            )}
                                             {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
                                                 <div className="row">
+
                                                     <b><IntlMessages id="checkout.billingAdd" /></b>
                                                     {itemsVal.address['addresses'].map((item, i) => {
                                                         // console.log(item.firstname)
@@ -931,9 +1022,9 @@ function Checkout(props) {
                                                                             defaultValue={item.id}
                                                                             onChange={handleBillingChange}
                                                                             className="form-check-input"
-                                                                            defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
+                                                                        // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
                                                                         />
-                                                                        {item.id === parseInt(custForm.default_billing) ? <label className="lable-text" htmlFor="btn-check-2">Great</label> : ""}
+                                                                        {/* {item.id === parseInt(custForm.default_billing) ? <label className="lable-text" htmlFor="btn-check-2">Great</label> : ""} */}
 
                                                                     </div>
                                                                 </div>
@@ -953,7 +1044,7 @@ function Checkout(props) {
                                             </div>
 
                                             <div className="row">
-                                                <div className="col-md-7">
+                                                {/* <div className="col-md-7">
                                                     <div className="single-address">
                                                         <label><IntlMessages id="checkout.payType" /></label>
                                                         <div>
@@ -970,7 +1061,7 @@ function Checkout(props) {
                                                             </label>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                                 <div className="col-md-5">
                                                     <div className="select-address">
                                                         <div className="select-address-inner">
@@ -982,11 +1073,30 @@ function Checkout(props) {
                                             </div>
                                             <div className="choose-method">
                                                 <hr />
-                                                <div className="d-grid gap-2 col-6">
-                                                    <button type="button" className="btn btn-outline-dark"><IntlMessages id="checkout.addCards" /></button>
+
+                                                {
+                                                    props.payTrue.length > 0 && (
+                                                        // console.log(props.payTrue.length) 
+                                                        <div className="d-grid gap-2 col-6">
+                                                            {props.payTrue.map((item, i) => {
+                                                                //  console.log(i)
+                                                                return (
+                                                                    <div key={i}>
+                                                                        <button type="button" onClick={() => {
+                                                                            selectPayment(item.code);
+                                                                        }} className="btn btn-outline-dark">{item.title}</button>
+                                                                        {i >= props.payTrue.length - 1 ? ""
+                                                                            : <p><IntlMessages id="signup.or" /></p>}
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    )
+                                                }
+                                                {/* <button type="button" className="btn btn-outline-dark"><IntlMessages id="checkout.addCards" /></button>
                                                     <p><IntlMessages id="signup.or" /></p>
-                                                    <button type="button" className="btn btn-outline-dark"><IntlMessages id="checkout.addpaypal" /></button>
-                                                </div>
+                                                    <button type="button" className="btn btn-outline-dark"><IntlMessages id="checkout.addpaypal" /></button> */}
+
                                             </div>
                                         </div>
                                     </div>
@@ -994,8 +1104,9 @@ function Checkout(props) {
                             </div>
 
                             <div className="d-grid gap-2 col-8 mx-auto">
-                                <button className="btn btn-secondary" onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> </button>
-                                <p></p>
+                                <button className="btn btn-secondary" onClick={placeOrder} type="button" style={{ "display": !isShow ? "inline-block" : "none" }}><IntlMessages id="place-Order" /> </button>
+
+                                <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                             </div>
                         </div>
                         <CheckoutSidebar sidebarData={itemsVal} />
@@ -1103,7 +1214,7 @@ function Checkout(props) {
                     <div className="CLE_pf_details">
                         <Modal.Header>
                             <h1><IntlMessages id="myaccount.myBillingAddress" /></h1>
-                            <Link className="cross_icn" to="#" onClick={addBillingAddress}> <i className="fas fa-times"></i></Link>
+                            <Link className="cross_icn" to="#" onClick={toggleBillingAddressModal}> <i className="fas fa-times"></i></Link>
                         </Modal.Header>
                         <Modal.Body>
                             <div className="">
@@ -1202,18 +1313,31 @@ function Checkout(props) {
     )
 }
 const mapStateToProps = (state) => {
-    let languages = '';
-
+    let languages = '', payTrue = '', guestShipp = [], guestBilling = [];
+    console.log(state);
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
 
+    if (state && state.Cart.paymentMethods) {
+        payTrue = state.Cart.paymentMethods
+    }
+    if (state && state.Cart.ship) {
+        guestShipp = state.Cart.ship
+    }
+    if (state && state.Cart.billing) {
+        guestBilling = state.Cart.billing
+    }
+    console.log(state.Cart.billing.firstname)
     return {
-        languages: languages
+        languages: languages,
+        payTrue: payTrue,
+        guestShipp: guestShipp,
+        guestBilling: guestBilling
     }
 }
 
 export default connect(
     mapStateToProps,
-    { addToCartTask }
+    { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState }
 )(Checkout);

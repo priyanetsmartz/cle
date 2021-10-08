@@ -317,10 +317,27 @@ export function getAddressById(addId: number) {
 
 export function getGiftMessage(itemId: number) {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
-    return APi.request(`/rest/V1/carts/${cartQuoteId}/gift-message/{itemId}`, "", "GET", "")
+    return APi.request(`rest/V1/carts/${cartQuoteId}/gift-message/${itemId}`, "", "GET", "")
 }
 
 export function getGuestGiftMessage(itemId: number) {
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
-    return APi.request(`/rest/V1/guest-carts/${cartQuoteToken}/gift-message/${itemId}`, "", "GET", "")
+    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/gift-message/${itemId}`, "", "GET", "")
+}
+
+export function myFatoora() {
+    let data = {
+        "PaymentMethodId": "2",
+        "CustomerName": "string",
+        "CustomerMobile": "8787878787",
+        "CustomerEmail": localStorage.getItem('token_email'),
+        "Street": "string",
+        "Address": "string",
+        "cartId": localStorage.getItem('cartQuoteId')
+    }
+    return APi.request(`rest/V1/myfatoorah/executePayment`, data, "POST", "");
+}
+
+export function getPaymentStatus(paymentId: number) {
+    return APi.request(`rest/V1/myfatoorah/paymentStatus/${paymentId}`, "", "GET", "");
 }

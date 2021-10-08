@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import cartAction from "../../../../redux/cart/productAction";
-import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, getWhishlistItemsForUser, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
+import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGiftMessage, getGuestCart, getGuestCartTotal, getWhishlistItemsForUser, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
 import notification from "../../../../components/notification";
 import RelevantProducts from './relevantProducts';
 import Modal from "react-bootstrap/Modal";
@@ -49,6 +49,32 @@ function CartItemPage(props) {
             // Anything in here is fired on component unmount.
         }
     }, [props.giftCart.Cart]);
+
+    async function getgidtMessageCall(items) {
+        const promises = [];
+        items.forEach(async (i) => {
+            promises.push(new Promise((resolve, reject) => {
+                const res = someAPICall(i);
+                resolve(res);
+            }));
+        })
+        const result = await Promise.all(promises);
+        return result;
+    }
+
+    async function someAPICall(product) {
+        let giftCall: any = await getGiftMessage(product.item_id);
+        let prod: any;
+        if (giftCall.data && giftCall.data.gift_message_id) {
+            prod = { ...product, isGift: true }
+        } else {
+            prod = { ...product, isGift: false }
+        }
+        return prod;
+    }
+
+
+
     const callGetCartItems = async () => {
         setOpacity(0.3);
         let cartData = [], cartItems: any, cartTotal: any;
@@ -60,16 +86,17 @@ function CartItemPage(props) {
             // get cart total 
             cartTotal = await getCartTotal();
             let whishlist: any = await getWhishlistItemsForUser();
-            // let products = result.data.items;
             let WhishlistData = whishlist.data;
-            //   console.log(WhishlistData)
+            let productNew = await getgidtMessageCall(products)
+            // console.log(productNew)
+
             const mergeById = (a1, a2) =>
                 a1.map(itm => ({
                     ...a2.find((item) => (item.sku === itm.sku) && item),
                     ...itm
                 }));
 
-            cartData = mergeById(products, WhishlistData);
+            cartData = mergeById(productNew, WhishlistData);
             // console.log(cartData)
         } else {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
@@ -226,7 +253,7 @@ function CartItemPage(props) {
                                     (
                                         <ul className="cart-pro-list">
                                             {cartItemsVal['items'].map((item, i) => {
-                                                //    console.log(item)
+                                                //  console.log(item.isGift)
                                                 return (
                                                     <div key={i}>
                                                         <li >
@@ -239,7 +266,7 @@ function CartItemPage(props) {
                                                                 <div className="col-md-9">
                                                                     <div className="pro-name-tag">
                                                                         <div className="float-start">
-                                                                            <p><strong>{item.name}</strong></p>
+                                                                            <p><strong><Link to={'/product-details/' + item.sku}>{item.name}</Link></strong></p>
                                                                             <p>{item.desc}</p>
                                                                         </div>
                                                                         {token && (
@@ -280,10 +307,13 @@ function CartItemPage(props) {
                                                             </div>
                                                         </li>
                                                         <div className="save-cart-btns">
-                                                            <Link to="#" onClick={() => {
-                                                                handleGiftMEssage(item.item_id);
-                                                            }}><IntlMessages id="cart.addGift" /> </Link>
-                                                            <Link to="#" className=""><IntlMessages id="cart.removeGift" /></Link>
+                                                            {item.isGift ?
+                                                                <Link to="#" className=""><IntlMessages id="cart.removeGift" /></Link>
+                                                                : <Link to="#" onClick={() => {
+                                                                    handleGiftMEssage(item.item_id);
+                                                                }}><IntlMessages id="cart.addGift" /> </Link>}
+
+
                                                         </div>
                                                     </div>
                                                 )

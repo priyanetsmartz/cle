@@ -8,8 +8,13 @@ const initState = {
     openGiftBox: 0,
     addToWishlistTask: false,
     openAccountPop: false,
-    openMiniCartPop: false
+    openMiniCartPop: false,
+    paymentMethods: [],
+    ship: {},
+    billing: {},
+    recomended: []
 }
+
 
 const cartReducer = (state = initState, action) => {
     switch (action.type) {
@@ -29,7 +34,14 @@ const cartReducer = (state = initState, action) => {
             return { ...state, openAccountPop: action.isShow };
         case actions.MINICART_SECTION:
             return { ...state, openMiniCartPop: action.isShow };
-
+        case actions.PAYMENT_METHODS:
+            return { ...state, paymentMethods: action.payload };
+        case actions.SHIPPING_ADDRESS:
+            return { ...state, ship: action.payload };
+        case actions.BILLING_ADDRESS:
+            return { ...state, billing: action.payload };
+        case actions.RECOMENDED_PRODUCTS:
+            return { ...state, recomended: action.payload };
         default:
             return state;
     }

@@ -18,14 +18,14 @@ import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import notification from '../../../../components/notification';
 import GiftMessage from './GiftMessage';
-const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask } = cartAction;
+const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts } = cartAction;
 
 function ProductDetails(props) {
     const { sku } = useParams();
     const [opacity, setOpacity] = useState(1);
     const [isShow, setIsShow] = useState(false);
     const [shareUrl, setShareUrl] = useState('');
-
+    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [iteminWhishlist, setItemInWhishlist] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
@@ -39,7 +39,8 @@ function ProductDetails(props) {
     const [sizeGuideModal, setSizeGuideModal] = useState(false);
     const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
     const [magezineData, setMagezineData] = useState({});
-    const [recomendationsData, setRecomendations] = useState({});
+    const [recomendationsData, setRecomendations] = useState([]);
+    const [linkedProducts, setProdLinked] = useState([]);
     const [configurableOptions, setConfigurableOptions] = useState([]);
     const [productSizeDetails, setProductSizeDetails] = useState({});
     const [tagsState, setTagsState] = useState([]);
@@ -48,6 +49,9 @@ function ProductDetails(props) {
     });
     const [extensionAttributes, setExtensionAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
+
+
+
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
@@ -66,9 +70,6 @@ function ProductDetails(props) {
         setMeasuringGuideModal(props.items.Cart.isOpenMeasuringGuide);
     }, [props.items.Cart]);
 
-    //     useEffect(() => {
-    //    //     console.log(props);
-    //     }, [props]);
     const handleClick = () => {
         setIsLoaded(true);
     }
@@ -111,6 +112,7 @@ function ProductDetails(props) {
             if (inWhishlist) {
                 setItemInWhishlist(inWhishlist.wishlist_item_id)
             }
+            // console.log(inWhishlist)
             let productExtras: any = await getProductExtras(result.data.id);
             setMagezineData(productExtras.data[0].posts)
             setRecomendations(productExtras.data[0].recommendation)
@@ -156,6 +158,7 @@ function ProductDetails(props) {
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = result.data.extension_attributes.stock_item.is_in_stock;
+        //  projectSingle['product_links'] = result.data.product_links;
         setOpacity(1)
         setProdId(projectSingle['id']);
         setTagsState(tags)
@@ -163,7 +166,17 @@ function ProductDetails(props) {
         setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
         setExtensionAttributes(result.data.extension_attributes.stock_item.qty);
         setproductDetails(projectSingle);
+        if (recomendationsData.length <= 0) {
+            console.log('sss')
+            setProdLinked(result.data.product_links);
+            props.recomendedProducts(result.data.product_links)
+        } else {
+            console.log('sssdddd')
+            props.recomendedProducts(recomendationsData)
+        }
+
         setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
+        console.log(productDetails)
     }
 
     const handleGiftMEssage = () => {
@@ -285,8 +298,8 @@ function ProductDetails(props) {
         <>
             <main>
                 {/* <Promotion /> */}
-                <section style={{ 'opacity': opacity }}>
-                    <div className="container">
+                <section style={{ 'opacity': opacity }} >
+                    <div className="container" id="productID" >
                         <div className="row">
                             <div className="col-sm-8">
                                 <div className="product-slider">
@@ -303,7 +316,7 @@ function ProductDetails(props) {
                             <div className="col-sm-4">
                                 <div className="product_description">
                                     <div className="list_accordon">
-                                        {tagsState.length > 0 && (
+                                        {/* {tagsState.length > 0 && (
                                             <ul>
                                                 {tagsState.map((tag, i) => {
                                                     return (<li key={i}><Link to="#" className="active">{tag}</Link></li>)
@@ -311,7 +324,7 @@ function ProductDetails(props) {
 
                                             </ul>
                                         )
-                                        }
+                                        } */}
                                         {isPriveuser && <div className="logo_stampg">
                                             <Link to="#"><img src={cleWork} alt="" className="img-fluid" /></Link>
                                         </div>}
@@ -483,7 +496,7 @@ function ProductDetails(props) {
                 </section>
 
                 {/* <section> */}
-                <Recomendations recomendationsData={recomendationsData} />
+                <Recomendations recomendationsData={recomendationsData.length > 0 ? recomendationsData : linkedProducts} />
                 {/* </section> */}
 
                 <section>
@@ -558,7 +571,7 @@ function ProductDetails(props) {
 }
 
 const mapStateToProps = (state) => {
-    //  console.log(state)
+    console.log(state)
     return {
         items: state
     }
@@ -566,5 +579,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask }
+    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts }
 )(ProductDetails);

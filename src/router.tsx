@@ -46,7 +46,7 @@ const PublicRoutes = ({ history }) => {
     <ConnectedRouter history={history}>
       <Switch>
         <ProductRoutes exact path="/search/:searchText" component={Search} />
-        <ProductRoutes exact path="/thankyou/:id" component={orderThankyou} />
+        <ProductRoutes exact path="/thankyou:id/:apicid/:paymentId/:Id" component={orderThankyou} />
         <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
         <ProductRoutes exact path="/products/new-in/all" component={Product} />
         <ProductRoutes exact path="/products/:category/:subcat" component={Categories} />
