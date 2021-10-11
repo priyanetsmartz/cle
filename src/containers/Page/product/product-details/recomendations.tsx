@@ -113,7 +113,7 @@ const Recommendations = (props) => {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
+    //console.log(state)
     let recomended = [];
     if (state && state.Cart.recomended.length > 0) {
         recomended = state.Cart.recomended;

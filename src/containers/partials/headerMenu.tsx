@@ -122,7 +122,7 @@ function HeaderMenu(props) {
             )}
             <div className="container">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
-                    <div className="col-6 pt-1">
+                    <div className="col-5 pt-1">
                         <div className="select-wearing">
                             {menuData.length > 0 && (
                                 <ul>
@@ -170,7 +170,7 @@ function HeaderMenu(props) {
                             </Link>
                         </div>
                     </div>
-                    <div className="col-4">
+                    <div className="col-5">
 
                         <div className="sell_item" style={{ display: 'none' }}>
                             <div className="sell_itemnote mb-2">

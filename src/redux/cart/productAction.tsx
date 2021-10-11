@@ -16,6 +16,7 @@ const actions = {
     SHIPPING_ADDRESS: 'SHIPPING_ADDRESS',
     BILLING_ADDRESS: 'BILLING_ADDRESS',
     RECOMENDED_PRODUCTS: 'RECOMENDED_PRODUCTS',
+    GET_ATTRIBUTES_PRODUCTS: 'GET_ATTRIBUTES_PRODUCTS',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -78,6 +79,10 @@ const actions = {
     }),
     recomendedProducts: payload => ({
         type: actions.RECOMENDED_PRODUCTS,
+        payload
+    }),
+    getAttributeProducts: payload => ({
+        type: actions.GET_ATTRIBUTES_PRODUCTS,
         payload
     })
 

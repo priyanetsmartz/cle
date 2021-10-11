@@ -324,7 +324,7 @@ export function getGuestGiftMessage(itemId: number) {
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/gift-message/${itemId}`, "", "GET", "")
 }
-
+// my fatoora payment method
 export function myFatoora() {
     let data = {
         "PaymentMethodId": "2",
@@ -340,4 +340,15 @@ export function myFatoora() {
 
 export function getPaymentStatus(paymentId: number) {
     return APi.request(`rest/V1/myfatoorah/paymentStatus/${paymentId}`, "", "GET", "");
+}
+
+
+// get product children if configurable
+export function getProductChildren(sku: string) {
+    return APi.request(`rest/V1/configurable-products/${sku}/children`, "", "GET", "")
+}
+
+// get config product labels
+export function configLabels(attributeId: string) {
+    return APi.request(`rest/V1/products/attributes/${attributeId}/options`, "", "GET", "")
 }

@@ -11,10 +11,9 @@ const { openGiftBoxes } = cartAction;
 function GiftMessage(props) {
     const intl = useIntl();
     useEffect(() => {
-       // console.log(props)
+        // console.log(props)
         return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
+            setIsShow(false);
         }
     }, [])
 
@@ -44,6 +43,7 @@ function GiftMessage(props) {
                     //     notification("error", "", "Please select Size");
                     //     return false;
                     // }
+                    
                     cartData = {
                         // "cart_item": {
                         //     "quote_id": cartQuoteId,

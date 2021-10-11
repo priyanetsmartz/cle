@@ -42,6 +42,8 @@ const cartReducer = (state = initState, action) => {
             return { ...state, billing: action.payload };
         case actions.RECOMENDED_PRODUCTS:
             return { ...state, recomended: action.payload };
+        case actions.GET_ATTRIBUTES_PRODUCTS:
+            return { ...state, attribute_section: action.payload };
         default:
             return state;
     }

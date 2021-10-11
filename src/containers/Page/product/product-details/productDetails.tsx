@@ -13,12 +13,12 @@ import ProductImages from './productImges';
 import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
-import { addToCartApi, addToCartApiGuest, addWhishlist, createGuestToken, getGuestCart, getProductDetails, getProductExtras, getWhishlistItemsForUser, removeWhishlist } from '../../../../redux/cart/productApi';
+import { addToCartApi, addToCartApiGuest, addWhishlist, configLabels, createGuestToken, getGuestCart, getProductChildren, getProductDetails, getProductExtras, getWhishlistItemsForUser, removeWhishlist } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import notification from '../../../../components/notification';
 import GiftMessage from './GiftMessage';
-const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts } = cartAction;
+const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts } = cartAction;
 
 function ProductDetails(props) {
     const { sku } = useParams();
@@ -42,8 +42,10 @@ function ProductDetails(props) {
     const [recomendationsData, setRecomendations] = useState([]);
     const [linkedProducts, setProdLinked] = useState([]);
     const [configurableOptions, setConfigurableOptions] = useState([]);
+    const [childrenProducts, seChildrenProducts] = useState([]);
     const [productSizeDetails, setProductSizeDetails] = useState({});
     const [tagsState, setTagsState] = useState([]);
+    const [selectedOption, setSelectedOption] = useState(0);
     const [slectedAttribute, setSlectedAttribute] = useState({
         options: {}
     });
@@ -70,6 +72,13 @@ function ProductDetails(props) {
         setMeasuringGuideModal(props.items.Cart.isOpenMeasuringGuide);
     }, [props.items.Cart]);
 
+    useEffect(() => {
+        if (props.attributeConfig && props.attributeConfig.length > 0) {
+            attributeSection(props.attributeConfig);
+        }
+
+    }, [props.attributeConfig]);
+
     const handleClick = () => {
         setIsLoaded(true);
     }
@@ -82,26 +91,89 @@ function ProductDetails(props) {
         setIsLoaded(false);
     }
     const handleChange = (event) => {
-        let option = {};
-        var index = event.target.selectedIndex;
-        let optionElement = event.target.childNodes[index]
-        let optionVal = optionElement.getAttribute('data-attribute');
-
-        option['option_id'] = optionVal;
-        option['option_value'] = event.target.value;
-        setSlectedAttribute({ options: option });
+        console.log(event.target.value)
+        let selected = event.target.value
+        setSelectedOption(event.target.value)
+        let result = childrenProducts.reduce(iterA, undefined);
+        console.log(result)
     }
 
+    function iterA(r, a) {
+        var value = getValue(a);
+        if (value) {
+            r = r || [];
+            r.push(value);
+        }
+        return r;
+    }
+
+    function getValue(item) {
+        console.log(selectedOption)
+        if (Array.isArray(item)) {
+            return item.reduce(iterA, undefined);
+        }
+        if (item && typeof item === 'object') {
+            return iterO(item);
+        }
+        if (typeof item !== 'object' && item.toString().toLowerCase().indexOf(selectedOption) !== -1) {
+            return item;
+        }
+    }
+
+    function iterO(o) {
+        var temp: any = Object.keys(o).reduce(function (r: any, k) {
+            var value = getValue(o[k]);
+            if (value) {
+                r = r || {};
+                r[k] = value;
+            }
+            return r;
+        }, undefined);
+
+        if (temp) {
+            Object.keys(o).forEach(function (k) {
+                if (!(k in temp)) {
+                    temp[k] = o[k];
+                }
+            });
+        }
+        return temp;
+    }
 
     const sizeGuideModalHandler = () => {
         setSizeGuideModal(!sizeGuideModal);
     }
+
+    async function attributeSection(attrs) {
+
+        const attributesDrop = [];
+        attrs.forEach(async (i) => {
+            attributesDrop.push(new Promise((resolve, reject) => {
+                const res: any = someAPICall(i);
+                // {...res, 'title': i.label}
+                resolve(res);
+            }));
+        })
+        const result = await Promise.all(attributesDrop);
+        //   console.log(result);
+        setConfigurableOptions(result)
+        // return result;
+    }
+
+
+    async function someAPICall(attribute) {
+        let data: any = []
+        let labels: any = await configLabels(attribute.attribute_id);
+        data.title = attribute.label;
+        data.labels = labels = labels.data;
+        return data;
+    }
+
     async function getProductDetailsFxn(skuUrl) {
         setOpacity(0.3)
         let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductDetails(skuUrl);
-
-
+        //  console.log(result.data)
         let projectSingle = {};
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
@@ -119,6 +191,13 @@ function ProductDetails(props) {
             //   console.log(productExtras.data)
         }
 
+        if (result.data.type_id === "configurable") {
+            let attributes = result.data.extension_attributes.configurable_product_options;
+            let childProducts: any = await getProductChildren(skuUrl);
+            props.getAttributeProducts(attributes)
+            console.log(childProducts.data)
+            seChildrenProducts(childProducts.data);
+        }
         let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
 
         result.data.custom_attributes.map((attributes) => {
@@ -163,11 +242,11 @@ function ProductDetails(props) {
         setProdId(projectSingle['id']);
         setTagsState(tags)
         setProductImages(result.data.media_gallery_entries)
-        setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
+        // setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
         setExtensionAttributes(result.data.extension_attributes.stock_item.qty);
         setproductDetails(projectSingle);
         if (recomendationsData.length <= 0) {
-            console.log('sss')
+            //  console.log('sss')
             setProdLinked(result.data.product_links);
             props.recomendedProducts(result.data.product_links)
         } else {
@@ -176,7 +255,7 @@ function ProductDetails(props) {
         }
 
         setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
-        console.log(productDetails)
+        // console.log(productDetails)
     }
 
     const handleGiftMEssage = () => {
@@ -342,14 +421,25 @@ function ProductDetails(props) {
                                             <div className="col-sm-4">
                                                 <div className="form-group">
                                                     <span className="form-label"><IntlMessages id="product.quantity" />:</span>
-                                                    {(extensionAttributes) ? (
+                                                    {/* {(extensionAttributes) ? (
                                                         <select className="form-select" onChange={handleQuantity} aria-label="Default select example">
                                                             {Array.from(Array(extensionAttributes).slice(0, 10), (e, i) => {
                                                                 return <option key={i + 1}>{i + 1}</option>
                                                             })}
 
                                                         </select>
-                                                    ) : ""}
+                                                    ) : ""} */}
+                                                    <select className="form-select" onChange={handleQuantity} aria-label="Default select example">
+                                                        {
+
+                                                            Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].slice(0, 10), (e, i) => {
+                                                                return <option key={i + 1}>{i + 1}</option>
+                                                            })
+                                                        }
+                                                        { }
+
+
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div className="col-sm-4">
@@ -360,17 +450,18 @@ function ProductDetails(props) {
                                                                 configurableOptions.map((data, i) => {
                                                                     return (
                                                                         <div key={i}>
-                                                                            <span className="form-label">{data.label} </span>
-                                                                            {(data && data.values) && (
-                                                                                <select className="form-select" onChange={handleChange} aria-label="productattribute">
-                                                                                    <option>----</option>
-                                                                                    {
-                                                                                        data.values.map((val, i) => {
-                                                                                            return <option key={i} data-attribute={data.attribute_id} value={val.value_index} >{val.value_index}</option>
-                                                                                        })}
+                                                                            <span className="form-label">{data.title} </span>
+                                                                            <select className="form-select" onChange={handleChange} aria-label="productattribute">
+                                                                                {(data && data.labels) && (
+                                                                                    data.labels.map((label, i) => {
+                                                                                        return (
+                                                                                            <option key={i} value={label.value}>{label.label}</option>
+                                                                                        )
 
-                                                                                </select>
-                                                                            )}
+                                                                                    })
+
+                                                                                )}
+                                                                            </select>
                                                                         </div>
                                                                     )
                                                                 })
@@ -571,13 +662,17 @@ function ProductDetails(props) {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
+    let attributeConfig = [];
+    if (state.Cart && state.Cart.attribute_section) {
+        attributeConfig = state.Cart.attribute_section;
+    }
     return {
-        items: state
+        items: state,
+        attributeConfig: attributeConfig
     }
 }
 
 export default connect(
     mapStateToProps,
-    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts }
+    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts }
 )(ProductDetails);
