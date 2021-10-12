@@ -38,41 +38,13 @@ function GiftMessage(props) {
             let customer_id = localStorage.getItem('cust_id');
             //  console.log(props)
             if (props.items.id) {
-                if (props.items.type_id === 'configurable') {
-                    // if (!slectedAttribute.options["option_id"]) {
-                    //     notification("error", "", "Please select Size");
-                    //     return false;
-                    // }
-                    
-                    cartData = {
-                        // "cart_item": {
-                        //     "quote_id": cartQuoteId,
-                        //     "product_type": "configurable",
-                        //     "sku": props.product.sku,
-                        //     "qty": 1,
-                        //     "product_option": {
-                        //         "extension_attributes": {
-                        //             "configurable_item_options": [
-                        //                 {
-                        //                     "option_id": slectedAttribute.options["option_id"],
-                        //                     "option_value": slectedAttribute.options["option_value"]
-                        //                 }
-                        //             ]
-                        //         }
-                        //     }
-                        // }
-                    }
-                } else {
-                    cartData = {
-                        "cartItem": {
-                            "sku": props.items.sku,
-                            "qty": 1,
-                            "quote_id": cartQuoteId
-                        }
+                cartData = {
+                    "cartItem": {
+                        "sku": props.items.sku,
+                        "qty": 1,
+                        "quote_id": cartQuoteId
                     }
                 }
-
-
 
                 let results: any;
                 if (customer_id) {

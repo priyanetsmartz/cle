@@ -46,9 +46,7 @@ function ProductDetails(props) {
     const [productSizeDetails, setProductSizeDetails] = useState({});
     const [tagsState, setTagsState] = useState([]);
     const [selectedOption, setSelectedOption] = useState(0);
-    const [slectedAttribute, setSlectedAttribute] = useState({
-        options: {}
-    });
+    const [slectedAttribute, setSlectedAttribute] = useState(0);
     const [extensionAttributes, setExtensionAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
 
@@ -90,57 +88,56 @@ function ProductDetails(props) {
     const hideModal = () => {
         setIsLoaded(false);
     }
-    const handleChange = (event) => {
-        const { id, value } = event.target;
-        console.log(value)
-        // let selected = event.target.value
-        // setSelectedOption(event.target.value)
-        // let result = childrenProducts.reduce(iterA, undefined);
+    const handleChange = (e) => {
+        const index = e.target.selectedIndex;
+        const el = e.target.childNodes[index]
+        const option = el.getAttribute('id');
 
-        // console.log(result)
-    }
+        let selected = e.target.value;
+        setSlectedAttribute(selected);
+        let selectChild = childrenProducts[option - 1];
+        console.log(selectChild);
+        let projectSingle = {};
+        let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
 
-    function iterA(r, a) {
-        var value = getValue(a);
-        console.log(value)
-        if (value) {
-            r = r || [];
-            r.push(value);
-        }
-        return r;
-    }
 
-    function getValue(item) {
-
-        if (Array.isArray(item)) {
-            return item.reduce(iterA, undefined);
-        }
-        if (item && typeof item === 'object') {
-            return iterO(item);
-        }
-        if (typeof item !== 'object' && item.toString().toLowerCase().indexOf(selectedOption) !== -1) {
-            return item;
-        }
-    }
-
-    function iterO(o) {
-        var temp: any = Object.keys(o).reduce(function (r: any, k) {
-            var value = getValue(o[k]);
-            if (value) {
-                r = r || {};
-                r[k] = value;
+        selectChild.custom_attributes.map((attributes) => {
+            if (attributes.attribute_code === "description") {
+                description = attributes.value;
             }
-            return r;
-        }, undefined);
+            if (attributes.attribute_code === "special_price") {
+                special_price = attributes.value;
+            }
+            if (attributes.attribute_code === "short_description") {
+                short = attributes.value;
+            }
+            if (attributes.attribute_code === "shipping_and_returns") {
+                shipping_and_returns = attributes.value;
+            }
+            if (attributes.attribute_code === "popular" && attributes.value === "1") {
+                tags.push("Popular");
+            }
+            if (attributes.attribute_code === "new_designer" && attributes.value === "1") {
+                tags.push("New Designers");
+            }
+            if (attributes.attribute_code === "sale" && attributes.value === "1") {
+                tags.push("Sale");
+            }
 
-        if (temp) {
-            Object.keys(o).forEach(function (k) {
-                if (!(k in temp)) {
-                    temp[k] = o[k];
-                }
-            });
-        }
-        return temp;
+        })
+
+        projectSingle['id'] = selectChild.id;
+        projectSingle['type_id'] = selectChild.type_id;
+        projectSingle['sku'] = selectChild.sku;
+        projectSingle['name'] = selectChild.name;
+        projectSingle['price'] = selectChild.price;
+        projectSingle['description'] = description;
+        projectSingle['saleprice'] = special_price;
+        projectSingle['short_description'] = short;
+        projectSingle['shipping_and_returns'] = shipping_and_returns;
+        projectSingle['is_in_stock'] = productDetails['is_in_stock']
+        setproductDetails(projectSingle);
+
     }
 
     const sizeGuideModalHandler = () => {
@@ -262,11 +259,21 @@ function ProductDetails(props) {
     }
 
     const handleGiftMEssage = () => {
-        props.openGiftBoxes(productDetails);
-        setIsGiftMessage(true)
+        if (productDetails['type_id'] === 'configurable') {
+            if (slectedAttribute === 0) {
+                setIsShow(false);
+                notification("error", "", "Please select Size");
+                return false;
+            }
+        } else {
+            props.openGiftBoxes(productDetails);
+            setIsGiftMessage(true)
+        }
+
     }
 
     async function handleCart(id: number, sku: string) {
+        console.log(productDetails)
         setIsShow(true);
         let cartData = {};
         let cartSucces: any;
@@ -283,31 +290,39 @@ function ProductDetails(props) {
             //  console.log(result.data)
         }
         localStorage.setItem('cartQuoteId', cartQuoteId);
-        // console.log(slectedAttribute.options)
+        //  console.log(slectedAttribute.options)
         if (productDetails['type_id'] === 'configurable') {
-            if (!slectedAttribute.options["option_id"]) {
+            if (slectedAttribute === 0) {
                 setIsShow(false);
                 notification("error", "", "Please select Size");
                 return false;
             }
+
             cartData = {
-                "cart_item": {
-                    "quote_id": cartQuoteId,
-                    "product_type": "configurable",
+                "cartItem": {
                     "sku": productDetails['sku'],
                     "qty": quantity,
-                    "product_option": {
-                        "extension_attributes": {
-                            "configurable_item_options": [
-                                {
-                                    "option_id": slectedAttribute.options["option_id"],
-                                    "option_value": slectedAttribute.options["option_value"]
-                                }
-                            ]
-                        }
-                    }
+                    "quote_id": cartQuoteId
                 }
             }
+            // cartData = {
+            //     "cart_item": {
+            //         "quote_id": cartQuoteId,
+            //         "product_type": "configurable",
+            //         "sku": productDetails['sku'],
+            //         "qty": quantity,
+            //         "product_option": {
+            //             "extension_attributes": {
+            //                 "configurable_item_options": [
+            //                     {
+            //                         "option_id": slectedAttribute.options["option_id"],
+            //                         "option_value": slectedAttribute.options["option_value"]
+            //                     }
+            //                 ]
+            //             }
+            //         }
+            //     }
+            // }
         } else {
             cartData = {
                 "cartItem": {
@@ -488,6 +503,10 @@ function ProductDetails(props) {
                                                     <IntlMessages id="product.addToCart" /></button>
                                                     <button style={{ "display": isShow ? "inline-block" : "none" }} className="btn btn-primary"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></button>
                                                 </>
+                                            )}
+                                            {productDetails['is_in_stock'] === false && (
+                                                <button type="button"  className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                                <IntlMessages id="product.outofstock" /></button>
                                             )}
                                         </div>
                                     </div>
