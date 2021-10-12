@@ -1,10 +1,12 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders } from '../../../redux/pages/customers';
+import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders, getCustomerOrdersByPrice } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import ReturnSection from './allReturns';
 import IntlMessages from "../../../components/utility/intlMessages";
+import { Slider } from 'antd';
+
 
 
 
@@ -35,9 +37,11 @@ function OrdersAndReturns(props) {
         }
     }
 
-    const priceFilter = (e) => {
-        const { value } = e.target;
-        console.log(value);
+    const handlePriceRange = async (range) => {
+        let result: any = await getCustomerOrdersByPrice((range[0]*10), (range[1]*10), pageSize);
+        if(result.data){
+            setOrders(result.data.items);
+        }
     }
 
 
@@ -54,11 +58,11 @@ function OrdersAndReturns(props) {
             fromDate = moment(`${filter}-01-01`).toJSON();
         }
         setOrderDate(fromDate);
-
-        let result: any = await getCustomerOrdersByDate(fromDate, currentDate.toJSON());
+        const dateFrom = moment(fromDate).format("YYYY-MM-DD h:mm:ss");
+        const dateTo = moment(currentDate.toJSON()).format("YYYY-MM-DD h:mm:ss")
+        let result: any = await getCustomerOrdersByDate(dateFrom, dateTo, pageSize);
         if (result) {
-            // console.log(result.data);
-            setOrders(result.data);
+            setOrders(result.data.items);
         }
     }
 
@@ -97,12 +101,13 @@ function OrdersAndReturns(props) {
                                 <div className="col-sm-4 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" />:</span>
-                                        <select className="form-select" aria-label="Default select example" onChange={priceFilter}>
+                                        <Slider range defaultValue={[0, 5]} onChange={handlePriceRange}/>
+                                        {/* <select className="form-select" aria-label="Default select example" onChange={priceFilter}>
                                             <option value="">$3,550 - $150,550</option>
                                             <option value="1">$1,550 - $150,550</option>
                                             <option value="2">$3,050 - $150,550</option>
                                             <option value="3">$2,550 - $150,550</option>
-                                        </select>
+                                        </select> */}
                                     </div>
                                 </div>
                                 <div className="col-sm-4">

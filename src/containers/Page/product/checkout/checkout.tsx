@@ -261,6 +261,7 @@ function Checkout(props) {
 
     const selectPayment = async (code) => {
         console.log(code)
+        console.log(billingAddressData);
         if (code === 'myfatoorah_gateway') {
             const payment: any = await myFatoora();
            if(payment.data[0].IsSuccess){
