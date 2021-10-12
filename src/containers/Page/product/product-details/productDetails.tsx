@@ -91,15 +91,18 @@ function ProductDetails(props) {
         setIsLoaded(false);
     }
     const handleChange = (event) => {
-        console.log(event.target.value)
-        let selected = event.target.value
-        setSelectedOption(event.target.value)
-        let result = childrenProducts.reduce(iterA, undefined);
-        console.log(result)
+        const { id, value } = event.target;
+        console.log(value)
+        // let selected = event.target.value
+        // setSelectedOption(event.target.value)
+        // let result = childrenProducts.reduce(iterA, undefined);
+
+        // console.log(result)
     }
 
     function iterA(r, a) {
         var value = getValue(a);
+        console.log(value)
         if (value) {
             r = r || [];
             r.push(value);
@@ -108,7 +111,7 @@ function ProductDetails(props) {
     }
 
     function getValue(item) {
-        console.log(selectedOption)
+
         if (Array.isArray(item)) {
             return item.reduce(iterA, undefined);
         }
@@ -455,7 +458,7 @@ function ProductDetails(props) {
                                                                                 {(data && data.labels) && (
                                                                                     data.labels.map((label, i) => {
                                                                                         return (
-                                                                                            <option key={i} value={label.value}>{label.label}</option>
+                                                                                            <option key={i} id={i} value={label.value}>{label.label}</option>
                                                                                         )
 
                                                                                     })
