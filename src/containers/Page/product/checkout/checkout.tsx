@@ -121,7 +121,7 @@ function Checkout(props) {
     async function checkoutScreen() {
         let cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
-        if (customer_id) {
+        if (customer_id && localStorage.getItem('cartQuoteToken')) {
             cartItems = await getCartItems();
             // get cart total 
             cartTotal = await getCartTotal();
@@ -263,12 +263,12 @@ function Checkout(props) {
         console.log(code)
         if (code === 'myfatoorah_gateway') {
             const payment: any = await myFatoora();
-           if(payment.data[0].IsSuccess){
-              let url =  payment.data[0].Data.PaymentURL;
-              if(url){
-                history.push(url);
-              }
-           }
+            if (payment.data[0].IsSuccess) {
+                let url = payment.data[0].Data.PaymentURL;
+                if (url) {
+                    history.push(url);
+                }
+            }
         }
     }
 
@@ -664,30 +664,29 @@ function Checkout(props) {
 
     //PLACE ORDER CODE GOES HERE
     const placeOrder = async () => {
-
-        if (!props.guestBilling.firstname) {
-            console.log('here')
-            return notification("error", "", "Please Add Biiling Address!");
-            // return false;
-        }
-
-        if (!props.guestShipp.firstname) {
-            return notification("error", "", "Please Add Shipping Address!");
-        }
-
-        if (!state.email) {
-            return notification("error", "", "Please Add email Address!");
-        }
-        setIsShow(true)
         let customer_id = localStorage.getItem('cust_id');
         let orderPlace: any;
         if (customer_id) {
             orderPlace = await placeUserOrder();
         } else {
+            if (!props.guestBilling.firstname) {
+                console.log('here')
+                return notification("error", "", "Please Add Biiling Address!");
+                // return false;
+            }
+
+            if (!props.guestShipp.firstname) {
+                return notification("error", "", "Please Add Shipping Address!");
+            }
+
+            if (!state.email) {
+                return notification("error", "", "Please Add email Address!");
+            }
+            setIsShow(true)
             orderPlace = await placeGuestOrder();
 
         }
-        if (orderPlace.data.message) {
+        if (orderPlace.data) {
             setIsShow(false)
             props.addToCartTask(true);
             localStorage.removeItem('cartQuoteId');

@@ -48,10 +48,10 @@ function Products(props) {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
         let result: any;
-        if(isCategory){
+        if (isCategory) {
             console.log("CAtegory api")
             result = await getProductByCategory(page, pageSize, catId, sortValue.sortBy, sortValue.sortByValue);
-        }else{
+        } else {
             console.log('product api')
             result = await getAllProducts(lang, page, pageSize, sortValue.sortBy, sortValue.sortByValue);
         }
@@ -238,10 +238,11 @@ function Products(props) {
                                 <div className="sort_by">
                                     <div className="sortbyfilter">
                                         <select className="form-select customfliter" aria-label="Default select example" defaultValue={sort} onChange={filtterData} >
+                                            <option value={3} key="3" >Our picks</option>
                                             <option value={0} key="0" >Newest First</option>
                                             <option value={1} key="1" >High to low -- price </option>
                                             <option value={2} key="2" >Low to High -- price</option>
-                                            <option value={3} key="3" >Our picks</option>
+
                                         </select>
                                     </div>
                                 </div>
@@ -397,7 +398,7 @@ function Products(props) {
                     </div>
                 </div>
             </section> */}
-            <Description catId={153}/>
+            <Description catId={153} />
 
         </main>
     )
