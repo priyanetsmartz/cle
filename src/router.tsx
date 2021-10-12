@@ -73,7 +73,7 @@ const PublicRoutes = ({ history }) => {
 
 
 
-        <MainRoute exact path="/business-login" component={VendorLogin} />
+        <ProductRoutes exact path="/business-login" component={VendorLogin} />
         <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
         <MainRoute exact path="/reset-password" component={ResetPassword} />
         <PriveRoute exact path="/prive-user" component={PriveUser} />
