@@ -162,9 +162,9 @@ function MyProfile(props) {
             });
         });
 
-        if (intersted_in[0].name === "kid") {
+        if (intersted_in[0] && intersted_in[0].name === "kid") {
             catToShow = categories_array[2];
-        } else if (intersted_in[0].name === "women") {
+        } else if (intersted_in[0] && intersted_in[0].name === "women") {
             catToShow = categories_array[1];
         } else {
             catToShow = categories_array[0];
