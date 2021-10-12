@@ -55,9 +55,14 @@ export function getCustomerOrders() {
     return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
 }
 
-export function getCustomerOrdersByDate(fromDate, toDate) {
+export function getCustomerOrdersByDate(fromDate, toDate, pageSize) {
     const custId = localStorage.getItem('cust_id');
-    return AdminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][1][filters][0][field]=created_at&searchCriteria[filterGroups][1][filters][0][value]=${toDate}&searchCriteria[filterGroups][1][filters][0][conditionType]=from&searchCriteria[filterGroups][1][filters][1][field]=created_at&searchCriteria[filterGroups][1][filters][1][value]=${fromDate}&searchCriteria[filterGroups][1][filters][1][conditionType]=to`, "", "GET", "");
+    return adminToken.request(`rest/V1/orders?&searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filter_groups][0][filters][0][field]=created_at&searchCriteria[filter_groups][0][filters][0][value]=${fromDate}&searchCriteria[filter_groups][0][filters][0][condition_type]=from&searchCriteria[filter_groups][1][filters][0][field]=created_at&searchCriteria[filter_groups][1][filters][0][value]=${toDate}&searchCriteria[filter_groups][1][filters][0][condition_type]=to&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=created_at&searchCriteria[sortOrders][0][direction]=ASC`, "", "GET", "");
+}
+
+export function getCustomerOrdersByPrice(priceFrom, priceTo, pageSize) {
+    const custId = localStorage.getItem('cust_id');
+    return adminToken.request(`rest/V1/orders?&searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filter_groups][0][filters][0][field]=grand_total&searchCriteria[filter_groups][0][filters][0][value]=${priceFrom}&searchCriteria[filter_groups][0][filters][0][condition_type]=from&searchCriteria[filter_groups][1][filters][0][field]=grand_total&searchCriteria[filter_groups][1][filters][0][value]=${priceTo}&searchCriteria[filter_groups][1][filters][0][condition_type]=to&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=ASC`, "", "GET", "");
 }
 
 export function sortCustomerOrders(sort, pageSize) {

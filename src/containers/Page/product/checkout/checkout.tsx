@@ -12,6 +12,7 @@ import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromo
 import { getCustomerDetails, getCountriesList, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
 import { language } from '../../../../settings';
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState } = cartAction;
+
 function Checkout(props) {
     const intl = useIntl();
     let history = useHistory();
@@ -226,7 +227,7 @@ function Checkout(props) {
             error["email"] = "Email is required";
             setEmailError({ errors: error });
         } else {
-            console.log('no here')
+            // console.log('no here')
         }
     }
 
@@ -260,13 +261,24 @@ function Checkout(props) {
 
 
     const selectPayment = async (code) => {
-        console.log(code)
+        let billAddress:any = {};
+        const add:any = itemsVal.address;
+        add.addresses.forEach(el =>{
+            if(el.default_billing){
+                billAddress.street = el.street[0];
+                billAddress.address = el.city;
+                billAddress.phone = el.telephone;
+                billAddress.name = el.firstname+' '+el.lastname;
+            }
+        })
         if (code === 'myfatoorah_gateway') {
-            const payment: any = await myFatoora();
+            setIsShow(true);
+            const payment: any = await myFatoora(billAddress);
             if (payment.data[0].IsSuccess) {
                 let url = payment.data[0].Data.PaymentURL;
                 if (url) {
-                    history.push(url);
+                    window.location.href = url;
+                    // history.push(url);
                 }
             }
         }
@@ -346,7 +358,7 @@ function Checkout(props) {
                 addressInformation.shippingAddress = shippingAddress;
                 addressInformation.billingAddress = billingAddress;
                 addressData.addressInformation = addressInformation;
-                console.log(addressData)
+                // console.log(addressData)
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
                 if (saveDelivery.data.payment_methods) {
                     props.showPaymentMethods(saveDelivery.data.payment_methods);
@@ -403,7 +415,7 @@ function Checkout(props) {
                 custForm.addresses.push(obj);
 
                 let newAddress: any = await saveCustomerDetails(custId, { customer: custForm });
-                console.log(newAddress.data)
+                // console.log(newAddress.data)
                 delete shippingAddress['default_shipping'];
 
                 delete shippingAddress['customer_id'];
@@ -495,9 +507,9 @@ function Checkout(props) {
             if (customer_id) {
 
                 custForm.addresses.push(billingObj);
-                console.log(custForm)
+                // console.log(custForm)
                 let newAddress: any = await saveCustomerDetails(custId, { customer: custForm });
-                console.log(newAddress.data)
+                // console.log(newAddress.data)
                 // delete billingAddress['default_shipping'];
                 delete billingAddress['default_billing'];
                 delete shippingAddress['customer_id'];
@@ -670,7 +682,7 @@ function Checkout(props) {
             orderPlace = await placeUserOrder();
         } else {
             if (!props.guestBilling.firstname) {
-                console.log('here')
+                // console.log('here')
                 return notification("error", "", "Please Add Biiling Address!");
                 // return false;
             }
@@ -695,7 +707,7 @@ function Checkout(props) {
             //return <Redirect to={'/thankyou/' + orderId} />
             history.push('/thankyou/' + orderId);
         } else {
-            console.log('herere')
+            // console.log('herere')
             setIsShow(false)
         }
 
@@ -1313,7 +1325,7 @@ function Checkout(props) {
 }
 const mapStateToProps = (state) => {
     let languages = '', payTrue = '', guestShipp = [], guestBilling = [];
-    console.log(state);
+    // console.log(state);
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
@@ -1327,7 +1339,7 @@ const mapStateToProps = (state) => {
     if (state && state.Cart.billing) {
         guestBilling = state.Cart.billing
     }
-    console.log(state.Cart.billing.firstname)
+    // console.log(state.Cart.billing.firstname)
     return {
         languages: languages,
         payTrue: payTrue,

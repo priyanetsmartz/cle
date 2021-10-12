@@ -34,6 +34,7 @@
     "react-image-gallery": "^1.2.7",
     "react-intl": "^5.20.4",
     "react-jquery-plugin": "^1.1.7",
+    "react-rangeslider": "^2.2.0",
     "react-redux": "^7.2.4",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",

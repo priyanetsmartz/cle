@@ -325,14 +325,14 @@ export function getGuestGiftMessage(itemId: number) {
     return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/gift-message/${itemId}`, "", "GET", "")
 }
 // my fatoora payment method
-export function myFatoora() {
+export function myFatoora(billAddress) {
     let data = {
         "PaymentMethodId": "2",
-        "CustomerName": "string",
-        "CustomerMobile": "8787878787",
+        "CustomerName": billAddress.name,
+        "CustomerMobile": billAddress.phone,
         "CustomerEmail": localStorage.getItem('token_email'),
-        "Street": "string",
-        "Address": "string",
+        "Street": billAddress.street,
+        "Address": billAddress.address,
         "cartId": localStorage.getItem('cartQuoteId')
     }
     return APi.request(`rest/V1/myfatoorah/executePayment`, data, "POST", "");
