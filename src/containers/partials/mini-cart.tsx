@@ -36,7 +36,9 @@ function MiniCart(props) {
             cartTotal = await getCartTotal();
             total = cartTotal.data.grand_total;
 
-        } else {
+        } else if ((!customer_id && cartQuoteId)|| (customer_id && !cartQuoteId)) {
+
+        }else {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
                 cartItems = await getGuestCart();

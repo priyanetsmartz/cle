@@ -6,6 +6,7 @@ import { wishListSearchSort } from '../../../redux/pages/customers';
 import { formatprice } from '../../../components/utility/allutils';
 import { removeWhishlist } from '../../../redux/cart/productApi';
 import cartAction from "../../../redux/cart/productAction";
+import IntlMessages from "../../../components/utility/intlMessages";
 const { addToWishlistTask } = cartAction;
 function MyWishList(props) {
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
@@ -15,6 +16,7 @@ function MyWishList(props) {
     const [sortOrder, setSortOrder] = useState('asc');
     const [sortBy, setSortBy] = useState('price');
     const [pageSize, setPageSize] = useState(10);
+    const [opacity, setOpacity] = useState(1);
 
     useEffect(() => {
         if (props.items || !props.items) {
@@ -24,17 +26,41 @@ function MyWishList(props) {
 
         return () => {
             props.addToWishlistTask(false);
+            setSearchName('')
+            setWishList([])
+            setSortOrder('')
+            setDelWishlist(0)
+            setSortBy('asc')
         }
-    })
+    }, [props.items])
 
     const getData = async () => {
         let result: any = await wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchName);
-        setWishList(result.data);
+        if (result.data) {
+            setWishList(result.data);
+            setOpacity(1)
+        } else {
+            setOpacity(1)
+        }
+
     }
     const searchHandler = (e) => {
-        setSearchName(e.target.value);
-        console.log(e.target.value)
-        getData();
+        setOpacity(0.3)
+        //   console.log(e.target.value.length)
+        if (e.target.value && e.target.value.length >= 3) {
+            setSearchName(e.target.value);
+            getData();
+        } else if (e.target.value.length === 0) {
+            setSearchName(e.target.value);
+            getData();
+        } else {
+            setSearchName(e.target.value);
+            getData();
+
+        }
+
+        //  console.log(e.target.value)
+
     }
 
     const sortHandler = (e) => {
@@ -62,6 +88,10 @@ function MyWishList(props) {
     return (
         <div className="col-sm-9">
             <div className="row" >
+                <div className="width-100">
+                    <h1><IntlMessages id="Profile.Wishlist-title" /></h1>
+                    <h2><IntlMessages id="Profile.Wishlist-subTitle" /></h2>
+                </div>
                 <div className="col-md-6 offset-md-3">
                     <div className="row">
                         <div className="col-md-6">
@@ -82,7 +112,7 @@ function MyWishList(props) {
                         </div>
                     </div>
                 </div>
-                <div className="product-listing" >
+                <div className="product-listing" style={{ 'opacity': opacity }} >
                     <div className="row g-2">
                         {wishList.length > 0 ?
                             <>
@@ -121,8 +151,9 @@ function MyWishList(props) {
 }
 
 const mapStateToProps = (state) => {
+    console.log(state)
     return {
-        items: state.Cart.addToWishlistTask
+        items: state.Cart.addToWishlist
     }
 }
 

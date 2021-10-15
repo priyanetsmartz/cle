@@ -140,8 +140,8 @@ function NewIn(props) {
 
 
     return (
-        <div className="product-listing" style={{ 'opacity': opacity }}>
-            <h1 className="mb-4">Explore New In</h1>
+        <div className="product-listing container" style={{ 'opacity': opacity }}>
+            <h1 className="mb-4"><IntlMessages id="category.explore"></IntlMessages></h1>
             <div className="row g-2">
                 {props.items.slice(0, 7).map(item => {
                     return (

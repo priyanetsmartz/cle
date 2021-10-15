@@ -21,6 +21,7 @@
     "js-cookie": "^2.2.1",
     "moment": "^2.29.1",
     "myfatoorah-javascript": "0.0.2",
+    "query-string": "^7.0.1",
     "react": "^17.0.2",
     "react-apple-signin-auth": "^0.1.1",
     "react-bootstrap": "^1.6.1",

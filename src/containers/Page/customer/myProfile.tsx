@@ -95,7 +95,7 @@ function MyProfile(props) {
         getData();
         getCountries();
         return () => {
-            //
+            setIsShow(false)
         }
     }, []);
 
@@ -745,7 +745,7 @@ function MyProfile(props) {
                 </div>
             </section>
 
-            <section className="my_profile_sect mb-4">
+            {/* <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -787,7 +787,7 @@ function MyProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             <section className="my_profile_sect change_passwordsec mb-4">
                 <div className="container">

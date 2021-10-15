@@ -49,15 +49,15 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/thankyou:id/:apicid/:paymentId/:Id" component={orderThankyou} />
         <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
         <ProductRoutes exact path="/products/new-in/all" component={Product} />
-        <ProductRoutes exact path="/products/:category/:subcat" component={Categories} />
-        <ProductRoutes exact path="/products/:category" component={Categories} />
+        <ProductHome exact path="/products/:category/:subcat" component={Categories} />
+        <ProductHome exact path="/products/:category" component={Categories} />
         <ProductRoutes exact path="/pay" component={Payment} />
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
         <PrivateRoute exact path="/notifications" component={Notifications} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
         <ProductHome exact path="/home" component={HomePage} />
         <ProductHome exact path="/return-order" component={ReturnPage} />
-        <PrivateRoute exact path="/designer-categories" component={DesignerCategories} />
+        {/* <PrivateRoute exact path="/designer-categories" component={DesignerCategories} /> */}
         <PrivateRoute exact path="/explore-desginer" component={ExploreDesigner} />
         <MainRoute exact path="/magazines/:category" component={AllPosts} />
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />

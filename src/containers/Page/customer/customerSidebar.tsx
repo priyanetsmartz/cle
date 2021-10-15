@@ -33,6 +33,7 @@ function Customer(props) {
 
     useEffect(() => {
         setActiveTab(key);
+
     }, [key]);
 
     const changeTab = (tab) => {
@@ -44,6 +45,11 @@ function Customer(props) {
         changeTab(e.target.value);
     }
 
+    if (isPriveUser) {
+        var priveColor = {
+            "color": "#017ABB"
+        }
+    }
 
 
     return (
@@ -54,7 +60,7 @@ function Customer(props) {
                         <div className="col-sm-3">
                             <div className="pro_categry_sidebar">
                                 <div className="my-userdetails">
-                                    <div className="user_show"><IntlMessages id="customer.hi" /></div>
+                                    <div className="user_show" style={priveColor}><IntlMessages id="customer.hi" /></div>
                                     <div className="user_name">{name}</div>
                                 </div>
                                 <div className="mobile_sidebar">
@@ -62,17 +68,17 @@ function Customer(props) {
                                         <option value="dashboard">{intl.formatMessage({ id: 'register.email' })}</option>
                                         <option value="orders-and-returns"><IntlMessages id="customer.ordersAndReturns" /></option>
                                         <option value="mytrades"><IntlMessages id="customer.myTrades" /></option>
-                                        <option value="rewards"><IntlMessages id="customer.myReward" /></option>
+                                        {/* <option value="rewards"><IntlMessages id="customer.myReward" /></option> */}
                                         <option value="wish-list"><IntlMessages id="customer.myWishlist" /></option>
                                         <option value="profile"><IntlMessages id="customer.myProfile" /></option>
-                                        <option value="notifications"><IntlMessages id="customer.myNotifications" /></option>
+                                        {/* <option value="notifications"><IntlMessages id="customer.myNotifications" /></option> */}
                                         <option value="support"><IntlMessages id="customer.mySupport" /></option>
                                     </select>
                                 </div>
                                 <div className="myorder_sidebar">
                                     <ul>
                                         <li className={activeTab === 'dashboard' ? 'active' : ''} >
-                                            <Link to="#" onClick={() => changeTab('dashboard')} className={isPriveUser  ? 'prive-txt' : ''}>
+                                            <Link to="#" onClick={() => changeTab('dashboard')} className={isPriveUser ? 'prive-txt' : ''}>
                                                 <img src={dashboardIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2">
                                                     <IntlMessages id="customer.dashboard" />
@@ -81,22 +87,22 @@ function Customer(props) {
                                         </li>
                                         <li className={activeTab === 'orders-and-returns' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('orders-and-returns')} className={isPriveUser ? 'prive-txt' : ''}>
-                                                <img src={ordersIcon} alt="" className="img-fluid" /> 
+                                                <img src={ordersIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span>
                                             </Link>
                                         </li>
                                         {/* <li className={activeTab === 'mytrades' ? 'active' : ''}><Link to="#" onClick={() => changeTab('mytrades')}>
                                             <img src={tradeIcon} alt="" className="img-fluid" /> <span className="pl-2">
                                                 <IntlMessages id="customer.myTrades" /></span></Link></li> */}
-                                        <li className={activeTab === 'rewards' ? 'active' : ''}>
+                                        {/* <li className={activeTab === 'rewards' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('rewards')} className={isPriveUser ? 'prive-txt' : ''}>
                                                 <img src={rewardIcon} alt="" className="img-fluid" /> 
                                                 <span className="pl-2"> <IntlMessages id="customer.myReward" /></span>
                                             </Link>
-                                        </li>
+                                        </li> */}
                                         <li className={activeTab === 'wish-list' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('wish-list')} className={isPriveUser ? 'prive-txt' : ''}>
-                                                <img src={wishlistIcon} alt="" className="img-fluid" /> 
+                                                <img src={wishlistIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="customer.myWishlist" /></span>
                                             </Link>
                                         </li>
@@ -106,12 +112,12 @@ function Customer(props) {
                                                 <span className="pl-2"> <IntlMessages id="customer.myProfile" /></span>
                                             </Link>
                                         </li>
-                                        <li className={activeTab === 'notifications' ? 'active' : ''}>
+                                        {/* <li className={activeTab === 'notifications' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('notifications')} className={isPriveUser ? 'prive-txt' : ''}>
                                                 <img src={notificationIcon} alt="" className="img-fluid" /> 
                                                 <span className="pl-2"><IntlMessages id="customer.myNotifications" /></span>
                                             </Link>
-                                        </li>
+                                        </li> */}
                                         <li className={activeTab === 'support' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('support')} className={isPriveUser ? 'prive-txt' : ''}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCookie } from "../../../helpers/session";
 import { getContactUsForm, SubmitContactUs } from '../../../redux/pages/allPages';
-
+import ContactBannerFooter from './contact-banner';
 
 
 function MySupport(props) {
@@ -15,7 +15,7 @@ function MySupport(props) {
     const [isShow, setIsShow] = useState(false);
     const [state, setState] = useState({
         name: name ? name : '',
-        email: email ? email: '',
+        email: email ? email : '',
         reason: "",
         message: ""
     })
@@ -56,6 +56,13 @@ function MySupport(props) {
         }
         getData()
         return () => {
+            setForm({
+                "title": "",
+                "form_id": null,
+                "store_id": "",
+                "form_json": [],
+                "code": ""
+            })
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
@@ -135,8 +142,8 @@ function MySupport(props) {
                 setIsShow(false);
                 setState(prevState => ({
                     ...prevState,
-                    name: name ? name: '',
-                    email: email ? email: '',
+                    name: name ? name : '',
+                    email: email ? email : '',
                     reason: "",
                     message: ""
                 }))
@@ -173,7 +180,7 @@ function MySupport(props) {
                                 <div className="customer-d">
                                     <div className="customer-d-wrap">
                                         <i className="fas fa-envelope" aria-hidden="true"></i>
-                                        <h4><IntlMessages id="register.email" /></h4>
+                                        <h4><IntlMessages id="login.email" /></h4>
                                         <a href="mailto:contact@cle.com"><p>contact@cle.com</p></a>
                                     </div>
                                 </div>
@@ -240,16 +247,7 @@ function MySupport(props) {
                 </div>
             </div>
 
-            <section className="container-fluid help-center">
-                <div className="row">
-                    <div className="col-xs-12 col-md-12 col-lg-12">
-                        <h3><IntlMessages id="mysupport.checkHelp" /></h3>
-                        <p><IntlMessages id="mysupport.findTheAnswer" /></p>
-                        {/* on check out redirect user to help center page */}
-                        <button type="submit" className="btn btn-primary"><IntlMessages id="home.checkout" /></button>
-                    </div>
-                </div>
-            </section>
+            <ContactBannerFooter />
         </>
     )
 }

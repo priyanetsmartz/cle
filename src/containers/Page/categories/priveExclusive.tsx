@@ -35,7 +35,7 @@ function PriveExclusive(props) {
         console.log(result.data);
         if (result) {
             result.data.items.forEach(el => {
-                if(el.attribute_code == 'image'){
+                if (el.attribute_code == 'image') {
 
                 }
             })
@@ -85,7 +85,7 @@ function PriveExclusive(props) {
                                                                 }
                                                             })
                                                         }
-                                                        <img src={image} alt="" />
+                                                        <img src={image} alt={item.name} />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <div className="product-details-new">

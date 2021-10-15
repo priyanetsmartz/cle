@@ -41,6 +41,10 @@ function HeaderMenu(props) {
 
         return () => {
             document.removeEventListener("mousedown", handleClick);
+            setIsLoaded(true)
+            SetMenuData([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
+            SetActiveCat('')
+            SetActiveOne('')
         };
     }, []);
 
@@ -57,8 +61,10 @@ function HeaderMenu(props) {
         fetchMyAPI()
         return () => {
             props.accountPopup(false)
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
+            setIsLoaded(true)
+            SetMenuData([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
+            SetActiveCat('')
+            SetActiveOne('')
         }
     }, [props.languages, category])
 
@@ -190,8 +196,8 @@ function HeaderMenu(props) {
                                             <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
                                             {customer_id && (
                                                 <ul>
-                                                    <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li>
-                                                    <li><Link to="/customer/dashboard"><IntlMessages id="dashboard" /> </Link></li>
+                                                    {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
+                                                    <li><Link to="/customer/profile"><IntlMessages id="dashboard" /> </Link></li>
                                                     <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
                                                     <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
                                                     <li><Link to="/customer/support"><IntlMessages id="myspport" /></Link> </li>
@@ -215,25 +221,25 @@ function HeaderMenu(props) {
 
                     </div>
                 </div>
-				<header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2">
-                <nav className="container-xxl flex-wrap flex-md-nowrap " aria-label="Main navigation">
-                    <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
-                        aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" className="bi" fill="currentColor"
-                            viewBox="0 0 16 16">
-                            <path fillRule="evenodd"
-                                d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
-                            </path>
-                        </svg>
-                    </button>
-                    <SearchBar />
-                </nav>
+                <header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2">
+                    <nav className="container-xxl flex-wrap flex-md-nowrap " aria-label="Main navigation">
+                        <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                            aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" className="bi" fill="currentColor"
+                                viewBox="0 0 16 16">
+                                <path fillRule="evenodd"
+                                    d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+                                </path>
+                            </svg>
+                        </button>
+                        <SearchBar />
+                    </nav>
 
 
-            </header>
+                </header>
             </div>
 
-            
+
 
             <section>
                 <div className="container">

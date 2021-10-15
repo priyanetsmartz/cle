@@ -159,8 +159,9 @@ export function getProductFilter(category_id: number) {
     );
 }
 
-export function getProductDetails(sku: string) {
-    return APi.request(`rest/V1/products/${sku}`, "", "GET", "");
+export function getProductDetails(sku: string, language: string) {
+    var storeId = language === 'arabic' ? 'ar' : 'en';
+    return APi.request(`rest/${storeId}/V1/products/${sku}`, "", "GET", "");
 }
 
 export function getProductExtras(productId: number) {
@@ -213,6 +214,11 @@ export function giftCart(giftData: any, itemId: number) {
 export function giftGuestCart(giftData: any, itemId: number) {
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/gift-message/${itemId}`, giftData, "POST", "")
+}
+
+export function giftMessageDelete(giftItemID: number, itemId: number, language: string) {
+    var storeId = language === 'arabic' ? 2 : 3;
+    return APi.request(`rest/V1/carts/${giftItemID}?storeId=${storeId}&itemId=${itemId}`, "", "GET", "")
 }
 
 export function getCheckOutTotals() {
@@ -301,12 +307,17 @@ export function placeGuestOrder() {
 }
 
 
-export function placeUserOrder() {
+export function placeUserOrder(method, placeOrderonMagento) {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
     let data = {
         "paymentMethod": {
-            "method": "checkmo"
-        }
+            "method": method,
+            "additional_data": {
+                "myfatoora_paymentId": placeOrderonMagento
+            }
+        },
+        "shipping_method_code": "flatrate",
+        "shipping_carrier_code": "flatrate"
     }
     return APi.request(`rest/V1/carts/${cartQuoteId}/order`, data, "PUT", "");
 }
@@ -333,7 +344,7 @@ export function myFatoora(billAddress) {
         "CustomerEmail": localStorage.getItem('token_email'),
         "Street": billAddress.street,
         "Address": billAddress.address,
-        "cartId": localStorage.getItem('cartQuoteId')
+        "cartId": 184// parseInt(localStorage.getItem('cartQuoteId'))
     }
     return APi.request(`rest/V1/myfatoorah/executePayment`, data, "POST", "");
 }

@@ -24,7 +24,10 @@ function OrdersAndReturns(props) {
 
     const getData = async () => {
         let result: any = await getCustomerOrders();
-        setOrders(result.data.items);
+        if (result && result.data && result.data.items) {
+            setOrders(result.data.items);
+        }
+
     }
 
     const handleSearch = async (e) => {
@@ -38,8 +41,8 @@ function OrdersAndReturns(props) {
     }
 
     const handlePriceRange = async (range) => {
-        let result: any = await getCustomerOrdersByPrice((range[0]*10), (range[1]*10), pageSize);
-        if(result.data){
+        let result: any = await getCustomerOrdersByPrice((range[0] * 10), (range[1] * 10), pageSize);
+        if (result.data) {
             setOrders(result.data.items);
         }
     }
@@ -101,7 +104,7 @@ function OrdersAndReturns(props) {
                                 <div className="col-sm-4 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" />:</span>
-                                        <Slider range defaultValue={[0, 5]} onChange={handlePriceRange}/>
+                                        <Slider range defaultValue={[0, 5]} onChange={handlePriceRange} />
                                         {/* <select className="form-select" aria-label="Default select example" onChange={priceFilter}>
                                             <option value="">$3,550 - $150,550</option>
                                             <option value="1">$1,550 - $150,550</option>

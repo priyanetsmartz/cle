@@ -86,9 +86,8 @@ function VendorLogin(props) {
       <div className="container">
         <div className="row">
           <div className="col-md-10 offset-md-1">
-            <h2 className="DC-section-title">Login or Create an account</h2>
-            <p className="login-desc">Save payment and shipping details, view your order history, return items, and track
-              and share favourite pieces in wishlist.</p>
+            <h2 className="DC-section-title"><IntlMessages id="newlogin" /></h2>
+            <p className="login-desc"><IntlMessages id="newlogin-sub" /></p>
           </div>
         </div>
         <div className="row m-5 login-register-inputs">

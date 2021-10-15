@@ -18,6 +18,7 @@ const { addToCart, productList } = cartAction;
 
 function LatestProducts(props) {
     let imageD = '';
+    let customer_id = localStorage.getItem('cust_id');
     const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
@@ -109,10 +110,14 @@ function LatestProducts(props) {
                                 <Link to="#" className="nav-link active" id="PD-tab" data-bs-toggle="tab" data-bs-target="#PD" type="button"
                                     role="tab" aria-controls="PD" aria-selected="true"><IntlMessages id="category.latestProducts" /></Link>
                             </li>
-                            <li className="nav-item" role="presentation">
-                                <Link to="#" className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
-                                    role="tab" aria-controls="D-maylike" aria-selected="false"><IntlMessages id="home.weChooseForYou" /></Link>
-                            </li>
+                            {
+                                customer_id && (
+                                    <li className="nav-item" role="presentation">
+                                        <Link to="#" className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
+                                            role="tab" aria-controls="D-maylike" aria-selected="false"><IntlMessages id="home.weChooseForYou" /></Link>
+                                    </li>
+                                )
+                                }
 
                         </ul>
                         <div className="tab-content" id="DesignerTabContent">
@@ -152,12 +157,12 @@ function LatestProducts(props) {
                                                                 <div className="pricetag">${formatprice(item.price)}</div>
                                                             </div>
                                                             {/* {token && ( */}
-                                                            <div className="cart-button mt-3 px-2"> 
+                                                            <div className="cart-button mt-3 px-2">
                                                                 <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase"
                                                                 >View Product</Link>
-                                                                <div className="add"> 
-                                                                <span className="product_fav">
-                                                                    <i className="fa fa-heart-o"></i></span> 
+                                                                <div className="add">
+                                                                    <span className="product_fav">
+                                                                        <i className="fa fa-heart-o"></i></span>
                                                                     <span className="product_fav"><i className="fa fa-opencart"></i>
                                                                     </span> </div>
                                                             </div>
@@ -170,11 +175,15 @@ function LatestProducts(props) {
                                     </Slider>
                                 </div>
                             </div>
-                            <div className="tab-pane fade" id="D-maylike" role="tabpanel" aria-labelledby="D-maylike-tab">
-                                <div className="row">
-                                    <WeChooseForYou />
-                                </div>
-                            </div>
+                            {
+                                customer_id && (
+                                    <div className="tab-pane fade" id="D-maylike" role="tabpanel" aria-labelledby="D-maylike-tab">
+                                        <div className="row">
+                                            <WeChooseForYou />
+                                        </div>
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                 </div>

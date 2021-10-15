@@ -7,6 +7,7 @@ import SizeGuide from './sizeGuide';
 import cartAction from "../../../../redux/cart/productAction";
 import MeasuringGuide from './measuringGuide';
 import Recomendations from './recomendations';
+import { getCookie } from "../../../../helpers/session";
 import ProductsMagazine from './magazine';
 import { useParams } from "react-router-dom";
 import ProductImages from './productImges';
@@ -22,6 +23,7 @@ const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedPr
 
 function ProductDetails(props) {
     const { sku } = useParams();
+    const language = getCookie('currentLanguage');
     const [opacity, setOpacity] = useState(1);
     const [isShow, setIsShow] = useState(false);
     const [shareUrl, setShareUrl] = useState('');
@@ -54,14 +56,14 @@ function ProductDetails(props) {
 
     useEffect(() => {
         const localToken = localStorage.getItem('token');
+        let lang = props.languages ? props.languages : language;
         setToken(localToken)
         getProductDetailsFxn(sku);
         setShareUrl(window.location.href);
         return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
+            props.openGiftBoxes(0);
         }
-    }, [sku])
+    }, [sku, props.languages])
     useEffect(() => {
         //  console.log(props.items.Cart);
         let giftBox = props.items.Cart.openGiftBox === 0 ? false : true;
@@ -83,20 +85,22 @@ function ProductDetails(props) {
 
 
     const hideGiftModalModal = () => {
+        props.openGiftBoxes(0);
         setIsGiftMessage(false)
     }
     const hideModal = () => {
         setIsLoaded(false);
     }
     const handleChange = (e) => {
+        //  console.log(e.target[e.target.selectedIndex].getAttribute('data-order'));
         const index = e.target.selectedIndex;
         const el = e.target.childNodes[index]
         const option = el.getAttribute('id');
-
+        //console.log(option)
         let selected = e.target.value;
         setSlectedAttribute(selected);
         let selectChild = childrenProducts[option - 1];
-        console.log(selectChild);
+        //  console.log(selectChild);
         let projectSingle = {};
         let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
 
@@ -155,24 +159,27 @@ function ProductDetails(props) {
             }));
         })
         const result = await Promise.all(attributesDrop);
-        //   console.log(result);
+        // console.log(result);
         setConfigurableOptions(result)
         // return result;
     }
 
 
     async function someAPICall(attribute) {
+        //console.log(attribute)
         let data: any = []
         let labels: any = await configLabels(attribute.attribute_id);
         data.title = attribute.label;
+        data.attribute_id = attribute.attribute_id;
         data.labels = labels = labels.data;
         return data;
     }
 
     async function getProductDetailsFxn(skuUrl) {
         setOpacity(0.3)
+        let lang = props.languages ? props.languages : language;
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductDetails(skuUrl);
+        let result: any = await getProductDetails(skuUrl, lang);
         //  console.log(result.data)
         let projectSingle = {};
         if (customer_id) {
@@ -195,7 +202,7 @@ function ProductDetails(props) {
             let attributes = result.data.extension_attributes.configurable_product_options;
             let childProducts: any = await getProductChildren(skuUrl);
             props.getAttributeProducts(attributes)
-            console.log(childProducts.data)
+            // console.log(childProducts.data)
             seChildrenProducts(childProducts.data);
         }
         let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
@@ -250,7 +257,7 @@ function ProductDetails(props) {
             setProdLinked(result.data.product_links);
             props.recomendedProducts(result.data.product_links)
         } else {
-            console.log('sssdddd')
+           // console.log('sssdddd')
             props.recomendedProducts(recomendationsData)
         }
 
@@ -358,14 +365,14 @@ function ProductDetails(props) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
             //     console.log(result);
-            if (result.data) {
-                setIsWishlist(0)
+            if (result.data) {                
                 props.addToWishlistTask(true);
+                setIsWishlist(0)
                 notification("success", "", 'Your product has been successfully added to your wishlist');
                 getProductDetailsFxn(sku)
             } else {
-                setIsWishlist(0)
                 props.addToWishlistTask(true);
+                setIsWishlist(0)
                 notification("error", "", "Something went wrong!");
                 getProductDetailsFxn(sku)
             }
@@ -379,14 +386,14 @@ function ProductDetails(props) {
         let del: any = await removeWhishlist(id);
         // console.log(del)
         if (del.data[0].message) {
-            setDelWishlist(0)
-            setItemInWhishlist(0)
             props.addToWishlistTask(true);
+            setDelWishlist(0)
+            setItemInWhishlist(0)            
             notification("success", "", del.data[0].message);
             getProductDetailsFxn(sku)
         } else {
-            setDelWishlist(0)
             props.addToWishlistTask(true);
+            setDelWishlist(0)            
             notification("error", "", "Something went wrong!");
             getProductDetailsFxn(sku)
         }
@@ -473,7 +480,7 @@ function ProductDetails(props) {
                                                                                 {(data && data.labels) && (
                                                                                     data.labels.map((label, i) => {
                                                                                         return (
-                                                                                            <option key={i} id={i} value={label.value}>{label.label}</option>
+                                                                                            <option key={i} data-order={data.attribute_id} id={i} value={label.value}>{label.label}</option>
                                                                                         )
 
                                                                                     })
@@ -505,8 +512,8 @@ function ProductDetails(props) {
                                                 </>
                                             )}
                                             {productDetails['is_in_stock'] === false && (
-                                                <button type="button"  className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
-                                                <IntlMessages id="product.outofstock" /></button>
+                                                <button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                                    <IntlMessages id="product.outofstock" /></button>
                                             )}
                                         </div>
                                     </div>
@@ -626,10 +633,10 @@ function ProductDetails(props) {
             <Modal show={measuringGuideModal} size="lg">
                 <MeasuringGuide />
             </Modal>
-            <Modal show={isGiftMessage} size="lg" data={productDetails} >
+            <Modal show={isGiftMessage} size="lg" data={productDetails} onHide={hideGiftModalModal} data-backdrop="static" data-keyboard="false">
                 <Modal.Header>
                     <h5 className="modal-title"><IntlMessages id="gift.title" /></h5>
-                    <div><IntlMessages id="gift.subTitle" /> </div>
+                    <p className="gifting-subtitle"><IntlMessages id="gift.subTitle" /> </p>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideGiftModalModal} aria-label="Close"></button>
                 </Modal.Header>
                 <GiftMessage />
@@ -684,12 +691,16 @@ function ProductDetails(props) {
 }
 
 const mapStateToProps = (state) => {
-    let attributeConfig = [];
+    let attributeConfig = [], languages = '';
     if (state.Cart && state.Cart.attribute_section) {
         attributeConfig = state.Cart.attribute_section;
     }
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
     return {
         items: state,
+        languages: languages,
         attributeConfig: attributeConfig
     }
 }
