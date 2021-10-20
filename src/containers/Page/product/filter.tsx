@@ -4,7 +4,7 @@ import { getProductFilter } from "../../../redux/cart/productApi";
 import { GraphQLClient, gql } from 'graphql-request';
 const axios = require("axios");
 function Filters(props) {
-
+    const [filters, setFilters] = useState({});
 
     useEffect(() => {
         const localToken = localStorage.getItem('token');
@@ -17,16 +17,26 @@ function Filters(props) {
 
     async function main() {
 
-        const client = new GraphQLClient('https://4a83875b65.nxcli.net/graphql')
-        client.setHeaders({
-            authorization: 'Bearer hcy0yuocc3geyjhoqd3esopkmjiky8tv',
-            // store: 'ar'
-        })
+        // const client = new GraphQLClient('https://4a83875b65.nxcli.net/graphql')
+        // client.setHeaders({  "Content-Type": "application/json" })
 
         const query = gql`{products(filter: { category_id: { eq: "52" } }, pageSize: 10) {aggregations{attribute_code count label options{count label value } } total_count page_info { page_size current_page } items {id name sku short_description { html } image { url }price_range { minimum_price { regular_price { value currency }final_price { value currency }fixed_product_taxes { label amount {value currency }}} maximum_price { discount { amount_off percent_off } fixed_product_taxes { label amount { value currency} } } } } } }`;
 
-        const data = await client.request(query);
-        console.log(data)
+        // const data = await client.request(query);
+        // setFilters(data.products)
+        // console.log(data.products)
+        axios.request({
+            method: 'post',
+            url: 'https://4a83875b65.nxcli.net/graphql',
+            data: query,
+            headers: { 'store': 'ar', "Content-Type": "application/json" }
+        })
+            .then(async response => {
+                console.log(response)
+            })
+            .catch(function (err) {
+                console.log(err.response);
+            });
     }
 
     return (
