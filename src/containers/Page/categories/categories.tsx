@@ -12,11 +12,11 @@ import PromotedProducts from './promotedProducts';
 import Magazine from '../home/magazine';
 import NewIn from './newIn';
 import Description from './description';
-
+import Footer from '../../../containers/partials/footer-new';
 
 function Categories(props) {
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
-    const [catId, setCatId] = useState(52); //set default category here
+    const [catId, setCatId] = useState(props.categoryId); //set default category here
     const [products, setProducts] = useState({
         newInProducts: [],
         customerProducts: [],
@@ -66,19 +66,21 @@ function Categories(props) {
                                 <div className="section" >
                                     <LatestProducts />
                                 </div>
-                                <div className="section" >
+                                {/* <div className="section" >
                                     <PromotedProducts />
-                                </div>
-                                <div className="section">
+                                </div> */}
+                                {/* <div className="section">
                                     <Magazine />
-                                </div>
+                                </div> */}
                                 <div className="section">
                                     <NewIn />
                                 </div>
                                 <div className="section">
-                                    <Description catId={153}/>
+                                    <Description catId={153} />
                                 </div>
-
+                                <div className="section footer">
+                                    <Footer />
+                                </div>
                             </div>
                         )
                     }}
@@ -95,17 +97,20 @@ function Categories(props) {
                     <div className="section" >
                         <LatestProducts />
                     </div>
-                    <div className="section" >
+                    {/* <div className="section" >
                         <PromotedProducts />
-                    </div>
-                    <div className="section">
+                    </div> */}
+                    {/* <div className="section">
                         <Magazine />
-                    </div>
+                    </div> */}
                     <div className="section">
                         <NewIn />
                     </div>
                     <div className="section">
-                        <Description catId={153}/>
+                        <Description catId={153} />
+                    </div>
+                    <div className="section footer">
+                        <Footer />
                     </div>
                 </div>
             </MobileView>
@@ -113,14 +118,19 @@ function Categories(props) {
     )
 }
 const mapStateToProps = (state) => {
-    let languages = '';
+   // console.log(state)
+    let languages = '', categoryId = 52;
 
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
+    if (state.App && state.App.menuId) {
+        categoryId = state.App.menuId
+    }
 
     return {
-        languages: languages
+        languages: languages,
+        categoryId: categoryId
     }
 }
 

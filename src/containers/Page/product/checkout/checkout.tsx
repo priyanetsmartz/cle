@@ -7,11 +7,12 @@ import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
 import { useIntl } from 'react-intl';
 import { useHistory } from "react-router";
+// import queryString from 'query-string'
 import cartAction from "../../../../redux/cart/productAction";
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, getCountriesList, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
 import { language } from '../../../../settings';
-const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState } = cartAction;
+const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
 
 function Checkout(props) {
     const intl = useIntl();
@@ -32,25 +33,14 @@ function Checkout(props) {
     // const [paymentMethodsList, SetPaymentMethodsList] = useState([])
     const [shippingMethods, SetShippingMethods] = useState([])
     const [isShow, setIsShow] = useState(false);
-    const [regions, setRegions] = useState([]); // for regions dropdown
-    // const [orderButton, setOrderButton] = useState({
-    //     email: false,
-    //     shippingAddress: false,
-    //     billingAddress: false,
-    //     shippingMethod: false,
-    //     paymentMethod: false
-    // });
+    const [isSetAddress, setIsSetAddress] = useState(0);
+    const [isBillingAddress, setIsBillingAddress] = useState(0);
+    const [selectedShippingMethod, setSelectedShippingMethod] = useState('');
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+    const [regions, setRegions] = useState([]);
     const [emailError, setEmailError] = useState({
         errors: {}
     });
-
-    const [orderError, setOrderError] = useState({
-        email: "",
-        shippingAddress: "",
-        billingAddress: "",
-        shippingMethod: "",
-        paymentMethod: ""
-    })
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: custId ? custId : 0,
@@ -104,6 +94,12 @@ function Checkout(props) {
     //for customer address ends here-------
 
     useEffect(() => {
+        const queries = new URLSearchParams(props.location.search);
+        let paymentId = queries.get('paymentId');
+        let id = queries.get('Id');
+        if (paymentId && id) {
+            placeOrderonMagento('myfatoorah_gateway', paymentId);
+        }
         let customer_id = localStorage.getItem('cust_id');
         checkoutScreen();
         if (customer_id) {
@@ -122,10 +118,12 @@ function Checkout(props) {
     async function checkoutScreen() {
         let cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
-        if (customer_id && localStorage.getItem('cartQuoteToken')) {
+        if (customer_id && localStorage.getItem('cartQuoteId')) {
             cartItems = await getCartItems();
             // get cart total 
             cartTotal = await getCartTotal();
+        } else if ((!customer_id && localStorage.getItem('cartQuoteId')) || (customer_id && !localStorage.getItem('cartQuoteId'))) {
+
         } else {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
@@ -133,6 +131,7 @@ function Checkout(props) {
                 cartTotal = await getGuestCartTotal();
             }
         }
+        //console.log(cartItems)
         let checkoutData = {}, checkItems = {}, ship = {};
         checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
         checkoutData['sub_total'] = cartTotal && cartTotal.data ? cartTotal.data.base_subtotal : 0;
@@ -159,7 +158,12 @@ function Checkout(props) {
         ship['region_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.region_id : '';
 
         ship['street'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.street : '';
-
+        props.getCheckoutSideBar({
+            checkData: checkoutData,
+            items: checkItems,
+            shippingAddress: shipingAdd,
+            shippingData: ship
+        })
         SetItems(prevState => ({
             ...prevState,
             checkData: checkoutData,
@@ -167,6 +171,7 @@ function Checkout(props) {
             shippingAddress: shipingAdd,
             shippingData: ship
         }))
+        //  console.log(checkoutData)
     }
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -260,35 +265,15 @@ function Checkout(props) {
     }
 
 
-    const selectPayment = async (code) => {
-        let billAddress:any = {};
-        const add:any = itemsVal.address;
-        add.addresses.forEach(el =>{
-            if(el.default_billing){
-                billAddress.street = el.street[0];
-                billAddress.address = el.city;
-                billAddress.phone = el.telephone;
-                billAddress.name = el.firstname+' '+el.lastname;
-            }
-        })
-        if (code === 'myfatoorah_gateway') {
-            setIsShow(true);
-            const payment: any = await myFatoora(billAddress);
-            if (payment.data[0].IsSuccess) {
-                let url = payment.data[0].Data.PaymentURL;
-                if (url) {
-                    window.location.href = url;
-                    // history.push(url);
-                }
-            }
-        }
-    }
+
 
     const handleAddressChange = async (e) => {
-        let addId = e.target.value;
-        let checked = e.target.checked;
+        const { name, value, checked } = e.target;
+        let selectedValue = parseInt(value);
+        //console.log(typeof (selectedValue))
         if (checked) {
-            const address: any = await getAddressById(addId);
+            setIsSetAddress(selectedValue)
+            const address: any = await getAddressById(selectedValue);
             if (address.data) {
                 let addressData: any = {};
                 let addressInformation: any = {};
@@ -309,14 +294,16 @@ function Checkout(props) {
                 addressData.addressInformation = addressInformation;
                 //console.log(addressData)
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
+                setIsSetAddress(0)
                 if (saveDelivery.data) {
                     checkoutScreen()
-                    notification("success", "", "Customer Address Updated");
+                    notification("success", "", "Address Updated");
                 } else {
                     notification("error", "", "Select Correct Address!");
                 }
 
             } else {
+                setIsSetAddress(0)
                 notification("error", "", "Select Correct Address!");
             }
         }
@@ -325,8 +312,10 @@ function Checkout(props) {
     const handleBillingChange = async (e) => {
         let addId = e.target.value;
         let checked = e.target.checked;
+        let selectedValue = parseInt(addId);
         // console.log(itemsVal.shippingData['firstname'])
         if (checked) {
+            setIsBillingAddress(selectedValue);
             const address: any = await getAddressById(addId);
             if (address.data) {
                 let addressData: any = {};
@@ -361,13 +350,16 @@ function Checkout(props) {
                 // console.log(addressData)
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
                 if (saveDelivery.data.payment_methods) {
+                    setIsBillingAddress(0);
                     props.showPaymentMethods(saveDelivery.data.payment_methods);
-                    notification("success", "", "Customer Address Updated");
+                    notification("success", "", "Address Updated");
                 } else {
+                    setIsBillingAddress(0);
                     notification("error", "", "Select Correct Address!");
                 }
 
             } else {
+                setIsBillingAddress(0);
                 notification("error", "", "Select Correct Address!");
             }
         }
@@ -389,8 +381,14 @@ function Checkout(props) {
     }
     // get shipping methods
     const getshippingMethods = async () => {
-        let result: any = await getShippinMethods();
-        SetShippingMethods(result.data)
+        console.log(itemsVal.shippingData);
+        if (itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) {
+            notification("error", "", "Please select delivery address!");
+        } else {
+            let result: any = await getShippinMethods();
+            SetShippingMethods(result.data)
+        }
+
     }
 
     // for customer address popup window starts here
@@ -444,22 +442,8 @@ function Checkout(props) {
             }
             if (result) {
                 checkoutScreen();
-                // setCustAddForm({
-                //     id: 0,
-                //     customer_id: custId ? custId : 0,
-                //     firstname: "",
-                //     lastname: "",
-                //     telephone: "",
-                //     postcode: "",
-                //     city: "",
-                //     country_id: "",
-                //     region_id: 0,
-                //     street: "",
-                //     default_billing: true,
-                //     default_shipping: true
-                // });
                 toggleAddressModal();
-                notification("success", "", "Customer Address Updated");
+                notification("success", "", "Address Updated");
             }
         } else {
 
@@ -537,7 +521,7 @@ function Checkout(props) {
                 props.showPaymentMethods(result.data.payment_methods);
                 checkoutScreen();
                 toggleBillingAddressModal()
-                notification("success", "", "Customer Address Updated");
+                notification("success", "", "Address Updated");
                 setCustAddForm({
                     id: 0,
                     customer_id: custId ? custId : 0,
@@ -664,59 +648,111 @@ function Checkout(props) {
         } else {
             result = await applyPromoCodeGuest(promoCode, props.languages)
         }
-        if (result) {
+        console.log(result.data)
+        if (!result.data.message) {
             setErrorPromo("");
             checkoutScreen();
             notification("success", "", "Promo code applied.");
         } else {
             setErrorPromo("");
-            return notification("error", "", "Invalid Promo code!");
+            return notification("error", "", result.data.message);
         }
     }
 
     //PLACE ORDER CODE GOES HERE
     const placeOrder = async () => {
+        setIsShow(true);
         let customer_id = localStorage.getItem('cust_id');
         let orderPlace: any;
+        let billAddress: any = {};
+        const add: any = itemsVal.address;
+        add.addresses.forEach(el => {
+            if (el.default_billing) {
+                billAddress.street = el.street[0];
+                billAddress.address = el.city;
+                billAddress.phone = el.telephone;
+                billAddress.name = el.firstname + ' ' + el.lastname;
+            }
+        })
+        console.log(selectedPaymentMethod);
+        if (selectedPaymentMethod === 'myfatoorah_gateway') {
+            console.log('fscfsd', billAddress)
+            const payment: any = await myFatoora(billAddress);
+            if (payment.data[0].IsSuccess) {
+                let url = payment.data[0].Data.PaymentURL;
+                if (url) {
+                    window.location.href = url;
+                    // history.push(url);
+                }
+            }
+
+        } else {
+            //  console.log(selectedShippingMethod)
+            if (customer_id) {
+                orderPlace = await placeUserOrder('checkmo', null);
+            } else {
+                if (!props.guestBilling.firstname) {
+                    // console.log('here')
+                    return notification("error", "", "Please Add Biiling Address!");
+                    // return false;
+                }
+
+                if (!props.guestShipp.firstname) {
+                    return notification("error", "", "Please Add Shipping Address!");
+                }
+
+                if (!state.email) {
+                    return notification("error", "", "Please Add email Address!");
+                }
+                setIsShow(true)
+                orderPlace = await placeGuestOrder();
+
+            }
+            if (orderPlace && orderPlace.data) {
+                setIsShow(false)
+                props.addToCartTask(true);
+                localStorage.removeItem('cartQuoteId');
+                localStorage.removeItem('cartQuoteToken');
+                let orderId = parseInt(orderPlace.data);
+                //return <Redirect to={'/thankyou/' + orderId} />
+                history.push('/thankyou/' + orderId);
+            } else {
+                // console.log('herere')
+                setIsShow(false)
+            }
+        }
+
+    }
+    const handleShippingMethodSelect = async (e) => {
+        setSelectedShippingMethod(e.target.value)
+    }
+    const selectPayment = async (code) => {
+        setSelectedPaymentMethod(code)
+    }
+
+    const placeOrderonMagento = async (paymentmode, placeOrderonMagento) => {
+        let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
-            orderPlace = await placeUserOrder();
-        } else {
-            if (!props.guestBilling.firstname) {
-                // console.log('here')
-                return notification("error", "", "Please Add Biiling Address!");
-                // return false;
+            let orderPlace: any = await placeUserOrder(paymentmode, placeOrderonMagento);
+            if (orderPlace.data) {
+                setIsShow(false)
+                props.addToCartTask(true);
+                localStorage.removeItem('cartQuoteId');
+                localStorage.removeItem('cartQuoteToken');
+                let orderId = parseInt(orderPlace.data);
+                //return <Redirect to={'/thankyou/' + orderId} />
+                history.push('/thankyou/' + orderId);
+            } else {
+                // console.log('herere')
+                setIsShow(false)
             }
-
-            if (!props.guestShipp.firstname) {
-                return notification("error", "", "Please Add Shipping Address!");
-            }
-
-            if (!state.email) {
-                return notification("error", "", "Please Add email Address!");
-            }
-            setIsShow(true)
-            orderPlace = await placeGuestOrder();
-
         }
-        if (orderPlace.data) {
-            setIsShow(false)
-            props.addToCartTask(true);
-            localStorage.removeItem('cartQuoteId');
-            localStorage.removeItem('cartQuoteToken');
-            let orderId = parseInt(orderPlace.data);
-            //return <Redirect to={'/thankyou/' + orderId} />
-            history.push('/thankyou/' + orderId);
-        } else {
-            // console.log('herere')
-            setIsShow(false)
-        }
-
     }
 
     return (
         <main>
             <section className="checkout-main">
-                <div className="container">ccc
+                <div className="container">
                     {/* {Object.keys(orderError).forEach((key) => {
                      //   console.log(orderError[key])
                         return (
@@ -886,28 +922,38 @@ function Checkout(props) {
                                                                         <div className="form-check">
                                                                             <input
                                                                                 type="checkbox"
+                                                                                style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
                                                                                 defaultValue={item.id}
+                                                                                name={item.id}
                                                                                 onChange={handleBillingChange}
                                                                                 className="form-check-input"
-                                                                            // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
+                                                                                defaultChecked={item.id === isBillingAddress ? true : false}
                                                                             />
+                                                                            <Link to="#" style={{ "display": isBillingAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                            </Link>
                                                                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                                                                 <IntlMessages id="usethisAddress" />
                                                                             </label>
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-md-5">
                                                                     <div className="select-address">
                                                                         <div className="select-address-inner">
+
                                                                             <input
+                                                                                style={{ "display": isSetAddress === item.id ? "none" : "inline-block" }}
                                                                                 type="checkbox"
+                                                                                name={item.id}
                                                                                 defaultValue={item.id}
                                                                                 onChange={handleAddressChange}
                                                                                 className="form-check-input"
-                                                                            // defaultChecked={item.id === itemsVal.shippingAddress ? true : false}
+                                                                                defaultChecked={item.id === isSetAddress ? true : false}
                                                                             />
-                                                                            {/* {item.id === itemsVal.shippingAddress ? <label className="lable-text">Great</label> : ""} */}
+
+                                                                            <Link to="#" style={{ "display": isSetAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                            </Link>
 
                                                                         </div>
                                                                     </div>
@@ -949,13 +995,11 @@ function Checkout(props) {
                                                                 <div className="col-md-4">
                                                                     <div className="select-address-inner">
                                                                         <input
-                                                                            type="checkbox"
-                                                                            defaultValue={item.id}
-                                                                            // onChange={handleAddressChange}
+                                                                            type="radio"
+                                                                            defaultValue={item.carrier_code}
+                                                                            onChange={handleShippingMethodSelect}
                                                                             className="form-check-input"
-                                                                        // checked={item.id === parseInt(custForm.default_shipping) ? true : false}
                                                                         />
-                                                                        {/* <label className="btn btn-primary" htmlFor="btn-check-2">Great</label> */}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1030,12 +1074,15 @@ function Checkout(props) {
                                                                     <div className="select-address-inner">
                                                                         <input
                                                                             type="checkbox"
+                                                                            style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
                                                                             defaultValue={item.id}
                                                                             onChange={handleBillingChange}
                                                                             className="form-check-input"
+                                                                            defaultChecked={item.id === isBillingAddress ? true : false}
                                                                         // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
                                                                         />
-                                                                        {/* {item.id === parseInt(custForm.default_billing) ? <label className="lable-text" htmlFor="btn-check-2">Great</label> : ""} */}
+                                                                        <Link to="#" style={{ "display": isBillingAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                        </Link>
 
                                                                     </div>
                                                                 </div>
@@ -1120,7 +1167,36 @@ function Checkout(props) {
                                 <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                             </div>
                         </div>
-                        <CheckoutSidebar sidebarData={itemsVal} />
+                        {/* <CheckoutSidebar sidebarData={itemsVal} /> */}
+                        <div className="col-md-4">
+                            <div className="order-detail-sec">
+                                <h5>{itemsVal.checkData['total_items'] ? itemsVal.checkData['total_items'] : 0} <IntlMessages id="item" /></h5>
+                                {itemsVal.items['items'] && itemsVal.items['items'].length > 0 && (
+                                    <ul className="Ordered-pro-list">
+                                        {itemsVal.items['items'].map(item => {
+                                            return (<li key={item.item_id} >
+                                                <Link to={'/product-details/' + item.sku}><span className="order-pro_img"><img src={item.extension_attributes.item_image} alt="minicart" className="imge-fluid" /></span>
+                                                    <span className="order-pro_name">
+                                                        <span className="order-pro_pname">{item.name}</span>
+                                                        {/* <span className="order-pro_prodt_tag">Manager pattern bag</span> */}
+                                                        <br /><IntlMessages id="cart.qty" /> {item.qty}
+                                                        {/* <br />One Size */}
+                                                    </span>
+                                                </Link>
+                                            </li>)
+                                        })}
+
+                                    </ul>
+                                )}
+                                <div className="product-total-price">
+                                    <p> <IntlMessages id="subTotal" /><span className="text-end">${itemsVal.checkData['sub_total'] ? itemsVal.checkData['sub_total'] : 0}</span></p>
+                                    <p> <IntlMessages id="shipping" /><span className="text-end">${itemsVal.checkData['shipping_charges'] ? itemsVal.checkData['shipping_charges'] : 0}</span></p>
+                                    <p> <IntlMessages id="tax" /><span className="text-end">${itemsVal.checkData['tax'] ? itemsVal.checkData['tax'] : 0}</span></p>
+                                    <hr />
+                                    <div className="final-price"><IntlMessages id="total" /> <span>${itemsVal.checkData['total'] ? itemsVal.checkData['total'] - itemsVal.checkData['discount'] : 0}</span></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1350,5 +1426,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState }
+    { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar }
 )(Checkout);

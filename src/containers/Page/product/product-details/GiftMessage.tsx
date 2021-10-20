@@ -14,6 +14,7 @@ function GiftMessage(props) {
         // console.log(props)
         return () => {
             setIsShow(false);
+            
         }
     }, [])
 

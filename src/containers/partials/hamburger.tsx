@@ -28,6 +28,7 @@ function Hamburger(props) {
         });
         return () => {
             window.removeEventListener("scroll", scrollCallBack);
+            setClassState('')
         };
     }, []);
 
@@ -37,6 +38,7 @@ function Hamburger(props) {
         setClassState(classValueLogo);
         document.body.classList.add(classValue);
         return () => {
+            setClassState('')
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }

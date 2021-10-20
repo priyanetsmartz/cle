@@ -27,7 +27,7 @@ function Description(props) {
                 <div className="row">
                     <div className="col-md-12">
                         {category.custom_attributes.map((el,i) => {
-                            return(el.attribute_code == "bottom_description" && 
+                            return(el.attribute_code === "bottom_description" && 
                                 <div key={i} dangerouslySetInnerHTML={{ __html: el.value }} />
                             )
                         })}

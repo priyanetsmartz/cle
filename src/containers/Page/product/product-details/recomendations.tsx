@@ -8,8 +8,12 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 import { getProductDetails } from '../../../../redux/cart/productApi';
 import { connect } from 'react-redux';
 import cartAction from "../../../../redux/cart/productAction";
+import { getCookie } from "../../../../helpers/session";
 const { addToCartTask } = cartAction;
+
+
 const Recommendations = (props) => {
+    const language = getCookie('currentLanguage');
     const [recomendedProducts, setRecomendedProducts] = useState([]);
     const [slidetoshow, setSlidetoshow] = useState(4);
     // console.log(recomendedProducts)
@@ -57,7 +61,8 @@ const Recommendations = (props) => {
     }
 
     async function someAPICall(product) {
-        let giftCall: any = await getProductDetails(product.linked_product_sku);
+        let lang = props.languages ? props.languages : language;
+        let giftCall: any = await getProductDetails(product.linked_product_sku, lang);
         // console.log(giftCall.data)
         return giftCall.data;
         // return giftCall.data;
@@ -87,20 +92,22 @@ const Recommendations = (props) => {
 
                                     return (
                                         <Link key={i} to={'/product-details/' + product.sku}>
-                                            <div className="productcalr" >
-                                                {
-                                                    product.custom_attributes.map((attributes) => {
-                                                        if (attributes.attribute_code === 'image') {
-                                                            imageD = attributes.value;
-                                                        }
-                                                    })
-                                                }
-                                                <div className="product_img" style={{
-                                                    "width": "180px", "height": "192px"
-                                                }} ><img src={product.img ? product.img : imageD} className="image-fluid" style={{ "width": "100%" }} alt={product.name} /> </div>
-                                                <div className="product_name"> {product.name} </div>
-                                                <div className="product_price"> ${formatprice(product.price)}</div>
-                                            </div>
+                                            {(product.custom_attributes && product.custom_attributes.length) ? (
+                                                <div className="productcalr" >
+                                                    {
+                                                        product.custom_attributes.map((attributes) => {
+                                                            if (attributes.attribute_code === 'image') {
+                                                                imageD = attributes.value;
+                                                            }
+                                                        })
+                                                    }
+                                                    <div className="product_img" style={{
+                                                        "width": "180px", "height": "192px"
+                                                    }} ><img src={product.img ? product.img : imageD} className="image-fluid" style={{ "width": "100%" }} alt={product.name} /> </div>
+                                                    <div className="product_name"> {product.name} </div>
+                                                    <div className="product_price"> ${formatprice(product.price)}</div>
+                                                </div>
+                                            ) : ""}
                                         </Link>
                                     )
                                 })}
@@ -114,9 +121,12 @@ const Recommendations = (props) => {
 
 const mapStateToProps = (state) => {
     //console.log(state)
-    let recomended = [];
+    let recomended = [], languages = '';
     if (state && state.Cart.recomended.length > 0) {
         recomended = state.Cart.recomended;
+    }
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
     }
     return {
         recomended: recomended

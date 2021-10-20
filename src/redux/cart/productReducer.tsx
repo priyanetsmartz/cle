@@ -6,17 +6,21 @@ const initState = {
     total: 0,
     addToCartTask: false,
     openGiftBox: 0,
-    addToWishlistTask: false,
+    addToWishlist: false,
     openAccountPop: false,
     openMiniCartPop: false,
     paymentMethods: [],
     ship: {},
     billing: {},
-    recomended: []
+    recomended: [],
+    checkout_sidebar: {
+        checkData: {}, items: {}, address: {}, shippingAddress: 0, shippingData: {}
+    }
 }
 
 
 const cartReducer = (state = initState, action) => {
+
     switch (action.type) {
         case actions.PRODUCT_LIST:
             return { ...state, items: action.payload };
@@ -28,8 +32,9 @@ const cartReducer = (state = initState, action) => {
             return { ...state, addToCartTask: action.addToCartTask };
         case actions.OPEN_GIFT_BOX:
             return { ...state, openGiftBox: action.isOpen };
-        case actions.ADD_TO_WISHLIST_TASK:
-            return { ...state, addToWishlistTask: action.addToWishlistTask };
+        case actions.ADD_TO_WISHLIST_TASK_NEw:
+            console.log('sadff', action.isShow, state);
+            return { ...state, addToWishlist: action.isShow };
         case actions.ACCOUNT_SECTION:
             return { ...state, openAccountPop: action.isShow };
         case actions.MINICART_SECTION:
@@ -44,6 +49,8 @@ const cartReducer = (state = initState, action) => {
             return { ...state, recomended: action.payload };
         case actions.GET_ATTRIBUTES_PRODUCTS:
             return { ...state, attribute_section: action.payload };
+        case actions.CHECKOUT_SIDEBAR:
+            return { ...state, checkout_sidebar: action.payload };
         default:
             return state;
     }

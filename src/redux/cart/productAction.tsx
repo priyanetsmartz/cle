@@ -9,7 +9,7 @@ const actions = {
     OPEN_MEASURING_GUIDE: 'OPEN_MEASURING_GUIDE',
     ADD_TO_CART_TASK: 'ADD_TO_CART_TASK',
     OPEN_GIFT_BOX: 'OPEN_GIFT_BOX',
-    ADD_TO_WISHLIST_TASK: 'ADD_TO_WISHLIST_TASK',
+    ADD_TO_WISHLIST_TASK_NEw: 'ADD_TO_WISHLIST_TASK_NEw',
     ACCOUNT_SECTION: 'ACCOUNT_SECTION',
     MINICART_SECTION: 'MINICART_SECTION',
     PAYMENT_METHODS: 'PAYMENT_METHODS',
@@ -17,6 +17,7 @@ const actions = {
     BILLING_ADDRESS: 'BILLING_ADDRESS',
     RECOMENDED_PRODUCTS: 'RECOMENDED_PRODUCTS',
     GET_ATTRIBUTES_PRODUCTS: 'GET_ATTRIBUTES_PRODUCTS',
+    CHECKOUT_SIDEBAR: 'CHECKOUT_SIDEBAR',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -25,9 +26,9 @@ const actions = {
         type: actions.ADD_TO_CART_TASK,
         addToCartTask
     }),
-    addToWishlistTask: addToWishlistTask => ({
-        type: actions.ADD_TO_WISHLIST_TASK,
-        addToWishlistTask
+    addToWishlistTask: isShow => ({       
+        type: actions.ADD_TO_WISHLIST_TASK_NEw,
+        isShow: isShow
     }),
     removeItem: (id: number) => ({
         type: actions.REMOVE_ITEM,
@@ -83,6 +84,10 @@ const actions = {
     }),
     getAttributeProducts: payload => ({
         type: actions.GET_ATTRIBUTES_PRODUCTS,
+        payload
+    }),
+    getCheckoutSideBar: payload => ({
+        type: actions.CHECKOUT_SIDEBAR,
         payload
     })
 

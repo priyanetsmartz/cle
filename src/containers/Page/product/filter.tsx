@@ -1,5 +1,34 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { getProductFilter } from "../../../redux/cart/productApi";
+import { GraphQLClient, gql } from 'graphql-request';
+const axios = require("axios");
 function Filters(props) {
+
+
+    useEffect(() => {
+        const localToken = localStorage.getItem('token');
+        main().catch((error) => console.error(error))
+
+        return () => {
+            //
+        }
+    }, [])
+
+    async function main() {
+
+        const client = new GraphQLClient('https://4a83875b65.nxcli.net/graphql')
+        client.setHeaders({
+            authorization: 'Bearer hcy0yuocc3geyjhoqd3esopkmjiky8tv',
+            // store: 'ar'
+        })
+
+        const query = gql`{products(filter: { category_id: { eq: "52" } }, pageSize: 10) {aggregations{attribute_code count label options{count label value } } total_count page_info { page_size current_page } items {id name sku short_description { html } image { url }price_range { minimum_price { regular_price { value currency }final_price { value currency }fixed_product_taxes { label amount {value currency }}} maximum_price { discount { amount_off percent_off } fixed_product_taxes { label amount { value currency} } } } } } }`;
+
+        const data = await client.request(query);
+        console.log(data)
+    }
+
     return (
         <div className="col-sm-3">
             <div className="pro_categry_sidebar">

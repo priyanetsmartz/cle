@@ -18,7 +18,7 @@ import SearchBar from './searchBar';
 import LanguageSwitcher from '../LanguageSwitcher';
 
 const { logout } = authAction;
-const { showSignin, openSignUp } = appAction;
+const { showSignin, openSignUp, menuSetup } = appAction;
 const { accountPopup, miniCartPopup } = cartAction;
 function HeaderMenu(props) {
     let history = useHistory();
@@ -41,6 +41,10 @@ function HeaderMenu(props) {
 
         return () => {
             document.removeEventListener("mousedown", handleClick);
+            setIsLoaded(true)
+            SetMenuData([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
+            SetActiveCat('')
+            SetActiveOne('')
         };
     }, []);
 
@@ -57,8 +61,10 @@ function HeaderMenu(props) {
         fetchMyAPI()
         return () => {
             props.accountPopup(false)
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
+            setIsLoaded(true)
+            SetMenuData([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
+            SetActiveCat('')
+            SetActiveOne('')
         }
     }, [props.languages, category])
 
@@ -113,6 +119,10 @@ function HeaderMenu(props) {
         props.showSignin(true);
     }
 
+    const handleMenuClick = (id) => {
+        props.menuSetup(id);
+    }
+
     return (
         <>
             {isLoaded && (
@@ -122,29 +132,27 @@ function HeaderMenu(props) {
             )}
             <div className="container">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
-                    <div className="col-5 pt-1">
+                    <div className="col-6 pt-1">
                         <div className="select-wearing">
                             {menuData.length > 0 && (
                                 <ul>
                                     {
                                         menuData.map((val, i) => {
                                             return (
-                                                // <li key={i} onMouseEnter={() => { setMenu(val.url_key) }} onMouseLeave={() => resetMenu()}>
                                                 <li key={i}>
-                                                    <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                    <Link to={'/products/' + val.url_key} onClick={(e) => { handleMenuClick(val.id); }} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
                                                         {val.child.map((childMenu: any, j) => {
-                                                            //  console.log(childMenu)
                                                             return (
                                                                 <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
-                                                                    <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
+                                                                    <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} onClick={(e) => { handleMenuClick(childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
                                                                     <span className="megamenu_bar">
                                                                         <Link to="#" className="cross_icn"> <i className="fas fa-times"></i></Link>
                                                                         <ul className="megamenugrid">
                                                                             <h3>{childMenu.name}</h3>
                                                                             {childMenu.child && childMenu.child.map((grandChild, k) => {
                                                                                 return (<li key={k}>
-                                                                                    <Link to={`/products/${val.url_key}/${grandChild.url_key}`}>{grandChild.name}</Link>
+                                                                                    <Link to={`/products/${val.url_key}/${grandChild.url_key}`} onClick={(e) => { handleMenuClick(grandChild.id); }}>{grandChild.name}</Link>
                                                                                 </li>)
                                                                             })}
 
@@ -170,7 +178,7 @@ function HeaderMenu(props) {
                             </Link>
                         </div>
                     </div>
-                    <div className="col-5">
+                    <div className="col-4">
 
                         <div className="sell_item" style={{ display: 'none' }}>
                             <div className="sell_itemnote mb-2">
@@ -190,8 +198,8 @@ function HeaderMenu(props) {
                                             <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
                                             {customer_id && (
                                                 <ul>
-                                                    <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li>
-                                                    <li><Link to="/customer/dashboard"><IntlMessages id="dashboard" /> </Link></li>
+                                                    {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
+                                                    <li><Link to="/customer/profile"><IntlMessages id="dashboard" /> </Link></li>
                                                     <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
                                                     <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
                                                     <li><Link to="/customer/support"><IntlMessages id="myspport" /></Link> </li>
@@ -215,25 +223,25 @@ function HeaderMenu(props) {
 
                     </div>
                 </div>
-				<header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2">
-                <nav className="container-xxl flex-wrap flex-md-nowrap " aria-label="Main navigation">
-                    <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
-                        aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" className="bi" fill="currentColor"
-                            viewBox="0 0 16 16">
-                            <path fillRule="evenodd"
-                                d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
-                            </path>
-                        </svg>
-                    </button>
-                    <SearchBar />
-                </nav>
+                <header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2">
+                    <nav className="container-xxl flex-wrap flex-md-nowrap " aria-label="Main navigation">
+                        <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                            aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" className="bi" fill="currentColor"
+                                viewBox="0 0 16 16">
+                                <path fillRule="evenodd"
+                                    d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+                                </path>
+                            </svg>
+                        </button>
+                        <SearchBar />
+                    </nav>
 
 
-            </header>
+                </header>
             </div>
 
-            
+
 
             <section>
                 <div className="container">
@@ -260,5 +268,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { logout, showSignin, openSignUp, accountPopup, miniCartPopup }
+    { logout, showSignin, openSignUp, accountPopup, miniCartPopup, menuSetup }
 )(HeaderMenu);

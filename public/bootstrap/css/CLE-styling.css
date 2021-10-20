@@ -71,6 +71,10 @@ body{width:100%;height:100%; overflow:hidden; font-family: 'Lato', sans-serif !i
 	position: relative;
 z-index: 15;
 }
+
+.myorder_sidebar ul li.active a.prive-txt {
+    color: #017ABB;
+}
 .home-inner-text figure.play-video-now {
     width: max-content;
     float: right;

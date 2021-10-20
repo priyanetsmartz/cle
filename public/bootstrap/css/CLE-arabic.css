@@ -111,8 +111,8 @@ right: 0;}
     font-size: 40px;
 }
 .sign-up-btn a{padding:12px 0; font-size: 24px;font-family: 'Conv_Meshki';}
-.about-inner .page-head svg text{transform: translate(105%,90px);font-size: 110px;}
-.magazine-inner .page-head svg text{transform: translate(115%,90px);font-size: 110px;}
+.about-inner .page-head svg text{transform: translate(105%,100px);font-size: 110px;}
+.magazine-inner .page-head svg text{transform: translate(115%,106px);font-size: 110px;}
 .partnership-title.page-head svg text{transform: translate(100%,100px);font-size: 110px;}
 .help-us-inner .page-head svg text{transform: translate(110%,90px);font-size: 95px;}
 .inner-pages .page-head svg text{transform: translate(55%,110px);font-size: 90px !important;}

@@ -49,7 +49,7 @@ class API {
           }
         })
         .catch(function (err) {
-          reject(err.response);
+          resolve(err.response);
         });
     });
   }

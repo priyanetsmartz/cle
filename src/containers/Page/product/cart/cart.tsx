@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import cartAction from "../../../../redux/cart/productAction";
-import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGiftMessage, getGuestCart, getGuestCartTotal, getWhishlistItemsForUser, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
+import { getCookie } from "../../../../helpers/session";
+import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGiftMessage, getGuestCart, getGuestCartTotal, getWhishlistItemsForUser, giftMessageDelete, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
 import notification from "../../../../components/notification";
 import RelevantProducts from './relevantProducts';
 import Modal from "react-bootstrap/Modal";
@@ -11,6 +12,7 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 const { openGiftBoxes, addToCartTask, addToWishlistTask } = cartAction;
 
 function CartItemPage(props) {
+    const language = getCookie('currentLanguage');
     const [token, setToken] = useState('');
     const [isShow, setIsShow] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
@@ -64,9 +66,10 @@ function CartItemPage(props) {
 
     async function someAPICall(product) {
         let giftCall: any = await getGiftMessage(product.item_id);
+        console.log(giftCall.data)
         let prod: any;
         if (giftCall.data && giftCall.data.gift_message_id) {
-            prod = { ...product, isGift: true }
+            prod = { ...product, isGift: true, gift_message_id: giftCall.data.gift_message_id }
         } else {
             prod = { ...product, isGift: false }
         }
@@ -237,6 +240,11 @@ function CartItemPage(props) {
         props.openGiftBoxes(pId);
         setIsGiftMessage(true)
     }
+    const handleGiftRemove = async (giftId, itemId) => {
+        let lang = props.languages ? props.languages : language;
+        let result: any = await giftMessageDelete(giftId, itemId, lang);
+        console.log(result);
+    }
     const hideGiftModalModal = () => {
         props.openGiftBoxes(0);
         setIsGiftMessage(false)
@@ -253,7 +261,7 @@ function CartItemPage(props) {
                                     (
                                         <ul className="cart-pro-list">
                                             {cartItemsVal['items'].map((item, i) => {
-                                                //  console.log(item.isGift)
+                                                // console.log(item)
                                                 return (
                                                     <div key={i}>
                                                         <li >
@@ -308,7 +316,7 @@ function CartItemPage(props) {
                                                         </li>
                                                         <div className="save-cart-btns">
                                                             {item.isGift ?
-                                                                <Link to="#" className=""><IntlMessages id="cart.removeGift" /></Link>
+                                                                <Link to="#" className="" onClick={() => { handleGiftRemove(item.gift_message_id, item.item_id) }}  ><IntlMessages id="cart.removeGift" /></Link>
                                                                 : <Link to="#" onClick={() => {
                                                                     handleGiftMEssage(item.item_id);
                                                                 }}><IntlMessages id="cart.addGift" /> </Link>}
@@ -353,7 +361,7 @@ function CartItemPage(props) {
                     </div>
                 </div>
             </section>
-            <Modal show={isGiftMessage} size="lg" data={prodId} >
+            <Modal show={isGiftMessage} size="lg" data={prodId} onHide={hideGiftModalModal} >
                 <Modal.Header>
                     <h5 className="modal-title"><IntlMessages id="gift.title" /></h5>
                     <div><IntlMessages id="gift.subTitle" /> </div>

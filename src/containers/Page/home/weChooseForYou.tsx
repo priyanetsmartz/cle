@@ -57,41 +57,47 @@ function WeChooseForYou(props) {
     }
 
     return (
-        <section className="width-100 my-5 choose-foryou-sec">
-            <div className="container">
-                <div className="row">
-                    <div className="col-sm-12">
-                        <div className="new-in-title">
-                            <h1><IntlMessages id="home.weChooseForYou" /></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="col-sm-12">
-                        <div className="new-in-slider">
-                            <div className="regular slider">
-                                <Slider {...settings}>
-                                    {products.map((item, i) => {
-                                        return (
-                                            <Link className="productcalr" key={i} to={'/product-details/' + item.name}>
-                                                <div className="product_img">
-                                                    <img src={item.img} alt="productimage" className="image-fluid" />
-                                                </div>
-                                                <div className="product_name mt-2">  <Link to={'/product-details/' + item.sku}>{item.name} </Link></div>
-                                                <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
-                                                <div className="product_price">$ {formatprice(item.price)}</div>
-                                            </Link>
-                                        )
-                                    })}
-                                </Slider>
+        <div>
+        {
+            products.length > 0 && (
+                <section className="width-100 my-5 choose-foryou-sec">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <div className="new-in-title">
+                                    <h1><IntlMessages id="home.weChooseForYou" /></h1>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-            </div>
-        </section>
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <div className="new-in-slider">
+                                    <div className="regular slider">
+                                        <Slider {...settings}>
+                                            {products.map((item, i) => {
+                                                return (
+                                                    <Link className="productcalr" key={i} to={'/product-details/' + item.name}>
+                                                        <div className="product_img">
+                                                            <img src={item.img} alt="productimage" className="image-fluid" />
+                                                        </div>
+                                                        <div className="product_name mt-2">  <Link to={'/product-details/' + item.sku}>{item.name} </Link></div>
+                                                        <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
+                                                        <div className="product_price">$ {formatprice(item.price)}</div>
+                                                    </Link>
+                                                )
+                                            })}
+                                        </Slider>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            )
+        }
+        </div>
     )
 }
 
