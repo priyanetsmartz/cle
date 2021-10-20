@@ -36,6 +36,10 @@ function ForgottenPassword(props) {
         }));
         setIsShow(false);
       } else {
+        setState(prevState => ({
+          ...prevState,
+          email: ""
+        }));
         notification("error", "", "No data found!");
         setIsShow(false);
       }
@@ -74,6 +78,7 @@ function ForgottenPassword(props) {
           <div className="row">
             <div className="col-md-12">
               <h3><IntlMessages id="forgot_pass" /></h3>
+              <p><IntlMessages id="forgotpass-subtitle" /></p>
             </div>
           </div>
           <br />

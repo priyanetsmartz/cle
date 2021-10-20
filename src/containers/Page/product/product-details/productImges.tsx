@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import homeVideo from "../../../../image/Website1440px.mp4"
 
 const ProductImages = (props) => {
+    let featuredImage = props.productImages ? props.productImages[0] : "";
     const [productImage, setProductImages] = useState(props.productImages);
-    const [fullSizedImg, setFullSizedImg] = useState(props.productImages[0]);
+    const [fullSizedImg, setFullSizedImg] = useState(featuredImage);
     useEffect(() => {
         setProductImages(props.productImages)
         setFullSizedImg(props.productImages[0]);
@@ -39,7 +40,7 @@ const ProductImages = (props) => {
                     fullSizedImg && fullSizedImg.media_type === 'external-video' ? (
                         <iframe className="product-full-img" title="product video" src={fullSizedImg.extension_attributes.video_content.video_url}>
                         </iframe>
-                        
+
                     ) : <img src={fullSizedImg ? fullSizedImg.file : ""} alt="" className="product-full-img" />
                 }
 

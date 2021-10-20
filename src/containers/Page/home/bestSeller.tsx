@@ -47,7 +47,7 @@ function BestSeller(props) {
     //get categories for the filter dropdown
     const getCategories = async () => {
         let result: any = await menu(props.languages);
-        console.log(result);
+        //console.log(result);
         let catList = [];
         if (result && result.data[0] && result.data[0].parent.child[0].child) {
             result.data[0].parent.child[0].child.forEach(el => {

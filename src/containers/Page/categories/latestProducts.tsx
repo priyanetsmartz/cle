@@ -42,7 +42,7 @@ function LatestProducts(props) {
     async function getProducts() {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory(page, pageSize, 'category', sortValue.sortBy, sortValue.sortByValue);
+        let result: any = await getProductByCategory(page, pageSize, props.categoryId, sortValue.sortBy, sortValue.sortByValue);
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
         if (customer_id) {
@@ -117,7 +117,7 @@ function LatestProducts(props) {
                                             role="tab" aria-controls="D-maylike" aria-selected="false"><IntlMessages id="home.weChooseForYou" /></Link>
                                     </li>
                                 )
-                                }
+                            }
 
                         </ul>
                         <div className="tab-content" id="DesignerTabContent">
@@ -193,8 +193,13 @@ function LatestProducts(props) {
 }
 
 const mapStateToProps = (state) => {
+    let categoryId = 52;
+    if (state.App && state.App.menuId) {
+        categoryId = state.App.menuId
+    }
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        categoryId: categoryId
     }
 }
 

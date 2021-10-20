@@ -49,6 +49,8 @@ export default function appReducer(state = initState, action) {
       return { ...state, userType: action.userType };
     case actions.SET_CAT:
       return { ...state, setCategory: action.setCategory };
+    case actions.MENU_SETUP:
+      return { ...state, menuId: action.menuId };
     default:
       return state;
   }

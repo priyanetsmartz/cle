@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
 import { useIntl } from 'react-intl';
 import { useHistory } from "react-router";
-import queryString from 'query-string'
+// import queryString from 'query-string'
 import cartAction from "../../../../redux/cart/productAction";
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, getCountriesList, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
@@ -34,6 +34,7 @@ function Checkout(props) {
     const [shippingMethods, SetShippingMethods] = useState([])
     const [isShow, setIsShow] = useState(false);
     const [isSetAddress, setIsSetAddress] = useState(0);
+    const [isBillingAddress, setIsBillingAddress] = useState(0);
     const [selectedShippingMethod, setSelectedShippingMethod] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const [regions, setRegions] = useState([]);
@@ -93,9 +94,9 @@ function Checkout(props) {
     //for customer address ends here-------
 
     useEffect(() => {
-        let queries = queryString.parse(props.location.search)
-        let paymentId = queries.paymentId;
-        let id = queries.Id;
+        const queries = new URLSearchParams(props.location.search);
+        let paymentId = queries.get('paymentId');
+        let id = queries.get('Id');
         if (paymentId && id) {
             placeOrderonMagento('myfatoorah_gateway', paymentId);
         }
@@ -130,7 +131,7 @@ function Checkout(props) {
                 cartTotal = await getGuestCartTotal();
             }
         }
-        console.log(cartItems)
+        //console.log(cartItems)
         let checkoutData = {}, checkItems = {}, ship = {};
         checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
         checkoutData['sub_total'] = cartTotal && cartTotal.data ? cartTotal.data.base_subtotal : 0;
@@ -170,7 +171,7 @@ function Checkout(props) {
             shippingAddress: shipingAdd,
             shippingData: ship
         }))
-        console.log(checkoutData)
+        //  console.log(checkoutData)
     }
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -268,9 +269,11 @@ function Checkout(props) {
 
     const handleAddressChange = async (e) => {
         const { name, value, checked } = e.target;
+        let selectedValue = parseInt(value);
+        //console.log(typeof (selectedValue))
         if (checked) {
-            setIsSetAddress(value)
-            const address: any = await getAddressById(value);
+            setIsSetAddress(selectedValue)
+            const address: any = await getAddressById(selectedValue);
             if (address.data) {
                 let addressData: any = {};
                 let addressInformation: any = {};
@@ -309,8 +312,10 @@ function Checkout(props) {
     const handleBillingChange = async (e) => {
         let addId = e.target.value;
         let checked = e.target.checked;
+        let selectedValue = parseInt(addId);
         // console.log(itemsVal.shippingData['firstname'])
         if (checked) {
+            setIsBillingAddress(selectedValue);
             const address: any = await getAddressById(addId);
             if (address.data) {
                 let addressData: any = {};
@@ -345,13 +350,16 @@ function Checkout(props) {
                 // console.log(addressData)
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
                 if (saveDelivery.data.payment_methods) {
+                    setIsBillingAddress(0);
                     props.showPaymentMethods(saveDelivery.data.payment_methods);
                     notification("success", "", "Address Updated");
                 } else {
+                    setIsBillingAddress(0);
                     notification("error", "", "Select Correct Address!");
                 }
 
             } else {
+                setIsBillingAddress(0);
                 notification("error", "", "Select Correct Address!");
             }
         }
@@ -700,7 +708,7 @@ function Checkout(props) {
                 orderPlace = await placeGuestOrder();
 
             }
-            if (orderPlace.data) {
+            if (orderPlace && orderPlace.data) {
                 setIsShow(false)
                 props.addToCartTask(true);
                 localStorage.removeItem('cartQuoteId');
@@ -914,32 +922,38 @@ function Checkout(props) {
                                                                         <div className="form-check">
                                                                             <input
                                                                                 type="checkbox"
+                                                                                style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
                                                                                 defaultValue={item.id}
                                                                                 name={item.id}
                                                                                 onChange={handleBillingChange}
                                                                                 className="form-check-input"
-                                                                            // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
+                                                                                defaultChecked={item.id === isBillingAddress ? true : false}
                                                                             />
+                                                                            <Link to="#" style={{ "display": isBillingAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                            </Link>
                                                                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                                                                 <IntlMessages id="usethisAddress" />
                                                                             </label>
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-md-5">
                                                                     <div className="select-address">
                                                                         <div className="select-address-inner">
+
                                                                             <input
-                                                                                style={{ "display": isSetAddress === 0 ? "inline-block" : "none" }}
+                                                                                style={{ "display": isSetAddress === item.id ? "none" : "inline-block" }}
                                                                                 type="checkbox"
                                                                                 name={item.id}
                                                                                 defaultValue={item.id}
                                                                                 onChange={handleAddressChange}
                                                                                 className="form-check-input"
-                                                                                defaultChecked={item.id == isSetAddress ? true : false}
+                                                                                defaultChecked={item.id === isSetAddress ? true : false}
                                                                             />
 
-                                                                            <Link to="#" style={{ "display": isSetAddress == item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link>                                                                            
+                                                                            <Link to="#" style={{ "display": isSetAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                            </Link>
 
                                                                         </div>
                                                                     </div>
@@ -984,11 +998,8 @@ function Checkout(props) {
                                                                             type="radio"
                                                                             defaultValue={item.carrier_code}
                                                                             onChange={handleShippingMethodSelect}
-                                                                            // onChange={handleAddressChange}
                                                                             className="form-check-input"
-                                                                        // checked={item.id === parseInt(custForm.default_shipping) ? true : false}
                                                                         />
-                                                                        {/* <label className="btn btn-primary" htmlFor="btn-check-2">Great</label> */}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1063,12 +1074,15 @@ function Checkout(props) {
                                                                     <div className="select-address-inner">
                                                                         <input
                                                                             type="checkbox"
+                                                                            style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
                                                                             defaultValue={item.id}
                                                                             onChange={handleBillingChange}
                                                                             className="form-check-input"
+                                                                            defaultChecked={item.id === isBillingAddress ? true : false}
                                                                         // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
                                                                         />
-                                                                        {/* {item.id === parseInt(custForm.default_billing) ? <label className="lable-text" htmlFor="btn-check-2">Great</label> : ""} */}
+                                                                        <Link to="#" style={{ "display": isBillingAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                        </Link>
 
                                                                     </div>
                                                                 </div>

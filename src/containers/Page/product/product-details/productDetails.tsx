@@ -193,8 +193,10 @@ function ProductDetails(props) {
             }
             // console.log(inWhishlist)
             let productExtras: any = await getProductExtras(result.data.id);
-            setMagezineData(productExtras.data[0].posts)
-            setRecomendations(productExtras.data[0].recommendation)
+            let posts = productExtras && productExtras.data[0] && productExtras.data[0].posts ? productExtras.data[0].posts : [];
+            let recomendations = productExtras && productExtras.data[0] && productExtras.data[0].recommendation ? productExtras.data[0].recommendation : []
+            setMagezineData(posts)
+            setRecomendations(recomendations)
             //   console.log(productExtras.data)
         }
 
@@ -206,31 +208,32 @@ function ProductDetails(props) {
             seChildrenProducts(childProducts.data);
         }
         let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
+        if (result.data.custom_attributes) {
+            result.data.custom_attributes.map((attributes) => {
+                if (attributes.attribute_code === "description") {
+                    description = attributes.value;
+                }
+                if (attributes.attribute_code === "special_price") {
+                    special_price = attributes.value;
+                }
+                if (attributes.attribute_code === "short_description") {
+                    short = attributes.value;
+                }
+                if (attributes.attribute_code === "shipping_and_returns") {
+                    shipping_and_returns = attributes.value;
+                }
+                if (attributes.attribute_code === "popular" && attributes.value === "1") {
+                    tags.push("Popular");
+                }
+                if (attributes.attribute_code === "new_designer" && attributes.value === "1") {
+                    tags.push("New Designers");
+                }
+                if (attributes.attribute_code === "sale" && attributes.value === "1") {
+                    tags.push("Sale");
+                }
 
-        result.data.custom_attributes.map((attributes) => {
-            if (attributes.attribute_code === "description") {
-                description = attributes.value;
-            }
-            if (attributes.attribute_code === "special_price") {
-                special_price = attributes.value;
-            }
-            if (attributes.attribute_code === "short_description") {
-                short = attributes.value;
-            }
-            if (attributes.attribute_code === "shipping_and_returns") {
-                shipping_and_returns = attributes.value;
-            }
-            if (attributes.attribute_code === "popular" && attributes.value === "1") {
-                tags.push("Popular");
-            }
-            if (attributes.attribute_code === "new_designer" && attributes.value === "1") {
-                tags.push("New Designers");
-            }
-            if (attributes.attribute_code === "sale" && attributes.value === "1") {
-                tags.push("Sale");
-            }
-
-        })
+            })
+        }
 
         // console.log(tags);
         // console.log(result.data.extension_attributes)
@@ -243,21 +246,22 @@ function ProductDetails(props) {
         projectSingle['saleprice'] = special_price;
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
-        projectSingle['is_in_stock'] = result.data.extension_attributes.stock_item.is_in_stock;
+        projectSingle['is_in_stock'] = result.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
         //  projectSingle['product_links'] = result.data.product_links;
         setOpacity(1)
         setProdId(projectSingle['id']);
         setTagsState(tags)
         setProductImages(result.data.media_gallery_entries)
         // setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
-        setExtensionAttributes(result.data.extension_attributes.stock_item.qty);
+        let qtyy = result.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
+        setExtensionAttributes(qtyy);
         setproductDetails(projectSingle);
         if (recomendationsData.length <= 0) {
             //  console.log('sss')
             setProdLinked(result.data.product_links);
             props.recomendedProducts(result.data.product_links)
         } else {
-           // console.log('sssdddd')
+            // console.log('sssdddd')
             props.recomendedProducts(recomendationsData)
         }
 
@@ -365,7 +369,7 @@ function ProductDetails(props) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
             //     console.log(result);
-            if (result.data) {                
+            if (result.data) {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
                 notification("success", "", 'Your product has been successfully added to your wishlist');
@@ -388,12 +392,12 @@ function ProductDetails(props) {
         if (del.data[0].message) {
             props.addToWishlistTask(true);
             setDelWishlist(0)
-            setItemInWhishlist(0)            
+            setItemInWhishlist(0)
             notification("success", "", del.data[0].message);
             getProductDetailsFxn(sku)
         } else {
             props.addToWishlistTask(true);
-            setDelWishlist(0)            
+            setDelWishlist(0)
             notification("error", "", "Something went wrong!");
             getProductDetailsFxn(sku)
         }

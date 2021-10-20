@@ -18,7 +18,7 @@ import SearchBar from './searchBar';
 import LanguageSwitcher from '../LanguageSwitcher';
 
 const { logout } = authAction;
-const { showSignin, openSignUp } = appAction;
+const { showSignin, openSignUp, menuSetup } = appAction;
 const { accountPopup, miniCartPopup } = cartAction;
 function HeaderMenu(props) {
     let history = useHistory();
@@ -119,6 +119,10 @@ function HeaderMenu(props) {
         props.showSignin(true);
     }
 
+    const handleMenuClick = (id) => {
+        props.menuSetup(id);
+    }
+
     return (
         <>
             {isLoaded && (
@@ -128,29 +132,27 @@ function HeaderMenu(props) {
             )}
             <div className="container">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
-                    <div className="col-5 pt-1">
+                    <div className="col-6 pt-1">
                         <div className="select-wearing">
                             {menuData.length > 0 && (
                                 <ul>
                                     {
                                         menuData.map((val, i) => {
                                             return (
-                                                // <li key={i} onMouseEnter={() => { setMenu(val.url_key) }} onMouseLeave={() => resetMenu()}>
                                                 <li key={i}>
-                                                    <Link to={'/products/' + val.url_key} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                    <Link to={'/products/' + val.url_key} onClick={(e) => { handleMenuClick(val.id); }} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
                                                         {val.child.map((childMenu: any, j) => {
-                                                            //  console.log(childMenu)
                                                             return (
                                                                 <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
-                                                                    <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
+                                                                    <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} onClick={(e) => { handleMenuClick(childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
                                                                     <span className="megamenu_bar">
                                                                         <Link to="#" className="cross_icn"> <i className="fas fa-times"></i></Link>
                                                                         <ul className="megamenugrid">
                                                                             <h3>{childMenu.name}</h3>
                                                                             {childMenu.child && childMenu.child.map((grandChild, k) => {
                                                                                 return (<li key={k}>
-                                                                                    <Link to={`/products/${val.url_key}/${grandChild.url_key}`}>{grandChild.name}</Link>
+                                                                                    <Link to={`/products/${val.url_key}/${grandChild.url_key}`} onClick={(e) => { handleMenuClick(grandChild.id); }}>{grandChild.name}</Link>
                                                                                 </li>)
                                                                             })}
 
@@ -176,7 +178,7 @@ function HeaderMenu(props) {
                             </Link>
                         </div>
                     </div>
-                    <div className="col-5">
+                    <div className="col-4">
 
                         <div className="sell_item" style={{ display: 'none' }}>
                             <div className="sell_itemnote mb-2">
@@ -266,5 +268,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { logout, showSignin, openSignUp, accountPopup, miniCartPopup }
+    { logout, showSignin, openSignUp, accountPopup, miniCartPopup, menuSetup }
 )(HeaderMenu);

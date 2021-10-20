@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux'
-import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import { getNewInCategories, getCategoryPage } from '../../../redux/cart/productApi';
-import notification from "../../../components/notification";
 const { addToCart, productList } = cartAction;
 
 function Categories(props) {

@@ -5,6 +5,8 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import notification from '../../../components/notification';
 import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
+import Modal from "react-bootstrap/Modal";
+import ForgottenPassword from '../forgotPassword';
 const { login, logout } = authAction;
 
 function VendorLogin(props) {
@@ -17,7 +19,7 @@ function VendorLogin(props) {
   });
   const [isShow, setIsShow] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-
+  const [forgotPopup, setForgotPopup] = useState(false);
   useEffect(() => {
   }, [])
 
@@ -41,7 +43,7 @@ function VendorLogin(props) {
         "rememberme": rememberMe
       }
       login({ userInfo });
-    }else{
+    } else {
       notification("warning", "", "Please enter valid email and password");
     }
   }
@@ -81,6 +83,16 @@ function VendorLogin(props) {
     }
   };
 
+  const handleForgetPopup = (e) => {
+    e.preventDefault();
+    // props.showSignin(true);
+    setForgotPopup(true);
+  }
+
+  const hideModal = (e) => {
+    setForgotPopup(false);
+  }
+
   return (
     <section className="designer-alphabet-list">
       <div className="container">
@@ -111,12 +123,12 @@ function VendorLogin(props) {
               <div className="row g-3">
                 <div className="col-6">
                   <div className="form-check">
-                  <Checkbox
-                    onChange={handleOnChange}
-                    checked={rememberMe}
-                  >
-                    <IntlMessages id="login.RememberMe" />
-                  </Checkbox>
+                    <Checkbox
+                      onChange={handleOnChange}
+                      checked={rememberMe}
+                    >
+                      <IntlMessages id="login.RememberMe" />
+                    </Checkbox>
                   </div>
                 </div>
                 <div className="col-6">
@@ -128,7 +140,7 @@ function VendorLogin(props) {
                       <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
                       <IntlMessages id="loading" />
                     </div>
-                    <Link to="#" className="forgot-pswd-new float-end">forgot your password?</Link>
+                    <Link onClick={(e) => { handleForgetPopup(e); }} className="forgot-pswd-new float-end"><IntlMessages id="forgot_pass" />?</Link>
                   </div>
                   <div className="clearfix"></div>
                 </div>
@@ -225,6 +237,13 @@ function VendorLogin(props) {
         </div>
 
       </div>
+      <Modal show={forgotPopup} className="forgot-modal" onHide={hideModal}>
+        <Modal.Header>
+          <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
+        <Modal.Body className="arabic-rtl-direction">
+          <ForgottenPassword />
+        </Modal.Body>
+      </Modal>
     </section>
   )
 }

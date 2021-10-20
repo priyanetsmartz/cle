@@ -6,7 +6,7 @@ function Breadcrumbs(props) {
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     useEffect(() => {
-        console.log(location)
+    //    / console.log(location)
         let breads = location.pathname.split('\/');
         setBreadcrumsState(breads)
     }, [location]);

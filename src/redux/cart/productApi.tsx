@@ -1,7 +1,9 @@
 import AdminApi from "../../restApi/AdminApi";
 import CustomerApi from "../../restApi/Api";
+import GraphqlAPI from "../../restApi/graphqlApi";
 const APi = new AdminApi();
 const CUSTOMER = new CustomerApi();
+const GRAPHQL = new GraphqlAPI;
 
 export function getAllProducts(language, page, pageSize, sortBy, sortByValue) {
     const localToken = localStorage.getItem('token');
@@ -11,7 +13,7 @@ export function getAllProducts(language, page, pageSize, sortBy, sortByValue) {
 }
 
 export function getProductByCategory(page, pageSize, category, sortBy, sortByValue) {
-    category = 52;
+    // category = 52;
     return APi.request(`rest/all/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=category_id&searchCriteria[filter_groups][1][filters][0][value]=${category}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}`, "", "GET", "");
 }
 
@@ -84,76 +86,32 @@ export function getPriveExclusiveProducts(category) {
 
 export function getProductFilter(category_id: number) {
 
-    let payload = {
-        query: `{
-            products(
-            filter: { category_id: { eq: "9" } }, pageSize: 10
-            ) {
-            aggregations{
-            attribute_code
-            count
-            label
-            options{
-            count
-            label
-            value
+    const data = {
+        query: `query GET_POSTS($first: Int) {
+          posts(first: $first) {
+            edges {
+              node {
+                postId
+                title
+                excerpt
+                date
+                content
+                author {
+                  node {
+                    username
+                  }
+                }
+              }
             }
-            }
-            total_count
-            page_info {
-            page_size
-            current_page
-            }
-            items {
-            id
-            name
-            sku
-            short_description {
-            html
-            }
-            image {
-            url
-            }
-            price_range {
-            minimum_price {
-            regular_price {
-            value
-            currency
-            }
-            final_price {
-            value
-            currency
-            }
-            fixed_product_taxes {
-            label
-            amount {
-            value
-            currency
-            }
-            }
-            }
-            maximum_price {
-            discount {
-            amount_off
-            percent_off
-            }
-            fixed_product_taxes {
-            label
-            amount {
-            value
-            currency
-            }
-            }
-            }
-            }
-            }
-            }
-           }
-   `,
-    }
-    return APi.request(
-        "en/graphql",
-        payload,
+          }
+        }`,
+        variables: {
+          first: 5
+        }
+      }
+    return GRAPHQL.request(
+        "graphql",
+        data,
         "POST",
         ""
     );
@@ -218,7 +176,7 @@ export function giftGuestCart(giftData: any, itemId: number) {
 
 export function giftMessageDelete(giftItemID: number, itemId: number, language: string) {
     var storeId = language === 'arabic' ? 2 : 3;
-    return APi.request(`rest/V1/carts/${giftItemID}?storeId=${storeId}&itemId=${itemId}`, "", "GET", "")
+    return APi.request(`rest/V1/cart/quoteItemMessage?storeId=${storeId}&itemId=${itemId}&giftMessageId=${giftItemID}`, "", "GET", "")
 }
 
 export function getCheckOutTotals() {
@@ -362,4 +320,10 @@ export function getProductChildren(sku: string) {
 // get config product labels
 export function configLabels(attributeId: string) {
     return APi.request(`rest/V1/products/attributes/${attributeId}/options`, "", "GET", "")
+}
+
+// get order detail by order id return after order placed.
+
+export function orderDetailbyId(orderId: number) {
+    return APi.request(`rest/V1/orders/${orderId}`, "", "GET", "")
 }

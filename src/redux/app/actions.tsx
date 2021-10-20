@@ -23,7 +23,8 @@ const actions = {
   LOGO_CLASS: "LOGO_CLASS",
   SET_TYPE: "SET_TYPE",
   SET_CAT: "SET_CAT",
-  
+  MENU_SETUP: "MENU_SETUP",
+
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
   }),
@@ -76,6 +77,10 @@ const actions = {
   setCategory: setCategory => ({
     type: actions.SET_CAT,
     setCategory
+  }),
+  menuSetup: menuId => ({
+    type: actions.MENU_SETUP,
+    menuId
   })
 };
 export default actions;

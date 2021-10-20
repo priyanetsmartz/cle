@@ -39,19 +39,19 @@ import orderThankyou from './containers/Page/product/orderThankyou';
 
 import Product from './containers/Page/product/product';
 import Cart from './containers/Page/product/cart/cart';
-import Payment from './containers/Page/payments/payment';
+
 
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Switch>
         <ProductRoutes exact path="/search/:searchText" component={Search} />
-        <ProductRoutes exact path="/thankyou:id/:apicid/:paymentId/:Id" component={orderThankyou} />
+        <ProductRoutes exact path="/thankyou" component={orderThankyou} />
         <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
         <ProductRoutes exact path="/products/new-in/all" component={Product} />
         <ProductHome exact path="/products/:category/:subcat" component={Categories} />
         <ProductHome exact path="/products/:category" component={Categories} />
-        <ProductRoutes exact path="/pay" component={Payment} />
+
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
         <PrivateRoute exact path="/notifications" component={Notifications} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />

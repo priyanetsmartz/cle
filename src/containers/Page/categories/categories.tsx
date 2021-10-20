@@ -16,7 +16,7 @@ import Footer from '../../../containers/partials/footer-new';
 
 function Categories(props) {
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
-    const [catId, setCatId] = useState(52); //set default category here
+    const [catId, setCatId] = useState(props.categoryId); //set default category here
     const [products, setProducts] = useState({
         newInProducts: [],
         customerProducts: [],
@@ -118,14 +118,19 @@ function Categories(props) {
     )
 }
 const mapStateToProps = (state) => {
-    let languages = '';
+   // console.log(state)
+    let languages = '', categoryId = 52;
 
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
+    if (state.App && state.App.menuId) {
+        categoryId = state.App.menuId
+    }
 
     return {
-        languages: languages
+        languages: languages,
+        categoryId: categoryId
     }
 }
 
