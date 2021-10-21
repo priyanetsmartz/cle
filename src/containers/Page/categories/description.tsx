@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getCategoryDetails } from '../../../redux/pages/customers';
+import { useLocation } from 'react-router-dom';
 
 function Description(props) {
+    const location = useLocation()
     const baseUrl = process.env.REACT_APP_API_URL;
     const [category, setCategory] = useState({
         custom_attributes: []
@@ -11,7 +13,7 @@ function Description(props) {
 
     useEffect(() => {
         getData();
-    }, [props.languages]);
+    }, [props.languages, location]);
 
     const getData = async () => {
         let result: any = await getCategoryDetails(props.languages, props.catId);

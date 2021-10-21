@@ -13,10 +13,12 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
+import { useLocation } from 'react-router-dom';
 const { addToCart, productList } = cartAction;
 
 
 function LatestProducts(props) {
+    const location = useLocation()
     let imageD = '';
     let customer_id = localStorage.getItem('cust_id');
     const [pageSize, setPageSize] = useState(12);
@@ -36,12 +38,14 @@ function LatestProducts(props) {
     };
 
     useEffect(() => {
+        console.log(props.items);
         getProducts();
-    }, []);
+    }, [location]);
 
     async function getProducts() {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
+        console.log(props.categoryId);
         let result: any = await getProductByCategory(page, pageSize, props.categoryId, sortValue.sortBy, sortValue.sortByValue);
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
@@ -100,6 +104,17 @@ function LatestProducts(props) {
         notification("success", "", "Item added to cart");
     }
 
+    const changeImg = (e, item, type) => {
+        item.custom_attributes.forEach(el => {
+            if(el.attribute_code == "thumbnail" && type){
+                e.target.src = el.value;
+            }
+            if(el.attribute_code == "image" && !type){
+                e.target.src = el.value;
+            }
+        })
+    }
+
     return (
         <section className="exclusive-tab">
             <div className="container">
@@ -149,7 +164,9 @@ function LatestProducts(props) {
                                                                         }
                                                                     })
                                                                 }
-                                                                <img src={imageD} alt={item.name} width="200" />
+                                                                <img src={imageD} alt={item.name} width="200" 
+                                                                onMouseEnter={(e) => changeImg(e, item, true)} 
+                                                                onMouseLeave={(e) => changeImg(e, item, false)}/>
                                                             </div>
                                                             <div className="about text-center">
                                                                 <h5>{item.name}</h5>

@@ -13,9 +13,11 @@ import { Pages1 } from '../../../redux/pages/allPages';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
+import { useLocation } from 'react-router-dom';
 const { addToCart, productList } = cartAction;
 
 function NewIn(props) {
+    const location = useLocation()
     let imageD = '';
     const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
@@ -34,7 +36,7 @@ function NewIn(props) {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [sortValue, page, pageSize])
+    }, [sortValue, page, pageSize, location])
 
     async function getProducts() {
         setOpacity(0.3);

@@ -13,8 +13,10 @@ import Magazine from '../home/magazine';
 import NewIn from './newIn';
 import Description from './description';
 import Footer from '../../../containers/partials/footer-new';
+import { useLocation } from 'react-router-dom';
 
 function Categories(props) {
+    const location = useLocation()
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [catId, setCatId] = useState(props.categoryId); //set default category here
     const [products, setProducts] = useState({
@@ -25,7 +27,7 @@ function Categories(props) {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [location]);
 
     const getData = async () => {
         let result: any = await getHomePageProducts(props.languages, customerId, catId);

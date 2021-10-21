@@ -405,6 +405,7 @@ function MyPreferences(props) {
                 <div className="row">
                     <div className="col-sm-6">
                         <div className="favt_section">
+
                             <ul>
                                 {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length > 0 && attributes.categories[activeCategory].map((cat, i) => {
                                     return (

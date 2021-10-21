@@ -38,7 +38,7 @@ function BestSeller(props) {
 
     const getData = async (catId) => {
         let result: any = await getHomePageProducts(props.languages, customerId, catId);
-        //  console.log(result.data)
+         console.log(result.data)
         if (result) {
             setBestseller(result.data[0].bestSellers);
         }

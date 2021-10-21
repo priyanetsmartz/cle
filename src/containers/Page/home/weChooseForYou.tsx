@@ -36,6 +36,7 @@ function WeChooseForYou(props) {
     const getData = async () => {
         let result: any = await getWeChooseForYou(props.languages, customerId);
         if (result) {
+            console.log(result.data[0].relevantProducts);
             setProducts(result.data[0].relevantProducts);
         }
     }

@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import Modal from "react-bootstrap/Modal";
 import ForgottenPassword from '../forgotPassword';
+import { vendorLogin } from '../../../redux/pages/vendorLogin';
 const { login, logout } = authAction;
 
 function VendorLogin(props) {
@@ -31,7 +32,7 @@ function VendorLogin(props) {
     }))
   }
 
-  const loginHadler = () => {
+  const loginHadler = async () => {
     if (handleValidation()) {
       setIsShow(true);
       const { login } = props;
@@ -42,7 +43,8 @@ function VendorLogin(props) {
         "password": loginForm.password,
         "rememberme": rememberMe
       }
-      login({ userInfo });
+      // login({ userInfo });
+      const result = vendorLogin(userInfo);
     } else {
       notification("warning", "", "Please enter valid email and password");
     }
