@@ -13,6 +13,7 @@ import Magazine from '../home/magazine';
 import NewIn from './newIn';
 import Description from './description';
 import Footer from '../../../containers/partials/footer-new';
+import Header from '../../../containers/partials/headerMenu';
 
 function Categories(props) {
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
@@ -28,36 +29,30 @@ function Categories(props) {
     }, []);
 
     const getData = async () => {
-        let result: any = await getHomePageProducts(props.languages, customerId, catId);
+        let result: any = await getHomePageProducts(props.languages, 12, catId);
         if (result) {
             setProducts(result.data[0]);
         }
     }
 
-
-    const onLeave = () => { }
-
-    const afterLoad = () => { }
-
     return (
         <>
             <BrowserView>
                 <ReactFullpage
-                    licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'
-                    //fullpage options
-                    // anchors={anchors}
-                    scrollingSpeed={500} /* Options here */
-                    onLeave={onLeave}
-                    afterLoad={afterLoad}
-
                     className="sectiosn"
                     sectionClassName='section'
-                    //normalScrollElements='.checkus-out'
                     scrollBar="true"
+                    // normalScrollElements='.banner'
+                    fixedElements='.cle-footer'
+                    // licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'              
+                    scrollingSpeed={500} /* Options here */
                     render={({ state, fullpageApi }) => {
                         return (
                             <div className="sectiosn" >
-                                <div className="section">
+                                <div className="section headerrr" key='uniqueKey'>
+                                    <Header />
+                                </div>
+                                <div className="section banner">
                                     <CategoryBanner />
                                 </div>
                                 {localStorage.getItem('token') === '4' && <div className="section" >
@@ -66,12 +61,12 @@ function Categories(props) {
                                 <div className="section" >
                                     <LatestProducts />
                                 </div>
-                                {/* <div className="section" >
+                                <div className="section" >
                                     <PromotedProducts />
-                                </div> */}
-                                {/* <div className="section">
+                                </div>
+                                <div className="section">
                                     <Magazine />
-                                </div> */}
+                                </div>
                                 <div className="section">
                                     <NewIn />
                                 </div>
@@ -97,12 +92,12 @@ function Categories(props) {
                     <div className="section" >
                         <LatestProducts />
                     </div>
-                    {/* <div className="section" >
+                    <div className="section" >
                         <PromotedProducts />
-                    </div> */}
-                    {/* <div className="section">
+                    </div>
+                    <div className="section">
                         <Magazine />
-                    </div> */}
+                    </div>
                     <div className="section">
                         <NewIn />
                     </div>
@@ -118,7 +113,7 @@ function Categories(props) {
     )
 }
 const mapStateToProps = (state) => {
-   // console.log(state)
+    // console.log(state)
     let languages = '', categoryId = 52;
 
     if (state && state.LanguageSwitcher) {

@@ -12,7 +12,8 @@ const initState = {
   showLogin: false,
   showSignUp: false,
   logoClass: 'normal',
-  userType: 1
+  userType: 1,
+  loader: true
 };
 export default function appReducer(state = initState, action) {
   switch (action.type) {
@@ -51,6 +52,8 @@ export default function appReducer(state = initState, action) {
       return { ...state, setCategory: action.setCategory };
     case actions.MENU_SETUP:
       return { ...state, menuId: action.menuId };
+    case actions.SHOW_LOADER:
+      return { ...state, loader: action.loader };
     default:
       return state;
   }

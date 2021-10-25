@@ -3,19 +3,21 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getCategoryDetails } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
+import { getCookie } from '../../../helpers/session';
 
 
 function CategoryBanner(props) {
     const baseUrl = process.env.REACT_APP_API_URL;
+    let catID = getCookie("_TESTCOOKIE");
     const [category, setCategory] = useState({
-        name:'',
+        name: '',
         custom_attributes: [],
-        custom:{
-            image:'',
-            desc:''
+        custom: {
+            image: '',
+            desc: ''
         }
     })
-    const [catId, setCatId] = useState('52')
+    const [catId, setCatId] = useState(catID)
 
     useEffect(() => {
         getData();
@@ -23,15 +25,15 @@ function CategoryBanner(props) {
 
     const getData = async () => {
         let result: any = await getCategoryDetails(props.languages, catId);
-       
+
         if (result) {
-            let obj:any = {};
+            let obj: any = {};
             result.data.custom_attributes.forEach(el => {
-                if(el.attribute_code === "image") {
-                    obj.image = baseUrl+el.value;
-                }else if(el.attribute_code === "description"){
+                if (el.attribute_code === "image") {
+                    obj.image = baseUrl + el.value;
+                } else if (el.attribute_code === "description") {
                     obj.desc = el.value;
-                } 
+                }
                 result.data.custom = obj;
             });
             setCategory(result.data);
@@ -48,7 +50,7 @@ function CategoryBanner(props) {
                             <div className="DC-top-ban-inner">
                                 <h2>{category.name}</h2>
                                 <div dangerouslySetInnerHTML={{ __html: category.custom.desc }} />
-                                <Link to={"category/"+catId} className="ban-btn">Check all designers</Link>
+                                <Link to={"category/" + catId} className="ban-btn">Check all designers</Link>
                             </div>
                         </div>
                     </div>

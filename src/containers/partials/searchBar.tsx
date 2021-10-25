@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import { getCookie } from '../../helpers/session';
 import IconZoomIn from '../../image/Icon_zoom_in.svg';
-import { searchFields } from '../../redux/cart/productApi';
+import { getCategoryList, searchFields } from '../../redux/cart/productApi';
 import { useHistory } from "react-router-dom";
 
 function SearchBar(props) {
@@ -13,7 +13,12 @@ function SearchBar(props) {
     const [autoSuggestions, SetAutoSuggestions] = useState([]);
     const [isShow, SetIsShow] = useState(false);
     const [nothingFound, SetNothingFound] = useState("");
+    const [categories, setCategories] = useState([]);
+    const [searchKeyword, setSearchKeyword] = useState('');
     const node = useRef(null);
+    useEffect(() => {
+        getCategoryListAPi();
+    }, []);
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClick);
@@ -34,11 +39,20 @@ function SearchBar(props) {
         SetIsShow(false);
 
     };
+    const getCategoryListAPi = async () => {
+        let results: any = await getCategoryList();
+        if (results.data && results.data.items) {
+            setCategories(results.data.items)
+        }
+
+    }
+
     const updateInput = async (e) => {
         let lang = props.languages ? props.languages : language;
         // console.log(e.target.value.length)
         if (e.target.value.length >= 3) {
-            let results: any = await searchFields(e.target.value, 3, lang, "created_at", "DESC");
+            setSearchKeyword(e.target.value)
+            let results: any = await searchFields(e.target.value, 0, 3, lang, "created_at", "DESC");
             if (results.data.items) {
                 SetIsShow(true);
                 SetNothingFound("")
@@ -55,10 +69,20 @@ function SearchBar(props) {
 
         //  console.log(autoSuggestions.items)
     }
+
+    const searchwithCategory = async (e) => {
+        const { value } = e.target;
+        if (searchKeyword) {
+            history.push(`/search/${searchKeyword}/${value}`);
+            SetIsShow(false);
+        } else {
+            history.push(`/search/all/${value}`);
+        }
+    }
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
             let serachVal = e.target.value;
-            history.push(`/search/${serachVal}`);
+            history.push(`/search/${serachVal}/all`);
             SetIsShow(false);
         }
     }
@@ -70,12 +94,18 @@ function SearchBar(props) {
                 <div className="search_input">
                     <div className="search_top"><img src={IconZoomIn} alt="searchIcon" className="me-1" />
                         <input type="search" placeholder="Search..." onChange={updateInput} onKeyDown={handleKeyDown} className="form-control me-1" />
-                        <select className="form-select" aria-label="Default select example">
-                            <option value="">Select category</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
+                        {
+                            categories.length > 0 && (
+                                <select className="form-select" onChange={searchwithCategory} aria-label="Default select example">
+                                    <option value="">Select category</option>
+                                    {categories.map((item, i) => {
+                                        return (<option key={i} value={item.id}>{item.name}</option>)
+                                    })
+                                    }
+                                </select>
+                            )
+                        }
+
                     </div>
                     <div ref={node} className="serach-results" style={{ "display": isShow ? "block" : "none" }}>
                         {(autoSuggestions && autoSuggestions.length) ? (

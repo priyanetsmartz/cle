@@ -10,6 +10,7 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import Recomendations from './product-details/recomendations';
 import Description from '../categories/description';
 import Filter from './filter';
+import { formatprice } from '../../../components/utility/allutils';
 const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 const { showSignin } = appAction;
 
@@ -283,7 +284,7 @@ function Products(props) {
                                                     <div className="about text-center">
                                                         <h5>{item.name}</h5>
                                                         <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
-                                                        <div className="pricetag">${item.price}</div>
+                                                        <div className="pricetag">${formatprice(item.price)}</div>
                                                     </div>
                                                     {/* {item.type_id === 'simple' && (
                                                         <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>

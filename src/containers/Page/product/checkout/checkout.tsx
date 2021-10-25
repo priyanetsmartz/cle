@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 import { useHistory } from "react-router";
 // import queryString from 'query-string'
 import cartAction from "../../../../redux/cart/productAction";
-import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora } from '../../../../redux/cart/productApi';
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora, getPaymentStatus, addPaymentDetailstoOrder } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, getCountriesList, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
 import { language } from '../../../../settings';
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
@@ -38,6 +38,7 @@ function Checkout(props) {
     const [selectedShippingMethod, setSelectedShippingMethod] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const [regions, setRegions] = useState([]);
+    const [paymentDetails, setPaymentDetails] = useState({});
     const [emailError, setEmailError] = useState({
         errors: {}
     });
@@ -98,7 +99,8 @@ function Checkout(props) {
         let paymentId = queries.get('paymentId');
         let id = queries.get('Id');
         if (paymentId && id) {
-            placeOrderonMagento('myfatoorah_gateway', paymentId);
+            //  placeOrderonMagento('myfatoorah_gateway', paymentId);
+            getPaymentStatusAPi(paymentId)
         }
         let customer_id = localStorage.getItem('cust_id');
         checkoutScreen();
@@ -122,9 +124,8 @@ function Checkout(props) {
             cartItems = await getCartItems();
             // get cart total 
             cartTotal = await getCartTotal();
-        } else if ((!customer_id && localStorage.getItem('cartQuoteId')) || (customer_id && !localStorage.getItem('cartQuoteId'))) {
-
         } else {
+            //console.log('hetet')
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
                 cartItems = await getGuestCart();
@@ -665,15 +666,25 @@ function Checkout(props) {
         let customer_id = localStorage.getItem('cust_id');
         let orderPlace: any;
         let billAddress: any = {};
-        const add: any = itemsVal.address;
-        add.addresses.forEach(el => {
-            if (el.default_billing) {
-                billAddress.street = el.street[0];
-                billAddress.address = el.city;
-                billAddress.phone = el.telephone;
-                billAddress.name = el.firstname + ' ' + el.lastname;
+        if (customer_id) {
+            const add: any = itemsVal.address;
+            add.addresses.forEach(el => {
+                if (el.default_billing) {
+                    billAddress.street = el.street[0];
+                    billAddress.address = el.city;
+                    billAddress.phone = el.telephone;
+                    billAddress.name = el.firstname + ' ' + el.lastname;
+                }
+            })
+        } else {
+            if (props.guestBilling) {
+                billAddress.CustomerEmail = state.email;
+                billAddress.street = props.guestBilling.street[0];
+                billAddress.address = props.guestBilling.city;
+                billAddress.phone = props.guestBilling.telephone;
+                billAddress.name = props.guestBilling.firstname + ' ' + props.guestBilling.lastname;
             }
-        })
+        }
         console.log(selectedPaymentMethod);
         if (selectedPaymentMethod === 'myfatoorah_gateway') {
             console.log('fscfsd', billAddress)
@@ -689,7 +700,7 @@ function Checkout(props) {
         } else {
             //  console.log(selectedShippingMethod)
             if (customer_id) {
-                orderPlace = await placeUserOrder('checkmo', null);
+                orderPlace = await placeUserOrder('checkmo');
             } else {
                 if (!props.guestBilling.firstname) {
                     // console.log('here')
@@ -730,25 +741,54 @@ function Checkout(props) {
         setSelectedPaymentMethod(code)
     }
 
-    const placeOrderonMagento = async (paymentmode, placeOrderonMagento) => {
+    const placeOrderonMagento = async (paymentmode) => {
         let customer_id = localStorage.getItem('cust_id');
         if (customer_id) {
-            let orderPlace: any = await placeUserOrder(paymentmode, placeOrderonMagento);
-            if (orderPlace.data) {
-                setIsShow(false)
-                props.addToCartTask(true);
-                localStorage.removeItem('cartQuoteId');
-                localStorage.removeItem('cartQuoteToken');
-                let orderId = parseInt(orderPlace.data);
-                //return <Redirect to={'/thankyou/' + orderId} />
-                history.push('/thankyou/' + orderId);
+            let orderPlace: any = await placeUserOrder(paymentmode);
+            if (orderPlace && orderPlace.data) {
+                let addOrderDetails: any = await addPaymentDetailsToMagento(orderPlace.data);
+                if (addOrderDetails.data) {
+                    setIsShow(false)
+                    props.addToCartTask(true);
+                    localStorage.removeItem('cartQuoteId');
+                    localStorage.removeItem('cartQuoteToken');
+                    let orderId = parseInt(orderPlace.data);
+                    history.push('/thankyou/' + orderId);
+                } else {
+                    notification("error", "", "Error ocurred! If amount deducted please check your order status in my account section or call site admin");
+                }
+
             } else {
-                // console.log('herere')
                 setIsShow(false)
             }
         }
     }
+    const getPaymentStatusAPi = async (getPaymentStatusAPi) => {
+        let paymentStatus: any = await getPaymentStatus(getPaymentStatusAPi);
+       // console.log(paymentStatus.data);
+        let detailsRequired = [];
+        detailsRequired['transactionId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId ? paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId : 0;
+        detailsRequired['InvoiceId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceId ? paymentStatus.data[0].Data.InvoiceId : 0;
+        detailsRequired['PaymentGateway'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions[0].PaymentGateway ? paymentStatus.data[0].Data.InvoiceTransactions[0].PaymentGateway : 0;
+        detailsRequired['TransactionStatus'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].IsSuccess ? paymentStatus.data[0].IsSuccess : 0;
+        //console.log(detailsRequired);
 
+        setPaymentDetails(detailsRequired)
+        placeOrderonMagento('myfatoorah_gateway')
+    }
+
+    const addPaymentDetailsToMagento = async (data) => {
+        let details = {
+            "orderId": data,
+            "transactionId": paymentDetails['transactionId'],
+            "PaymentGateway": paymentDetails['PaymentGateway'],
+            "InvoiceId": paymentDetails['InvoiceId'],
+            "TransactionStatus": paymentDetails['TransactionStatus'],
+        }
+        let result: any = await addPaymentDetailstoOrder(details);
+        return result.data;
+
+    }
     return (
         <main>
             <section className="checkout-main">

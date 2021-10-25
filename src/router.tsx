@@ -45,17 +45,18 @@ const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Switch>
-        <ProductRoutes exact path="/search/:searchText" component={Search} />
+        <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
         <ProductRoutes exact path="/thankyou" component={orderThankyou} />
         <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
-        <ProductRoutes exact path="/products/new-in/all" component={Product} />
+        <ProductRoutes exact path="/products/:category/:subcat/all" component={Product} />
+        <ProductRoutes exact path="/products/:category/all" component={Product} />
         <ProductHome exact path="/products/:category/:subcat" component={Categories} />
         <ProductHome exact path="/products/:category" component={Categories} />
 
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
         <PrivateRoute exact path="/notifications" component={Notifications} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
-        <ProductHome exact path="/home" component={HomePage} />
+        <ProductHome exact path="/" component={HomePage} />
         <ProductHome exact path="/return-order" component={ReturnPage} />
         {/* <PrivateRoute exact path="/designer-categories" component={DesignerCategories} /> */}
         <PrivateRoute exact path="/explore-desginer" component={ExploreDesigner} />
@@ -63,7 +64,7 @@ const PublicRoutes = ({ history }) => {
         <MainRoute exact path="/magazine/:slug" component={SinglePost} />
         <MainRoute exact path="/magazines" component={AllPosts} />
         <HomeRoute exact path="/:signup/:member" component={NewHome} />
-        <HomeRoute exact path="/" component={NewHome} />
+        {/* <HomeRoute exact path="/" component={NewHome} /> */}
         <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
         <MainRoute exact path="/contact-us" component={contact} />
         <ProductRoutes exact path="/faq" component={Faq} />

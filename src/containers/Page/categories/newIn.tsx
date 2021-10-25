@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
@@ -8,7 +7,7 @@ import {
     addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi,
     getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken
 } from '../../../redux/cart/productApi';
-
+import { useParams } from "react-router-dom";
 import { Pages1 } from '../../../redux/pages/allPages';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
@@ -17,6 +16,7 @@ const { addToCart, productList } = cartAction;
 
 function NewIn(props) {
     let imageD = '';
+    const { category, subcat } = useParams();
     const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
@@ -39,7 +39,7 @@ function NewIn(props) {
     async function getProducts() {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory(page, pageSize, 'category', sortValue.sortBy, sortValue.sortByValue);
+        let result: any = await getProductByCategory(page, pageSize, 52, sortValue.sortBy, sortValue.sortByValue);
         //  console.log(Math.ceil(result.data.total_count / 9))
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
@@ -176,13 +176,13 @@ function NewIn(props) {
                                         <div className="pricetag">${formatprice(item.price)}</div>
                                     </div>
                                     {/* {token && ( */}
-                                    <div className="cart-button mt-3 px-2"> 
+                                    <div className="cart-button mt-3 px-2">
                                         <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase">
                                             View Product</Link>
-                                        <div className="add"> 
+                                        <div className="add">
                                             <span className="product_fav">
-                                                <i className="fa fa-heart-o"></i></span> 
-                                            <span className="product_fav"><i className="fa fa-opencart"></i></span> 
+                                                <i className="fa fa-heart-o"></i></span>
+                                            <span className="product_fav"><i className="fa fa-opencart"></i></span>
                                         </div>
                                     </div>
                                     {/* )} */}
@@ -193,11 +193,14 @@ function NewIn(props) {
                 })}
                 <div className="col-md-3">
                     <div className="view-all-btn">
-                    <Link to="/products/new-in/all"><IntlMessages id="category.viewAll" /></Link>
+                        {
+                            subcat !== undefined ? <Link to={`/products/${category}/${subcat}/all`} > <IntlMessages id="category.viewAll" /></Link> : <Link to={`/products/${category}/all`} > <IntlMessages id="category.viewAll" /></Link>
+                        }
+
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 const mapStateToProps = (state) => {

@@ -29,6 +29,7 @@ function MiniCart(props) {
         let cartData = [], total = 0, cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
         const cartQuoteId = localStorage.getItem('cartQuoteId');
+        const cartQuoteToken = localStorage.getItem('cartQuoteToken');
         if (customer_id && cartQuoteId) {
             cartItems = await getCartItems();
             cartData = cartItems.data.items;
@@ -36,9 +37,7 @@ function MiniCart(props) {
             cartTotal = await getCartTotal();
             total = cartTotal.data.grand_total;
 
-        } else if ((!customer_id && cartQuoteId)|| (customer_id && !cartQuoteId)) {
-
-        }else {
+        } if (cartQuoteToken && cartQuoteId) {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
                 cartItems = await getGuestCart();

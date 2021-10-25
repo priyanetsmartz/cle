@@ -9,7 +9,7 @@ import { addWhishlist, removeWhishlist } from '../../../redux/cart/productApi';
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
-
+import { setCookie, getCookie } from '../../../helpers/session'
 const { addToCart, productList } = cartAction;
 
 function WeChooseForYou(props) {
@@ -34,9 +34,15 @@ function WeChooseForYou(props) {
     }, [props.languages]);
 
     const getData = async () => {
-        let result: any = await getWeChooseForYou(props.languages, customerId);
-        if (result) {
-            setProducts(result.data[0].relevantProducts);
+        const relevantCookies = getCookie("relevant");
+        if (!relevantCookies) {
+            let result: any = await getWeChooseForYou(props.languages, customerId);
+            if (result.data[0] && result.data[0].relevantProducts.length > 0) {
+                console.log(result.data[0].relevantProducts)
+                setCookie("relevant", true)
+                setProducts(result.data[0].relevantProducts);
+            }
+
         }
     }
 
@@ -58,45 +64,45 @@ function WeChooseForYou(props) {
 
     return (
         <div>
-        {
-            products.length > 0 && (
-                <section className="width-100 my-5 choose-foryou-sec">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-sm-12">
-                                <div className="new-in-title">
-                                    <h1><IntlMessages id="home.weChooseForYou" /></h1>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="row">
-                            <div className="col-sm-12">
-                                <div className="new-in-slider">
-                                    <div className="regular slider">
-                                        <Slider {...settings}>
-                                            {products.map((item, i) => {
-                                                return (
-                                                    <Link className="productcalr" key={i} to={'/product-details/' + item.name}>
-                                                        <div className="product_img">
-                                                            <img src={item.img} alt="productimage" className="image-fluid" />
-                                                        </div>
-                                                        <div className="product_name mt-2">  <Link to={'/product-details/' + item.sku}>{item.name} </Link></div>
-                                                        <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
-                                                        <div className="product_price">$ {formatprice(item.price)}</div>
-                                                    </Link>
-                                                )
-                                            })}
-                                        </Slider>
+            {
+                products.length > 0 && (
+                    <section className="width-100 my-5 choose-foryou-sec">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <div className="new-in-title">
+                                        <h1><IntlMessages id="home.weChooseForYou" /></h1>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
-                </section>
-            )
-        }
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <div className="new-in-slider">
+                                        <div className="regular slider">
+                                            <Slider {...settings}>
+                                                {products.map((item, i) => {
+                                                    return (
+                                                        <Link className="productcalr" key={i} to={'/product-details/' + item.name}>
+                                                            <div className="product_img">
+                                                                <img src={item.img} alt="productimage" className="image-fluid" />
+                                                            </div>
+                                                            <div className="product_name mt-2">  <Link to={'/product-details/' + item.sku}>{item.name} </Link></div>
+                                                            <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
+                                                            <div className="product_price">$ {formatprice(item.price)}</div>
+                                                        </Link>
+                                                    )
+                                                })}
+                                            </Slider>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                )
+            }
         </div>
     )
 }

@@ -11,10 +11,7 @@ const ProductHome = ({ component: Component, auth, ...rest }) => (
         {...rest}
         render={props =>
             <>
-                {/* <Header logo="white" {...props} /> */}
-                <Header />
                 <Component {...props} />
-                {/* <Footer /> */}
             </>
         }
     />

@@ -29,7 +29,7 @@ function Filters(props) {
             method: 'post',
             url: 'https://4a83875b65.nxcli.net/graphql',
             data: query,
-            headers: { 'store': 'ar', "Content-Type": "application/json" }
+            headers: {  "Content-Type": "application/json" }
         })
             .then(async response => {
                 console.log(response)

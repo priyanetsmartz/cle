@@ -14,7 +14,7 @@ const { showSignin } = appAction;
 
 function SearchResults(props) {
     let pageSizeNumber = siteConfig.pageSize;
-    const { searchText } = useParams();
+    const { searchText, cat } = useParams();
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [pageSize, setPageSize] = useState(pageSizeNumber);
@@ -36,27 +36,39 @@ function SearchResults(props) {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [searchText, sortValue, page, pageSize, props.languages])
+    }, [searchText, sortValue, page, pageSize, props.languages, cat])
 
     const getData = async (e) => {
         //console.log(searchText)
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
         let lang = props.languages ? props.languages : language;
-        let results: any = await searchFields(searchText, pageSizeNumber, lang, sortValue.sortBy, sortValue.sortByValue);
+        let results: any;
+        // console.log(cat)
+        if (searchText === 'all' && cat) {
+            results = await searchFields(searchText, cat, pageSizeNumber, lang, sortValue.sortBy, sortValue.sortByValue);
+        } else if (searchText === 'all' && cat === 'all') {
+            results = await searchFields(searchText, 0, pageSizeNumber, lang, sortValue.sortBy, sortValue.sortByValue);
+        } else {
+            results = await searchFields(searchText, cat, pageSizeNumber, lang, sortValue.sortBy, sortValue.sortByValue);
+        }
+
         setPagination(Math.ceil(results.data.total_count / pageSize));
         let productResult = results.data.items;
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
             let products = results.data.items;
             let WhishlistData = whishlist.data;
+          //  console.log(products);
             const mergeById = (a1, a2) =>
                 a1.map(itm => ({
                     ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
                     ...itm
                 }));
+            if (products) {
+                productResult = mergeById(products, WhishlistData);
+            }
 
-            productResult = mergeById(products, WhishlistData);
             // console.log(productResult)
 
         }

@@ -16,10 +16,10 @@ function LanguageSwitcher(props) {
     setValue(lang);
   }
   return (
-    <li className="lang-sec"><Link to="/" className={highlight === 'english' ? 'highlighted' : ''} onClick={() => {
+    <li className="lang-sec"><Link to="/" style={{ "display": highlight === 'english' ? "none" : "inline-block" }} className={highlight === 'english' ? 'highlighted' : ''} onClick={() => {
       handleChange('english');
     }} >En</Link>
-      <Link to="/" className={highlight === 'arabic' ? 'highlighted' : ''} onClick={() => {
+      <Link to="/" style={{ "display": highlight === 'arabic' ? "none" : "inline-block" }} className={highlight === 'arabic' ? 'highlighted' : ''} onClick={() => {
         handleChange('arabic');
       }}>
         <svg xmlns="http://www.w3.org/2000/svg" width="31" height="19" viewBox="0 0 31 19">

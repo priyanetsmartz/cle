@@ -19,6 +19,9 @@ import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import notification from '../../../../components/notification';
 import GiftMessage from './GiftMessage';
+import appAction from "../../../../redux/app/actions";
+
+const { showSignin } = appAction;
 const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts } = cartAction;
 
 function ProductDetails(props) {
@@ -134,9 +137,9 @@ function ProductDetails(props) {
         projectSingle['type_id'] = selectChild.type_id;
         projectSingle['sku'] = selectChild.sku;
         projectSingle['name'] = selectChild.name;
-        projectSingle['price'] = selectChild.price;
+        projectSingle['price'] = selectChild.price ? selectChild.price : 0;
         projectSingle['description'] = description;
-        projectSingle['saleprice'] = special_price;
+        projectSingle['saleprice'] = special_price ? special_price : 0;
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = productDetails['is_in_stock']
@@ -236,14 +239,14 @@ function ProductDetails(props) {
         }
 
         // console.log(tags);
-        // console.log(result.data.extension_attributes)
+        console.log( result.data.price)
         projectSingle['id'] = result.data.id;
         projectSingle['type_id'] = result.data.type_id;
         projectSingle['sku'] = result.data.sku;
         projectSingle['name'] = result.data.name;
-        projectSingle['price'] = result.data.price;
+        projectSingle['price'] = result.data.price ? result.data.price : 0;
         projectSingle['description'] = description;
-        projectSingle['saleprice'] = special_price;
+        projectSingle['saleprice'] = special_price ? special_price : 0;
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = result.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
@@ -284,7 +287,7 @@ function ProductDetails(props) {
     }
 
     async function handleCart(id: number, sku: string) {
-        console.log(productDetails)
+        //console.log(productDetails)
         setIsShow(true);
         let cartData = {};
         let cartSucces: any;
@@ -711,5 +714,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts }
+    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, showSignin }
 )(ProductDetails);
