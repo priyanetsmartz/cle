@@ -668,7 +668,7 @@ function Checkout(props) {
         const add: any = itemsVal.address;
         add.addresses.forEach(el => {
             if (el.default_billing) {
-                billAddress.street = el.street[0];
+                billAddress.street = el.street ? el.street[0] : '';
                 billAddress.address = el.city;
                 billAddress.phone = el.telephone;
                 billAddress.name = el.firstname + ' ' + el.lastname;

@@ -148,15 +148,17 @@ function HeaderMenu(props) {
                                                                     <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} onClick={(e) => { handleMenuClick(childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
                                                                     <span className="megamenu_bar">
                                                                         <Link to="#" className="cross_icn"> <i className="fas fa-times"></i></Link>
-                                                                        <ul className="megamenugrid">
-                                                                            <h3>{childMenu.name}</h3>
-                                                                            {childMenu.child && childMenu.child.map((grandChild, k) => {
-                                                                                return (<li key={k}>
-                                                                                    <Link to={`/products/${val.url_key}/${grandChild.url_key}`} onClick={(e) => { handleMenuClick(grandChild.id); }}>{grandChild.name}</Link>
-                                                                                </li>)
-                                                                            })}
-
-                                                                        </ul>
+                                                                        {childMenu.child && childMenu.child.map((grandChild, l) => {
+                                                                            return (<ul className="megamenugrid" key={l}>
+                                                                                <h3>{grandChild.name}</h3>
+                                                                                {grandChild.child && grandChild.child.map((greatGrandChild, k) => {
+                                                                                    return (<li key={k}>
+                                                                                        <Link to={`/products/${val.url_key}/${greatGrandChild.url_key}`}
+                                                                                            onClick={(e) => { handleMenuClick(greatGrandChild.id); }}>{greatGrandChild.name}</Link>
+                                                                                    </li>)
+                                                                                })}
+                                                                            </ul>)
+                                                                        })}
 
                                                                     </span>
                                                                 </li>

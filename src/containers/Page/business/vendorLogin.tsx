@@ -8,9 +8,11 @@ import authAction from "../../../redux/auth/actions";
 import Modal from "react-bootstrap/Modal";
 import ForgottenPassword from '../forgotPassword';
 import { vendorLogin } from '../../../redux/pages/vendorLogin';
+import { useHistory } from "react-router-dom";
 const { login, logout } = authAction;
 
 function VendorLogin(props) {
+  const history = useHistory();
   const [loginForm, setLoginForm] = useState({
     email: '',
     password: ''
@@ -36,15 +38,26 @@ function VendorLogin(props) {
     if (handleValidation()) {
       setIsShow(true);
       const { login } = props;
-      console.log(loginForm);
       const userInfo = {
         "type": "user",
-        "email": loginForm.email,
+        "username": loginForm.email,
         "password": loginForm.password,
         "rememberme": rememberMe
       }
       // login({ userInfo });
-      const result = vendorLogin(userInfo);
+      const result:any = await vendorLogin(userInfo);
+      if(result){
+        setIsShow(false);
+        const vendorObj = {
+          vendor_id: result.data[0].vendor_id,
+          vendor_name: result.data[0].vendor_name,
+          email: result.data[0].email,
+          telephone: result.data[0].telephone,
+          country_id:result.data[0].country_id,
+        }
+        localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
+        history.push(`/vendor/profile`);
+      }
     } else {
       notification("warning", "", "Please enter valid email and password");
     }

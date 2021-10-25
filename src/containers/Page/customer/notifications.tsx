@@ -26,13 +26,11 @@ function Notifications(props) {
     }
 
 
-
     return (
         <main>
             <section className="mt-5">
                 <div className="container">
                     <div className="row">
-
                         <div className="col-sm-3">
                             <div className="date-range">
                                 <h4>Date</h4>
