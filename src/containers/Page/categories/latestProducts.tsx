@@ -14,6 +14,7 @@ import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+import { useLocation } from 'react-router-dom';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
@@ -21,7 +22,9 @@ const { addToCart, productList } = cartAction;
 
 
 function LatestProducts(props) {
+    let catID = getCookie("_TESTCOOKIE");
     let imageD = '', description = '', hoverImage = '';
+    const location = useLocation()
     let customer_id = localStorage.getItem('cust_id');
     const [isHoverImage, setIsHoverImage] = useState(0);
     const [pageSize, setPageSize] = useState(12);
@@ -38,17 +41,43 @@ function LatestProducts(props) {
         infinite: false,
         speed: 500,
         slidesToShow: 4,
-        slidesToScroll: 4
+        slidesToScroll: 4, responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
     };
 
     useEffect(() => {
-        getProducts();
-    }, [props.categoryId]);
+        let catID = getCookie("_TESTCOOKIE");
+        getProducts(catID);
+    }, [location]);
 
-    async function getProducts() {
+    async function getProducts(catID) {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory(page, pageSize, props.categoryId, sortValue.sortBy, sortValue.sortByValue);
+        //console.log(props.categoryId);
+        let result: any = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue);
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
         if (customer_id) {
@@ -68,7 +97,7 @@ function LatestProducts(props) {
         setProductsLatest(productResult)
         // props.productList(productResult);
         // get product page filter
-       // let result1: any = await getProductFilter(9);
+        // let result1: any = await getProductFilter(9);
         // console.log(result1);
         // console.log(props.items);
 
@@ -77,7 +106,7 @@ function LatestProducts(props) {
     async function handleWhishlist(id: number) {
         let result: any = await addWhishlist(id);
         notification("success", "", result.data[0].message);
-        getProducts()
+        getProducts(catID)
 
     }
     async function handleDelWhishlist(id: number) {
@@ -86,7 +115,7 @@ function LatestProducts(props) {
         let del: any = await removeWhishlist(id);
         //  console.log(del);
         notification("success", "", del.data[0].message);
-        getProducts()
+        getProducts(catID)
     }
 
     const someHandler = (id) => {
@@ -98,6 +127,16 @@ function LatestProducts(props) {
         setIsHoverImage(0)
     }
 
+    const changeImg = (e, item, type) => {
+        item.custom_attributes.forEach(el => {
+            if (el.attribute_code == "thumbnail" && type) {
+                e.target.src = el.value;
+            }
+            if (el.attribute_code == "image" && !type) {
+                e.target.src = el.value;
+            }
+        })
+    }
 
     return (
         <section className="exclusive-tab">
@@ -147,10 +186,6 @@ function LatestProducts(props) {
                                                                                 if (attributes.attribute_code === 'image') {
                                                                                     imageD = attributes.value;
                                                                                 }
-                                                                            })
-                                                                        }
-                                                                        {
-                                                                            item.custom_attributes.map((attributes) => {
                                                                                 if (attributes.attribute_code === 'short_description') {
                                                                                     description = attributes.value;
                                                                                 }
@@ -159,7 +194,7 @@ function LatestProducts(props) {
                                                                         {
                                                                             isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD} className="image-fluid" alt={item.name} height="150" />
                                                                         }
-                                                                    </div>
+                                                                    </div >
 
                                                                     <div className="product_name"> {item.name} </div>
                                                                     <div className="product_vrity" dangerouslySetInnerHTML={{ __html: description }} />
@@ -169,16 +204,16 @@ function LatestProducts(props) {
                                                                         <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
                                                                     </div>
 
-                                                                </div>
+                                                                </div >
 
                                                             )
                                                         })}
-                                                    </Slider>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                    </Slider >
+                                                </div >
+                                            </div >
+                                        </div >
+                                    </div >
+                                </div >
                             )}
                             {
                                 (customer_id && relevantCookies) && (
@@ -189,22 +224,17 @@ function LatestProducts(props) {
                                     </div>
                                 )
                             }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        </div >
+                    </div >
+                </div >
+            </div >
+        </section >
     )
 }
 
 const mapStateToProps = (state) => {
-    let categoryId = 52;
-    if (state.App && state.App.menuId) {
-        categoryId = state.App.menuId
-    }
     return {
-        items: state.Cart.items,
-        categoryId: categoryId
+        items: state.Cart.items
     }
 }
 

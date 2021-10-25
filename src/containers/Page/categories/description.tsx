@@ -2,24 +2,21 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getCategoryDetails } from '../../../redux/pages/customers';
+import { useLocation } from 'react-router-dom';
 
 function Description(props) {
+    const location = useLocation()
     const baseUrl = process.env.REACT_APP_API_URL;
     const [category, setCategory] = useState({
         custom_attributes: []
     })
 
     useEffect(() => {
-        getData();
-    }, [props.languages]);
-
-    const getData = async () => {
-        let result: any = await getCategoryDetails(props.languages, props.catId);
-       
-        if (result) {
-            setCategory(result.data);
+        console.log(props.cateData, props.cateData);
+        if (props.cateData) {
+            setCategory(props.cateData);
         }
-    }
+    }, [props.languages, location]);
 
     return (
         <section className="cle-designer-info">

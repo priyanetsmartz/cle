@@ -37,8 +37,7 @@ function HeaderMenu(props) {
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
             //console.log(result)
-            var jsonData = result.data[0].parent.child;
-            console.log(jsonData[0].id)
+            var jsonData = result.data[0].parent.child;        
             let catMenu = category ? category : jsonData[0].url_key;
             SetMenuData(jsonData);
             SetActiveOne(catMenu)
@@ -211,7 +210,7 @@ function HeaderMenu(props) {
                                 <ul>
                                     <li><Link to="#">{customerName ? customerName : ""} </Link></li>
                                     <LanguageSwitcher />
-                                    <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li>
+                                    {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
                                     <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 
                                         <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>

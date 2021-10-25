@@ -51,6 +51,8 @@ const cartReducer = (state = initState, action) => {
             return { ...state, attribute_section: action.payload };
         case actions.CHECKOUT_SIDEBAR:
             return { ...state, checkout_sidebar: action.payload };
+        case actions.GET_CATEGORY_DATA:
+            return { ...state, category_data: action.payload };
         default:
             return state;
     }

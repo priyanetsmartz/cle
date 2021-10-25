@@ -110,7 +110,7 @@ export function getContent(language: string, indentifier) {
 }
 
 export function getCategoryDetails(language, catId) {
-    console.log(catId)
+    //console.log(catId)
     const storeId = language === 'english' ? 3 : 2;
     return adminToken.request(`rest/V1/categories/${catId}?storeId=${storeId}`, "", "GET", "");
 }

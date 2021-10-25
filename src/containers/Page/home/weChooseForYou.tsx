@@ -7,6 +7,7 @@ import { getWeChooseForYou } from '../../../redux/pages/customers';
 import { Link } from 'react-router-dom'
 import { addWhishlist, removeWhishlist } from '../../../redux/cart/productApi';
 import Slider from "react-slick";
+import { useLocation } from 'react-router-dom';
 import { formatprice } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { setCookie, getCookie } from '../../../helpers/session'
@@ -14,6 +15,8 @@ const { addToCart, productList } = cartAction;
 
 function WeChooseForYou(props) {
     const [token, setToken] = useState('');
+    let catID = getCookie("_TESTCOOKIE");
+    const location = useLocation()
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
@@ -24,14 +27,39 @@ function WeChooseForYou(props) {
         infinite: true,
         speed: 500,
         slidesToShow: 4,
-        slidesToScroll: 4
+        slidesToScroll: 4,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
     };
 
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
         getData();
-    }, [props.languages]);
+    }, [props.languages, location]);
 
     const getData = async () => {
         const relevantCookies = getCookie("relevant");

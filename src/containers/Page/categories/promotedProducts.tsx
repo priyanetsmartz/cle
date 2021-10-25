@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux'
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import { formatprice } from '../../../components/utility/allutils';
 import {
@@ -13,29 +13,35 @@ import { Pages1 } from '../../../redux/pages/allPages';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
+import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+const commonFunctions = new CommonFunctions();
+const baseUrl = commonFunctions.getBaseUrl();
+const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
 const { addToCart, productList } = cartAction;
 
 function PromotedProducts(props) {
-    let imageD = '';
-    const [pageSize, setPageSize] = useState(12);
-    const [pagination, setPagination] = useState(1);
+    let imageD = '', description = '';
+    const location = useLocation()
+    const [isHoverImage, setIsHoverImage] = useState(0);
     const [opacity, setOpacity] = useState(1);
-    const [page, setCurrent] = useState(1);
+
     const [token, setToken] = useState('');
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
-    const [sort, setSort] = useState(0);
+
     const language = getCookie('currentLanguage');
     const baseUrl = process.env.REACT_APP_API_URL;
+    //check with magento team
     const [catId, setCatId] = useState(153)// for promoted products
     const [category, setCategory] = useState({
-        name:'',
+        name: '',
         custom_attributes: [],
-        custom:{
-            image:'',
-            desc:''
+        custom: {
+            image: '',
+            desc: ''
         }
     })
     useEffect(() => {
+        let lang = props.languages ? props.languages : language;
         const localToken = localStorage.getItem('token');
         setToken(localToken)
         getProducts();
@@ -45,23 +51,27 @@ function PromotedProducts(props) {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [sortValue, page, pageSize])
+    }, [props.languages, location])
 
-    
+
 
     const getCategoryData = async () => {
         let result: any = await getCategoryDetails(props.languages, catId);
-       
-        if (result) {
-            let obj:any = {};
-            result.data.custom_attributes.forEach(el => {
-                if(el.attribute_code == "image") {
-                    obj.image = baseUrl+el.value;
-                }else if(el.attribute_code == "description"){
-                    obj.desc = el.value;
-                } 
-                result.data.custom = obj;
-            });
+
+        if (result && result.data) {
+            let obj: any = {};
+            const promises = [];
+            result.data.custom_attributes.forEach(async (el) => {
+                promises.push(new Promise((resolve, reject) => {
+                    if (el.attribute_code === "image") {
+                        obj.image = baseUrl + el.value;
+                    } else if (el.attribute_code === "description") {
+                        obj.desc = el.value;
+                    }
+                    result.data.custom = obj;
+                    resolve(result.data.custom);
+                }));
+            })
             setCategory(result.data);
         }
     }
@@ -69,9 +79,7 @@ function PromotedProducts(props) {
     async function getProducts() {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory(page, pageSize, catId, sortValue.sortBy, sortValue.sortByValue);
-        //  console.log(Math.ceil(result.data.total_count / 9))
-        setPagination(Math.ceil(result.data.total_count / pageSize));
+        let result: any = await getProductByCategory(1, 2, catId, sortValue.sortBy, sortValue.sortByValue);
         let productResult = result.data.items;
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
@@ -94,56 +102,6 @@ function PromotedProducts(props) {
         // console.log(result1)
 
     }
-    const filtterData = (event) => {
-        let lang = props.languages ? props.languages : language;
-        let sortBy = "created_at";
-        let sortByValue = "desc";
-        if (event.target.value === "1") {
-            sortBy = "price";
-            sortByValue = "desc";
-        } else if (event.target.value === "2") {
-            sortBy = "price";
-            sortByValue = "asc";
-        }
-
-        setSort(event.target.value);
-        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
-
-    }
-    async function handleCart(id: number, sku: string) {
-        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        let customer_id = localStorage.getItem('cust_id');
-
-        let cartQuoteId = ''
-        if (cartQuoteIdLocal) {
-            cartQuoteId = cartQuoteIdLocal
-        } else {
-            // create customer token
-            let guestToken: any = await createGuestToken();
-            localStorage.setItem('cartQuoteToken', guestToken.data);
-            let result: any = await getGuestCart();
-            cartQuoteId = result.data.id
-            console.log(result.data)
-        }
-        localStorage.setItem('cartQuoteId', cartQuoteId);
-        // only simple product is added to cart because in design there are no option to show configuration product
-        let cartData = {
-            "cartItem": {
-                "quote_id": localStorage.getItem('cartQuoteId'),
-                "sku": sku,
-                "qty": 1
-            }
-        }
-        if (customer_id) {
-            addToCartApi(cartData)
-        } else {
-            addToCartApiGuest(cartData)
-        }
-
-        // props.addToCart(id);
-        props.addToCartTask(true);
-        notification("success", "", "Item added to cart");
-    }
 
     async function handleWhishlist(id: number) {
         let result: any = await addWhishlist(id);
@@ -159,14 +117,16 @@ function PromotedProducts(props) {
         notification("success", "", del.data[0].message);
         getProducts()
     }
-    const handlePageSize = (page) => {
-        setPageSize(page)
+
+    const someHandler = (id) => {
+        let prod = parseInt(id)
+        setIsHoverImage(prod);
     }
-    const getPaginationGroup = () => {
-        let start = Math.floor((page - 1) / 4) * 4;
-        let fill = pagination > 5 ? 4 : pagination;
-        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
-    };
+
+    const someOtherHandler = (e) => {
+        setIsHoverImage(0)
+    }
+
     return (
         <section className="new-in-brand-sec">
             <div className="container">
@@ -180,17 +140,17 @@ function PromotedProducts(props) {
 
                             <div className="col-sm-5">
                                 <div className="new-in-brandMainPic">
-                                    <img src="images/blog_1.jpg" alt="" className="img-fluid" />
+                                    <img src={category.custom.image} alt="" className="img-fluid" />
                                     <Link to="/products/promoted" className="BrandMainPic-btn">
                                         <IntlMessages id="category.viewAll" /></Link>
                                 </div>
                             </div>
 
                             <div className="col-sm-7">
-                                <div className="brand-pro-list">
+                                <div className="brand-pro-list row product-listing">
                                     {props.items.slice(0, 2).map(item => {
                                         return (
-                                            <div className="col-md-3" key={item.id}>
+                                            <div className="col-md-6" key={item.id}>
                                                 <Link to={'/product-details/' + item.sku}>
                                                     <div className="product py-4">
                                                         {token && (
@@ -205,24 +165,30 @@ function PromotedProducts(props) {
                                                         )
                                                         }
 
-                                                        <div className="text-center">
+                                                        <div className="text-center" onMouseEnter={() => someHandler(item.id)}
+                                                            onMouseLeave={() => someOtherHandler(item.id)}>
                                                             {
                                                                 item.custom_attributes.map((attributes) => {
                                                                     if (attributes.attribute_code === 'image') {
                                                                         imageD = attributes.value;
                                                                     }
+                                                                    if (attributes.attribute_code === 'description') {
+                                                                        description = attributes.value.substr(0, 50);
+                                                                    }
                                                                 })
                                                             }
-                                                            <img src={imageD} alt={item.name} width="200" />
+                                                            {
+                                                                isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="200" /> : <img src={imageD} className="image-fluid" alt={item.name} height="200" />
+                                                            }
                                                         </div>
                                                         <div className="about text-center">
                                                             <h5>{item.name}</h5>
-                                                            <div className="tagname">{item.desc}</div>
+                                                            <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />...
                                                             <div className="pricetag">${formatprice(item.price)}</div>
                                                         </div>
                                                         {/* {token && ( */}
-                                                        <div className="cart-button mt-3 px-2"> 
-                                                        <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase">View Product</Link>
+                                                        <div className="cart-button mt-3 px-2">
+                                                            <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase">View Product</Link>
                                                             <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
                                                         </div>
                                                         {/* )} */}

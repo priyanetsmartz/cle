@@ -40,8 +40,7 @@ function Magazine(props) {
                                                 <img src={item.post_thumbnail} alt="" className="img-fluid" />
                                             </div>
                                             <h3 className="text">{item.title}</h3>
-                                            <p className="text">{item.short_content}
-                                            </p>
+                                            <p dangerouslySetInnerHTML={{ __html: item.short_content }} />
                                             <Link to={"/magazine/" + item.post_id} className="btn btn-secondary"><IntlMessages id="magazine.read_more" /></Link>
                                         </div>
                                     </div>

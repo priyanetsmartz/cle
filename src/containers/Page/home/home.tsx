@@ -26,9 +26,22 @@ function HomePage(props) {
         customerProducts: []
     });
     useEffect(() => {
+        const header = document.getElementById("headerrr");
+        const sticky = header.offsetTop;
+        const scrollCallBack: any = window.addEventListener("scroll", () => {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky-fullpage");
+            } else {
+                header.classList.remove("sticky-fullpage");
+            }
+        });
         const localToken = localStorage.getItem('token');
         setToken(localToken)
         getData();
+
+        return () => {
+            window.removeEventListener("scroll", scrollCallBack);
+        }
     }, []);
 
     const getData = async () => {
@@ -73,7 +86,7 @@ function HomePage(props) {
                     render={({ state, fullpageApi }) => {
                         return (
                             <div className="sectiosn" >
-                                <div className="section headerrr" key='uniqueKey'>
+                                <div className="section headerrr" id="headerrr" key='uniqueKey'>
                                     <Header />
                                 </div>
                                 <div className="section banner">
@@ -118,11 +131,13 @@ function HomePage(props) {
             </BrowserView>
             <MobileView>
                 <div className="sectiosn" >
-                    <div className="section header-cle" >
+                    <div className="section headerrr" id="headerrr" key='uniqueKey'>
                         <Header />
                     </div>
                     <div className="section">
                         <HomeBanner />
+                    </div>
+                    <div className="section">
                         <Personal />
                     </div>
                     <div className="section" >
