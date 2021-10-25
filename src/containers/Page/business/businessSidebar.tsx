@@ -5,7 +5,6 @@ import { useHistory } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
 import Dashboard from './dashboard';
 import BusinessProfile from './businessProfile';
-import MyRewards from './myRewards';
 import MyNotifications from './myNotifications';
 import MySupport from './mySupport';
 import dashboardIcon from '../../../image/dashboard_icon.svg';
@@ -28,7 +27,6 @@ import MyAnalysis from './myAnalysis';
 
 function BusinessSidebar(props) {
     const intl = useIntl();
-    const userGroup = localStorage.getItem('token')
     const [name, setName] = useState(localStorage.getItem('token_name'));
     const history = useHistory();
     const key = props.match.params.tab;
@@ -40,7 +38,7 @@ function BusinessSidebar(props) {
     }, [key]);
 
     const changeTab = (tab) => {
-        history.push(`/customer/${tab}`);
+        history.push(`/vendor/${tab}`);
         setActiveTab(tab);
     }
 
@@ -63,14 +61,15 @@ function BusinessSidebar(props) {
                                 </div>
                                 <div className="mobile_sidebar">
                                     <select className="form-select" aria-label="Default select example" onChange={changeMobTab}>
-                                        <option value="dashboard">{intl.formatMessage({ id: 'register.email' })}</option>
-                                        <option value="orders-and-returns"><IntlMessages id="customer.ordersAndReturns" /></option>
-                                        <option value="mytrades"><IntlMessages id="customer.myTrades" /></option>
-                                        {/* <option value="rewards"><IntlMessages id="customer.myReward" /></option> */}
-                                        <option value="wish-list"><IntlMessages id="customer.myWishlist" /></option>
-                                        <option value="profile"><IntlMessages id="customer.myProfile" /></option>
-                                        {/* <option value="notifications"><IntlMessages id="customer.myNotifications" /></option> */}
-                                        <option value="support"><IntlMessages id="customer.mySupport" /></option>
+                                        <option value="dashboard">{intl.formatMessage({ id: 'customer.dashboard' })}</option>
+                                        <option value="sales-orders">{intl.formatMessage({ id: 'vendor.salesOrders' })}</option>
+                                        <option value="product-listing">{intl.formatMessage({ id: 'vendor.productListing' })}</option>
+                                        <option value="returns-complaints">{intl.formatMessage({ id: 'vendor.returnComplaints' })}</option>
+                                        <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
+                                        <option value="analysis">{intl.formatMessage({ id: 'vendor.myAnalysis' })}</option>
+                                        <option value="profile">{intl.formatMessage({ id: 'vendor.businessProfile' })}</option>
+                                        <option value="notifications">{intl.formatMessage({ id: 'vendor.notification' })}</option>
+                                        <option value="support">{intl.formatMessage({ id: 'vendor.mySupport' })}</option>
                                     </select>
                                 </div>
                                 <div className="myorder_sidebar">
@@ -86,43 +85,43 @@ function BusinessSidebar(props) {
                                         <li className={activeTab === 'sales-orders' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('sales-orders')}>
                                                 <img src={ordersIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2">My Sales Orders</span>
+                                                <span className="pl-2"><IntlMessages id="vendor.salesOrders" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'product-listing' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('product-listing')}>
                                                 <img src={wishlistIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2">My Product Listing</span>
+                                                <span className="pl-2"><IntlMessages id="vendor.productListing" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('returns-complaints')}>
                                                 <img src={profileIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2"> My Returns and Complaints</span>
+                                                <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'payouts' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('payouts')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2">My Payouts</span>
+                                                <span className="pl-2"><IntlMessages id="vendor.payouts" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'analysis' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('analysis')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2">My Analysis</span>
+                                                <span className="pl-2"><IntlMessages id="vendor.myAnalysis" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'profile' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('profile')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2">My Business Profile</span>
+                                                <span className="pl-2"><IntlMessages id="vendor.businessProfile" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'notifications' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('notifications')}>
                                                 <img src={notificationIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2">My Notifications</span>
+                                                <span className="pl-2"><IntlMessages id="vendor.notification" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'support' ? 'active' : ''}>

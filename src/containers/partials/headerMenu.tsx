@@ -37,7 +37,7 @@ function HeaderMenu(props) {
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
             //console.log(result)
-            var jsonData = result.data[0].parent.child;        
+            var jsonData = result.data[0].parent.child;
             let catMenu = category ? category : jsonData[0].url_key;
             SetMenuData(jsonData);
             SetActiveOne(catMenu)
@@ -137,7 +137,7 @@ function HeaderMenu(props) {
     }
 
     const handleMenuClick = (e, id) => {
-       // e.preventDefault();
+        // e.preventDefault();
         setCookie("_TESTCOOKIE", id);
         props.menuSetup(id);
     }
@@ -166,16 +166,19 @@ function HeaderMenu(props) {
                                                                 <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
                                                                     <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
                                                                     <span className="megamenu_bar">
-                                                                        {/* <Link to="#" className="cross_icn"> <i className="fas fa-times"></i></Link> */}
-                                                                        <ul className="megamenugrid">
-                                                                            <h3>{childMenu.name}</h3>
-                                                                            {childMenu.child && childMenu.child.map((grandChild, k) => {
-                                                                                return (<li key={k}>
-                                                                                    <Link to={`/products/${val.url_key}/${grandChild.url_key}`} onClick={(e) => { handleMenuClick(e, grandChild.id); }}>{grandChild.name}</Link>
-                                                                                </li>)
-                                                                            })}
-
-                                                                        </ul>
+                                                                        <Link to="#" className="cross_icn"> <i className="fas fa-times"></i></Link>
+                                                                        {childMenu.child && childMenu.child.map((grandChild, l) => {
+                                                                            return (<ul className="megamenugrid" key={l}>
+                                                                                <h3> <Link to={`/products/${val.url_key}/${grandChild.url_key}`}
+                                                                                    onClick={(e) => { handleMenuClick(e, grandChild.id); }}>{grandChild.name}</Link></h3>
+                                                                                {grandChild.child && grandChild.child.map((greatGrandChild, k) => {
+                                                                                    return (<li key={k}>
+                                                                                        <Link to={`/products/${val.url_key}/${greatGrandChild.url_key}`}
+                                                                                            onClick={(e) => { handleMenuClick(e, greatGrandChild.id); }}>{greatGrandChild.name}</Link>
+                                                                                    </li>)
+                                                                                })}
+                                                                            </ul>)
+                                                                        })}
 
                                                                     </span>
                                                                 </li>
@@ -208,8 +211,8 @@ function HeaderMenu(props) {
                         <div className="user_cart">
                             <div className="cartuser-info">
                                 <ul>
-                                    <li><Link to="#">{customerName ? customerName : ""} </Link></li>
                                     <LanguageSwitcher />
+                                    <li><Link to="#">{customerName ? customerName : ""} </Link></li>
                                     {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
                                     <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 

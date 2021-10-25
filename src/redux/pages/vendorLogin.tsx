@@ -7,8 +7,7 @@ const adminToken = new ADMINTOKEN();
 
 
 export function vendorLogin(userInfo) {
-    console.log(userInfo);
-    return AdminApi.request(`rest/V1/vendor/login?username=${userInfo.email}&password=${userInfo.password}`, "", "GET", "");
+    return adminToken.request(`rest/V1/vendor/login`, userInfo, "POST", "");
 }
 
 export function vendorLogout() {

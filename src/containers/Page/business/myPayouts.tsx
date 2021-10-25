@@ -9,7 +9,7 @@ function MyPayouts(props) {
 
     return (
         <div className="col-sm-9">
-            <h3>My Sales And Orders</h3>
+            <h3>My Payouts</h3>
         </div>
     )
 }

@@ -13,6 +13,8 @@ import { DROPDOWN } from '../../../config/constants';
 import moment from 'moment';
 
 function BusinessProfile(props) {
+    const [vendorData, setVendorData] = useState(JSON.parse(localStorage.getItem('cle_vendor')));
+
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [custForm, setCustForm] = useState({
         id: custId,
@@ -439,36 +441,32 @@ function BusinessProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.name" /></label>
-                                        <div className="field-name">{custForm.firstname}</div>
+                                        <div className="field-name">{vendorData.vendor_name}</div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
-                                        <div className="field-name">{custForm.lastname}</div>
+                                        <div className="field-name"></div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
-                                        <div className="field-name">
-                                            {DROPDOWN.gender.map(el => {
-                                                return el.id == custForm.gender ? (<span key={el.id}>{el.name}</span>) : null
-                                            })}
-                                        </div>
+                                        <div className="field-name"> </div>
                                     </div>
-                                    {/* <div className="field_details">
+                                    <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
-                                        <div className="field-name">{custForm.addresses[0]?.telephone}</div>
-                                    </div> */}
+                                        <div className="field-name">{vendorData.telephone}</div>
+                                    </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
-                                        <div className="field-name">{custForm.dob}</div>
+                                        <div className="field-name">{vendorData.dob}</div>
                                     </div>
-                                    {/* <div className="field_details">
+                                    <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.country" /></label>
-                                        <div className="field-name">{custForm.addresses[0]?.country_id}</div>
-                                    </div> */}
+                                        <div className="field-name">{vendorData.country_id}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -496,37 +494,33 @@ function BusinessProfile(props) {
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.name" /></label>
-                                        <div className="field-name">{custForm.firstname}</div>
+                                        <label className="form-label">Company Name</label>
+                                        <div className="field-name">HugoBoss</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
-                                        <div className="field-name">{custForm.lastname}</div>
+                                        <label className="form-label">Website</label>
+                                        <div className="field-name">www.boss.com</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
-                                        <div className="field-name">
-                                            {DROPDOWN.gender.map(el => {
-                                                return el.id == custForm.gender ? (<span key={el.id}>{el.name}</span>) : null
-                                            })}
-                                        </div>
+                                        <label className="form-label">IBAM Number</label>
+                                        <div className="field-name">123 </div>
                                     </div>
-                                    {/* <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
-                                        <div className="field-name">{custForm.addresses[0]?.telephone}</div>
-                                    </div> */}
+                                    <div className="field_details">
+                                        <label className="form-label">Facebook</label>
+                                        <div className="field-name">facebook.com/boss</div>
+                                    </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
+                                        <label className="form-label">Tax</label>
                                         <div className="field-name">{custForm.dob}</div>
                                     </div>
-                                    {/* <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.country" /></label>
-                                        <div className="field-name">{custForm.addresses[0]?.country_id}</div>
-                                    </div> */}
+                                    <div className="field_details">
+                                        <label className="form-label">Instagram</label>
+                                        <div className="field-name">instagram.com/boss</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -582,7 +576,7 @@ function BusinessProfile(props) {
                 </div>
             </section>
 
-            {/* <section className="my_profile_sect mb-4">
+            <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -624,7 +618,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section> */}
+            </section>
 
             <section className="my_profile_sect change_passwordsec mb-4">
                 <div className="container">
