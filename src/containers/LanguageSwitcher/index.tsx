@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import actions from "../../redux/languageSwitcher/actions";
 import { Link } from "react-router-dom";
@@ -15,11 +15,14 @@ function LanguageSwitcher(props) {
     setHighlight(lang);
     setValue(lang);
   }
+  useEffect(() => {
+    setHighlight(props.languages);
+  }, [props.languages]);
   return (
-    <li className="lang-sec"><Link to="/" className={highlight === 'english' ? 'highlighted' : ''} onClick={() => {
+    <li className="lang-sec"><Link to="/" style={{ "display": highlight === 'english' ? "none" : "inline-block" }} className={highlight === 'english' ? 'highlighted' : ''} onClick={() => {
       handleChange('english');
     }} >En</Link>
-      <Link to="/" className={highlight === 'arabic' ? 'highlighted' : ''} onClick={() => {
+      <Link to="/" style={{ "display": highlight === 'arabic' ? "none" : "inline-block" }} className={highlight === 'arabic' ? 'highlighted' : ''} onClick={() => {
         handleChange('arabic');
       }}>
         <svg xmlns="http://www.w3.org/2000/svg" width="31" height="19" viewBox="0 0 31 19">
@@ -36,7 +39,14 @@ function LanguageSwitcher(props) {
 }
 
 function mapStateToProps(state) {
-  return state.LanguageSwitcher
+  let languages = '';
+  if (state && state.LanguageSwitcher) {
+    languages = state.LanguageSwitcher.language;
+  }
+
+  return {
+    languages: languages
+  }
 
 }
 export default connect(

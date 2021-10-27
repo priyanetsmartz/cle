@@ -16,9 +16,10 @@ import Breadcrumbs from './locationBreadcrumbs';
 import MiniCart from './mini-cart';
 import SearchBar from './searchBar';
 import LanguageSwitcher from '../LanguageSwitcher';
+import { getCookie, setCookie } from '../../helpers/session';
 
 const { logout } = authAction;
-const { showSignin, openSignUp, menuSetup } = appAction;
+const { showSignin, openSignUp, menuSetup, showLoader } = appAction;
 const { accountPopup, miniCartPopup } = cartAction;
 function HeaderMenu(props) {
     let history = useHistory();
@@ -31,27 +32,11 @@ function HeaderMenu(props) {
     const [activeCat, SetActiveCat] = useState('')
     const [activeOne, SetActiveOne] = useState('');
 
-
-    setTimeout(() => {
-        setIsLoaded(false);
-    }, 3000);
-
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClick);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClick);
-            setIsLoaded(true)
-            SetMenuData([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
-            SetActiveCat('')
-            SetActiveOne('')
-        };
-    }, []);
-
     useEffect(() => {
         // console.log(location)
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
+            //console.log(result)
             var jsonData = result.data[0].parent.child;
             let catMenu = category ? category : jsonData[0].url_key;
             SetMenuData(jsonData);
@@ -67,6 +52,38 @@ function HeaderMenu(props) {
             SetActiveOne('')
         }
     }, [props.languages, category])
+
+    useEffect(() => {
+        setTimeout(() => {
+            window.scrollTo(0, 0)
+            props.showLoader(false);
+        }, 3000);
+        const header = document.getElementById("header-mvp");
+        const sticky = header.offsetTop;
+        const scrollCallBack: any = window.addEventListener("scroll", () => {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky");
+            } else {
+                header.classList.remove("sticky");
+            }
+        });
+        return () => {
+            window.removeEventListener("scroll", scrollCallBack);
+        };
+    }, []);
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+            setIsLoaded(true)
+            SetMenuData([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
+            SetActiveCat('')
+            SetActiveOne('')
+        };
+    }, []);
+
+
 
 
     const handleClick = e => {
@@ -119,18 +136,20 @@ function HeaderMenu(props) {
         props.showSignin(true);
     }
 
-    const handleMenuClick = (id) => {
+    const handleMenuClick = (e, id) => {
+        // e.preventDefault();
+        setCookie("_TESTCOOKIE", id);
         props.menuSetup(id);
     }
 
     return (
-        <>
-            {isLoaded && (
+        <div>
+            {props.loading && (
                 <div className="CLE-loading" style={{ "position": "fixed" }}>
                     <img className="loading-gif" src={loading} alt="loader" />
                 </div>
             )}
-            <div className="container">
+            <div className="container header-mvp" id="header-mvp">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
                     <div className="col-6 pt-1">
                         <div className="select-wearing">
@@ -140,21 +159,22 @@ function HeaderMenu(props) {
                                         menuData.map((val, i) => {
                                             return (
                                                 <li key={i}>
-                                                    <Link to={'/products/' + val.url_key} onClick={(e) => { handleMenuClick(val.id); }} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                    <Link to={'/products/' + val.url_key} onClick={(e) => { handleMenuClick(e, val.id); }} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
                                                         {val.child.map((childMenu: any, j) => {
                                                             return (
                                                                 <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
-                                                                    <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} onClick={(e) => { handleMenuClick(childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
+                                                                    <Link className={key_url === childMenu.url_key ? "nav-link p-2 activemenu" : "nav-link p-2"} onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
                                                                     <span className="megamenu_bar">
                                                                         <Link to="#" className="cross_icn"> <i className="fas fa-times"></i></Link>
                                                                         {childMenu.child && childMenu.child.map((grandChild, l) => {
                                                                             return (<ul className="megamenugrid" key={l}>
-                                                                                <h3>{grandChild.name}</h3>
+                                                                                <h3> <Link to={`/products/${val.url_key}/${grandChild.url_key}`}
+                                                                                    onClick={(e) => { handleMenuClick(e, grandChild.id); }}>{grandChild.name}</Link></h3>
                                                                                 {grandChild.child && grandChild.child.map((greatGrandChild, k) => {
                                                                                     return (<li key={k}>
                                                                                         <Link to={`/products/${val.url_key}/${greatGrandChild.url_key}`}
-                                                                                            onClick={(e) => { handleMenuClick(greatGrandChild.id); }}>{greatGrandChild.name}</Link>
+                                                                                            onClick={(e) => { handleMenuClick(e, greatGrandChild.id); }}>{greatGrandChild.name}</Link>
                                                                                     </li>)
                                                                                 })}
                                                                             </ul>)
@@ -173,14 +193,14 @@ function HeaderMenu(props) {
                             )}
                         </div>
                     </div>
-                    <div className="col-2">
+                    <div className="col-1">
                         <div className="cli_logo">
                             <Link className=" me-2" to="/">
                                 <img src={CLELogo} className="img-fluid" alt="logo" />
                             </Link>
                         </div>
                     </div>
-                    <div className="col-4">
+                    <div className="col-5">
 
                         <div className="sell_item" style={{ display: 'none' }}>
                             <div className="sell_itemnote mb-2">
@@ -191,9 +211,9 @@ function HeaderMenu(props) {
                         <div className="user_cart">
                             <div className="cartuser-info">
                                 <ul>
-                                    <li><Link to="#">{customerName ? customerName : ""} </Link></li>
                                     <LanguageSwitcher />
-                                    <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li>
+                                    <li><Link to="#">{customerName ? customerName : ""} </Link></li>
+                                    {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
                                     <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 
                                         <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
@@ -255,20 +275,21 @@ function HeaderMenu(props) {
                     </div>
                 </div>
             </section>
-        </>
+        </div>
     )
 }
 
 const mapStateToProps = (state) => {
-    //console.log(state)
+    //  console.log(state)
     return {
         items: state.Cart.items,
         languages: state.LanguageSwitcher.language,
-        openAccountPop: state.Cart.openAccountPop
+        openAccountPop: state.Cart.openAccountPop,
+        loading: state.App.loader
     }
 }
 
 export default connect(
     mapStateToProps,
-    { logout, showSignin, openSignUp, accountPopup, miniCartPopup, menuSetup }
+    { logout, showSignin, openSignUp, accountPopup, miniCartPopup, menuSetup, showLoader }
 )(HeaderMenu);

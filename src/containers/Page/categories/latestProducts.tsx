@@ -13,40 +13,71 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
+import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { useLocation } from 'react-router-dom';
+const commonFunctions = new CommonFunctions();
+const baseUrl = commonFunctions.getBaseUrl();
+const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
 const { addToCart, productList } = cartAction;
 
 
 function LatestProducts(props) {
+    let catID = getCookie("_TESTCOOKIE");
+    let imageD = '', description = '', hoverImage = '';
     const location = useLocation()
-    let imageD = '';
     let customer_id = localStorage.getItem('cust_id');
+    const [isHoverImage, setIsHoverImage] = useState(0);
     const [pageSize, setPageSize] = useState(12);
+    const [productsLatest, setProductsLatest] = useState([]);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
     const [page, setCurrent] = useState(1);
-    const [token, setToken] = useState('');
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
     const [sort, setSort] = useState(0);
     const language = getCookie('currentLanguage');
+    const relevantCookies = getCookie("relevant");
     const settings = {
         dots: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 4,
-        slidesToScroll: 4
+        slidesToScroll: 4, responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
     };
 
     useEffect(() => {
-        console.log(props.items);
-        getProducts();
+        let catID = getCookie("_TESTCOOKIE");
+        getProducts(catID);
     }, [location]);
 
-    async function getProducts() {
+    async function getProducts(catID) {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        console.log(props.categoryId);
-        let result: any = await getProductByCategory(page, pageSize, props.categoryId, sortValue.sortBy, sortValue.sortByValue);
+        //console.log(props.categoryId);
+        let result: any = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue);
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
         if (customer_id) {
@@ -63,10 +94,10 @@ function LatestProducts(props) {
 
         }
         setOpacity(1);
-
-        props.productList(productResult);
+        setProductsLatest(productResult)
+        // props.productList(productResult);
         // get product page filter
-        let result1: any = await getProductFilter(9);
+        // let result1: any = await getProductFilter(9);
         // console.log(result1);
         // console.log(props.items);
 
@@ -75,7 +106,7 @@ function LatestProducts(props) {
     async function handleWhishlist(id: number) {
         let result: any = await addWhishlist(id);
         notification("success", "", result.data[0].message);
-        getProducts()
+        getProducts(catID)
 
     }
     async function handleDelWhishlist(id: number) {
@@ -84,32 +115,24 @@ function LatestProducts(props) {
         let del: any = await removeWhishlist(id);
         //  console.log(del);
         notification("success", "", del.data[0].message);
-        getProducts()
+        getProducts(catID)
     }
 
+    const someHandler = (id) => {
+        let prod = parseInt(id)
+        setIsHoverImage(prod);
+    }
 
-    function handleClick(id: number, sku: string) {
-        let cartData = {
-            "cartItem": {
-                "sku": sku,
-                "qty": 1,
-                "quote_id": localStorage.getItem('cartQuoteId')
-            }
-        }
-        let customer_id = localStorage.getItem('cust_id');
-        if (customer_id) {
-            addToCartApi(cartData)
-        }
-        props.addToCart(id);
-        notification("success", "", "Item added to cart");
+    const someOtherHandler = (e) => {
+        setIsHoverImage(0)
     }
 
     const changeImg = (e, item, type) => {
         item.custom_attributes.forEach(el => {
-            if(el.attribute_code == "thumbnail" && type){
+            if (el.attribute_code == "thumbnail" && type) {
                 e.target.src = el.value;
             }
-            if(el.attribute_code == "image" && !type){
+            if (el.attribute_code == "image" && !type) {
                 e.target.src = el.value;
             }
         })
@@ -126,7 +149,7 @@ function LatestProducts(props) {
                                     role="tab" aria-controls="PD" aria-selected="true"><IntlMessages id="category.latestProducts" /></Link>
                             </li>
                             {
-                                customer_id && (
+                                (customer_id && relevantCookies) && (
                                     <li className="nav-item" role="presentation">
                                         <Link to="#" className="nav-link" id="D-maylike-tab" data-bs-toggle="tab" data-bs-target="#D-maylike" type="button"
                                             role="tab" aria-controls="D-maylike" aria-selected="false"><IntlMessages id="home.weChooseForYou" /></Link>
@@ -136,64 +159,64 @@ function LatestProducts(props) {
 
                         </ul>
                         <div className="tab-content" id="DesignerTabContent">
-                            <div className="tab-pane fade show active" id="PD" role="tabpanel" aria-labelledby="PD-tab">
-                                <div className="row">
-                                    <Slider {...settings}>
-                                        {props.items.map(item => {
-                                            return (
-                                                <div className="col-md-4" key={item.id}>
-                                                    <Link to={'/product-details/' + item.sku}>
-                                                        <div className="product py-4">
-                                                            {token && (
-                                                                <span className="off bg-favorite">
-                                                                    {!item.wishlist_item_id && (
-                                                                        <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                                                    )}
-                                                                    {item.wishlist_item_id && (
-                                                                        <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                                                    )}
-                                                                </span>
-                                                            )
-                                                            }
+                            {productsLatest.length > 0 && (
+                                <div className="tab-pane fade show active" id="PD" role="tabpanel" aria-labelledby="PD-tab">
+                                    <div className="row">
+                                        <div className="col-sm-12">
+                                            <div className="new-in-slider product-listing">
+                                                <div className="regular slider">
+                                                    <Slider {...settings}>
+                                                        {productsLatest.map(item => {
+                                                            return (
 
-                                                            <div className="text-center">
-                                                                {
-                                                                    item.custom_attributes.map((attributes) => {
-                                                                        if (attributes.attribute_code === 'image') {
-                                                                            imageD = attributes.value;
+                                                                <div className="productcalr product" key={item.id} >
+                                                                    <span className="off bg-favorite">
+                                                                        {!item.wishlist_item_id && (
+                                                                            <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                                        )}
+                                                                        {item.wishlist_item_id && (
+                                                                            <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                                        )}
+                                                                    </span>
+                                                                    <div className="product_img" onMouseEnter={() => someHandler(item.id)}
+                                                                        onMouseLeave={() => someOtherHandler(item.id)}>
+
+                                                                        {
+                                                                            item.custom_attributes.map((attributes) => {
+                                                                                if (attributes.attribute_code === 'image') {
+                                                                                    imageD = attributes.value;
+                                                                                }
+                                                                                if (attributes.attribute_code === 'short_description') {
+                                                                                    description = attributes.value;
+                                                                                }
+                                                                            })
                                                                         }
-                                                                    })
-                                                                }
-                                                                <img src={imageD} alt={item.name} width="200" 
-                                                                onMouseEnter={(e) => changeImg(e, item, true)} 
-                                                                onMouseLeave={(e) => changeImg(e, item, false)}/>
-                                                            </div>
-                                                            <div className="about text-center">
-                                                                <h5>{item.name}</h5>
-                                                                <div className="tagname">{item.desc}</div>
-                                                                <div className="pricetag">${formatprice(item.price)}</div>
-                                                            </div>
-                                                            {/* {token && ( */}
-                                                            <div className="cart-button mt-3 px-2">
-                                                                <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase"
-                                                                >View Product</Link>
-                                                                <div className="add">
-                                                                    <span className="product_fav">
-                                                                        <i className="fa fa-heart-o"></i></span>
-                                                                    <span className="product_fav"><i className="fa fa-opencart"></i>
-                                                                    </span> </div>
-                                                            </div>
-                                                            {/* )} */}
-                                                        </div>
-                                                    </Link>
-                                                </div>
-                                            )
-                                        })}
-                                    </Slider>
-                                </div>
-                            </div>
+                                                                        {
+                                                                            isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD} className="image-fluid" alt={item.name} height="150" />
+                                                                        }
+                                                                    </div >
+
+                                                                    <div className="product_name"> {item.name} </div>
+                                                                    <div className="product_vrity" dangerouslySetInnerHTML={{ __html: description }} />
+                                                                    {/* <div className="product_vrity">{item.short_description}</div> */}
+                                                                    <div className="product_price">$ {formatprice(item.price)}</div>
+                                                                    <div className="cart-button mt-3 px-2">
+                                                                        <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
+                                                                    </div>
+
+                                                                </div >
+
+                                                            )
+                                                        })}
+                                                    </Slider >
+                                                </div >
+                                            </div >
+                                        </div >
+                                    </div >
+                                </div >
+                            )}
                             {
-                                customer_id && (
+                                (customer_id && relevantCookies) && (
                                     <div className="tab-pane fade" id="D-maylike" role="tabpanel" aria-labelledby="D-maylike-tab">
                                         <div className="row">
                                             <WeChooseForYou />
@@ -201,22 +224,17 @@ function LatestProducts(props) {
                                     </div>
                                 )
                             }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        </div >
+                    </div >
+                </div >
+            </div >
+        </section >
     )
 }
 
 const mapStateToProps = (state) => {
-    let categoryId = 52;
-    if (state.App && state.App.menuId) {
-        categoryId = state.App.menuId
-    }
     return {
-        items: state.Cart.items,
-        categoryId: categoryId
+        items: state.Cart.items
     }
 }
 

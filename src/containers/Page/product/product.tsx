@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import appAction from "../../../redux/app/actions";
 import { addWhishlist, getAllProducts, getWhishlistItemsForUser, getProductByCategory, removeWhishlist, addToCartApi, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
@@ -10,15 +10,23 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import Recomendations from './product-details/recomendations';
 import Description from '../categories/description';
 import Filter from './filter';
+import { formatprice } from '../../../components/utility/allutils';
+import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+const commonFunctions = new CommonFunctions();
+const baseUrl = commonFunctions.getBaseUrl();
+const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
 const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 const { showSignin } = appAction;
 
 
 function Products(props) {
+    const location = useLocation()
     let imageD = '', description = '';
+    let catID = getCookie("_TESTCOOKIE");
     const [isShow, setIsShow] = useState(0);
+    const [isHoverImage, setIsHoverImage] = useState(0);
     const [isCategory, setIsCategory] = useState(props.match.path.split('/')[2] ? true : false);
-    const [catId, setCatId] = useState(52);// change to dynamic id
+    const [catId, setCatId] = useState(catID);// change to dynamic id
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [pageSize, setPageSize] = useState(12);
@@ -32,24 +40,26 @@ function Products(props) {
 
 
     useEffect(() => {
+        let catID = getCookie("_TESTCOOKIE");
+
         const localToken = localStorage.getItem('token');
         setToken(localToken)
-        getProducts();
+        getProducts(catID);
 
         return () => {
             props.addToCartTask(false);
             props.addToWishlistTask(true);
         }
-    }, [sortValue, page, pageSize, props.languages])
+    }, [sortValue, page, pageSize, props.languages, location])
 
-    async function getProducts() {
+    async function getProducts(catID) {
         let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
         let result: any;
         if (isCategory) {
             console.log("CAtegory api")
-            result = await getProductByCategory(page, pageSize, catId, sortValue.sortBy, sortValue.sortByValue);
+            result = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue);
         } else {
             console.log('product api')
             result = await getAllProducts(lang, page, pageSize, sortValue.sortBy, sortValue.sortByValue);
@@ -90,45 +100,7 @@ function Products(props) {
         setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
 
     }
-    async function handleCart(id: number, sku: string) {
-        setIsShow(id);
-        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        let cartSucces: any;
-        let cartQuoteId = ''
-        if (cartQuoteIdLocal) {
-            cartQuoteId = cartQuoteIdLocal
-        } else {
-            // create customer token
-            let guestToken: any = await createGuestToken();
-            localStorage.setItem('cartQuoteToken', guestToken.data);
-            let result: any = await getGuestCart();
-            cartQuoteId = result.data.id
-            //  console.log(result.data)
-        }
-        localStorage.setItem('cartQuoteId', cartQuoteId);
-        // only simple product is added to cart because in design there are no option to show configuration product
-        let cartData = {
-            "cartItem": {
-                "quote_id": localStorage.getItem('cartQuoteId'),
-                "sku": sku,
-                "qty": 1
-            }
-        }
-        let customer_id = localStorage.getItem('cust_id');
-        if (customer_id) {
-            cartSucces = await addToCartApi(cartData)
-        } else {
-            cartSucces = await addToCartApiGuest(cartData)
-        }
-        if (cartSucces.data.item_id) {
-            props.addToCartTask(true);
-            notification("success", "", "Item added to cart!");
-            setIsShow(0);
-        } else {
-            notification("error", "", "Something went wrong!");
-            setIsShow(0);
-        }
-    }
+
 
     async function handleWhishlist(id: number) {
         if (token) {
@@ -139,12 +111,12 @@ function Products(props) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
                 notification("success", "", 'Your product has been successfully added to your wishlist');
-                getProducts()
+                getProducts(catID)
             } else {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
                 notification("error", "", "Something went wrong!");
-                getProducts()
+                getProducts(catID)
             }
         } else {
             props.showSignin(true);
@@ -158,12 +130,12 @@ function Products(props) {
             setDelWishlist(0)
             props.addToWishlistTask(true);
             notification("success", "", del.data[0].message);
-            getProducts()
+            getProducts(catID)
         } else {
             setDelWishlist(0)
             props.addToWishlistTask(true);
             notification("error", "", "Something went wrong!");
-            getProducts()
+            getProducts(catID)
         }
     }
     const handlePageSize = (page) => {
@@ -194,6 +166,14 @@ function Products(props) {
         e.preventDefault();
         setCurrent((page) => page - 1);
 
+    }
+    const someHandler = (id) => {
+        let prod = parseInt(id)
+        setIsHoverImage(prod);
+    }
+
+    const someOtherHandler = (e) => {
+        setIsHoverImage(0)
     }
 
 
@@ -267,7 +247,8 @@ function Products(props) {
                                                         )}
                                                     </span>
 
-                                                    <div className="text-center">
+                                                    <div className="text-center" onMouseEnter={() => someHandler(item.id)}
+                                                        onMouseLeave={() => someOtherHandler(item.id)}>
                                                         {
                                                             item.custom_attributes.map((attributes) => {
                                                                 if (attributes.attribute_code === 'image') {
@@ -278,12 +259,14 @@ function Products(props) {
                                                                 }
                                                             })
                                                         }
-                                                        <Link to={'/product-details/' + item.sku}><img src={imageD} alt={item.name} width="200" /></Link>
+                                                        <Link to={'/product-details/' + item.sku}>
+                                                            {isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD} className="image-fluid" alt={item.name} height="150" />
+                                                            }</Link>
                                                     </div>
                                                     <div className="about text-center">
                                                         <h5>{item.name}</h5>
                                                         <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
-                                                        <div className="pricetag">${item.price}</div>
+                                                        <div className="pricetag">${formatprice(item.price)}</div>
                                                     </div>
                                                     {/* {item.type_id === 'simple' && (
                                                         <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>

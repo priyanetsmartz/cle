@@ -9,6 +9,7 @@ function FooterExtra(props) {
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
     const [analyticsCode, SetAnalyticsCode] = useState({ status: 0, accountNo: 0 })
     useEffect(() => {
+        
         async function fetchMyAPI() {
             let result: any = await footer(props.languages);
             var jsonData = result.data.items[0];

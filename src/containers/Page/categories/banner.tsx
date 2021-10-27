@@ -1,42 +1,31 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getCategoryDetails } from '../../../redux/pages/customers';
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { getCookie } from '../../../helpers/session';
+import IntlMessages from "../../../components/utility/intlMessages";
 
 
 function CategoryBanner(props) {
-    const baseUrl = process.env.REACT_APP_API_URL;
-    const [category, setCategory] = useState({
-        name:'',
+    const { category, subcat } = useParams();
+    const location = useLocation()
+    let catID = getCookie("_TESTCOOKIE");
+    const [categoryData, setCategory] = useState({
+        name: '',
         custom_attributes: [],
-        custom:{
-            image:'',
-            desc:''
+        custom: {
+            image: '',
+            desc: ''
         }
     })
-    const [catId, setCatId] = useState('52')
 
     useEffect(() => {
-        getData();
-    }, [props.languages]);
-
-    const getData = async () => {
-        let result: any = await getCategoryDetails(props.languages, catId);
-       
-        if (result) {
-            let obj:any = {};
-            result.data.custom_attributes.forEach(el => {
-                if(el.attribute_code === "image") {
-                    obj.image = baseUrl+el.value;
-                }else if(el.attribute_code === "description"){
-                    obj.desc = el.value;
-                } 
-                result.data.custom = obj;
-            });
-            setCategory(result.data);
+        if (props.cateData) {
+            setCategory(props.cateData);
         }
-    }
+
+    }, [props.languages, location, props.cateData]);
+
 
     return (
         <>
@@ -44,11 +33,13 @@ function CategoryBanner(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12 position-relative">
-                            <img src={category.custom.image} alt="" />
+                            <img src={categoryData.custom.image} alt="" />
                             <div className="DC-top-ban-inner">
-                                <h2>{category.name}</h2>
-                                <div dangerouslySetInnerHTML={{ __html: category.custom.desc }} />
-                                <Link to={"category/"+catId} className="ban-btn">Check all designers</Link>
+                                <h2>{categoryData.name}</h2>
+                                <div dangerouslySetInnerHTML={{ __html: categoryData.custom.desc }} />
+                                {
+                                    subcat !== undefined ? <Link to={`/products/${category}/${subcat}/all`} className="ban-btn" > <IntlMessages id="category.viewAll" /></Link> : <Link to={`/products/${category}/all`} className="ban-btn"> <IntlMessages id="category.viewAll" /></Link>
+                                }
                             </div>
                         </div>
                     </div>
@@ -63,9 +54,13 @@ const mapStateToProps = (state) => {
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
+    // if (state && state.Cart.category_data) {
+    //     cateData = state.Cart.category_data
+    // }
 
     return {
-        languages: languages
+        languages: languages,
+        ///  cateData: cateData
     }
 }
 

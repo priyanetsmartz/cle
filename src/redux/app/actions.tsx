@@ -24,6 +24,7 @@ const actions = {
   SET_TYPE: "SET_TYPE",
   SET_CAT: "SET_CAT",
   MENU_SETUP: "MENU_SETUP",
+  SHOW_LOADER: "SHOW_LOADER",
 
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
@@ -81,6 +82,10 @@ const actions = {
   menuSetup: menuId => ({
     type: actions.MENU_SETUP,
     menuId
+  }),
+  showLoader: loader => ({
+    type: actions.SHOW_LOADER,
+    loader
   })
 };
 export default actions;

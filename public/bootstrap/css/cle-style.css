@@ -924,7 +924,9 @@ p.promotion_alert {
 }
 
 /* .active_megamenu { */
-    /* position: relative; */
+
+/* position: relative; */
+
 /* } */
 
 .megamenu_bar {
@@ -934,7 +936,7 @@ p.promotion_alert {
     border: 1px solid #000;
     position: absolute;
     top: 40px;
-    left:0;
+    left: 0;
     z-index: 99;
     right: auto;
     padding: 20px;
@@ -2506,13 +2508,13 @@ span.maindatory {
 
 .choose-shopping button {
     width: 100%;
-	font-family: 'Monument Extended';
-	font-size: 12px;
+    font-family: 'Monument Extended';
+    font-size: 12px;
     text-align: center;
-	font-weight: 500;
-	border:1px solid #000;
-	color:#000;
-	border-radius:0px;
+    font-weight: 500;
+    border: 1px solid #000;
+    color: #000;
+    border-radius: 0px;
 }
 
 .no-worries {
@@ -2575,9 +2577,9 @@ span.maindatory {
     font-family: 'Monument Extended';
     font-weight: 500;
     font-style: normal;
-	background:#fff;
-	right: 0;
-margin: auto;
+    background: #fff;
+    right: 0;
+    margin: auto;
 }
 
 .categoriy-list a.btn.details {
@@ -2590,7 +2592,7 @@ margin: auto;
     padding: .375rem .15rem;
 }
 
-.categoriy-list a.btn.details:hover, .categoriy-list .card:hover a.btn.details{
+.categoriy-list a.btn.details:hover, .categoriy-list .card:hover a.btn.details {
     padding: .375rem .80rem;
 }
 
@@ -2617,7 +2619,11 @@ margin: auto;
     float: left;
     text-align: center;
 }
-.new-in-slider .productcalr .product_img img{margin: auto;}
+
+.new-in-slider .productcalr .product_img img {
+    margin: auto;
+}
+
 .new-in-slider .product_name {
     width: 100%;
     float: left;
@@ -2722,10 +2728,10 @@ margin: auto;
 }
 
 .list-prodctsale .accordion-item {
-    border: 0 !important;  
+    border: 0 !important;
     border-top: 1px solid #000 !important;
     border-radius: 0 !important;
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .list-prodctsale .accordion-button:not(.collapsed) {
@@ -3480,7 +3486,7 @@ margin: auto;
     background: #f7f7fc;
     padding: 100px 60px;
     position: relative;
-	margin-top: 0;
+    margin-top: 0;
 }
 
 .banner-content-2 h4 {
@@ -3555,7 +3561,7 @@ margin: auto;
     line-height: 46px;
     font-family: 'Monument Extended';
     margin-bottom: 10px;
-	color: #fff;
+    color: #fff;
 }
 
 .become-part-inner p {
@@ -4320,32 +4326,122 @@ h4.arrow-change:after {
 
 /* FAQ */
 
-.FAQ-top-banner{position:relative; width:100%;}
-.FAQ-top-banner img {width: 100%;}
-.FAQ-banner-content{position:absolute; height:max-content; bottom:0px; right:0; left:0; top:0; margin:auto;}
-.FAQ-banner-content h2{font-size: 36px; line-height: 46px; font-family: 'Monument Extended'; color:#fff;font-weight: normal;}
-.FAQ-banner-content p{font-size: 18px; line-height: 27px; color:#fff;font-weight: 500;}
-.search_input img {width: 20px !important; float: left !important;}
-.search_input{padding:0px 15px !important;}
-.FAQ-head{font-size: 24px; line-height: 30px; font-family: 'Monument Extended'; color:#000;font-weight: 500; margin-bottom:20px;}
-.FAQ-qus-sec{margin:0px 0 50px;}
-.FAQ-qus-sec h5 {font-size: 16px; font-weight: bold;border-bottom:1px solid #707070; margin-bottom:20px; padding-bottom:20px;}
-.FAQ-qus-sec h5 i{margin-right:25px;}
-.FAQ-qus-sec h5 span{}
-.FAQ-qus-sec ul{margin:0 0 20px; padding:0; list-style-type:none;}
-.FAQ-qus-sec ul li{font-size: 16px;margin-bottom:10px;line-height: 20px;}
-.faq-view-all a{font-size: 16px; line-height: 20px; font-family: 'Monument Extended'; color:#2e2baa;font-weight: normal;}
+.FAQ-top-banner {
+    position: relative;
+    width: 100%;
+}
+
+.FAQ-top-banner img {
+    width: 100%;
+}
+
+.FAQ-banner-content {
+    position: absolute;
+    height: max-content;
+    bottom: 0px;
+    right: 0;
+    left: 0;
+    top: 0;
+    margin: auto;
+}
+
+.FAQ-banner-content h2 {
+    font-size: 36px;
+    line-height: 46px;
+    font-family: 'Monument Extended';
+    color: #fff;
+    font-weight: normal;
+}
+
+.FAQ-banner-content p {
+    font-size: 18px;
+    line-height: 27px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.search_input img {
+    width: 20px !important;
+    float: left !important;
+}
+
+.search_input {
+    padding: 0px 15px !important;
+}
+
+.FAQ-head {
+    font-size: 24px;
+    line-height: 30px;
+    font-family: 'Monument Extended';
+    color: #000;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.FAQ-qus-sec {
+    margin: 0px 0 50px;
+}
+
+.FAQ-qus-sec h5 {
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 1px solid #707070;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+
+.FAQ-qus-sec h5 i {
+    margin-right: 25px;
+}
+
+.FAQ-qus-sec h5 span {}
+
+.FAQ-qus-sec ul {
+    margin: 0 0 20px;
+    padding: 0;
+    list-style-type: none;
+}
+
+.FAQ-qus-sec ul li {
+    font-size: 16px;
+    margin-bottom: 10px;
+    line-height: 20px;
+}
+
+.faq-view-all a {
+    font-size: 16px;
+    line-height: 20px;
+    font-family: 'Monument Extended';
+    color: #2e2baa;
+    font-weight: normal;
+}
+
 .helpCenter-ViewAll .accordion-item {
     margin-bottom: 0;
     border: none !important;
-        border-bottom-color: currentcolor;
-        border-bottom-style: none;
-        border-bottom-width: medium;
+    border-bottom-color: currentcolor;
+    border-bottom-style: none;
+    border-bottom-width: medium;
     border-bottom: 1px solid #707070 !important;
-	padding:15px 15px 15px 0;
+    padding: 15px 15px 15px 0;
 }
-.helpCenter-ViewAll .accordion-item:first-child {border-top: 1px solid #707070 !important;}
-.helpCenter-ViewAll .accordion-item .accordion-button {border-radius: 0 !important;background: #fff !important;font-size: 16px; line-height: 20px; font-family: 'Monument Extended'; color:#000;font-weight: 500;padding: 0;box-shadow: none !important;}
+
+.helpCenter-ViewAll .accordion-item:first-child {
+    border-top: 1px solid #707070 !important;
+}
+
+.helpCenter-ViewAll .accordion-item .accordion-button {
+    border-radius: 0 !important;
+    background: #fff !important;
+    font-size: 16px;
+    line-height: 20px;
+    font-family: 'Monument Extended';
+    color: #000;
+    font-weight: 500;
+    padding: 0;
+    box-shadow: none !important;
+}
+
 .helpCenter-ViewAll .accordion-item .accordion-body {
     padding: 0;
     margin-top: 15px;
@@ -4353,27 +4449,65 @@ h4.arrow-change:after {
     line-height: 24px;
     color: #000;
 }
+
 .helpCenter-ViewAll {
     margin-bottom: 60px;
 }
 
-
-
 /* Login / register */
 
-.login-desc{font-size: 18px; line-height: 27px; color:#000;font-weight: 500; text-align:center; padding:0 100px;}
+.login-desc {
+    font-size: 18px;
+    line-height: 27px;
+    color: #000;
+    font-weight: 500;
+    text-align: center;
+    padding: 0 100px;
+}
+
 .login-sec {
     padding: 0 55px;
 }
-.or-bg{width:100%; height:2px;  margin:40px 0; position:relative;}
-.or-bg .or-text{background:#fff; padding:0 15px; width:max-content; margin:auto;font-size:16px;}
-.social-login a{width:100%; display:block; border:1px solid; padding:10px; text-align:center; color:#000; font-size:16px;margin-bottom: 10px;text-decoration: none;}
-.social-login a:after{content: ""; clear: both;display: block;}
+
+.or-bg {
+    width: 100%;
+    height: 2px;
+    margin: 40px 0;
+    position: relative;
+}
+
+.or-bg .or-text {
+    background: #fff;
+    padding: 0 15px;
+    width: max-content;
+    margin: auto;
+    font-size: 16px;
+}
+
+.social-login a {
+    width: 100%;
+    display: block;
+    border: 1px solid;
+    padding: 10px;
+    text-align: center;
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.social-login a:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
 .social-login a svg {
     margin-left: 25%;
     float: left;
     text-align: right;
 }
+
 .social-login a span {
     width: 65%;
     float: right;
@@ -4388,15 +4522,25 @@ h4.arrow-change:after {
 .active_megamenu .megamenu_bar {
     display: none;
 }
+
 /* order confirmation */
 
-.order-number h2{
-	font-size: 20px;
-font-family: 'Monument Extended';
-font-style: normal;
-text-decoration: none;
-font-weight: 400;
-color: #000;
-margin-bottom: 20px;
-margin-top: 43px;
+.order-number h2 {
+    font-size: 20px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    text-decoration: none;
+    font-weight: 400;
+    color: #000;
+    margin-bottom: 20px;
+    margin-top: 43px;
+}
+
+.header-mvp {
+    position: relative;
+    z-index: 1;
+}
+
+.headerrr, .headerrr .fp-tableCell {
+    height: 100px !important;
 }

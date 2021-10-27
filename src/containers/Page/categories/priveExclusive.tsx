@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getPriveExclusiveProducts } from '../../../redux/cart/productApi';
-import { addToCartApi } from '../../../redux/cart/productApi';
-import notification from "../../../components/notification";
 import cartAction from "../../../redux/cart/productAction";
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
+import { getCookie } from '../../../helpers/session';
+
 const { addToCart, productList } = cartAction;
 
 
 function PriveExclusive(props) {
+    const location = useLocation()
     let image = '', thumbnail = '';
-    const [catId, setCatId] = useState(52);
+    const language = getCookie('currentLanguage');
     const [products, setProducts] = useState({
         items: []
     });
@@ -27,39 +28,22 @@ function PriveExclusive(props) {
     };
 
     useEffect(() => {
-        getData();
-    }, []);
+        let lang = props.languages ? props.languages : language;
+        let catID = getCookie("_TESTCOOKIE");
+        getData(catID, lang);
+    }, [props.languages, location]);
 
-    const getData = async () => {
-        let result: any = await getPriveExclusiveProducts(catId);
-        console.log(result.data);
+    const getData = async (catID, lang) => {
+        let result: any = await getPriveExclusiveProducts(catID, lang);
         if (result) {
             result.data.items.forEach(el => {
-                if (el.attribute_code == 'image') {
+                if (el.attribute_code === 'image') {
 
                 }
             })
             setProducts(result.data);
         }
     }
-
-    function handleClick(id: number, sku: string) {
-        let cartData = {
-            "cartItem": {
-                "sku": sku,
-                "qty": 1,
-                "quote_id": localStorage.getItem('cartQuoteId')
-            }
-        }
-        let customer_id = localStorage.getItem('cust_id');
-        if (customer_id) {
-            addToCartApi(cartData)
-        }
-        props.addToCart(id);
-        notification("success", "", "Item added to cart");
-    }
-
-
 
     return (
         <section>

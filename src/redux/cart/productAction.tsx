@@ -18,6 +18,7 @@ const actions = {
     RECOMENDED_PRODUCTS: 'RECOMENDED_PRODUCTS',
     GET_ATTRIBUTES_PRODUCTS: 'GET_ATTRIBUTES_PRODUCTS',
     CHECKOUT_SIDEBAR: 'CHECKOUT_SIDEBAR',
+    GET_CATEGORY_DATA: 'GET_CATEGORY_DATA',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -26,7 +27,7 @@ const actions = {
         type: actions.ADD_TO_CART_TASK,
         addToCartTask
     }),
-    addToWishlistTask: isShow => ({       
+    addToWishlistTask: isShow => ({
         type: actions.ADD_TO_WISHLIST_TASK_NEw,
         isShow: isShow
     }),
@@ -89,7 +90,11 @@ const actions = {
     getCheckoutSideBar: payload => ({
         type: actions.CHECKOUT_SIDEBAR,
         payload
-    })
+    }),
+    getCategoryData: payload => ({
+        type: actions.GET_CATEGORY_DATA,
+        payload
+    }),
 
 };
 export default actions;

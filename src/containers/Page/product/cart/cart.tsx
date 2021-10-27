@@ -105,7 +105,8 @@ function CartItemPage(props) {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
                 cartItems = await getGuestCart();
-                cartData = cartItems.data.items;
+                let products = cartItems.data.items;
+                cartData = await getgidtMessageCall(products)
                 cartTotal = await getGuestCartTotal();
 
             }

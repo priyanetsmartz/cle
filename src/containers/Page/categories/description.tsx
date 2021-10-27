@@ -12,16 +12,11 @@ function Description(props) {
     })
 
     useEffect(() => {
-        getData();
-    }, [props.languages, location]);
-
-    const getData = async () => {
-        let result: any = await getCategoryDetails(props.languages, props.catId);
-       
-        if (result) {
-            setCategory(result.data);
+        console.log(props.cateData, props.cateData);
+        if (props.cateData) {
+            setCategory(props.cateData);
         }
-    }
+    }, [props.languages, location]);
 
     return (
         <section className="cle-designer-info">

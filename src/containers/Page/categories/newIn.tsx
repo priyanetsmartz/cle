@@ -1,36 +1,40 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import { formatprice } from '../../../components/utility/allutils';
 import {
-    addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi,
-    getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken
+    addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
 } from '../../../redux/cart/productApi';
-
-import { Pages1 } from '../../../redux/pages/allPages';
+import { useParams } from "react-router-dom";
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useLocation } from 'react-router-dom';
+import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+const commonFunctions = new CommonFunctions();
+const baseUrl = commonFunctions.getBaseUrl();
+const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
 const { addToCart, productList } = cartAction;
 
 function NewIn(props) {
     const location = useLocation()
-    let imageD = '';
+    let imageD = '', description = '';
+    let catID = getCookie("_TESTCOOKIE");
+    const { category, subcat } = useParams();
     const [pageSize, setPageSize] = useState(12);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
     const [page, setCurrent] = useState(1);
     const [token, setToken] = useState('');
+    const [isHoverImage, setIsHoverImage] = useState(0);
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
     const [sort, setSort] = useState(0);
     const language = getCookie('currentLanguage');
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
-        getProducts();
+        getProducts(catID);
 
         return () => {
             // componentwillunmount in functional component.
@@ -38,10 +42,10 @@ function NewIn(props) {
         }
     }, [sortValue, page, pageSize, location])
 
-    async function getProducts() {
+    async function getProducts(catID) {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory(page, pageSize, 'category', sortValue.sortBy, sortValue.sortByValue);
+        let result: any = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue);
         //  console.log(Math.ceil(result.data.total_count / 9))
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
@@ -66,61 +70,11 @@ function NewIn(props) {
         // console.log(result1)
 
     }
-    const filtterData = (event) => {
-        let lang = props.languages ? props.languages : language;
-        let sortBy = "created_at";
-        let sortByValue = "desc";
-        if (event.target.value === "1") {
-            sortBy = "price";
-            sortByValue = "desc";
-        } else if (event.target.value === "2") {
-            sortBy = "price";
-            sortByValue = "asc";
-        }
-
-        setSort(event.target.value);
-        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
-
-    }
-    async function handleCart(id: number, sku: string) {
-        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        let customer_id = localStorage.getItem('cust_id');
-
-        let cartQuoteId = ''
-        if (cartQuoteIdLocal) {
-            cartQuoteId = cartQuoteIdLocal
-        } else {
-            // create customer token
-            let guestToken: any = await createGuestToken();
-            localStorage.setItem('cartQuoteToken', guestToken.data);
-            let result: any = await getGuestCart();
-            cartQuoteId = result.data.id
-            console.log(result.data)
-        }
-        localStorage.setItem('cartQuoteId', cartQuoteId);
-        // only simple product is added to cart because in design there are no option to show configuration product
-        let cartData = {
-            "cartItem": {
-                "quote_id": localStorage.getItem('cartQuoteId'),
-                "sku": sku,
-                "qty": 1
-            }
-        }
-        if (customer_id) {
-            addToCartApi(cartData)
-        } else {
-            addToCartApiGuest(cartData)
-        }
-
-        // props.addToCart(id);
-        props.addToCartTask(true);
-        notification("success", "", "Item added to cart");
-    }
 
     async function handleWhishlist(id: number) {
         let result: any = await addWhishlist(id);
         notification("success", "", result.data[0].message);
-        getProducts()
+        getProducts(catID)
 
     }
     async function handleDelWhishlist(id: number) {
@@ -129,16 +83,17 @@ function NewIn(props) {
         let del: any = await removeWhishlist(id);
         //  console.log(del);
         notification("success", "", del.data[0].message);
-        getProducts()
+        getProducts(catID)
     }
-    const handlePageSize = (page) => {
-        setPageSize(page)
+
+    const someHandler = (id) => {
+        let prod = parseInt(id)
+        setIsHoverImage(prod);
     }
-    const getPaginationGroup = () => {
-        let start = Math.floor((page - 1) / 4) * 4;
-        let fill = pagination > 5 ? 4 : pagination;
-        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
-    };
+
+    const someOtherHandler = (e) => {
+        setIsHoverImage(0)
+    }
 
 
     return (
@@ -163,28 +118,37 @@ function NewIn(props) {
                                     }
 
                                     <div className="text-center">
-                                        {
-                                            item.custom_attributes.map((attributes) => {
-                                                if (attributes.attribute_code === 'image') {
-                                                    imageD = attributes.value;
-                                                }
-                                            })
-                                        }
-                                        <img src={imageD} alt={item.name} width="200" />
+                                        <div className="product_img" onMouseEnter={() => someHandler(item.id)}
+                                            onMouseLeave={() => someOtherHandler(item.id)}>
+
+                                            {
+                                                item.custom_attributes.map((attributes) => {
+                                                    if (attributes.attribute_code === 'image') {
+                                                        imageD = attributes.value;
+                                                    }
+                                                    if (attributes.attribute_code === 'short_description') {
+                                                        description = attributes.value;
+                                                    }
+                                                })
+                                            }
+                                            {
+                                                isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD} className="image-fluid" alt={item.name} height="150" />
+                                            }
+                                        </div >
                                     </div>
                                     <div className="about text-center">
                                         <h5>{item.name}</h5>
-                                        <div className="tagname">{item.desc}</div>
+                                        <div  className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
                                         <div className="pricetag">${formatprice(item.price)}</div>
                                     </div>
                                     {/* {token && ( */}
-                                    <div className="cart-button mt-3 px-2"> 
+                                    <div className="cart-button mt-3 px-2">
                                         <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase">
                                             View Product</Link>
-                                        <div className="add"> 
+                                        <div className="add">
                                             <span className="product_fav">
-                                                <i className="fa fa-heart-o"></i></span> 
-                                            <span className="product_fav"><i className="fa fa-opencart"></i></span> 
+                                                <i className="fa fa-heart-o"></i></span>
+                                            <span className="product_fav"><i className="fa fa-opencart"></i></span>
                                         </div>
                                     </div>
                                     {/* )} */}
@@ -195,11 +159,14 @@ function NewIn(props) {
                 })}
                 <div className="col-md-3">
                     <div className="view-all-btn">
-                    <Link to="/products/new-in/all"><IntlMessages id="category.viewAll" /></Link>
+                        {
+                            subcat !== undefined ? <Link to={`/products/${category}/${subcat}/all`} > <IntlMessages id="category.viewAll" /></Link> : <Link to={`/products/${category}/all`} > <IntlMessages id="category.viewAll" /></Link>
+                        }
+
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 const mapStateToProps = (state) => {

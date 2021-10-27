@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import notification from '../../../../components/notification';
 import cartAction from "../../../../redux/cart/productAction";
-import { addToCartApi, addToCartApiGuest, giftCart, giftGuestCart } from "../../../../redux/cart/productApi";
+import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, giftCart, giftGuestCart } from "../../../../redux/cart/productApi";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
-const { openGiftBoxes } = cartAction;
+const { openGiftBoxes, addToCartTask } = cartAction;
 function GiftMessage(props) {
     const intl = useIntl();
     useEffect(() => {
         // console.log(props)
         return () => {
             setIsShow(false);
-            
+
         }
     }, [])
 
@@ -35,7 +35,19 @@ function GiftMessage(props) {
         if (handleValidation()) {
             setIsShow(true);
             let cartData = {};
-            let cartQuoteId = localStorage.getItem('cartQuoteId');
+            let cartQuoteId = '';
+            let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+            if (cartQuoteIdLocal) {
+                cartQuoteId = cartQuoteIdLocal
+            } else {
+                // create customer token
+                let guestToken: any = await createGuestToken();
+                localStorage.setItem('cartQuoteToken', guestToken.data);
+                let result: any = await getGuestCart();
+                cartQuoteId = result.data.id
+                //  console.log(result.data)
+            }
+            localStorage.setItem('cartQuoteId', cartQuoteId);
             let customer_id = localStorage.getItem('cust_id');
             //  console.log(props)
             if (props.items.id) {
@@ -101,6 +113,7 @@ function GiftMessage(props) {
                     message: ""
                 })
                 props.openGiftBoxes(0);
+                props.addToCartTask(true);
                 notification("success", "", "Item added as a gift!");
             }
         } else {
@@ -198,5 +211,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { openGiftBoxes }
+    { openGiftBoxes, addToCartTask }
 )(GiftMessage);
