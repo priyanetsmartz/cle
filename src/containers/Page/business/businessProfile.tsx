@@ -13,7 +13,12 @@ import { DROPDOWN } from '../../../config/constants';
 import moment from 'moment';
 
 function BusinessProfile(props) {
-    const [vendorData, setVendorData] = useState(JSON.parse(localStorage.getItem('cle_vendor')));
+    const [vendorData, setVendorData] = useState({
+        vendor_name:'',
+        telephone:'',
+        country_id:'',
+        dob:''
+    });
 
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [custForm, setCustForm] = useState({
@@ -88,6 +93,10 @@ function BusinessProfile(props) {
 
     //--------------------------------------------------------------
     useEffect(() => {
+        const ven = localStorage.getItem('cle_vendor');
+        if(ven){
+            setVendorData(JSON.parse(ven))
+        }
         getData();
         getCountries();
         return () => {
