@@ -142,23 +142,23 @@ function Checkout(props) {
         checkoutData['total_items'] = cartTotal && cartTotal.data ? cartTotal.data.items_qty : 0;
         checkItems['items'] = cartItems && cartItems.data ? cartItems.data.items : [];
         //  console.log(cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.id)
-        let shipingAdd = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.id : 0;
+        let shipingAdd = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.id : 0;
 
-        ship['firstname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.firstname : '';
+        ship['firstname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.firstname : '';
 
-        ship['lastname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.lastname : '';
+        ship['lastname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.lastname : '';
 
-        ship['telephone'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.telephone : '';
+        ship['telephone'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.telephone : '';
 
-        ship['postcode'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.postcode : '';
+        ship['postcode'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.postcode : '';
 
-        ship['city'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.city : '';
+        ship['city'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.city : '';
 
-        ship['country_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.country_id : '';
+        ship['country_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.country_id : '';
 
-        ship['region_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.region_id : '';
+        ship['region_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.region_id : '';
 
-        ship['street'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.street : '';
+        ship['street'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.street : '';
         props.getCheckoutSideBar({
             checkData: checkoutData,
             items: checkItems,
@@ -726,7 +726,7 @@ function Checkout(props) {
                 localStorage.removeItem('cartQuoteToken');
                 let orderId = parseInt(orderPlace.data);
                 //return <Redirect to={'/thankyou/' + orderId} />
-                history.push('/thankyou/' + orderId);
+                history.push('/thankyou?id=' + orderId);
             } else {
                 // console.log('herere')
                 setIsShow(false)
@@ -765,7 +765,7 @@ function Checkout(props) {
     }
     const getPaymentStatusAPi = async (getPaymentStatusAPi) => {
         let paymentStatus: any = await getPaymentStatus(getPaymentStatusAPi);
-       // console.log(paymentStatus.data);
+        // console.log(paymentStatus.data);
         let detailsRequired = [];
         detailsRequired['transactionId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId ? paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId : 0;
         detailsRequired['InvoiceId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceId ? paymentStatus.data[0].Data.InvoiceId : 0;
@@ -1102,12 +1102,6 @@ function Checkout(props) {
                                                                             <p className="text-muted">
                                                                                 <IntlMessages id="myaccount.defaultBillingAddress" />
                                                                             </p> : ""}
-                                                                        <div className="form-check">
-                                                                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                                                            <label className="form-check-label" >
-                                                                                <IntlMessages id="checkout.issueInvoice" />
-                                                                            </label>
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-md-5">

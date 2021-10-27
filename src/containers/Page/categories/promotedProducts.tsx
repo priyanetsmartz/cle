@@ -90,8 +90,12 @@ function PromotedProducts(props) {
                     ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
                     ...itm
                 }));
+            if (WhishlistData) {
+                productResult = mergeById(products, WhishlistData);
+            } else {
+                productResult = products
+            }
 
-            productResult = mergeById(products, WhishlistData);
 
         }
         setOpacity(1);

@@ -55,14 +55,16 @@ function LatestProducts(props) {
                 breakpoint: 600,
                 settings: {
                     slidesToShow: 2,
-                    slidesToScroll: 2
+                    slidesToScroll: 2,
+                    dots: true
                 }
             },
             {
                 breakpoint: 480,
                 settings: {
                     slidesToShow: 1,
-                    slidesToScroll: 1
+                    slidesToScroll: 1,
+                    dots: true
                 }
             }
         ]
@@ -163,8 +165,8 @@ function LatestProducts(props) {
                                 <div className="tab-pane fade show active" id="PD" role="tabpanel" aria-labelledby="PD-tab">
                                     <div className="row">
                                         <div className="col-sm-12">
-                                            <div className="new-in-slider product-listing">
-                                                <div className="regular slider">
+                                            <div className="new-in-slider">
+                                                <div className="regular  product-listing slider">
                                                     <Slider {...settings}>
                                                         {productsLatest.map(item => {
                                                             return (

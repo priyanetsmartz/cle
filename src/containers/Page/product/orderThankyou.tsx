@@ -34,7 +34,7 @@ function OrderThankyou(props) {
         orderDetails['base_tax_amount'] = results.data ? results.data.base_tax_amount : 0;
         orderDetails['grand_total'] = results.data ? results.data.grand_total : 0;
         orderDetails['items'] = results.data ? results.data.items : {};
-        console.log(orderDetails)
+        //console.log(orderDetails)
         setOrderDetails(orderDetails);
     }
     return (

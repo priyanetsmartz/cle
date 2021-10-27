@@ -239,7 +239,7 @@ function ProductDetails(props) {
         }
 
         // console.log(tags);
-        console.log( result.data.price)
+        console.log(result.data.price)
         projectSingle['id'] = result.data.id;
         projectSingle['type_id'] = result.data.type_id;
         projectSingle['sku'] = result.data.sku;
@@ -293,6 +293,7 @@ function ProductDetails(props) {
         let cartSucces: any;
         let cartQuoteId = '';
         let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        console.log(cartQuoteIdLocal)
         if (cartQuoteIdLocal) {
             cartQuoteId = cartQuoteIdLocal
         } else {
@@ -445,7 +446,7 @@ function ProductDetails(props) {
                                         <h2><div dangerouslySetInnerHTML={{ __html: productDetails['short_description'] }} /></h2>
                                     </div>
                                     <div className="product-sale_off mt-4 mb-4">
-                                        <div className="product_saleoff">{productDetails['saleprice'] > 0 ? <><span className="saleoff">${formatprice(productDetails['price'])}</span> now 25% off</> : <span>${formatprice(productDetails['price'])}</span>}</div>
+                                        <div className="product_saleoff">{productDetails['saleprice'] > 0 ? <><span className="saleoff">${formatprice(productDetails['price'])}</span> now 25% off</> : <span>${productDetails['price'] > 0 ? formatprice(productDetails['price']) : 0}</span>}</div>
                                         {productDetails['saleprice'] > 0 ? <div className="product_price">${formatprice(productDetails['saleprice'])}</div> : ""}
                                     </div>
                                     <div className="selection-process mb-2">

@@ -62,3 +62,11 @@
 	border:1px solid #fff;
 	text-decoration:none;
 }
+
+
+.gallery-wrap.mobile-slider .item {
+    width: 100% !important;
+    display: block !important;
+    flex: none !important;
+    background-size: cover;
+}

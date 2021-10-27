@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { BrowserView, MobileView } from 'react-device-detect';
-import ReactFullpage from '@fullpage/react-fullpage';
 import { getCategoryDetails } from '../../../redux/pages/customers';
 import CategoryBanner from './banner';
 import PriveExclusive from './priveExclusive';
 import LatestProducts from './latestProducts';
 import PromotedProducts from './promotedProducts';
-import Magazine from '../home/magazine';
 import NewIn from './newIn';
 import Description from './description';
 import Footer from '../../../containers/partials/footer-new';
@@ -16,14 +13,13 @@ import Header from '../../../containers/partials/headerMenu';
 import { useLocation } from 'react-router-dom';
 import { getCookie } from '../../../helpers/session';
 import cartAction from "../../../redux/cart/productAction";
-
+import AppBreadcrumbs from '../../partials/breadCrumbs';
 const { getCategoryData } = cartAction;
 
 
 function Categories(props) {
     const baseUrl = process.env.REACT_APP_API_URL;
     const location = useLocation()
-    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [category, setCategory] = useState({
         name: '',
         custom_attributes: [],
@@ -75,83 +71,36 @@ function Categories(props) {
 
 
     return (
-        <>
-            <BrowserView>
-                <ReactFullpage
-                    className="sectiosn"
-                    sectionClassName='section'
-                    scrollBar="true"
-                    // normalScrollElements='.banner'
-                    fixedElements='.cle-footer'
-                    // licenseKey='BC3287DC-D6A247E6-834B93FA-A1FE7092'              
-                    scrollingSpeed={500} /* Options here */
-                    render={({ state, fullpageApi }) => {
-                        return (
-                            <div className="sectiosn" >
-                                <div className="section headerrr" id="headerrr" key='uniqueKey'>
-                                    <Header />
-                                </div>
-                                <div className="section banner">
-                                    <CategoryBanner cateData={category} />
-                                </div>
-                                {localStorage.getItem('token') === '4' && <div className="section" >
-                                    <PriveExclusive />
-                                </div>}
-                                <div className="section" >
-                                    <LatestProducts />
-                                </div>
-                                <div className="section" >
-                                    <PromotedProducts />
-                                </div>
-                                <div className="section">
-                                    <Magazine />
-                                </div>
-                                <div className="section">
-                                    <NewIn />
-                                </div>
-                                <div className="section">
-                                    <Description cateData={category} />
-                                </div>
-                                <div className="section footer">
-                                    <Footer />
-                                </div>
-                            </div>
-                        )
-                    }}
-                />
-            </BrowserView>
-            <MobileView>
-                <div className="sectiosn" >
-                    <div className="section headerrr" id="headerrr" key='uniqueKey'>
-                        <Header />
-                    </div>
-                    <div className="section">
-                        <CategoryBanner cateData={category} />
-                    </div>
-                    {localStorage.getItem('token') === '4' && <div className="section" >
-                        <PriveExclusive />
-                    </div>}
-                    <div className="section" >
-                        <LatestProducts />
-                    </div>
-                    <div className="section" >
-                        <PromotedProducts />
-                    </div>
-                    <div className="section">
-                        <Magazine />
-                    </div>
-                    <div className="section">
-                        <NewIn />
-                    </div>
-                    <div className="section">
-                        <Description cateData={category} />
-                    </div>
-                    <div className="section footer">
-                        <Footer />
-                    </div>
-                </div>
-            </MobileView>
-        </>
+        <div className="sectiosn" >
+            <div className="section headerrr" id="headerrr" key='uniqueKey'>
+                <Header />
+            </div>
+            <div className="section banner">
+                <CategoryBanner cateData={category} />
+                <AppBreadcrumbs />
+            </div>
+            {localStorage.getItem('token') === '4' && <div className="section" >
+                <PriveExclusive />
+            </div>}
+            <div className="section" >
+                <LatestProducts />
+            </div>
+            <div className="section" >
+                <PromotedProducts />
+            </div>
+            {/* <div className="section">
+                <Magazine />
+            </div> */}
+            <div className="section">
+                <NewIn />
+            </div>
+            <div className="section">
+                <Description cateData={category} />
+            </div>
+            <div className="section footer">
+                <Footer />
+            </div>
+        </div>
     )
 }
 const mapStateToProps = (state) => {

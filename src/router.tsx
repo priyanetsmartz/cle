@@ -51,6 +51,8 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
         <ProductRoutes exact path="/products/:category/:subcat/all" component={Product} />
         <ProductRoutes exact path="/products/:category/all" component={Product} />
+        <ProductHome exact path="/products/:category/:subcat/:childcat/:greatchildcat" component={Categories} />
+        <ProductHome exact path="/products/:category/:subcat/:childcat" component={Categories} />
         <ProductHome exact path="/products/:category/:subcat" component={Categories} />
         <ProductHome exact path="/products/:category" component={Categories} />
 
@@ -59,16 +61,16 @@ const PublicRoutes = ({ history }) => {
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
         <PrivateRoute exact path="/vendor/:tab" component={BusinessSidebar} />
         <ProductHome exact path="/" component={HomePage} />
-        <ProductHome exact path="/return-order" component={ReturnPage} />
+        <ProductRoutes exact path="/return-order" component={ReturnPage} />
         {/* <PrivateRoute exact path="/designer-categories" component={DesignerCategories} /> */}
         <PrivateRoute exact path="/explore-desginer" component={ExploreDesigner} />
-        <MainRoute exact path="/magazines/:category" component={AllPosts} />
-        <MainRoute exact path="/magazine/:slug" component={SinglePost} />
-        <MainRoute exact path="/magazines" component={AllPosts} />
+        <ProductRoutes exact path="/magazines/:category" component={AllPosts} />
+        <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />
+        <ProductRoutes exact path="/magazines" component={AllPosts} />
         <HomeRoute exact path="/:signup/:member" component={NewHome} />
         {/* <HomeRoute exact path="/" component={NewHome} /> */}
-        <MainRoute exact path="/help-us/thank-you" component={ThankYou} />
-        <MainRoute exact path="/contact-us" component={contact} />
+        <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
+        <ProductRoutes exact path="/contact-us" component={contact} />
         <ProductRoutes exact path="/faq" component={Faq} />
         <ProductRoutes exact path="/faq-listing" component={FaqListing} />
 
@@ -77,18 +79,18 @@ const PublicRoutes = ({ history }) => {
 
 
         <ProductRoutes exact path="/vendor-login" component={VendorLogin} />
-        <MainRoute exact path="/forgot-password" component={ForgottenPassword} />
-        <MainRoute exact path="/reset-password" component={ResetPassword} />
+        <ProductRoutes exact path="/forgot-password" component={ForgottenPassword} />
+        <ProductRoutes exact path="/reset-password" component={ResetPassword} />
         <PriveRoute exact path="/prive-user" component={PriveUser} />
         <PrivateRoute exact path="/profile" component={profile} />
-        <MainRoute exact path="/password-link-expired" component={PasswordLinkExpired} />
+        <ProductRoutes exact path="/password-link-expired" component={PasswordLinkExpired} />
         <Route exact path="/post-comment">
           <PostComment />
         </Route>
         <ProductRoutes exact path="/products" component={Product} />
         <ProductRoutes exact path="/my-cart" component={Cart} />
         <ProductRoutes exact path="/checkout" component={Checkout} />
-        <MainRoute path="/:id" component={Pages} />
+        <ProductRoutes path="/:id" component={Pages} />
         {/* <Route exact path="/page-not-found" component={NotFound} /> */}
       </Switch>
     </ConnectedRouter >

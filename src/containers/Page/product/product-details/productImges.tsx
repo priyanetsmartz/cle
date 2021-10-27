@@ -7,7 +7,10 @@ const ProductImages = (props) => {
     const [fullSizedImg, setFullSizedImg] = useState(featuredImage);
     useEffect(() => {
         setProductImages(props.productImages)
-        setFullSizedImg(props.productImages[0]);
+        if (props.productImages && props.productImages.length > 0) {
+            setFullSizedImg(props.productImages[0]);
+        }
+
     }, [props.productImages])
     const changeImg = (i) => {
         // console.log(productImage[i])

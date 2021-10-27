@@ -15,6 +15,7 @@ const { addToCart, productList } = cartAction;
 
 function WeChooseForYou(props) {
     const [token, setToken] = useState('');
+    // console.log(props.choosenData)
     let catID = getCookie("_TESTCOOKIE");
     const location = useLocation()
     const [isWishlist, setIsWishlist] = useState(0);
@@ -58,21 +59,9 @@ function WeChooseForYou(props) {
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
-        getData();
-    }, [props.languages, location]);
+        setProducts(props.choosenData)
+    }, [props.languages, location, props.choosenData]);
 
-    const getData = async () => {
-        const relevantCookies = getCookie("relevant");
-        if (!relevantCookies) {
-            let result: any = await getWeChooseForYou(props.languages, customerId);
-            if (result.data[0] && result.data[0].relevantProducts.length > 0) {
-                console.log(result.data[0].relevantProducts)
-                setCookie("relevant", true)
-                setProducts(result.data[0].relevantProducts);
-            }
-
-        }
-    }
 
     async function handleWhishlist(id: number) {
         let result: any = await addWhishlist(id);
@@ -93,7 +82,7 @@ function WeChooseForYou(props) {
     return (
         <div>
             {
-                products.length > 0 && (
+                (props.choosenData && props.choosenData.length > 0) && (
                     <section className="width-100 my-5 choose-foryou-sec">
                         <div className="container">
                             <div className="row">
@@ -109,7 +98,7 @@ function WeChooseForYou(props) {
                                     <div className="new-in-slider">
                                         <div className="regular slider">
                                             <Slider {...settings}>
-                                                {products.map((item, i) => {
+                                                {props.choosenData.map((item, i) => {
                                                     return (
                                                         <Link className="productcalr" key={i} to={'/product-details/' + item.name}>
                                                             <div className="product_img">

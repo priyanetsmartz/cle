@@ -21,7 +21,7 @@ function RelevantProducts(props) {
 
     const settings = {
         dots: false,
-        infinite: true,
+        infinite: false,
         arrows: true,
         speed: 500,
         slidesToShow: 4,
@@ -29,7 +29,34 @@ function RelevantProducts(props) {
         centerMode: false,
         variableWidth: false,
         autoplay: true,
-        autoplaySpeed: 2000
+        autoplaySpeed: 2000,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    dots: true
+                }
+            }
+        ]
     };
 
     const getReleveantProds = async () => {
@@ -43,7 +70,7 @@ function RelevantProducts(props) {
     }
     return (
         <>
-            {(relevs && relevs.length)? (
+            {(relevs && relevs.length) ? (
                 <div className="also-like ">
                     <h2><IntlMessages id="youMayLike" /> </h2>
                     <div className="releveant-slider" >
@@ -51,7 +78,7 @@ function RelevantProducts(props) {
                             {relevs.slice(0, 8).map((product) => {
                                 return (
                                     <Link key={product.id} to={'/product-details/' + product.sku}>
-                                        <div className="productcalr" >
+                                        <div className="productcalr product" >
                                             <div className="product_img" style={{
                                                 "width": "180px", "height": "192px"
                                             }} ><img src={product.img} className="image-fluid" style={{ "width": "100%" }} alt={product.name} /> </div>
@@ -64,7 +91,7 @@ function RelevantProducts(props) {
                         </Slider>
                     </div>
                 </div>
-            ):""}
+            ) : ""}
         </>
     )
 }

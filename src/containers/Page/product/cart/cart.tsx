@@ -296,7 +296,7 @@ function CartItemPage(props) {
                                                                             <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
                                                                             <div className="col-sm-5 cartschanger">
                                                                                 <div className="value-button" id="decrease" onClick={() => { handleSubtractQuantity(item) }} >-</div>
-                                                                                <input type="number" id="number" disabled defaultValue={item.qty} value={value === item.item_id ? qty : item.qty} />
+                                                                                <input type="number" id="number" disabled  value={value === item.item_id ? qty : item.qty} />
                                                                                 <div className="value-button" id="increase" onClick={() => { handleAddQuantity(item) }}>+</div>
                                                                             </div>
                                                                             {/* <div className="col-sm-5">

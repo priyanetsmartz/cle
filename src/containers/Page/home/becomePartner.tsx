@@ -127,8 +127,7 @@ function BecomePartner(props) {
                                 <span className="error">{errors.errors["email"]}</span>
                             </form>
                             <div className="terms-text text-center">
-                                <IntlMessages id="newsletter.foot" /> <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link>
-                                <IntlMessages id="signup.and" />  <Link to="/privacy-policy"><IntlMessages id="signup.privacy_policy" /></Link><IntlMessages id="newsletter.optout" />
+                                <IntlMessages id="newsletter.foot" /> <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link> <IntlMessages id="signup.and" />  <Link to="/privacy-policy"> <IntlMessages id="signup.privacy_policy" /></Link> <IntlMessages id="newsletter.optout" />
                             </div>
                         </div>
                     </div>

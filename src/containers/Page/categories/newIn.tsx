@@ -97,9 +97,10 @@ function NewIn(props) {
 
 
     return (
-        <div className="product-listing container" style={{ 'opacity': opacity }}>
+        <div className=" container" style={{ 'opacity': opacity }}>
             <h1 className="mb-4"><IntlMessages id="category.explore"></IntlMessages></h1>
-            <div className="row g-2">
+            <div className="row product-listing g-2">
+
                 {props.items.slice(0, 7).map(item => {
                     return (
                         <div className="col-md-3" key={item.id}>
@@ -138,12 +139,12 @@ function NewIn(props) {
                                     </div>
                                     <div className="about text-center">
                                         <h5>{item.name}</h5>
-                                        <div  className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
+                                        <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
                                         <div className="pricetag">${formatprice(item.price)}</div>
                                     </div>
                                     {/* {token && ( */}
                                     <div className="cart-button mt-3 px-2">
-                                        <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase">
+                                        <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">
                                             View Product</Link>
                                         <div className="add">
                                             <span className="product_fav">

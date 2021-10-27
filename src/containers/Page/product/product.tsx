@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import appAction from "../../../redux/app/actions";
-import { addWhishlist, getAllProducts, getWhishlistItemsForUser, getProductByCategory, removeWhishlist, addToCartApi, getGuestCart, addToCartApiGuest, createGuestToken } from '../../../redux/cart/productApi';
+import { addWhishlist, getAllProducts, getWhishlistItemsForUser, getProductByCategory, removeWhishlist } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
@@ -20,7 +20,8 @@ const { showSignin } = appAction;
 
 
 function Products(props) {
-    const location = useLocation()
+    const location = useLocation();
+    const { category } = useParams();
     let imageD = '', description = '';
     let catID = getCookie("_TESTCOOKIE");
     const [isShow, setIsShow] = useState(0);
@@ -57,7 +58,7 @@ function Products(props) {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
         let result: any;
-        if (isCategory) {
+        if (category) {
             console.log("CAtegory api")
             result = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue);
         } else {
@@ -85,7 +86,6 @@ function Products(props) {
 
     }
     const filtterData = (event) => {
-        let lang = props.languages ? props.languages : language;
         let sortBy = "created_at";
         let sortByValue = "desc";
         if (event.target.value === "1") {
