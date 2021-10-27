@@ -19,6 +19,7 @@ function MyPreferences(props) {
     const [isShow, setIsShow] = useState(false);
 
     useEffect(() => {
+        console.log(attributes)
         getAttributes();
         return () => {
             //
@@ -26,8 +27,8 @@ function MyPreferences(props) {
     }, []);
 
     useEffect(() => {
-        //  console.log(favCat)
-        attributes.categories[activeCategory] = favCat;
+         console.log(favCat)
+        // attributes.categories[activeCategory] = favCat;
         setAttributes(prevState => ({
             ...prevState,
             categories: attributes.categories
@@ -41,10 +42,11 @@ function MyPreferences(props) {
         if (preference && props.custData && props.custData.custom_attributes) {
             props.custData.custom_attributes.forEach(el => {
                 if (el.attribute_code === 'mostly_intersted_in') {
-                    preference.mostly_intersted.forEach(intested => {
+                    preference.mostly_intersted.forEach((intested, index) => {
                         el.value.split(',').forEach(element => {
                             if (intested.id === element) {
                                 intested.isChecked = true;
+                                setActiveCategory(index);
                             }
                         });
                     })
@@ -315,7 +317,7 @@ function MyPreferences(props) {
                     </div>
                     <div className="col-sm-6">
                         <div className="clothing_size">
-                            <h2>e<IntlMessages id="preferences.shoeSize" /></h2>
+                            <h2><IntlMessages id="preferences.shoeSize" /></h2>
                             <div className="cl_size_sec">
                                 <ul>
                                     {attributes.shoes_size && attributes.shoes_size.map((ss, i) => {

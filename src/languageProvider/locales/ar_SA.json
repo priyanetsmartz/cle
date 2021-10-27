@@ -211,6 +211,14 @@
   "myaccount.giftingPreferences": "تفضيلات الإهداء",
   "myaccount.youCanPutInfo": "يمكنك إضافة تواريخ المناسبات المهمّة للاحتفال بأحبّائك! وبإمكاننا مساعدتك في اختيار الهديّة المناسِبة، للمناسَبة المناسِبة!",
   "myaccount.myBirthday": "يوم ميلادي",
+  "myaccount.iLike": "انا يعجبني",
+  "myaccount.notifyMe": "يخطر لي عبر البريد الإلكتروني",
+  "myaccount.occasion": "مناسبات",
+  "myaccount.annualReminder": "تذكير سنوي",
+  "myaccount.dateOfDelivery": "تاريخ التسليم",
+  "myaccount.categoryPrefer": "تفضيل الفئة",
+  "myaccount.notify": "أشعرني، أعلمني، بلغني",
+  "myaccount.addAFriend": "أضف عيد ميلاد صديق",
   "myaccount.listOfBirthdays": "قائمة أعياد الميلاد",
   "myaccount.myAddresses": "عناويني",
   "myaccount.address": "عنوان",
@@ -354,5 +362,6 @@
   "myaccount.onceYouHaveConfirmd":"عند تأكيدك للمعلومات المذكورة أعلاه، سنقوم بإلغاء حسابك وإرسال رسالة تأكيد عبر البريد الإلكتروني.",
   "myaccount.ifYouHaveChanges":"إن قمت بتغيير رأيك، فسنكون سعداء للتّرحيب بك مجدّداً في جالية كلي! كل ما عليك فعله هو تأكيد المعلومات المذكور",
   "myaccount.dontWantToclose":"لا تريد إغلاق حسابك ولكن ترغب في استراحة؟",
-  "vendor.mySupport":"دعمي"
+  "vendor.mySupport":"دعمي",
+  "mysupport.cta": "اقرأ الأسئلة الشائعة"
 }

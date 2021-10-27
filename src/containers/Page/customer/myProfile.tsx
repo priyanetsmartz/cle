@@ -1002,12 +1002,12 @@ function MyProfile(props) {
             <Modal show={myDetailsModel} >
                 <div className="CLE_pf_details">
                     <Modal.Header>
-                        <h1>My Details</h1>
+                        <h1><IntlMessages id="myaccount.myDetails" /></h1>
                         <Link to="#" onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     </Modal.Header>
                     <Modal.Body className="arabic-rtl-direction">
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Frist name<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Ann"
                                 id="firstname"
                                 value={custForm.firstname}
@@ -1015,14 +1015,14 @@ function MyProfile(props) {
                             <span className="error">{errors.errors["firstname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Surname<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Smith" id="lastname"
                                 value={custForm.lastname}
                                 onChange={handleChange} />
                             <span className="error">{errors.errors["lastname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Gender</label>
+                            <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                             <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">Select</option>
                                 {DROPDOWN.gender.map(opt => {
@@ -1040,7 +1040,7 @@ function MyProfile(props) {
                             <span className="error">{errors.errors["phone"]}</span>
                         </div> */}
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Date of birth</label>
+                            <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">Select</option>
@@ -1076,7 +1076,7 @@ function MyProfile(props) {
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">
                             <div className="confirm-btn">
-                                <button type="button" className="btn btn-secondary" onClick={saveCustDetails}>Confirm</button>
+                                <button type="button" className="btn btn-secondary" onClick={saveCustDetails}><IntlMessages id="myaccount.confirm" /></button>
                             </div>
                         </div>
                     </Modal.Footer>
@@ -1088,7 +1088,7 @@ function MyProfile(props) {
             <Modal show={myPreferenceModel} size="lg">
                 <Modal.Header>
                     <div className="CLE_pf_details">
-                        <h1>My Preferences</h1>
+                        <h1><IntlMessages id="myaccount.myPreferences" /></h1>
                         <Link to="#" onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></Link>
                         <MyPreferences custData={custForm} preferences={attributes} />
                     </div>
@@ -1202,11 +1202,11 @@ function MyProfile(props) {
                 <Modal.Body className="gifting_pref">
                     <div className="girft_details">
                         <Modal.Header>
-                            <h1>Gifting Preferences</h1>
+                            <h1><IntlMessages id="myaccount.giftingPreferences" /></h1>
                             <Link to="#" onClick={openGigitingModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
                         </Modal.Header>
                         <div className="my_birthday mb-3">
-                            <label className="form-label">My birthday</label>
+                            <label className="form-label"><IntlMessages id="myaccount.myBirthday" /></label>
                             <div className="birthdate">01 May 1990</div>
                         </div>
                     </div>
@@ -1216,7 +1216,7 @@ function MyProfile(props) {
                             <div className="width-100">
                                 <div className="dobfeild_gift row">
                                     <div className="col-sm-4">
-                                        <label className="form-label">I like</label>
+                                        <label className="form-label"><IntlMessages id="myaccount.iLike" /></label>
                                         <select className="form-select me-3" aria-label="Default select example">
                                             <option value="">01</option>
                                             <option value="1">01</option>
@@ -1248,7 +1248,7 @@ function MyProfile(props) {
                         <div className="col-sm-6">
                             <div className="dobfeild_gift row">
                                 <div className="col-sm-6">
-                                    <label className="form-label">I like</label>
+                                    <label className="form-label"><IntlMessages id="myaccount.iLike" /></label>
                                     <select className="form-select " aria-label="Default select example">
                                         <option value="">Watches</option>
                                         <option value="1">01</option>
@@ -1275,7 +1275,7 @@ function MyProfile(props) {
                     <div className="row">
                         <div className="col-sm-12 mt-3 mb-5">
                             <div className="form-check form-switch custom-switch">
-                                <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Notify me via emial</label>
+                                <label className="form-check-label" htmlFor="flexSwitchCheckChecked"><IntlMessages id="myaccount.notifyMe" /></label>
                                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
                             </div>
                         </div>
@@ -1284,17 +1284,17 @@ function MyProfile(props) {
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="add_frd_birthdaysec">
-                                <h2>Add a friend’s birthday</h2>
+                                <h2><IntlMessages id="myaccount.addAFriend" /></h2>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Name<span className="maindatory">*</span></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.name" /><span className="maindatory">*</span></label>
                                     <input type="text" className="form-control" placeholder="John" />
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Last Name</label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.surName" /></label>
                                     <input type="text" className="form-control" placeholder="Doe" />
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Occasion</label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.occasion" /></label>
                                     <select className="form-select me-3" aria-label="Default select example">
                                         <option value="">Select</option>
                                         <option value="1">Birthday</option>
@@ -1307,7 +1307,7 @@ function MyProfile(props) {
                                     </select>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Annual Reminder</label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.annualReminder" /></label>
                                     <select className="form-select me-3" aria-label="Default select example">
                                         <option value="">Select</option>
                                         <option value="1">Yes</option>
@@ -1315,7 +1315,7 @@ function MyProfile(props) {
                                     </select>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Date of birth</label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dob" /></label>
                                     <div className="dobfeild">
                                         <select className="form-select me-3" aria-label="Default select example">
                                             <option value="">01</option>
@@ -1338,7 +1338,7 @@ function MyProfile(props) {
                                     </div>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Date of delivery</label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dateOfDelivery" /></label>
                                     <select className="form-select me-3" aria-label="Default select example">
                                         <option value="">Select</option>
                                         <option value="1">Same Date as event</option>
@@ -1346,7 +1346,7 @@ function MyProfile(props) {
                                     </select>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Gender</label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.gender" /></label>
                                     <select className="form-select" aria-label="Default select example" id="gender">
                                         <option value="">Select</option>
                                         {DROPDOWN.gender.map(opt => {
@@ -1355,7 +1355,7 @@ function MyProfile(props) {
                                     </select>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Category preference</label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.categoryPrefer" /></label>
                                     <select className="form-select me-3" aria-label="Default select example">
                                         <option value="">Select</option>
                                         <option value="1">Jewelry</option>
@@ -1365,7 +1365,7 @@ function MyProfile(props) {
                                     </select>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Notify me</label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.notify" /></label>
                                     <select className="form-select me-3" aria-label="Default select example">
                                         <option value="">Select</option>
                                         <option value="1">By email</option>
@@ -1433,7 +1433,7 @@ function MyProfile(props) {
                         <div className="col-sm-6">
                             <div className="list_birthday">
                                 <div className="width-100">
-                                    <h2>List of added birthdays</h2>
+                                    <h2><IntlMessages id="myaccount.listOfBirthdays" /></h2>
                                 </div>
                                 <div className="favt_dragdrop  mt-3">
                                     <div className="favdesignr_size_sec">
@@ -1442,7 +1442,7 @@ function MyProfile(props) {
                                             <li><Link to="#">Mom / 20 June 1964</Link></li>
                                             <li><Link to="#">Dad / 20 July 1962</Link></li>
                                         </ul>
-                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey">Remove all</Link></div>
+                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div>
                                     </div>
                                 </div>
                             </div>
@@ -1450,7 +1450,7 @@ function MyProfile(props) {
                         <Modal.Footer>
                             <div className="width-100 mb-4">
                                 <div className="float-end">
-                                    <button type="button" className="btn btn-secondary">Confirm</button>
+                                    <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.confirm" /></button>
                                 </div>
                             </div>
                         </Modal.Footer>
