@@ -45,15 +45,15 @@ function VendorLogin(props) {
         "rememberme": rememberMe
       }
       // login({ userInfo });
-      const result:any = await vendorLogin(userInfo);
-      if(result){
+      const result: any = await vendorLogin(userInfo);
+      if (result) {
         setIsShow(false);
         const vendorObj = {
           vendor_id: result.data[0].vendor_id,
           vendor_name: result.data[0].vendor_name,
           email: result.data[0].email,
           telephone: result.data[0].telephone,
-          country_id:result.data[0].country_id,
+          country_id: result.data[0].country_id,
         }
         localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
         history.push(`/vendor/profile`);
@@ -118,7 +118,7 @@ function VendorLogin(props) {
           </div>
         </div>
         <div className="row m-5 login-register-inputs">
-          <div className="col-md-6 border-end">
+          <div className="col-md-6">
             <div className="login-sec">
               <h3>Login</h3>
               <div className="mb-3">
@@ -183,13 +183,6 @@ function VendorLogin(props) {
                   </svg>
                   <span>Continue with Google</span></Link>
                 <Link to="#">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15.966" height="19" viewBox="0 0 15.966 19">
-                    <path id="apple-brands"
-                      d="M17.349,42.04a3.96,3.96,0,0,1,2.121-3.6,4.558,4.558,0,0,0-3.593-1.892c-1.506-.119-3.152.878-3.754.878-.636,0-2.1-.836-3.241-.836C6.515,36.632,4,38.482,4,42.244a10.572,10.572,0,0,0,.611,3.444c.543,1.557,2.5,5.374,4.547,5.311,1.069-.025,1.824-.759,3.215-.759,1.349,0,2.049.759,3.241.759,2.062-.03,3.835-3.5,4.352-5.061a4.2,4.2,0,0,1-2.617-3.9Zm-2.4-6.965A4,4,0,0,0,15.966,32a4.5,4.5,0,0,0-2.88,1.48A4.058,4.058,0,0,0,12,36.53,3.563,3.563,0,0,0,14.948,35.075Z"
-                      transform="translate(-4 -32)" />
-                  </svg>
-                  <span>Continue with Apple</span></Link>
-                <Link to="#">
                   <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19">
                     <path id="facebook"
                       d="M16.883,7.758a9.415,9.415,0,0,1,4.8,1.3,9.6,9.6,0,0,1,2.4,14.494,9.68,9.68,0,0,1-5.361,3.2V19.929h1.863L21,17.245H18.181V15.488a1.528,1.528,0,0,1,.325-1.009,1.486,1.486,0,0,1,1.192-.453h1.7V11.674q-.037-.012-.7-.093a13.83,13.83,0,0,0-1.5-.093,3.75,3.75,0,0,0-2.694.961A3.714,3.714,0,0,0,15.5,15.206v2.039H13.35v2.684H15.5v6.829a9.447,9.447,0,0,1-5.81-3.2,9.585,9.585,0,0,1,2.4-14.494,9.418,9.418,0,0,1,4.8-1.3Z"
@@ -197,56 +190,6 @@ function VendorLogin(props) {
                   </svg>
                   <span>Continue with Facebook</span></Link>
               </div>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="login-sec">
-              <h3>Create an Account</h3>
-
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label htmlFor="inputFName" className="form-label">First Name*</label>
-                  <input type="email" className="form-control" id="inputFName" />
-                </div>
-                <div className="col-md-6">
-                  <label htmlFor="inputLName" className="form-label">Last Name*</label>
-                  <input type="text" className="form-control" id="inputLName" />
-                </div>
-                <div className="col-12">
-                  <label htmlFor="inputPassword4" className="form-label">Create Password* (Min 6 characters)</label>
-                  <input type="password" className="form-control" id="inputPassword4" />
-                </div>
-                <div className="col-12">
-                  <label htmlFor="inputPassword4" className="form-label">Confirm Password*</label>
-                  <input type="password" className="form-control" id="inputPassword4" />
-                </div>
-                <div className="col-12">
-                  <label htmlFor="inputState" className="form-label">Country</label>
-                  <select id="inputState" className="form-select">
-                    <option value="">Choose...</option>
-                    <option>...</option>
-                  </select>
-                </div>
-                <div className="col-md-12">
-                  <label htmlFor="inputNumber" className="form-label">Phone Number</label>
-                  <input type="text" className="form-control" id="inputNumber" />
-                </div>
-                <div className="col-4">
-
-                </div>
-                <div className="col-8">
-                  <div className="float-end">
-                    <button type="submit" className="btn btn-secondary float-end">Register</button>
-                    <p className="float-end text-end">By registering you agree with our <Link to="#">Terms & Conditions</Link>
-                      and <Link to="#">Privacy Policy</Link>.</p>
-                  </div>
-                  <div className="clearfix"></div>
-                </div>
-                <div className="col-12 d-grid">
-                  <button type="submit" className="btn btn-secondary">Are you a business? Start here</button>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
