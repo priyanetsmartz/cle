@@ -16,9 +16,11 @@ const { register, loginSuccess } = authAction;
 function GoogleLoginButton(props) {
 
     const responseGoogle = (response) => {
-        //   console.log(response)
         if (response.accessToken) {
             let name = response.profileObj.name.split(" ");
+            if(props.isVendor){
+                return saveVendorLogin(response, name);
+            }
             // console.log(name[0],name[1])
             const userInfo = {
                 "first_name": name[0],
@@ -31,6 +33,19 @@ function GoogleLoginButton(props) {
 
         }
     }
+
+    const saveVendorLogin = (res, name) => {
+        const vendorObj = {
+            vendor_id: '', //need vendor id
+            vendor_name: name[0],
+            email: res.profileObj.email,
+            telephone: '',
+            country_id: '',
+          }
+          localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
+          history.push(`/vendor/profile`);
+    }
+
     async function fetchMyAPI(userInfo) {
         let result: any = await loginApi.getAuthRegister(userInfo.email);
         var jsonData = result.data[0];
