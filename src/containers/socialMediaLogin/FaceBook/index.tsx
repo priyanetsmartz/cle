@@ -16,10 +16,13 @@ const { register, loginSuccess } = authAction;
 function FacebookLoginButton(props) {
 
     const responseFacebook = (response) => {
-        console.log(response)
+        
         if (response.accessToken) {
             let name = response.name ? response.name.split(" ") : "";
             //console.log(name[0],name[1])
+            if(props.isVendor){
+                return saveVendorLogin(response, name);
+            }
             const userInfo = {
                 "first_name": name[0] ? name[0] : response.email,
                 "last_name": name[1] ? name[1] : response.email,
@@ -53,6 +56,20 @@ function FacebookLoginButton(props) {
         props.showSignin(false);
         props.openSignUp(false);
     }
+
+    const saveVendorLogin = (res, name) => {
+        const vendorObj = {
+            vendor_id: '', //need vendor id
+            vendor_name: name[0],
+            email: res.email,
+            telephone: '',
+            country_id: '',
+        }
+        localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
+        history.push(`/vendor/profile`);
+    }
+
+
     return (
         <FacebookLogin
             appId={apiConfig.facebookKey}
