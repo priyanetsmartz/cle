@@ -104,9 +104,9 @@ function MyWishList(props) {
                         </div>
                         <div className="col-md-6">
                             <select value={sortOrder} onChange={sortHandler} className="form-control">
-                                <option value="">SortBy</option>
-                                <option value="asc">Price - High to low</option>
-                                <option value="desc">Price - Low to high</option>
+                                <option value=""><IntlMessages id="order.orderNo" />:</option>
+                                <option value="asc"><IntlMessages id="filterPriceAsc" /></option>
+                                <option value="desc"><IntlMessages id="filterPriceDesc" /></option>
 
                             </select>
                         </div>

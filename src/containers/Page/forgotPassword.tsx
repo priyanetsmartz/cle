@@ -24,12 +24,12 @@ function ForgottenPassword(props) {
   }
 
   const handleSubmitClick = async (e) => {
-    e.preventDefault();    
+    e.preventDefault();
     if (handleValidation()) {
       setIsShow(true);
       let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email, websiteId: 1 });
       if (result.data) {
-        notification("success", "", "mail sent");
+        notification("success", "", <IntlMessages id="forgotpassmail" />);
         setState(prevState => ({
           ...prevState,
           email: ""
@@ -40,12 +40,12 @@ function ForgottenPassword(props) {
           ...prevState,
           email: ""
         }));
-        notification("error", "", "No data found!");
+        notification("error", "", <IntlMessages id="NotFound" />);
         setIsShow(false);
       }
     } else {
 
-      notification("error", "", "Please enter valid email");
+      notification("error", "", <IntlMessages id="emailvalidation" />);
     }
   }
 

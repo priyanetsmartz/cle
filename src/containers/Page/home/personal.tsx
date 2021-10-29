@@ -83,7 +83,7 @@ function Personal(props) {
             label: form.form_json[activeIndex][0].label,
             type: form.form_json[activeIndex][0].type
         }
-
+        var formCode = props.language === 'english' ? 'home_page_survey' : 'Home_page_survery_arabic';
         answers[form.form_json[activeIndex][0].name] = tempObj
         setAnswers(answers);
         payload.answer.response_json = JSON.stringify(answers);
@@ -91,7 +91,7 @@ function Personal(props) {
         payload.answer.store_id = form.store_id;
         payload.answer.customer_id = localStorage.getItem('cust_id');
         payload.answer.form_name = form.title;
-        payload.answer.form_code = 'help-us';
+        payload.answer.form_code = formCode;
         setPayload(payload);
         if (form.form_json[activeIndex + 1]) {
             setActiveIndex(activeIndex + 1);
@@ -139,7 +139,7 @@ function Personal(props) {
                                                                         </div>
                                                                     );
                                                                 })}
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -159,7 +159,7 @@ function Personal(props) {
                                                             );
                                                         })}
                                                     </div>
-                                                    </>}
+                                                </>}
 
                                                 <div className="no-worries">
                                                     <h3><IntlMessages id="home.noWorries" /></h3>

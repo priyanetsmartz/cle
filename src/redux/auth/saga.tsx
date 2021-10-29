@@ -52,7 +52,7 @@ export function* loginRequest() {
           localStorage.setItem('token_name', token.data[0].firstname + ' ' + token.data[0].lastname);
           localStorage.setItem('token', token.data[0].group_id);
           const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
-          console.log(cartToken);
+          //console.log(cartToken);
           if (cartToken.data === true) {
             localStorage.removeItem('cartQuoteToken');
           } else {

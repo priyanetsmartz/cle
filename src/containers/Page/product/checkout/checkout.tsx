@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
-import CheckoutSidebar from './sidebar';
+import cardPlaceholder from '../../../../image/cards.png';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
 import { useIntl } from 'react-intl';
 import { useHistory } from "react-router";
-// import queryString from 'query-string'
+import { siteConfig } from '../../../../settings'
 import cartAction from "../../../../redux/cart/productAction";
-import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getPaymentMethods, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora, getPaymentStatus, addPaymentDetailstoOrder } from '../../../../redux/cart/productApi';
+import orderprocessing from "../../../../image/orderprocessing.gif";
+import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora, getPaymentStatus, addPaymentDetailstoOrder } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, getCountriesList, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
-import { language } from '../../../../settings';
+
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
 
 function Checkout(props) {
@@ -29,7 +30,11 @@ function Checkout(props) {
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [addNewAddressModal, setAddNewAddressModal] = useState(false);
     const [addBillingAddress, setAddBillingAddress] = useState(false);
+    const [orderProcessing, setOrderProcessing] = useState(false);
     const [errorPromo, setErrorPromo] = useState('');
+    const [loaderOnCheckout, setLoaderOnCheckout] = useState(false);
+    const [addShippingAddressLoader, setAddShippingAddressLoader] = useState(false)
+    const [changeCountryLoader, setChangeCountryLoader] = useState(false)
     // const [paymentMethodsList, SetPaymentMethodsList] = useState([])
     const [shippingMethods, SetShippingMethods] = useState([])
     const [isShow, setIsShow] = useState(false);
@@ -99,7 +104,7 @@ function Checkout(props) {
         let paymentId = queries.get('paymentId');
         let id = queries.get('Id');
         if (paymentId && id) {
-            //  placeOrderonMagento('myfatoorah_gateway', paymentId);
+            setOrderProcessing(true)
             getPaymentStatusAPi(paymentId)
         }
         let customer_id = localStorage.getItem('cust_id');
@@ -118,6 +123,7 @@ function Checkout(props) {
     }, [props.languages, props.payTrue, props.guestShipp, props.guestBilling])
 
     async function checkoutScreen() {
+        setLoaderOnCheckout(true)
         let cartItems: any, cartTotal: any;
         let customer_id = localStorage.getItem('cust_id');
         if (customer_id && localStorage.getItem('cartQuoteId')) {
@@ -138,6 +144,7 @@ function Checkout(props) {
         checkoutData['sub_total'] = cartTotal && cartTotal.data ? cartTotal.data.base_subtotal : 0;
         checkoutData['shipping_charges'] = cartTotal && cartTotal.data ? cartTotal.data.base_shipping_amount : 0;
         checkoutData['total'] = cartTotal && cartTotal.data ? cartTotal.data.base_grand_total : 0;
+        checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
         checkoutData['tax'] = cartTotal && cartTotal.data ? cartTotal.data.base_tax_amount : 0;
         checkoutData['total_items'] = cartTotal && cartTotal.data ? cartTotal.data.items_qty : 0;
         checkItems['items'] = cartItems && cartItems.data ? cartItems.data.items : [];
@@ -165,6 +172,7 @@ function Checkout(props) {
             shippingAddress: shipingAdd,
             shippingData: ship
         })
+
         SetItems(prevState => ({
             ...prevState,
             checkData: checkoutData,
@@ -172,6 +180,7 @@ function Checkout(props) {
             shippingAddress: shipingAdd,
             shippingData: ship
         }))
+        setLoaderOnCheckout(false)
         //  console.log(checkoutData)
     }
     const handleChange = (e) => {
@@ -296,16 +305,16 @@ function Checkout(props) {
                 //console.log(addressData)
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
                 setIsSetAddress(0)
-                if (saveDelivery.data) {
+                if (saveDelivery && saveDelivery.data && (saveDelivery.data.message === '' || saveDelivery.data.message === undefined)) {
                     checkoutScreen()
                     notification("success", "", "Address Updated");
                 } else {
-                    notification("error", "", "Select Correct Address!");
+                    notification("error", "", saveDelivery.data.message);
                 }
 
             } else {
                 setIsSetAddress(0)
-                notification("error", "", "Select Correct Address!");
+                notification("error", "", 'Error!');
             }
         }
     }
@@ -350,13 +359,13 @@ function Checkout(props) {
                 addressData.addressInformation = addressInformation;
                 // console.log(addressData)
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
-                if (saveDelivery.data.payment_methods) {
+                if (saveDelivery.data.payment_methods && (saveDelivery.data.message === undefined || saveDelivery.data.message === '')) {
                     setIsBillingAddress(0);
                     props.showPaymentMethods(saveDelivery.data.payment_methods);
                     notification("success", "", "Address Updated");
                 } else {
                     setIsBillingAddress(0);
-                    notification("error", "", "Select Correct Address!");
+                    notification("error", "", saveDelivery.data.message);
                 }
 
             } else {
@@ -366,6 +375,7 @@ function Checkout(props) {
         }
     }
     const handleCountryChange = async (e) => {
+        setChangeCountryLoader(true)
         const { id, value } = e.target;
         setCustAddForm(prevState => ({
             ...prevState,
@@ -374,8 +384,10 @@ function Checkout(props) {
 
         const res: any = await getRegionsByCountryID(value);
         if (res.data.available_regions === undefined) {
+            setChangeCountryLoader(false)
             setRegions([]);
         } else {
+            setChangeCountryLoader(false)
             setRegions(res.data.available_regions);
         }
 
@@ -395,6 +407,7 @@ function Checkout(props) {
     // for customer address popup window starts here
     const saveCustAddress = async () => {
         let result: any
+        setAddShippingAddressLoader(true)
         if (validateAddress()) {
 
             let customer_id = localStorage.getItem('cust_id');
@@ -441,15 +454,16 @@ function Checkout(props) {
                 // console.log(address)
                 result = await setGuestUserDeliveryAddress(address);
             }
-            if (result) {
+            if (result && result.data && (result.data.message === '' || result.data.message === undefined)) {
                 checkoutScreen();
                 toggleAddressModal();
                 notification("success", "", "Address Updated");
             }
         } else {
 
-            console.log(errors)
+            notification("errror", "", result.data.message);
         }
+        setAddShippingAddressLoader(false)
     }
 
     const saveBillingAddress = async () => {
@@ -517,7 +531,7 @@ function Checkout(props) {
                 result = await setGuestUserDeliveryAddress(address);
             }
 
-            if (result.data) {
+            if (result.data.message === undefined || result.data.message === '') {
                 // here 
                 props.showPaymentMethods(result.data.payment_methods);
                 checkoutScreen();
@@ -638,6 +652,7 @@ function Checkout(props) {
         return formIsValid;
     }
     const applyPromo = async () => {
+        setLoaderOnCheckout(true)
         let result: any;
         if (promoCode === '') {
             setErrorPromo("Promo code is required!");
@@ -649,7 +664,7 @@ function Checkout(props) {
         } else {
             result = await applyPromoCodeGuest(promoCode, props.languages)
         }
-        console.log(result.data)
+        //console.log(result.data)
         if (!result.data.message) {
             setErrorPromo("");
             checkoutScreen();
@@ -668,8 +683,9 @@ function Checkout(props) {
         let billAddress: any = {};
         if (customer_id) {
             const add: any = itemsVal.address;
+            console.log(add)
             add.addresses.forEach(el => {
-                if (el.default_billing) {
+                if (el.default_billing || el.default_shipping) {
                     billAddress.street = el.street[0];
                     billAddress.address = el.city;
                     billAddress.phone = el.telephone;
@@ -685,11 +701,11 @@ function Checkout(props) {
                 billAddress.name = props.guestBilling.firstname + ' ' + props.guestBilling.lastname;
             }
         }
-        console.log(selectedPaymentMethod);
+        //  console.log(selectedPaymentMethod);
         if (selectedPaymentMethod === 'myfatoorah_gateway') {
             console.log('fscfsd', billAddress)
             const payment: any = await myFatoora(billAddress);
-            if (payment.data[0].IsSuccess) {
+            if (payment && payment.data && payment.data.length > 0 && payment.data[0].IsSuccess) {
                 let url = payment.data[0].Data.PaymentURL;
                 if (url) {
                     window.location.href = url;
@@ -741,28 +757,28 @@ function Checkout(props) {
         setSelectedPaymentMethod(code)
     }
 
-    const placeOrderonMagento = async (paymentmode) => {
-        let customer_id = localStorage.getItem('cust_id');
-        if (customer_id) {
-            let orderPlace: any = await placeUserOrder(paymentmode);
-            if (orderPlace && orderPlace.data) {
-                let addOrderDetails: any = await addPaymentDetailsToMagento(orderPlace.data);
-                if (addOrderDetails.data) {
-                    setIsShow(false)
-                    props.addToCartTask(true);
-                    localStorage.removeItem('cartQuoteId');
-                    localStorage.removeItem('cartQuoteToken');
-                    let orderId = parseInt(orderPlace.data);
-                    history.push('/thankyou/' + orderId);
-                } else {
-                    notification("error", "", "Error ocurred! If amount deducted please check your order status in my account section or call site admin");
-                }
+    // const placeOrderonMagento = async (paymentmode) => {
+    //     let customer_id = localStorage.getItem('cust_id');
+    //     if (customer_id) {
+    //         let orderPlace: any = await placeUserOrder(paymentmode);
+    //         if (orderPlace && orderPlace.data) {
+    //             let addOrderDetails: any = await addPaymentDetailsToMagento(orderPlace.data);
+    //             if (addOrderDetails.data) {
+    //                 setIsShow(false)
+    //                 props.addToCartTask(true);
+    //                 localStorage.removeItem('cartQuoteId');
+    //                 localStorage.removeItem('cartQuoteToken');
+    //                 let orderId = parseInt(orderPlace.data);
+    //                 history.push('/thankyou/' + orderId);
+    //             } else {
+    //                 notification("error", "", "Error ocurred! If amount deducted please check your order status in my account section or call site admin");
+    //             }
 
-            } else {
-                setIsShow(false)
-            }
-        }
-    }
+    //         } else {
+    //             setIsShow(false)
+    //         }
+    //     }
+    // }
     const getPaymentStatusAPi = async (getPaymentStatusAPi) => {
         let paymentStatus: any = await getPaymentStatus(getPaymentStatusAPi);
         // console.log(paymentStatus.data);
@@ -774,23 +790,50 @@ function Checkout(props) {
         //console.log(detailsRequired);
 
         setPaymentDetails(detailsRequired)
-        placeOrderonMagento('myfatoorah_gateway')
+        // placeOrderonMagento('myfatoorah_gateway')
+        let customer_id = localStorage.getItem('cust_id');
+        if (customer_id) {
+            let orderPlace: any = await placeUserOrder('myfatoorah_gateway');
+            if (orderPlace && orderPlace.data) {
+                let details = {
+                    "orderId": orderPlace.data,
+                    "transactionId": detailsRequired['transactionId'],
+                    "PaymentGateway": detailsRequired['PaymentGateway'],
+                    "InvoiceId": detailsRequired['InvoiceId'],
+                    "TransactionStatus": detailsRequired['TransactionStatus']
+                }
+                let addOrderDetails: any = await addPaymentDetailsToMagento(details);
+                if (addOrderDetails.data) {
+                    setIsShow(false)
+                    props.addToCartTask(true);
+                    localStorage.removeItem('cartQuoteId');
+                    localStorage.removeItem('cartQuoteToken');
+                    let orderId = parseInt(orderPlace.data);
+                    history.push('/thankyou?id=' + orderId);
+                } else {
+                    notification("error", "", "Error ocurred! If amount deducted please check your order status in my account section or call site admin");
+                }
+
+            } else {
+                setIsShow(false)
+            }
+        }
     }
 
     const addPaymentDetailsToMagento = async (data) => {
-        let details = {
-            "orderId": data,
-            "transactionId": paymentDetails['transactionId'],
-            "PaymentGateway": paymentDetails['PaymentGateway'],
-            "InvoiceId": paymentDetails['InvoiceId'],
-            "TransactionStatus": paymentDetails['TransactionStatus'],
-        }
-        let result: any = await addPaymentDetailstoOrder(details);
-        return result.data;
+
+        let result: any = await addPaymentDetailstoOrder(data);
+        return result;
 
     }
+
     return (
         <main>
+            {orderProcessing && (
+                <div className="CLE-loading order-processing" style={{ "position": "fixed" }}>
+                    <p> Please do not refresh the page and wait while we are processing your payment. This can take a few minutes</p>   <img className="loading-gif" src={orderprocessing} alt="loader" />
+                </div>
+            )}
             <section className="checkout-main">
                 <div className="container">
                     {/* {Object.keys(orderError).forEach((key) => {
@@ -1026,7 +1069,7 @@ function Checkout(props) {
                                                         return (
                                                             <div className="row" key={i}>
                                                                 <div className="col-md-3">
-                                                                    <div className="delivery-charges">${item.amount}</div>
+                                                                    <div className="delivery-charges">{siteConfig.currency}{item.amount}</div>
                                                                 </div>
                                                                 <div className="col-md-5">
                                                                     <label>{item.carrier_title}</label>
@@ -1136,31 +1179,10 @@ function Checkout(props) {
                                             </div>
 
                                             <div className="row">
-                                                {/* <div className="col-md-7">
-                                                    <div className="single-address">
-                                                        <label><IntlMessages id="checkout.payType" /></label>
-                                                        <div>
-                                                            Mastercard<br />
-                                                            **** **** **** 0356<br />
-                                                            Exp: 06/25<br />
-                                                            Anna Smith<br />
-                                                        </div>
-                                                        <p className="text-muted"><IntlMessages id="checkout.defaultPayMethod" /></p>
-                                                        <div className="form-check">
-                                                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                                            <label className="form-check-label">
-                                                                <IntlMessages id="checkout.issueInvoice" />
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div> */}
-                                                <div className="col-md-5">
-                                                    <div className="select-address">
-                                                        <div className="select-address-inner">
-                                                            <input type="checkbox" className="btn-check" id="btn-check-2" autoComplete="off" />
-                                                            <label className="btn btn-primary"></label>
-                                                        </div>
-                                                    </div>
+
+                                                <div className="we-accept">
+                                                    <p><strong><IntlMessages id="we-accept" />:</strong></p>
+                                                    <img src={cardPlaceholder} alt="cards" />
                                                 </div>
                                             </div>
                                             <div className="choose-method">
@@ -1222,12 +1244,19 @@ function Checkout(props) {
 
                                     </ul>
                                 )}
+
                                 <div className="product-total-price">
-                                    <p> <IntlMessages id="subTotal" /><span className="text-end">${itemsVal.checkData['sub_total'] ? itemsVal.checkData['sub_total'] : 0}</span></p>
-                                    <p> <IntlMessages id="shipping" /><span className="text-end">${itemsVal.checkData['shipping_charges'] ? itemsVal.checkData['shipping_charges'] : 0}</span></p>
-                                    <p> <IntlMessages id="tax" /><span className="text-end">${itemsVal.checkData['tax'] ? itemsVal.checkData['tax'] : 0}</span></p>
+                                    {loaderOnCheckout && (
+                                        <div className="checkout-loading" >
+                                            <i className="fa fa-spinner" aria-hidden="true"></i>
+                                        </div>
+                                    )}
+                                    <p> <IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['sub_total'] ? itemsVal.checkData['sub_total'] : 0}</span></p>
+                                    <p> <IntlMessages id="order.discount" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['discount'] ? itemsVal.checkData['discount'] : 0}</span></p>
+                                    <p> <IntlMessages id="shipping" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['shipping_charges'] ? itemsVal.checkData['shipping_charges'] : 0}</span></p>
+                                    <p> <IntlMessages id="tax" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['tax'] ? itemsVal.checkData['tax'] : 0}</span></p>
                                     <hr />
-                                    <div className="final-price"><IntlMessages id="total" /> <span>${itemsVal.checkData['total'] ? itemsVal.checkData['total'] - itemsVal.checkData['discount'] : 0}</span></div>
+                                    <div className="final-price"><IntlMessages id="total" /> <span>{siteConfig.currency}{itemsVal.checkData['total']}</span></div>
                                 </div>
                             </div>
                         </div>
@@ -1306,6 +1335,9 @@ function Checkout(props) {
                                     </select>
                                     <span className="error">{errors.errors["country_id"]}</span>
                                 </div>
+                                {changeCountryLoader && (
+                                   <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
+                                )}
                                 {regions.length > 0 && <div className="width-100 mb-3 form-field">
                                     <label className="form-label">
                                         <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
@@ -1321,7 +1353,9 @@ function Checkout(props) {
                                     <div className="width-100 mb-3 form-field">
                                         <div className="Frgt_paswd">
                                             <div className="confirm-btn">
-                                                <button type="button" className="btn btn-secondary" onClick={saveCustAddress}><IntlMessages id="myaccount.confirm" /></button>
+                                                <button type="button" className="btn btn-secondary" style={{ "display": !addShippingAddressLoader ? "inline-block" : "none" }} onClick={saveCustAddress}><IntlMessages id="myaccount.confirm" /></button>
+
+                                                <div className="spinner" style={{ "display": addShippingAddressLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                                             </div>
                                         </div>
                                     </div>

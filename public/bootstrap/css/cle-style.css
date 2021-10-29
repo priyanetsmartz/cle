@@ -713,6 +713,8 @@ p.promotion_alert {
     font-style: normal;
     color: #2E2BAA;
     text-align: center;
+	line-height: 42px;
+	transition: all 0.6s ease 0s;
 }
 
 .slider {
@@ -1909,7 +1911,6 @@ span.maindatory {
 }
 
 .product-listing .product:hover {
-    border: 1px solid #000;
     cursor: pointer;
 }
 
@@ -1986,30 +1987,44 @@ span.maindatory {
 }
 
 .product-listing .cart-button {
-    bottom: 0px;
-    left: 0;
+    bottom: 15px;
     opacity: 0;
     position: absolute;
     right: 0;
     text-align: center;
     transition: all 0.6s ease 0s;
 }
+.product-listing .cart-button a{
+font-family: 'Monument Extended';
+font-weight: normal;
+font-style: normal;
+background:#2E2BAA !important;
+text-align: center;
+border-radius: 0;
+font-size: 12px;
+text-transform: capitalize !important;
+border:0;
+}
 
 .product-listing .product:hover .off {
     display: inline-block;
     color: #fff;
-    border-radius: 5px;
-    padding: 3px 10px;
-    font-size: 12px;
+    border-radius: 0px;
+    padding: 0px 5px;
+    font-size: 22px;
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 0px;
+    left: 0px;
 }
 
 .product-listing .product:hover .cart-button {
-    bottom: 35px;
-    opacity: 1;
-    display: inline-block;
+opacity: 1;
+display: inline-block;
+right: 0;
+left: auto;
+}
+.product-listing .product:hover .product_price{
+	text-align: left;
 }
 
 .myorder_sidebar {
@@ -2655,7 +2670,7 @@ margin: auto;
 }
 
 .new-in-slider .productcalr .product_price {
-    margin-top: 30px;
+    margin-top: 15px;
 }
 
 .choose-foryou-sec {
@@ -3108,6 +3123,8 @@ margin: auto;
 margin: 0 0 5px !important;
 	}
 	.no-worries{margin-top:10px;}
+	.product-img-slider{display: inline-block;}
+	.become-part-inner{position: inherit;padding: 15px;}
 }
 
 @media only screen and (max-width: 600px) {}
@@ -4457,4 +4474,41 @@ margin: auto;
 }
 .gallery-wrap .item{
 	background-size: cover;
+	cursor:auto;
+}
+.gallery-wrap .item:after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+.category-card-img .welcome-slide {
+    max-width: inherit;
+    width: 110%;
+    transition: all 0.5s ease;
+}
+.card:hover .welcome-slide {
+    width: 100%;
+}
+.category-card-img {
+    width: 286px;
+    height: 285px;
+    overflow: hidden;
+}
+.mini-cart-btn a{
+font-size: 12px;
+font-family: 'Monument Extended';
+text-decoration: none;
+font-weight: 500;
+color: #fff !important;
+background:#2e2baa;
+border-radius:0;
+margin-bottom:7px;
 }

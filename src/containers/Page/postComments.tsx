@@ -53,7 +53,7 @@ function PostComment(props) {
             let result: any = await AddComment(state);
             if (result) {
                 getComments()
-                notification("success", "", "Comment added!");
+                notification("success", "", <IntlMessages id="commentAdded" />);
                 setState(prevState => ({
                     ...prevState,
                     message: "",
@@ -62,7 +62,7 @@ function PostComment(props) {
             }
         } else {
             setIsShow(false);
-            notification("warning", "", "Please enter required values");
+            notification("warning", "",<IntlMessages id="commentRequired" />);
         }
 
     }

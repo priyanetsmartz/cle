@@ -6,37 +6,55 @@ import { Link } from "react-router-dom";
 import ReturnSection from './allReturns';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Slider } from 'antd';
-
+import { getCookie } from '../../../helpers/session';
+import { useIntl } from 'react-intl';
 
 
 
 function OrdersAndReturns(props) {
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(12);
     const [orderId, setOrderId] = useState('');
+    const [pagination, setPagination] = useState(1);
     const [orderDate, setOrderDate] = useState('');
     const [sortOrder, setSortOrder] = useState('');
     const [orders, setOrders] = useState([]);
-
+    const [page, setCurrent] = useState(1);
+    const language = getCookie('currentLanguage');
+    const intl = useIntl();
     useEffect(() => {
-        getData();
+        getData(pageSize);
+    }, [pageSize]);
 
-    }, []);
-
-    const getData = async () => {
-        let result: any = await getCustomerOrders();
+    const getData = async (pageSize) => {
+        let result: any = await getCustomerOrders(pageSize);
         if (result && result.data && result.data.items) {
             setOrders(result.data.items);
+            setPagination(Math.ceil(result.data.length / pageSize));
         }
 
     }
+    const groupBy = async (array, key) => {
+        // Return the end result
+        return array.reduce((result, currentValue) => {
+            let dateee = moment(currentValue[key]).format('MM/DD/YYYY');
+            // If an array already present for key, push it to the array. Else create an array and push the object
+            (result[dateee] = result[dateee] || []).push(
+                currentValue
+            );
+            // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+            return result;
+        }); // empty object is the initial value for result object
+    };
 
     const handleSearch = async (e) => {
         const val = e.target.value;
         setOrderId(val);
-        if (val === "") return getData();
-        let result: any = await searchOrders(val);
-        if (result) {
-            setOrders([result.data]);
+        if (val === "") return getData(pageSize);
+        if (val.length >= 3) {
+            let result: any = await searchOrders(val);
+            if (result && result.data && !result.data.message) {
+                setOrders([result.data]);
+            }
         }
     }
 
@@ -54,7 +72,7 @@ function OrdersAndReturns(props) {
         let fromDate;
         let currentDate = moment(new Date());
         if (!filter) {
-            return getData();
+            return getData(pageSize);
         } else if (filter === 1 || filter === 3 || filter === 6) {
             fromDate = moment(currentDate).subtract(filter, 'M').toJSON();
         } else {
@@ -78,6 +96,35 @@ function OrdersAndReturns(props) {
         }
     }
 
+    const handlePageSize = (page) => {
+        setPageSize(page)
+    }
+    const getPaginationGroup = () => {
+        let start = Math.floor((page - 1) / 4) * 4;
+        let fill = pagination > 5 ? 4 : pagination;
+        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
+    };
+
+    const goToNextPage = (e) => {
+        let lang = props.languages ? props.languages : language;
+        e.preventDefault();
+        setCurrent((page) => page + 1);
+
+    }
+    function changePage(event) {
+        let lang = props.languages ? props.languages : language;
+
+        event.preventDefault()
+        const pageNumber = Number(event.target.textContent);
+        setCurrent(pageNumber);
+    }
+    const goToPreviousPage = (e) => {
+        let lang = props.languages ? props.languages : language;
+
+        e.preventDefault();
+        setCurrent((page) => page - 1);
+
+    }
     return (
         <>
             <div className="col-sm-9">
@@ -118,7 +165,7 @@ function OrdersAndReturns(props) {
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
                                             <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder="Search..." value={orderId}
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} value={orderId}
                                                 onChange={handleSearch} className="form-control me-1" />
                                         </div>
                                     </div>
@@ -148,9 +195,9 @@ function OrdersAndReturns(props) {
                                             <div className="paginatn_result">
                                                 <span><IntlMessages id="order.resultPerPage" /></span>
                                                 <ul>
-                                                    <li><Link to="#" className="active">12</Link></li>
-                                                    <li><Link to="#">60</Link></li>
-                                                    <li><Link to="#">120</Link></li>
+                                                    <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
+                                                    <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
+                                                    <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
                                                 </ul>
                                             </div>
                                             <div className="sort_by">
@@ -158,134 +205,141 @@ function OrdersAndReturns(props) {
 
                                                     <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
                                                         <option value="">SortBy</option>
-                                                        <option value="ASC">Price - High to low</option>
-                                                        <option value="DESC">Price - Low to high</option>
+                                                        <option value="ASC">Price - Low to High</option>
+                                                        <option value="DESC">Price - High to Low</option>
                                                     </select>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
+                                {orders && orders.length > 0 ?
 
-                                {orders && orders.map((item, i) => {
-                                    return (
-                                        <div key={i}>
-                                            <div className="row">
+                                    <div>
+                                        {orders && (orders.map((item, i) => {
+                                            // console.log(i)
+                                            return (
+
+                                                <div key={i}>
+                                                    {/* <div className="row">
                                                 <div className="col-sm-12">
                                                     <div className="sortbyeyearly_show">
                                                         <h3>May 2021</h3>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
-                                            <div className="row my-3">
-                                                <div className="col-sm-12">
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-6">
-                                                            <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item.increment_id}</h3>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <div className="viewall_btn">
-                                                                <Link to={`/order-details/${item.increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
+                                                    <div className="row my-3">
+                                                        <div className="col-sm-12">
+                                                            <div className="row mb-3">
+                                                                <div className="col-sm-6">
+                                                                    <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item.increment_id}</h3>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="viewall_btn">
+                                                                        <Link to={`/order-details/${item.increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
+                                                                    </div>
+                                                                </div>
+
                                                             </div>
                                                         </div>
 
+                                                        <div className="d-md-flex">
+                                                            <div className="col-sm-6">
+                                                                <div className="order-viewsec">
+                                                                    <div className="order-details">
+                                                                        <div className="order-date">
+                                                                            <label className="form-label"><IntlMessages id="order.orderDate" /></label>
+                                                                            <div className="labl_text">{item.created_at}</div>
+                                                                        </div>
+
+                                                                        <div className="products">
+                                                                            <label className="form-label"> <IntlMessages id="order.products" /></label>
+                                                                            <div className="labl_text"> {item && item.items ? item.items.length : 0}</div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="order-details">
+                                                                        <div className="order-date">
+                                                                            <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
+                                                                            <div className="labl_text">{item.shipment_date}</div>
+                                                                        </div>
+
+                                                                        <div className="products">
+                                                                            <label className="form-label"> <IntlMessages id="order.price" /></label>
+                                                                            <div className="labl_text"> {item.grand_total}</div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="order-shipped">
+                                                                        <label className="form-label">
+                                                                            {/* <IntlMessages id="order.weHaveShipped" /> */}
+                                                                            {item.status}
+                                                                        </label>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="prodcut_catg">
+                                                                    <div className="product_photo">
+                                                                        <img src={item.items[0]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                    </div>
+                                                                    <div className="product_photo">
+                                                                        <img src={item.items[1]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                    </div>
+                                                                    <div className="more_product">
+                                                                        <Link to="#">
+                                                                            <img src={item.items[2]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                            <div className="overlay_img"></div>
+                                                                            <span className="more_pro">{item.items.length}</span>
+                                                                        </Link>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-sm-12">
+                                                            <div className="blank_bdr"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <div className="d-md-flex">
-                                                    <div className="col-sm-6">
-                                                        <div className="order-viewsec">
-                                                            <div className="order-details">
-                                                                <div className="order-date">
-                                                                    <label className="form-label"><IntlMessages id="order.orderDate" /></label>
-                                                                    <div className="labl_text">{item.created_at}</div>
-                                                                </div>
-
-                                                                <div className="products">
-                                                                    <label className="form-label"> <IntlMessages id="order.products" /></label>
-                                                                    <div className="labl_text"> {item.items.length}</div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div className="order-details">
-                                                                <div className="order-date">
-                                                                    <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
-                                                                    <div className="labl_text">{item.shipment_date}</div>
-                                                                </div>
-
-                                                                <div className="products">
-                                                                    <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                                                    <div className="labl_text"> {item.grand_total}</div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div className="order-shipped">
-                                                                <label className="form-label">
-                                                                    {/* <IntlMessages id="order.weHaveShipped" /> */}
-                                                                    {item.status}
-                                                                </label>
-                                                            </div>
-
-
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-sm-6">
-                                                        <div className="prodcut_catg">
-                                                            <div className="product_photo">
-                                                                <img src={item.items[0]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                                            </div>
-                                                            <div className="product_photo">
-                                                                <img src={item.items[1]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                                            </div>
-                                                            <div className="more_product">
-                                                                <Link to="#">
-                                                                    <img src={item.items[2]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                                                    <div className="overlay_img"></div>
-                                                                    <span className="more_pro">{item.items.length}</span>
-                                                                </Link>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-sm-12">
-                                                    <div className="blank_bdr"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
+                                            );
+                                        }))}
+                                    </div>
+                                    : <IntlMessages id="no_data" />}
 
                                 <div className="resltspage_sec footer-pagints">
                                     <div className="paginatn_result">
                                         <span><IntlMessages id="order.resultPerPage" /></span>
                                         <ul>
-                                            <li><Link to="#" className="active">12</Link></li>
-                                            <li><Link to="#">60</Link></li>
-                                            <li><Link to="#">120</Link></li>
+                                            <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
+                                            <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
+                                            <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
                                         </ul>
                                     </div>
                                     <div className="page_by">
                                         <div className="pagination">
 
-                                            <nav aria-label="Page navigation example">
-                                                <ul className="pagination">
-                                                    <li className="page-item">
-                                                        <Link className="page-link" to="#" aria-label="Previous">
-                                                        </Link><Link to="#"><img src="images/arrow-left.svg" className="img-fluid" alt="" /></Link>
-
-                                                    </li>
-                                                    <li className="page-item"><Link className="page-link" to="#">Page</Link></li>
-                                                    <li className="page-item"><Link className="page-link" to="#">1</Link></li>
-                                                    <li className="page-item"><Link className="page-link" to="#">of</Link></li>
-                                                    <li className="page-item"><Link className="page-link" to="#">3</Link></li>
-                                                    <li className="page-item">
-                                                        <Link className="page-link" to="#" aria-label="Next">
-                                                        </Link><Link to="#"><img src="images/arrow-right.svg" className="img-fluid" alt="" /></Link>
-
-                                                    </li>
-                                                </ul>
-                                            </nav>
+                                            <div className="col-md-12 pagination">
+                                                {pagination > 1 && (<nav aria-label="Page navigation example">
+                                                    <ul className="pagination justify-content-center">
+                                                        <li
+                                                            className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
+                                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
+                                                        </li>
+                                                        {getPaginationGroup().map((i, index) => (
+                                                            <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
+                                                        ))}
+                                                        <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
+                                                            <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
+                                                                to="/">Next</Link>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

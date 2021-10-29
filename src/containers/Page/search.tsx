@@ -59,7 +59,7 @@ function SearchResults(props) {
             let whishlist: any = await getWhishlistItemsForUser();
             let products = results.data.items;
             let WhishlistData = whishlist.data;
-          //  console.log(products);
+            //  console.log(products);
             const mergeById = (a1, a2) =>
                 a1.map(itm => ({
                     ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
@@ -102,12 +102,12 @@ function SearchResults(props) {
             if (result.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
-                notification("success", "", 'Your product has been successfully added to your wishlist');
+                notification("success", "", <IntlMessages id="addedToWhishlist" />);
                 getData(searchText)
             } else {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
-                notification("error", "", "Something went wrong!");
+                notification("error", "", <IntlMessages id="somethingwrong" />);
                 getData(searchText)
             }
         } else {
@@ -126,7 +126,7 @@ function SearchResults(props) {
         } else {
             setDelWishlist(0)
             props.addToWishlistTask(true);
-            notification("error", "", "Something went wrong!");
+            notification("error", "", <IntlMessages id="somethingwrong" />);
             getData(searchText)
         }
     }

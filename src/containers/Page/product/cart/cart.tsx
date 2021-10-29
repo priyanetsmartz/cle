@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import cartAction from "../../../../redux/cart/productAction";
 import { getCookie } from "../../../../helpers/session";
-import { addWhishlist, addWhishlistBySku, getCartItems, getCartTotal, getGiftMessage, getGuestCart, getGuestCartTotal, getWhishlistItemsForUser, giftMessageDelete, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
+import cardPlaceholder from '../../../../image/cards.png';
+import { addWhishlistBySku, getCartItems, getCartTotal, getGiftMessage, getGuestCart, getGuestCartTotal, getWhishlistItemsForUser, giftMessageDelete, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
 import notification from "../../../../components/notification";
 import RelevantProducts from './relevantProducts';
 import Modal from "react-bootstrap/Modal";
@@ -296,7 +297,7 @@ function CartItemPage(props) {
                                                                             <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
                                                                             <div className="col-sm-5 cartschanger">
                                                                                 <div className="value-button" id="decrease" onClick={() => { handleSubtractQuantity(item) }} >-</div>
-                                                                                <input type="number" id="number" disabled  value={value === item.item_id ? qty : item.qty} />
+                                                                                <input type="number" id="number" disabled value={value === item.item_id ? qty : item.qty} />
                                                                                 <div className="value-button" id="increase" onClick={() => { handleAddQuantity(item) }}>+</div>
                                                                             </div>
                                                                             {/* <div className="col-sm-5">
@@ -349,7 +350,7 @@ function CartItemPage(props) {
                                 </div>
                                 <div className="we-accept">
                                     <p><strong><IntlMessages id="we-accept" />:</strong></p>
-                                    <img src="" alt="cards" />
+                                    <img src={cardPlaceholder} alt="cards" />
                                     <p><IntlMessages id="coupontitle" /></p>
                                 </div>
 

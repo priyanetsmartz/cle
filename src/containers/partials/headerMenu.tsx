@@ -17,6 +17,7 @@ import MiniCart from './mini-cart';
 import SearchBar from './searchBar';
 import LanguageSwitcher from '../LanguageSwitcher';
 import { setCookie } from '../../helpers/session';
+import { capitalize } from '../../components/utility/allutils';
 
 const { logout } = authAction;
 const { showSignin, openSignUp, menuSetup, showLoader } = appAction;
@@ -34,7 +35,7 @@ function HeaderMenu(props) {
     const [activeOne, SetActiveOne] = useState('');
 
     useEffect(() => {
-        // console.log(location)
+        //props.showLoader(true)
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
             //console.log(result)
@@ -55,6 +56,7 @@ function HeaderMenu(props) {
     }, [props.languages, category])
 
     useEffect(() => {
+
         setTimeout(() => {
             window.scrollTo(0, 0)
             props.showLoader(false);
@@ -72,6 +74,7 @@ function HeaderMenu(props) {
             window.removeEventListener("scroll", scrollCallBack);
         };
     }, []);
+
     useEffect(() => {
         document.addEventListener("mousedown", handleClick);
 
@@ -85,7 +88,12 @@ function HeaderMenu(props) {
     }, []);
 
 
-
+    const setMenu = (urlKey) => {
+        SetActiveCat(urlKey)
+    }
+    const resetMenu = () => {
+        SetActiveCat(activeOne)
+    }
 
     const handleClick = e => {
         if (node.current.contains(e.target)) {
@@ -108,14 +116,6 @@ function HeaderMenu(props) {
     }
     const hideAccountFxn = () => {
         props.accountPopup(false)
-    }
-
-    const setMenu = (urlKey) => {
-        SetActiveCat(urlKey)
-    }
-
-    const resetMenu = () => {
-        SetActiveCat(activeOne)
     }
     const logout = () => {
         // Clear access token and ID token from local storage
@@ -160,36 +160,37 @@ function HeaderMenu(props) {
                                         menuData.map((val, i) => {
                                             return (
                                                 <li key={i}>
-                                                    <Link to={'/products/' + val.url_key} onClick={(e) => { handleMenuClick(e, val.id); }} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
-                                                    {val && val.child && val.child.length > 0 && (<ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
-                                                        {val.child.map((childMenu: any, j) => {
-                                                            return (
-                                                                <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
-                                                                    <Link className={activeCat === childMenu.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"} onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
-                                                                    <span className="megamenu_bar">
+                                                    <Link to="#" className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                    {val && val.child && val.child.length > 0 && (
+                                                        <ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0 lolo" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
+                                                            {val.child.map((childMenu: any, j) => {
+                                                                return (
+                                                                    <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
+                                                                        <Link className={activeCat === childMenu.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"} onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
+                                                                        <span className="megamenu_bar">
 
-                                                                        {childMenu.child && childMenu.child.map((grandChild, l) => {
-                                                                            return (
-                                                                                <ul className="megamenugrid" key={l}>
-                                                                                    <h3> <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}`}
-                                                                                        onClick={(e) => { handleMenuClick(e, grandChild.id); }} className={activeCat === grandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"}>{grandChild.name}</Link></h3>
-                                                                                    {grandChild.child && grandChild.child.map((greatGrandChild, k) => {
-                                                                                        return (<li key={k}>
-                                                                                            <Link to={`/products/${val.url_key}/${childMenu.name}/${grandChild.url_key}/${greatGrandChild.url_key}`}
-                                                                                                onClick={(e) => { handleMenuClick(e, greatGrandChild.id); }} className={activeCat === greatGrandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"} >{greatGrandChild.name}</Link>
-                                                                                        </li>)
-                                                                                    })}
-                                                                                </ul>)
-                                                                        })}
-                                                                        <ul className="megamenugrid last-images-menu"><li className="nav-link p-2"><img src={baseUrl + childMenu.image} width="100%" alt="megamenu" /></li>
-                                                                        <div className="cvp"><Link className="btn details px-auto"  onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>View more</Link></div></ul>
-                                                                    </span>
-                                                                </li>
+                                                                            {childMenu.child && childMenu.child.map((grandChild, l) => {
+                                                                                return (
+                                                                                    <ul className="megamenugrid" key={l}>
+                                                                                        <h3> <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}`}
+                                                                                            onClick={(e) => { handleMenuClick(e, grandChild.id); }} className={activeCat === grandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"}>{grandChild.name}</Link></h3>
+                                                                                        {grandChild.child && grandChild.child.map((greatGrandChild, k) => {
+                                                                                            return (<li key={k}>
+                                                                                                <Link to={`/products/${val.url_key}/${childMenu.name}/${grandChild.url_key}/${greatGrandChild.url_key}`}
+                                                                                                    onClick={(e) => { handleMenuClick(e, greatGrandChild.id); }} className={activeCat === greatGrandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"} >{greatGrandChild.name}</Link>
+                                                                                            </li>)
+                                                                                        })}
+                                                                                    </ul>)
+                                                                            })}
+                                                                            <ul className="megamenugrid last-images-menu"><li className="nav-link p-2"><img src={baseUrl + childMenu.image} width="100%" alt="megamenu" /></li>
+                                                                                <div className="cvp"><Link className="btn details px-auto" onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>View more</Link></div></ul>
+                                                                        </span>
+                                                                    </li>
 
-                                                            );
-                                                        })}
+                                                                );
+                                                            })}
 
-                                                    </ul>
+                                                        </ul>
                                                     )}
                                                 </li>)
                                         })
@@ -217,7 +218,7 @@ function HeaderMenu(props) {
                             <div className="cartuser-info">
                                 <ul>
                                     <LanguageSwitcher />
-                                    <li><Link to="#">{customerName ? customerName : ""} </Link></li>
+                                    <li><Link to="#">{customerName ? capitalize(customerName) : ""} </Link></li>
                                     {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
                                     <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 
@@ -242,7 +243,9 @@ function HeaderMenu(props) {
                                         </div>
 
                                     </li>
-                                    <li> <Link to="/customer/wish-list"><img src={favorit} alt="wishlist" /></Link> </li>
+                                    {customerName && (
+                                        <li> <Link to="/customer/wish-list"><img src={favorit} alt="wishlist" /></Link> </li>
+                                    )}
                                     <MiniCart />
                                 </ul>
                             </div>

@@ -54,18 +54,19 @@ function HomePage(props) {
 
         if (customerId) {
             let result: any = await getWeChooseForYou(props.languages, customerId);
-            if (relevantCookies === undefined) {
-                console.log(result.data[0].relevantProducts.length)
-                if (result.data[0] && result.data[0].relevantProducts.length > 0) {
-                    setCookie("relevant", true)
-                    setChoose(result.data[0].relevantProducts);
-                } else {
-                    setCookie("relevant", false)
-                }
-
+            console.log(result.data[0].customerProducts)
+            if (result && result.data && result.data[0] && result.data[0].customerProducts.length > 0) {
+                setCookie("relevant", true)
+                setChoose(result.data[0].customerProducts);
+            } else {
+                setCookie("relevant", false)
             }
+
+        } else {
+            setCookie("relevant", false)
         }
     }
+
 
 
     // const onLeave = () => { }
@@ -97,9 +98,9 @@ function HomePage(props) {
             <div className="section" >
                 <HtmlContent identifier="home_page_pre-owned_category" />
             </div>
-            <div className="section">
+            {/* <div className="section">
                 <HtmlContent identifier="home_page_brown_london_section" />
-            </div>
+            </div> */}
             <div className="section">
                 <BestSeller />
             </div>

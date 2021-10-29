@@ -1,3 +1,4 @@
+import { getCookie } from "../../helpers/session";
 import ADMINAPI from "../../restApi/AdminApi";
 import API from "../../restApi/Api";
 
@@ -59,16 +60,18 @@ class Login {
   }
 
   genCartQuoteID(localToken) {
+    console.log('hetre');
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
+    const language = getCookie('currentLanguage');
     if (cartQuoteToken) {
-      //  var storeId = language === 'arabic' ? 2 : 3;
+      var storeId = language === 'arabic' ? 2 : 3;
       let cartData = {
         "customerId": parseInt(localToken),
-        "storeId": 3 // check for language input
+        "storeId": storeId// check for language input
       }
       return Api.request(`rest/V1/guest-carts/${cartQuoteToken}`, cartData, "PUT", "")
     } else {
-      return Api.request(`rest/all/V1/carts/mine?customerId=${localToken}`, "", "POST", "")
+      return AdminApi.request(`rest/V1/customers/${localToken}/carts`, "", "POST", "")
     }
 
 

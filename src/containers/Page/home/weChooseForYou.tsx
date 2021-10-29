@@ -3,14 +3,14 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import notification from "../../../components/notification";
 import cartAction from "../../../redux/cart/productAction";
-import { getWeChooseForYou } from '../../../redux/pages/customers';
 import { Link } from 'react-router-dom'
 import { addWhishlist, removeWhishlist } from '../../../redux/cart/productApi';
 import Slider from "react-slick";
 import { useLocation } from 'react-router-dom';
 import { formatprice } from '../../../components/utility/allutils';
+import { siteConfig } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
-import { setCookie, getCookie } from '../../../helpers/session'
+import { getCookie } from '../../../helpers/session'
 const { addToCart, productList } = cartAction;
 
 function WeChooseForYou(props) {
@@ -18,6 +18,7 @@ function WeChooseForYou(props) {
     // console.log(props.choosenData)
     let catID = getCookie("_TESTCOOKIE");
     const location = useLocation()
+    const [isHoverImage, setIsHoverImage] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
@@ -78,7 +79,14 @@ function WeChooseForYou(props) {
         notification("success", "", del.data[0].message);
         // getProducts()
     }
+    const someHandler = (id) => {
+        let prod = parseInt(id)
+        setIsHoverImage(prod);
+    }
 
+    const someOtherHandler = (e) => {
+        setIsHoverImage(0)
+    }
     return (
         <div>
             {
@@ -95,19 +103,34 @@ function WeChooseForYou(props) {
 
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <div className="new-in-slider">
+                                    <div className="new-in-slider product-listing">
                                         <div className="regular slider">
                                             <Slider {...settings}>
                                                 {props.choosenData.map((item, i) => {
                                                     return (
-                                                        <Link className="productcalr" key={i} to={'/product-details/' + item.name}>
-                                                            <div className="product_img">
-                                                                <img src={item.img} alt="productimage" className="image-fluid" />
-                                                            </div>
+                                                        <div className="productcalr product" key={item.id}>
+                                                            <span className="off bg-favorite">
+                                                                {!item.wishlist_item_id && (
+                                                                    <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
+                                                                    </div>
+                                                                )}
+
+                                                                {item.wishlist_item_id && (
+                                                                    <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
+                                                                    </div>
+                                                                )}
+                                                            </span>
+                                                            <Link to={'/product-details/' + item.sku}> <div className="product_img" onMouseEnter={() => someHandler(item.id)}
+                                                                onMouseLeave={() => someOtherHandler(item.id)}>
+                                                                {
+                                                                    isHoverImage === parseInt(item.id) ? <img src={item.hover_image} className="image-fluid hover" alt={item.name} height="200" /> : <img src={item.img} className="image-fluid" alt={item.name} height="200" />
+                                                                }
+
+                                                            </div></Link>
                                                             <div className="product_name mt-2">  <Link to={'/product-details/' + item.sku}>{item.name} </Link></div>
                                                             <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
-                                                            <div className="product_price">$ {formatprice(item.price)}</div>
-                                                        </Link>
+                                                            <div className="product_price">{siteConfig.currency} {formatprice(item.price)}</div>
+                                                        </div>
                                                     )
                                                 })}
                                             </Slider>

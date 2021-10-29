@@ -45,41 +45,20 @@ function PromotedProducts(props) {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
         getProducts();
-        getCategoryData();
+        setCategory(props.cateData);
 
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [props.languages, location])
+    }, [props.languages, location, props.cateData])
 
 
-
-    const getCategoryData = async () => {
-        let result: any = await getCategoryDetails(props.languages, catId);
-
-        if (result && result.data) {
-            let obj: any = {};
-            const promises = [];
-            result.data.custom_attributes.forEach(async (el) => {
-                promises.push(new Promise((resolve, reject) => {
-                    if (el.attribute_code === "image") {
-                        obj.image = baseUrl + el.value;
-                    } else if (el.attribute_code === "description") {
-                        obj.desc = el.value;
-                    }
-                    result.data.custom = obj;
-                    resolve(result.data.custom);
-                }));
-            })
-            setCategory(result.data);
-        }
-    }
 
     async function getProducts() {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory(1, 2, catId, sortValue.sortBy, sortValue.sortByValue);
+        let result: any = await getProductByCategory(1, 2, catId, sortValue.sortBy, sortValue.sortByValue, props.languages);
         let productResult = result.data.items;
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
@@ -155,49 +134,48 @@ function PromotedProducts(props) {
                                     {props.items.slice(0, 2).map(item => {
                                         return (
                                             <div className="col-md-6" key={item.id}>
-                                                <Link to={'/product-details/' + item.sku}>
-                                                    <div className="product py-4">
-                                                        {token && (
-                                                            <span className="off bg-favorite">
-                                                                {!item.wishlist_item_id && (
-                                                                    <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                                                )}
-                                                                {item.wishlist_item_id && (
-                                                                    <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                                                )}
-                                                            </span>
-                                                        )
-                                                        }
 
-                                                        <div className="text-center" onMouseEnter={() => someHandler(item.id)}
-                                                            onMouseLeave={() => someOtherHandler(item.id)}>
-                                                            {
-                                                                item.custom_attributes.map((attributes) => {
-                                                                    if (attributes.attribute_code === 'image') {
-                                                                        imageD = attributes.value;
-                                                                    }
-                                                                    if (attributes.attribute_code === 'description') {
-                                                                        description = attributes.value.substr(0, 50);
-                                                                    }
-                                                                })
-                                                            }
-                                                            {
-                                                                isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="200" /> : <img src={imageD} className="image-fluid" alt={item.name} height="200" />
-                                                            }
-                                                        </div>
-                                                        <div className="about text-center">
-                                                            <h5>{item.name}</h5>
-                                                            <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />...
-                                                            <div className="pricetag">${formatprice(item.price)}</div>
-                                                        </div>
-                                                        {/* {token && ( */}
-                                                        <div className="cart-button mt-3 px-2">
-                                                            <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase">View Product</Link>
-                                                            <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
-                                                        </div>
-                                                        {/* )} */}
+                                                <div className="product py-4">
+                                                    {token && (
+                                                        <span className="off bg-favorite">
+                                                            {!item.wishlist_item_id && (
+                                                                <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                            )}
+                                                            {item.wishlist_item_id && (
+                                                                <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                            )}
+                                                        </span>
+                                                    )
+                                                    }
+
+                                                    <div className="text-center" onMouseEnter={() => someHandler(item.id)}
+                                                        onMouseLeave={() => someOtherHandler(item.id)}>
+                                                        {
+                                                            item.custom_attributes.map((attributes) => {
+                                                                if (attributes.attribute_code === 'image') {
+                                                                    imageD = attributes.value;
+                                                                }
+                                                                if (attributes.attribute_code === 'description') {
+                                                                    description = attributes.value.substr(0, 50);
+                                                                }
+                                                            })
+                                                        }
+                                                        {
+                                                            isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="200" /> : <img src={imageD} className="image-fluid" alt={item.name} height="200" />
+                                                        }
                                                     </div>
-                                                </Link>
+                                                    <div className="about text-center">
+                                                        <h5>{item.name}</h5>
+                                                        <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />...
+                                                        <div className="pricetag">${formatprice(item.price)}</div>
+                                                    </div>
+                                                    {/* {token && ( */}
+                                                    <div className="cart-button mt-3 px-2">
+                                                        <Link to={'/product-details/' + item.name} className="btn btn-primary text-uppercase">View Product</Link>
+                                                        <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
+                                                    </div>
+                                                    {/* )} */}
+                                                </div>
                                             </div>
                                         )
                                     })}
@@ -215,7 +193,8 @@ function PromotedProducts(props) {
 
 const mapStateToProps = (state) => {
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        languages: state.LanguageSwitcher.language
     }
 }
 

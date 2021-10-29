@@ -13,9 +13,7 @@ function FooterExtra(props) {
         async function fetchMyAPI() {
             let result: any = await footer(props.languages);
             var jsonData = result.data.items[0];
-            SetPagesData(jsonData);
-            let analytics: any = await analyticsFetch();
-            SetAnalyticsCode(analytics.data);
+            SetPagesData(jsonData);          
         }
         fetchMyAPI()
         return () => {

@@ -4,7 +4,7 @@ const Api = new API();
 export function MagazineList(language: string) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/blog/list?store_id=${storeId}&page_no=1&sortBy=published_at&soryByValue=desc`, payload, "GET", "");
+    return Api.request(`rest/all/V1/blog/list?store_id=${storeId}&page_no=1&sortBy=published_at&soryByValue=desc`, payload, "GET", "");
 }
 
 export function PostList() {
@@ -13,31 +13,31 @@ export function PostList() {
 export function GetCategoryData(language: string, page: number, sortBy: string, sortByValue: string) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/blog/list?store_id=${storeId}&page_no=${page}&sortBy=${sortBy}&soryByValue=${sortByValue}`, payload, "GET", "");
+    return Api.request(`rest/all/V1/blog/list?store_id=${storeId}&page_no=${page}&sortBy=${sortBy}&soryByValue=${sortByValue}`, payload, "GET", "");
 }
 
 export function FeaturedList(language: string) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/featured/blog?store_id=` + storeId, payload, "GET", "");
+    return Api.request(`rest/all/V1/featured/blog?store_id=` + storeId, payload, "GET", "");
 }
 
 export function GetCategoryList(language: string) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/blog/categories?store_id=` + storeId, payload, "GET", "");
+    return Api.request(`rest/all/V1/blog/categories?store_id=` + storeId, payload, "GET", "");
 }
 
 export function GetDataOfCategory(language: string, categroy_Id: number, page: number, sortBy: string, sortByValue: string) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/category/bloglist?store_id=${storeId}&page_no=${page}&catId=${categroy_Id}&sortBy=${sortBy}&soryByValue=${sortByValue}`, payload, "GET", "");
+    return Api.request(`rest/all/V1/category/bloglist?store_id=${storeId}&page_no=${page}&catId=${categroy_Id}&sortBy=${sortBy}&soryByValue=${sortByValue}`, payload, "GET", "");
 }
 
 export function RelatedList(language: string, postId) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`default/rest/all/V1/related/blog?storeId=${storeId}&postId=${postId}`, payload, "GET", "");
+    return Api.request(`rest/all/V1/related/blog?storeId=${storeId}&postId=${postId}`, payload, "GET", "");
 }
 
 export function PostData(language = 'english', url_key: string) {

@@ -27,11 +27,9 @@ function LatestProducts(props) {
     const location = useLocation()
     let customer_id = localStorage.getItem('cust_id');
     const [isHoverImage, setIsHoverImage] = useState(0);
-    const [pageSize, setPageSize] = useState(12);
     const [productsLatest, setProductsLatest] = useState([]);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
-    const [page, setCurrent] = useState(1);
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
     const [sort, setSort] = useState(0);
     const language = getCookie('currentLanguage');
@@ -78,9 +76,8 @@ function LatestProducts(props) {
     async function getProducts(catID) {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        //console.log(props.categoryId);
-        let result: any = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue);
-        setPagination(Math.ceil(result.data.total_count / pageSize));
+        let result: any = await getProductByCategory(1, 4, catID, sortValue.sortBy, sortValue.sortByValue, props.languages);
+
         let productResult = result.data.items;
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
@@ -96,12 +93,7 @@ function LatestProducts(props) {
 
         }
         setOpacity(1);
-        setProductsLatest(productResult)
-        // props.productList(productResult);
-        // get product page filter
-        // let result1: any = await getProductFilter(9);
-        // console.log(result1);
-        // console.log(props.items);
+        setProductsLatest(productResult);
 
     }
 
@@ -160,7 +152,7 @@ function LatestProducts(props) {
                             }
 
                         </ul>
-                        <div className="tab-content" id="DesignerTabContent">
+                        <div className="tab-content" id="DesignerTabContent" style={{ 'opacity': opacity }}>
                             {productsLatest.length > 0 && (
                                 <div className="tab-pane fade show active" id="PD" role="tabpanel" aria-labelledby="PD-tab">
                                     <div className="row">
@@ -235,8 +227,13 @@ function LatestProducts(props) {
 }
 
 const mapStateToProps = (state) => {
+    let languages = '';
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        languages: languages
     }
 }
 

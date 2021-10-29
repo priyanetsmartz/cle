@@ -7,6 +7,8 @@ import cartAction from "../../../../redux/cart/productAction";
 import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, giftCart, giftGuestCart } from "../../../../redux/cart/productApi";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
+import Login from '../../../../redux/auth/Login';
+const loginApi = new Login();
 const { openGiftBoxes, addToCartTask } = cartAction;
 function GiftMessage(props) {
     const intl = useIntl();
@@ -36,9 +38,15 @@ function GiftMessage(props) {
             setIsShow(true);
             let cartData = {};
             let cartQuoteId = '';
+
+            let customer_id = localStorage.getItem('cust_id');
             let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-            if (cartQuoteIdLocal) {
+            if (cartQuoteIdLocal || customer_id) {
+                let customerCart: any = await loginApi.genCartQuoteID(customer_id)
                 cartQuoteId = cartQuoteIdLocal
+                if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                    cartQuoteId = customerCart.data;
+                }
             } else {
                 // create customer token
                 let guestToken: any = await createGuestToken();
@@ -48,7 +56,6 @@ function GiftMessage(props) {
                 //  console.log(result.data)
             }
             localStorage.setItem('cartQuoteId', cartQuoteId);
-            let customer_id = localStorage.getItem('cust_id');
             //  console.log(props)
             if (props.items.id) {
                 cartData = {

@@ -137,7 +137,7 @@ function RegistrationForm(props) {
             }
             register({ userInfo });
         } else {
-            notification("warning", "", "Please enter required values");
+            notification("warning", "", <IntlMessages id="commentRequired" />);
         }
     }
 

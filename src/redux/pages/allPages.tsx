@@ -36,7 +36,7 @@ export function Pages(value: string, language: string) {
 
 export function GetHelpUsForm(language) {
     var storeId = language === 'english' ? 3 : 2;
-    var formCode = language === 'english' ? 'help-us' : 'help-us-ar';
+    var formCode = language === 'english' ? 'home_page_survey' : 'Home_page_survery_arabic';
     return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=${formCode}`, "", "GET", "");
 }
 

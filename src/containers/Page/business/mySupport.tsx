@@ -189,8 +189,8 @@ function MySupport(props) {
                                 <div className="customer-d">
                                     <div className="customer-d-wrap">
                                         <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
-                                        <a href="https://www.google.com/maps/search/?api=1&query=24.6537488,46.8341752" target="_blank">
-                                            <h4><IntlMessages id="myaccount.address" /></h4></a>
+                                        <Link to="https://www.google.com/maps/search/?api=1&query=24.6537488,46.8341752" target="_blank">
+                                            <h4><IntlMessages id="myaccount.address" /></h4></Link>
 
                                         <p>Istabul St, As Sulay <br />Riyadh 14322, Kingdom of Saudi Arabia</p>
                                     </div>

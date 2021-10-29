@@ -59,10 +59,10 @@ function Products(props) {
         let customer_id = localStorage.getItem('cust_id');
         let result: any;
         if (category) {
-            console.log("CAtegory api")
-            result = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue);
+      
+            result = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue, props.languages);
         } else {
-            console.log('product api')
+    
             result = await getAllProducts(lang, page, pageSize, sortValue.sortBy, sortValue.sortByValue);
         }
         //  console.log(Math.ceil(result.data.total_count / 9))

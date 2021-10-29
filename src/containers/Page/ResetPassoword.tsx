@@ -54,7 +54,7 @@ function ResetPassword(props) {
             let result: any = await SaveNewPass({ email: "", resetToken: token, newPassword: state.password });
             console.log(result);
             if (result.data) {
-                notification("success", "", "Password updated!");
+                notification("success", "", <IntlMessages id="resetPassword" />);
                 setState(prevState => ({
                     ...prevState,
                     password: "",
@@ -63,12 +63,12 @@ function ResetPassword(props) {
                 setIsShow(false);
                 history.push("/");
             } else {
-                notification("error", "", "Token Expired!");
+                notification("error", "",<IntlMessages id="tokenExpired" />);
                 history.push("/");
             }
         } else {
             setIsShow(false);
-            console.log("Please enter valid password");
+            notification("error", "", <IntlMessages id="validPass" />);
         }
     }
 

@@ -45,7 +45,7 @@ function NewIn(props) {
     async function getProducts(catID) {
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue);
+        let result: any = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue, props.languages);
         //  console.log(Math.ceil(result.data.total_count / 9))
         setPagination(Math.ceil(result.data.total_count / pageSize));
         let productResult = result.data.items;
@@ -104,7 +104,6 @@ function NewIn(props) {
                 {props.items.slice(0, 7).map(item => {
                     return (
                         <div className="col-md-3" key={item.id}>
-                            <Link to={'/product-details/' + item.sku}>
                                 <div className="product py-4">
                                     {token && (
                                         <span className="off bg-favorite">
@@ -154,7 +153,6 @@ function NewIn(props) {
                                     </div>
                                     {/* )} */}
                                 </div>
-                            </Link>
                         </div>
                     )
                 })}
@@ -172,7 +170,8 @@ function NewIn(props) {
 }
 const mapStateToProps = (state) => {
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        languages: state.LanguageSwitcher.language
     }
 }
 

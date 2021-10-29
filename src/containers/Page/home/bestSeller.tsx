@@ -9,6 +9,7 @@ import { menu } from '../../../redux/pages/allPages';
 import { getHomePageProducts } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import notification from "../../../components/notification";
+import { siteConfig } from '../../../settings';
 import { addWhishlist, getWhishlistItemsForUser, removeWhishlist } from '../../../redux/cart/productApi';
 const { addToWishlistTask } = cartAction;
 const { showSignin } = appAction;
@@ -84,7 +85,7 @@ function BestSeller(props) {
                     }));
 
                 productResult = mergeById(products, WhishlistData);
-                console.log(typeof (productResult))
+             //   console.log(typeof (productResult))
             } else {
                 productResult = result.data[0].bestSellers;
 
@@ -188,7 +189,7 @@ function BestSeller(props) {
                         </div>
                     </div>
                 </div>
-                {bestseller.length > 0 && (
+                {bestseller.length > 0 ? (
                     <div className="row" style={{ 'opacity': opacity }}>
                         <div className="col-sm-12">
                             <div className="new-in-slider product-listing">
@@ -216,7 +217,7 @@ function BestSeller(props) {
                                                     </div>
                                                     <div className="product_name"> {item.name} </div>
                                                     <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
-                                                    <div className="product_price"> ${formatprice(item.price)}</div>
+                                                    <div className="product_price"> {siteConfig.currency}{formatprice(item.price)}</div>
                                                     <div className="cart-button mt-3 px-2">
                                                         <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
                                                     </div>
@@ -228,7 +229,7 @@ function BestSeller(props) {
                             </div>
                         </div>
                     </div>
-                )}
+                ) : <IntlMessages id="NotFound" />}
             </div>
         </section>
     )

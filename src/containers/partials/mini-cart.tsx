@@ -92,18 +92,24 @@ function MiniCart(props) {
                                 )
                             })
                         ) :
-                        "Your cart is empty"
+                        <IntlMessages id="cart.cartEmpty" />
                     }
                 </ul>
-                <div className="minitotl_amnt">
-                    <div className="minicart_label"><IntlMessages id="total" /></div>
-                    <div className="minicart_amount">${cartTotal}</div>
-                </div>
+                {cartItemsVal && cartItemsVal['items'] && cartItemsVal['items'].length ?
+                    (
+                        <div className="minitotl_amnt">
+                            <div className="minicart_label"><IntlMessages id="total" /></div>
+                            <div className="minicart_amount">${cartTotal}</div>
+                        </div>
+                    ) : ""}
                 <div className="width-100">
                     <div className="d-grid">
                         <Link to="/my-cart" className="btn btn-secondary" type="button"><IntlMessages id="cart.menu" /></Link>
                         <br />
-                        <Link to="/checkout" className="btn btn-secondary" type="button"><IntlMessages id="checkout.menu" /></Link>
+                        {cartItemsVal && cartItemsVal['items'] && cartItemsVal['items'].length ?
+                            (
+                                <Link to="/checkout" className="btn btn-secondary" type="button"><IntlMessages id="checkout.menu" /></Link>
+                            ) : ""}
                     </div>
                 </div>
             </div>

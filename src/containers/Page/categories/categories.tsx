@@ -85,9 +85,9 @@ function Categories(props) {
             <div className="section" >
                 <LatestProducts />
             </div>
-            <div className="section" >
-                <PromotedProducts />
-            </div>
+            {/* <div className="section" >
+                <PromotedProducts cateData={category} />
+            </div> */}
             {/* <div className="section">
                 <Magazine />
             </div> */}

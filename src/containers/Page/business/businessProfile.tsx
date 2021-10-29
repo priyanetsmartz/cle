@@ -8,16 +8,15 @@ import {
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
-import { language } from '../../../settings';
 import { DROPDOWN } from '../../../config/constants';
 import moment from 'moment';
 
 function BusinessProfile(props) {
     const [vendorData, setVendorData] = useState({
-        vendor_name:'',
-        telephone:'',
-        country_id:'',
-        dob:''
+        vendor_name: '',
+        telephone: '',
+        country_id: '',
+        dob: ''
     });
 
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
@@ -37,7 +36,7 @@ function BusinessProfile(props) {
     const userGroup = localStorage.getItem('token');
     const [isShow, setIsShow] = useState(false);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
-    
+
 
     const [myDetailsModel, setMyDetailsModel] = useState(false);
     const [myAddressModal, setMyAddressModal] = useState(false);
@@ -59,7 +58,7 @@ function BusinessProfile(props) {
         year: ''
     });
     const [country, setCountry] = useState("");
-    
+
 
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
@@ -94,7 +93,7 @@ function BusinessProfile(props) {
     //--------------------------------------------------------------
     useEffect(() => {
         const ven = localStorage.getItem('cle_vendor');
-        if(ven){
+        if (ven) {
             setVendorData(JSON.parse(ven))
         }
         getData();
@@ -111,7 +110,7 @@ function BusinessProfile(props) {
         dob.month = d[1];
         dob.year = d[0];
         setDob(dob);
-        
+
         if (result) {
             setCustForm(result.data);
         }
@@ -139,7 +138,7 @@ function BusinessProfile(props) {
         let result: any = await saveCustomerDetails(custId, { customer: custForm });
         if (result) {
             setMyDetailsModel(false);
-            notification("success", "", "Customer details Updated");
+            notification("success", "", <IntlMessages id="customerUpdate" />);
         }
     }
 
@@ -171,7 +170,7 @@ function BusinessProfile(props) {
                     region_id: "",
                     street: ""
                 });
-                notification("success", "", "Customer Address Updated");
+                notification("success", "", <IntlMessages id="customerAddressUpdate" />);
                 setIsShow(false);
             }
         }
@@ -232,7 +231,7 @@ function BusinessProfile(props) {
         if (result) {
             custForm.addresses.splice(index, 1);
             setCustForm(custForm);
-            notification("success", "", "Customer Address deleted!");
+            notification("success", "", <IntlMessages id="customerAddressDelete" />);
         }
     }
     //edit existing address ends here--------------->
@@ -284,14 +283,14 @@ function BusinessProfile(props) {
         if (handleValidation()) {
             let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
             if (result.data) {
-                notification("success", "", "Password updated");
+                notification("success", "", <IntlMessages id="passwordUpdate" />);
                 setChangePass({
                     confirmNewPassword: "",
                     newPassword: "",
                     password: ""
                 });
             } else {
-                notification("error", "", "Invalid password!");
+                notification("error", "", <IntlMessages id="passwordInvalid" />);
             }
         }
     }
@@ -341,14 +340,14 @@ function BusinessProfile(props) {
 
             let result: any = await updateCustEmail(req);
             if (result.data) {
-                notification("success", "", "New email Updated");
+                notification("success", "", <IntlMessages id="newEmailUpdate" />);
                 setChangeEmail({
                     confirmNewEmail: "",
                     newEmail: "",
                     password: ""
                 })
             } else {
-                notification("error", "", "Error in updating email!");
+                notification("error", "", <IntlMessages id="errorNewEmailUpdate" />);
             }
         }
     }
@@ -569,8 +568,8 @@ function BusinessProfile(props) {
                                     <li>{address.city}</li>
                                     <li>{address.country_id}</li>
                                 </ul>
-                                {i== 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                                <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
+                                {i == 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
+                                    <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
                                 <div className="address-action">
                                     <Link to="#" onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
                                     <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`} onClick={() => editAddress(i)}>

@@ -200,7 +200,7 @@ function MagazineCategory(props) {
             }
         } else {
             setIsShow(false);
-            notification("warning", "", "Please enter required values");
+            notification("warning", "", <IntlMessages id="emailvalidation" />);
         }
     }
     return (

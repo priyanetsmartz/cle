@@ -50,9 +50,9 @@ export function savePreference(data) {
     return adminToken.request(`rest/V1/customer/preferences`, data, "PUT", "");
 }
 
-export function getCustomerOrders() {
+export function getCustomerOrders(pageSize) {
     const custId = localStorage.getItem('cust_id');
-    return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
+    return adminToken.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[sortOrders][0][field]=created_at&searchCriteria[sortOrders][0][direction]=DESC&searchCriteria[page_size]=${pageSize}`, "", "GET", "");
 }
 
 export function getCustomerOrdersByDate(fromDate, toDate, pageSize) {
@@ -115,13 +115,21 @@ export function getCategoryDetails(language, catId) {
     return adminToken.request(`rest/V1/categories/${catId}?storeId=${storeId}`, "", "GET", "");
 }
 
+// export function getWeChooseForYou(language, custId) {
+//     const storeId = language === 'english' ? 3 : 2;
+//     return adminToken.request(`rest/all/V1/product/relevantProducts?storeId=${storeId}&customerId=${custId}`, "", "GET", "");
+// }
+
 export function getWeChooseForYou(language, custId) {
     const storeId = language === 'english' ? 3 : 2;
-    return adminToken.request(`rest/all/V1/product/relevantProducts?storeId=${storeId}&customerId=${custId}`, "", "GET", "");
+    return adminToken.request(`rest/all/V1/product/newin?storeId=${storeId}&customerId=${custId}`, "", "GET", "");
 }
 
-export function getHomePageBanner() {
-    return adminToken.request(`rest/V1/lof/bannerslider/getList?searchCriteria[filterGroups][0][filters][0][field]=tags&searchCriteria[filterGroups][0][filters][0][value]=home_page_slider`, "", "GET", "");
+
+export function getHomePageBanner(language) {
+    const bannerName = language === 'english' ? 'home_page_slider' : 'home_page_banner_arabic';
+
+    return adminToken.request(`rest/V1/lof/bannerslider/getList?searchCriteria[filterGroups][0][filters][0][field]=tags&searchCriteria[filterGroups][0][filters][0][value]=${bannerName}`, "", "GET", "");
 }
 
 export function getDesginers(language, catId) {

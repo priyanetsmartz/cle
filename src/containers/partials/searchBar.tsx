@@ -5,6 +5,7 @@ import { getCookie } from '../../helpers/session';
 import IconZoomIn from '../../image/Icon_zoom_in.svg';
 import { getCategoryList, searchFields } from '../../redux/cart/productApi';
 import { useHistory } from "react-router-dom";
+import { useIntl } from 'react-intl';
 
 function SearchBar(props) {
     const history = useHistory();
@@ -41,7 +42,7 @@ function SearchBar(props) {
     };
     const getCategoryListAPi = async () => {
         let results: any = await getCategoryList();
-        if (results.data && results.data.items) {
+        if (results && results.data && results.data.items) {
             setCategories(results.data.items)
         }
 
@@ -73,31 +74,31 @@ function SearchBar(props) {
     const searchwithCategory = async (e) => {
         const { value } = e.target;
         if (searchKeyword) {
-            history.push(`/search/${searchKeyword}/${value}`);
+        //    history.push(`/search/${searchKeyword}/${value}`);
             SetIsShow(false);
         } else {
-            history.push(`/search/all/${value}`);
+          //  history.push(`/search/all/${value}`);
         }
     }
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
             let serachVal = e.target.value;
-            history.push(`/search/${serachVal}/all`);
+          //  history.push(`/search/${serachVal}/all`);
             SetIsShow(false);
         }
     }
-
+    const intl = useIntl();
     return (
         <div className="navbar-collapse collapse mainmenu-bar" id="bdNavbar">
             <hr className="d-md-none text-white-50" />
             <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
                 <div className="search_input">
                     <div className="search_top"><img src={IconZoomIn} alt="searchIcon" className="me-1" />
-                        <input type="search" placeholder="Search..." onChange={updateInput} onKeyDown={handleKeyDown} className="form-control me-1" />
+                        <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} onChange={updateInput} onKeyDown={handleKeyDown} className="form-control me-1" />
                         {
                             categories.length > 0 && (
                                 <select className="form-select" onChange={searchwithCategory} aria-label="Default select example">
-                                    <option value="">Select category</option>
+                                    <option value=""> --</option>
                                     {categories.map((item, i) => {
                                         return (<option key={i} value={item.id}>{item.name}</option>)
                                     })

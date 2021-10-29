@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { getHomePageBanner } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import { BrowserView, MobileView } from 'react-device-detect';
+import IntlMessages from "../../../components/utility/intlMessages";
 import './slider.css';
+
 
 function HomeBanner(props) {
     const baseUrl = process.env.REACT_APP_API_URL;
@@ -24,10 +26,10 @@ function HomeBanner(props) {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [props.languages]);
 
     const getData = async () => {
-        let result: any = await getHomePageBanner();
+        let result: any = await getHomePageBanner(props.languages);
         if (result) {
             setBanner(result.data.items[0]);
         }
@@ -43,8 +45,8 @@ function HomeBanner(props) {
                             style={{ backgroundImage: `url(${imagePath + item.resource_path})`, height: '657px', width: '436px', flex: (activeIndex === i) ? 7 : 1 }} >
                             {(activeIndex === i) && <> <div className="slider-text-inner"><div className="head_one_txt">Welcome to Our Marketplace</div>
                                 <h2 className="head_two_txt">{item.title}</h2>
-                                <div className="head_three_txt">Refreshing fregrances reminiscent of the warm weather</div>
-                                <div className="cta-dicover"><Link to="#">Discover</Link></div></div></>}
+                                <div className="head_three_txt">{item.alt_text}</div>
+                                <div className="cta-dicover"><Link to="#"><IntlMessages id="banner.cta" /></Link></div></div></>}
                         </div>)
                     })}
                 </div>
@@ -55,10 +57,11 @@ function HomeBanner(props) {
                         return (<div key={i} className={`item ${item.is_featured === 1 ? 'featured' : ''}`} onMouseEnter={() => setActiveIndex(i)}
                             style={{ backgroundImage: `url(${imagePath + item.resource_path})`, height: '657px', width: '436px', flex: (activeIndex === i) ? 7 : 1 }} >
                             <img src={imagePath + item.resource_path} alt="" />
-                            <div className="slider-text-inner"><div className="head_one_txt">Welcome to Our Marketplace</div>
+                            <div className="slider-text-inner">
+                                <div className="head_one_txt">Welcome to Our Marketplace</div>
                                 <h2 className="head_two_txt">{item.title}</h2>
-                                <div className="head_three_txt">Refreshing fregrances reminiscent of the warm weather</div>
-                                <div className="cta-dicover"><Link to="#">Discover</Link></div></div>
+                                <div className="head_three_txt">{item.alt_text}</div>
+                                <div className="cta-dicover"><Link to="#"><IntlMessages id="banner.cta" /></Link></div></div>
                         </div>)
                     })}
                 </Slider>
@@ -68,8 +71,14 @@ function HomeBanner(props) {
 }
 
 const mapStateToProps = (state) => {
+    let languages = '';
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        languages: languages
+
     }
 }
 

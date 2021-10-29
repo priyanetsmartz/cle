@@ -5,7 +5,7 @@ import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-
+import { capitalize } from '../../../components/utility/allutils';
 
 function OrderDetails(props) {
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
@@ -26,7 +26,7 @@ function OrderDetails(props) {
         country_id: "",
         street: ""
     });
-    
+
     const [errors, setError] = useState({
         errors: {}
     });
@@ -62,10 +62,10 @@ function OrderDetails(props) {
         }))
     }
 
-     // for customer address popup window starts here
+    // for customer address popup window starts here
     const saveCustAddress = async (e) => {
         if (validateAddress()) {
-            
+
         }
     }
 
@@ -120,19 +120,19 @@ function OrderDetails(props) {
 
     const compareValues = (order) => {
         return function innerSort(a, b) {
-      
-          const varA = a.price;
-          const varB = b.price;
-      
-          let comparison = 0;
-          if (varA > varB) {
-            comparison = 1;
-          } else if (varA < varB) {
-            comparison = -1;
-          }
-          return (
-            (order == 0) ? (comparison * -1) : comparison
-          );
+
+            const varA = a.price;
+            const varB = b.price;
+
+            let comparison = 0;
+            if (varA > varB) {
+                comparison = 1;
+            } else if (varA < varB) {
+                comparison = -1;
+            }
+            return (
+                (order == 0) ? (comparison * -1) : comparison
+            );
         };
     }
 
@@ -156,8 +156,8 @@ function OrderDetails(props) {
                                 {/* change this after clarification */}
                                 <p><strong>
                                     {order.status == 'complete' ? <IntlMessages id="order.itsDelivered" /> : order.status == 'pending' ?
-                                    <IntlMessages id="order.itsPending" />: order.status == 'processing' ? <IntlMessages id="order.itsProcessing" />
-                                : order.status}
+                                        <IntlMessages id="order.itsPending" /> : order.status == 'processing' ? <IntlMessages id="order.itsProcessing" />
+                                            : order.status}
                                 </strong></p>
                                 {order.status == 'complete' && <p><IntlMessages id="order.delivered" /> {order.shipping_amount}</p>}
                                 <div className="progress-bar-area">
@@ -167,9 +167,9 @@ function OrderDetails(props) {
                                     </div>
                                 </div>
                                 <p>
-                                {order.status == 'complete' ? <IntlMessages id="order.yourParcelDelivered" /> : order.status == 'pending' ?
-                                    <IntlMessages id="order.yourParcelPending" />: order.status == 'processing' ? <IntlMessages id="order.yourParcelProcessing" />
-                                : order.status}</p>
+                                    {order.status == 'complete' ? <IntlMessages id="order.yourParcelDelivered" /> : order.status == 'pending' ?
+                                        <IntlMessages id="order.yourParcelPending" /> : order.status == 'processing' ? <IntlMessages id="order.yourParcelProcessing" />
+                                            : order.status}</p>
                             </div>
                         </div>
                     </div>
@@ -209,7 +209,7 @@ function OrderDetails(props) {
                         <div className="order-delivery-address">
                             <div className="Address-title">
                                 <span className="float-start"><IntlMessages id="order.deliveryAddress" /></span>
-                                <a onClick={toggleAddressModal} className="float-end"><IntlMessages id="order.change" /></a>
+                                <Link to="#" onClick={toggleAddressModal} className="float-end"><IntlMessages id="order.change" /></Link>
                                 <div className="clearfix"></div>
                             </div>
                             <p>
@@ -242,18 +242,18 @@ function OrderDetails(props) {
                 <div className="row">
                     <div className="col-md-12 return-complaint-btns">
                         <div className="float-start">
-                            <a href=""><IntlMessages id="order.returnProducts" /></a>
-                            <a href=""><IntlMessages id="order.makeAComplaint" /></a>
+                            <Link to=""><IntlMessages id="order.returnProducts" /></Link>
+                            <Link to=""><IntlMessages id="order.makeAComplaint" /></Link>
                         </div>
                         <div className="float-end">
                             <div className="btn-group">
                                 <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                    Sort By
+                                    <IntlMessages id="magazine.sortby" />
                                 </button>
                                 <ul className="dropdown-menu dropdown-menu-end">
-                                    <li><button className="dropdown-item" type="button" onClick={() => sortHandler(0)}>Price: high to low</button></li>
-                                    <li><button className="dropdown-item" type="button" onClick={() => sortHandler(1)}>Price: low to high</button></li>
+                                    <li><button className="dropdown-item" type="button" onClick={() => sortHandler(0)}><IntlMessages id="filterPriceDesc" /></button></li>
+                                    <li><button className="dropdown-item" type="button" onClick={() => sortHandler(1)}><IntlMessages id="filterPriceAsc" /></button></li>
                                 </ul>
                             </div>
                         </div>
@@ -267,21 +267,22 @@ function OrderDetails(props) {
                                 <div className="row">
                                     <div className="col-md-3">
                                         <div className="product-image">
-                                            <img src={item.extension_attributes.item_image} />
+                                            <img alt="{item.name}" src={item.extension_attributes.item_image} />
                                         </div>
                                     </div>
                                     <div className="col-md-9">
                                         <div className="pro-name-tag mb-5">
                                             <div className="float-start">
-                                                <p><strong>{item.name}</strong></p>
-                                                <p>{item.product_type}</p>
+                                                <p> <Link to={'/product-details/' + item.sku}><strong>{item.name}</strong></Link></p>
+                                                <p>{capitalize(item.product_type)}</p>
                                             </div>
-                                            <a href="" className="float-end text-end order-pro-price">${item.price}</a>
+                                            <Link to="#" className="float-end text-end order-pro-price">${item.price}</Link>
                                             <div className="clearfix"></div>
                                         </div>
                                         <div className="pro-name-tag">
-                                            <p>One Size</p>
-                                            <p><strong><IntlMessages id="order.productNo" /></strong> 123456789</p>
+                                            {/* <p>One Size</p> */}
+                                            {/* will add this in alpha */}
+                                            <p><strong><IntlMessages id="order.productNo" /></strong> {item.product_id}</p>
                                             <div className="clearfix"></div>
                                         </div>
                                     </div>
@@ -293,18 +294,21 @@ function OrderDetails(props) {
 
                 </ul>
                 {order && order.items && order.items.length > 10 && <div className="show-more-btn">
-                    <a onClick={showMore} className="btn btn-secondary">
+                    <Link to="#" onClick={showMore} className="btn btn-secondary">
                         <IntlMessages id="order.showMore" />
-                    </a>
+                    </Link>
                 </div>}
             </div>
 
             {/* change delivery address modalc */}
             <Modal show={changeAddressModal}>
                 <div className="CLE_pf_details">
-                    <h1>My Address</h1>
-                    <a className="cross_icn" onClick={toggleAddressModal}> <i className="fas fa-times"></i></a>
-                    <div className="">
+                    <Modal.Header>
+                        <h1><IntlMessages id="myaccount.myDetails" /></h1>
+                        <Link to="#" className="cross_icn" onClick={toggleAddressModal}> <i className="fas fa-times"></i> </Link>
+                    </Modal.Header>
+
+                    <Modal.Body className="arabic-rtl-direction">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">First name<span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Ann"
@@ -368,18 +372,18 @@ function OrderDetails(props) {
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
                         </div>
-                        <div className="width-100 mb-3 form-field">
-                            <div className="Frgt_paswd">
-                                <div className="confirm-btn">
-                                    <button type="button" className="btn btn-secondary" onClick={saveCustAddress}>Confirm</button>
-                                </div>
+                    </Modal.Body>
+                    <Modal.Footer className="width-100 mb-3 form-field">
+                        <div className="Frgt_paswd">
+                            <div className="confirm-btn">
+                                <button type="button" className="btn btn-secondary" onClick={saveCustAddress}><IntlMessages id="myaccount.confirm" /></button>
                             </div>
                         </div>
-                    </div>
+                    </Modal.Footer>
                 </div>
             </Modal>
 
-        </section>
+        </section >
     );
 }
 

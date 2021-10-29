@@ -12,7 +12,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../image/CLE-logo-black.svg";
 import FacebookLoginButton from '../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../socialMediaLogin/Google';
-import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
+
 import { useIntl } from 'react-intl';
 const { showSignin, openSignUp, toggleOpenDrawer } = appAction;
 const { login, logout } = authAction;
@@ -51,6 +51,11 @@ function SignIn(props) {
       }
     }
     return () => {
+      setRememberMe(false);
+      setState({
+        email: "",
+        password: ""
+      })
       // componentwillunmount in functional component.
       // Anything in here is fired on component unmount.
     }
@@ -110,7 +115,7 @@ function SignIn(props) {
       // }
     } else {
       setIsShow(false);
-      notification("warning", "", "Please enter valid email and password");
+      notification("warning", "", <IntlMessages id="commentRequired" />);
     }
   }
 

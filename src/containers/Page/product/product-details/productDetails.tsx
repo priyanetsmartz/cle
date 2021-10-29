@@ -19,11 +19,11 @@ import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import notification from '../../../../components/notification';
 import GiftMessage from './GiftMessage';
+import Login from '../../../../redux/auth/Login';
 import appAction from "../../../../redux/app/actions";
-
-const { showSignin } = appAction;
+const loginApi = new Login();
+const { showSignin, showLoader } = appAction;
 const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts } = cartAction;
-
 function ProductDetails(props) {
     const { sku } = useParams();
     const language = getCookie('currentLanguage');
@@ -58,6 +58,7 @@ function ProductDetails(props) {
 
 
     useEffect(() => {
+        props.showLoader(true)
         const localToken = localStorage.getItem('token');
         let lang = props.languages ? props.languages : language;
         setToken(localToken)
@@ -292,17 +293,21 @@ function ProductDetails(props) {
         let cartData = {};
         let cartSucces: any;
         let cartQuoteId = '';
+        let customer_id = localStorage.getItem('cust_id');
         let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        console.log(cartQuoteIdLocal)
-        if (cartQuoteIdLocal) {
+        //console.log(cartQuoteIdLocal)
+        if (cartQuoteIdLocal || customer_id) {
+            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
             cartQuoteId = cartQuoteIdLocal
+            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart.data;
+            }
         } else {
-            // create customer token
+
             let guestToken: any = await createGuestToken();
             localStorage.setItem('cartQuoteToken', guestToken.data);
             let result: any = await getGuestCart();
             cartQuoteId = result.data.id
-            //  console.log(result.data)
         }
         localStorage.setItem('cartQuoteId', cartQuoteId);
         //  console.log(slectedAttribute.options)
@@ -320,24 +325,6 @@ function ProductDetails(props) {
                     "quote_id": cartQuoteId
                 }
             }
-            // cartData = {
-            //     "cart_item": {
-            //         "quote_id": cartQuoteId,
-            //         "product_type": "configurable",
-            //         "sku": productDetails['sku'],
-            //         "qty": quantity,
-            //         "product_option": {
-            //             "extension_attributes": {
-            //                 "configurable_item_options": [
-            //                     {
-            //                         "option_id": slectedAttribute.options["option_id"],
-            //                         "option_value": slectedAttribute.options["option_value"]
-            //                     }
-            //                 ]
-            //             }
-            //         }
-            //     }
-            // }
         } else {
             cartData = {
                 "cartItem": {
@@ -348,7 +335,7 @@ function ProductDetails(props) {
             }
         }
 
-        let customer_id = localStorage.getItem('cust_id');
+
         if (customer_id) {
             cartSucces = await addToCartApi(cartData)
         } else {
@@ -715,5 +702,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, showSignin }
+    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, showSignin, showLoader }
 )(ProductDetails);
