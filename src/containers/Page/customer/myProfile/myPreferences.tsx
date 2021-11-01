@@ -19,7 +19,7 @@ function MyPreferences(props) {
     const [isShow, setIsShow] = useState(false);
 
     useEffect(() => {
-        console.log(attributes)
+        // console.log(attributes)
         getAttributes();
         return () => {
             //
@@ -27,7 +27,11 @@ function MyPreferences(props) {
     }, []);
 
     useEffect(() => {
+<<<<<<< HEAD
         console.log(favCat)
+=======
+        //  console.log(favCat)
+>>>>>>> c503f312c435ab706d474d7a092e033337b20f06
         // attributes.categories[activeCategory] = favCat;
         setAttributes(prevState => ({
             ...prevState,

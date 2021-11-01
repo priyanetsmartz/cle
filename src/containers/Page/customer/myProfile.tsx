@@ -4,7 +4,7 @@ import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
 import {
     getCustomerDetails, saveCustomerDetails, getCountriesList, changePassword,
-    updateCustEmail, deleteAddress, getPreference, getRegionsByCountryID
+    updateCustEmail, deleteAddress, getPreference, getRegionsByCountryID, savePreference
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
@@ -89,6 +89,20 @@ function MyProfile(props) {
         newEmail: "",
         confirmNewEmail: "",
         password: "",
+    });
+
+    const [giftingPrefer, setGiftingPrefer] = useState({
+        name: "",
+        surName: "",
+        occasion: "",
+        annualReminder:"",
+        dobDate:"",
+        dobMonth:"",
+        dobYear:"",
+        DateOfDelivery:"",
+        gender:"",
+        categoryPreference:"",
+        notifyMe:""
     });
 
     const [errors, setError] = useState({
@@ -218,6 +232,14 @@ function MyProfile(props) {
     const handleChange = (e) => {
         const { id, value } = e.target
         setCustForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
+    }
+
+    const handleGiftingChange = (e) => {
+        const { id, value } = e.target
+        setGiftingPrefer(prevState => ({
             ...prevState,
             [id]: value
         }))
@@ -493,6 +515,20 @@ function MyProfile(props) {
         return formIsValid;
     }
     //change email ends here----------------------------------------->
+
+    const saveGiftingPrefer = async () => {
+        console.log(giftingPrefer);
+        let data = {
+            customerId: custId,
+            gifting_preference: giftingPrefer
+        }
+
+        const res = await savePreference(data);
+        if (res) {
+            setIsShow(false);
+            notification("success", "", "Gifiting Preferences Updated");
+        }
+    }
 
     const openMyDetails = () => {
         setMyDetailsModel(!myDetailsModel);
@@ -1221,6 +1257,7 @@ function MyProfile(props) {
             </Modal>
 
             {/* Gifting preference details modal */}
+
             <Modal show={giftingModal} size="lg">
                 <Modal.Body className="gifting_pref">
                     <div className="girft_details">
@@ -1310,59 +1347,67 @@ function MyProfile(props) {
                                 <h2><IntlMessages id="myaccount.addAFriend" /></h2>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.name" /><span className="maindatory">*</span></label>
-                                    <input type="text" className="form-control" placeholder="John" />
+                                    <input type="text" className="form-control" placeholder="John" value={giftingPrefer.name} id="name"
+                                        onChange={handleGiftingChange}/>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.surName" /></label>
-                                    <input type="text" className="form-control" placeholder="Doe" />
+                                    <input type="text" className="form-control" placeholder="Doe" value={giftingPrefer.surName} id="surName"
+                                        onChange={handleGiftingChange}/>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.occasion" /></label>
-                                    <select className="form-select me-3" aria-label="Default select example">
+                                    <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.occasion} id="occasion"
+                                        onChange={handleGiftingChange}>
                                         <option value="">Select</option>
-                                        <option value="1">Birthday</option>
-                                        <option value="2">Graduation</option>
-                                        <option value="3">Engagement</option>
-                                        <option value="4">Wedding</option>
-                                        <option value="5">Ramadan</option>
-                                        <option value="6">Eid</option>
-                                        <option value="7">Other</option>
+                                        <option value="Birthday">Birthday</option>
+                                        <option value="Graduation">Graduation</option>
+                                        <option value="Engagement">Engagement</option>
+                                        <option value="Wedding">Wedding</option>
+                                        <option value="Ramadan">Ramadan</option>
+                                        <option value="Eid">Eid</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.annualReminder" /></label>
-                                    <select className="form-select me-3" aria-label="Default select example">
+                                    <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.annualReminder} id="annualReminder"
+                                        onChange={handleGiftingChange}>
                                         <option value="">Select</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
                                     </select>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dob" /></label>
                                     <div className="dobfeild">
-                                        <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">01</option>
-                                            <option value="1">01</option>
-                                            <option value="2">02</option>
-                                            <option value="3">03</option>
+                                        <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobDate} id="dobDate"
+                                            onChange={handleGiftingChange}>
+                                                <option value="">Select</option>
+                                                {DROPDOWN.dates.map(opt => {
+                                                    return (<option value={opt} key={opt}>{opt}</option>);
+                                                })}
                                         </select>
-                                        <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">May</option>
-                                            <option value="1">May</option>
-                                            <option value="2">June</option>
-                                            <option value="3">July</option>
+                                        <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobMonth} id="dobMonth"
+                                            onChange={handleGiftingChange}>
+                                                <option value="">Select</option>
+                                                {DROPDOWN.months.map(opt => {
+                                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                                })}
                                         </select>
-                                        <select className="form-select" aria-label="Default select example">
-                                            <option value="">1990</option>
-                                            <option value="1">1990</option>
-                                            <option value="2">1991</option>
-                                            <option value="3">1993</option>
+                                        <select className="form-select" aria-label="Default select example" value={giftingPrefer.dobYear} id="dobYear"
+                                            onChange={handleGiftingChange}>
+                                                <option value="">Select</option>
+                                                {DROPDOWN.years.map(opt => {
+                                                    return (<option value={opt} key={opt}>{opt}</option>);
+                                                })}
                                         </select>
                                     </div>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dateOfDelivery" /></label>
-                                    <select className="form-select me-3" aria-label="Default select example">
+                                    <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.DateOfDelivery} id="DateOfDelivery"
+                                        onChange={handleGiftingChange}>
                                         <option value="">Select</option>
                                         <option value="1">Same Date as event</option>
                                         <option value="2">Set custom date</option>
@@ -1370,7 +1415,8 @@ function MyProfile(props) {
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.gender" /></label>
-                                    <select className="form-select" aria-label="Default select example" id="gender">
+                                    <select className="form-select" aria-label="Default select example" value={giftingPrefer.gender} id="gender"
+                                        onChange={handleGiftingChange}>
                                         <option value="">Select</option>
                                         {DROPDOWN.gender.map(opt => {
                                             return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
@@ -1379,7 +1425,8 @@ function MyProfile(props) {
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.categoryPrefer" /></label>
-                                    <select className="form-select me-3" aria-label="Default select example">
+                                    <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.categoryPreference} id="categoryPreference"
+                                        onChange={handleGiftingChange}>
                                         <option value="">Select</option>
                                         <option value="1">Jewelry</option>
                                         <option value="2">Watches</option>
@@ -1389,7 +1436,8 @@ function MyProfile(props) {
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.notify" /></label>
-                                    <select className="form-select me-3" aria-label="Default select example">
+                                    <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.notifyMe} id="notifyMe"
+                                        onChange={handleGiftingChange}>
                                         <option value="">Select</option>
                                         <option value="1">By email</option>
                                         <option value="2">By Whatsapp </option>
@@ -1473,7 +1521,7 @@ function MyProfile(props) {
                         <Modal.Footer>
                             <div className="width-100 mb-4">
                                 <div className="float-end">
-                                    <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.confirm" /></button>
+                                    <button type="button" className="btn btn-secondary" onClick={saveGiftingPrefer}><IntlMessages id="myaccount.confirm" /></button>
                                 </div>
                             </div>
                         </Modal.Footer>
