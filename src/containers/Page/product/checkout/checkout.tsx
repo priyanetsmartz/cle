@@ -461,7 +461,7 @@ function Checkout(props) {
             }
         } else {
 
-            notification("errror", "", result.data.message);
+            notification("errror", "", 'Something wen wrong!');
         }
         setAddShippingAddressLoader(false)
     }
@@ -732,7 +732,7 @@ function Checkout(props) {
                     return notification("error", "", "Please Add email Address!");
                 }
                 setIsShow(true)
-                orderPlace = await placeGuestOrder();
+                orderPlace = await placeGuestOrder('checkmo');
 
             }
             if (orderPlace && orderPlace.data) {
@@ -792,32 +792,36 @@ function Checkout(props) {
         setPaymentDetails(detailsRequired)
         // placeOrderonMagento('myfatoorah_gateway')
         let customer_id = localStorage.getItem('cust_id');
+        let orderPlace: any;
         if (customer_id) {
-            let orderPlace: any = await placeUserOrder('myfatoorah_gateway');
-            if (orderPlace && orderPlace.data) {
-                let details = {
-                    "orderId": orderPlace.data,
-                    "transactionId": detailsRequired['transactionId'],
-                    "PaymentGateway": detailsRequired['PaymentGateway'],
-                    "InvoiceId": detailsRequired['InvoiceId'],
-                    "TransactionStatus": detailsRequired['TransactionStatus']
-                }
-                let addOrderDetails: any = await addPaymentDetailsToMagento(details);
-                if (addOrderDetails.data) {
-                    setIsShow(false)
-                    props.addToCartTask(true);
-                    localStorage.removeItem('cartQuoteId');
-                    localStorage.removeItem('cartQuoteToken');
-                    let orderId = parseInt(orderPlace.data);
-                    history.push('/thankyou?id=' + orderId);
-                } else {
-                    notification("error", "", "Error ocurred! If amount deducted please check your order status in my account section or call site admin");
-                }
-
-            } else {
-                setIsShow(false)
-            }
+            orderPlace = await placeUserOrder('myfatoorah_gateway');
+        } else {
+            orderPlace = await placeGuestOrder('myfatoorah_gateway');
         }
+        if (orderPlace && orderPlace.data) {
+            let details = {
+                "orderId": orderPlace.data,
+                "transactionId": detailsRequired['transactionId'],
+                "PaymentGateway": detailsRequired['PaymentGateway'],
+                "InvoiceId": detailsRequired['InvoiceId'],
+                "TransactionStatus": detailsRequired['TransactionStatus']
+            }
+            let addOrderDetails: any = await addPaymentDetailsToMagento(details);
+            if (addOrderDetails.data) {
+                setIsShow(false)
+                props.addToCartTask(true);
+                localStorage.removeItem('cartQuoteId');
+                localStorage.removeItem('cartQuoteToken');
+                let orderId = parseInt(orderPlace.data);
+                history.push('/thankyou?id=' + orderId);
+            } else {
+                notification("error", "", "Error ocurred! If amount deducted please check your order status in my account section or call site admin");
+            }
+
+        } else {
+            setIsShow(false)
+        }
+        // }
     }
 
     const addPaymentDetailsToMagento = async (data) => {
@@ -1248,7 +1252,7 @@ function Checkout(props) {
                                 <div className="product-total-price">
                                     {loaderOnCheckout && (
                                         <div className="checkout-loading" >
-                                            <i className="fa fa-spinner" aria-hidden="true"></i>
+                                            <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
                                         </div>
                                     )}
                                     <p> <IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['sub_total'] ? itemsVal.checkData['sub_total'] : 0}</span></p>
@@ -1336,7 +1340,7 @@ function Checkout(props) {
                                     <span className="error">{errors.errors["country_id"]}</span>
                                 </div>
                                 {changeCountryLoader && (
-                                   <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
+                                    <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
                                 )}
                                 {regions.length > 0 && <div className="width-100 mb-3 form-field">
                                     <label className="form-label">

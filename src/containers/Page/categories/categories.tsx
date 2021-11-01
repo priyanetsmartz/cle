@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getCategoryDetails } from '../../../redux/pages/customers';
+import { getCategoryDetails, getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
 import CategoryBanner from './banner';
 import PriveExclusive from './priveExclusive';
 import LatestProducts from './latestProducts';
 import PromotedProducts from './promotedProducts';
+import { Link, useParams } from "react-router-dom";
 import NewIn from './newIn';
 import Description from './description';
 import Footer from '../../../containers/partials/footer-new';
@@ -18,9 +19,13 @@ const { getCategoryData } = cartAction;
 
 
 function Categories(props) {
+    const { category, subcat, childcat, greatchildcat } = useParams();
+    // console.log(category, subcat, childcat, greatchildcat)
     const baseUrl = process.env.REACT_APP_API_URL;
     const location = useLocation()
-    const [category, setCategory] = useState({
+    const [categoryId, setCategoryId] = useState(0);
+    const [urlPathLink, setUrlPath] = useState('');
+    const [categories, setCategory] = useState({
         name: '',
         custom_attributes: [],
         custom: {
@@ -45,18 +50,39 @@ function Categories(props) {
         };
     }, [location]);
     useEffect(() => {
-        let catID = getCookie("_TESTCOOKIE");
-        getData(catID);
+        // let catID = getCookie("_TESTCOOKIE");
+        // if (catID) {
+        //     getData(catID);
+        // } else {
+        //     let urlPath = location + "/" + category + "/" + subcat / childcat;
+        //     console.log(urlPath)
+        // }
+        let urlPath = '';
+        if (category && subcat && childcat && greatchildcat) {            
+            urlPath = category + "/" + subcat + "/" + childcat + '/' + greatchildcat;
+        } else if (category && subcat && childcat) {
+            urlPath = category + "/" + subcat + "/" + childcat;
+        } else if (category && subcat) {
+            urlPath = category + "/" + subcat;
+        } else {
+            urlPath = category;
+        }
+        let urlPathdata = '/products/' + urlPath + '/all';
+        setUrlPath(urlPathdata);
+        getData(urlPath)
         return () => {
             //
         };
-    }, [props.languages, catID, location]);
+    }, [props.languages, catID, location, category, subcat, childcat, greatchildcat]);
 
-    const getData = async (catID) => {
-        let result: any = await getCategoryDetails(props.languages, catID);
-        if (result && result.data) {
+    const getData = async (urlPath) => {
+        let result: any = await getCategoryDetailsbyUrlPath(props.languages, urlPath);
+        //  console.log(result.data.items[0].custom_attributes);
+        // let result: any = await getCategoryDetails(props.languages, catID);
+        if (result && result.data && result.data.items && result.data.items.length > 0 && result.data.items[0].custom_attributes && result.data.items[0].custom_attributes.length > 0) {
             let obj: any = {};
-            result.data.custom_attributes.forEach(el => {
+
+            result.data.items[0].custom_attributes.forEach(el => {
                 if (el.attribute_code === "image") {
                     obj.image = baseUrl + el.value;
                 } else if (el.attribute_code === "description") {
@@ -64,6 +90,8 @@ function Categories(props) {
                 }
                 result.data.custom = obj;
             });
+            // console.log(result.data.items[0].id)
+            setCategoryId(result.data.items[0].id)
             setCategory(result.data);
             // props.getCategoryData(result.data);
         }
@@ -76,26 +104,26 @@ function Categories(props) {
                 <Header />
             </div>
             <div className="section banner">
-                <CategoryBanner cateData={category} />
+                <CategoryBanner cateData={categories} ctId={categoryId} urls={urlPathLink} />
                 <AppBreadcrumbs />
             </div>
             {localStorage.getItem('token') === '4' && <div className="section" >
                 <PriveExclusive />
             </div>}
             <div className="section" >
-                <LatestProducts />
+                <LatestProducts ctId={categoryId} />
             </div>
             {/* <div className="section" >
-                <PromotedProducts cateData={category} />
+                <PromotedProducts cateData={categories} />
             </div> */}
             {/* <div className="section">
                 <Magazine />
             </div> */}
             <div className="section">
-                <NewIn />
+                <NewIn ctId={categoryId} urls={urlPathLink} />
             </div>
             <div className="section">
-                <Description cateData={category} />
+                <Description cateData={categories} />
             </div>
             <div className="section footer">
                 <Footer />

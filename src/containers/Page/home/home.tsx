@@ -12,8 +12,9 @@ import Magazine from './magazine';
 import BecomePartner from './becomePartner';
 import Footer from '../../../containers/partials/footer-new';
 import Header from '../../../containers/partials/headerMenu';
-
+import appAction from "../../../redux/app/actions";
 import { getCookie, setCookie } from '../../../helpers/session';
+const { showLoader } = appAction;
 function HomePage(props) {
     let relevantCookies = getCookie("relevant");
     const [token, setToken] = useState('');
@@ -24,6 +25,7 @@ function HomePage(props) {
         customerProducts: []
     });
     useEffect(() => {
+        props.showLoader(true)
         const header = document.getElementById("headerrr");
         const sticky = header.offsetTop;
         const scrollCallBack: any = window.addEventListener("scroll", () => {
@@ -43,18 +45,17 @@ function HomePage(props) {
     }, []);
 
     const getData = async () => {
-        let relevantCookies = getCookie("relevant");
         let result: any = await getHomePageProducts(props.languages, 12, '');
         if (result) {
             setProducts(result.data[0]);
         }
-        if (relevantCookies === 'true') {
-            console.log(typeof (relevantCookies), relevantCookies)
-        }
+        // if (relevantCookies === 'true') {
+        //     console.log(typeof (relevantCookies), relevantCookies)
+        // }
 
         if (customerId) {
             let result: any = await getWeChooseForYou(props.languages, customerId);
-            console.log(result.data[0].customerProducts)
+
             if (result && result.data && result.data[0] && result.data[0].customerProducts.length > 0) {
                 setCookie("relevant", true)
                 setChoose(result.data[0].customerProducts);
@@ -129,5 +130,6 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { showLoader }
 )(HomePage);

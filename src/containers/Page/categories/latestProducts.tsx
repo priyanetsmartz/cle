@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
     addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist,
-    addToCartApi, getProductFilter
+    addToCartApi, getProductFilter, createGuestToken, getGuestCart, addToCartApiGuest
 } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
-import { getCookie } from '../../../helpers/session';
+import { getCookie, setCookie } from '../../../helpers/session';
 import cartAction from "../../../redux/cart/productAction";
 import WeChooseForYou from '../home/weChooseForYou';
 import { Link } from "react-router-dom";
@@ -15,14 +15,20 @@ import { formatprice } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { useLocation } from 'react-router-dom';
+import { getWeChooseForYou } from '../../../redux/pages/customers';
+import Login from '../../../redux/auth/Login';
+
+const loginApi = new Login();
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
-const { addToCart, productList } = cartAction;
+const { addToCart, productList, addToCartTask } = cartAction;
 
 
 function LatestProducts(props) {
     let catID = getCookie("_TESTCOOKIE");
+    const [isShow, setIsShow] = useState(0);
+    const [choosen, setChoose] = useState([]);
     let imageD = '', description = '', hoverImage = '';
     const location = useLocation()
     let customer_id = localStorage.getItem('cust_id');
@@ -30,6 +36,7 @@ function LatestProducts(props) {
     const [productsLatest, setProductsLatest] = useState([]);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
+    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
     const [sort, setSort] = useState(0);
     const language = getCookie('currentLanguage');
@@ -69,9 +76,9 @@ function LatestProducts(props) {
     };
 
     useEffect(() => {
-        let catID = getCookie("_TESTCOOKIE");
-        getProducts(catID);
-    }, [location]);
+        getProducts(props.ctId);
+
+    }, [location, props.ctId]);
 
     async function getProducts(catID) {
         setOpacity(0.3);
@@ -94,7 +101,19 @@ function LatestProducts(props) {
         }
         setOpacity(1);
         setProductsLatest(productResult);
+        if (customerId) {
+            let result1: any = await getWeChooseForYou(props.languages, customerId);
 
+            if (result1 && result1.data && result1.data[0] && result1.data[0].customerProducts.length > 0) {
+                setCookie("relevant", true)
+                setChoose(result1.data[0].customerProducts);
+            } else {
+                setCookie("relevant", false)
+            }
+
+        } else {
+            setCookie("relevant", false)
+        }
     }
 
     async function handleWhishlist(id: number) {
@@ -132,6 +151,52 @@ function LatestProducts(props) {
         })
     }
 
+    async function handleCart(id: number, sku: string) {
+        //console.log(productDetails)
+        setIsShow(id);
+        let cartData = {};
+        let cartSucces: any;
+        let cartQuoteId = '';
+        let customer_id = localStorage.getItem('cust_id');
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        //console.log(cartQuoteIdLocal)
+        if (cartQuoteIdLocal || customer_id) {
+            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
+            cartQuoteId = cartQuoteIdLocal
+            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart.data;
+            }
+        } else {
+
+            let guestToken: any = await createGuestToken();
+            localStorage.setItem('cartQuoteToken', guestToken.data);
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data.id
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
+        cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": cartQuoteId
+            }
+        }
+
+
+        if (customer_id) {
+            cartSucces = await addToCartApi(cartData)
+        } else {
+            cartSucces = await addToCartApiGuest(cartData)
+        }
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(0);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(0);
+        }
+    }
     return (
         <section className="exclusive-tab">
             <div className="container">
@@ -195,7 +260,9 @@ function LatestProducts(props) {
                                                                     {/* <div className="product_vrity">{item.short_description}</div> */}
                                                                     <div className="product_price">$ {formatprice(item.price)}</div>
                                                                     <div className="cart-button mt-3 px-2">
-                                                                        <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
+                                                                        {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                                            <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
                                                                     </div>
 
                                                                 </div >
@@ -213,7 +280,7 @@ function LatestProducts(props) {
                                 (customer_id && relevantCookies) && (
                                     <div className="tab-pane fade" id="D-maylike" role="tabpanel" aria-labelledby="D-maylike-tab">
                                         <div className="row">
-                                            <WeChooseForYou />
+                                            <WeChooseForYou choosenData={choosen} />
                                         </div>
                                     </div>
                                 )
@@ -239,5 +306,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList }
+    { addToCart, productList, addToCartTask }
 )(LatestProducts);

@@ -21,7 +21,7 @@ import { capitalize } from '../../components/utility/allutils';
 
 const { logout } = authAction;
 const { showSignin, openSignUp, menuSetup, showLoader } = appAction;
-const { accountPopup, miniCartPopup } = cartAction;
+const { accountPopup, miniCartPopup, addToCartTask } = cartAction;
 function HeaderMenu(props) {
     const baseUrl = process.env.REACT_APP_API_URL;
     let history = useHistory();
@@ -35,7 +35,6 @@ function HeaderMenu(props) {
     const [activeOne, SetActiveOne] = useState('');
 
     useEffect(() => {
-        //props.showLoader(true)
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
             //console.log(result)
@@ -56,11 +55,11 @@ function HeaderMenu(props) {
     }, [props.languages, category])
 
     useEffect(() => {
-
+        // props.showLoader(true)
         setTimeout(() => {
             window.scrollTo(0, 0)
             props.showLoader(false);
-        }, 3000);
+        }, 5000);
         const header = document.getElementById("header-mvp");
         const sticky = header.offsetTop;
         const scrollCallBack: any = window.addEventListener("scroll", () => {
@@ -87,13 +86,11 @@ function HeaderMenu(props) {
         };
     }, []);
 
-
-    const setMenu = (urlKey) => {
+    const handleToMenuClick = (urlKey) => {
         SetActiveCat(urlKey)
     }
-    const resetMenu = () => {
-        SetActiveCat(activeOne)
-    }
+
+
 
     const handleClick = e => {
         if (node.current.contains(e.target)) {
@@ -128,6 +125,7 @@ function HeaderMenu(props) {
         localStorage.removeItem('cartQuoteId');
         //  cookie.remove('name', { path: '', domain: '.dev.cle.com/' })
         props.logout();
+        props.addToCartTask(true);
         //  props.showHelpus(false);
         history.replace('/');
     }
@@ -160,7 +158,7 @@ function HeaderMenu(props) {
                                         menuData.map((val, i) => {
                                             return (
                                                 <li key={i}>
-                                                    <Link to="#" className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                    <Link to="#" onClick={(e) => { handleToMenuClick(val.url_key); }} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     {val && val.child && val.child.length > 0 && (
                                                         <ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0 lolo" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
                                                             {val.child.map((childMenu: any, j) => {
@@ -176,14 +174,16 @@ function HeaderMenu(props) {
                                                                                             onClick={(e) => { handleMenuClick(e, grandChild.id); }} className={activeCat === grandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"}>{grandChild.name}</Link></h3>
                                                                                         {grandChild.child && grandChild.child.map((greatGrandChild, k) => {
                                                                                             return (<li key={k}>
-                                                                                                <Link to={`/products/${val.url_key}/${childMenu.name}/${grandChild.url_key}/${greatGrandChild.url_key}`}
+                                                                                                <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}/${greatGrandChild.url_key}`}
                                                                                                     onClick={(e) => { handleMenuClick(e, greatGrandChild.id); }} className={activeCat === greatGrandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"} >{greatGrandChild.name}</Link>
                                                                                             </li>)
                                                                                         })}
                                                                                     </ul>)
                                                                             })}
-                                                                            <ul className="megamenugrid last-images-menu"><li className="nav-link p-2"><img src={baseUrl + childMenu.image} width="100%" alt="megamenu" /></li>
-                                                                                <div className="cvp"><Link className="btn details px-auto" onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>View more</Link></div></ul>
+                                                                            {childMenu.image && (
+                                                                                <ul className="megamenugrid last-images-menu"><li className="nav-link p-2"><img src={baseUrl + childMenu.image} width="100%" alt="megamenu" /></li>
+                                                                                    <div className="cvp"><Link className="btn details px-auto" onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>View more</Link></div></ul>
+                                                                            )}
                                                                         </span>
                                                                     </li>
 
@@ -287,5 +287,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { logout, showSignin, openSignUp, accountPopup, miniCartPopup, menuSetup, showLoader }
+    { logout, showSignin, openSignUp, accountPopup, miniCartPopup, menuSetup, showLoader, addToCartTask }
 )(HeaderMenu);

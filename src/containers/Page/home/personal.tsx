@@ -128,21 +128,23 @@ function Personal(props) {
                                         {!isSurvey && <div className="persnalize-select">
                                             <div className="marketing_secs">
                                                 <div className="width-100%">
-                                                    <div className="steps-sec">
-                                                        <div className="stepwizard">
-                                                            <div className="stepwizard-row">
-                                                                {form && form.form_json.map((ques, i) => {
-                                                                    return (
-                                                                        <div className="stepwizard-step" key={i}>
-                                                                            <div className={`btn btn-primary btn-circle ${(activeTab === (i + 1) ? 'active' : '')}`}><span
-                                                                                className="text">{i + 1}</span></div>
-                                                                        </div>
-                                                                    );
-                                                                })}
+                                                    {form.form_json.length > 1 && (
+                                                        <div className="steps-sec">
+                                                            <div className="stepwizard">
+                                                                <div className="stepwizard-row">
+                                                                    {form && form.form_json.map((ques, i) => {
+                                                                        return (
+                                                                            <div className="stepwizard-step" key={i}>
+                                                                                <div className={`btn btn-primary btn-circle ${(activeTab === (i + 1) ? 'active' : '')}`}><span
+                                                                                    className="text">{i + 1}</span></div>
+                                                                            </div>
+                                                                        );
+                                                                    })}
 
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    )}
                                                 </div>
 
 

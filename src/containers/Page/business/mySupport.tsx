@@ -202,7 +202,8 @@ function MySupport(props) {
                     <section className="support-form">
                         <div className="row">
                             <div className="col-xs-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2">
-                                <h3><IntlMessages id="contact.reach" /></h3>
+                                <iframe title="contact form" style={{ "height": "800px", "width": "99%", "border": "none" }} src='https://forms.zohopublic.com/cleportal692/form/ContactusTeaser/formperma/ChqWeIlStcsFpEqH1XolNHheBwaVh9Huwq8bZ6pXOIQ'></iframe>
+                                {/* <h3><IntlMessages id="contact.reach" /></h3>
                                 <p><IntlMessages id="contact.do_you_have_question" /></p>
 
                                 {form && form.form_json[0] && form.form_json[0].map(item => {
@@ -238,7 +239,7 @@ function MySupport(props) {
                                 <div className="d-flex justify-content-end">
                                     <Link to="/" className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}> <IntlMessages id="contact.send" /></Link>
                                     <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
-                                </div>
+                                </div> */}
 
 
                             </div>

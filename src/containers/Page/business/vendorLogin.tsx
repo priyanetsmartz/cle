@@ -48,7 +48,7 @@ function VendorLogin(props) {
       }
       // login({ userInfo });
       const result: any = await vendorLogin(userInfo);
-      if (result) {
+      if (result && result.data && result.data) {
         setIsShow(false);
         const vendorObj = {
           vendor_id: result.data[0].vendor_id,
@@ -166,9 +166,9 @@ function VendorLogin(props) {
                 <div className="or-text-new">Or</div>
               </div>
               <div className="social-login">
-              <GoogleLoginButton isVendor={true}/>
-              <FacebookLoginButton isVendor={true}/>
-                
+                <GoogleLoginButton isVendor={true} />
+                <FacebookLoginButton isVendor={true} />
+
               </div>
             </div>
           </div>

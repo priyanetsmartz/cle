@@ -19,6 +19,7 @@ function OrdersAndReturns(props) {
     const [sortOrder, setSortOrder] = useState('');
     const [orders, setOrders] = useState([]);
     const [page, setCurrent] = useState(1);
+    const [loaderOrders, setLoaderOrders] = useState(true);
     const language = getCookie('currentLanguage');
     const intl = useIntl();
     useEffect(() => {
@@ -26,8 +27,10 @@ function OrdersAndReturns(props) {
     }, [pageSize]);
 
     const getData = async (pageSize) => {
+        setLoaderOrders(true);
         let result: any = await getCustomerOrders(pageSize);
         if (result && result.data && result.data.items) {
+            setLoaderOrders(false);
             setOrders(result.data.items);
             setPagination(Math.ceil(result.data.length / pageSize));
         }
@@ -47,26 +50,32 @@ function OrdersAndReturns(props) {
     };
 
     const handleSearch = async (e) => {
+        setLoaderOrders(true);
         const val = e.target.value;
         setOrderId(val);
         if (val === "") return getData(pageSize);
         if (val.length >= 3) {
             let result: any = await searchOrders(val);
             if (result && result.data && !result.data.message) {
+                setLoaderOrders(false);
                 setOrders([result.data]);
+
             }
         }
     }
 
     const handlePriceRange = async (range) => {
+        setLoaderOrders(true);
         let result: any = await getCustomerOrdersByPrice((range[0] * 10), (range[1] * 10), pageSize);
         if (result.data) {
             setOrders(result.data.items);
+            setLoaderOrders(false);
         }
     }
 
 
     const getOrdersByDate = async (e) => {
+        setLoaderOrders(true);
         const { value } = e.target;
         let filter = parseInt(value);
         let fromDate;
@@ -83,15 +92,17 @@ function OrdersAndReturns(props) {
         const dateTo = moment(currentDate.toJSON()).format("YYYY-MM-DD h:mm:ss")
         let result: any = await getCustomerOrdersByDate(dateFrom, dateTo, pageSize);
         if (result) {
+            setLoaderOrders(false);
             setOrders(result.data.items);
         }
     }
 
     const sortOrdersHandler = async (e) => {
+        setLoaderOrders(true);
         setSortOrder(e.target.value);
         let result: any = await sortCustomerOrders(e.target.value, pageSize);
         if (result) {
-            // console.log(result.data);
+            setLoaderOrders(false);
             setOrders(result.data.items);
         }
     }
@@ -180,10 +191,10 @@ function OrdersAndReturns(props) {
                                 <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
                                     type="button" role="tab" aria-controls="home" aria-selected="true"><IntlMessages id="order.orders" /></button>
                             </li>
-                            <li className="nav-item" role="presentation">
+                            {/* <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
                                     type="button" role="tab" aria-controls="profile" aria-selected="false"><IntlMessages id="order.returns" /></button>
-                            </li>
+                            </li> */}
 
                         </ul>
                         <div className="tab-content" id="myTabContent">
@@ -214,9 +225,15 @@ function OrdersAndReturns(props) {
                                         </div>
                                     </div>
                                 </div>
+                                {loaderOrders && (
+                                    <div className="checkout-loading" >
+                                        <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                    </div>
+                                )}
                                 {orders && orders.length > 0 ?
 
                                     <div>
+
                                         {orders && (orders.map((item, i) => {
                                             // console.log(i)
                                             return (
@@ -308,7 +325,7 @@ function OrdersAndReturns(props) {
                                             );
                                         }))}
                                     </div>
-                                    : <IntlMessages id="no_data" />}
+                                    : !loaderOrders ? <IntlMessages id="no_data" /> : ""}
 
                                 <div className="resltspage_sec footer-pagints">
                                     <div className="paginatn_result">

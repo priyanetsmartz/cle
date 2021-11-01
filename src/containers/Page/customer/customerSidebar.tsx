@@ -19,8 +19,9 @@ import notificationIcon from '../../../image/my_notification.svg';
 import supportIcon from '../../../image/my_support.svg';
 import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
-// import MyTrades from './mytrades';
-// import tradeIcon from '../../../image/my_trade.svg';
+import { capitalize } from '../../../components/utility/allutils';
+import appAction from "../../../redux/app/actions";
+const { showLoader } = appAction;
 
 function Customer(props) {
     const intl = useIntl();
@@ -32,6 +33,7 @@ function Customer(props) {
     const [activeTab, setActiveTab] = useState('');
 
     useEffect(() => {
+      //  props.showLoader(true)
         setActiveTab(key);
 
     }, [key]);
@@ -61,7 +63,7 @@ function Customer(props) {
                             <div className="pro_categry_sidebar">
                                 <div className="my-userdetails">
                                     <div className="user_show" style={priveColor}><IntlMessages id="customer.hi" /></div>
-                                    <div className="user_name">{name}</div>
+                                    <div className="user_name">{name ? capitalize(name) : ""}</div>
                                 </div>
                                 <div className="mobile_sidebar">
                                     <select className="form-select" aria-label="Default select example" onChange={changeMobTab}>
@@ -148,5 +150,6 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { showLoader }
 )(Customer);

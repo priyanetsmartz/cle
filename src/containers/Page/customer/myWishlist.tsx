@@ -4,11 +4,15 @@ import notification from '../../../components/notification';
 import { Link } from 'react-router-dom'
 import { wishListSearchSort } from '../../../redux/pages/customers';
 import { formatprice } from '../../../components/utility/allutils';
-import { removeWhishlist } from '../../../redux/cart/productApi';
+import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, removeWhishlist } from '../../../redux/cart/productApi';
 import cartAction from "../../../redux/cart/productAction";
 import IntlMessages from "../../../components/utility/intlMessages";
-const { addToWishlistTask } = cartAction;
+import Login from '../../../redux/auth/Login';
+const { addToWishlistTask, addToCartTask } = cartAction;
+const loginApi = new Login();
+
 function MyWishList(props) {
+    const [isShow, setIsShow] = useState(false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [delWishlist, setDelWishlist] = useState(0);
     const [wishList, setWishList] = useState([]);
@@ -16,6 +20,7 @@ function MyWishList(props) {
     const [sortOrder, setSortOrder] = useState('asc');
     const [sortBy, setSortBy] = useState('price');
     const [pageSize, setPageSize] = useState(10);
+    const [loaderOrders, setLoaderOrders] = useState(true);
     const [opacity, setOpacity] = useState(1);
 
     useEffect(() => {
@@ -35,12 +40,15 @@ function MyWishList(props) {
     }, [props.items])
 
     const getData = async () => {
+        setLoaderOrders(true)
         let result: any = await wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchName);
         if (result.data) {
             setWishList(result.data);
             setOpacity(1)
+            setLoaderOrders(false)
         } else {
             setOpacity(1)
+            setLoaderOrders(false)
         }
 
     }
@@ -84,7 +92,52 @@ function MyWishList(props) {
 
         }
     }
+    async function handleCart(id: number, sku: string) {
+        //console.log(productDetails)
+        setIsShow(true);
+        let cartData = {};
+        let cartSucces: any;
+        let cartQuoteId = '';
+        let customer_id = localStorage.getItem('cust_id');
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        //console.log(cartQuoteIdLocal)
+        if (cartQuoteIdLocal || customer_id) {
+            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
+            cartQuoteId = cartQuoteIdLocal
+            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart.data;
+            }
+        } else {
 
+            let guestToken: any = await createGuestToken();
+            localStorage.setItem('cartQuoteToken', guestToken.data);
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data.id
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
+        cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": cartQuoteId
+            }
+        }
+
+
+        if (customer_id) {
+            cartSucces = await addToCartApi(cartData)
+        } else {
+            cartSucces = await addToCartApiGuest(cartData)
+        }
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(false);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(false);
+        }
+    }
     return (
         <div className="col-sm-9">
             <div className="row" >
@@ -114,6 +167,11 @@ function MyWishList(props) {
                 </div>
                 <div className="product-listing" style={{ 'opacity': opacity }} >
                     <div className="row g-2">
+                        {loaderOrders && (
+                            <div className="checkout-loading" >
+                                <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                            </div>
+                        )}
                         {wishList.length > 0 ?
                             <>
                                 {wishList && wishList.map(item => {
@@ -126,7 +184,9 @@ function MyWishList(props) {
                                                     {/* need sku from api  */}
                                                     {/* <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.product_id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button></div> */}
                                                     <div className="cart-button mt-3 px-2">
-                                                        <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link></div>
+                                                        <Link to="#" style={{ "display": !isShow ? "inline-block" : "none" }} onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>
+                                                        <Link to="#" style={{ "display": isShow ? "inline-block" : "none" }} className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link>
+                                                    </div>
                                                 </div>
                                                 <div className="about text-center">
                                                     <h5>{item.name}</h5>
@@ -139,7 +199,7 @@ function MyWishList(props) {
                                     );
                                 })}
                             </>
-                            : <div className="text-center" >Wishlist is empty!</div>}
+                            : !loaderOrders ? <IntlMessages id="no_data" /> : ""}
                     </div>
                 </div>
 
@@ -159,5 +219,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToWishlistTask }
+    { addToWishlistTask, addToCartTask }
 )(MyWishList);

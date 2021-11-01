@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
-import cartAction from "../../../redux/cart/productAction";
 import { formatprice } from '../../../components/utility/allutils';
 import {
-    addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
+    addToCartApi,
+    addToCartApiGuest,
+    addWhishlist, createGuestToken, getGuestCart, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
 } from '../../../redux/cart/productApi';
 import { useParams } from "react-router-dom";
 import notification from "../../../components/notification";
@@ -12,12 +13,17 @@ import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useLocation } from 'react-router-dom';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+import Login from '../../../redux/auth/Login';
+import cartAction from "../../../redux/cart/productAction";
+const loginApi = new Login();
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
+
 const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
-const { addToCart, productList } = cartAction;
+const { addToCart, productList, addToCartTask } = cartAction;
 
 function NewIn(props) {
+    const [isShow, setIsShow] = useState(0);
     const location = useLocation()
     let imageD = '', description = '';
     let catID = getCookie("_TESTCOOKIE");
@@ -34,15 +40,16 @@ function NewIn(props) {
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
-        getProducts(catID);
+        getProducts(props.ctId);
 
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [sortValue, page, pageSize, location])
+    }, [sortValue, page, pageSize, location, props.ctId])
 
     async function getProducts(catID) {
+        console.log(props.ctId)
         setOpacity(0.3);
         let customer_id = localStorage.getItem('cust_id');
         let result: any = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue, props.languages);
@@ -94,78 +101,125 @@ function NewIn(props) {
     const someOtherHandler = (e) => {
         setIsHoverImage(0)
     }
+    async function handleCart(id: number, sku: string) {
+        //console.log(productDetails)
+        setIsShow(id);
+        let cartData = {};
+        let cartSucces: any;
+        let cartQuoteId = '';
+        let customer_id = localStorage.getItem('cust_id');
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        //console.log(cartQuoteIdLocal)
+        if (cartQuoteIdLocal || customer_id) {
+            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
+            cartQuoteId = cartQuoteIdLocal
+            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart.data;
+            }
+        } else {
 
+            let guestToken: any = await createGuestToken();
+            localStorage.setItem('cartQuoteToken', guestToken.data);
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data.id
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
+        cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": cartQuoteId
+            }
+        }
+
+
+        if (customer_id) {
+            cartSucces = await addToCartApi(cartData)
+        } else {
+            cartSucces = await addToCartApiGuest(cartData)
+        }
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(0);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(0);
+        }
+    }
 
     return (
-        <div className=" container" style={{ 'opacity': opacity }}>
-            <h1 className="mb-4"><IntlMessages id="category.explore"></IntlMessages></h1>
-            <div className="row product-listing g-2">
+        <>
+            {
+                props.items.length > 0 && (
+                    <div className=" container" style={{ 'opacity': opacity }}>
+                        <h1 className="mb-4"><IntlMessages id="category.explore"></IntlMessages></h1>
+                        <div className="row product-listing g-2">
 
-                {props.items.slice(0, 7).map(item => {
-                    return (
-                        <div className="col-md-3" key={item.id}>
-                                <div className="product py-4">
-                                    {token && (
-                                        <span className="off bg-favorite">
-                                            {!item.wishlist_item_id && (
-                                                <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                            )}
-                                            {item.wishlist_item_id && (
-                                                <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                            )}
-                                        </span>
-                                    )
-                                    }
-
-                                    <div className="text-center">
-                                        <div className="product_img" onMouseEnter={() => someHandler(item.id)}
-                                            onMouseLeave={() => someOtherHandler(item.id)}>
-
-                                            {
-                                                item.custom_attributes.map((attributes) => {
-                                                    if (attributes.attribute_code === 'image') {
-                                                        imageD = attributes.value;
-                                                    }
-                                                    if (attributes.attribute_code === 'short_description') {
-                                                        description = attributes.value;
-                                                    }
-                                                })
+                            {props.items.slice(0, props.items.length - 1).map(item => {
+                                return (
+                                    <div className="col-md-3" key={item.id}>
+                                        <div className="product py-4">
+                                            {token && (
+                                                <span className="off bg-favorite">
+                                                    {!item.wishlist_item_id && (
+                                                        <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                    )}
+                                                    {item.wishlist_item_id && (
+                                                        <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
+                                                    )}
+                                                </span>
+                                            )
                                             }
-                                            {
-                                                isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD} className="image-fluid" alt={item.name} height="150" />
-                                            }
-                                        </div >
-                                    </div>
-                                    <div className="about text-center">
-                                        <h5>{item.name}</h5>
-                                        <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
-                                        <div className="pricetag">${formatprice(item.price)}</div>
-                                    </div>
-                                    {/* {token && ( */}
-                                    <div className="cart-button mt-3 px-2">
-                                        <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">
-                                            View Product</Link>
-                                        <div className="add">
-                                            <span className="product_fav">
-                                                <i className="fa fa-heart-o"></i></span>
-                                            <span className="product_fav"><i className="fa fa-opencart"></i></span>
+
+                                            <div className="text-center">
+                                                <div className="product_img" onMouseEnter={() => someHandler(item.id)}
+                                                    onMouseLeave={() => someOtherHandler(item.id)}>
+
+                                                    {
+                                                        item.custom_attributes.map((attributes) => {
+                                                            if (attributes.attribute_code === 'image') {
+                                                                imageD = attributes.value;
+                                                            }
+                                                            if (attributes.attribute_code === 'short_description') {
+                                                                description = attributes.value;
+                                                            }
+                                                        })
+                                                    }
+                                                    {
+                                                        isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD} className="image-fluid" alt={item.name} height="150" />
+                                                    }
+                                                </div >
+                                            </div>
+                                            <div className="about text-center">
+                                                <h5>{item.name}</h5>
+                                                <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
+                                                <div className="pricetag">${formatprice(item.price)}</div>
+                                            </div>
+                                            {/* {token && ( */}
+                                            <div className="cart-button mt-3 px-2">
+                                                {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                    <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
+                                            </div>
+                                            {/* )} */}
                                         </div>
                                     </div>
-                                    {/* )} */}
-                                </div>
-                        </div>
-                    )
-                })}
-                <div className="col-md-3">
-                    <div className="view-all-btn">
-                        {
-                            subcat !== undefined ? <Link to={`/products/${category}/${subcat}/all`} > <IntlMessages id="category.viewAll" /></Link> : <Link to={`/products/${category}/all`} > <IntlMessages id="category.viewAll" /></Link>
-                        }
+                                )
+                            })}
+                            <div className="col-md-3">
+                                <div className="view-all-btn">
+                                    {
+                                        <Link to={props.urls} > <IntlMessages id="category.viewAll" /></Link>
+                                    }
 
-                    </div>
-                </div>
-            </div>
-        </div >
+                                </div>
+                            </div>
+                        </div>
+                    </div >
+                )
+            }
+        </>
     )
 }
 const mapStateToProps = (state) => {
@@ -177,5 +231,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList }
+    { addToCart, productList, addToCartTask }
 )(NewIn);

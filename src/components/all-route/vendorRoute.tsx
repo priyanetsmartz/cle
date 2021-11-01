@@ -2,16 +2,16 @@ import React from "react";
 import { Route, Redirect } from "react-router";
 import { connect } from "react-redux";
 
-import Header from '../../containers/partials/header';
+import Header from '../../containers/partials/headerMenu';
 import Footer from '../../containers/partials/footer-new';
-
-const MainRoute = ({ component: Component, auth, ...rest }) => (
+const vendorLocal = localStorage.getItem('cle_vendor');
+const VendorRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      auth === undefined ? (
+      vendorLocal ? (
         <>
-          <Header logo="black" {...props} />
+          <Header />
           <Component {...props} />
           <Footer />
         </>
@@ -22,9 +22,5 @@ const MainRoute = ({ component: Component, auth, ...rest }) => (
   />
 );
 
-function mapStateToProps(state) {
-  return {
-    auth: state.auth
-  }
-}
-export default connect(mapStateToProps)(MainRoute);
+
+export default VendorRoute;

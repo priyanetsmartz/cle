@@ -27,14 +27,15 @@ import MyAnalysis from './myAnalysis';
 
 function BusinessSidebar(props) {
     const intl = useIntl();
-    const [name, setName] = useState(localStorage.getItem('token_name'));
+    const [vendor, setVandor] = useState({ vendor_name: '' });
     const history = useHistory();
     const key = props.match.params.tab;
     const [activeTab, setActiveTab] = useState('');
 
     useEffect(() => {
         setActiveTab(key);
-
+        let myJSONString = localStorage.getItem('cle_vendor')
+        setVandor(JSON.parse(myJSONString));
     }, [key]);
 
     const changeTab = (tab) => {
@@ -57,24 +58,24 @@ function BusinessSidebar(props) {
                             <div className="pro_categry_sidebar">
                                 <div className="my-userdetails">
                                     <div className="user_show"><IntlMessages id="customer.hi" /></div>
-                                    <div className="user_name">{name}</div>
+                                    <div className="user_name">{vendor.vendor_name}</div>
                                 </div>
                                 <div className="mobile_sidebar">
                                     <select className="form-select" aria-label="Default select example" onChange={changeMobTab}>
                                         <option value="dashboard">{intl.formatMessage({ id: 'customer.dashboard' })}</option>
-                                        <option value="sales-orders">{intl.formatMessage({ id: 'vendor.salesOrders' })}</option>
+                                        {/* <option value="sales-orders">{intl.formatMessage({ id: 'vendor.salesOrders' })}</option>
                                         <option value="product-listing">{intl.formatMessage({ id: 'vendor.productListing' })}</option>
                                         <option value="returns-complaints">{intl.formatMessage({ id: 'vendor.returnComplaints' })}</option>
                                         <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
                                         <option value="analysis">{intl.formatMessage({ id: 'vendor.myAnalysis' })}</option>
                                         <option value="profile">{intl.formatMessage({ id: 'vendor.businessProfile' })}</option>
-                                        <option value="notifications">{intl.formatMessage({ id: 'vendor.notification' })}</option>
+                                        <option value="notifications">{intl.formatMessage({ id: 'vendor.notification' })}</option> */}
                                         <option value="support">{intl.formatMessage({ id: 'vendor.mySupport' })}</option>
                                     </select>
                                 </div>
                                 <div className="myorder_sidebar">
                                     <ul>
-                                        <li className={activeTab === 'dashboard' ? 'active' : ''} >
+                                        {/* <li className={activeTab === 'dashboard' ? 'active' : ''} >
                                             <Link to="#" onClick={() => changeTab('dashboard')}>
                                                 <img src={dashboardIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2">
@@ -111,19 +112,19 @@ function BusinessSidebar(props) {
                                                 <img src={supportIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.myAnalysis" /></span>
                                             </Link>
-                                        </li>
+                                        </li> */}
                                         <li className={activeTab === 'profile' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('profile')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.businessProfile" /></span>
                                             </Link>
                                         </li>
-                                        <li className={activeTab === 'notifications' ? 'active' : ''}>
+                                        {/* <li className={activeTab === 'notifications' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('notifications')}>
                                                 <img src={notificationIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.notification" /></span>
                                             </Link>
-                                        </li>
+                                        </li> */}
                                         <li className={activeTab === 'support' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('support')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
@@ -134,7 +135,7 @@ function BusinessSidebar(props) {
                                 </div>
                             </div>
                         </div>
-                        {activeTab === 'dashboard' ? <Dashboard /> :
+                        {activeTab === 'dashboard' ? <BusinessProfile /> :
                             activeTab === 'sales-orders' ? <MySalesOrders /> :
                                 activeTab === 'product-listing' ? <MyProductListing /> :
                                     activeTab === 'returns-complaints' ? <MyReturnsComplaints /> :

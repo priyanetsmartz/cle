@@ -6,7 +6,7 @@ import SinglePost from './containers/Page/singlePost';
 import ForgottenPassword from './containers/Page/forgotPassword';
 import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
-import MainRoute from "./components/all-route/MainRoute";
+import VendorRoute from "./components/all-route/vendorRoute";
 import ProductRoutes from "./components/all-route/ProductRoutes";
 import ProductHome from "./components/all-route/productHomeRoute"
 import PrivateRoute from "./components/all-route/LoggedinRoute";
@@ -49,17 +49,20 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
         <ProductRoutes exact path="/thankyou" component={orderThankyou} />
         <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
+        <ProductRoutes exact path="/products/:category/:subcat/:childcat/:greatchildcat/all" component={Product} />
+        <ProductRoutes exact path="/products/:category/:subcat/:childcat/all" component={Product} />
         <ProductRoutes exact path="/products/:category/:subcat/all" component={Product} />
         <ProductRoutes exact path="/products/:category/all" component={Product} />
         <ProductHome exact path="/products/:category/:subcat/:childcat/:greatchildcat" component={Categories} />
         <ProductHome exact path="/products/:category/:subcat/:childcat" component={Categories} />
+        <ProductHome exact path="/products/:category/:subcat/:id" component={Categories} />
         <ProductHome exact path="/products/:category/:subcat" component={Categories} />
         <ProductHome exact path="/products/:category" component={Categories} />
 
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
         <PrivateRoute exact path="/notifications" component={Notifications} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
-        <PrivateRoute exact path="/vendor/:tab" component={BusinessSidebar} />
+        <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
         <ProductHome exact path="/" component={HomePage} />
         <ProductRoutes exact path="/return-order" component={ReturnPage} />
         {/* <PrivateRoute exact path="/designer-categories" component={DesignerCategories} /> */}

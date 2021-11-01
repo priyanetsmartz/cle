@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link, useLocation, useParams } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import appAction from "../../../redux/app/actions";
-import { addWhishlist, getAllProducts, getWhishlistItemsForUser, getProductByCategory, removeWhishlist } from '../../../redux/cart/productApi';
+import { addWhishlist, getAllProducts, getWhishlistItemsForUser, getProductByCategory, removeWhishlist, createGuestToken, getGuestCart, addToCartApi, addToCartApiGuest } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
@@ -12,7 +12,9 @@ import Description from '../categories/description';
 import Filter from './filter';
 import { formatprice } from '../../../components/utility/allutils';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+import Login from '../../../redux/auth/Login';
 const commonFunctions = new CommonFunctions();
+const loginApi = new Login();
 const baseUrl = commonFunctions.getBaseUrl();
 const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
 const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
@@ -59,10 +61,10 @@ function Products(props) {
         let customer_id = localStorage.getItem('cust_id');
         let result: any;
         if (category) {
-      
+
             result = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue, props.languages);
         } else {
-    
+
             result = await getAllProducts(lang, page, pageSize, sortValue.sortBy, sortValue.sortByValue);
         }
         //  console.log(Math.ceil(result.data.total_count / 9))
@@ -176,6 +178,53 @@ function Products(props) {
         setIsHoverImage(0)
     }
 
+    async function handleCart(id: number, sku: string) {
+        //console.log(productDetails)
+        setIsShow(id);
+        let cartData = {};
+        let cartSucces: any;
+        let cartQuoteId = '';
+        let customer_id = localStorage.getItem('cust_id');
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        //console.log(cartQuoteIdLocal)
+        if (cartQuoteIdLocal || customer_id) {
+            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
+            cartQuoteId = cartQuoteIdLocal
+            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart.data;
+            }
+        } else {
+
+            let guestToken: any = await createGuestToken();
+            localStorage.setItem('cartQuoteToken', guestToken.data);
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data.id
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
+        cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": cartQuoteId
+            }
+        }
+
+
+        if (customer_id) {
+            cartSucces = await addToCartApi(cartData)
+        } else {
+            cartSucces = await addToCartApiGuest(cartData)
+        }
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(0);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(0);
+        }
+    }
+
 
     return (
         <main>
@@ -274,7 +323,9 @@ function Products(props) {
                                                     )}
                                                     {item.type_id === 'configurable' && ( */}
                                                     <div className="cart-button mt-3 px-2">
-                                                        <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
+                                                        {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                            <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
                                                     </div>
                                                     {/* )} */}
 

@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, useLocation, useParams } from "react-router-dom";
-import { getCookie } from '../../../helpers/session';
+import { getCookie, setCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 
 
 function CategoryBanner(props) {
-    const { category, subcat } = useParams();
+    const { category, subcat, childcat, greatchildcat } = useParams();
     const location = useLocation()
-    let catID = getCookie("_TESTCOOKIE");
+    const [urlPathLink, setUrlPath] = useState('');
     const [categoryData, setCategory] = useState({
         name: '',
         custom_attributes: [],
@@ -20,11 +20,15 @@ function CategoryBanner(props) {
     })
 
     useEffect(() => {
+        if (props.ctId) {
+            setCookie("_TESTCOOKIE", props.ctId)
+        }
+
         if (props.cateData) {
             setCategory(props.cateData);
         }
 
-    }, [props.languages, location, props.cateData]);
+    }, [props.languages, location, props.cateData, props.ctId]);
 
 
     return (
@@ -38,7 +42,7 @@ function CategoryBanner(props) {
                                 <h2>{categoryData.name}</h2>
                                 <div dangerouslySetInnerHTML={{ __html: categoryData.custom.desc }} />
                                 {
-                                    subcat !== undefined ? <Link to={`/products/${category}/${subcat}/all`} className="ban-btn" > <IntlMessages id="category.viewAll" /></Link> : <Link to={`/products/${category}/all`} className="ban-btn"> <IntlMessages id="category.viewAll" /></Link>
+                                    props.urls !== undefined ? <Link to={props.urls} className="ban-btn" > <IntlMessages id="category.viewAll" /></Link> : <Link to={`/products`} className="ban-btn"> <IntlMessages id="category.viewAll" /></Link>
                                 }
                             </div>
                         </div>

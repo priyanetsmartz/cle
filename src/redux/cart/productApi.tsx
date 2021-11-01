@@ -251,10 +251,10 @@ export function setUserDeliveryAddress(data) {
     return APi.request(`rest/V1/carts/${cartQuoteId}/shipping-information`, data, "POST", "");
 }
 
-export function placeGuestOrder() {
+export function placeGuestOrder(method) {
     let data = {
         "paymentMethod": {
-            "method": "checkmo"
+            "method": method
         }
     }
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');

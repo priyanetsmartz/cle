@@ -4,20 +4,23 @@ import { connect } from 'react-redux';
 import notification from "../../../components/notification";
 import cartAction from "../../../redux/cart/productAction";
 import { Link } from 'react-router-dom'
-import { addWhishlist, removeWhishlist } from '../../../redux/cart/productApi';
+import { addToCartApi, addToCartApiGuest, addWhishlist, createGuestToken, getGuestCart, removeWhishlist } from '../../../redux/cart/productApi';
 import Slider from "react-slick";
 import { useLocation } from 'react-router-dom';
 import { formatprice } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
-import { getCookie } from '../../../helpers/session'
-const { addToCart, productList } = cartAction;
+import { getCookie } from '../../../helpers/session';
+import Login from '../../../redux/auth/Login';
+const loginApi = new Login();
+const { addToCart, productList, addToCartTask } = cartAction;
 
 function WeChooseForYou(props) {
     const [token, setToken] = useState('');
     // console.log(props.choosenData)
     let catID = getCookie("_TESTCOOKIE");
     const location = useLocation()
+    const [isShow, setIsShow] = useState(0);
     const [isHoverImage, setIsHoverImage] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
@@ -26,7 +29,7 @@ function WeChooseForYou(props) {
 
     const settings = {
         dots: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 4,
@@ -63,7 +66,52 @@ function WeChooseForYou(props) {
         setProducts(props.choosenData)
     }, [props.languages, location, props.choosenData]);
 
+    async function handleCart(id: number, sku: string) {
+        //console.log(productDetails)
+        setIsShow(id);
+        let cartData = {};
+        let cartSucces: any;
+        let cartQuoteId = '';
+        let customer_id = localStorage.getItem('cust_id');
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        //console.log(cartQuoteIdLocal)
+        if (cartQuoteIdLocal || customer_id) {
+            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
+            cartQuoteId = cartQuoteIdLocal
+            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart.data;
+            }
+        } else {
 
+            let guestToken: any = await createGuestToken();
+            localStorage.setItem('cartQuoteToken', guestToken.data);
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data.id
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
+        cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": cartQuoteId
+            }
+        }
+
+
+        if (customer_id) {
+            cartSucces = await addToCartApi(cartData)
+        } else {
+            cartSucces = await addToCartApiGuest(cartData)
+        }
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(0);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(0);
+        }
+    }
     async function handleWhishlist(id: number) {
         let result: any = await addWhishlist(id);
         notification("success", "", result.data[0].message);
@@ -123,13 +171,18 @@ function WeChooseForYou(props) {
                                                             <Link to={'/product-details/' + item.sku}> <div className="product_img" onMouseEnter={() => someHandler(item.id)}
                                                                 onMouseLeave={() => someOtherHandler(item.id)}>
                                                                 {
-                                                                    isHoverImage === parseInt(item.id) ? <img src={item.hover_image} className="image-fluid hover" alt={item.name} height="200" /> : <img src={item.img} className="image-fluid" alt={item.name} height="200" />
+                                                                    isHoverImage === parseInt(item.id) ? <img src={item.hover_image} className="image-fluid hover" alt={item.name} /> : <img src={item.img} className="image-fluid" alt={item.name} />
                                                                 }
 
                                                             </div></Link>
                                                             <div className="product_name mt-2">  <Link to={'/product-details/' + item.sku}>{item.name} </Link></div>
                                                             <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
                                                             <div className="product_price">{siteConfig.currency} {formatprice(item.price)}</div>
+                                                            <div className="cart-button mt-3 px-2">
+                                                                {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                                    <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
+                                                            </div>
                                                         </div>
                                                     )
                                                 })}
@@ -156,5 +209,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList }
+    { addToCart, productList, addToCartTask }
 )(WeChooseForYou);

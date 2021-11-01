@@ -12,8 +12,11 @@ import { language } from '../../../settings';
 import MyPreferences from './myProfile/myPreferences';
 import { DROPDOWN } from '../../../config/constants';
 import moment from 'moment';
+import { capitalize } from '../../../components/utility/allutils';
+import { useIntl } from 'react-intl';
 
 function MyProfile(props) {
+    const intl = useIntl();
     const userGroup = localStorage.getItem('token');
     const [isShow, setIsShow] = useState(false);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
@@ -25,8 +28,9 @@ function MyProfile(props) {
         clothing_size: [],
         favCat: [],
         favDesigner: []
-
     });
+    const [loaderPassChange, setLoaderPassChange] = useState(false);
+    const [loaderEmailChange, setloaderEmailChange] = useState(false);
     const [myDetailsModel, setMyDetailsModel] = useState(false);
     const [myPreferenceModel, setMyPreferenceModel] = useState(false);
     const [myAddressModal, setMyAddressModal] = useState(false);
@@ -116,27 +120,29 @@ function MyProfile(props) {
         let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [];
         //console.log(custom_attributes)
         // match keys and extract values//
-        custom_attributes.map((attributes) => {
-            if (attributes.attribute_code === "clothing_size") {
-                let cloths = attributes.value
-                clothing_size = cloths.split(",");
-            }
-            if (attributes.attribute_code === "shoes_size") {
-                let shoes = attributes.value
-                shoes_size = shoes.split(",");
-            }
-            if (attributes.attribute_code === "mostly_intersted_in") {
-                mostly_intersted_in = attributes.value;
-            }
-            if (attributes.attribute_code === "favourite_categories") {
-                let favs = attributes.value
-                favourite_categories = favs.split(",");
-            }
-            if (attributes.attribute_code === "favourite_designers") {
-                let favDesigns = attributes.value
-                favourite_designers = favDesigns.split(",");
-            }
-        })
+        if (custom_attributes && custom_attributes.length > 0) {
+            custom_attributes.map((attributes) => {
+                if (attributes.attribute_code === "clothing_size") {
+                    let cloths = attributes.value
+                    clothing_size = cloths.split(",");
+                }
+                if (attributes.attribute_code === "shoes_size") {
+                    let shoes = attributes.value
+                    shoes_size = shoes.split(",");
+                }
+                if (attributes.attribute_code === "mostly_intersted_in") {
+                    mostly_intersted_in = attributes.value;
+                }
+                if (attributes.attribute_code === "favourite_categories") {
+                    let favs = attributes.value
+                    favourite_categories = favs.split(",");
+                }
+                if (attributes.attribute_code === "favourite_designers") {
+                    let favDesigns = attributes.value
+                    favourite_designers = favDesigns.split(",");
+                }
+            })
+        }
         // to get all the preferences list
         let preference: any = await getPreference(lang);
         setAttributes(preference);
@@ -367,16 +373,22 @@ function MyProfile(props) {
     }
 
     const handleChangePass = async () => {
+
         if (handleValidation()) {
+            setLoaderPassChange(true);
             let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
             if (result.data) {
+                console.log(result.data)
                 notification("success", "", "Password updated");
                 setChangePass({
                     confirmNewPassword: "",
                     newPassword: "",
                     password: ""
                 });
+                setLoaderPassChange(false);
             } else {
+
+                setLoaderPassChange(false);
                 notification("error", "", "Invalid password!");
             }
         }
@@ -419,6 +431,7 @@ function MyProfile(props) {
 
     const handleChangeEmail = async () => {
         if (handleValidationEmail()) {
+            setloaderEmailChange(true)
             const req = {
                 customerId: custId,
                 newEmail: changeEmail.newEmail,
@@ -433,7 +446,9 @@ function MyProfile(props) {
                     newEmail: "",
                     password: ""
                 })
+                setloaderEmailChange(false)
             } else {
+                setloaderEmailChange(false)
                 notification("error", "", "Error in updating email!");
             }
         }
@@ -536,11 +551,11 @@ function MyProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.name" /></label>
-                                        <div className="field-name">{custForm.firstname}</div>
+                                        <div className="field-name">{custForm.firstname ? capitalize(custForm.firstname) : ""}</div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
-                                        <div className="field-name">{custForm.lastname}</div>
+                                        <div className="field-name">{custForm.lastname ? capitalize(custForm.lastname) : ""}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
@@ -620,7 +635,7 @@ function MyProfile(props) {
                                             }
                                         </div>
                                     </div>
-                                    <div className="field_details">
+                                    {/* <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteDesigners" /></label>
                                         <div className="field-name">
                                             {
@@ -629,7 +644,7 @@ function MyProfile(props) {
                                                 })
                                             }
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
@@ -729,8 +744,8 @@ function MyProfile(props) {
                                     <li>{address.city}</li>
                                     <li>{address.country_id}</li>
                                 </ul>
-                                {i== 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                                <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
+                                {i == 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
+                                    <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
                                 <div className="address-action">
                                     <Link to="#" onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
                                     <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`} onClick={() => editAddress(i)}>
@@ -813,7 +828,7 @@ function MyProfile(props) {
                                 <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" /></label>
-                                    <input type={passMask.password ? 'password' : 'text'} className="form-control" placeholder="000"
+                                    <input type={passMask.password ? 'password' : 'text'} className="form-control" placeholder="****"
                                         id="password"
                                         value={changePass.password}
                                         onChange={handlePassword} />
@@ -825,7 +840,7 @@ function MyProfile(props) {
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="myaccount.newPassword" /> <span
                                         className="maindatory">&#42;</span></label>
-                                    <input type={passMask.newPassword ? 'password' : 'text'} className="form-control" placeholder="000" id="newPassword"
+                                    <input type={passMask.newPassword ? 'password' : 'text'} className="form-control" placeholder="****" id="newPassword"
                                         value={changePass.newPassword}
                                         onChange={handlePassword} />
                                     <span className="hidden-pass" onClick={() => togglePasswordVisiblity('newPassword')}>
@@ -837,7 +852,7 @@ function MyProfile(props) {
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /> <span
                                         className="maindatory">&#42;</span></label>
-                                    <input type={passMask.confirmNewPassword ? 'password' : 'text'} className="form-control" placeholder="000"
+                                    <input type={passMask.confirmNewPassword ? 'password' : 'text'} className="form-control" placeholder="****"
                                         id="confirmNewPassword"
                                         value={changePass.confirmNewPassword}
                                         onChange={handlePassword} />
@@ -853,8 +868,12 @@ function MyProfile(props) {
                                     </div>
                                     <div className="Frgt_paswd">
                                         <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary" onClick={handleChangePass}>
+                                            <button type="button" className="btn btn-secondary" style={{ "display": !loaderPassChange ? "inline-block" : "none" }} onClick={handleChangePass}>
                                                 <IntlMessages id="myaccount.confirm" /></button>
+                                            <div className="btn btn-secondary" style={{ "display": loaderPassChange ? "inline-block" : "none" }}>
+                                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                <IntlMessages id="loading" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -865,7 +884,7 @@ function MyProfile(props) {
                                 <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
                                 <div className="width-100 mb-3">
                                     <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
-                                    <input type="email" className="form-control" placeholder="000" id="newEmail"
+                                    <input type="email" className="form-control" placeholder={intl.formatMessage({ id: "myaccount.newEmailAddress" })} id="newEmail"
                                         value={changeEmail.newEmail}
                                         onChange={handleEmail} />
                                     <span className="error">{errors.errors["newEmail"]}</span>
@@ -873,7 +892,7 @@ function MyProfile(props) {
                                 <div className="width-100 mb-3">
                                     <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
                                         className="maindatory">&#42;</span></label>
-                                    <input type="email" className="form-control" placeholder="000" id="confirmNewEmail"
+                                    <input type="email" className="form-control" placeholder={intl.formatMessage({ id: "myaccount.confirmNewEmailAddress" })} id="confirmNewEmail"
                                         value={changeEmail.confirmNewEmail}
                                         onChange={handleEmail} />
                                     <span className="error">{errors.errors["confirmNewEmail"]}</span>
@@ -881,7 +900,7 @@ function MyProfile(props) {
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" /><span
                                         className="maindatory">&#42;</span></label>
-                                    <input type={passMask.emailPass ? 'password' : 'text'} className="form-control" placeholder="000"
+                                    <input type={passMask.emailPass ? 'password' : 'text'} className="form-control" placeholder={intl.formatMessage({ id: "login.password" })}
                                         id="password"
                                         value={changeEmail.password}
                                         onChange={handleEmail} />
@@ -893,9 +912,13 @@ function MyProfile(props) {
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
                                         <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary" onClick={handleChangeEmail}>
+                                            <button type="button" className="btn btn-secondary" style={{ "display": !loaderEmailChange ? "inline-block" : "none" }} onClick={handleChangeEmail}>
                                                 <IntlMessages id="myaccount.confirm" />
                                             </button>
+                                            <div className="btn btn-secondary" style={{ "display": loaderEmailChange ? "inline-block" : "none" }}>
+                                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                <IntlMessages id="loading" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -948,7 +971,7 @@ function MyProfile(props) {
                                         <h2 className="accordion-header" id="flush-headingThree">
                                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                <img src="images/timer_icon.png" className="img-fluid" alt="" /> 
+                                                <img src="images/timer_icon.png" className="img-fluid" alt="" />
                                                 <IntlMessages id="myaccount.dontWantToclose" />
                                             </button>
                                         </h2>
@@ -1372,7 +1395,7 @@ function MyProfile(props) {
                                         <option value="2">By Whatsapp </option>
                                     </select>
                                 </div>
-                                
+
 
                                 {/* <div className="width-100 mb-3 form-field">
                                     <div className="dobfeild_gift row">
@@ -1490,7 +1513,7 @@ function MyProfile(props) {
             <Modal show={addCard}>
                 <div className="CLE_pf_detahils">
                     <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
-                    <a onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></a>
+                    <Link to="#" onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     <div className="payment_mode">
                         <h2><IntlMessages id="checkout.addCards" /></h2>
                         <div className="width-100 mb-3 form-field">

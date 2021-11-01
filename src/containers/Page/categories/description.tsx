@@ -6,15 +6,11 @@ import { useLocation } from 'react-router-dom';
 
 function Description(props) {
     const location = useLocation()
-    const baseUrl = process.env.REACT_APP_API_URL;
-    const [category, setCategory] = useState({
-        custom_attributes: []
-    })
+    const [category, setCategory] = useState([])
 
     useEffect(() => {
-      //  console.log(props.cateData, props.cateData);
-        if (props.cateData) {
-            setCategory(props.cateData);
+        if (props.cateData && props.cateData.items && props.cateData.items.length > 0 && props.cateData.items[0].custom_attributes && props.cateData.items[0].custom_attributes.length > 0) {
+            setCategory(props.cateData.items[0].custom_attributes);
         }
     }, [props.languages, location, props.cateData]);
 
@@ -23,7 +19,7 @@ function Description(props) {
             <div className="container">
                 <div className="row">
                     <div className="col-md-12">
-                        {category.custom_attributes.map((el, i) => {
+                        {category.map((el, i) => {
                             return (el.attribute_code === "bottom_description" &&
                                 <div key={i} dangerouslySetInnerHTML={{ __html: el.value }} />
                             )

@@ -35,7 +35,7 @@ function BusinessProfile(props) {
 
     const userGroup = localStorage.getItem('token');
     const [isShow, setIsShow] = useState(false);
-    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
+    // const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
 
 
     const [myDetailsModel, setMyDetailsModel] = useState(false);
@@ -552,33 +552,33 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        <div className={`addnew_address ${isPriveUser ? 'prive-bg' : ''}`} onClick={openAddressModal}>
+                        <div className="addnew_address" onClick={openAddressModal}>
                             <div className="addressnew_addressblue">
                                 <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
                             </div>
                         </div>
-
-                        {custForm && custForm.addresses.map((address, i) => {
-                            return (<div className="addressnew_addressbodr" key={i}>
-                                <h3><IntlMessages id="myaccount.address" /></h3>
-                                <ul>
-                                    <li>{address.firstname + ' ' + address.lastname}</li>
-                                    <li>{address.street}</li>
-                                    <li>{address.postcode}</li>
-                                    <li>{address.city}</li>
-                                    <li>{address.country_id}</li>
-                                </ul>
-                                {i == 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                                    <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
-                                <div className="address-action">
-                                    <Link to="#" onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                    <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`} onClick={() => editAddress(i)}>
-                                        <IntlMessages id="myaccount.edit" />
-                                    </Link>
-                                </div>
-                            </div>);
-                        })}
-
+                        {(custForm && custForm.addresses && custForm.addresses.length > 0) && (<>
+                            {custForm && custForm.addresses.map((address, i) => {
+                                return (<div className="addressnew_addressbodr" key={i}>
+                                    <h3><IntlMessages id="myaccount.address" /></h3>
+                                    <ul>
+                                        <li>{address.firstname + ' ' + address.lastname}</li>
+                                        <li>{address.street}</li>
+                                        <li>{address.postcode}</li>
+                                        <li>{address.city}</li>
+                                        <li>{address.country_id}</li>
+                                    </ul>
+                                    {i == 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
+                                        <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
+                                    <div className="address-action">
+                                        <Link to="#" onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
+                                        <Link to="#" className="edit_btn" onClick={() => editAddress(i)}>
+                                            <IntlMessages id="myaccount.edit" />
+                                        </Link>
+                                    </div>
+                                </div>);
+                            })}
+                        </>)}
 
                     </div>
                 </div>
@@ -593,7 +593,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        <div className={`addnew_address ${isPriveUser ? 'prive-bg' : ''}`} onClick={openPaymentMethodModal}>
+                        <div className="addnew_address" onClick={openPaymentMethodModal}>
                             <div className="addressnew_addressblue">
                                 <span> <IntlMessages id="myaccount.addNewPayment" /> </span>
                             </div>
@@ -609,7 +609,7 @@ function BusinessProfile(props) {
                             <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action bank_card">
                                 <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`}><IntlMessages id="myaccount.edit" /></Link>
+                                <Link to="#" className="edit_btn" ><IntlMessages id="myaccount.edit" /></Link>
                             </div>
                         </div>
                         <div className="addressnew_addressbodr">
@@ -621,7 +621,7 @@ function BusinessProfile(props) {
                             <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                             <div className="address-action paypal_card">
                                 <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`}><IntlMessages id="myaccount.edit" /></Link>
+                                <Link to="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></Link>
                             </div>
                         </div>
                     </div>
@@ -824,19 +824,19 @@ function BusinessProfile(props) {
                     <div className="row">
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg' : ''}`}>
+                                <Link to="customer-orders" className="btn btn-secondary">
                                     <IntlMessages id="myaccount.myOrdersReturns" /></Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg' : ''}`}>
+                                <Link to="customer-orders" className="btn btn-secondary">
                                     <IntlMessages id="myaccount.orderDetails" /></Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <button type="button" className={`btn btn-secondary ${isPriveUser ? 'prive-bg' : ''}`}><IntlMessages id="myaccount.returnDetails" /></button>
+                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.returnDetails" /></button>
                             </div>
                         </div>
                     </div>
@@ -908,7 +908,7 @@ function BusinessProfile(props) {
                                 </select>
                             </div>
                         </div>
-                        {/* <div className="width-100 mb-3 form-field">
+                        <div className="width-100 mb-3 form-field">
                             <label className="form-label">Country<span className="maindatory">*</span></label>
                             <select value={country} onChange={(e) => { setCountry(e.target.value) }} id="country" className="form-select" aria-label="Default select example">
                                 {countries && countries.map(opt => {
@@ -916,7 +916,7 @@ function BusinessProfile(props) {
                                 })}
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
-                        </div> */}
+                        </div>
                     </Modal.Body>
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">

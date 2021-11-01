@@ -17,6 +17,7 @@ function SearchBar(props) {
     const [categories, setCategories] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
     const node = useRef(null);
+    const intl = useIntl();
     useEffect(() => {
         getCategoryListAPi();
     }, []);
@@ -87,7 +88,7 @@ function SearchBar(props) {
             SetIsShow(false);
         }
     }
-    const intl = useIntl();
+ 
     return (
         <div className="navbar-collapse collapse mainmenu-bar" id="bdNavbar">
             <hr className="d-md-none text-white-50" />

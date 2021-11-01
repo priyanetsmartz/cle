@@ -10,11 +10,14 @@ import { getHomePageProducts } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import notification from "../../../components/notification";
 import { siteConfig } from '../../../settings';
-import { addWhishlist, getWhishlistItemsForUser, removeWhishlist } from '../../../redux/cart/productApi';
-const { addToWishlistTask } = cartAction;
+import { addToCartApi, addToCartApiGuest, addWhishlist, createGuestToken, getGuestCart, getWhishlistItemsForUser, removeWhishlist } from '../../../redux/cart/productApi';
+import Login from '../../../redux/auth/Login';
+const loginApi = new Login();
+const { addToWishlistTask, addToCartTask } = cartAction;
 const { showSignin } = appAction;
 function BestSeller(props) {
     const [token, setToken] = useState('');
+    const [isShow, setIsShow] = useState(0);
     const [categoriesList, setCategoriesList] = useState([]);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
@@ -85,7 +88,7 @@ function BestSeller(props) {
                     }));
 
                 productResult = mergeById(products, WhishlistData);
-             //   console.log(typeof (productResult))
+                //   console.log(typeof (productResult))
             } else {
                 productResult = result.data[0].bestSellers;
 
@@ -163,6 +166,52 @@ function BestSeller(props) {
         setIsHoverImage(0)
     }
 
+    async function handleCart(id: number, sku: string) {
+        //console.log(productDetails)
+        setIsShow(id);
+        let cartData = {};
+        let cartSucces: any;
+        let cartQuoteId = '';
+        let customer_id = localStorage.getItem('cust_id');
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        //console.log(cartQuoteIdLocal)
+        if (cartQuoteIdLocal || customer_id) {
+            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
+            cartQuoteId = cartQuoteIdLocal
+            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart.data;
+            }
+        } else {
+
+            let guestToken: any = await createGuestToken();
+            localStorage.setItem('cartQuoteToken', guestToken.data);
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data.id
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
+        cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": cartQuoteId
+            }
+        }
+
+
+        if (customer_id) {
+            cartSucces = await addToCartApi(cartData)
+        } else {
+            cartSucces = await addToCartApiGuest(cartData)
+        }
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(0);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(0);
+        }
+    }
     return (
         <section className="width-100 my-5">
             <div className="container">
@@ -209,17 +258,21 @@ function BestSeller(props) {
                                                             </div>
                                                         )}
                                                     </span>
-                                                    <div className="product_img" onMouseEnter={() => someHandler(item.id)}
-                                                        onMouseLeave={() => someOtherHandler(item.id)}>
-                                                        {
-                                                            isHoverImage === parseInt(item.id) ? <img src={item.hover_image} className="image-fluid hover" alt={item.name} height="150" /> : <img src={item.img} className="image-fluid" alt={item.name} height="150" />
-                                                        }
-                                                    </div>
-                                                    <div className="product_name"> {item.name} </div>
+                                                    <Link to={'/product-details/' + item.sku}>
+                                                        <div className="product_img" onMouseEnter={() => someHandler(item.id)}
+                                                            onMouseLeave={() => someOtherHandler(item.id)}>
+                                                            {
+                                                                isHoverImage === parseInt(item.id) ? <img src={item.hover_image} className="image-fluid hover" alt={item.name} height="150" /> : <img src={item.img} className="image-fluid" alt={item.name} height="150" />
+                                                            }
+                                                        </div>
+                                                    </Link>
+                                                    <div className="product_name"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                     <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
                                                     <div className="product_price"> {siteConfig.currency}{formatprice(item.price)}</div>
                                                     <div className="cart-button mt-3 px-2">
-                                                        <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
+                                                        {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                            <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
                                                     </div>
                                                 </div>
                                             )
@@ -243,5 +296,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToWishlistTask, showSignin }
+    { addToWishlistTask, showSignin, addToCartTask }
 )(BestSeller);

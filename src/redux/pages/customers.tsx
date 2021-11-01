@@ -115,6 +115,11 @@ export function getCategoryDetails(language, catId) {
     return adminToken.request(`rest/V1/categories/${catId}?storeId=${storeId}`, "", "GET", "");
 }
 
+export function getCategoryDetailsbyUrlPath(language, url) {
+    return adminToken.request(`rest/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_path&searchCriteria[filterGroups][0][filters][0][value]=${url}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
+}
+
+
 // export function getWeChooseForYou(language, custId) {
 //     const storeId = language === 'english' ? 3 : 2;
 //     return adminToken.request(`rest/all/V1/product/relevantProducts?storeId=${storeId}&customerId=${custId}`, "", "GET", "");

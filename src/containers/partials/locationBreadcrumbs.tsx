@@ -1,12 +1,25 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 function Breadcrumbs(props) {
     const location = useLocation()
+    const { category, subcat, childcat, greatchildcat } = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
+    const [keyUl, setKey] = useState('');
     useEffect(() => {
-    //    / console.log(location)
+        let urlPath = '';
+        if (category && subcat && childcat && greatchildcat) {
+            urlPath = category + "/" + subcat + "/" + childcat + '/' + greatchildcat;
+        } else if (category && subcat && childcat) {
+            urlPath = category + "/" + subcat + "/" + childcat;
+        } else if (category && subcat) {
+            urlPath = category + "/" + subcat;
+        } else {
+            urlPath = category;
+        }
+
+        setKey(urlPath)
         let breads = location.pathname.split('\/');
         setBreadcrumsState(breads)
     }, [location]);
@@ -15,8 +28,8 @@ function Breadcrumbs(props) {
         <nav aria-label="breadcrumb" className="new-breadcrumb">
             {(location.pathname !== "/home") && (<ol className="breadcrumb">
                 <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                {breadcrumsState.map((local, j) => {     
-                    console.log(local)              
+                {breadcrumsState.map((local, j) => {
+                    //       console.log(local)              
                     if (j === breadcrumsState.length - 1) {
                         return (
                             <li key={j} className="breadcrumb-item active">{local}</li>

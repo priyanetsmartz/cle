@@ -27,7 +27,7 @@ function MyPreferences(props) {
     }, []);
 
     useEffect(() => {
-         console.log(favCat)
+        console.log(favCat)
         // attributes.categories[activeCategory] = favCat;
         setAttributes(prevState => ({
             ...prevState,
@@ -339,7 +339,7 @@ function MyPreferences(props) {
                 </div>
 
             </div>
-
+            {/* 
             <div className="favorite_designers mb-4">
                 <h2><IntlMessages id="preferences.favDesigner" /></h2>
                 <div className="row">
@@ -389,7 +389,7 @@ function MyPreferences(props) {
                     </div>
 
                 </div>
-            </div>
+            </div> */}
 
             <div className="favorite_designers mb-4">
                 <h2><IntlMessages id="preferences.favCategory" /></h2>
