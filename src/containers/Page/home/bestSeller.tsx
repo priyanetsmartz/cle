@@ -66,16 +66,18 @@ function BestSeller(props) {
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         setToken(localToken)
-        getData(catId);
+        getData(0);
 
         getCategories()
     }, [props.languages]);
 
     const getData = async (catId) => {
+        console.log(catId)
         let result: any = await getHomePageProducts(props.languages, 12, catId);
         let customer_id = localStorage.getItem('cust_id');
         if (result) {
             let productResult = result.data[0].bestSellers;
+            // console.log(productResult)
             if (customer_id) {
                 let whishlist: any = await getWhishlistItemsForUser();
                 let products = result.data[0].bestSellers;
@@ -102,10 +104,10 @@ function BestSeller(props) {
     //get categories for the filter dropdown
     const getCategories = async () => {
         let result: any = await menu(props.languages);
-        //console.log(result);
+        //console.log(result.data[0].parent.child[1]);
         let catList = [];
-        if (result && result.data[0] && result.data[0].parent.child[0].child) {
-            result.data[0].parent.child[0].child.forEach(el => {
+        if (result && result.data[0] && result.data[0].parent.child[1].child) {
+            result.data[0].parent.child[1].child.forEach(el => {
                 catList.push(el);
             })
         }
@@ -114,7 +116,7 @@ function BestSeller(props) {
 
     const changeCategory = (e) => {
         setCatId(e.target.value);
-        getData(e.target.value);
+        getData(e.target.value !== 'All' ? e.target.value : 0);
         setOpacity(0.3);
     }
 
@@ -229,6 +231,7 @@ function BestSeller(props) {
                                 <div className="sortbyfilter">
                                     <h3><IntlMessages id="home.show" /></h3>
                                     <select className="form-select customfliter" value={catId} aria-label="Default select example" onChange={changeCategory}>
+                                        <option>All</option>
                                         {categoriesList.map((cat, i) => {
                                             return (<option value={cat.id} key={i}>{cat.name} </option>)
                                         })}

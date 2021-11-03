@@ -130,7 +130,7 @@ function Customer(props) {
                                 </div>
                             </div>
                         </div>
-                        {activeTab === 'dashboard' ? <Dashboard /> :
+                        {activeTab === 'dashboard' ? <MyProfile /> :
                             activeTab === 'orders-and-returns' ? <OrdersAndReturns /> :
                                 // activeTab === 'mytrades' ? <MyTrades /> :
                                 activeTab === 'profile' ? <MyProfile /> :

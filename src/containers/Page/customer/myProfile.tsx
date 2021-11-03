@@ -19,6 +19,7 @@ function MyProfile(props) {
     const intl = useIntl();
     const userGroup = localStorage.getItem('token');
     const [isShow, setIsShow] = useState(false);
+    const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [attributes, setAttributes]: any = useState({});
@@ -58,7 +59,7 @@ function MyProfile(props) {
         email: "",
         firstname: "",
         lastname: "",
-        gender: "",
+        gender: 0,
         dob: "",
         website_id: 1,
         addresses: [],
@@ -95,14 +96,14 @@ function MyProfile(props) {
         name: "",
         surName: "",
         occasion: "",
-        annualReminder:"",
-        dobDate:"",
-        dobMonth:"",
-        dobYear:"",
-        DateOfDelivery:"",
-        gender:"",
-        categoryPreference:"",
-        notifyMe:""
+        annualReminder: "",
+        dobDate: "",
+        dobMonth: "",
+        dobYear: "",
+        DateOfDelivery: "",
+        gender: 0,
+        categoryPreference: "",
+        notifyMe: ""
     });
 
     const [errors, setError] = useState({
@@ -150,6 +151,7 @@ function MyProfile(props) {
                 if (attributes.attribute_code === "favourite_categories") {
                     let favs = attributes.value
                     favourite_categories = favs.split(",");
+                    console.log(favourite_categories)
                 }
                 if (attributes.attribute_code === "favourite_designers") {
                     let favDesigns = attributes.value
@@ -181,13 +183,13 @@ function MyProfile(props) {
                 return o1.value === o2; // return the ones with equal id
             });
         });
-
+        console.log(categories_array)
         if (intersted_in[0] && intersted_in[0].name === "kid") {
-            catToShow = categories_array[2];
-        } else if (intersted_in[0] && intersted_in[0].name === "women") {
             catToShow = categories_array[1];
-        } else {
+        } else if (intersted_in[0] && intersted_in[0].name === "women") {
             catToShow = categories_array[0];
+        } else {
+            catToShow = categories_array[2];
         }
 
         //  console.log(catToShow)
@@ -195,8 +197,9 @@ function MyProfile(props) {
             return favourite_categories.some(function (o2) {
                 return o1.id === o2; // return the ones with equal id
             });
-        });
 
+        });
+        console.log(favCategoryArray)
         var favDesignerArray = designer_array[0].filter(function (o1) {
             return favourite_designers.some(function (o2) {
                 return o1.id === o2; // return the ones with equal id
@@ -246,14 +249,23 @@ function MyProfile(props) {
     }
 
     const saveCustDetails = async (e) => {
+        setSaveCustDetailsLoader(true)
         e.preventDefault();
+        // console.log(custForm)
+        custForm.email = localStorage.getItem('token_email')
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
-            custForm.dob = `${dob.day}/${dob.month}/${dob.year}`;
+            custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
         }
         let result: any = await saveCustomerDetails(custId, { customer: custForm });
         if (result) {
             setMyDetailsModel(false);
+            setSaveCustDetailsLoader(false)
+            getData()
             notification("success", "", "Customer details Updated");
+        } else {
+
+            setSaveCustDetailsLoader(false)
+            notification("error", "", "Something went wrong!");
         }
     }
 
@@ -599,7 +611,7 @@ function MyProfile(props) {
                                         <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                                         <div className="field-name">
                                             {DROPDOWN.gender.map(el => {
-                                                return el.id == custForm.gender ? (<span key={el.id}>{el.name}</span>) : null
+                                                return parseInt(el.id) === custForm.gender ? (<span key={el.id}>{el.name}</span>) : null
                                             })}
                                         </div>
                                     </div>
@@ -725,7 +737,7 @@ function MyProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.myBirthday" /></label>
-                                        <div className="field-name">01 May 1990</div>
+                                        <div className="field-name">{custForm.dob}</div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label">&nbsp;</label>
@@ -1135,7 +1147,9 @@ function MyProfile(props) {
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">
                             <div className="confirm-btn">
-                                <button type="button" className="btn btn-secondary" onClick={saveCustDetails}><IntlMessages id="myaccount.confirm" /></button>
+                                <button type="button" className="btn btn-secondary" style={{ "display": !saveCustDetailsLoader ? "inline-block" : "none" }} onClick={saveCustDetails}><IntlMessages id="myaccount.confirm" /></button>
+
+                                <button className="spinner" style={{ "display": saveCustDetailsLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</button>
                             </div>
                         </div>
                     </Modal.Footer>
@@ -1348,12 +1362,12 @@ function MyProfile(props) {
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.name" /><span className="maindatory">*</span></label>
                                     <input type="text" className="form-control" placeholder="John" value={giftingPrefer.name} id="name"
-                                        onChange={handleGiftingChange}/>
+                                        onChange={handleGiftingChange} />
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.surName" /></label>
                                     <input type="text" className="form-control" placeholder="Doe" value={giftingPrefer.surName} id="surName"
-                                        onChange={handleGiftingChange}/>
+                                        onChange={handleGiftingChange} />
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.occasion" /></label>
@@ -1383,24 +1397,24 @@ function MyProfile(props) {
                                     <div className="dobfeild">
                                         <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobDate} id="dobDate"
                                             onChange={handleGiftingChange}>
-                                                <option value="">Select</option>
-                                                {DROPDOWN.dates.map(opt => {
-                                                    return (<option value={opt} key={opt}>{opt}</option>);
-                                                })}
+                                            <option value="">Select</option>
+                                            {DROPDOWN.dates.map(opt => {
+                                                return (<option value={opt} key={opt}>{opt}</option>);
+                                            })}
                                         </select>
                                         <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobMonth} id="dobMonth"
                                             onChange={handleGiftingChange}>
-                                                <option value="">Select</option>
-                                                {DROPDOWN.months.map(opt => {
-                                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
-                                                })}
+                                            <option value="">Select</option>
+                                            {DROPDOWN.months.map(opt => {
+                                                return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                            })}
                                         </select>
                                         <select className="form-select" aria-label="Default select example" value={giftingPrefer.dobYear} id="dobYear"
                                             onChange={handleGiftingChange}>
-                                                <option value="">Select</option>
-                                                {DROPDOWN.years.map(opt => {
-                                                    return (<option value={opt} key={opt}>{opt}</option>);
-                                                })}
+                                            <option value="">Select</option>
+                                            {DROPDOWN.years.map(opt => {
+                                                return (<option value={opt} key={opt}>{opt}</option>);
+                                            })}
                                         </select>
                                     </div>
                                 </div>

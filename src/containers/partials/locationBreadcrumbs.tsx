@@ -18,7 +18,9 @@ function Breadcrumbs(props) {
         } else {
             urlPath = category;
         }
-
+      //  console.log(urlPath)
+        // let test = urlPath.split("/");
+        //console.log(test)
         setKey(urlPath)
         let breads = location.pathname.split('\/');
         setBreadcrumsState(breads)

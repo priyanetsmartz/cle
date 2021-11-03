@@ -13,6 +13,7 @@ function SearchBar(props) {
     const language = getCookie('currentLanguage');
     const [autoSuggestions, SetAutoSuggestions] = useState([]);
     const [isShow, SetIsShow] = useState(false);
+    const [selectedCat, SetSelectedCat] = useState('All');
     const [nothingFound, SetNothingFound] = useState("");
     const [categories, setCategories] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -20,29 +21,29 @@ function SearchBar(props) {
     const intl = useIntl();
     useEffect(() => {
         getCategoryListAPi();
-    }, []);
+    }, [props.languages]);
 
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClick);
+    // useEffect(() => {
+    //     document.addEventListener("mousedown", handleClick);
 
-        return () => {
-            document.removeEventListener("mousedown", handleClick);
-        };
-    }, []);
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClick);
+    //     };
+    // }, []);
 
-    const handleClick = e => {
-        if (node.current.contains(e.target)) {
-            // inside click
-            console.log('here inside')
-            return;
-        }
-        // outside click
-        SetNothingFound("")
-        SetIsShow(false);
+    // const handleClick = e => {
+    //     if (node.current.contains(e.target)) {
+    //         // inside click
+    //         console.log('here inside')
+    //         return;
+    //     }
+    //     // outside click
+    //     SetNothingFound("")
+    //     SetIsShow(false);
 
-    };
+    // };
     const getCategoryListAPi = async () => {
-        let results: any = await getCategoryList();
+        let results: any = await getCategoryList(props.languages);
         if (results && results.data && results.data.items) {
             setCategories(results.data.items)
         }
@@ -74,21 +75,26 @@ function SearchBar(props) {
 
     const searchwithCategory = async (e) => {
         const { value } = e.target;
+        SetSelectedCat(value)
         if (searchKeyword) {
-        //    history.push(`/search/${searchKeyword}/${value}`);
+
+            history.push(`/search/${searchKeyword}/${value}`);
             SetIsShow(false);
+        } else if (value) {
+            history.push(`/search/all/${value}`);
         } else {
-          //  history.push(`/search/all/${value}`);
+            history.push(`/search/all/all`);
         }
     }
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
             let serachVal = e.target.value;
-          //  history.push(`/search/${serachVal}/all`);
+            setSearchKeyword(serachVal)
+            history.push(`/search/${serachVal}/all`);
             SetIsShow(false);
         }
     }
- 
+
     return (
         <div className="navbar-collapse collapse mainmenu-bar" id="bdNavbar">
             <hr className="d-md-none text-white-50" />
@@ -99,9 +105,9 @@ function SearchBar(props) {
                         {
                             categories.length > 0 && (
                                 <select className="form-select" onChange={searchwithCategory} aria-label="Default select example">
-                                    <option value=""> --</option>
+
                                     {categories.map((item, i) => {
-                                        return (<option key={i} value={item.id}>{item.name}</option>)
+                                        return (<option key={i} selected={item.name === selectedCat} value={item.id}>{item.name}</option>)
                                     })
                                     }
                                 </select>

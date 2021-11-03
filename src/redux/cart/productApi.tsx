@@ -81,25 +81,61 @@ export function getPriveExclusiveProducts(category, language) {
     return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${category}&searchCriteria[filter_groups][0][filters][0][field]=prive&searchCriteria[filter_groups][0][filters][0][value]=1&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=visibility&searchCriteria[filter_groups][1][filters][0][value]=4&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&fields=items[sku,name,id,price,custom_attributes]&searchCriteria[pageSize]=7&searchCriteria[sortOrders][0][field]=created_at& searchCriteria[sortOrders][0][direction]=DESC&storeId=${storeId}`, "", "GET", "");
 }
 
+export function getProductsFilterRest(category_id: number, language: string) {
+    var storeId = language === 'english' ? 'en' : 'ar';
+    let data = {
+        "catId": 153,
+        "storeCode": storeId,
+        "pageSize": 12
+    }
+    return APi.request(`rest/all/V1/product/filters`, data, "POST", "");
+
+}
+
+export function getProductsFilterRestCollection(category_id: number, language: string) {
+    var storeId = language === 'english' ? 'en' : 'ar';
+    let priceLow = 0, priceHigh = 100;
+    let data = '{products(filter:{category_id:{ eq: "' + category_id + '" },price:{from: "' + priceLow + '", to: "' + priceHigh + '" } }, pageSize: 10){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page}}}';
+    let query = {
+        "query": data,
+        "storeCode": storeId,
+    }
+    // let newdd = JSON.stringify(query);
+    // let str = newdd.replace(/\\/g, '');
+    // let str1= str.replace(/\\/g, '');
+    // let query1 = ({
+    //     "query": str1,
+    //     "storeCode": storeId,
+    // })
+
+
+    return APi.request(`rest/all/V1/product/filtersCollection`, query, "POST", "");
+
+}
 export function getProductFilter(category_id: number) {
 
     const data = {
         query: `{
-            products(
-            filter: { category_id: { eq: "52" } }, pageSize: 10
-            ) {
+    products(
+        filter: { category_id: { eq: "153" } }, pageSize: 10
+    ) {
             aggregations{
             attribute_code
             count
             label
             options{
-            count
-            label
-            value
+                count
+                label
+                value
             }
-            }
-            }
-            }`,
+        }
+        total_count
+            page_info {
+            page_size
+            current_page
+        }
+    }
+} `,
     }
     return APi.request(
         "graphql",
@@ -111,12 +147,12 @@ export function getProductFilter(category_id: number) {
 
 export function getProductDetails(sku: string, language: string) {
     var storeId = language === 'arabic' ? 'ar' : 'en';
-    return APi.request(`rest/${storeId}/V1/products/${sku}`, "", "GET", "");
+    return APi.request(`rest/${storeId}/V1/products/${sku} `, "", "GET", "");
 }
 
 export function getProductExtras(productId: number) {
     const localToken = localStorage.getItem('cust_id');
-    return APi.request(`rest/all/V1/product/recommendation?storeId=3&customerId=${localToken}&productId=${productId}`, "", "GET", "");
+    return APi.request(`rest/V1/product/recommendation?storeId=3&customerId=${localToken}&productId=${productId}`, "", "GET", "");
 }
 
 export function addToCartApiGuest(cartData) {
@@ -205,9 +241,11 @@ export function applyPromoCodeGuest(couponCode, language) {
 export function searchFields(search: string, category: number, page: number, language: string, sortBy, sortByValue) {
     var storeId = language === 'arabic' ? 2 : 3;
     if (search === 'all' && category) {
-        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=category_id&searchCriteria[filter_groups][1][filters][0][value]=${category}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=1&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "");
+        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=category_id&searchCriteria[filter_groups][1][filters][0][value]=${category}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}&searchCriteria[pageSize]=${page}&searchCriteria[currentPage]=1`, "", "GET", "");
+    } else if (search && category) {
+        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=name&searchCriteria[filter_groups][1][filters][0][value]=%${search}%&searchCriteria[filter_groups][1][filters][0][condition_type]=like&searchCriteria[filter_groups][1][filters][1][field]=short_description&searchCriteria[filter_groups][1][filters][1][value]=%${search}%&searchCriteria[filter_groups][1][filters][1][condition_type]=like&searchCriteria[filter_groups][2][filters][0][field]=category_id&searchCriteria[filter_groups][2][filters][0][value]=${category}&searchCriteria[filter_groups][2][filters][0][condition_type]=eq&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[currentPage]=1&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
     } else {
-        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=name&searchCriteria[filter_groups][1][filters][0][value]=%${search}%&searchCriteria[filter_groups][1][filters][0][condition_type]=like&searchCriteria[filter_groups][1][filters][1][field]=short_description&searchCriteria[filter_groups][1][filters][1][value]=%${search}%&searchCriteria[filter_groups][1][filters][1][condition_type]=like&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=1&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
+        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[currentPage]=1&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
     }
 
 }
@@ -327,7 +365,8 @@ export function orderDetailbyId(orderId: number) {
 
 // category list api
 
-export function getCategoryList() {
-    return APi.request(`rest/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=is_active&searchCriteria[filterGroups][0][filters][0][value]=1&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][1][filters][0][field]=level&searchCriteria[filterGroups][1][filters][0][value]=2&searchCriteria[filterGroups][1][filters][0][conditionType]=eq&fields=items[name,id]`, "", "GET", "")
+export function getCategoryList(language) {
+    var storeId = language === 'arabic' ? "ar" : "en";
+    return APi.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=is_active&searchCriteria[filterGroups][0][filters][0][value]=1&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][1][filters][0][field]=level&searchCriteria[filterGroups][1][filters][0][value]=2&searchCriteria[filterGroups][1][filters][0][conditionType]=eq&fields=items[name,id]`, "", "GET", "")
 
 }

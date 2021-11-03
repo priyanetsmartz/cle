@@ -5,22 +5,26 @@ import "slick-carousel/slick/slick-theme.css";
 import { formatprice } from '../../../../components/utility/allutils';
 import { Link } from "react-router-dom";
 import IntlMessages from "../../../../components/utility/intlMessages";
-import { getProductDetails } from '../../../../redux/cart/productApi';
+import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, getProductDetails } from '../../../../redux/cart/productApi';
 import { connect } from 'react-redux';
+import notification from '../../../../components/notification';
 import cartAction from "../../../../redux/cart/productAction";
+import Login from '../../../../redux/auth/Login';
 import { getCookie } from "../../../../helpers/session";
+const loginApi = new Login();
 const { addToCartTask } = cartAction;
 
 
 const Recommendations = (props) => {
     const language = getCookie('currentLanguage');
+    const [isShow, setIsShow] = useState(0);
     const [recomendedProducts, setRecomendedProducts] = useState([]);
     const [slidetoshow, setSlidetoshow] = useState(4);
     // console.log(recomendedProducts)
     useEffect(() => {
-
-        if (props.recomended.length > 0) {
-            getAttributes(props.recomended);
+        console.log(props.recomend)
+        if (props.recomend && props.recomend.length > 0) {
+            getAttributes(props.recomend);
         }
 
         return () => {
@@ -28,24 +32,27 @@ const Recommendations = (props) => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [props.recomended])
+    }, [props.recomend])
 
-    async function getAttributes(recomendedProducts) {
+    async function getAttributes(recomends) {
         let allProducts: any;
-        // console.log(recomendedProducts)
-        if (recomendedProducts && recomendedProducts.length > 0 && recomendedProducts[0].link_type) {
-            var filteredItems = await recomendedProducts.filter(function (item) {
+        console.log(recomends)
+        if (recomends && recomends.length > 0 && recomends[0].link_type) {
+            var filteredItems = await recomends.filter(function (item) {
                 return item.link_type === 'related';
             });
 
             allProducts = await getgidtMessageCall(filteredItems)
         } else {
 
-            allProducts = recomendedProducts;
+            allProducts = recomends;
         }
+
+        console.log('recomends', allProducts)
         let prods = allProducts.length > 8 ? allProducts.slice(0, 8) : allProducts;
         setSlidetoshow(prods.length)
         setRecomendedProducts(prods)
+        console.log(prods)
     }
     async function getgidtMessageCall(items) {
         // console.log(items)
@@ -69,49 +76,114 @@ const Recommendations = (props) => {
     }
     const settings = {
         dots: false,
-        infinite: true,
-        arrows: true,
+        infinite: false,
         speed: 500,
-        slidesToShow: slidetoshow,
-        slidesToScroll: 1,
-        centerMode: true,
-        variableWidth: true,
-        autoplay: true,
-        autoplaySpeed: 2000
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
     };
+    async function handleCart(id: number, sku: string) {
+        //console.log(productDetails)
+        setIsShow(id);
+        let cartData = {};
+        let cartSucces: any;
+        let cartQuoteId = '';
+        let customer_id = localStorage.getItem('cust_id');
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        //console.log(cartQuoteIdLocal)
+        if (cartQuoteIdLocal || customer_id) {
+            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
+            cartQuoteId = cartQuoteIdLocal
+            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart.data;
+            }
+        } else {
+
+            let guestToken: any = await createGuestToken();
+            localStorage.setItem('cartQuoteToken', guestToken.data);
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data.id
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
+        cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": cartQuoteId
+            }
+        }
+
+
+        if (customer_id) {
+            cartSucces = await addToCartApi(cartData)
+        } else {
+            cartSucces = await addToCartApiGuest(cartData)
+        }
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(0);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(0);
+        }
+    }
     return (
         <div className="container">
             <div className="col-sm-12">
-                {(recomendedProducts && recomendedProducts.length) ? (
+                {(props.recomend && props.recomend.length) ? (
                     <div className="recommendations-section text-center ">
                         <h1> <IntlMessages id="product.recommendations" /></h1>
-                        <div className="recommed-slider" >
-                            <Slider className="regular slider" {...settings}>
-                                {recomendedProducts.map((product, i) => {
-                                    let imageD = '';
+                        <div className="new-in-slider product-listing">
+                            <div className="regular slider">
+                                <Slider {...settings}>
+                                    {props.recomend.map((item, i) => {
 
-                                    return (
-                                        <Link key={i} to={'/product-details/' + product.sku}>
-                                            {(product.custom_attributes && product.custom_attributes.length) ? (
-                                                <div className="productcalr" >
-                                                    {
-                                                        product.custom_attributes.map((attributes) => {
-                                                            if (attributes.attribute_code === 'image') {
-                                                                imageD = attributes.value;
-                                                            }
-                                                        })
-                                                    }
-                                                    <div className="product_img" style={{
-                                                        "width": "180px", "height": "192px"
-                                                    }} ><img src={product.img ? product.img : imageD} className="image-fluid" style={{ "width": "100%" }} alt={product.name} /> </div>
-                                                    <div className="product_name"> {product.name} </div>
-                                                    <div className="product_price"> ${formatprice(product.price)}</div>
+                                        return (
+                                            <div className="productcalr product" key={i} >
+                                                <Link to={'/product-details/' + item.sku}>
+                                                    <div className="product_img" >
+                                                        <img src={item.img} className="image-fluid" alt={item.name} height="150" />
+                                                    </div>
+                                                </Link>
+                                                <div className="product_name"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                                <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }} />
+                                                {/* <div className="product_vrity">{item.short_description}</div> */}
+                                                <div className="product_price">$ {formatprice(item.price)}</div>
+                                                <div className="cart-button mt-3 px-2">
+                                                    {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                        <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
                                                 </div>
-                                            ) : ""}
-                                        </Link>
-                                    )
-                                })}
-                            </Slider>
+                                            </div>
+                                        )
+                                    })}
+                                </Slider>
+                            </div>
                         </div>
                     </div>) : ""}
             </div>
@@ -120,7 +192,7 @@ const Recommendations = (props) => {
 }
 
 const mapStateToProps = (state) => {
-    //console.log(state)
+    // console.log(state)
     let recomended = [], languages = '';
     if (state && state.Cart.recomended.length > 0) {
         recomended = state.Cart.recomended;
@@ -129,7 +201,8 @@ const mapStateToProps = (state) => {
         languages = state.LanguageSwitcher.language
     }
     return {
-        recomended: recomended
+        recomended: recomended,
+        languages: languages
     }
 }
 export default connect(

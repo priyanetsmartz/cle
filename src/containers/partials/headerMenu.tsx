@@ -59,7 +59,7 @@ function HeaderMenu(props) {
         setTimeout(() => {
             window.scrollTo(0, 0)
             props.showLoader(false);
-        }, 5000);
+        }, 3000);
         const header = document.getElementById("header-mvp");
         const sticky = header.offsetTop;
         const scrollCallBack: any = window.addEventListener("scroll", () => {
@@ -170,8 +170,11 @@ function HeaderMenu(props) {
                                                                             {childMenu.child && childMenu.child.map((grandChild, l) => {
                                                                                 return (
                                                                                     <ul className="megamenugrid" key={l}>
-                                                                                        <h3> <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}`}
-                                                                                            onClick={(e) => { handleMenuClick(e, grandChild.id); }} className={activeCat === grandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"}>{grandChild.name}</Link></h3>
+                                                                                        {((l === childMenu.child.length-1) ||( l === (childMenu.child.length - 2))) ? (
+                                                                                            <h3> {grandChild.name}</h3>
+                                                                                        ) :
+                                                                                            <h3> <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}`}
+                                                                                                onClick={(e) => { handleMenuClick(e, grandChild.id); }} className={activeCat === grandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"}>{grandChild.name}</Link></h3>}
                                                                                         {grandChild.child && grandChild.child.map((greatGrandChild, k) => {
                                                                                             return (<li key={k}>
                                                                                                 <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}/${greatGrandChild.url_key}`}
@@ -253,6 +256,38 @@ function HeaderMenu(props) {
 
                     </div>
                 </div>
+                <div className="cust-mob-menu">
+                    {menuData.length > 0 && (
+                        <div className="dropdown">
+                            <ul className="list-unstyled">
+                                {
+                                    menuData.map((val, i) => {
+                                        return (<li className="dropdown" key={i}>
+                                            <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">{val.name}</Link>
+                                            {val && val.child && val.child.length > 0 && (
+                                                <ul className="dropdown-menu">
+                                                    {val.child.map((childMenu: any, j) => {
+                                                        return (<li className="dropdown" key={j}>
+                                                            <Link to="#" className="dropdown-toggle" data-bs-toggle="dropdown">{childMenu.name}</Link>
+                                                            <ul className="dropdown-menu">
+                                                                {childMenu.child && childMenu.child.map((grandChild, l) => {
+                                                                    return (<li key={l}><Link className="dropdown-item" to="#">{grandChild.name}</Link></li>)
+                                                                })}
+                                                            </ul>
+                                                        </li>
+                                                        )
+                                                    })}
+
+                                                </ul>
+                                            )}
+                                        </li>
+                                        )
+                                    })}
+
+                            </ul>
+                        </div>
+                    )}
+                </div>
                 <header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2">
                     <nav className="container-xxl flex-wrap flex-md-nowrap " aria-label="Main navigation">
                         <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
@@ -271,7 +306,7 @@ function HeaderMenu(props) {
                 </header>
             </div>
 
-        </div>
+        </div >
     )
 }
 

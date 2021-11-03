@@ -96,7 +96,7 @@ export function wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchNa
 //apis for the home page
 export function getHomePageProducts(language, pageSize, catId) {
     const storeId = language === 'english' ? 3 : 2;
-    if (catId) {
+    if (catId && catId !== 0) {
         return adminToken.request(`rest/all/V1/product/newin?storeId=${storeId}&page_size=${pageSize}&catId=${catId}`, "", "GET", "");
     } else {
         return adminToken.request(`rest/all/V1/product/newin?storeId=${storeId}&page_size=${pageSize}`, "", "GET", "");
@@ -116,7 +116,8 @@ export function getCategoryDetails(language, catId) {
 }
 
 export function getCategoryDetailsbyUrlPath(language, url) {
-    return adminToken.request(`rest/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_path&searchCriteria[filterGroups][0][filters][0][value]=${url}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
+    const storeId = language === 'english' ? "en" : "ar";
+    return adminToken.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_path&searchCriteria[filterGroups][0][filters][0][value]=${url}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`, "", "GET", "");
 }
 
 

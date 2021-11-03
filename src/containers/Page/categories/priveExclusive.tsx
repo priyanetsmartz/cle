@@ -78,7 +78,7 @@ function PriveExclusive(props) {
                                                             <p></p>
                                                             <div className="pro-price-btn">
                                                                 ${formatprice(item.price)}
-                                                                <Link to={'/product-details/' + item.name}>View Product</Link></div>
+                                                                <Link to={'/product-details/' + item.sku}>View Product</Link></div>
                                                         </div>
                                                     </div>
                                                 </div>

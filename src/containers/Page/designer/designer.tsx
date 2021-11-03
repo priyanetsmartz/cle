@@ -37,7 +37,7 @@ function DesignerCategories(props) {
                                 <div className="section">
                                     <HtmlContent identifier="design_category_banner_image" />
                                 </div>
-                                {localStorage.getItem('token') == '4' && <div className="section" >
+                                {localStorage.getItem('token') === '4' && <div className="section" >
                                     <PriveExclusive />
                                 </div>}
                                 <div className="section" >

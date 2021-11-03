@@ -7,14 +7,19 @@ import { siteConfig } from '../../settings/index';
 import IntlMessages from "../../components/utility/intlMessages";
 import notification from "../../components/notification";
 import Filter from '../Page/product/filter';
-import { searchFields, addWhishlist, getWhishlistItemsForUser, removeWhishlist } from '../../redux/cart/productApi';
+import { searchFields, addWhishlist, getWhishlistItemsForUser, removeWhishlist, createGuestToken, getGuestCart, addToCartApiGuest, addToCartApi } from '../../redux/cart/productApi';
 import { capitalize } from '../../components/utility/allutils';
+import cartAction from "../../redux/cart/productAction";
 import appAction from "../../redux/app/actions";
+import Login from '../../redux/auth/Login';
+const { addToCartTask } = cartAction;
+const loginApi = new Login();
 const { showSignin } = appAction;
 
 function SearchResults(props) {
     let pageSizeNumber = siteConfig.pageSize;
     const { searchText, cat } = useParams();
+    const [isShow, setIsShow] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [pageSize, setPageSize] = useState(pageSizeNumber);
@@ -44,12 +49,15 @@ function SearchResults(props) {
         let customer_id = localStorage.getItem('cust_id');
         let lang = props.languages ? props.languages : language;
         let results: any;
-        // console.log(cat)
-        if (searchText === 'all' && cat) {
+        console.log(cat, searchText)
+        if (searchText === 'all' && cat !== 'all') {
+            console.log('done')
             results = await searchFields(searchText, cat, pageSizeNumber, lang, sortValue.sortBy, sortValue.sortByValue);
         } else if (searchText === 'all' && cat === 'all') {
+            console.log('both all')
             results = await searchFields(searchText, 0, pageSizeNumber, lang, sortValue.sortBy, sortValue.sortByValue);
         } else {
+            console.log('category')
             results = await searchFields(searchText, cat, pageSizeNumber, lang, sortValue.sortBy, sortValue.sortByValue);
         }
 
@@ -159,7 +167,52 @@ function SearchResults(props) {
         setCurrent((page) => page - 1);
 
     }
+    async function handleCart(id: number, sku: string) {
+        //console.log(productDetails)
+        setIsShow(id);
+        let cartData = {};
+        let cartSucces: any;
+        let cartQuoteId = '';
+        let customer_id = localStorage.getItem('cust_id');
+        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
+        //console.log(cartQuoteIdLocal)
+        if (cartQuoteIdLocal || customer_id) {
+            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
+            cartQuoteId = cartQuoteIdLocal
+            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart.data;
+            }
+        } else {
 
+            let guestToken: any = await createGuestToken();
+            localStorage.setItem('cartQuoteToken', guestToken.data);
+            let result: any = await getGuestCart();
+            cartQuoteId = result.data.id
+        }
+        localStorage.setItem('cartQuoteId', cartQuoteId);
+        cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": cartQuoteId
+            }
+        }
+
+
+        if (customer_id) {
+            cartSucces = await addToCartApi(cartData)
+        } else {
+            cartSucces = await addToCartApiGuest(cartData)
+        }
+        if (cartSucces.data.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", "Item added to cart!");
+            setIsShow(0);
+        } else {
+            notification("error", "", "Something went wrong!");
+            setIsShow(0);
+        }
+    }
     return (
         <div className="container">
             <div className="row">
@@ -233,7 +286,9 @@ function SearchResults(props) {
                                         )}
                                         {item.type_id === 'configurable' && ( */}
                                                 <div className="cart-button mt-3 px-2">
-                                                    <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
+                                                    {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                        <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
                                                 </div>
                                                 {/* )} */}
 

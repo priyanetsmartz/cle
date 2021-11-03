@@ -195,13 +195,16 @@ function ProductDetails(props) {
             if (inWhishlist) {
                 setItemInWhishlist(inWhishlist.wishlist_item_id)
             }
-            // console.log(inWhishlist)
-            let productExtras: any = await getProductExtras(result.data.id);
+            let productExtras: any;
+            if (result && result.data) {
+                productExtras = await getProductExtras(result.data.id);
+            }
+
             let posts = productExtras && productExtras.data[0] && productExtras.data[0].posts ? productExtras.data[0].posts : [];
             let recomendations = productExtras && productExtras.data[0] && productExtras.data[0].recommendation ? productExtras.data[0].recommendation : []
             setMagezineData(posts)
             setRecomendations(recomendations)
-            //   console.log(productExtras.data)
+            
         }
 
         if (result.data.type_id === "configurable") {
@@ -240,7 +243,7 @@ function ProductDetails(props) {
         }
 
         // console.log(tags);
-        console.log(result.data.price)
+   //     console.log(result.data.price)
         projectSingle['id'] = result.data.id;
         projectSingle['type_id'] = result.data.type_id;
         projectSingle['sku'] = result.data.sku;
@@ -260,15 +263,19 @@ function ProductDetails(props) {
         let qtyy = result.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
         setExtensionAttributes(qtyy);
         setproductDetails(projectSingle);
-        if (recomendationsData.length <= 0) {
-            //  console.log('sss')
-            setProdLinked(result.data.product_links);
-            props.recomendedProducts(result.data.product_links)
-        } else {
-            // console.log('sssdddd')
-            props.recomendedProducts(recomendationsData)
-        }
 
+        // check check check
+        // if (recomendationsData.length <= 0) {
+        //      console.log('sss')
+        //     setProdLinked(result.data.product_links);
+        //    // setRecomendations(result.data.product_links)
+        //     props.recomendedProducts(result.data.product_links)
+        // } else {
+        //     console.log(recomendationsData)
+        //   //  setRecomendations(recomendationsData)
+        //     props.recomendedProducts(recomendationsData)
+        // }
+        //console.log(recomendationsData)
         setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
         // console.log(productDetails)
     }
@@ -611,7 +618,7 @@ function ProductDetails(props) {
                 </section>
 
                 {/* <section> */}
-                <Recomendations recomendationsData={recomendationsData.length > 0 ? recomendationsData : linkedProducts} />
+                <Recomendations recomend={recomendationsData} />
                 {/* </section> */}
 
                 <section>

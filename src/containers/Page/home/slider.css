@@ -14,7 +14,7 @@
     transition: flex 0.8s ease;
 	cursor:pointer;
 }
-
+.item.featured{flex:7 1 0% !important;}
 
 .gallery-wrap .item.active{
 	flex: 5;
@@ -27,6 +27,8 @@
     margin: auto;
     height: max-content;
 	transition: all 0.8s ease;
+	width: 50%;
+z-index: 1;
 }
 .head_one_txt{
 	font-weight:bold;

@@ -42,7 +42,7 @@ function HomePage(props) {
         return () => {
             window.removeEventListener("scroll", scrollCallBack);
         };
-    }, []);
+    }, [props.languages]);
 
     const getData = async () => {
         let result: any = await getHomePageProducts(props.languages, 12, '');

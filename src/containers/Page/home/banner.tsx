@@ -35,34 +35,41 @@ function HomeBanner(props) {
         }
     }
 
+    const someHandler = (i) => {
+        setActiveIndex(i);
+        const del = document.getElementById("delta");
+        del.classList.remove("featured");
+    }
 
     return (
         <div className="banner-wrap">
             <BrowserView>
                 <div className="gallery-wrap">
                     {banner && banner.banners.map((item, i) => {
-                        return (<div key={i} className={`item ${item.is_featured === 1 ? 'featured' : ''}`} onMouseEnter={() => setActiveIndex(i)}
-                            style={{ backgroundImage: `url(${imagePath + item.resource_path})`, height: '657px', width: '436px', flex: (activeIndex === i) ? 7 : 1 }} >
-                            {(activeIndex === i) && <> <div className="slider-text-inner"><div className="head_one_txt">Welcome to Our Marketplace</div>
-                                <h2 className="head_two_txt">{item.title}</h2>
-                                <div className="head_three_txt">{item.alt_text}</div>
-                                <div className="cta-dicover"><Link to="#"><IntlMessages id="banner.cta" /></Link></div></div></>}
-                        </div>)
+                        return (
+                            <div key={i} id={`${item.is_featured === 1 ? 'delta' : ''}`} className={`item ${item.is_featured === 1 ? 'featured' : ''}`} onMouseEnter={() => someHandler(i)}
+                                style={{ backgroundImage: `url(${imagePath + item.resource_path})`, height: '657px', width: '436px', flex: (activeIndex === i) ? 7 : 1 }} >
+                                {(activeIndex === i) && <> <div className="slider-text-inner"><div className="head_one_txt">Welcome to Our Marketplace</div>
+                                    <h2 className="head_two_txt">{item.title}</h2>
+                                    <div className="head_three_txt">{item.alt_text}</div>
+                                    <div className="cta-dicover"><Link to="#"><IntlMessages id="banner.cta" /></Link></div></div></>}
+                            </div>)
                     })}
                 </div>
             </BrowserView>
             <MobileView>
                 <Slider {...settings}>
                     {banner && banner.banners.map((item, i) => {
-                        return (<div key={i} className={`item ${item.is_featured === 1 ? 'featured' : ''}`} onMouseEnter={() => setActiveIndex(i)}
-                            style={{ backgroundImage: `url(${imagePath + item.resource_path})`, height: '657px', width: '436px', flex: (activeIndex === i) ? 7 : 1 }} >
-                            <img src={imagePath + item.resource_path} alt="" />
-                            <div className="slider-text-inner">
-                                <div className="head_one_txt">Welcome to Our Marketplace</div>
-                                <h2 className="head_two_txt">{item.title}</h2>
-                                <div className="head_three_txt">{item.alt_text}</div>
-                                <div className="cta-dicover"><Link to="#"><IntlMessages id="banner.cta" /></Link></div></div>
-                        </div>)
+                        return (
+                            <div key={i} className={`item ${item.is_featured === 1 ? 'featured' : ''}`} onMouseEnter={() => setActiveIndex(i)}
+                                style={{ backgroundImage: `url(${imagePath + item.resource_path})`, height: '657px', width: '436px', flex: (activeIndex === i) ? 7 : 1 }} >
+                                <img src={imagePath + item.resource_path} alt="" />
+                                <div className="slider-text-inner">
+                                    <div className="head_one_txt">Welcome to Our Marketplace</div>
+                                    <h2 className="head_two_txt">{item.title}</h2>
+                                    <div className="head_three_txt">{item.alt_text}</div>
+                                    <div className="cta-dicover"><Link to={item.link}><IntlMessages id="banner.cta" /></Link></div></div>
+                            </div>)
                     })}
                 </Slider>
             </MobileView>

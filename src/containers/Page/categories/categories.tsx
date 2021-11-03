@@ -15,6 +15,7 @@ import { useLocation } from 'react-router-dom';
 import { getCookie } from '../../../helpers/session';
 import cartAction from "../../../redux/cart/productAction";
 import AppBreadcrumbs from '../../partials/breadCrumbs';
+import { capitalize } from '../../../components/utility/allutils';
 const { getCategoryData } = cartAction;
 
 
@@ -58,7 +59,7 @@ function Categories(props) {
         //     console.log(urlPath)
         // }
         let urlPath = '';
-        if (category && subcat && childcat && greatchildcat) {            
+        if (category && subcat && childcat && greatchildcat) {
             urlPath = category + "/" + subcat + "/" + childcat + '/' + greatchildcat;
         } else if (category && subcat && childcat) {
             urlPath = category + "/" + subcat + "/" + childcat;
@@ -105,7 +106,24 @@ function Categories(props) {
             </div>
             <div className="section banner">
                 <CategoryBanner cateData={categories} ctId={categoryId} urls={urlPathLink} />
-                <AppBreadcrumbs />
+                <section>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                {/* <AppBreadcrumbs />  */}
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/products">Products</Link></li>
+                                    <li className="breadcrumb-item"><Link to={`/products/${category}`}>{category}</Link></li>
+                                    {subcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}`}>{capitalize(subcat)}</Link></li>)}
+                                    {childcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}/${childcat}`}>{capitalize(childcat)}</Link></li>)}
+                                    {greatchildcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}/${childcat}/${greatchildcat}`}>{capitalize(greatchildcat)}</Link></li>)}
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
             {localStorage.getItem('token') === '4' && <div className="section" >
                 <PriveExclusive />
