@@ -520,12 +520,12 @@ function ProductDetails(props) {
                                         </div>
                                     </div>
 
-                                    <div className="row my-3">
-                                        <div className="d-grid gap-2 d-md-flex justify-content-start">
-                                            <button type="button" className="btn btn-outline-primary me-4" onClick={() => {
+                                    <div className="my-3">
+                                        <div className="gap-2 justify-content-start">
+                                            <button type="button" className="send-a-gift-btn" onClick={() => {
                                                 handleGiftMEssage();
                                             }} > <IntlMessages id="product.sendAGift" /></button>
-                                            <button type="button" className="btn btn-outline-success" onClick={() => {
+                                            <button type="button" className="share-btn" onClick={() => {
                                                 handleClick();
                                             }} ><img src={ShareIcon} alt=""
                                                 className="pe-1" /> </button>

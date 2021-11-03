@@ -594,7 +594,7 @@ function MyProfile(props) {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-9">
+                        <div className="col-sm-12 mb-3">
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
@@ -652,7 +652,7 @@ function MyProfile(props) {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-9">
+                        <div className="col-sm-12 mb-3">
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
@@ -732,7 +732,7 @@ function MyProfile(props) {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-9">
+                        <div className="col-sm-12 mb-3">
                             <div className="row">
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">

@@ -4785,6 +4785,8 @@ margin: 0 0 5px !important;
 		.pdp-thumbnail-pre, .pdp-thumbnail-next{display:none;}
 		.product_details h1{font-size:20px;}
 		.product-sale_off{margin: 10px 0 !important;}
+		.releveant-slider .slick-dots{display:none !important;}
+		.checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link{margin-right: 15px;}
 
 	}
 
