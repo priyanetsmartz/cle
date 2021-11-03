@@ -139,13 +139,13 @@ function MyWishList(props) {
         }
     }
     return (
-        <div className="col-sm-9">
+        <div className="col-sm-9 my-wishlist-main">
             <div className="row" >
-                <div className="width-100">
+                <div className="width-100 wishlist-head">
                     <h1><IntlMessages id="Profile.Wishlist-title" /></h1>
                     <h2><IntlMessages id="Profile.Wishlist-subTitle" /></h2>
                 </div>
-                <div className="col-md-6 offset-md-3">
+                <div className="col-md-6">
                     <div className="row">
                         <div className="col-md-6">
                             <input type="text"
@@ -176,9 +176,9 @@ function MyWishList(props) {
                             <>
                                 {wishList && wishList.map(item => {
                                     return (
-                                        <div className="col-md-4" key={item.product_id}>
+                                        <div className="col-md-4 position-relative" key={item.product_id}>
                                             <span onClick={() => handleDelWhishlist(item.wishlist_item_id)} className="bg-remove">{delWishlist === item.wishlist_item_id ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-times" aria-hidden="true"></i>}</span>
-                                            <div className="product py-4">
+                                            <div className="product p-4">
                                                 <div className="text-center">
                                                     <img src={item.img_src} alt={item.name} width="200" />
                                                     {/* need sku from api  */}

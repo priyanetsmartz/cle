@@ -28,7 +28,7 @@ const ProductImages = (props) => {
     return (
         <div className="row">
             <div className="col-sm-2">
-                <button onClick={scrolldown}>Pre</button>
+            <button onClick={scrolldown} className="pdp-thumbnail-pre"><i className="fas fa-chevron-up"></i></button>
                 <div className="product-img-slider" id="inner">
                     {productImage.map((img, i) => {
                         return (
@@ -36,7 +36,7 @@ const ProductImages = (props) => {
                         );
                     })}
                 </div>
-                <button onClick={scrollup}>Next</button>
+                <button onClick={scrollup} className="pdp-thumbnail-next"><i className="fas fa-chevron-down"></i></button>
             </div>
             <div className="col-sm-10 img-container">
                 {

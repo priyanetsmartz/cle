@@ -142,6 +142,19 @@ top: 30%;
 .social-menu-head{
 	font-family: "Greta Arabic Regular" !important;
 }
+
+.time-is-now svg text#YOUR{
+	fill: #fff;
+stroke: none;
+}
+.page-head svg text {
+    fill: #2e2baa;
+    stroke: none;
+}
+.social-title{
+	margin: -55px auto 0;
+}
+
 @media (min-width: 360px) and (max-width: 768px){
 	.home-inner-text figure.time-is-now{width: 75%;right: 0%;}
 	.container {
@@ -233,7 +246,7 @@ margin-bottom: 10px;
 
 .header-mvp{direction: rtl;}
 .select-wearing ul li{float: right;}
-.select-wearing ul li ul{right: 0; left:auto;}
+.select-wearing ul li ul{right: 0; left:auto;top: 50px;}
 .select-wearing ul li ul li{float: right;}
 .megamenu_bar{right: 0; left:auto;}
 .megamenu_bar ul.megamenugrid{float: right;}
@@ -250,5 +263,14 @@ text-align: right;}
     text-align: right;
 }
 .minitotl_amnt .minicart_amount{text-align: left;}
+.slider-text-inner {right: 60px;left:auto; text-align:right;}
+.slick-list{direction: rtl;}
+.discover-bg{direction: rtl;}
+.discover-bg::before{left: auto;right: 0;}
+.discoverleft{width: 85%;padding: 116px 0px 90px 130px;}
+.list-prodctsale .accordion-item .accordion-button::after{margin-left: 0;margin-right: auto;}
+.list-prodctsale .accordion-button .list-number{float: right;margin-right: 0;margin-left: 15px;}
+
+.become-part-inner{text-align: right;}
 
 

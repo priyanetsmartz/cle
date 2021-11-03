@@ -309,7 +309,7 @@ function CartItemPage(props) {
                                                                         </div>
                                                                     </div>
                                                                     <div className="cart-pro-price">${item.price}</div>
-                                                                    <div className="pro-name-tag"  >
+                                                                    <div className="pro-remove-tag"  >
                                                                         {/* <p className="float-start">Ready tp ship to the contiguous SA in 1-14 days</p> */}
                                                                         <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" >{isShow === item.item_id ? "Removing....." : <IntlMessages id="cart.remove" />}</Link>
                                                                     </div>

@@ -150,7 +150,7 @@ function HeaderMenu(props) {
             )}
             <div className="container header-mvp" id="header-mvp">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
-                    <div className="col-6 pt-1">
+                    <div className="col-5 pt-1">
                         <div className="select-wearing">
                             {menuData.length > 0 && (
                                 <ul>
@@ -199,7 +199,7 @@ function HeaderMenu(props) {
                             )}
                         </div>
                     </div>
-                    <div className="col-1">
+                    <div className="col-2">
                         <div className="cli_logo">
                             <Link className=" me-2" to="/">
                                 <img src={CLELogo} className="img-fluid" alt="logo" />

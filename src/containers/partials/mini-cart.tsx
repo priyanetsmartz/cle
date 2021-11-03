@@ -103,7 +103,7 @@ function MiniCart(props) {
                         </div>
                     ) : ""}
                 <div className="width-100">
-                    <div className="d-grid">
+                    <div className="d-grid mini-cart-btn">
                         <Link to="/my-cart" className="btn btn-secondary" type="button"><IntlMessages id="cart.menu" /></Link>
                         <br />
                         {cartItemsVal && cartItemsVal['items'] && cartItemsVal['items'].length ?

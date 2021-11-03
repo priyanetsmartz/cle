@@ -35,7 +35,7 @@ function Filters(props) {
                             <li className="mb-3">
                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                     data-bs-target="#home-collapse" aria-expanded="true">
-                                    Category
+                                    Category <i className="fas fa-chevron-up"></i>
                                 </button>
                                 <div className="collapse show" id="home-collapse">
                                     <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -54,7 +54,7 @@ function Filters(props) {
                             <li className="mb-3">
                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                     data-bs-target="#dashboard-collapse" aria-expanded="false">
-                                    Designers
+                                    Designers <i className="fas fa-chevron-up"></i>
                                 </button>
                                 <div className="collapse" id="dashboard-collapse">
                                     <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -73,7 +73,7 @@ function Filters(props) {
                             <li className="mb-3">
                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                     data-bs-target="#orders-collapse" aria-expanded="false">
-                                    Color
+                                    Color <i className="fas fa-chevron-up"></i>
                                 </button>
                                 <div className="collapse" id="orders-collapse">
                                     <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -92,7 +92,7 @@ function Filters(props) {
                             <li className="mb-3">
                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                     data-bs-target="#account-collapse" aria-expanded="false">
-                                    Watches size
+                                    Watches size <i className="fas fa-chevron-up"></i>
                                 </button>
                                 <div className="collapse" id="account-collapse">
                                     <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -112,7 +112,7 @@ function Filters(props) {
                             <li className="mb-3">
                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                     data-bs-target="#account-collapse" aria-expanded="false">
-                                    Jewelry size
+                                    Jewelry size <i className="fas fa-chevron-up"></i>
                                 </button>
                                 <div className="collapse" id="account-collapse">
                                     <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -132,7 +132,7 @@ function Filters(props) {
                             <li className="mb-3">
                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                     data-bs-target="#account-collapse" aria-expanded="false">
-                                    Accessories size
+                                    Accessories size <i className="fas fa-chevron-up"></i>
                                 </button>
                                 <div className="collapse" id="account-collapse">
                                     <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -152,7 +152,7 @@ function Filters(props) {
                             <li className="mb-3">
                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                     data-bs-target="#account-collapse" aria-expanded="false">
-                                    Clothes size
+                                    Clothes size <i className="fas fa-chevron-up"></i>
                                 </button>
                                 <div className="collapse" id="account-collapse">
                                     <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -172,7 +172,7 @@ function Filters(props) {
                             <li className="mb-3">
                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                     data-bs-target="#account-collapse" aria-expanded="false">
-                                    Prices
+                                    Prices <i className="fas fa-chevron-up"></i>
                                 </button>
                                 <div className="collapse" id="account-collapse">
                                     <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -191,7 +191,7 @@ function Filters(props) {
                             <li className="mb-3">
                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                     data-bs-target="#account-collapse" aria-expanded="false">
-                                    Release years
+                                    Release years <i className="fas fa-chevron-up"></i>
                                 </button>
                                 <div className="collapse" id="account-collapse">
                                     <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
