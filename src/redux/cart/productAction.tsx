@@ -19,6 +19,9 @@ const actions = {
     GET_ATTRIBUTES_PRODUCTS: 'GET_ATTRIBUTES_PRODUCTS',
     CHECKOUT_SIDEBAR: 'CHECKOUT_SIDEBAR',
     GET_CATEGORY_DATA: 'GET_CATEGORY_DATA',
+    SET_LOADER_PRODUCTS: 'SET_LOADER_PRODUCTS',
+    SET_SORTING_PRODUCTS: 'SET_SORTING_PRODUCTS',
+    SET_PAGESIZE: 'SET_PAGESIZE',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -95,6 +98,19 @@ const actions = {
         type: actions.GET_CATEGORY_DATA,
         payload
     }),
+    loaderProducts: loading => ({
+        type: actions.SET_LOADER_PRODUCTS,
+        loading
+    }),
+    sortingFilterProducts: payload => ({
+        type: actions.SET_SORTING_PRODUCTS,
+        payload
+    }),
+    setPageFilter: payload => ({
+        type: actions.SET_PAGESIZE,
+        payload
+    })
+    
 
 };
 export default actions;

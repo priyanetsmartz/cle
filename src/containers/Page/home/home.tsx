@@ -25,7 +25,7 @@ function HomePage(props) {
         customerProducts: []
     });
     useEffect(() => {
-        props.showLoader(true)
+       // props.showLoader(true)
         const header = document.getElementById("headerrr");
         const sticky = header.offsetTop;
         const scrollCallBack: any = window.addEventListener("scroll", () => {

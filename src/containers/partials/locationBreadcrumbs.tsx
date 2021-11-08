@@ -28,7 +28,8 @@ function Breadcrumbs(props) {
 
     return (
         <nav aria-label="breadcrumb" className="new-breadcrumb">
-            {(location.pathname !== "/home") && (<ol className="breadcrumb">
+            {(location.pathname !== "/home") && (
+            <ol className="breadcrumb">
                 <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                 {breadcrumsState.map((local, j) => {
                     //       console.log(local)              

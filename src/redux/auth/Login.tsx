@@ -72,9 +72,9 @@ class Login {
       return Api.request(`rest/V1/guest-carts/${cartQuoteToken}`, cartData, "PUT", "")
     } else {
       return AdminApi.request(`rest/V1/customers/${localToken}/carts`, "", "POST", "")
+
+      // return Api.request(`rest/V1/carts/mine`, '', 'GET', "")
     }
-
-
   }
 
 }

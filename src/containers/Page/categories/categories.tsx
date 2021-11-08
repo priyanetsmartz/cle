@@ -114,7 +114,7 @@ function Categories(props) {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item"><Link to="/products">Products</Link></li>
-                                    <li className="breadcrumb-item"><Link to={`/products/${category}`}>{category}</Link></li>
+                                    <li className="breadcrumb-item"><Link to={`/products/${category}`}>{capitalize(category)}</Link></li>
                                     {subcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}`}>{capitalize(subcat)}</Link></li>)}
                                     {childcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}/${childcat}`}>{capitalize(childcat)}</Link></li>)}
                                     {greatchildcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}/${childcat}/${greatchildcat}`}>{capitalize(greatchildcat)}</Link></li>)}

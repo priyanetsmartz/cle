@@ -17,7 +17,7 @@ import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { useLocation } from 'react-router-dom';
 import { getWeChooseForYou } from '../../../redux/pages/customers';
 import Login from '../../../redux/auth/Login';
-
+import { siteConfig } from '../../../settings/index'
 const loginApi = new Login();
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
@@ -258,7 +258,7 @@ function LatestProducts(props) {
                                                                     <div className="product_name"> {item.name} </div>
                                                                     <div className="product_vrity" dangerouslySetInnerHTML={{ __html: description }} />
                                                                     {/* <div className="product_vrity">{item.short_description}</div> */}
-                                                                    <div className="product_price">$ {formatprice(item.price)}</div>
+                                                                    <div className="product_price"> {siteConfig.currency} {formatprice(item.price)}</div>
                                                                     <div className="cart-button mt-3 px-2">
                                                                         {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                                             <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}

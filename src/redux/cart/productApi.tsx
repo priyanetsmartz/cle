@@ -92,26 +92,36 @@ export function getProductsFilterRest(category_id: number, language: string) {
 
 }
 
-export function getProductsFilterRestCollection(category_id: number, language: string) {
+export function getProductsFilterRestCollection(category_id: number, language: string, sorting,pageSize) {
     var storeId = language === 'english' ? 'en' : 'ar';
-    let priceLow = 0, priceHigh = 100;
-    let data = '{products(filter:{category_id:{ eq: "' + category_id + '" },price:{from: "' + priceLow + '", to: "' + priceHigh + '" } }, pageSize: 10){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page}}}';
+    let data = '{products(filter:{category_id:{ eq: "' + category_id + '" } }, pageSize: '+pageSize+',sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+
     let query = {
         "query": data,
         "storeCode": storeId,
     }
-    // let newdd = JSON.stringify(query);
-    // let str = newdd.replace(/\\/g, '');
-    // let str1= str.replace(/\\/g, '');
-    // let query1 = ({
-    //     "query": str1,
-    //     "storeCode": storeId,
-    // })
-
-
     return APi.request(`rest/all/V1/product/filtersCollection`, query, "POST", "");
-
 }
+
+export function getProductsFilterRestCollectionProducts(category_id: number, language: string, attribute = '', value = '', sorting,pageSize) {
+    var storeId = language === 'english' ? 'en' : 'ar';
+    let priceLow = 0, priceHigh = 100;
+    let data = '';
+    if (attribute === 'price') {
+        data = '{products(filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ':{from: "' + priceLow + '", to: "' + priceHigh + '" } }, pageSize: '+pageSize+',sort:{' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+    } else if (attribute === 'category_id') {
+        data = '{products(filter:{category_id:{ eq: "' + value + '" } }, pageSize: '+pageSize+',sort:{' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+    } else {
+        data = '{products(filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ': { eq:"' + value + '" } }, pageSize: '+pageSize+',sort:{' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+    }
+
+    let query = {
+        "query": data,
+        "storeCode": storeId,
+    }
+    return APi.request(`rest/all/V1/product/filtersCollection`, query, "POST", "");
+}
+
 export function getProductFilter(category_id: number) {
 
     const data = {

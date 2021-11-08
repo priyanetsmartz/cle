@@ -1,10 +1,9 @@
-const apiUrl = '';
 export default {
-  apiUrl
+  apiUrl: '',
 };
 const siteConfig = {
   siteName: 'CLE',
-  currency: '$',
+  currency: 'SR ',
   siteIcon: 'ion-flash',
   footerText: 'CLE ©' + (new Date()).getFullYear(),
   facebookLink: 'https://www.facebook.com/werecle',

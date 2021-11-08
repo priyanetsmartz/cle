@@ -8,6 +8,7 @@ import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart } from 
 import Login from '../../../redux/auth/Login';
 import cartAction from "../../../redux/cart/productAction";
 import notification from '../../../components/notification';
+import { siteConfig } from '../../../settings';
 const { addToCartTask } = cartAction;
 const loginApi = new Login();
 function NewIn(props) {
@@ -139,7 +140,7 @@ function NewIn(props) {
                                                 <div className="product_name"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                 <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }} />
                                                 {/* <div className="product_vrity">{item.short_description}</div> */}
-                                                <div className="product_price">$ {formatprice(item.price)}</div>
+                                                <div className="product_price">{siteConfig.currency}  {formatprice(item.price)}</div>
                                                 <div className="cart-button mt-3 px-2">
                                                     {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                         <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}

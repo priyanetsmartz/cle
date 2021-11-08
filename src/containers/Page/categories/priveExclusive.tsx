@@ -5,6 +5,7 @@ import { getPriveExclusiveProducts } from '../../../redux/cart/productApi';
 import cartAction from "../../../redux/cart/productAction";
 import Slider from "react-slick";
 import { formatprice } from '../../../components/utility/allutils';
+import { siteConfig } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { getCookie } from '../../../helpers/session';
 
@@ -77,7 +78,7 @@ function PriveExclusive(props) {
                                                             <h4>{item.name}</h4>
                                                             <p></p>
                                                             <div className="pro-price-btn">
-                                                                ${formatprice(item.price)}
+                                                            {siteConfig.currency} {formatprice(item.price)}
                                                                 <Link to={'/product-details/' + item.sku}>View Product</Link></div>
                                                         </div>
                                                     </div>

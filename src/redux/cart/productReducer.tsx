@@ -15,7 +15,10 @@ const initState = {
     recomended: [],
     checkout_sidebar: {
         checkData: {}, items: {}, address: {}, shippingAddress: 0, shippingData: {}
-    }
+    },
+    prods: false,
+    filters: { sortBy: 'price', sortByValue: "DESC" },
+    pageeSize: 12
 }
 
 
@@ -33,7 +36,7 @@ const cartReducer = (state = initState, action) => {
         case actions.OPEN_GIFT_BOX:
             return { ...state, openGiftBox: action.isOpen };
         case actions.ADD_TO_WISHLIST_TASK_NEw:
-          //  console.log('sadff', action.isShow, state);
+            //  console.log('sadff', action.isShow, state);
             return { ...state, addToWishlist: action.isShow };
         case actions.ACCOUNT_SECTION:
             return { ...state, openAccountPop: action.isShow };
@@ -53,6 +56,12 @@ const cartReducer = (state = initState, action) => {
             return { ...state, checkout_sidebar: action.payload };
         case actions.GET_CATEGORY_DATA:
             return { ...state, category_data: action.payload };
+        case actions.SET_LOADER_PRODUCTS:
+            return { ...state, prods: action.loading };
+        case actions.SET_SORTING_PRODUCTS:
+            return { ...state, filters: action.payload };
+        case actions.SET_PAGESIZE:
+            return { ...state, pageeSize: action.payload };
         default:
             return state;
     }

@@ -8,7 +8,7 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { Slider } from 'antd';
 import { getCookie } from '../../../helpers/session';
 import { useIntl } from 'react-intl';
-
+import { siteConfig } from '../../../settings/index'
 
 
 function OrdersAndReturns(props) {
@@ -24,7 +24,7 @@ function OrdersAndReturns(props) {
     const intl = useIntl();
     useEffect(() => {
         getData(pageSize);
-    }, [pageSize]);
+    }, [pageSize, props.languages]);
 
     const getData = async (pageSize) => {
         setLoaderOrders(true);
@@ -151,10 +151,10 @@ function OrdersAndReturns(props) {
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.date" />:</span>
                                         <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
-                                            <option value="">Select</option>
-                                            <option value="1">Last Month</option>
-                                            <option value="3">Last 3 Months</option>
-                                            <option value="6">Last 6 Months</option>
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
+                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
+                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
                                             <option value="2021">2021</option>
                                         </select>
                                     </div>
@@ -215,9 +215,9 @@ function OrdersAndReturns(props) {
                                                 <div className="sortbyfilter">
 
                                                     <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
-                                                        <option value="">SortBy</option>
-                                                        <option value="ASC">Price - Low to High</option>
-                                                        <option value="DESC">Price - High to Low</option>
+                                                        <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                                        <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                                        <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -285,7 +285,7 @@ function OrdersAndReturns(props) {
 
                                                                         <div className="products">
                                                                             <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                                                            <div className="labl_text"> {item.grand_total}</div>
+                                                                            <div className="labl_text">{siteConfig.currency} {item.grand_total}</div>
                                                                         </div>
                                                                     </div>
 
@@ -381,9 +381,15 @@ function OrdersAndReturns(props) {
 
 
 function mapStateToProps(state) {
+    let languages = ''
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+
     return {
+        languages: languages,
         state: state
-    };
+    }
 };
 export default connect(
     mapStateToProps

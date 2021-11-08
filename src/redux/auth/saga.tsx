@@ -51,13 +51,13 @@ export function* loginRequest() {
           localStorage.setItem('token_email', token.data[0].email);
           localStorage.setItem('token_name', token.data[0].firstname + ' ' + token.data[0].lastname);
           localStorage.setItem('token', token.data[0].group_id);
-          const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
-          //console.log(cartToken);
-          if (cartToken.data === true) {
-            localStorage.removeItem('cartQuoteToken');
-          } else {
-            localStorage.setItem('cartQuoteId', cartToken.data);
-          }
+          // const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
+          // //console.log(cartToken);
+          // if (cartToken.data === true) {
+          //   localStorage.removeItem('cartQuoteToken');
+          // } else {
+          //   localStorage.setItem('cartQuoteId', cartToken.data.id);
+          // }
 
           yield put({
             type: appAction.SHOW_SIGHNIN,

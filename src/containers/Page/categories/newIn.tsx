@@ -15,6 +15,7 @@ import { useLocation } from 'react-router-dom';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import Login from '../../../redux/auth/Login';
 import cartAction from "../../../redux/cart/productAction";
+import { siteConfig } from '../../../settings/index'
 const loginApi = new Login();
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
@@ -177,7 +178,7 @@ function NewIn(props) {
                                                     onMouseLeave={() => someOtherHandler(item.id)}>
 
                                                     {
-                                                        item.custom_attributes.map((attributes) => {
+                                                        item.custom_attributes && item.custom_attributes.length > 0 && item.custom_attributes.map((attributes) => {
                                                             if (attributes.attribute_code === 'image') {
                                                                 imageD = attributes.value;
                                                             }
@@ -194,7 +195,7 @@ function NewIn(props) {
                                             <div className="about text-center">
                                                 <h5>{item.name}</h5>
                                                 <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
-                                                <div className="pricetag">${formatprice(item.price)}</div>
+                                                <div className="pricetag">{siteConfig.currency} {formatprice(item.price)}</div>
                                             </div>
                                             {/* {token && ( */}
                                             <div className="cart-button mt-3 px-2">

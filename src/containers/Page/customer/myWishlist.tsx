@@ -8,10 +8,14 @@ import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, remove
 import cartAction from "../../../redux/cart/productAction";
 import IntlMessages from "../../../components/utility/intlMessages";
 import Login from '../../../redux/auth/Login';
+import { useIntl } from 'react-intl';
+import { siteConfig } from '../../../settings';
 const { addToWishlistTask, addToCartTask } = cartAction;
+
 const loginApi = new Login();
 
 function MyWishList(props) {
+    const intl = useIntl();
     const [isShow, setIsShow] = useState(false);
     const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [delWishlist, setDelWishlist] = useState(0);
@@ -37,7 +41,7 @@ function MyWishList(props) {
             setDelWishlist(0)
             setSortBy('asc')
         }
-    }, [props.items])
+    }, [props.items, props.languages])
 
     const getData = async () => {
         setLoaderOrders(true)
@@ -73,6 +77,7 @@ function MyWishList(props) {
 
     const sortHandler = (e) => {
         setSortOrder(e.target.value);
+        setSortBy('price')
         getData();
     }
 
@@ -157,10 +162,9 @@ function MyWishList(props) {
                         </div>
                         <div className="col-md-6">
                             <select value={sortOrder} onChange={sortHandler} className="form-control">
-                                <option value=""><IntlMessages id="order.orderNo" />:</option>
-                                <option value="asc"><IntlMessages id="filterPriceAsc" /></option>
-                                <option value="desc"><IntlMessages id="filterPriceDesc" /></option>
-
+                                <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
                             </select>
                         </div>
                     </div>
@@ -191,7 +195,7 @@ function MyWishList(props) {
                                                 <div className="about text-center">
                                                     <h5>{item.name}</h5>
                                                     <div className="tagname" dangerouslySetInnerHTML={{ __html: item.description }} />
-                                                    <div className="pricetag">${formatprice(item.price)}</div>
+                                                    <div className="pricetag">{siteConfig.currency} {formatprice(item.price)}</div>
                                                 </div>
 
                                             </div>
@@ -211,9 +215,9 @@ function MyWishList(props) {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
-        items: state.Cart.addToWishlist
+        items: state.Cart.addToWishlist,
+        languages: state.LanguageSwitcher.language
     }
 }
 

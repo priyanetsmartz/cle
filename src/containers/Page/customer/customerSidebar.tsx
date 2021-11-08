@@ -81,7 +81,7 @@ function Customer(props) {
                                     <ul>
                                         <li className={activeTab === 'dashboard' ? 'active' : ''} >
                                             <Link to="#" onClick={() => changeTab('dashboard')} className={isPriveUser ? 'prive-txt' : ''}>
-                                                <img src={dashboardIcon} alt="" className="img-fluid" />
+                                                <i className="fas fa-columns"></i>
                                                 <span className="pl-2">
                                                     <IntlMessages id="customer.dashboard" />
                                                 </span>
@@ -89,7 +89,7 @@ function Customer(props) {
                                         </li>
                                         <li className={activeTab === 'orders-and-returns' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('orders-and-returns')} className={isPriveUser ? 'prive-txt' : ''}>
-                                                <img src={ordersIcon} alt="" className="img-fluid" />
+                                                <i className="fas fa-box"></i>
                                                 <span className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span>
                                             </Link>
                                         </li>
@@ -104,13 +104,13 @@ function Customer(props) {
                                         </li> */}
                                         <li className={activeTab === 'wish-list' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('wish-list')} className={isPriveUser ? 'prive-txt' : ''}>
-                                                <img src={wishlistIcon} alt="" className="img-fluid" />
+                                                <i className="fas fa-heart"></i>
                                                 <span className="pl-2"><IntlMessages id="customer.myWishlist" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'profile' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('profile')} className={isPriveUser ? 'prive-txt' : ''}>
-                                                <img src={profileIcon} alt="" className="img-fluid" />
+                                                <i className="fas fa-user"></i>
                                                 <span className="pl-2"> <IntlMessages id="customer.myProfile" /></span>
                                             </Link>
                                         </li>
@@ -122,7 +122,7 @@ function Customer(props) {
                                         </li> */}
                                         <li className={activeTab === 'support' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('support')} className={isPriveUser ? 'prive-txt' : ''}>
-                                                <img src={supportIcon} alt="" className="img-fluid" />
+                                                <i className="fas fa-phone-alt"></i>
                                                 <span className="pl-2"><IntlMessages id="customer.mySupport" /></span>
                                             </Link>
                                         </li>

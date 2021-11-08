@@ -14,6 +14,7 @@ import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+import { siteConfig } from '../../../settings';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
@@ -167,7 +168,7 @@ function PromotedProducts(props) {
                                                     <div className="about text-center">
                                                         <h5>{item.name}</h5>
                                                         <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />...
-                                                        <div className="pricetag">${formatprice(item.price)}</div>
+                                                        <div className="pricetag">{siteConfig.currency} {formatprice(item.price)}</div>
                                                     </div>
                                                     {/* {token && ( */}
                                                     <div className="cart-button mt-3 px-2">

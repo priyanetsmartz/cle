@@ -72,7 +72,7 @@ function BestSeller(props) {
     }, [props.languages]);
 
     const getData = async (catId) => {
-        console.log(catId)
+       // console.log(catId)
         let result: any = await getHomePageProducts(props.languages, 12, catId);
         let customer_id = localStorage.getItem('cust_id');
         if (result) {

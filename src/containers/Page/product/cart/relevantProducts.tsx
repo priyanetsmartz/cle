@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { getCookie } from '../../../../helpers/session';
 import { getCartRelevantProducts } from '../../../../redux/cart/productApi';
 import IntlMessages from "../../../../components/utility/intlMessages";
+import { siteConfig } from '../../../../settings';
 function RelevantProducts(props) {
     const [relevs, setRelevs] = useState([]);
     const language = getCookie('currentLanguage');
@@ -83,7 +84,7 @@ function RelevantProducts(props) {
                                                 "width": "180px", "height": "192px"
                                             }} ><img src={product.img} className="image-fluid" style={{ "width": "100%" }} alt={product.name} /> </div>
                                             <div className="product_name"> {product.name} </div>
-                                            <div className="product_price"> ${formatprice(product.price)}</div>
+                                            <div className="product_price">{siteConfig.currency} {formatprice(product.price)}</div>
                                         </div>
                                     </Link>
                                 )

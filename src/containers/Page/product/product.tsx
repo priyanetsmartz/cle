@@ -13,11 +13,12 @@ import Filter from './filter';
 import { formatprice } from '../../../components/utility/allutils';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import Login from '../../../redux/auth/Login';
+import { siteConfig } from '../../../settings/index'
 const commonFunctions = new CommonFunctions();
 const loginApi = new Login();
 const baseUrl = commonFunctions.getBaseUrl();
 const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
-const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
+const { addToCart, productList, addToCartTask, addToWishlistTask, sortingFilterProducts, setPageFilter } = cartAction;
 const { showSignin } = appAction;
 
 
@@ -44,16 +45,24 @@ function Products(props) {
 
     useEffect(() => {
         let catID = getCookie("_TESTCOOKIE");
-
         const localToken = localStorage.getItem('token');
         setToken(localToken)
-        getProducts(catID);
+        //   getProducts(catID);
 
         return () => {
             props.addToCartTask(false);
             props.addToWishlistTask(true);
         }
     }, [sortValue, page, pageSize, props.languages, location])
+
+    useEffect(() => {
+        if (props.prodloader === true) {
+            setOpacity(0.3);
+        } else {
+            setOpacity(1);
+        }
+
+    }, [props.prodloader])
 
     async function getProducts(catID) {
         let lang = props.languages ? props.languages : language;
@@ -74,13 +83,16 @@ function Products(props) {
             let whishlist: any = await getWhishlistItemsForUser();
             let products = result.data.items;
             let WhishlistData = whishlist.data;
-            const mergeById = (a1, a2) =>
-                a1.map(itm => ({
-                    ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
-                    ...itm
-                }));
+            if (WhishlistData && WhishlistData.length > 0) {
+                const mergeById = (a1, a2) =>
+                    a1.map(itm => ({
+                        ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
+                        ...itm
+                    }));
 
-            productResult = mergeById(products, WhishlistData);
+                productResult = mergeById(products, WhishlistData);
+            }
+
 
         }
         setOpacity(1);
@@ -89,17 +101,18 @@ function Products(props) {
     }
     const filtterData = (event) => {
         let sortBy = "created_at";
-        let sortByValue = "desc";
+        let sortByValue = "DESC";
         if (event.target.value === "1") {
             sortBy = "price";
-            sortByValue = "desc";
+            sortByValue = "DESC";
         } else if (event.target.value === "2") {
             sortBy = "price";
-            sortByValue = "asc";
+            sortByValue = "ASC";
         }
 
         setSort(event.target.value);
-        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
+        //   setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
+        props.sortingFilterProducts({ sortBy: sortBy, sortByValue: sortByValue })
 
     }
 
@@ -140,8 +153,9 @@ function Products(props) {
             getProducts(catID)
         }
     }
-    const handlePageSize = (page) => {
+    const handlePageSize = (page:number) => {
         setPageSize(page)
+        props.setPageFilter(page)
     }
     const getPaginationGroup = () => {
         let start = Math.floor((page - 1) / 4) * 4;
@@ -189,7 +203,7 @@ function Products(props) {
         //console.log(cartQuoteIdLocal)
         if (cartQuoteIdLocal || customer_id) {
             let customerCart: any = await loginApi.genCartQuoteID(customer_id)
-            cartQuoteId = cartQuoteIdLocal
+            cartQuoteId = cartQuoteIdLocal;
             if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
                 cartQuoteId = customerCart.data;
             }
@@ -275,68 +289,69 @@ function Products(props) {
                                     </div>
                                 </div>
                             </div>
+                            {props.items.length > 0 ?
+                                <div className="product-listing" style={{ 'opacity': opacity }}>
+                                    <div className="row g-2">
+                                        {props.items.map(item => {
+                                            // console.log(item)
+                                            return (
+                                                <div className="col-md-4" key={item.id}>
+                                                    {/* <Link to={'/product-details/' + item.sku}> */}
+                                                    <div className="product py-4">
 
-                            <div className="product-listing" style={{ 'opacity': opacity }}>
-                                <div className="row g-2">
-                                    {props.items.map(item => {
-                                        return (
-                                            <div className="col-md-4" key={item.id}>
-                                                {/* <Link to={'/product-details/' + item.sku}> */}
-                                                <div className="product py-4">
+                                                        <span className="off bg-favorite">
+                                                            {!item.wishlist_item_id && (
+                                                                <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
+                                                                </div>
+                                                            )}
 
-                                                    <span className="off bg-favorite">
-                                                        {!item.wishlist_item_id && (
-                                                            <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
-                                                            </div>
-                                                        )}
+                                                            {item.wishlist_item_id && (
+                                                                <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
+                                                                </div>
+                                                            )}
+                                                        </span>
 
-                                                        {item.wishlist_item_id && (
-                                                            <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
-                                                            </div>
-                                                        )}
-                                                    </span>
-
-                                                    <div className="text-center" onMouseEnter={() => someHandler(item.id)}
-                                                        onMouseLeave={() => someOtherHandler(item.id)}>
-                                                        {
-                                                            item.custom_attributes.map((attributes) => {
-                                                                if (attributes.attribute_code === 'image') {
-                                                                    imageD = attributes.value;
-                                                                }
-                                                                if (attributes.attribute_code === 'short_description') {
-                                                                    description = attributes.value;
-                                                                }
-                                                            })
-                                                        }
-                                                        <Link to={'/product-details/' + item.sku}>
-                                                            {isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD} className="image-fluid" alt={item.name} height="150" />
-                                                            }</Link>
-                                                    </div>
-                                                    <div className="about text-center">
-                                                        <h5>{item.name}</h5>
-                                                        <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
-                                                        <div className="pricetag">${formatprice(item.price)}</div>
-                                                    </div>
-                                                    {/* {item.type_id === 'simple' && (
+                                                        <div className="text-center" onMouseEnter={() => someHandler(item.id)}
+                                                            onMouseLeave={() => someOtherHandler(item.id)}>
+                                                            {
+                                                                item.custom_attributes && item.custom_attributes.length > 0 && item.custom_attributes.map((attributes) => {
+                                                                    if (attributes.attribute_code === 'image') {
+                                                                        imageD = attributes.value;
+                                                                    }
+                                                                    if (attributes.attribute_code === 'short_description') {
+                                                                        description = attributes.value;
+                                                                    }
+                                                                })
+                                                            }
+                                                            <Link to={'/product-details/' + item.sku}>
+                                                                {isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries && item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD ? imageD : item.image.url} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD ? imageD : item.image.url} className="image-fluid" alt={item.name} height="150" />
+                                                                }</Link>
+                                                        </div>
+                                                        <div className="about text-center">
+                                                            <h5>{item.name}</h5>
+                                                            <div className="tagname" dangerouslySetInnerHTML={{ __html: description ? description : item.short_description.html ? item.short_description.html : '' }} />
+                                                            <div className="pricetag"> {siteConfig.currency}{formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)}</div>
+                                                        </div>
+                                                        {/* {item.type_id === 'simple' && (
                                                         <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>
                                                         </div>
                                                     )}
                                                     {item.type_id === 'configurable' && ( */}
-                                                    <div className="cart-button mt-3 px-2">
-                                                        {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
-                                                            <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+                                                        <div className="cart-button mt-3 px-2">
+                                                            {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                                <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
+                                                        </div>
+                                                        {/* )} */}
 
                                                     </div>
-                                                    {/* )} */}
-
+                                                    {/* </Link> */}
                                                 </div>
-                                                {/* </Link> */}
-                                            </div>
-                                        )
-                                    })}
+                                            )
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
-
+                                : <IntlMessages id="NotFound" />}
                             <div className="resltspage_sec footer-pagints">
                                 <div className="paginatn_result">
                                     <span>Results per page</span>
@@ -381,7 +396,7 @@ function Products(props) {
                 <Recomendations />
             </section>
 
-            <section className="my_profile_sect check-als mb-5">
+            {/* <section className="my_profile_sect check-als mb-5">
                 <div className="container">
 
                     <div className="row">
@@ -411,7 +426,7 @@ function Products(props) {
 
 
                 </div>
-            </section>
+            </section> */}
 
             {/* <section className="my-5">
                 <div className="container">
@@ -437,18 +452,22 @@ function Products(props) {
     )
 }
 const mapStateToProps = (state) => {
-    let languages = '';
+    let languages = '', load = '';
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
+    }
+    if (state && state.Cart) {
+        load = state.Cart.prods
     }
     return {
         items: state.Cart.items,
         wishlist: state.Cart.addToWishlistTask,
-        languages: languages
+        languages: languages,
+        prodloader: load
     }
 }
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList, addToCartTask, addToWishlistTask, showSignin }
+    { addToCart, productList, addToCartTask, addToWishlistTask, showSignin, sortingFilterProducts, setPageFilter }
 )(Products);

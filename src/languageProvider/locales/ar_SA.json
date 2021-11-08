@@ -385,8 +385,13 @@
   "errorNewEmailUpdate": "خطأ أثناء تحديث عنوان بريدك الإلكتروني!",
   "searchPlaceholder": "بحث...",
   "searchCategory": "اختر الفئة",
+  "sorting": "صنف حسب",
   "filterPriceDesc":"السعر الاعلى الى الادنى",
   "filterPriceAsc":"السعر من الارخص للاعلى",
   "searchorderid":"ابحث في معرف الطلب الخاص بك هنا ....",
-  "banner.cta":"يكتشف"
+  "banner.cta":"يكتشف",
+  "select": "تحديد",
+  "last_month": "الشهر الماضي",
+  "lastthree": "آخر 3 أشهر",
+  "lastsix": "آخر 6 أشهر"
 }

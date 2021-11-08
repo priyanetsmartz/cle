@@ -5,6 +5,7 @@ import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import avatar from '../../image/avtar.svg';
 import favorit from '../../image/favrot.svg';
 import bell from '../../image/bell-solid.svg';
+import { BrowserView, MobileView } from 'react-device-detect';
 import { Link, useParams } from "react-router-dom";
 import { menu } from '../../redux/pages/allPages';
 import { useHistory } from "react-router";
@@ -30,6 +31,7 @@ function HeaderMenu(props) {
     let customerName = localStorage.getItem('token_name')
     const { category, key_url } = useParams();
     const [isLoaded, setIsLoaded] = useState(true);
+    const [mobileMenu, setMobileMenu] = useState(false);
     const [menuData, SetMenuData] = useState([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
     const [activeCat, SetActiveCat] = useState('')
     const [activeOne, SetActiveOne] = useState('');
@@ -114,6 +116,10 @@ function HeaderMenu(props) {
     const hideAccountFxn = () => {
         props.accountPopup(false)
     }
+
+    const menuMObileclicK = () => {
+       setMobileMenu(!mobileMenu);
+    }
     const logout = () => {
         // Clear access token and ID token from local storage
         // props.toggleOpenDrawer(false);
@@ -150,7 +156,7 @@ function HeaderMenu(props) {
             )}
             <div className="container header-mvp" id="header-mvp">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
-                    <div className="col-5 pt-1">
+                    <div className="col-4 pt-1 h-mob-l">
                         <div className="select-wearing">
                             {menuData.length > 0 && (
                                 <ul>
@@ -170,7 +176,7 @@ function HeaderMenu(props) {
                                                                             {childMenu.child && childMenu.child.map((grandChild, l) => {
                                                                                 return (
                                                                                     <ul className="megamenugrid" key={l}>
-                                                                                        {((l === childMenu.child.length-1) ||( l === (childMenu.child.length - 2))) ? (
+                                                                                        {((l === childMenu.child.length - 1) || (l === (childMenu.child.length - 2))) ? (
                                                                                             <h3> {grandChild.name}</h3>
                                                                                         ) :
                                                                                             <h3> <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}`}
@@ -202,14 +208,14 @@ function HeaderMenu(props) {
                             )}
                         </div>
                     </div>
-                    <div className="col-2">
+                    <div className="col-4">
                         <div className="cli_logo">
                             <Link className=" me-2" to="/">
                                 <img src={CLELogo} className="img-fluid" alt="logo" />
                             </Link>
                         </div>
                     </div>
-                    <div className="col-5">
+                    <div className="col-4 h-mob-r">
 
                         <div className="sell_item" style={{ display: 'none' }}>
                             <div className="sell_itemnote mb-2">
@@ -217,7 +223,7 @@ function HeaderMenu(props) {
                             </div>
                         </div>
 
-                        <div className="user_cart">
+                        <div className="user_cart mob-hide">
                             <div className="cartuser-info">
                                 <ul>
                                     <LanguageSwitcher />
@@ -255,8 +261,11 @@ function HeaderMenu(props) {
                         </div>
 
                     </div>
+                  
+                        <Link to='#'  className="cle-mobile-menu" onClick={(e) => { menuMObileclicK(); }}><i className="fa fa-align-justify"></i></Link>
+                
                 </div>
-                <div className="cust-mob-menu">
+                <div className="cust-mob-menu" style={{ "display": !mobileMenu ? "none" : "block" }}>
                     {menuData.length > 0 && (
                         <div className="dropdown">
                             <ul className="list-unstyled">
@@ -304,6 +313,55 @@ function HeaderMenu(props) {
 
 
                 </header>
+                <div className="user-header-info">
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <div className="user_cart">
+                                <div className="cartuser-info">
+                                    <ul>
+                                        <LanguageSwitcher />
+                                        <li><Link to="#">{customerName ? capitalize(customerName) : ""} </Link></li>
+                                        {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
+                                        <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
+
+                                            <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
+                                                <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
+                                                {customer_id && (
+                                                    <ul>
+                                                        {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
+                                                        <li><Link to="/customer/profile"><IntlMessages id="dashboard" /> </Link></li>
+                                                        <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
+                                                        <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
+                                                        <li><Link to="/customer/support"><IntlMessages id="myspport" /></Link> </li>
+                                                    </ul>
+                                                )}
+                                                <div className="d-grid">
+                                                    {
+                                                        customer_id ? <button className="btn btn-secondary" onClick={() => { logout(); }} type="button"><IntlMessages id="logout" /></button> :
+                                                            <button className="btn btn-secondary" type="button" onClick={(e) => { handlesigninClick(e); }} ><IntlMessages id="menu_Sign_in" /></button>
+                                                    }
+
+                                                </div>
+                                            </div>
+
+                                        </li>
+                                        {customerName && (
+                                            <li> <Link to="/customer/wish-list"><img src={favorit} alt="wishlist" /></Link> </li>
+                                        )}
+                                        <MiniCart />
+                                    </ul>
+                                </div>
+
+
+
+                                <SearchBar />
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div >

@@ -342,22 +342,39 @@ function Checkout(props) {
                     region_id: address.data.region_id,
                     street: address.data.street
                 };
-
-                let shippingAddress = {
-                    customer_id: custId ? custId : 0,
-                    firstname: itemsVal.shippingData['firstname'],
-                    lastname: itemsVal.shippingData['lastname'],
-                    telephone: itemsVal.shippingData['telephone'],
-                    postcode: itemsVal.shippingData['postcode'],
-                    city: itemsVal.shippingData['city'],
-                    country_id: itemsVal.shippingData['country_id'],
-                    region_id: itemsVal.shippingData['region_id'],
-                    street: itemsVal.shippingData['street']
+                let shippingAddress = {}
+                console.log(itemsVal.shippingData['country_id'] )
+                if (itemsVal.shippingData['country_id'] !== null) {
+                    shippingAddress = {
+                        customer_id: custId ? custId : 0,
+                        firstname: itemsVal.shippingData['firstname'],
+                        lastname: itemsVal.shippingData['lastname'],
+                        telephone: itemsVal.shippingData['telephone'],
+                        postcode: itemsVal.shippingData['postcode'],
+                        city: itemsVal.shippingData['city'],
+                        country_id: itemsVal.shippingData['country_id'],
+                        region_id: itemsVal.shippingData['region_id'],
+                        street: itemsVal.shippingData['street']
+                    }
+                } else {
+                    console.log(itemsVal.shippingData['country_id'] )
+                    shippingAddress = {
+                        customer_id: custId ? custId : 0,
+                        firstname: address.data.firstname,
+                        lastname: address.data.lastname,
+                        telephone: address.data.telephone,
+                        postcode: address.data.postcode,
+                        city: address.data.city,
+                        country_id: address.data.country_id,
+                        region_id: address.data.region_id,
+                        street: address.data.street
+                    };
                 }
+              
                 addressInformation.shippingAddress = shippingAddress;
                 addressInformation.billingAddress = billingAddress;
                 addressData.addressInformation = addressInformation;
-                // console.log(addressData)
+                console.log(addressData)
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
                 if (saveDelivery.data.payment_methods && (saveDelivery.data.message === undefined || saveDelivery.data.message === '')) {
                     setIsBillingAddress(0);
@@ -685,7 +702,7 @@ function Checkout(props) {
             const add: any = itemsVal.address;
             console.log(add)
             add.addresses.forEach(el => {
-                if (el.default_billing || el.default_shipping) {
+                if (el.default_billing || el.default_shipping || add.addresses.length === 1) {
                     billAddress.street = el.street[0];
                     billAddress.address = el.city;
                     billAddress.phone = el.telephone;

@@ -241,10 +241,10 @@ function OrderDetails(props) {
             <div className="container mb-5">
                 <div className="row">
                     <div className="col-md-12 return-complaint-btns">
-                        <div className="float-start">
+                        {/* <div className="float-start">
                             <Link to=""><IntlMessages id="order.returnProducts" /></Link>
                             <Link to=""><IntlMessages id="order.makeAComplaint" /></Link>
-                        </div>
+                        </div> */}
                         <div className="float-end">
                             <div className="btn-group">
                                 <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"

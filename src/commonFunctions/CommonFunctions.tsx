@@ -1,14 +1,14 @@
-import { siteConfig } from '../config/config';
+import { siteConfigs } from '../config/config';
 
 class CommonFunctions {
   //Get Image Path
   getImagePath(container:string) {
-    return siteConfig.apiUrl + "attachments/" + container + "/download/";
+    return siteConfigs.apiUrl + "attachments/" + container + "/download/";
   }
 
   //Get Base URL
   getBaseUrl() {
-    return siteConfig.apiUrl;
+    return siteConfigs.apiUrl;
   }
 
   //Round number

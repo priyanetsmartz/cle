@@ -18,6 +18,7 @@ import { addToCartApi, addToCartApiGuest, addWhishlist, configLabels, createGues
 import { formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import notification from '../../../../components/notification';
+import { siteConfig } from '../../../../settings';
 import GiftMessage from './GiftMessage';
 import Login from '../../../../redux/auth/Login';
 import appAction from "../../../../redux/app/actions";
@@ -58,7 +59,7 @@ function ProductDetails(props) {
 
 
     useEffect(() => {
-        props.showLoader(true)
+        // props.showLoader(true)
         const localToken = localStorage.getItem('token');
         let lang = props.languages ? props.languages : language;
         setToken(localToken)
@@ -440,8 +441,8 @@ function ProductDetails(props) {
                                         <h2><div dangerouslySetInnerHTML={{ __html: productDetails['short_description'] }} /></h2>
                                     </div>
                                     <div className="product-sale_off mt-4 mb-4">
-                                        <div className="product_saleoff">{productDetails['saleprice'] > 0 ? <><span className="saleoff">${formatprice(productDetails['price'])}</span> now 25% off</> : <span>${productDetails['price'] > 0 ? formatprice(productDetails['price']) : 0}</span>}</div>
-                                        {productDetails['saleprice'] > 0 ? <div className="product_price">${formatprice(productDetails['saleprice'])}</div> : ""}
+                                        <div className="product_saleoff">{productDetails['saleprice'] > 0 ? <><span className="saleoff">{siteConfig.currency} {formatprice(productDetails['price'])}</span> now 25% off</> : <span>${productDetails['price'] > 0 ? formatprice(productDetails['price']) : 0}</span>}</div>
+                                        {productDetails['saleprice'] > 0 ? <div className="product_price">{siteConfig.currency} {formatprice(productDetails['saleprice'])}</div> : ""}
                                     </div>
                                     <div className="selection-process mb-2">
                                         <div className="row">

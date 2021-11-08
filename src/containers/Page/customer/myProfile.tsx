@@ -183,7 +183,7 @@ function MyProfile(props) {
                 return o1.value === o2; // return the ones with equal id
             });
         });
-        console.log(categories_array)
+        // console.log(categories_array)
         if (intersted_in[0] && intersted_in[0].name === "kid") {
             catToShow = categories_array[1];
         } else if (intersted_in[0] && intersted_in[0].name === "women") {
@@ -191,14 +191,15 @@ function MyProfile(props) {
         } else {
             catToShow = categories_array[2];
         }
-
-        //  console.log(catToShow)
-        var favCategoryArray = catToShow.filter(function (o1) {
-            return favourite_categories.some(function (o2) {
-                return o1.id === o2; // return the ones with equal id
+        var favCategoryArray = [];
+        if (catToShow && catToShow.length > 0) {
+            favCategoryArray = catToShow.filter(function (o1) {
+                return favourite_categories.some(function (o2) {
+                    return o1.id === o2; // return the ones with equal id
+                });
             });
+        }
 
-        });
         console.log(favCategoryArray)
         var favDesignerArray = designer_array[0].filter(function (o1) {
             return favourite_designers.some(function (o2) {
@@ -584,7 +585,7 @@ function MyProfile(props) {
     }
 
     return (
-        <div className="col-sm-9">
+        <div className={isPriveUser ? 'prive-txt col-sm-9' : 'col-sm-9'}>
             <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
