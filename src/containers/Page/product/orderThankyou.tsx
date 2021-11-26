@@ -4,19 +4,25 @@ import { orderDetailbyId } from '../../../redux/cart/productApi';
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import { capitalize } from '../../../components/utility/allutils';
+import { siteConfig } from '../../../settings';
+import Form from './order-form';
 
 function OrderThankyou(props) {
     const query = new URLSearchParams(props.location.search);
     const orderId = query.get('id')
     const [orderDetails, setOrderDetails] = useState({});
     useEffect(() => {
-        const localToken = localStorage.getItem('token');
-        getOrderDetails(orderId);
+        const localToken = props.token.token;
+        if (orderId) {
+            getOrderDetails(orderId);
+        }else{
+            window.location.href = '/';
+        }      
 
         return () => {
             //
         }
-    }, [])
+    }, [props.token])
 
     async function getOrderDetails(orderId) {
         let results: any = await orderDetailbyId(orderId);
@@ -24,7 +30,7 @@ function OrderThankyou(props) {
         orderDetails['increment_id'] = results.data ? results.data.increment_id : 0;
         orderDetails['created_at'] = results.data ? results.data.created_at : 0;
         orderDetails['shipment_date'] = results.data && results.data.extension_attributes && results.data.extension_attributes.shipment_date ? results.data.extension_attributes.shipment_date : 0;
-        orderDetails['payment-method'] = results.data ? capitalize(results.data.payment.method.split('_')[0]) : "-";
+        orderDetails['payment-method'] = results.data  && results.data.payment.method ? capitalize(results.data.payment.method.split('_')[0]) : "-";
         orderDetails['total_item_count'] = results.data ? results.data.total_item_count : 0;
         orderDetails['delivery_address'] = results.data && results.data.extension_attributes && results.data.extension_attributes.shipping_assignments && results.data.extension_attributes.shipping_assignments[0].shipping ? results.data.extension_attributes.shipping_assignments[0].shipping.address : 0;
         orderDetails['base_subtotal'] = results.data ? results.data.base_subtotal : 0;
@@ -50,54 +56,7 @@ function OrderThankyou(props) {
                         </div>
                     </div>
                 </div>
-                <div className="container">
-                    <div className="row delivery-bar">
-                        <div className="col-md-8 offset-md-2">
-                            <div className="marketing_secs">
-
-                                <h2>checkout process feedback</h2>
-                                <p>Please, answer 3 questions and help us be better.</p>
-
-                                <div className="width-100%">
-                                    <div className="steps-sec">
-
-                                        <div className="stepwizard">
-                                            <div className="stepwizard-row">
-                                                <div className="stepwizard-step">
-                                                    <button type="button" className="btn btn-primary btn-circle"><span className="text">1</span></button>
-                                                </div>
-                                                <div className="stepwizard-step">
-                                                    <button type="button" className="btn btn-default btn-circle"><span className="text">2</span></button>
-                                                </div>
-                                                <div className="stepwizard-step">
-                                                    <button type="button" className="btn btn-default btn-circle" disabled><span
-                                                        className="text">3</span></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <p>Is the Checkout process is clear for you? Choose an answer from 1 to 5 (1-it's chaotic; 5-it's
-                                    perfect).</p>
-
-
-                                <div className="choose-shopping">
-
-                                    <button type="button" className="btn btn-outline-primary me-2">1</button>
-                                    <button type="button" className="btn btn-outline-primary me-2">2</button>
-                                    <button type="button" className="btn btn-outline-primary me-2">3</button>
-                                    <button type="button" className="btn btn-outline-primary me-2">4</button>
-                                    <button type="button" className="btn btn-outline-primary me-2">5</button>
-
-                                </div>
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Form/>               
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12">
@@ -152,12 +111,12 @@ function OrderThankyou(props) {
                                     <span>Order Total</span>
                                 </div>
                                 <div className="product-total-price">
-                                    <p>Sub Total<span className="text-end">${orderDetails['base_subtotal']}</span></p>
-                                    <p>Discount  <span className="text-end">${orderDetails['base_discount_amount']}</span></p>
-                                    <p>Shipping<span className="text-end">${orderDetails['base_shipping_amount']}</span></p>
-                                    <p>Tax<span className="text-end">${orderDetails['base_tax_amount'] + orderDetails['base_shipping_tax_amount']}</span></p>
+                                    <p>Sub Total<span className="text-end">{siteConfig.currency}{orderDetails['base_subtotal']}</span></p>
+                                    <p>Discount  <span className="text-end">{siteConfig.currency}{orderDetails['base_discount_amount']}</span></p>
+                                    <p>Shipping<span className="text-end">{siteConfig.currency}{orderDetails['base_shipping_amount']}</span></p>
+                                    <p>Tax<span className="text-end">{siteConfig.currency}{orderDetails['base_tax_amount'] + orderDetails['base_shipping_tax_amount']}</span></p>
                                     <hr />
-                                    <div className="final-price">Total<span>${orderDetails['grand_total']}</span></div>
+                                    <div className="final-price">Total<span>{siteConfig.currency}{orderDetails['grand_total']}</span></div>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +141,7 @@ function OrderThankyou(props) {
                                                     <p><strong>{item.name}</strong></p>
                                                     {/* <p>Web Strip &amp; gold PVD watch</p> */}
                                                 </div>
-                                                <Link to="#" className="float-end text-end order-pro-price">${item.original_price}</Link>
+                                                <Link to="#" className="float-end text-end order-pro-price">{siteConfig.currency}{item.original_price}</Link>
                                                 <div className="clearfix"></div>
                                             </div>
                                             <div className="pro-name-tag">

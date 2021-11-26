@@ -9,6 +9,7 @@ import Login from "../../../redux/auth/Login";
 import { setCookie } from '../../../helpers/session';
 import notification from "../../../components/notification";
 import { history } from "../../../redux/store";
+import { sessionService } from 'redux-react-session';
 const loginApi = new Login();
 const { showSignin, openSignUp } = appAction;
 const { register, loginSuccess } = authAction;
@@ -38,9 +39,15 @@ function FacebookLoginButton(props) {
         let result: any = await loginApi.getAuthRegister(userInfo.email);
         var jsonData = result.data[0];
         if (jsonData) {
-            localStorage.setItem('id_token', jsonData.new_token);
-            localStorage.setItem('cust_id', jsonData.entity_id);
-            localStorage.setItem('token', jsonData.group_id);
+            let id_token = jsonData.new_token;
+            let data = {
+                'cust_id': jsonData.entity_id,
+                'token_email': userInfo.email,
+                'token': jsonData.group_id,
+                'id_token': jsonData.new_token
+            }
+            sessionService.saveSession({ id_token })
+            sessionService.saveUser(data)
             setCookie("username", jsonData.email)
             props.loginSuccess(jsonData.new_token)
            //console.log(jsonData.group_id)

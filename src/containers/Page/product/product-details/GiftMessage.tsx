@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 import { connect } from 'react-redux';
 import notification from '../../../../components/notification';
 import cartAction from "../../../../redux/cart/productAction";
@@ -8,10 +9,13 @@ import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, giftCa
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import Login from '../../../../redux/auth/Login';
+import { getCookie } from "../../../../helpers/session";
 const loginApi = new Login();
 const { openGiftBoxes, addToCartTask } = cartAction;
+
 function GiftMessage(props) {
     const intl = useIntl();
+    let history = useHistory();
     useEffect(() => {
         // console.log(props)
         return () => {
@@ -38,8 +42,8 @@ function GiftMessage(props) {
             setIsShow(true);
             let cartData = {};
             let cartQuoteId = '';
-
-            let customer_id = localStorage.getItem('cust_id');
+            let lang = getCookie('currentLanguage');
+            let customer_id = props.token.cust_id;
             let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
             if (cartQuoteIdLocal || customer_id) {
                 let customerCart: any = await loginApi.genCartQuoteID(customer_id)
@@ -51,7 +55,7 @@ function GiftMessage(props) {
                 // create customer token
                 let guestToken: any = await createGuestToken();
                 localStorage.setItem('cartQuoteToken', guestToken.data);
-                let result: any = await getGuestCart();
+                let result: any = await getGuestCart(lang);
                 cartQuoteId = result.data.id
                 //  console.log(result.data)
             }
@@ -121,11 +125,13 @@ function GiftMessage(props) {
                 })
                 props.openGiftBoxes(0);
                 props.addToCartTask(true);
-                notification("success", "", "Item added as a gift!");
+                notification("success", "", intl.formatMessage({ id: "addedgift" }));
+                history.push('/my-cart');
+                window.location.href = '/my-cart';
             }
         } else {
             setIsShow(false);
-            notification("warning", "", "Please enter valid email and password");
+            notification("warning", "", intl.formatMessage({ id: "validgiftingvalues" }));
         }
     }
     const handleValidation = () => {
@@ -134,18 +140,18 @@ function GiftMessage(props) {
 
         if (!state["for"]) {
             formIsValid = false;
-            error["for"] = "For is required";
+            error["for"] = intl.formatMessage({ id: "receivedreq" })
         }
 
         //email
         if (!state["from"]) {
             formIsValid = false;
-            error["from"] = 'From is required';
+            error["from"] = intl.formatMessage({ id: "senderreq" })
         }
 
         if (!state["message"]) {
             formIsValid = false;
-            error["message"] = 'Message is required';
+            error["message"] =intl.formatMessage({ id: "giftmessage" })
         }
         setError({ errors: error });
         setIsShow(false);
@@ -212,7 +218,8 @@ const mapStateToProps = (state) => {
     //  console.log(state)
     return {
         items: state.Cart.openGiftBox,
-        product: state.Cart.items
+        product: state.Cart.items,
+        token: state.session.user
     }
 }
 

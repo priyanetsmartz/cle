@@ -9,7 +9,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../image/CLE-logo-black.svg";
 import FacebookLoginButton from '../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../socialMediaLogin/Google';
-import AppleSigninButton from '../socialMediaLogin/AppleSigninButton';
 import { useIntl } from 'react-intl';
 import { Link } from "react-router-dom";
 const { register } = authAction;
@@ -58,46 +57,46 @@ function RegistrationForm(props) {
         let formIsValid = true;
         if (!state["first_name"]) {
             formIsValid = false;
-            error["first_name"] = 'First Name is required';
+            error["first_name"] = intl.formatMessage({ id: "firstnamerequired" });
         }
 
         if (!state["last_name"]) {
             formIsValid = false;
-            error["last_name"] = 'Last Name is required';
+            error["last_name"] = intl.formatMessage({ id: "lastnamerequired" });
         }
 
         //Email   
         if (typeof state["email"] !== "undefined") {
             if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
                 formIsValid = false;
-                error["email"] = "Email is not valid";
+                error["email"] = intl.formatMessage({ id: "emailvalidation" });
             }
         }
         if (!state["email"]) {
             formIsValid = false;
-            error["email"] = "Email is required";
+            error["email"] = intl.formatMessage({ id: "emailrequired" });
         }
 
         if (state["confirmPassword"] !== state["password"]) {
             formIsValid = false;
-            error["confirmPassword"] = 'confirm password not matched';
+            error["confirmPassword"] =intl.formatMessage({ id: "confirmpasswordnotmatched" });
         }
 
         if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#^])([A-Za-z\d$@$!%*?&#^]{8,})$/.test(state["password"]))) {
             formIsValid = false;
-            error["password"] = 'The password should contain at least one digit, one lower case, one upper case, Special Character from amongst these $@$!%*?&#^ and at least 8 from the mentioned characters.';
+            error["password"] =  intl.formatMessage({ id: "passwordvalidation" });
         }
 
         //password
         if (!state["password"]) {
             formIsValid = false;
-            error["password"] = 'Password is required';
+            error["password"] = intl.formatMessage({ id: "passwordreq" });
         }
 
 
         if (!state["confirmPassword"]) {
             formIsValid = false;
-            error["confirmPassword"] = 'Confirm Password is required';
+            error["confirmPassword"] =  intl.formatMessage({ id: "confirmpasswordreq" });
         }
 
 
@@ -137,7 +136,7 @@ function RegistrationForm(props) {
             }
             register({ userInfo });
         } else {
-            notification("warning", "", <IntlMessages id="commentRequired" />);
+            notification("warning", "", intl.formatMessage({ id: "commentRequired" }));
         }
     }
 

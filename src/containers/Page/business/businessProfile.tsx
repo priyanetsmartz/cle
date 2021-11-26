@@ -10,16 +10,20 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { DROPDOWN } from '../../../config/constants';
 import moment from 'moment';
-
+import { useIntl } from 'react-intl';
 function BusinessProfile(props) {
+    const intl = useIntl();
     const [vendorData, setVendorData] = useState({
         vendor_name: '',
         telephone: '',
         country_id: '',
-        dob: ''
+        dob: '',
+        email: '',
+        street: '',
+        city: ''
     });
 
-    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
+    const [custId, setCustid] = useState(props.token.cust_id);
     const [custForm, setCustForm] = useState({
         id: custId,
         email: "",
@@ -33,7 +37,7 @@ function BusinessProfile(props) {
     });
 
 
-    const userGroup = localStorage.getItem('token');
+    const userGroup = props.token.token;
     const [isShow, setIsShow] = useState(false);
     // const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
 
@@ -51,7 +55,7 @@ function BusinessProfile(props) {
 
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [regions, setRegions] = useState([]); // for regions dropdown
-    const [telephone, setTelephone] = useState("");
+
     const [dob, setDob] = useState({
         day: '',
         month: '',
@@ -138,7 +142,7 @@ function BusinessProfile(props) {
         let result: any = await saveCustomerDetails(custId, { customer: custForm });
         if (result) {
             setMyDetailsModel(false);
-            notification("success", "", <IntlMessages id="customerUpdate" />);
+            notification("success", "", intl.formatMessage({ id: "customerdetailsupdated" }));
         }
     }
 
@@ -170,7 +174,7 @@ function BusinessProfile(props) {
                     region_id: "",
                     street: ""
                 });
-                notification("success", "", <IntlMessages id="customerAddressUpdate" />);
+                notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
                 setIsShow(false);
             }
         }
@@ -182,32 +186,32 @@ function BusinessProfile(props) {
 
         if (!custAddForm.telephone) {
             formIsValid = false;
-            error['telephone'] = 'Phone is required';
+            error['telephone'] = intl.formatMessage({ id: "phonereq" });
         }
         if (!custAddForm.postcode) {
             formIsValid = false;
-            error["postcode"] = 'Post Code is required';
+            error["postcode"] = intl.formatMessage({ id: "pinreq" });
         }
         if (!custAddForm.city) {
             formIsValid = false;
-            error["city"] = 'City is required';
+            error["city"] = intl.formatMessage({ id: "pinreq" });
         }
 
         if (!custAddForm.country_id) {
             formIsValid = false;
-            error['country_id'] = 'Country is required';
+            error['country_id'] = intl.formatMessage({ id: "countryreq" });
         }
         if (!custAddForm.street) {
             formIsValid = false;
-            error["street"] = 'Address is required';
+            error["street"] = intl.formatMessage({ id: "addressreq" });
         }
         if (!custAddForm.firstname) {
             formIsValid = false;
-            error["firstname"] = 'First Name is required';
+            error["firstname"] = intl.formatMessage({ id: "firstnamerequired" });
         }
         if (!custAddForm.lastname) {
             formIsValid = false;
-            error["lastname"] = 'Last Name is required';
+            error["lastname"] = intl.formatMessage({ id: "lastnamerequired" });
         }
 
         setError({ errors: error });
@@ -231,7 +235,7 @@ function BusinessProfile(props) {
         if (result) {
             custForm.addresses.splice(index, 1);
             setCustForm(custForm);
-            notification("success", "", <IntlMessages id="customerAddressDelete" />);
+            notification("success", "", intl.formatMessage({ id: "customerAddressDelete" }));
         }
     }
     //edit existing address ends here--------------->
@@ -283,14 +287,14 @@ function BusinessProfile(props) {
         if (handleValidation()) {
             let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
             if (result.data) {
-                notification("success", "", <IntlMessages id="passwordUpdate" />);
+                notification("success", "", intl.formatMessage({ id: "passwordUpdate" }));
                 setChangePass({
                     confirmNewPassword: "",
                     newPassword: "",
                     password: ""
                 });
             } else {
-                notification("error", "", <IntlMessages id="passwordInvalid" />);
+                notification("error", "", intl.formatMessage({ id: "passwordInvalid" }));
             }
         }
     }
@@ -301,19 +305,19 @@ function BusinessProfile(props) {
 
         if (!changePass["password"]) {
             formIsValid = false;
-            error["password"] = 'Password is required';
+            error["password"] = intl.formatMessage({ id: "passwordreq" });
         }
         if (!changePass["newPassword"]) {
             formIsValid = false;
-            error["newPassword"] = 'New Password is required';
+            error["newPassword"] = intl.formatMessage({ id: "newpasswordreq" });
         }
         if (!changePass["confirmNewPassword"]) {
             formIsValid = false;
-            error["confirmNewPassword"] = 'Confirm New Password is required';
+            error["confirmNewPassword"] = intl.formatMessage({ id: "confirmnewpasswordreq" });
         }
         if (changePass["confirmNewPassword"] !== changePass["newPassword"]) {
             formIsValid = false;
-            error["confirmNewPassword"] = 'Confirm New password not matched';
+            error["confirmNewPassword"] = intl.formatMessage({ id: "confirmnewnotmatched" });
         }
 
         setError({ errors: error });
@@ -340,14 +344,14 @@ function BusinessProfile(props) {
 
             let result: any = await updateCustEmail(req);
             if (result.data) {
-                notification("success", "", <IntlMessages id="newEmailUpdate" />);
+                notification("success", "", intl.formatMessage({ id: "newEmailUpdate" }));
                 setChangeEmail({
                     confirmNewEmail: "",
                     newEmail: "",
                     password: ""
                 })
             } else {
-                notification("error", "", <IntlMessages id="errorNewEmailUpdate" />);
+                notification("error", "", intl.formatMessage({ id: "errorNewEmailUpdate" }));
             }
         }
     }
@@ -359,32 +363,32 @@ function BusinessProfile(props) {
         if (typeof changeEmail["newEmail"] !== "undefined") {
             if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(changeEmail["newEmail"]))) {
                 formIsValid = false;
-                error["newEmail"] = "New Email is not valid";
+                error["newEmail"] = intl.formatMessage({ id: "emailvalidation" });
             }
         }
         if (typeof changeEmail["confirmNewEmail"] !== "undefined") {
             if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(changeEmail["confirmNewEmail"]))) {
                 formIsValid = false;
-                error["confirmNewEmail"] = "Confirm New Email is not valid";
+                error["confirmNewEmail"] = intl.formatMessage({ id: "confirmneemailvalid" });
             }
         }
         if (!changeEmail["newEmail"]) {
             formIsValid = false;
-            error["newEmail"] = "New Email is required";
+            error["newEmail"] = intl.formatMessage({ id: "emailrequired" });
         }
         if (!changeEmail["confirmNewEmail"]) {
             formIsValid = false;
-            error["confirmNewEmail"] = "Confirm New Email is required";
+            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmneemailreq" })
         }
 
         if (!changeEmail["password"]) {
             formIsValid = false;
-            error["password"] = "Password is required";
+            error["password"] =intl.formatMessage({ id: "passwordreq" })
         }
 
         if (changeEmail["confirmNewEmail"] !== changeEmail["newEmail"]) {
             formIsValid = false;
-            error["confirmNewEmail"] = 'Confirm New password not matched';
+            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmpasswordnotmatched" })
         }
 
         setError({ errors: error });
@@ -452,25 +456,27 @@ function BusinessProfile(props) {
                                         <div className="field-name">{vendorData.vendor_name}</div>
                                     </div>
                                     <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
-                                        <div className="field-name"></div>
-                                    </div>
-                                </div>
-                                <div className="col-sm-4">
-                                    <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
-                                        <div className="field-name"> </div>
-                                    </div>
-                                    <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
                                         <div className="field-name">{vendorData.telephone}</div>
                                     </div>
+                                    {/* <div className="field_details">
+                                        <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
+                                        <div className="field-name"></div>
+                                    </div> */}
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
-                                        <div className="field-name">{vendorData.dob}</div>
+                                        <label className="form-label">Street</label>
+                                        <div className="field-name">{vendorData.street} </div>
                                     </div>
+                                    <div className="field_details mb-3">
+                                        <label className="form-label">City</label>
+                                        <div className="field-name">{vendorData.city} </div>
+                                    </div>
+
+                                </div>
+                                <div className="col-sm-4">
+
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.country" /></label>
                                         <div className="field-name">{vendorData.country_id}</div>
@@ -478,18 +484,18 @@ function BusinessProfile(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-3">
+                        {/* <div className="col-sm-3">
                             <div className="d-grid ">
                                 <button type="button" className="btn btn-secondary" onClick={openMyDetails}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
 
-            <section className="my_profile_sect mb-4">
+            {/* <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -541,9 +547,9 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
-            <section className="my_profile_sect mb-4">
+            {/* <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -582,9 +588,9 @@ function BusinessProfile(props) {
 
                     </div>
                 </div>
-            </section>
+            </section> */}
 
-            <section className="my_profile_sect mb-4">
+            {/* <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -626,9 +632,9 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
-            <section className="my_profile_sect change_passwordsec mb-4">
+            {/* <section className="my_profile_sect change_passwordsec mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -841,7 +847,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
@@ -1060,7 +1066,7 @@ function BusinessProfile(props) {
             </Modal>
 
             {/* add credit card modal */}
-            <Modal show={addCard}>
+            {/* <Modal show={addCard}>
                 <div className="CLE_pf_detahils">
                     <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
                     <a onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></a>
@@ -1110,7 +1116,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </Modal>
+            </Modal> */}
         </div>
     )
 }
@@ -1122,7 +1128,8 @@ const mapStateToProps = (state) => {
     }
 
     return {
-        languages: languages
+        languages: languages,
+        token: state.session.user
     }
 }
 

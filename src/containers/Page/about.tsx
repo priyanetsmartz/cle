@@ -24,10 +24,9 @@ function AboutUs(props) {
             // Anything in here is fired on component unmount.
         }
     }, [props.languages])
-    
+
     useEffect(() => {
-        let tokenCheck = localStorage.getItem('id_token');
-        let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
+        let tokenCheckFilter = !props.helpusVal ? props.token : props.helpusVal;
         // console.log(tokenCheckFilter)
         if (!tokenCheckFilter) {
             setOnLogin(false);
@@ -40,7 +39,7 @@ function AboutUs(props) {
         }
     })
 
-    
+
     const handleClick = (e) => {
         e.preventDefault()
         const { openSignUp } = props;
@@ -87,7 +86,8 @@ function mapStateToProps(state) {
     return {
         signupModel: signupModel,
         languages: languages,
-        helpusVal: helpusVal
+        helpusVal: helpusVal,
+        token: state.session.user
 
     };
 };

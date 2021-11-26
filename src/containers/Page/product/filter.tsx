@@ -6,31 +6,35 @@ import { connect } from "react-redux";
 import { getCookie } from "../../../helpers/session";
 const { productList, loaderProducts } = cartAction;
 function Filters(props) {
-    let catID = getCookie("_TESTCOOKIE");
+    //let catID = getCookie("_TESTCOOKIE");
+    let catID = props.catid;
+    //console.log(catID);
     const [filters, setFilters] = useState([]);
     const [total, setTotal] = useState(0);
     const [catState, setCatState] = useState(catID);
     const [currentFilter, setCurrentFilter] = useState('')
     useEffect(() => {
 
-        const localToken = localStorage.getItem('token');
+        const localToken = props.token.token;
         main(catID);
 
         return () => {
             //
         }
-    }, [props.languages, props.filterval, props.pageeSize])
+    }, [props.languages, props.filterval, props.pageeSize, props.catid])
 
     async function main(catID) {
+
         let catt = catState ? catState : catID;
-        let filter: any = await getProductsFilterRestCollection(catt, props.languages, props.filterval,props.pageeSize);
-        let customer_id = localStorage.getItem('cust_id');
+
+        let filter: any = await getProductsFilterRestCollection(catt, props.languages, props.filterval, props.pageeSize);
+        let customer_id = props.token.cust_id;
         let total = 0, aggregations = [], items = [];
+
         if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
             aggregations = filter.data[0].data.products.aggregations;
             total = filter.data[0].data.products.total_count;
             items = filter.data[0].data.products.items;
-            //  console.log(filter.data[0].data.products.items)
             let productResult = filter.data[0].data.products.items;
             if (customer_id) {
                 let whishlist: any = await getWhishlistItemsForUser();
@@ -45,13 +49,10 @@ function Filters(props) {
 
                     productResult = mergeById(products, WhishlistData);
                 }
-
-
             }
             props.loaderProducts(false);
             props.productList(productResult);
         }
-
         setTotal(total)
         setFilters(aggregations)
 
@@ -59,7 +60,7 @@ function Filters(props) {
     }
     const currentvalue = async (e) => {
         e.preventDefault();
-        let customer_id = localStorage.getItem('cust_id');
+        let customer_id = props.token.cust_id;
         let catID = getCookie("_TESTCOOKIE");
         let attribute_code = e.target.getAttribute("data-remove");
         let value = (e.target.value)
@@ -72,7 +73,7 @@ function Filters(props) {
 
         setCurrentFilter(e.target.value)
         props.loaderProducts(true);
-        let filter: any = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, props.filterval,props.pageeSize);
+        let filter: any = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, props.filterval, props.pageeSize);
         let total = 0, items = [];
         if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
             total = filter.data[0].data.products.total_count;
@@ -115,7 +116,7 @@ function Filters(props) {
                                     return (
                                         <li className="mb-3" key={i}>
                                             <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                data-bs-target={`#home-collapse-${i}`} aria-expanded="true">
+                                                data-bs-target={`#home-collapse-${i}`} aria-expanded="false">
                                                 {item.label}
                                             </button>
                                             {item.options.length > 0 && (
@@ -143,7 +144,7 @@ function Filters(props) {
 }
 
 const mapStateToProps = (state) => {
- //   console.log(state.Cart)
+    //   console.log(state.Cart)
     let languages = '', filtering = {}, pageeSize = '';
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
@@ -155,7 +156,8 @@ const mapStateToProps = (state) => {
     return {
         languages: languages,
         filterval: filtering,
-        pageeSize: pageeSize
+        pageeSize: pageeSize,
+        token: state.session.user
     }
 }
 

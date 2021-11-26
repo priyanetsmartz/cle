@@ -1,12 +1,10 @@
 import AdminApi from "../../restApi/AdminApi";
-import CustomerApi from "../../restApi/Api";
-import GraphqlAPI from "../../restApi/graphqlApi";
+import { sessionService } from 'redux-react-session';
 const APi = new AdminApi();
-const CUSTOMER = new CustomerApi();
-const GRAPHQL = new GraphqlAPI;
 
-export function getAllProducts(language, page, pageSize, sortBy, sortByValue) {
-    const localToken = localStorage.getItem('token');
+
+export async function getAllProducts(language, page, pageSize, sortBy, sortByValue) {
+    let localToken = await sessionService.loadSession().then(session => { return session }).catch(err => console.log(''))
     var storeId = language === 'english' ? 3 : 2;
     let priveQuery = localToken && parseInt(localToken) === 4 ? '' : `searchCriteria[filter_groups][1][filters][0][field]=prive&searchCriteria[filter_groups][1][filters][0][value]=0&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&`;
     return APi.request(`rest/all/V1/products/?${priveQuery}searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "");
@@ -14,30 +12,35 @@ export function getAllProducts(language, page, pageSize, sortBy, sortByValue) {
 
 export function getProductByCategory(page, pageSize, category, sortBy, sortByValue, language) {
     var storeId = language === 'english' ? 3 : 2;
-    return APi.request(`rest/all/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=category_id&searchCriteria[filter_groups][1][filters][0][value]=${category}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&searchCriteria[currentPage]=${page}&searchCriteria[pageSize]=${pageSize}&storeId=${storeId}`, "", "GET", "");
+    return APi.request(`rest/all/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=category_id&searchCriteria[filter_groups][1][filters][0][value]=${category}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&searchCriteria[filter_groups][2][filters][0][field]=status&searchCriteria[filter_groups][2][filters][0][value]=1&searchCriteria[filter_groups][2][filters][0][condition_type]=eq&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&searchCriteria[currentPage]=${page}&searchCriteria[pageSize]=${pageSize}&storeId=${storeId}`, "", "GET", "");
 }
 
-export function addWhishlist(id: number) {
-    const localToken = localStorage.getItem('cust_id');
+export async function addWhishlist(id: number) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.cust_id;
     return APi.request(`rest/V1/wishlist/add/${id}?customerId=${localToken}`, "", "POST", "")
 }
-export function addWhishlistBySku(sku: String) {
-    const localToken = localStorage.getItem('cust_id')
+export async function addWhishlistBySku(sku: String) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.cust_id;
     return APi.request(`rest/V1/wishlist/addBySku/${sku}?customerId=${localToken}`, "", "POST", "");
 }
 
-export function removeWhishlist(wishlist_item_id: number) {
-    const localToken = localStorage.getItem('cust_id');
+export async function removeWhishlist(wishlist_item_id: number) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.cust_id;
     return APi.request(`rest/V1/wishlist/delete/${wishlist_item_id}?customerId=${localToken}`, "", "DELETE", "")
 }
 
-export function getWhishlistItems() {
-    const localToken = localStorage.getItem('cust_id');
+export async function getWhishlistItems() {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.cust_id;
     return APi.request(`rest/V1/wishlist/items?customerId=${localToken}`, "", "GET", "");
 }
 
-export function getWhishlistItemsForUser() {
-    const localToken = localStorage.getItem('cust_id');
+export async function getWhishlistItemsForUser() {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.cust_id;
     return APi.request(`rest/all/V1/customer/wishlistItems?customerId=${localToken}`, "", "GET", "")
 }
 
@@ -45,14 +48,21 @@ export function addToCartApi(cartData) {
     return APi.request(`rest/V1/carts/mine/items`, cartData, "POST", "")
 }
 
-export function getCartItems() {
+export function getCartItems(language) {
+    var storeId = language === 'english' ? 'en' : 'ar';
     const cartQuoteId = localStorage.getItem('cartQuoteId');
-    return APi.request(`rest/V1/carts/${cartQuoteId}`, "", "GET", "")
+    return APi.request(`rest/${storeId}/V1/carts/${cartQuoteId}`, "", "GET", "")
 }
 
 export function getCartTotal() {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
     return APi.request(`rest/V1/carts/${cartQuoteId}/totals`, "", "GET", "")
+}
+
+export async function getcustomercartquoet() {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.token;  
+    return APi.request(`rest/V1/customers/${localToken}/carts`, "", "POST", "");
 }
 export function removeItemFromCart(id: number) {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
@@ -65,7 +75,7 @@ export function updateCartItem(id: number, cartData: object) {
 }
 
 export function getNewInCategories(sortOrder, pageSize, catId) {
-    return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${catId}&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&fields=items[sku,name,id,price,custom_attributes]&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=created_at& searchCriteria[sortOrders][0][direction]=${sortOrder}`, "", "GET", "");
+    return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${catId}&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=status&searchCriteria[filter_groups][1][filters][0][value]=1&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&fields=items[sku,name,id,price,custom_attributes]&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=created_at& searchCriteria[sortOrders][0][direction]=${sortOrder}`, "", "GET", "");
 }
 
 export function getCategoryPage(catId) {
@@ -81,43 +91,55 @@ export function getPriveExclusiveProducts(category, language) {
     return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=${category}&searchCriteria[filter_groups][0][filters][0][field]=prive&searchCriteria[filter_groups][0][filters][0][value]=1&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=visibility&searchCriteria[filter_groups][1][filters][0][value]=4&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&fields=items[sku,name,id,price,custom_attributes]&searchCriteria[pageSize]=7&searchCriteria[sortOrders][0][field]=created_at& searchCriteria[sortOrders][0][direction]=DESC&storeId=${storeId}`, "", "GET", "");
 }
 
-export function getProductsFilterRest(category_id: number, language: string) {
+
+export function getProductsFilterRestCollection(category_id: number, language: string, sorting, pageSize, currentPage = 1) {
     var storeId = language === 'english' ? 'en' : 'ar';
-    let data = {
-        "catId": 153,
-        "storeCode": storeId,
-        "pageSize": 12
+    let data;
+    if (sorting.sortBy === '') {
+        data = '{products(filter:{category_id:{ eq: "' + category_id + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+    } else {
+        data = '{products(filter:{category_id:{ eq: "' + category_id + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ', sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
-    return APi.request(`rest/all/V1/product/filters`, data, "POST", "");
-
-}
-
-export function getProductsFilterRestCollection(category_id: number, language: string, sorting,pageSize) {
-    var storeId = language === 'english' ? 'en' : 'ar';
-    let data = '{products(filter:{category_id:{ eq: "' + category_id + '" } }, pageSize: '+pageSize+',sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
-
     let query = {
         "query": data,
         "storeCode": storeId,
+        "catId": category_id
     }
     return APi.request(`rest/all/V1/product/filtersCollection`, query, "POST", "");
 }
 
-export function getProductsFilterRestCollectionProducts(category_id: number, language: string, attribute = '', value = '', sorting,pageSize) {
+export function getProductsFilterRestCollectionProducts(category_id: number, language: string, attribute = '', value = '', sorting, pageSize, branding = '', testing = '', currentPage = 1, searchText = '') {
+    let selection = '';
+
+    if (searchText !== 'all') {
+        selection = 'search: "' + searchText + '",';
+    }
     var storeId = language === 'english' ? 'en' : 'ar';
-    let priceLow = 0, priceHigh = 100;
     let data = '';
     if (attribute === 'price') {
-        data = '{products(filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ':{from: "' + priceLow + '", to: "' + priceHigh + '" } }, pageSize: '+pageSize+',sort:{' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+        let price = value.split('-');
+        let priceLow = price[0], priceHigh = price[1];
+        data = '{products(' + selection + ' filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ':{from: "' + priceLow + '", to: "' + priceHigh + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     } else if (attribute === 'category_id') {
-        data = '{products(filter:{category_id:{ eq: "' + value + '" } }, pageSize: '+pageSize+',sort:{' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
-    } else {
-        data = '{products(filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ': { eq:"' + value + '" } }, pageSize: '+pageSize+',sort:{' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+        data = '{products(' + selection + ' filter:{category_id:{ eq: "' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+    }
+    else if (testing === 'test') {
+        console.log('test')
+        data = '{products(search: "' + value + '", pageSize: ' + pageSize + ' ,currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+    }
+    else if (category_id === undefined && branding) {
+        console.log('sasvs')
+        data = '{products(search: "' + branding + '", pageSize: ' + pageSize + ',currentPage: ' + currentPage + '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+    }
+    else {
+        console.log(attribute)
+        data = '{products(' + selection + ' filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ': { eq:"' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
 
     let query = {
         "query": data,
         "storeCode": storeId,
+        "catId": category_id
     }
     return APi.request(`rest/all/V1/product/filtersCollection`, query, "POST", "");
 }
@@ -160,8 +182,9 @@ export function getProductDetails(sku: string, language: string) {
     return APi.request(`rest/${storeId}/V1/products/${sku} `, "", "GET", "");
 }
 
-export function getProductExtras(productId: number) {
-    const localToken = localStorage.getItem('cust_id');
+export async function getProductExtras(productId: number) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.cust_id;
     return APi.request(`rest/V1/product/recommendation?storeId=3&customerId=${localToken}&productId=${productId}`, "", "GET", "");
 }
 
@@ -173,9 +196,10 @@ export function addToCartApiGuest(cartData) {
 export function createGuestToken() {
     return APi.request(`rest/V1/guest-carts`, "", "POST", "")
 }
-export function getGuestCart() {
+export function getGuestCart(language: string) {
+    var storeId = language === 'arabic' ? 'ar' : 'en';
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
-    return APi.request(`rest/all/V1/guest-carts/${cartQuoteToken}`, "", "GET", "")
+    return APi.request(`rest/${storeId}/V1/guest-carts/${cartQuoteToken}`, "", "GET", "")
 }
 export function getGuestCartTotal() {
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
@@ -191,8 +215,9 @@ export function updateGuestCartItem(id, cartData) {
     return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/items/${id}`, cartData, "PUT", "")
 }
 
-export function assignGuestCartToUSer(language) {
-    const localToken = localStorage.getItem('cust_id');
+export async function assignGuestCartToUSer(language) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.cust_id;
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     var storeId = language === 'arabic' ? 2 : 3;
     let cartData = {
@@ -222,9 +247,12 @@ export function getCheckOutTotals() {
     return APi.request(`/rest/V1/carts/${cartQuoteId}/totals`, "", "GET", "")
 }
 
-export function getCartRelevantProducts(productIds: number, language: string) {
+export async function getCartRelevantProducts(productIds: number, language: string) {
     var storeId = language === 'arabic' ? 2 : 3;
-    const customerId = localStorage.getItem('cust_id');
+
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const customerId = user.cust_id;
+
     return APi.request(`/rest/V1/product/relevantProducts?customerId=${customerId}&storeId=${storeId}&productIds=${productIds}`, "", "GET", "")
 }
 
@@ -248,20 +276,34 @@ export function applyPromoCodeGuest(couponCode, language) {
 }
 
 
-export function searchFields(search: string, category: number, page: number, language: string, sortBy, sortByValue) {
-    var storeId = language === 'arabic' ? 2 : 3;
-    if (search === 'all' && category) {
-        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=category_id&searchCriteria[filter_groups][1][filters][0][value]=${category}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}&searchCriteria[pageSize]=${page}&searchCriteria[currentPage]=1`, "", "GET", "");
-    } else if (search && category) {
-        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=name&searchCriteria[filter_groups][1][filters][0][value]=%${search}%&searchCriteria[filter_groups][1][filters][0][condition_type]=like&searchCriteria[filter_groups][1][filters][1][field]=short_description&searchCriteria[filter_groups][1][filters][1][value]=%${search}%&searchCriteria[filter_groups][1][filters][1][condition_type]=like&searchCriteria[filter_groups][2][filters][0][field]=category_id&searchCriteria[filter_groups][2][filters][0][value]=${category}&searchCriteria[filter_groups][2][filters][0][condition_type]=eq&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[currentPage]=1&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
+export function searchFields(search: string, category: number, page: number, language: string, sortBy, sortByValue, currentPage = 1) {
+    var storeId = language === 'english' ? 'en' : 'ar';
+    let data: any;
+    if (category === 0) {
+        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=name&searchCriteria[filter_groups][1][filters][0][value]=%${search}%&searchCriteria[filter_groups][1][filters][0][condition_type]=like&fields=items[sku,brand,name,id,custom_attributes,custom_attributes,price]&searchCriteria[currentPage]=1&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
     } else {
-        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&fields=items[sku,name,id,custom_attributes,custom_attributes,price]&searchCriteria[currentPage]=1&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
+        let sortt = '', searching = '';
+        if (sortBy !== '') {
+            sortt = 'sort: {' + sortBy + ': ' + sortByValue + '}';
+        }
+        // console.log(search);
+        if (search !== 'all') {
+            searching = 'search: "' + search + '",';
+        }
+        data = '{products(' + searching + ' filter:{   category_id:{ eq: "' + category + '" }  }, pageSize: ' + page + ',currentPage: ' + currentPage + '  ' + sortt + '){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
+    let query = {
+        "query": data,
+        "storeCode": storeId,
+        "catId": category
+    }
+    return APi.request(`rest/all/V1/product/filtersCollection`, query, "POST", "");
 
 }
 
-export function setDefaultShippingAddress(addressId) {
-    const customerId = localStorage.getItem('cust_id');
+export async function setDefaultShippingAddress(addressId) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const customerId = user.cust_id;
     let cartData = {
         "customerId": customerId,
         "addressId": addressId
@@ -269,8 +311,9 @@ export function setDefaultShippingAddress(addressId) {
     return APi.request(`rest/V1/customer/setDefaultShippingAddress`, cartData, "PUT", "")
 }
 
-export function setDefaultBillngAddress(addressId) {
-    const customerId = localStorage.getItem('cust_id');
+export async function setDefaultBillngAddress(addressId) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const customerId = user.cust_id;
     let cartData = {
         "customerId": customerId,
         "addressId": addressId
@@ -334,12 +377,14 @@ export function getGuestGiftMessage(itemId: number) {
     return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/gift-message/${itemId}`, "", "GET", "")
 }
 // my fatoora payment method
-export function myFatoora(billAddress) {
+export async function myFatoora(billAddress) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.token_email;
     let data = {
         "PaymentMethodId": "2",
         "CustomerName": billAddress.name,
         "CustomerMobile": billAddress.phone,
-        "CustomerEmail": billAddress.CustomerEmail ? billAddress.CustomerEmail : localStorage.getItem('token_email'),
+        "CustomerEmail": billAddress.CustomerEmail ? billAddress.CustomerEmail : localToken,
         "Street": billAddress.street,
         "Address": billAddress.address,
         "cartId": localStorage.getItem('cartQuoteId')
@@ -375,8 +420,8 @@ export function orderDetailbyId(orderId: number) {
 
 // category list api
 
-export function getCategoryList(language) {
+export function getCategoryList(language, categoryD) {
     var storeId = language === 'arabic' ? "ar" : "en";
-    return APi.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=is_active&searchCriteria[filterGroups][0][filters][0][value]=1&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][1][filters][0][field]=level&searchCriteria[filterGroups][1][filters][0][value]=2&searchCriteria[filterGroups][1][filters][0][conditionType]=eq&fields=items[name,id]`, "", "GET", "")
+    return APi.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=parent_id&searchCriteria[filterGroups][0][filters][0][value]=${categoryD}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[filterGroups][1][filters][0][field]=is_active&searchCriteria[filterGroups][1][filters][0][value]=1&searchCriteria[filterGroups][1][filters][0][conditionType]=eq&searchCriteria[filterGroups][2][filters][0][field]=include_in_menu&searchCriteria[filterGroups][2][filters][0][value]=1&searchCriteria[filterGroups][2][filters][0][conditionType]=eq&fields=items[name,id]`, "", "GET", "")
 
 }

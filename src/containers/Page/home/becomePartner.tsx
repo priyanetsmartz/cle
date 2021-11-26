@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
-import { SendNewsletter} from '../../../redux/pages/magazineList';
+import { SendNewsletter } from '../../../redux/pages/magazineList';
 import notification from '../../../components/notification';
 import { getCookie } from "../../../helpers/session";
 import { Link } from "react-router-dom";
@@ -56,23 +56,23 @@ function BecomePartner(props) {
             }
         } else {
             setIsShow(false);
-            notification("warning", "", "Please enter required values");
+            notification("warning", "", intl.formatMessage({ id: "requirederror" }));
         }
     }
 
-    
+
     const handleValidation = () => {
         let error = {};
         let formIsValid = true;
         if (typeof state["email"] !== "undefined") {
             if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
                 formIsValid = false;
-                error["email"] = "Email is not valid";
+                error["email"] =  intl.formatMessage({ id: "emailvalidation" });
             }
         }
         if (!state["email"]) {
             formIsValid = false;
-            error["email"] = "Email is required";
+            error["email"] = intl.formatMessage({ id: "emailrequired" });
         }
 
         setError({ errors: error });
@@ -101,28 +101,28 @@ function BecomePartner(props) {
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="radio" checked={radio === "Womenswear"} onChange={onValueChange} name="inlineRadioOptions" id="inlineRadio1" value="Womenswear" />
                                     <label className="form-check-label" htmlFor="inlineRadio1"><IntlMessages
-                                            id="newsletter.option1" /></label>
+                                        id="newsletter.option1" /></label>
                                 </div>
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="radio" onChange={onValueChange} name="inlineRadioOptions" id="inlineRadio2" value="Menswear" />
-                                        <label className="form-check-label" htmlFor="inlineRadio2"><IntlMessages
-                                            id="newsletter.option2" /></label>
+                                    <label className="form-check-label" htmlFor="inlineRadio2"><IntlMessages
+                                        id="newsletter.option2" /></label>
                                 </div>
                             </div>
                             <form className="row g-3 newsletter-signup">
                                 <div className="col-auto">
                                     <label htmlFor="inputEmail" className="visually-hidden"><IntlMessages id="home.yourMail" /></label>
                                     <input type="text"
-                                            id="email"
-                                            aria-describedby="emailHelp"
-                                            placeholder={intl.formatMessage({ id: 'newsletter.input' })}
-                                            value={state.email}
-                                            onChange={handleChange} />
+                                        id="email"
+                                        aria-describedby="emailHelp"
+                                        placeholder={intl.formatMessage({ id: 'newsletter.input' })}
+                                        value={state.email}
+                                        onChange={handleChange} />
                                 </div>
                                 <div className="col-auto">
-                                <button type="submit" className="btn btn-primary mb-3" style={{ "display": !isShow ? "inline-block" : "none" }} onClick={handleSubmitClick} ><IntlMessages id="newsletter.signup" /></button>
-                                        <div className="tn btn-primary btn-sm shadow-none" style={{ "display": isShow ? "inline-block" : "none" }}>
-                                            <span className="btn btn-primary mb-3" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
+                                    <button type="submit" className="btn btn-primary mb-3" style={{ "display": !isShow ? "inline-block" : "none" }} onClick={handleSubmitClick} ><IntlMessages id="newsletter.signup" /></button>
+                                    <div className="tn btn-primary btn-sm shadow-none" style={{ "display": isShow ? "inline-block" : "none" }}>
+                                        <span className="btn btn-primary mb-3" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                                 </div>
                                 <span className="error">{errors.errors["email"]}</span>
                             </form>

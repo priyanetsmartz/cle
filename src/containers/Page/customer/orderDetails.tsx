@@ -5,15 +5,16 @@ import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-import { capitalize } from '../../../components/utility/allutils';
+import { capitalize, formatprice } from '../../../components/utility/allutils';
+import { siteConfig } from '../../../settings';
 
 function OrderDetails(props) {
-    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
+    const [custId, setCustid] = useState(props.token.cust_id);
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [orderId, setOrderId] = useState(props.match.params.orderId);
     const [maxItems, setMaxitems] = useState(10);
     const [orderProgress, setOrderProgress] = useState(0);
-    const [order, setOrder]: any = useState({});
+    const [order, setOrder]: any = useState([]);
     const [changeAddressModal, setChangeAddressModal] = useState(false);
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
@@ -38,10 +39,27 @@ function OrderDetails(props) {
     }, []);
 
     const getData = async () => {
+        let orderDetails = [];
         let result: any = await searchOrders(orderId);
-        setOrder(result.data);
+        orderDetails['increment_id'] = result.data.items[0] ? result.data.items[0].increment_id : 0;
+        orderDetails['created_at'] = result.data.items[0] ? result.data.items[0].created_at : 0;
+        orderDetails['shipment_date'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipment_date ? result.data.items[0].extension_attributes.shipment_date : 0;
+        orderDetails['payment-method'] = result.data.items[0] && result.data.items[0].payment.method ? capitalize(result.data.items[0].payment.method.split('_')[0]) : "-";
+        orderDetails['total_item_count'] = result.data.items[0] ? result.data.items[0].total_item_count : 0;
+        orderDetails['delivery_address'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipping_assignments && result.data.items[0].extension_attributes.shipping_assignments[0].shipping ? result.data.items[0].extension_attributes.shipping_assignments[0].shipping.address : 0;
+        orderDetails['base_subtotal'] = result.data.items[0] ? result.data.items[0].base_subtotal : 0;
+        orderDetails['base_discount_amount'] = result.data.items[0] ? result.data.items[0].base_discount_amount : 0;
+        orderDetails['base_shipping_amount'] = result.data.items[0] ? result.data.items[0].base_shipping_amount : 0;
+        orderDetails['base_shipping_tax_amount'] = result.data.items[0] ? result.data.items[0].base_shipping_tax_amount : 0;
+        orderDetails['base_tax_amount'] = result.data.items[0] ? result.data.items[0].base_tax_amount : 0;
+        orderDetails['grand_total'] = result.data.items[0] ? result.data.items[0].grand_total : 0;
+        orderDetails['items'] = result.data.items[0] ? result.data.items[0].items : {};
+
+
+        setOrder(orderDetails);
+        // console.log(result.data.items[0].extension_attributes.shipping_assignments[0].shipping.address)
         //change this after clarification
-        const p = result.data.status == 'processing' ? 10 : result.data.status == 'complete' ? 100 : result.data.status == 'pending' ? 25 : 10;
+        const p = result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'processing' ? 10 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'complete' ? 100 : result.data && result.data.items && result.data.items > 0 && result.data.items.status == 'pending' ? 25 : 10;
         setOrderProgress(p)
     }
 
@@ -183,19 +201,19 @@ function OrderDetails(props) {
                             <div className="row">
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.purchaseDate" /></strong></p>
-                                    <p>{moment(order.created_at).format('ddd, D MMMM YYYY')}</p>
+                                    <p>{moment(order['created_at']).format('ddd, D MMMM YYYY')}</p>
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.shippingDate" /></strong></p>
-                                    <p>{moment(order.shipment_date).format('ddd, D MMMM YYYY')}</p>
+                                    {/* <p>{order['shipment_date'] ? moment(order['shipment_date']).format('ddd, D MMMM YYYY'): ''}</p> */}
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.paymentMethod" /></strong></p>
-                                    <p>{order.payment?.method}</p>
+                                    <p>{order['payment-method'] ? capitalize(order['payment-method'].split('_')[0]) : "-"}</p>
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.products" /></strong></p>
-                                    <p>{order.items?.length}</p>
+                                    <p>{order['items']?.length}</p>
                                 </div>
                             </div>
                         </div>
@@ -213,11 +231,11 @@ function OrderDetails(props) {
                                 <div className="clearfix"></div>
                             </div>
                             <p>
-                                {order.billing_address?.firstname + ' ' + order.billing_address?.lastname}<br />
-                                {order.billing_address?.street}<br />
-                                {order.billing_address?.postcode}<br />
-                                {order.billing_address?.city}<br />
-                                {order.billing_address?.country_id}
+                                {order['delivery_address']?.firstname + ' ' + order['delivery_address']?.lastname}<br />
+                                {order['delivery_address']?.street}<br />
+                                {order['delivery_address']?.postcode}<br />
+                                {order['delivery_address']?.city}<br />
+                                {order['delivery_address']?.country_id}
                             </p>
                         </div>
                     </div>
@@ -227,11 +245,11 @@ function OrderDetails(props) {
                                 <span><IntlMessages id="order.orderTotal" /></span>
                             </div>
                             <div className="product-total-price">
-                                <p><IntlMessages id="order.subTotal" /><span className="text-end">${order.base_subtotal}</span></p>
-                                <p><IntlMessages id="order.shipping" /><span className="text-end">${order.base_shipping_amount}</span></p>
-                                <p><IntlMessages id="order.tax" /><span className="text-end">${order.shipping_amount}</span></p>
+                                <p><IntlMessages id="order.subTotal" /><span className="text-end">{siteConfig.currency}{formatprice(order.base_subtotal)}</span></p>
+                                <p><IntlMessages id="order.shipping" /><span className="text-end">{siteConfig.currency}{formatprice(order.base_shipping_amount)}</span></p>
+                                <p><IntlMessages id="order.tax" /><span className="text-end">{siteConfig.currency}{formatprice(order.shipping_amount)}</span></p>
                                 <hr />
-                                <div className="final-price"><IntlMessages id="order.total" /><span>${order.grand_total}</span></div>
+                                <div className="final-price"><IntlMessages id="order.total" /><span>{siteConfig.currency}{formatprice(order.grand_total)}</span></div>
                             </div>
                         </div>
                     </div>
@@ -272,11 +290,18 @@ function OrderDetails(props) {
                                     </div>
                                     <div className="col-md-9">
                                         <div className="pro-name-tag mb-5">
-                                            <div className="float-start">
-                                                <p> <Link to={'/product-details/' + item.sku}><strong>{item.name}</strong></Link></p>
+                                        <div className="float-start">
+                                                {item.extension_attributes.barnd && ( <div className="product_name"><Link to={'/search/' + item.extension_attributes.barnd}>{item.extension_attributes.barnd}</Link></div>)}
+                                                <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                 <p>{capitalize(item.product_type)}</p>
                                             </div>
-                                            <Link to="#" className="float-end text-end order-pro-price">${item.price}</Link>
+                                            {/* <div className="float-start">
+                                                {item.extension_attributes.barnd && (
+                                                    <b> <Link to={'/search/' + item.extension_attributes.barnd}><strong>{item.extension_attributes.barnd}</strong></Link></b>)}
+                                                <p> <Link to={'/product-details/' + item.sku}><strong>{item.name}</strong></Link></p>
+                                                <p>{capitalize(item.product_type)}</p>
+                                            </div> */}
+                                            <Link to="#" className="float-end text-end order-pro-price">{siteConfig.currency}{formatprice(item.price)}</Link>
                                             <div className="clearfix"></div>
                                         </div>
                                         <div className="pro-name-tag">
@@ -389,7 +414,8 @@ function OrderDetails(props) {
 
 function mapStateToProps(state) {
     return {
-        state: state
+        state: state,
+        token: state.session.user
     };
 };
 export default connect(

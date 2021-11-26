@@ -9,11 +9,11 @@ function HtmlContent(props) {
 
     useEffect(() => {
         getData();
-    }, [props.languages]);
+    }, [props.languages, props.currentId, props.currentCAT]);
 
     const getData = async () => {
         let result: any = await getContent(props.languages, props.identifier);
-        if (result.data && result.data.items && result.data.items.length > 0) {
+        if (result && result.data && result.data.items && result.data.items.length > 0) {
             SetPagesData(result.data.items[0]);
         }
     }
@@ -32,7 +32,9 @@ const mapStateToProps = (state) => {
     }
 
     return {
-        languages: languages
+        languages: languages,
+        currentId: state.Cart.catId,
+        currentCAT: state.Cart.catname
     }
 }
 

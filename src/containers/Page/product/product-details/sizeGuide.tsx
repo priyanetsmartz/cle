@@ -18,6 +18,7 @@ function SizeGuide(props) {
 
     const measuringGuideHanler = () => {
         const { openMeasuringGuide } = props;
+        props.openSizeGuide(false);
         openMeasuringGuide(true);
     }
 

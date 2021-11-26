@@ -16,7 +16,7 @@ function ExploreDesigner(props) {
 
     const getData = async () => {
         let result: any = await getDesginers(props.languages, catId);
-        console.log(result.data.items);
+       // console.log(result.data.items);
         if (result) {
             // setDesigners(result.data.items[0]);
         }

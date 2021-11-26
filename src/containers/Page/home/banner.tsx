@@ -22,14 +22,15 @@ function HomeBanner(props) {
         infinite: true,
         autoplaySpeed: 2000,
     }
+    const [newSet, setNewset] = useState(true);
     const [activeIndex, setActiveIndex] = useState(null);
 
     useEffect(() => {
         getData();
-    }, [props.languages]);
+    }, [props.languages,props.categoryName]);
 
     const getData = async () => {
-        let result: any = await getHomePageBanner(props.languages);
+        let result: any = await getHomePageBanner(props.languages, props.categoryName);
         if (result) {
             setBanner(result.data.items[0]);
         }
@@ -37,6 +38,7 @@ function HomeBanner(props) {
 
     const someHandler = (i) => {
         setActiveIndex(i);
+        setNewset(false);
         const del = document.getElementById("delta");
         del.classList.remove("featured");
     }
@@ -49,10 +51,22 @@ function HomeBanner(props) {
                         return (
                             <div key={i} id={`${item.is_featured === 1 ? 'delta' : ''}`} className={`item ${item.is_featured === 1 ? 'featured' : ''}`} onMouseEnter={() => someHandler(i)}
                                 style={{ backgroundImage: `url(${imagePath + item.resource_path})`, height: '657px', width: '436px', flex: (activeIndex === i) ? 7 : 1 }} >
-                                {(activeIndex === i) && <> <div className="slider-text-inner"><div className="head_one_txt">Welcome to Our Marketplace</div>
-                                    <h2 className="head_two_txt">{item.title}</h2>
-                                    <div className="head_three_txt">{item.alt_text}</div>
-                                    <div className="cta-dicover"><Link to="#"><IntlMessages id="banner.cta" /></Link></div></div></>}
+                                {(activeIndex === i) &&
+                                    <> <div className="slider-text-inner">
+                                        <div className="head_one_txt"><IntlMessages id="header-banner-text" /></div>
+                                        <h2 className="head_two_txt">{item.title}</h2>
+                                        <div className="head_three_txt">{item.alt_text}</div>
+                                        <div className={`cta-dicover ${i}`}><a href={item.link} ><IntlMessages id="banner.cta" /></a></div></div>
+                                    </>
+                                }
+                                {item.is_featured === 1 ?
+                                    < > <div style={{ "display": !newSet ? "none" : "block" }} className="slider-text-inner sf">
+                                        <div className="head_one_txt"><IntlMessages id="header-banner-text" /></div>
+                                        <h2 className="head_two_txt">{item.title}</h2>
+                                        <div className="head_three_txt">{item.alt_text}</div>
+                                        <div className={`cta-dicover ${i}`}><a href={item.link} ><IntlMessages id="banner.cta" /></a></div></div>
+                                    </> : ''}
+
                             </div>)
                     })}
                 </div>
@@ -65,7 +79,7 @@ function HomeBanner(props) {
                                 style={{ backgroundImage: `url(${imagePath + item.resource_path})`, height: '657px', width: '436px', flex: (activeIndex === i) ? 7 : 1 }} >
                                 <img src={imagePath + item.resource_path} alt="" />
                                 <div className="slider-text-inner">
-                                    <div className="head_one_txt">Welcome to Our Marketplace</div>
+                                    <div className="head_one_txt"><IntlMessages id="header-banner-text" /></div>
                                     <h2 className="head_two_txt">{item.title}</h2>
                                     <div className="head_three_txt">{item.alt_text}</div>
                                     <div className="cta-dicover"><Link to={item.link}><IntlMessages id="banner.cta" /></Link></div></div>

@@ -4,7 +4,7 @@ import actions from "./actions";
 import appAction from "../app/actions"
 import Login from "./Login";
 import notification from "../../components/notification";
-// import { useHistory } from "react-router";
+import { sessionService } from 'redux-react-session';
 
 import { setCookie, removeCookie, getCookie } from "../../helpers/session";
 const loginApi = new Login();
@@ -25,8 +25,18 @@ export function* loginRequest() {
         //Check if remember me is clicked
         if (userInfo) {
           const token = yield call(loginApi.getAuthRegister, userInfo.email);
-          if (token.data[0].entity_id) localStorage.setItem('cust_id', token.data[0].entity_id); //store customer id
-
+   
+          let id_token = response.data;
+          let data = {
+            'cust_id': token.data[0].entity_id,
+            'token_email': token.data[0].email,
+            'token_name': token.data[0].firstname + ' ' + token.data[0].lastname,
+            'token': token.data[0].group_id,
+            'id_token': response.data
+          }
+     
+          sessionService.saveSession({ id_token })
+          sessionService.saveUser(data)
           yield put({
             type: actions.LOGIN_SUCCESS,
             token: response.data,
@@ -47,17 +57,15 @@ export function* loginRequest() {
             removeCookie("remember_me");
           }
 
-          localStorage.setItem('id_token', response.data);
-          localStorage.setItem('token_email', token.data[0].email);
-          localStorage.setItem('token_name', token.data[0].firstname + ' ' + token.data[0].lastname);
-          localStorage.setItem('token', token.data[0].group_id);
-          // const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
-          // //console.log(cartToken);
-          // if (cartToken.data === true) {
-          //   localStorage.removeItem('cartQuoteToken');
-          // } else {
-          //   localStorage.setItem('cartQuoteId', cartToken.data.id);
-          // }
+
+
+          const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
+          console.log(cartToken);
+          if (cartToken.data === true) {
+            localStorage.removeItem('cartQuoteToken');
+          } else {
+            localStorage.setItem('cartQuoteId', cartToken.data);
+          }
 
           yield put({
             type: appAction.SHOW_SIGHNIN,
@@ -68,11 +76,12 @@ export function* loginRequest() {
             showHelpus: true
           });
           notification("success", "", "Successfully Logged in");
-          if (token.data[0].group_id === "4") {
-            yield put(push("/prive-user"));
-          } else {
-            yield put(push("/"));
-          }
+          // if (token.data[0].group_id === "4") {
+          //   //yield put(push("/prive-user"));
+          //   window.location.href = '/prive-user';
+          // } else {
+          //   window.location.href = '/';
+          // }
         }
       } else {
         notification("error", "", "Invalid Username or password.");
@@ -119,11 +128,18 @@ export function* registerRequest() {
             }
           });
           notification("success", "", "Account registered and Successfully Logged in");
-          localStorage.setItem('id_token', token.data[0].new_token);
-          localStorage.setItem('cust_id', token.data[0].entity_id);
-          localStorage.setItem('token_email', token.data[0].email);
-          localStorage.setItem('token_name', token.data[0].firstname + ' ' + token.data[0].lastname);
-          localStorage.setItem('token', token.data[0].group_id);
+
+          let id_token = token.data[0].new_token;
+          let data = {
+            'cust_id': token.data[0].entity_id,
+            'token_email': token.data[0].email,
+            'token_name': token.data[0].firstname + ' ' + token.data[0].lastname,
+            'token': token.data[0].group_id,
+            'id_token': response.data
+          }
+
+          sessionService.saveSession({ id_token })
+          sessionService.saveUser(data);
 
           yield setCookie("username", token.data[0].email);
           if (token.data[0].group_id === "4") {

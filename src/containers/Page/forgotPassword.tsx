@@ -8,7 +8,7 @@ import { useIntl } from 'react-intl';
 function ForgottenPassword(props) {
   const intl = useIntl();
   const [state, setState] = useState({
-    email: ""
+    email1: ""
   })
   const [isShow, setIsShow] = useState(false);
   const [errors, setError] = useState({
@@ -27,25 +27,25 @@ function ForgottenPassword(props) {
     e.preventDefault();
     if (handleValidation()) {
       setIsShow(true);
-      let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email, websiteId: 1 });
+      let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email1, websiteId: 1 });
       if (result.data) {
-        notification("success", "", <IntlMessages id="forgotpassmail" />);
+        notification("success", "", intl.formatMessage({ id: "forgotpassmail" }));
         setState(prevState => ({
           ...prevState,
-          email: ""
+          email1: ""
         }));
         setIsShow(false);
       } else {
         setState(prevState => ({
           ...prevState,
-          email: ""
+          email1: ""
         }));
-        notification("error", "", <IntlMessages id="NotFound" />);
+        notification("error", "", intl.formatMessage({ id: "genralerror" }));
         setIsShow(false);
       }
     } else {
 
-      notification("error", "", <IntlMessages id="emailvalidation" />);
+      notification("error", "", intl.formatMessage({ id: "emailvalidation" }));
     }
   }
 
@@ -54,15 +54,15 @@ function ForgottenPassword(props) {
     let error = {};
     let formIsValid = true;
 
-    if (typeof state["email"] !== "undefined") {
-      if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
+    if (typeof state["email1"] !== "undefined") {
+      if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email1"]))) {
         formIsValid = false;
-        error["email"] = "Email is not valid";
+        error["email1"] = intl.formatMessage({ id: "emailvalidation" });
       }
     }
-    if (!state["email"]) {
+    if (!state["email1"]) {
       formIsValid = false;
-      error["email"] = "Email is required";
+      error["email1"] =  intl.formatMessage({ id: "emailrequired" });
     }
 
     setError({ errors: error });
@@ -72,11 +72,11 @@ function ForgottenPassword(props) {
 
 
   return (
-    <div className="container" style={{ marginTop: '150px' }}>
-      <div className="row arabic-rtl-direction">
-        <div className="col-md-6 offset-md-3">
+    <div className="container">
+      <div className="row arabic-rtl-direction forgot">
+        <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-12 text-center">
               <h3><IntlMessages id="forgot_pass" /></h3>
               <p><IntlMessages id="forgotpass-subtitle" /></p>
             </div>
@@ -88,13 +88,13 @@ function ForgottenPassword(props) {
                 <label htmlFor="exampleInputEmail1"><IntlMessages id="email_address" /></label>
                 <input type="email"
                   className="form-control"
-                  id="email"
+                  id="email1"
                   aria-describedby="emailHelp"
                   placeholder={intl.formatMessage({ id: 'email_address' })}
-                  value={state.email}
+                  value={state.email1}
                   onChange={handleChange}
                 />
-                <span className="error">{errors.errors["email"]}</span>
+                <span className="error">{errors.errors["email1"]}</span>
               </div>
             </div>
             <br />

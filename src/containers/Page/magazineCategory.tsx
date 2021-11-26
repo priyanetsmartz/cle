@@ -166,12 +166,12 @@ function MagazineCategory(props) {
         if (typeof state["email"] !== "undefined") {
             if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
                 formIsValid = false;
-                error["email"] = "Email is not valid";
+                error["email"] = intl.formatMessage({ id: "emailvalidation" });
             }
         }
         if (!state["email"]) {
             formIsValid = false;
-            error["email"] = "Email is required";
+            error["email"] = intl.formatMessage({ id: "emailrequired" });
         }
 
         setError({ errors: error });
@@ -200,7 +200,7 @@ function MagazineCategory(props) {
             }
         } else {
             setIsShow(false);
-            notification("warning", "", <IntlMessages id="emailvalidation" />);
+            notification("error", "", intl.formatMessage({ id: "emailvalidation" }));
         }
     }
     return (
@@ -332,14 +332,14 @@ function MagazineCategory(props) {
                                     <ul className="pagination justify-content-center">
                                         <li
                                             className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
+                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><IntlMessages id="pagination-prev" /></Link>
                                         </li>
                                         {getPaginationGroup().map((i, index) => (
                                             <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
                                         ))}
                                         <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
                                             <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                                to="/">Next</Link>
+                                                to="/"><IntlMessages id="pagination-next" /></Link>
                                         </li>
                                     </ul>
                                 </nav>

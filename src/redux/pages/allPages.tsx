@@ -34,12 +34,23 @@ export function Pages(value: string, language: string) {
     return AdminApi.request("rest/V1/cmsPage/search?searchCriteria[filterGroups][0][filters][0][field]=store_id&searchCriteria[filterGroups][0][filters][0][value]=" + storeId + "&searchCriteria[filterGroups][0][filters][0][condition_type]==&searchCriteria[filterGroups][1][filters][0][field]=identifier&searchCriteria[filterGroups][1][filters][0][value]=" + value + "&searchCriteria[filterGroups][1][filters][0][condition_type]==", payload, "GET", "");
 }
 
-export function GetHelpUsForm(language) {
+export function GetHelpUsForm(language,categoryname) {
     var storeId = language === 'english' ? 3 : 2;
-    var formCode = language === 'english' ? 'home_page_survey' : 'Home_page_survery_arabic';
+
+    let formCode ='';
+    if (categoryname === 'women' || categoryname === '' ) {
+        formCode = language === 'english' ? 'home_page_survey' : 'Home_page_survery_arabic';
+    }else{
+        formCode = language === 'english' ? `home_page_survey_${categoryname}` : `home_page_survey_${categoryname}_arabic`;
+    }
     return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=${formCode}`, "", "GET", "");
 }
 
+export function GetOrderUsForm(language) {
+    var storeId = language === 'english' ? 3 : 2;
+    var formCode = language === 'english' ? 'checkout_process_feedback' : 'checkout_process_feedback_arabic';
+    return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=${formCode}`, "", "GET", "");
+}
 export function SaveAnswers(data) {
     return AdminApi.request("rest/all/V1/amasty_customform/answer", data, "POST", "");
 }

@@ -4,12 +4,13 @@ import { useLocation, useHistory } from "react-router";
 import { ValidateToken, SaveNewPass } from "../../redux/pages/allPages";
 import notification from '../../components/notification';
 import { Link } from "react-router-dom";
-
+import { useIntl } from 'react-intl';
 function ResetPassword(props) {
     let history = useHistory();
     const pass = useLocation().search;
     const token = new URLSearchParams(pass).get("token");
     const customerId = new URLSearchParams(pass).get("id");
+    const intl = useIntl();
     // console.log(token, customerId);
 
     const [state, setState] = useState({
@@ -52,9 +53,9 @@ function ResetPassword(props) {
         setIsShow(true);
         if (handleValidation()) {
             let result: any = await SaveNewPass({ email: "", resetToken: token, newPassword: state.password });
-            console.log(result);
+            //   console.log(result);
             if (result.data) {
-                notification("success", "", <IntlMessages id="resetPassword" />);
+                notification("success", "", intl.formatMessage({ id: "resetPassword" }));
                 setState(prevState => ({
                     ...prevState,
                     password: "",
@@ -63,12 +64,12 @@ function ResetPassword(props) {
                 setIsShow(false);
                 history.push("/");
             } else {
-                notification("error", "",<IntlMessages id="tokenExpired" />);
+                notification("error", "", intl.formatMessage({ id: "tokenExpired" }));
                 history.push("/");
             }
         } else {
             setIsShow(false);
-            notification("error", "", <IntlMessages id="validPass" />);
+            notification("error", "", intl.formatMessage({ id: "validPass" }));
         }
     }
 
@@ -79,22 +80,22 @@ function ResetPassword(props) {
 
         if (!state["password"]) {
             formIsValid = false;
-            error["password"] = "Password is required";
+            error["password"] = intl.formatMessage({ id: "passwordreq" });
         }
 
         if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#^])([A-Za-z\d$@$!%*?&#^]{8,})$/.test(state["password"]))) {
             formIsValid = false;
-            error["password"] = 'The password should contain at least one digit, one lower case, one upper case, Special Character from amongst these $@$!%*?&#^ and at least 8 from the mentioned characters.';
+            error["password"] = intl.formatMessage({ id: "passwordvalidation" });
         }
 
         if (!state["confirmPassword"]) {
             formIsValid = false;
-            error["confirmPassword"] = "Confirm Password is required";
+            error["confirmPassword"] = intl.formatMessage({ id: "confirmpasswordreq" });
         }
 
         if (state["confirmPassword"] !== state["password"]) {
             formIsValid = false;
-            error["confirmPassword"] = 'Confirm Password not matched';
+            error["confirmPassword"] = intl.formatMessage({ id: "confirmpasswordnotmatched" });
         }
 
         setError({ errors: error });

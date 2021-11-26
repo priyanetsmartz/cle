@@ -4,19 +4,21 @@ import { GetHelpUsForm, SaveAnswers } from '../../../redux/pages/allPages';
 import { connect } from "react-redux";
 import { setCookie, getCookie } from "../../../helpers/session";
 import appAction from "../../../redux/app/actions";
+import { Link } from "react-router-dom";
 
 const { showSignin } = appAction;
 
 function Personal(props) {
-
-    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
-    const [isSurvey, setIsSurvey] = useState(customerId && (customerId == getCookie('help-us')) ? true : false);
+    let statuspop = getCookie('help-us-hide') === 'true' ? false : true;
+    const [customerId, setCustomerId] = useState(props.token.cust_id);
+    const [isSurvey, setIsSurvey] = useState(customerId && (customerId === getCookie('help-us')) ? true : false);
 
     const [onLogin, setOnLogin] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
     const [isSurveyEnd, setIsSurveyEnd] = useState(false);
     const [isHidden, setIsHidden] = useState(false);
     const [loading, setloading] = useState(false);
+    const [hidePersonal, setHidePersonal] = useState(statuspop);
     const [activeIndex, setActiveIndex] = useState(0);
 
     const [form, setForm] = useState({
@@ -47,26 +49,37 @@ function Personal(props) {
     const [answers, setAnswers] = useState({});
     const language = getCookie('currentLanguage');
     useEffect(() => {
+        //console.log(props.currentCAT) 
         async function getData() {
             let lang = props.languages ? props.languages : language;
-            let result: any = await GetHelpUsForm(lang);
-            setForm(result.data[0]);
+            let result: any = await GetHelpUsForm(lang, props.currentCAT);
+            if (result && result.data && result.data.length > 0) {
+                setForm(result.data[0]);
+            } else {
+                setForm({
+                    "title": "",
+                    "form_id": "",
+                    "store_id": "",
+                    "form_json": []
+                });
+            }
+
         }
         getData()
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [props.languages]);
+    }, [props.languages, props.currentCAT]);
 
     useEffect(() => {
-        let tokenCheck = localStorage.getItem('id_token');
+        let tokenCheck = props.token.id_token;
         let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
         if (!tokenCheckFilter) {
             setOnLogin(false);
         } else {
             setOnLogin(true);
-            setCustomerId(localStorage.getItem('cust_id'));
+            setCustomerId(props.token.cust_id);
             setIsSurvey(customerId && (customerId === getCookie('help-us')) ? true : false);
         }
         return () => {
@@ -83,13 +96,20 @@ function Personal(props) {
             label: form.form_json[activeIndex][0].label,
             type: form.form_json[activeIndex][0].type
         }
-        var formCode = props.language === 'english' ? 'home_page_survey' : 'Home_page_survery_arabic';
+
+        let formCode = '';
+        if (props.categoryName === 'women' || props.categoryName === '') {
+            formCode = props.languages === 'english' ? 'home_page_survey' : 'Home_page_survery_arabic';
+        } else {
+            formCode = props.languages === 'english' ? `home_page_survey_${props.categoryName}` : `home_page_survey_${props.categoryName}_arabic`;
+        }
+
         answers[form.form_json[activeIndex][0].name] = tempObj
         setAnswers(answers);
         payload.answer.response_json = JSON.stringify(answers);
         payload.answer.form_id = form.form_id;
         payload.answer.store_id = form.store_id;
-        payload.answer.customer_id = localStorage.getItem('cust_id');
+        payload.answer.customer_id = props.token.cust_id;
         payload.answer.form_name = form.title;
         payload.answer.form_code = formCode;
         setPayload(payload);
@@ -116,9 +136,14 @@ function Personal(props) {
         showSignin(true);
     }
 
+    const closePopup = () => {
+        setHidePersonal(false);
+        setCookie("help-us-hide", 'true');
+    }
+
     return (
-        <>
-            <section className="width-100 mb-5">
+        <>{form.form_json.length > 1 && (
+            <section className="width-100 mb-5" style={{ 'display': hidePersonal ? 'block' : 'none' }}>
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -167,15 +192,16 @@ function Personal(props) {
                                                     <h3><IntlMessages id="home.noWorries" /></h3>
                                                 </div>
                                             </div>
-                                            <div className="alert_cross">
-                                                <a href="#"><img src="images/cross-blue_icn.svg" className="" alt="" /> </a>
-                                            </div>
+                                            <div className="alert_cross" onClick={closePopup}><Link to='#'>X </Link></div>
                                         </div>}
 
                                         {isSurvey && (
-                                            <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
-                                                <h3><IntlMessages id="helpus.thankyou" /></h3>
-                                            </div>
+                                            <>
+                                                <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
+                                                    <h3><IntlMessages id="helpus.thankyou" /></h3>
+                                                </div>
+                                                <div className="alert_cross" onClick={closePopup}><Link to='#'>X </Link></div>
+                                            </>
                                         )}
                                     </div>
                                 </div>
@@ -185,6 +211,7 @@ function Personal(props) {
                     </div>
                 </div>
             </section>
+        )}
         </>
     );
 }
@@ -199,7 +226,9 @@ function mapStateToProps(state) {
     }
     return {
         languages: languages,
-        helpusVal: helpusVal
+        helpusVal: helpusVal,
+        token: state.session.user,
+        currentCAT: state.Cart.catname
     };
 };
 export default connect(

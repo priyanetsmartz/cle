@@ -11,7 +11,7 @@ import { vendorLogin } from '../../../redux/pages/vendorLogin';
 import { useHistory } from "react-router-dom";
 import FacebookLoginButton from '../../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../../socialMediaLogin/Google';
-const { login, logout } = authAction;
+const { login, logout ,vendorrrr} = authAction;
 
 function VendorLogin(props) {
   const history = useHistory();
@@ -56,9 +56,17 @@ function VendorLogin(props) {
           email: result.data[0].email,
           telephone: result.data[0].telephone,
           country_id: result.data[0].country_id,
+          street : result.data[0].street,
+          city : result.data[0].city,
         }
+        props.vendorrrr(vendorObj)
         localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
-        history.push(`/vendor/profile`);
+       // history.push(`/vendor/profile`);
+        window.location.href = '/vendor/profile';
+        // setTimeout(() => {
+        //   history.push(`/vendor/profile`);
+        // }, 3000);
+
       }
     } else {
       notification("warning", "", "Please enter valid email and password");
@@ -115,11 +123,12 @@ function VendorLogin(props) {
       <div className="container">
         <div className="row">
           <div className="col-md-10 offset-md-1">
-            <h2 className="DC-section-title"><IntlMessages id="newlogin" /></h2>
-            <p className="login-desc"><IntlMessages id="newlogin-sub" /></p>
+            <h2 className="DC-section-title"><IntlMessages id="newloginseller" /></h2>
+            <p className="login-desc"><IntlMessages id="newlogin-subseller" /></p>
           </div>
         </div>
         <div className="row m-5 login-register-inputs">
+        <div className="col-md-2"></div>
           <div className="col-md-6">
             <div className="login-sec">
               <h3><IntlMessages id="login.button" /></h3>
@@ -157,21 +166,22 @@ function VendorLogin(props) {
                       <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
                       <IntlMessages id="loading" />
                     </div>
-                    <Link onClick={(e) => { handleForgetPopup(e); }} className="forgot-pswd-new float-end"><IntlMessages id="forgot_pass" />?</Link>
+                    {/* <Link onClick={(e) => { handleForgetPopup(e); }} className="forgot-pswd-new float-end"><IntlMessages id="forgot_pass" />?</Link> */}
                   </div>
                   <div className="clearfix"></div>
                 </div>
               </div>
-              <div className="or-bg-new">
+              {/* <div className="or-bg-new">
                 <div className="or-text-new">Or</div>
               </div>
               <div className="social-login">
                 <GoogleLoginButton isVendor={true} />
                 <FacebookLoginButton isVendor={true} />
 
-              </div>
+              </div> */}
             </div>
           </div>
+          <div className="col-md-2"></div>
         </div>
 
       </div>
@@ -196,5 +206,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { login }
+  { login ,vendorrrr}
 )(VendorLogin);

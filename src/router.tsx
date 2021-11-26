@@ -1,7 +1,5 @@
 import { Route, Switch } from 'react-router' // react-router v4/v5
 import { ConnectedRouter } from 'connected-react-router';
-// import About from './containers/Page/about';
-// import Magazine from './containers/Page/magazine';
 import SinglePost from './containers/Page/singlePost';
 import ForgottenPassword from './containers/Page/forgotPassword';
 import PostComment from './containers/Page/postComments';
@@ -10,13 +8,10 @@ import VendorRoute from "./components/all-route/vendorRoute";
 import ProductRoutes from "./components/all-route/ProductRoutes";
 import ProductHome from "./components/all-route/productHomeRoute"
 import PrivateRoute from "./components/all-route/LoggedinRoute";
-import HomeRoute from './components/all-route/HomeRoute';
 import PriveRoute from "./components/all-route/priveRoute";
 import AllPosts from './containers/Page/magazineCategory';
-import NewHome from './containers/Page/anewpage';
 import ThankYou from './containers/Page/ThankYou';
 import ResetPassword from './containers/Page/ResetPassoword';
-import profile from './containers/Page/profile';
 import contact from "./containers/Page/contact";
 import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 import PriveUser from './containers/Page/PriveUser';
@@ -29,15 +24,12 @@ import OrderDetails from './containers/Page/customer/orderDetails';
 import Categories from './containers/Page/categories/categories';
 import ProductDetails from './containers/Page/product/product-details/productDetails';
 import VendorLogin from './containers/Page/business/vendorLogin';
-import DesignerCategories from './containers/Page/designer/designer';
 import Checkout from './containers/Page/product/checkout/checkout';
 import ExploreDesigner from './containers/Page/designer/exploreDesigner';
 import Faq from './containers/Page/faq/faq';
 import FaqListing from './containers/Page/faq/faqListing';
 import Search from './containers/Page/search';
 import orderThankyou from './containers/Page/product/orderThankyou';
-// import New from './containers/Page/new';
-
 import Product from './containers/Page/product/product';
 import Cart from './containers/Page/product/cart/cart';
 
@@ -47,12 +39,14 @@ const PublicRoutes = ({ history }) => {
     <ConnectedRouter history={history}>
       <Switch>
         <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
+        <ProductRoutes exact path="/search/:brandname" component={Search} />
         <ProductRoutes exact path="/thankyou" component={orderThankyou} />
         <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
         <ProductRoutes exact path="/products/:category/:subcat/:childcat/:greatchildcat/all" component={Product} />
         <ProductRoutes exact path="/products/:category/:subcat/:childcat/all" component={Product} />
         <ProductRoutes exact path="/products/:category/:subcat/all" component={Product} />
         <ProductRoutes exact path="/products/:category/all" component={Product} />
+        
         <ProductHome exact path="/products/:category/:subcat/:childcat/:greatchildcat" component={Categories} />
         <ProductHome exact path="/products/:category/:subcat/:childcat" component={Categories} />
         <ProductHome exact path="/products/:category/:subcat/:id" component={Categories} />
@@ -62,30 +56,28 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
         <PrivateRoute exact path="/notifications" component={Notifications} />
         <PrivateRoute exact path="/customer/:tab" component={Customer} />
-        <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
+        <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />    
+        <ProductHome exact path="/category/:categoryname" component={HomePage} />   
         <ProductHome exact path="/" component={HomePage} />
+        <ProductHome exact path="/:signup/:member" component={HomePage} />
         <ProductRoutes exact path="/return-order" component={ReturnPage} />
-        {/* <PrivateRoute exact path="/designer-categories" component={DesignerCategories} /> */}
+
         <PrivateRoute exact path="/explore-desginer" component={ExploreDesigner} />
         <ProductRoutes exact path="/magazines/:category" component={AllPosts} />
         <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />
         <ProductRoutes exact path="/magazines" component={AllPosts} />
-        <HomeRoute exact path="/:signup/:member" component={NewHome} />
-        {/* <HomeRoute exact path="/" component={NewHome} /> */}
+    
+
         <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
         <ProductRoutes exact path="/contact-us" component={contact} />
         <ProductRoutes exact path="/faq" component={Faq} />
         <ProductRoutes exact path="/faq-listing" component={FaqListing} />
 
-        {/* <PrivateRoute exact path="/customer-orders" component={CustomerOrders} /> */}
-
-
-
         <ProductRoutes exact path="/vendor-login" component={VendorLogin} />
         <ProductRoutes exact path="/forgot-password" component={ForgottenPassword} />
         <ProductRoutes exact path="/reset-password" component={ResetPassword} />
         <PriveRoute exact path="/prive-user" component={PriveUser} />
-        <PrivateRoute exact path="/profile" component={profile} />
+
         <ProductRoutes exact path="/password-link-expired" component={PasswordLinkExpired} />
         <Route exact path="/post-comment">
           <PostComment />
@@ -94,7 +86,6 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/my-cart" component={Cart} />
         <ProductRoutes exact path="/checkout" component={Checkout} />
         <ProductRoutes path="/:id" component={Pages} />
-        {/* <Route exact path="/page-not-found" component={NotFound} /> */}
       </Switch>
     </ConnectedRouter >
   );

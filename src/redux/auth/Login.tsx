@@ -7,13 +7,7 @@ const AdminApi = new ADMINAPI();
 
 class Login {
 
-  // getAdminToken() {
-  //   var payload = {
-  //     username: 'monikat',
-  //     password: 'monika@123'
-  //   };
-  //   return AdminApi.request("rest/V1/integration/admin/token", payload, "POST", "");
-  // }
+
   //Login
   login(email: string, password: string, type: string) {
     var payload = {
@@ -21,7 +15,7 @@ class Login {
       password: password,
       type: type
     };
-    return Api.request("rest/V1/integration/customer/token", payload, "POST", "");
+    return AdminApi.request("rest/V1/integration/customer/token", payload, "POST", "");
   }
 
   getCustomerType() {
@@ -29,7 +23,7 @@ class Login {
     return AdminApi.request("/rest/V1/customerGroups/search/?searchCriteria[filterGroups][0][filters][0][field]=id&searchCriteria[filterGroups][0][filters][0][value]=3&searchCriteria[filterGroups][0][filters][0][condition_type]=gt", payload, "GET", "");
   }
   register(firstname: string, lastname: string, email: string, password: string, type: number, store: string) {
-    var storeId = store === 'english' ? 3 : 3;
+    var storeId = store === 'english' ? 3 : 2;
     var payload = {
       "customer": {
         "email": email,
@@ -60,17 +54,18 @@ class Login {
   }
 
   genCartQuoteID(localToken) {
-    console.log('hetre');
+    //console.log('hetre');
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     const language = getCookie('currentLanguage');
-    if (cartQuoteToken) {
+    if (cartQuoteToken && !localToken) {
       var storeId = language === 'arabic' ? 2 : 3;
-      let cartData = {
-        "customerId": parseInt(localToken),
-        "storeId": storeId// check for language input
-      }
-      return Api.request(`rest/V1/guest-carts/${cartQuoteToken}`, cartData, "PUT", "")
+      // let cartData = {
+      //   "customerId": parseInt(localToken),
+      //   "storeId": storeId// check for language input
+      // }
+      return Api.request(`rest/V1/guest-carts/${cartQuoteToken}`, '', "PUT", "")
     } else {
+      localStorage.removeItem('cartQuoteToken');
       return AdminApi.request(`rest/V1/customers/${localToken}/carts`, "", "POST", "")
 
       // return Api.request(`rest/V1/carts/mine`, '', 'GET', "")

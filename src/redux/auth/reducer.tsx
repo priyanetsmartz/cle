@@ -22,6 +22,8 @@ export default function authReducer(state = initState, action) {
       return { ...state, loading: false };
     case actions.GET_GLOBALAUTH:
       return { ...state, globalAuth: action.token, loading: false };
+    case actions.VENDOR_DATA:
+      return { ...state, vendorr: action.token };
     default:
       return state;
   }

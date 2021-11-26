@@ -9,8 +9,8 @@ const { showSignin } = appAction;
 
 function HelpUs(props) {
 
-    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
-    const [isSurvey, setIsSurvey] = useState(customerId && (customerId == getCookie('help-us')) ? true : false);
+    const [customerId, setCustomerId] = useState(props.token.cust_id);
+    const [isSurvey, setIsSurvey] = useState(customerId && (customerId === getCookie('help-us')) ? true : false);
 
     const [onLogin, setOnLogin] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
@@ -49,7 +49,7 @@ function HelpUs(props) {
     useEffect(() => {
         async function getData() {
             let lang = props.languages ? props.languages : language;
-            let result: any = await GetHelpUsForm(lang);
+            let result: any = await GetHelpUsForm(lang,'');
             setForm(result.data[0]);
         }
         getData()
@@ -60,13 +60,14 @@ function HelpUs(props) {
     }, [props.languages]);
 
     useEffect(() => {
-        let tokenCheck = localStorage.getItem('id_token');
+       
+        let tokenCheck = props.token.id_token;
         let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
         if (!tokenCheckFilter) {
             setOnLogin(false);
         } else {
             setOnLogin(true);
-            setCustomerId(localStorage.getItem('cust_id'));
+            setCustomerId(props.token.cust_id);
             setIsSurvey(customerId && (customerId === getCookie('help-us')) ? true : false);
         }
         return () => {
@@ -89,7 +90,7 @@ function HelpUs(props) {
         payload.answer.response_json = JSON.stringify(answers);
         payload.answer.form_id = form.form_id;
         payload.answer.store_id = form.store_id;
-        payload.answer.customer_id = localStorage.getItem('cust_id');
+        payload.answer.customer_id = props.token.cust_id;
         payload.answer.form_name = form.title;
         payload.answer.form_code = 'help-us';
         setPayload(payload);
@@ -121,9 +122,9 @@ function HelpUs(props) {
             <div className="help-us-body">
                 <div className="container help-us-inner">
                     <figure className="text-center page-head">
-                         
-						<svg xmlns="http://www.w3.org/2000/svg" width="848" height="117" viewBox="0 0 848 117">
-  <text id="Help_us" data-name={<IntlMessages id="help_us.title" />} transform="translate(424 85)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="96" fontFamily="Monument Extended Book"><tspan x="-422.016" y="0"><IntlMessages id="help_us.title" /></tspan></text> </svg>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="848" height="117" viewBox="0 0 848 117">
+                            <text id="Help_us" data-name={<IntlMessages id="help_us.title" />} transform="translate(424 85)" fill="none" stroke="#2e2baa" strokeWidth="1" fontSize="96" fontFamily="Monument Extended Book"><tspan x="-422.016" y="0"><IntlMessages id="help_us.title" /></tspan></text> </svg>
 
                     </figure>
                     <div className="row">
@@ -131,7 +132,7 @@ function HelpUs(props) {
                         {!isSurvey && (
                             <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                 <div className="show-hide">
-                                    
+
                                 </div>
                                 {!isHidden && <div>
                                     <ul className="counter-list arabic-rtl-direction">
@@ -180,7 +181,8 @@ function mapStateToProps(state) {
     }
     return {
         languages: languages,
-        helpusVal: helpusVal
+        helpusVal: helpusVal,
+        token: state.session.user
     };
 };
 export default connect(

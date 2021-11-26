@@ -22,16 +22,17 @@ import { siteConfig } from '../../../../settings';
 import GiftMessage from './GiftMessage';
 import Login from '../../../../redux/auth/Login';
 import appAction from "../../../../redux/app/actions";
+import { useIntl } from 'react-intl';
 const loginApi = new Login();
 const { showSignin, showLoader } = appAction;
-const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts } = cartAction;
+const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, openSizeGuide } = cartAction;
 function ProductDetails(props) {
     const { sku } = useParams();
+    const intl = useIntl();
     const language = getCookie('currentLanguage');
     const [opacity, setOpacity] = useState(1);
     const [isShow, setIsShow] = useState(false);
     const [shareUrl, setShareUrl] = useState('');
-    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
     const [iteminWhishlist, setItemInWhishlist] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
@@ -46,12 +47,11 @@ function ProductDetails(props) {
     const [measuringGuideModal, setMeasuringGuideModal] = useState(false);
     const [magezineData, setMagezineData] = useState({});
     const [recomendationsData, setRecomendations] = useState([]);
-    const [linkedProducts, setProdLinked] = useState([]);
     const [configurableOptions, setConfigurableOptions] = useState([]);
     const [childrenProducts, seChildrenProducts] = useState([]);
     const [productSizeDetails, setProductSizeDetails] = useState({});
+    const [measuringDetails, setMeasuringDetails] = useState({});
     const [tagsState, setTagsState] = useState([]);
-    const [selectedOption, setSelectedOption] = useState(0);
     const [slectedAttribute, setSlectedAttribute] = useState(0);
     const [extensionAttributes, setExtensionAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
@@ -59,18 +59,20 @@ function ProductDetails(props) {
 
 
     useEffect(() => {
-        // props.showLoader(true)
-        const localToken = localStorage.getItem('token');
-        let lang = props.languages ? props.languages : language;
+        setTimeout(() => {
+            window.scrollTo(0, 0)
+            props.showLoader(false);
+        }, 3000);
+        const localToken = props.token.token;
         setToken(localToken)
         getProductDetailsFxn(sku);
         setShareUrl(window.location.href);
         return () => {
             props.openGiftBoxes(0);
         }
-    }, [sku, props.languages])
+    }, [sku, props.languages, props.token])
     useEffect(() => {
-        //  console.log(props.items.Cart);
+        //  console.log(props.items.Cart.isOpenSizeGuide);
         let giftBox = props.items.Cart.openGiftBox === 0 ? false : true;
         setIsGiftMessage(giftBox)
         setSizeGuideModal(props.items.Cart.isOpenSizeGuide);
@@ -150,7 +152,7 @@ function ProductDetails(props) {
     }
 
     const sizeGuideModalHandler = () => {
-        setSizeGuideModal(!sizeGuideModal);
+        props.openSizeGuide(true);
     }
 
     async function attributeSection(attrs) {
@@ -183,7 +185,7 @@ function ProductDetails(props) {
     async function getProductDetailsFxn(skuUrl) {
         setOpacity(0.3)
         let lang = props.languages ? props.languages : language;
-        let customer_id = localStorage.getItem('cust_id');
+        let customer_id = props.token.cust_id;
         let result: any = await getProductDetails(skuUrl, lang);
         //  console.log(result.data)
         let projectSingle = {};
@@ -205,7 +207,7 @@ function ProductDetails(props) {
             let recomendations = productExtras && productExtras.data[0] && productExtras.data[0].recommendation ? productExtras.data[0].recommendation : []
             setMagezineData(posts)
             setRecomendations(recomendations)
-            
+
         }
 
         if (result.data.type_id === "configurable") {
@@ -215,7 +217,7 @@ function ProductDetails(props) {
             // console.log(childProducts.data)
             seChildrenProducts(childProducts.data);
         }
-        let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
+        let description = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [];
         if (result.data.custom_attributes) {
             result.data.custom_attributes.map((attributes) => {
                 if (attributes.attribute_code === "description") {
@@ -223,6 +225,15 @@ function ProductDetails(props) {
                 }
                 if (attributes.attribute_code === "special_price") {
                     special_price = attributes.value;
+                }
+                if (attributes.attribute_code === "brand") {
+                    brand = attributes.value;
+                }
+                if (attributes.attribute_code === "watch_color") {
+                    watch_color = attributes.value;
+                }
+                if (attributes.attribute_code === "gift_message_available") {
+                    gift = attributes.value;
                 }
                 if (attributes.attribute_code === "short_description") {
                     short = attributes.value;
@@ -244,14 +255,17 @@ function ProductDetails(props) {
         }
 
         // console.log(tags);
-   //     console.log(result.data.price)
+        //     console.log(result.data.price)
         projectSingle['id'] = result.data.id;
         projectSingle['type_id'] = result.data.type_id;
         projectSingle['sku'] = result.data.sku;
         projectSingle['name'] = result.data.name;
+        projectSingle['brand'] = brand;
         projectSingle['price'] = result.data.price ? result.data.price : 0;
         projectSingle['description'] = description;
         projectSingle['saleprice'] = special_price ? special_price : 0;
+        projectSingle['watch_color'] = watch_color;
+        projectSingle['gift'] = gift;
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = result.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
@@ -276,8 +290,9 @@ function ProductDetails(props) {
         //   //  setRecomendations(recomendationsData)
         //     props.recomendedProducts(recomendationsData)
         // }
-        //console.log(recomendationsData)
+        // console.log(result.data)
         setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
+        setMeasuringDetails(result.data.extension_attributes.mp_sizechart.rule_description);
         // console.log(productDetails)
     }
 
@@ -285,7 +300,7 @@ function ProductDetails(props) {
         if (productDetails['type_id'] === 'configurable') {
             if (slectedAttribute === 0) {
                 setIsShow(false);
-                notification("error", "", "Please select Size");
+                notification("error", "", intl.formatMessage({ id: "selectproductsize" }));
                 return false;
             }
         } else {
@@ -296,50 +311,42 @@ function ProductDetails(props) {
     }
 
     async function handleCart(id: number, sku: string) {
-        //console.log(productDetails)
+        //console.log('productDetails')
         setIsShow(true);
         let cartData = {};
         let cartSucces: any;
         let cartQuoteId = '';
-        let customer_id = localStorage.getItem('cust_id');
+        let customer_id = props.token.cust_id;
         let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
         //console.log(cartQuoteIdLocal)
-        if (cartQuoteIdLocal || customer_id) {
+        if (cartQuoteIdLocal && customer_id) {
+            //   console.log('vvvv')
             let customerCart: any = await loginApi.genCartQuoteID(customer_id)
             cartQuoteId = cartQuoteIdLocal
             if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
                 cartQuoteId = customerCart.data;
             }
         } else {
+            //  console.log(cartQuoteIdLocal)
+            if (!cartQuoteIdLocal) {
+                // console.log(cartQuoteIdLocal)
+                let guestToken: any = await createGuestToken();
+                localStorage.setItem('cartQuoteToken', guestToken.data);
+                let result: any = await getGuestCart(props.languages);
+                cartQuoteId = result.data.id
+            } else {
+                //   console.log('hdhdh')
+                let result: any = await getGuestCart(props.languages);
+                cartQuoteId = result.data.id
+            }
 
-            let guestToken: any = await createGuestToken();
-            localStorage.setItem('cartQuoteToken', guestToken.data);
-            let result: any = await getGuestCart();
-            cartQuoteId = result.data.id
         }
         localStorage.setItem('cartQuoteId', cartQuoteId);
-        //  console.log(slectedAttribute.options)
-        if (productDetails['type_id'] === 'configurable') {
-            if (slectedAttribute === 0) {
-                setIsShow(false);
-                notification("error", "", "Please select Size");
-                return false;
-            }
-
-            cartData = {
-                "cartItem": {
-                    "sku": productDetails['sku'],
-                    "qty": quantity,
-                    "quote_id": cartQuoteId
-                }
-            }
-        } else {
-            cartData = {
-                "cartItem": {
-                    "sku": productDetails['sku'],
-                    "qty": quantity,
-                    "quote_id": cartQuoteId
-                }
+        cartData = {
+            "cartItem": {
+                "sku": sku,
+                "qty": 1,
+                "quote_id": cartQuoteId
             }
         }
 
@@ -351,10 +358,14 @@ function ProductDetails(props) {
         }
         if (cartSucces.data.item_id) {
             props.addToCartTask(true);
-            notification("success", "", "Item added to cart!");
+            notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(false);
         } else {
-            notification("error", "", "Something went wrong!");
+            if (cartSucces.data.message) {
+                notification("error", "", cartSucces.data.message);
+            } else {
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
             setIsShow(false);
         }
     }
@@ -371,12 +382,12 @@ function ProductDetails(props) {
             if (result.data) {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
-                notification("success", "", 'Your product has been successfully added to your wishlist');
+                notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
                 getProductDetailsFxn(sku)
             } else {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
-                notification("error", "", "Something went wrong!");
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
                 getProductDetailsFxn(sku)
             }
         } else {
@@ -397,7 +408,7 @@ function ProductDetails(props) {
         } else {
             props.addToWishlistTask(true);
             setDelWishlist(0)
-            notification("error", "", "Something went wrong!");
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
             getProductDetailsFxn(sku)
         }
     }
@@ -408,7 +419,7 @@ function ProductDetails(props) {
                 <section style={{ 'opacity': opacity }} >
                     <div className="container" id="productID" >
                         <div className="row">
-                            <div className="col-sm-8">
+                            <div className="col-sm-6">
                                 <div className="product-slider">
                                     <span className="pdp-favorite">
                                         {iteminWhishlist === 0 ? (
@@ -420,7 +431,7 @@ function ProductDetails(props) {
                                     <ProductImages productImages={productImages} />
                                 </div>
                             </div>
-                            <div className="col-sm-4">
+                            <div className="col-sm-6">
                                 <div className="product_description">
                                     <div className="list_accordon">
                                         {/* {tagsState.length > 0 && (
@@ -437,11 +448,11 @@ function ProductDetails(props) {
                                         </div>}
                                     </div>
                                     <div className="product_details">
-                                        <h1>{productDetails['name']}</h1>
-                                        <h2><div dangerouslySetInnerHTML={{ __html: productDetails['short_description'] }} /></h2>
+                                        <h1><Link to={'/search/' + productDetails['brand']}>{productDetails['brand']}</Link></h1>
+                                        <h2>{productDetails['name']}</h2>
                                     </div>
                                     <div className="product-sale_off mt-4 mb-4">
-                                        <div className="product_saleoff">{productDetails['saleprice'] > 0 ? <><span className="saleoff">{siteConfig.currency} {formatprice(productDetails['price'])}</span> now 25% off</> : <span>${productDetails['price'] > 0 ? formatprice(productDetails['price']) : 0}</span>}</div>
+                                        <div className="product_saleoff">{productDetails['saleprice'] > 0 ? <><span className="saleoff">{siteConfig.currency} {formatprice(productDetails['price'])} </span> now 25% off</> : <span> {siteConfig.currency}{productDetails['price'] > 0 ? formatprice(productDetails['price']) : 0}</span>}</div>
                                         {productDetails['saleprice'] > 0 ? <div className="product_price">{siteConfig.currency} {formatprice(productDetails['saleprice'])}</div> : ""}
                                     </div>
                                     <div className="selection-process mb-2">
@@ -509,7 +520,7 @@ function ProductDetails(props) {
                                     <div className="width-100 my-3">
                                         <div className="d-grid">
                                             {productDetails['is_in_stock'] === true && (
-                                                <>  <button type="button" style={{ "display": !isShow ? "inline-block" : "none" }} onClick={() => { handleCart(productDetails['id'], productDetails['sku']) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                                <>  <button type="button" style={{ "display": !isShow ? "flex" : "none" }} onClick={() => { handleCart(productDetails['id'], productDetails['sku']) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
                                                     <IntlMessages id="product.addToCart" /></button>
                                                     <button style={{ "display": isShow ? "inline-block" : "none" }} className="btn btn-primary"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></button>
                                                 </>
@@ -523,9 +534,11 @@ function ProductDetails(props) {
 
                                     <div className="my-3">
                                         <div className="gap-2 justify-content-start">
-                                            <button type="button" className="send-a-gift-btn" onClick={() => {
-                                                handleGiftMEssage();
-                                            }} > <IntlMessages id="product.sendAGift" /></button>
+                                            {productDetails['gift'] === '1' && (
+                                                <button type="button" className="send-a-gift-btn" onClick={() => {
+                                                    handleGiftMEssage();
+                                                }} > <IntlMessages id="product.sendAGift" /></button>
+                                            )}
                                             <button type="button" className="share-btn" onClick={() => {
                                                 handleClick();
                                             }} ><img src={ShareIcon} alt=""
@@ -562,13 +575,13 @@ function ProductDetails(props) {
                                                 <div className="accordion-body">
                                                     <div className="details_product">
                                                         <ul>
-                                                            <li>Colour: Gold</li>
-                                                            <li>Composition: 18kt gold-plated sterling silver.</li>
+                                                            <li>Colour: {productDetails['watch_color']}</li>
+                                                            {/* <li>Composition: 18kt gold-plated sterling silver.</li>
                                                             <li>Country of origin: Italy</li>
                                                             <li>Curb-chain links</li>
                                                             <li>Picture jasper-stone links</li>
                                                             <li>T bar</li>
-                                                            <li>Clasp fastening</li>
+                                                            <li>Clasp fastening</li> */}
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -585,12 +598,12 @@ function ProductDetails(props) {
                                                 data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">
                                                     <div className="details_product">
-                                                        <ul>
+                                                        {/* <ul>
                                                             <li> Chain length 16.6in/42.5cm</li>
                                                             <li> Max feature width 1.4in/3.8cm</li>
                                                             <li> Max feature length 0.7in/1.3cm</li>
-                                                        </ul>
-                                                        <Link to="#" className="sizeguid"> <IntlMessages id="product.sizeguide" /></Link>
+                                                        </ul> */}
+                                                        {/* <Link to="#" className="sizeguid"> <IntlMessages id="product.sizeguide" /></Link> */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -634,7 +647,7 @@ function ProductDetails(props) {
             {/* size guide modal ends here */}
             {/* measuring guide modal starts here */}
             <Modal show={measuringGuideModal} size="lg">
-                <MeasuringGuide />
+                <MeasuringGuide measuringDetailsg={measuringDetails} />
             </Modal>
             <Modal show={isGiftMessage} size="lg" data={productDetails} onHide={hideGiftModalModal} data-backdrop="static" data-keyboard="false">
                 <Modal.Header>
@@ -649,44 +662,29 @@ function ProductDetails(props) {
                     <h5 className="modal-title"><IntlMessages id="products.shareProduct" /></h5>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
                 <Modal.Body className="arabic-rtl-direction">
-                    <li>
-                        <FacebookShareButton
-                            url={shareUrl}
-                            quote={productDetails['name']}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="21.42" height="21.419" viewBox="0 0 21.42 21.419">
-                                <path id="facebook" d="M18.093,7.758A10.614,10.614,0,0,1,23.5,9.229,10.818,10.818,0,0,1,26.2,25.568a10.912,10.912,0,0,1-6.043,3.609v-7.7h2.1l.475-3.025h-3.18V16.472a1.722,1.722,0,0,1,.366-1.138,1.675,1.675,0,0,1,1.344-.511h1.921v-2.65q-.041-.013-.784-.105a15.591,15.591,0,0,0-1.692-.105,4.228,4.228,0,0,0-3.038,1.083,4.187,4.187,0,0,0-1.141,3.108v2.3H14.11v3.025h2.42v7.7a10.65,10.65,0,0,1-6.549-3.609,10.805,10.805,0,0,1,2.706-16.34,10.617,10.617,0,0,1,5.406-1.471Z" transform="translate(-7.383 -7.758)" fill="#2E2BAA" fillRule="evenodd" />
-                            </svg>
-                        </FacebookShareButton>
-                        <LinkedinShareButton
-                            url={shareUrl}
-                            title={productDetails['name']}>
-                            <svg id="_x31_0.Linkedin" xmlns="http://www.w3.org/2000/svg" width="21.472" height="21.472" viewBox="0 0 21.472 21.472">
-                                <path id="Path_17" data-name="Path 17" d="M52.176,49.981V42.117c0-3.865-.832-6.817-5.341-6.817a4.66,4.66,0,0,0-4.214,2.308h-.054V35.649H38.3V49.981h4.455V42.869c0-1.879.349-3.677,2.657-3.677,2.281,0,2.308,2.12,2.308,3.784v6.978h4.455Z" transform="translate(-30.704 -28.51)" fill="#2E2BAA" />
-                                <path id="Path_18" data-name="Path 18" d="M11.3,36.6h4.455V50.932H11.3Z" transform="translate(-10.951 -29.461)" fill="#2E2BAA" />
-                                <path id="Path_19" data-name="Path 19" d="M12.577,10a2.59,2.59,0,1,0,2.577,2.577A2.577,2.577,0,0,0,12.577,10Z" transform="translate(-10 -10)" fill="#2E2BAA" />
-                            </svg>
-                        </LinkedinShareButton>
-
-                        <TwitterShareButton
-                            url={shareUrl}
-                            title={productDetails['name']}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="85.393" height="22" viewBox="0 0 85.393 22">
-                                <g id="Group_727" data-name="Group 727" transform="translate(-785.223 -4492)">
-                                    <g id="Group_728" data-name="Group 728">
-                                        <text id="Twitter" transform="translate(813.615 4510)" fontSize="18"
-                                            fontFamily="Lato-Semibold, Lato" fontWeight="600">
-                                            {/* <tspan x="0" y="0">Twitter</tspan> */}
-                                        </text>
-                                        <path id="twitter-brands"
-                                            d="M20.989,52.817c.015.208.015.416.015.623A13.548,13.548,0,0,1,7.362,67.082,13.549,13.549,0,0,1,0,64.93a9.919,9.919,0,0,0,1.158.059A9.6,9.6,0,0,0,7.11,62.94a4.8,4.8,0,0,1-4.483-3.325,6.047,6.047,0,0,0,.905.074,5.071,5.071,0,0,0,1.262-.163A4.8,4.8,0,0,1,.95,54.821v-.059a4.829,4.829,0,0,0,2.167.609,4.8,4.8,0,0,1-1.484-6.412,13.628,13.628,0,0,0,9.886,5.017,5.412,5.412,0,0,1-.119-1.1,4.8,4.8,0,0,1,8.3-3.28,9.439,9.439,0,0,0,3.043-1.158,4.782,4.782,0,0,1-2.108,2.642,9.612,9.612,0,0,0,2.761-.742A10.306,10.306,0,0,1,20.989,52.817Z"
-                                            transform="translate(785.223 4445.418)" fill="#2E2BAA" />
-                                    </g>
-                                </g>
-                            </svg>
-                        </TwitterShareButton>
-
-                    </li>
-
+                    <ul className="list-inline share">
+                        <li className="list-inline-item">
+                            <FacebookShareButton
+                                url={shareUrl}
+                                quote={productDetails['name']}>
+                                <i className="fab fa-facebook" aria-hidden="true"></i>
+                            </FacebookShareButton>
+                        </li>
+                        <li className="list-inline-item">
+                            <LinkedinShareButton
+                                url={shareUrl}
+                                title={productDetails['name']}>
+                                <i className="fab fa-linkedin" aria-hidden="true"></i>
+                            </LinkedinShareButton>
+                        </li>
+                        <li className="list-inline-item">
+                            <TwitterShareButton
+                                url={shareUrl}
+                                title={productDetails['name']}>
+                                <i className='fab fa-twitter'></i>
+                            </TwitterShareButton>
+                        </li>
+                    </ul>
                 </Modal.Body>
             </Modal>
         </>
@@ -694,6 +692,7 @@ function ProductDetails(props) {
 }
 
 const mapStateToProps = (state) => {
+    // console.log(state.Cart)
     let attributeConfig = [], languages = '';
     if (state.Cart && state.Cart.attribute_section) {
         attributeConfig = state.Cart.attribute_section;
@@ -704,11 +703,12 @@ const mapStateToProps = (state) => {
     return {
         items: state,
         languages: languages,
-        attributeConfig: attributeConfig
+        attributeConfig: attributeConfig,
+        token: state.session.user
     }
 }
 
 export default connect(
     mapStateToProps,
-    { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, showSignin, showLoader }
+    { addToCart, openSizeGuide, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, showSignin, showLoader }
 )(ProductDetails);

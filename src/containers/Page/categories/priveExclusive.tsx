@@ -4,15 +4,18 @@ import { Link, useLocation } from "react-router-dom";
 import { getPriveExclusiveProducts } from '../../../redux/cart/productApi';
 import cartAction from "../../../redux/cart/productAction";
 import Slider from "react-slick";
-import { formatprice } from '../../../components/utility/allutils';
+import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { getCookie } from '../../../helpers/session';
-
-const { addToCart, productList } = cartAction;
+import notification from "../../../components/notification";
+import { useIntl } from 'react-intl';
+const { addToCart, productList, addToCartTask } = cartAction;
 
 
 function PriveExclusive(props) {
+    const intl = useIntl();
+    const [isShow, setIsShow] = useState(0);
     const location = useLocation()
     let image = '', thumbnail = '';
     const language = getCookie('currentLanguage');
@@ -45,6 +48,23 @@ function PriveExclusive(props) {
             setProducts(result.data);
         }
     }
+    
+    async function handleCart(id: number, sku: string) {
+        setIsShow(id);
+        let cartResults: any = await handleCartFxn(id, sku);
+        if (cartResults.item_id) {
+            props.addToCartTask(true);
+            notification("success", "", intl.formatMessage({ id: "addedtocart" }));
+            setIsShow(0);
+        } else {
+            if (cartResults.message) {
+                notification("error", "", cartResults.message);
+            } else {
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
+            setIsShow(0);
+        }
+    }
 
     return (
         <section>
@@ -70,16 +90,18 @@ function PriveExclusive(props) {
                                                                 }
                                                             })
                                                         }
-                                                        <img src={image} alt={item.name} />
+                                                      <Link to={'/product-details/' + item.sku}>  <img src={image} alt={item.name} /></Link>
                                                     </div>
                                                     <div className="col-md-6">
                                                         <div className="product-details-new">
-                                                            <img src={thumbnail} alt="" />
-                                                            <h4>{item.name}</h4>
-                                                            <p></p>
-                                                            <div className="pro-price-btn">
-                                                            {siteConfig.currency} {formatprice(item.price)}
-                                                                <Link to={'/product-details/' + item.sku}>View Product</Link></div>
+                                                        <Link to={'/product-details/' + item.sku}>  <img src={thumbnail} alt= {item.name} /></Link>
+                                                            <div className="product_name"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
+                                                            <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                                            <div className="product_price">{siteConfig.currency} {formatprice(item.price)}</div>
+                                                            <div className="cart-button mt-3 px-2">
+                                                                {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                                    <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -87,18 +109,7 @@ function PriveExclusive(props) {
                                         )
                                     })}
                                 </Slider>
-                            </div>
-
-                            < button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
-                                data-bs-slide="prev">
-                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Previous</span>
-                            </button>
-                            <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
-                                data-bs-slide="next">
-                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Next</span>
-                            </button>
+                            </div>                           
                         </div>
                     </div>
                 </div>
@@ -115,5 +126,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList }
+    { addToCart, productList, addToCartTask }
 )(PriveExclusive);

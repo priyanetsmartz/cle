@@ -2,10 +2,10 @@ export default {
   apiUrl: '',
 };
 const siteConfig = {
-  siteName: 'CLE',
-  currency: 'SR ',
+  siteName: 'CLÉ',
+  currency: 'SAR ',
   siteIcon: 'ion-flash',
-  footerText: 'CLE ©' + (new Date()).getFullYear(),
+  footerText: 'CLÉ ©' + (new Date()).getFullYear(),
   facebookLink: 'https://www.facebook.com/werecle',
   instagram: 'https://www.instagram.com/werecle',
   linkedin: 'https://sa.linkedin.com/company/werecle',

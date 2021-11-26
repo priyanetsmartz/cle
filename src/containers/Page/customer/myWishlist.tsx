@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import { Link } from 'react-router-dom'
 import { wishListSearchSort } from '../../../redux/pages/customers';
-import { formatprice } from '../../../components/utility/allutils';
-import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, removeWhishlist } from '../../../redux/cart/productApi';
+import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { removeWhishlist } from '../../../redux/cart/productApi';
 import cartAction from "../../../redux/cart/productAction";
 import IntlMessages from "../../../components/utility/intlMessages";
 import Login from '../../../redux/auth/Login';
@@ -15,14 +15,17 @@ const { addToWishlistTask, addToCartTask } = cartAction;
 const loginApi = new Login();
 
 function MyWishList(props) {
+    const userGroup = props.token.token;
+    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
     const intl = useIntl();
-    const [isShow, setIsShow] = useState(false);
-    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
+    const [isShow, setIsShow] = useState(0);
+    const [custId, setCustid] = useState(props.token.cust_id);
     const [delWishlist, setDelWishlist] = useState(0);
     const [wishList, setWishList] = useState([]);
     const [searchName, setSearchName] = useState('');
-    const [sortOrder, setSortOrder] = useState('asc');
-    const [sortBy, setSortBy] = useState('price');
+    const [sortOrder, setSortOrder] = useState('');
+  
+    const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
     const [pageSize, setPageSize] = useState(10);
     const [loaderOrders, setLoaderOrders] = useState(true);
     const [opacity, setOpacity] = useState(1);
@@ -38,14 +41,14 @@ function MyWishList(props) {
             setSearchName('')
             setWishList([])
             setSortOrder('')
-            setDelWishlist(0)
-            setSortBy('asc')
+            setDelWishlist(0)          
         }
-    }, [props.items, props.languages])
+    }, [props.items, props.languages, sortOrder])
 
     const getData = async () => {
         setLoaderOrders(true)
-        let result: any = await wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchName);
+      //  console.log(sortValue.sortBy, sortValue.sortByValue) 
+        let result: any = await wishListSearchSort(custId, pageSize, sortValue.sortBy, sortValue.sortByValue, searchName);
         if (result.data) {
             setWishList(result.data);
             setOpacity(1)
@@ -70,17 +73,26 @@ function MyWishList(props) {
             getData();
 
         }
+    }
+ 
 
-        //  console.log(e.target.value)
+    const filtterData = (event) => {
+      //  setOpacity(0.3);
+        // setCurrent(1)
+        let sortBy = "";
+        let sortByValue = "";
+        if (event.target.value === "1") {
+            sortBy = "price";
+            sortByValue = "DESC";
+        } else if (event.target.value === "2") {
+            sortBy = "price";
+            sortByValue = "ASC";
+        }
+
+        setSortOrder(event.target.value);
+        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })       
 
     }
-
-    const sortHandler = (e) => {
-        setSortOrder(e.target.value);
-        setSortBy('price')
-        getData();
-    }
-
     async function handleDelWhishlist(id: number) {
         setDelWishlist(id)
         let del: any = await removeWhishlist(id);
@@ -93,63 +105,34 @@ function MyWishList(props) {
             setDelWishlist(0)
             props.addToWishlistTask(true);
             getData()
-            notification("error", "", "Something went wrong!");
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
 
         }
     }
     async function handleCart(id: number, sku: string) {
-        //console.log(productDetails)
-        setIsShow(true);
-        let cartData = {};
-        let cartSucces: any;
-        let cartQuoteId = '';
-        let customer_id = localStorage.getItem('cust_id');
-        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        //console.log(cartQuoteIdLocal)
-        if (cartQuoteIdLocal || customer_id) {
-            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
-            cartQuoteId = cartQuoteIdLocal
-            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
-                cartQuoteId = customerCart.data;
-            }
-        } else {
-
-            let guestToken: any = await createGuestToken();
-            localStorage.setItem('cartQuoteToken', guestToken.data);
-            let result: any = await getGuestCart();
-            cartQuoteId = result.data.id
-        }
-        localStorage.setItem('cartQuoteId', cartQuoteId);
-        cartData = {
-            "cartItem": {
-                "sku": sku,
-                "qty": 1,
-                "quote_id": cartQuoteId
-            }
-        }
-
-
-        if (customer_id) {
-            cartSucces = await addToCartApi(cartData)
-        } else {
-            cartSucces = await addToCartApiGuest(cartData)
-        }
-        if (cartSucces.data.item_id) {
+        setIsShow(id);
+        let cartResults: any = await handleCartFxn(id, sku);
+        if (cartResults.item_id) {
             props.addToCartTask(true);
-            notification("success", "", "Item added to cart!");
-            setIsShow(false);
+            notification("success", "", intl.formatMessage({ id: "addedtocart" }));
+            setIsShow(0);
         } else {
-            notification("error", "", "Something went wrong!");
-            setIsShow(false);
+            if (cartResults.message) {
+                notification("error", "", cartResults.message);
+            } else {
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
+            setIsShow(0);
         }
     }
     return (
-        <div className="col-sm-9 my-wishlist-main">
+        <div className={isPriveUser ? 'prive-txt col-sm-9 my-wishlist-main' : 'col-sm-9 my-wishlist-main'}>
             <div className="row" >
                 <div className="width-100 wishlist-head">
                     <h1><IntlMessages id="Profile.Wishlist-title" /></h1>
                     <h2><IntlMessages id="Profile.Wishlist-subTitle" /></h2>
                 </div>
+                <div className="col-md-6"></div>
                 <div className="col-md-6">
                     <div className="row">
                         <div className="col-md-6">
@@ -161,11 +144,13 @@ function MyWishList(props) {
                             />
                         </div>
                         <div className="col-md-6">
-                            <select value={sortOrder} onChange={sortHandler} className="form-control">
+                            <select className="form-control" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+
                             </select>
+
                         </div>
                     </div>
                 </div>
@@ -184,20 +169,22 @@ function MyWishList(props) {
                                             <span onClick={() => handleDelWhishlist(item.wishlist_item_id)} className="bg-remove">{delWishlist === item.wishlist_item_id ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-times" aria-hidden="true"></i>}</span>
                                             <div className="product p-4">
                                                 <div className="text-center">
-                                                    <img src={item.img_src} alt={item.name} width="200" />
+                                                    <Link to={'/product-details/' + item.sku}><img src={item.img_src} alt={item.name} width="200" /></Link>
                                                     {/* need sku from api  */}
                                                     {/* <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.product_id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button></div> */}
-                                                    <div className="cart-button mt-3 px-2">
-                                                        <Link to="#" style={{ "display": !isShow ? "inline-block" : "none" }} onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>
-                                                        <Link to="#" style={{ "display": isShow ? "inline-block" : "none" }} className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link>
-                                                    </div>
+
                                                 </div>
                                                 <div className="about text-center">
-                                                    <h5>{item.name}</h5>
-                                                    <div className="tagname" dangerouslySetInnerHTML={{ __html: item.description }} />
-                                                    <div className="pricetag">{siteConfig.currency} {formatprice(item.price)}</div>
+                                                    <h5><Link to={'/search/' + item.brand}>{item.brand}</Link></h5>
+                                                    <div className="tagname"><Link to={'/product-details/' + item.sku}>{item.name}</Link></div>
+                                                    {/* <div className="tagname" dangerouslySetInnerHTML={{ __html: item.description }} /> */}
+                                                    <div className="pricetag">{siteConfig.currency} {formatprice(item.price)} </div>
                                                 </div>
+                                                <div className="cart-button mt-3 px-2">
+                                                    {isShow === parseInt(item.product_id) ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                        <Link to="#" onClick={() => { handleCart(parseInt(item.product_id), item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
+                                                </div>
                                             </div>
                                         </div>
                                     );
@@ -217,7 +204,8 @@ function MyWishList(props) {
 const mapStateToProps = (state) => {
     return {
         items: state.Cart.addToWishlist,
-        languages: state.LanguageSwitcher.language
+        languages: state.LanguageSwitcher.language,
+        token: state.session.user
     }
 }
 

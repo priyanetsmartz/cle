@@ -9,12 +9,16 @@ const ProductRoutes = ({ component: Component, auth, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      <>
-        <Header />
-        <AppBreadcrumbs />
-        <Component {...props} />
+      <div className="sectiosn" id='topheaderrr' >
+        <div className="section headerrr" id="headerrr" key='uniqueKey'>
+          <Header />
+        </div>
+        <div className='customwrapper' >
+          <AppBreadcrumbs />
+          <Component {...props} />
+        </div>
         <Footer />
-      </>
+      </div>
     }
   />
 );

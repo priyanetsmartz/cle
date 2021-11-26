@@ -43,7 +43,7 @@ function PromotedProducts(props) {
     })
     useEffect(() => {
         let lang = props.languages ? props.languages : language;
-        const localToken = localStorage.getItem('token');
+        const localToken =props.token.token;
         setToken(localToken)
         getProducts();
         setCategory(props.cateData);
@@ -58,7 +58,7 @@ function PromotedProducts(props) {
 
     async function getProducts() {
         setOpacity(0.3);
-        let customer_id = localStorage.getItem('cust_id');
+        let customer_id = props.token.cust_id;
         let result: any = await getProductByCategory(1, 2, catId, sortValue.sortBy, sortValue.sortByValue, props.languages);
         let productResult = result.data.items;
         if (customer_id) {
@@ -195,7 +195,8 @@ function PromotedProducts(props) {
 const mapStateToProps = (state) => {
     return {
         items: state.Cart.items,
-        languages: state.LanguageSwitcher.language
+        languages: state.LanguageSwitcher.language,
+        token: state.session.user
     }
 }
 

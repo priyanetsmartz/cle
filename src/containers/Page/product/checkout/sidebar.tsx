@@ -7,7 +7,7 @@ function CheckoutSidebar(props) {
         checkData: {}, items: {}
     });
     useEffect(() => {
-        console.log(props.sidebarData)
+      //  console.log(props.sidebarData)
         // console.log(props.sidebarData.checkData, props.sidebarData.items)
         SetItems({ checkData: props.sidebarData.checkData, items: props.sidebarData.items });
         // checkoutScreen();
@@ -53,7 +53,7 @@ function CheckoutSidebar(props) {
 
 
 const mapStateToProps = (state) => {
-console.log(state)
+//console.log(state)
     return {
 
     }

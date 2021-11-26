@@ -9,9 +9,12 @@ import { Slider } from 'antd';
 import { getCookie } from '../../../helpers/session';
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings/index'
+import { capitalize, formatprice } from '../../../components/utility/allutils';
 
 
 function OrdersAndReturns(props) {
+    const userGroup = localStorage.getItem('token');
+    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [pageSize, setPageSize] = useState(12);
     const [orderId, setOrderId] = useState('');
     const [pagination, setPagination] = useState(1);
@@ -19,20 +22,20 @@ function OrdersAndReturns(props) {
     const [sortOrder, setSortOrder] = useState('');
     const [orders, setOrders] = useState([]);
     const [page, setCurrent] = useState(1);
-    const [loaderOrders, setLoaderOrders] = useState(true);
+    const [loaderOrders, setLoaderOrders] = useState(false);
     const language = getCookie('currentLanguage');
     const intl = useIntl();
     useEffect(() => {
         getData(pageSize);
-    }, [pageSize, props.languages]);
+    }, [pageSize, props.languages, page]);
 
     const getData = async (pageSize) => {
         setLoaderOrders(true);
-        let result: any = await getCustomerOrders(pageSize);
+        let result: any = await getCustomerOrders(pageSize, page);
         if (result && result.data && result.data.items) {
             setLoaderOrders(false);
             setOrders(result.data.items);
-            setPagination(Math.ceil(result.data.length / pageSize));
+            setPagination(Math.ceil(result.data.total_count / pageSize));
         }
 
     }
@@ -57,8 +60,9 @@ function OrdersAndReturns(props) {
         if (val.length >= 3) {
             let result: any = await searchOrders(val);
             if (result && result.data && !result.data.message) {
+                //console.log(result.data.items)
                 setLoaderOrders(false);
-                setOrders([result.data]);
+                setOrders(result.data.items);
 
             }
         }
@@ -138,7 +142,7 @@ function OrdersAndReturns(props) {
     }
     return (
         <>
-            <div className="col-sm-9">
+               <div className={isPriveUser ? 'prive-txt col-sm-9' : 'col-sm-9'}>
                 <div className="my_orders_returns_sec">
                     <div className="width-100">
                         <h1><IntlMessages id="order.myOrders" /></h1>
@@ -155,20 +159,15 @@ function OrdersAndReturns(props) {
                                             <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
                                             <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
                                             <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
-                                            <option value="2021">2021</option>
+                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div className="col-sm-4 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" />:</span>
-                                        <Slider range defaultValue={[0, 5]} onChange={handlePriceRange} />
-                                        {/* <select className="form-select" aria-label="Default select example" onChange={priceFilter}>
-                                            <option value="">$3,550 - $150,550</option>
-                                            <option value="1">$1,550 - $150,550</option>
-                                            <option value="2">$3,050 - $150,550</option>
-                                            <option value="3">$2,550 - $150,550</option>
-                                        </select> */}
+                                        <Slider range max={20000} defaultValue={[0, 5]} onChange={handlePriceRange} />
+
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
@@ -268,7 +267,7 @@ function OrdersAndReturns(props) {
                                                                     <div className="order-details">
                                                                         <div className="order-date">
                                                                             <label className="form-label"><IntlMessages id="order.orderDate" /></label>
-                                                                            <div className="labl_text">{item.created_at}</div>
+                                                                            <div className="labl_text">{item.created_at ? moment(item.created_at).format('ddd, D MMMM YYYY') : ''}</div>
                                                                         </div>
 
                                                                         <div className="products">
@@ -285,14 +284,14 @@ function OrdersAndReturns(props) {
 
                                                                         <div className="products">
                                                                             <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                                                            <div className="labl_text">{siteConfig.currency} {item.grand_total}</div>
+                                                                            <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
                                                                         </div>
                                                                     </div>
 
                                                                     <div className="order-shipped">
                                                                         <label className="form-label">
                                                                             {/* <IntlMessages id="order.weHaveShipped" /> */}
-                                                                            {item.status}
+                                                                            {capitalize(item.status)}
                                                                         </label>
                                                                     </div>
 
@@ -338,20 +337,19 @@ function OrdersAndReturns(props) {
                                     </div>
                                     <div className="page_by">
                                         <div className="pagination">
-
                                             <div className="col-md-12 pagination">
                                                 {pagination > 1 && (<nav aria-label="Page navigation example">
                                                     <ul className="pagination justify-content-center">
                                                         <li
                                                             className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
+                                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><IntlMessages id="pagination-prev" /></Link>
                                                         </li>
                                                         {getPaginationGroup().map((i, index) => (
                                                             <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
                                                         ))}
                                                         <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
                                                             <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                                                to="/">Next</Link>
+                                                                to="/"><IntlMessages id="pagination-next" /></Link>
                                                         </li>
                                                     </ul>
                                                 </nav>

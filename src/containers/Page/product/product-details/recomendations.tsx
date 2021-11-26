@@ -2,21 +2,21 @@ import { useState, useEffect } from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { formatprice } from '../../../../components/utility/allutils';
+import { formatprice, handleCartFxn } from '../../../../components/utility/allutils';
 import { Link } from "react-router-dom";
 import IntlMessages from "../../../../components/utility/intlMessages";
-import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, getProductDetails } from '../../../../redux/cart/productApi';
+import { getProductDetails } from '../../../../redux/cart/productApi';
 import { connect } from 'react-redux';
 import notification from '../../../../components/notification';
 import cartAction from "../../../../redux/cart/productAction";
-import Login from '../../../../redux/auth/Login';
 import { getCookie } from "../../../../helpers/session";
 import { siteConfig } from '../../../../settings';
-const loginApi = new Login();
+import { useIntl } from 'react-intl';
 const { addToCartTask } = cartAction;
 
 
 const Recommendations = (props) => {
+    const intl = useIntl();
     const language = getCookie('currentLanguage');
     const [isShow, setIsShow] = useState(0);
     const [recomendedProducts, setRecomendedProducts] = useState([]);
@@ -37,7 +37,7 @@ const Recommendations = (props) => {
 
     async function getAttributes(recomends) {
         let allProducts: any;
-        console.log(recomends)
+        //console.log(recomends)
         if (recomends && recomends.length > 0 && recomends[0].link_type) {
             var filteredItems = await recomends.filter(function (item) {
                 return item.link_type === 'related';
@@ -49,11 +49,11 @@ const Recommendations = (props) => {
             allProducts = recomends;
         }
 
-        console.log('recomends', allProducts)
+        // console.log('recomends', allProducts)
         let prods = allProducts.length > 8 ? allProducts.slice(0, 8) : allProducts;
         setSlidetoshow(prods.length)
         setRecomendedProducts(prods)
-        console.log(prods)
+        // console.log(prods)
     }
     async function getgidtMessageCall(items) {
         // console.log(items)
@@ -107,52 +107,25 @@ const Recommendations = (props) => {
             }
         ]
     };
+
     async function handleCart(id: number, sku: string) {
-        //console.log(productDetails)
         setIsShow(id);
-        let cartData = {};
-        let cartSucces: any;
-        let cartQuoteId = '';
-        let customer_id = localStorage.getItem('cust_id');
-        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        //console.log(cartQuoteIdLocal)
-        if (cartQuoteIdLocal || customer_id) {
-            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
-            cartQuoteId = cartQuoteIdLocal
-            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
-                cartQuoteId = customerCart.data;
-            }
-        } else {
-
-            let guestToken: any = await createGuestToken();
-            localStorage.setItem('cartQuoteToken', guestToken.data);
-            let result: any = await getGuestCart();
-            cartQuoteId = result.data.id
-        }
-        localStorage.setItem('cartQuoteId', cartQuoteId);
-        cartData = {
-            "cartItem": {
-                "sku": sku,
-                "qty": 1,
-                "quote_id": cartQuoteId
-            }
-        }
-
-
-        if (customer_id) {
-            cartSucces = await addToCartApi(cartData)
-        } else {
-            cartSucces = await addToCartApiGuest(cartData)
-        }
-        if (cartSucces.data.item_id) {
+        let cartResults: any = await handleCartFxn(id, sku);
+        if (cartResults.item_id) {
             props.addToCartTask(true);
-            notification("success", "", "Item added to cart!");
+            notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            notification("error", "", "Something went wrong!");
+            if (cartResults.message) {
+                notification("error", "", cartResults.message);
+            } else {
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
             setIsShow(0);
         }
     }
+
+
     return (
         <div className="container">
             <div className="col-sm-12">
@@ -171,8 +144,8 @@ const Recommendations = (props) => {
                                                         <img src={item.img} className="image-fluid" alt={item.name} height="150" />
                                                     </div>
                                                 </Link>
-                                                <div className="product_name"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }} />
+                                                <div className="product_name"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
+                                                <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                 {/* <div className="product_vrity">{item.short_description}</div> */}
                                                 <div className="product_price">{siteConfig.currency}  {formatprice(item.price)}</div>
                                                 <div className="cart-button mt-3 px-2">
@@ -208,5 +181,5 @@ const mapStateToProps = (state) => {
 }
 export default connect(
     mapStateToProps,
-    {}
+    { addToCartTask }
 )(Recommendations);

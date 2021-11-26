@@ -22,6 +22,9 @@ const actions = {
     SET_LOADER_PRODUCTS: 'SET_LOADER_PRODUCTS',
     SET_SORTING_PRODUCTS: 'SET_SORTING_PRODUCTS',
     SET_PAGESIZE: 'SET_PAGESIZE',
+    SET_CATAEARCH: 'SET_CATAEARCH',
+    SET_CATANAME: 'SET_CATANAME',
+    OPEN_PREP_BOX: 'OPEN_PREP_BOX',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -109,8 +112,18 @@ const actions = {
     setPageFilter: payload => ({
         type: actions.SET_PAGESIZE,
         payload
-    })
-    
-
+    }),
+    setCatSearch: catId => ({
+        type: actions.SET_CATAEARCH,
+        catId
+    }),
+    setCurrentCat: catname => ({
+        type: actions.SET_CATANAME,
+        catname
+    }),
+    closePrefPopup: isOpen => ({
+        type: actions.OPEN_PREP_BOX,
+        isOpen: isOpen
+    }),
 };
 export default actions;

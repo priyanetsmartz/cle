@@ -5,18 +5,20 @@ import IntlMessages from "../../components/utility/intlMessages";
 import notification from '../../components/notification';
 import { AddComment } from '../../redux/pages/magazineList';
 import { GetComments } from '../../redux/pages/magazineList';
+import { useIntl } from 'react-intl';
 import moment from 'moment';
 const { postComment } = authAction;
 
 function PostComment(props) {
     const [isShow, setIsShow] = useState(false);
+    const intl = useIntl();
     const [state, setState] = useState({
-        name: localStorage.getItem('token_name'),
-        email: localStorage.getItem('token_email'),
+        name: props.token.token_name,
+        email: props.token.token_email,
         post_id: props.postId,
         message: "",
         store_id: props.auth.LanguageSwitcher.language === 'english' ? 3 : 2,
-        customer_id: localStorage.getItem('cust_id'),
+        customer_id: props.token.cust_id,
         reply_to: null
     })
     const [comments, setComments] = useState([]);
@@ -53,7 +55,7 @@ function PostComment(props) {
             let result: any = await AddComment(state);
             if (result) {
                 getComments()
-                notification("success", "", <IntlMessages id="commentAdded" />);
+                notification("success", "", intl.formatMessage({ id: "commentAdded" }));
                 setState(prevState => ({
                     ...prevState,
                     message: "",
@@ -62,7 +64,7 @@ function PostComment(props) {
             }
         } else {
             setIsShow(false);
-            notification("warning", "",<IntlMessages id="commentRequired" />);
+            notification("warning", "", intl.formatMessage({ id: "commentRequired" }));
         }
 
     }
@@ -73,7 +75,7 @@ function PostComment(props) {
 
         if (!state["message"]) {
             formIsValid = false;
-            error["message"] = 'Message is required';
+            error["message"] = intl.formatMessage({ id: "messagerequired" });
         }
 
         setError({ errors: error });
@@ -90,7 +92,7 @@ function PostComment(props) {
     return (
         <>
             <h2><IntlMessages id="postComments" /></h2>
-            {localStorage.getItem('id_token') && <div className="container mt-5">
+            {props.token.id_token && <div className="container mt-5">
                 <div className="d-flex justify-content-center row">
                     <div className="col-md-8">
                         <div className="d-flex flex-column comment-section">
@@ -129,7 +131,7 @@ function PostComment(props) {
                                             </div>
                                             <small>{moment(item.created_at).fromNow()}</small>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 );
                             })}
 
@@ -144,7 +146,7 @@ function PostComment(props) {
 const mapStateToProps = state => ({
     auth: state,
     errors: state.errors,
-    // loginerror:state.errors.loginerror
+    token: state.session.user
 });
 export default connect(
     mapStateToProps,

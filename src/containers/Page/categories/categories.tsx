@@ -1,21 +1,19 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getCategoryDetails, getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
+import { getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
 import CategoryBanner from './banner';
 import PriveExclusive from './priveExclusive';
 import LatestProducts from './latestProducts';
-import PromotedProducts from './promotedProducts';
 import { Link, useParams } from "react-router-dom";
 import NewIn from './newIn';
 import Description from './description';
 import Footer from '../../../containers/partials/footer-new';
 import Header from '../../../containers/partials/headerMenu';
 import { useLocation } from 'react-router-dom';
-import { getCookie } from '../../../helpers/session';
 import cartAction from "../../../redux/cart/productAction";
-import AppBreadcrumbs from '../../partials/breadCrumbs';
 import { capitalize } from '../../../components/utility/allutils';
+import { siteConfig } from '../../../settings';
 const { getCategoryData } = cartAction;
 
 
@@ -34,7 +32,7 @@ function Categories(props) {
             desc: ''
         }
     })
-    let catID = getCookie("_TESTCOOKIE");
+    //let catID = getCookie("_TESTCOOKIE");
 
     useEffect(() => {
         const header = document.getElementById("headerrr");
@@ -51,13 +49,7 @@ function Categories(props) {
         };
     }, [location]);
     useEffect(() => {
-        // let catID = getCookie("_TESTCOOKIE");
-        // if (catID) {
-        //     getData(catID);
-        // } else {
-        //     let urlPath = location + "/" + category + "/" + subcat / childcat;
-        //     console.log(urlPath)
-        // }
+
         let urlPath = '';
         if (category && subcat && childcat && greatchildcat) {
             urlPath = category + "/" + subcat + "/" + childcat + '/' + greatchildcat;
@@ -74,12 +66,10 @@ function Categories(props) {
         return () => {
             //
         };
-    }, [props.languages, catID, location, category, subcat, childcat, greatchildcat]);
+    }, [props.languages, location, category, subcat, childcat, greatchildcat]);
 
     const getData = async (urlPath) => {
-        let result: any = await getCategoryDetailsbyUrlPath(props.languages, urlPath);
-        //  console.log(result.data.items[0].custom_attributes);
-        // let result: any = await getCategoryDetails(props.languages, catID);
+        let result: any = await getCategoryDetailsbyUrlPath(props.languages, urlPath, siteConfig.pageSize);
         if (result && result.data && result.data.items && result.data.items.length > 0 && result.data.items[0].custom_attributes && result.data.items[0].custom_attributes.length > 0) {
             let obj: any = {};
 
@@ -91,16 +81,15 @@ function Categories(props) {
                 }
                 result.data.custom = obj;
             });
-            // console.log(result.data.items[0].id)
+          //  console.log(result.data.items[0].id)
             setCategoryId(result.data.items[0].id)
             setCategory(result.data);
-            // props.getCategoryData(result.data);
         }
     }
 
 
     return (
-        <div className="sectiosn" >
+        <div className="sectiosn" id='topheaderrr'>
             <div className="section headerrr" id="headerrr" key='uniqueKey'>
                 <Header />
             </div>
@@ -125,7 +114,7 @@ function Categories(props) {
                 </section>
 
             </div>
-            {localStorage.getItem('token') === '4' && <div className="section" >
+            {props.token.token === '4' && <div className="section" >
                 <PriveExclusive />
             </div>}
             <div className="section" >
@@ -162,7 +151,8 @@ const mapStateToProps = (state) => {
 
     return {
         languages: languages,
-        cateData: cateData
+        cateData: cateData,
+        token: state.session.user
 
     }
 }

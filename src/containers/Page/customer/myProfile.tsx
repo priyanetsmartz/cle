@@ -14,21 +14,26 @@ import { DROPDOWN } from '../../../config/constants';
 import moment from 'moment';
 import { capitalize } from '../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
-
+import callIcon from '../../../image/call-icon.png';
+import deleteIcon from '../../../image/delete-icon.png';
+import timerIcon from '../../../image/timer_icon.png';
+import cartAction from "../../../redux/cart/productAction";
+const { closePrefPopup } = cartAction;
 function MyProfile(props) {
     const intl = useIntl();
-    const userGroup = localStorage.getItem('token');
+    const userGroup = props.token.token;
     const [isShow, setIsShow] = useState(false);
     const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
-    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
-    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
+    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
+    const [custId, setCustid] = useState(props.token.cust_id);
     const [attributes, setAttributes]: any = useState({});
     const [customerPrefer, setCustomerPrefer]: any = useState({
         interestedIn: '',
         shoes_size: [],
         clothing_size: [],
         favCat: [],
-        favDesigner: []
+        favDesigner: [],
+        gifting_preferencees: []
     });
     const [loaderPassChange, setLoaderPassChange] = useState(false);
     const [loaderEmailChange, setloaderEmailChange] = useState(false);
@@ -116,7 +121,16 @@ function MyProfile(props) {
         return () => {
             setIsShow(false)
         }
-    }, []);
+    }, [props.token]);
+
+    useEffect(() => {
+        //setMyPreferenceModel(props.prefrences);
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
+    }, [props.prefrences]);
+
 
     async function getData() {
         let lang = props.languages ? props.languages : language;
@@ -132,7 +146,7 @@ function MyProfile(props) {
         let custom_attributes = result.data.custom_attributes;
 
         let clothing_size = [], shoes_size = [], mostly_intersted_in = 0, favourite_categories = [], favourite_designers = [];
-        let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [];
+        let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [], gifting_preferencees = [];
         //console.log(custom_attributes)
         // match keys and extract values//
         if (custom_attributes && custom_attributes.length > 0) {
@@ -151,11 +165,15 @@ function MyProfile(props) {
                 if (attributes.attribute_code === "favourite_categories") {
                     let favs = attributes.value
                     favourite_categories = favs.split(",");
-                    console.log(favourite_categories)
+                    //console.log(favourite_categories)
                 }
                 if (attributes.attribute_code === "favourite_designers") {
                     let favDesigns = attributes.value
                     favourite_designers = favDesigns.split(",");
+                }
+                if (attributes.attribute_code === "gifting_preference") {
+                    let gifting = attributes.value
+                    gifting_preferencees = JSON.parse(gifting);
                 }
             })
         }
@@ -183,7 +201,7 @@ function MyProfile(props) {
                 return o1.value === o2; // return the ones with equal id
             });
         });
-        // console.log(categories_array)
+        //console.log(categories_array)
         if (intersted_in[0] && intersted_in[0].name === "kid") {
             catToShow = categories_array[1];
         } else if (intersted_in[0] && intersted_in[0].name === "women") {
@@ -200,20 +218,21 @@ function MyProfile(props) {
             });
         }
 
-        console.log(favCategoryArray)
+        //console.log(favCategoryArray)
         var favDesignerArray = designer_array[0].filter(function (o1) {
             return favourite_designers.some(function (o2) {
                 return o1.id === o2; // return the ones with equal id
             });
         });
-
+        //  console.log(gifting_preferencees)
         setCustomerPrefer(prevState => ({
             ...prevState,
             interestedIn: intersted_in[0] ? intersted_in[0].name : "",
             shoes_size: shoes_sizeData,
             clothing_size: clothing_sizeData,
             favCat: favCategoryArray,
-            favDesigner: favDesignerArray
+            favDesigner: favDesignerArray,
+            gifting_preferencees: gifting_preferencees,
         }));
 
 
@@ -253,7 +272,7 @@ function MyProfile(props) {
         setSaveCustDetailsLoader(true)
         e.preventDefault();
         // console.log(custForm)
-        custForm.email = localStorage.getItem('token_email')
+        custForm.email = props.token.token_email;
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
             custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
         }
@@ -262,11 +281,11 @@ function MyProfile(props) {
             setMyDetailsModel(false);
             setSaveCustDetailsLoader(false)
             getData()
-            notification("success", "", "Customer details Updated");
+            notification("success", "", intl.formatMessage({ id: "customerUpdate" }));
         } else {
 
             setSaveCustDetailsLoader(false)
-            notification("error", "", "Something went wrong!");
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
     }
 
@@ -275,14 +294,14 @@ function MyProfile(props) {
         if (validateAddress()) {
             setIsShow(true);
             let obj: any = { ...custAddForm };
-            if (obj.region_id == '') delete obj.region_id;
+            if (obj.region_id === '') delete obj.region_id;
             obj.street = [obj.street];
             if (obj.id === 0) {
                 custForm.addresses.push(obj);
             } else {
                 custForm.addresses[addIndex] = obj;
             }
-            console.log(custAddForm);
+            //console.log(custAddForm);
             let result: any = await saveCustomerDetails(custId, { customer: custForm });
             if (result) {
                 openAddressModal();
@@ -298,7 +317,7 @@ function MyProfile(props) {
                     region_id: "",
                     street: ""
                 });
-                notification("success", "", "Customer Address Updated");
+                notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
                 setIsShow(false);
             }
         }
@@ -310,32 +329,32 @@ function MyProfile(props) {
 
         if (!custAddForm.telephone) {
             formIsValid = false;
-            error['telephone'] = 'Phone is required';
+            error['telephone'] = intl.formatMessage({ id: "phonereq" })
         }
         if (!custAddForm.postcode) {
             formIsValid = false;
-            error["postcode"] = 'Post Code is required';
+            error["postcode"] = intl.formatMessage({ id: "pinreq" })
         }
         if (!custAddForm.city) {
             formIsValid = false;
-            error["city"] = 'City is required';
+            error["city"] = intl.formatMessage({ id: "cityreq" })
         }
 
         if (!custAddForm.country_id) {
             formIsValid = false;
-            error['country_id'] = 'Country is required';
+            error['country_id'] = intl.formatMessage({ id: "countryreq" })
         }
         if (!custAddForm.street) {
             formIsValid = false;
-            error["street"] = 'Address is required';
+            error["street"] = intl.formatMessage({ id: "addressreq" })
         }
         if (!custAddForm.firstname) {
             formIsValid = false;
-            error["firstname"] = 'First Name is required';
+            error["firstname"] = intl.formatMessage({ id: "firstnamerequired" })
         }
         if (!custAddForm.lastname) {
             formIsValid = false;
-            error["lastname"] = 'Last Name is required';
+            error["lastname"] = intl.formatMessage({ id: "lastnamerequired" })
         }
 
         setError({ errors: error });
@@ -359,7 +378,7 @@ function MyProfile(props) {
         if (result) {
             custForm.addresses.splice(index, 1);
             setCustForm(custForm);
-            notification("success", "", "Customer Address deleted!");
+            notification("success", "", intl.formatMessage({ id: "customerAddressDelete" }));
         }
     }
     //edit existing address ends here--------------->
@@ -413,8 +432,8 @@ function MyProfile(props) {
             setLoaderPassChange(true);
             let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
             if (result.data) {
-                console.log(result.data)
-                notification("success", "", "Password updated");
+                // console.log(result.data)
+                notification("success", "", intl.formatMessage({ id: "passwordUpdate" }));
                 setChangePass({
                     confirmNewPassword: "",
                     newPassword: "",
@@ -424,7 +443,7 @@ function MyProfile(props) {
             } else {
 
                 setLoaderPassChange(false);
-                notification("error", "", "Invalid password!");
+                notification("error", "", intl.formatMessage({ id: "passwordInvalid" }));
             }
         }
     }
@@ -435,19 +454,19 @@ function MyProfile(props) {
 
         if (!changePass["password"]) {
             formIsValid = false;
-            error["password"] = 'Password is required';
+            error["password"] = intl.formatMessage({ id: "passwordreq" })
         }
         if (!changePass["newPassword"]) {
             formIsValid = false;
-            error["newPassword"] = 'New Password is required';
+            error["newPassword"] = intl.formatMessage({ id: 'newpasswordreq' })
         }
         if (!changePass["confirmNewPassword"]) {
             formIsValid = false;
-            error["confirmNewPassword"] = 'Confirm New Password is required';
+            error["confirmNewPassword"] = intl.formatMessage({ id: 'confirmnewpasswordreq' });
         }
         if (changePass["confirmNewPassword"] !== changePass["newPassword"]) {
             formIsValid = false;
-            error["confirmNewPassword"] = 'Confirm New password not matched';
+            error["confirmNewPassword"] = intl.formatMessage({ id: 'confirmnewnotmatched' });
         }
 
         setError({ errors: error });
@@ -475,7 +494,7 @@ function MyProfile(props) {
 
             let result: any = await updateCustEmail(req);
             if (result.data) {
-                notification("success", "", "New email Updated");
+                notification("success", "", intl.formatMessage({ id: "newEmailUpdate" }));
                 setChangeEmail({
                     confirmNewEmail: "",
                     newEmail: "",
@@ -484,7 +503,7 @@ function MyProfile(props) {
                 setloaderEmailChange(false)
             } else {
                 setloaderEmailChange(false)
-                notification("error", "", "Error in updating email!");
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
             }
         }
     }
@@ -496,32 +515,32 @@ function MyProfile(props) {
         if (typeof changeEmail["newEmail"] !== "undefined") {
             if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(changeEmail["newEmail"]))) {
                 formIsValid = false;
-                error["newEmail"] = "New Email is not valid";
+                error["newEmail"] = intl.formatMessage({ id: "emailvalidation" });
             }
         }
         if (typeof changeEmail["confirmNewEmail"] !== "undefined") {
             if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(changeEmail["confirmNewEmail"]))) {
                 formIsValid = false;
-                error["confirmNewEmail"] = "Confirm New Email is not valid";
+                error["confirmNewEmail"] = intl.formatMessage({ id: "confirmneemailvalid" });
             }
         }
         if (!changeEmail["newEmail"]) {
             formIsValid = false;
-            error["newEmail"] = "New Email is required";
+            error["newEmail"] = intl.formatMessage({ id: "emailrequired" });
         }
         if (!changeEmail["confirmNewEmail"]) {
             formIsValid = false;
-            error["confirmNewEmail"] = "Confirm New Email is required";
+            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmneemailreq" });
         }
 
         if (!changeEmail["password"]) {
             formIsValid = false;
-            error["password"] = "Password is required";
+            error["password"] = intl.formatMessage({ id: "passwordreq" });
         }
 
         if (changeEmail["confirmNewEmail"] !== changeEmail["newEmail"]) {
             formIsValid = false;
-            error["confirmNewEmail"] = 'Confirm New password not matched';
+            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmnewnotmatched" });
         }
 
         setError({ errors: error });
@@ -530,7 +549,7 @@ function MyProfile(props) {
     //change email ends here----------------------------------------->
 
     const saveGiftingPrefer = async () => {
-        console.log(giftingPrefer);
+        // console.log(giftingPrefer);
         let data = {
             customerId: custId,
             gifting_preference: giftingPrefer
@@ -539,7 +558,7 @@ function MyProfile(props) {
         const res = await savePreference(data);
         if (res) {
             setIsShow(false);
-            notification("success", "", "Gifiting Preferences Updated");
+            notification("success", "", intl.formatMessage({ id: "giftingsuccess" }));
         }
     }
 
@@ -549,7 +568,8 @@ function MyProfile(props) {
 
     const openMyPreferences = () => {
         getAttributes();
-        setMyPreferenceModel(!myPreferenceModel);
+        props.closePrefPopup(true);
+        setMyPreferenceModel(!myPreferenceModel)
     }
 
     const openAddressModal = () => {
@@ -667,7 +687,7 @@ function MyProfile(props) {
                                         <div className="field-name">
                                             {
                                                 customerPrefer.clothing_size.map((favs, i) => {
-                                                    return (<span key={i}>{favs.label}, </span>)
+                                                    return (<span key={i}>{favs.label}{i === customerPrefer.clothing_size.length - 1 ? '' : ','}  </span>)
                                                 })
                                             }
                                         </div>
@@ -679,7 +699,7 @@ function MyProfile(props) {
                                         <div className="field-name">
                                             {
                                                 customerPrefer.shoes_size.map((favs, i) => {
-                                                    return (<span key={i}>{favs.label}, </span>)
+                                                    return (<span key={i}>{favs.label}{i === customerPrefer.shoes_size.length - 1 ? '' : ','} </span>)
                                                 })
                                             }
                                         </div>
@@ -699,10 +719,12 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteCategories" /></label>
                                         <div className="field-name">
-                                            {
-                                                customerPrefer.favCat.map((favs, i) => {
-                                                    return (<span key={favs.id} >{favs.name}, </span>)
-                                                })
+                                            {customerPrefer.favCat.map((favs, i) => {
+                                                return (
+                                                    <span key={favs.id} >{favs.name}{i === customerPrefer.favCat.length - 1 ?
+                                                        '' : ','} </span>
+                                                )
+                                            })
                                             }
                                         </div>
                                     </div>
@@ -748,7 +770,7 @@ function MyProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.listOfBirthdays" /></label>
-                                        <div className="field-name">John / Mom / +3 more</div>
+                                        <div className="field-name">{customerPrefer.gifting_preferencees['name']}/{customerPrefer.gifting_preferencees['dobDate']} {customerPrefer.gifting_preferencees['dobMonth']}  {customerPrefer.gifting_preferencees['dobYear']}</div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label">&nbsp;</label>
@@ -912,7 +934,7 @@ function MyProfile(props) {
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
-                                        <Link to="forget-password" className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
+                                        <Link to="/forgot-password" className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
 
                                     </div>
                                     <div className="Frgt_paswd">
@@ -940,7 +962,7 @@ function MyProfile(props) {
                                 </div>
                                 <div className="width-100 mb-3">
                                     <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
-                                        className="maindatory">&#42;</span></label>
+                                        className="maindatory"></span></label>
                                     <input type="email" className="form-control" placeholder={intl.formatMessage({ id: "myaccount.confirmNewEmailAddress" })} id="confirmNewEmail"
                                         value={changeEmail.confirmNewEmail}
                                         onChange={handleEmail} />
@@ -994,7 +1016,7 @@ function MyProfile(props) {
                                         <h2 className="accordion-header" id="flush-headingOne">
                                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                                <img src="images/call-icon.png" className="img-fluid" alt="" /><IntlMessages id="myaccount.contactCustomerCare" />
+                                                <img src={callIcon} className="img-fluid" alt="" /><IntlMessages id="myaccount.contactCustomerCare" />
                                             </button>
                                         </h2>
                                         <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne"
@@ -1006,7 +1028,7 @@ function MyProfile(props) {
                                         <h2 className="accordion-header" id="flush-headingTwo">
                                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                                <img src="images/delete-icon.png" className="img-fluid" alt="" /> <IntlMessages id="myaccount.wellDeactvate" />
+                                                <img src={deleteIcon} className="img-fluid" alt="callIcon" /> <IntlMessages id="myaccount.wellDeactvate" />
                                             </button>
                                         </h2>
                                         <div id="flush-collapseTwo" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
@@ -1020,7 +1042,7 @@ function MyProfile(props) {
                                         <h2 className="accordion-header" id="flush-headingThree">
                                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                <img src="images/timer_icon.png" className="img-fluid" alt="" />
+                                                <img src={timerIcon} className="img-fluid" alt="" />
                                                 <IntlMessages id="myaccount.dontWantToclose" />
                                             </button>
                                         </h2>
@@ -1041,7 +1063,7 @@ function MyProfile(props) {
                 </div>
             </section>
 
-            <section className="my_profile_sect check-als mb-4">
+            {/* <section className="my_profile_sect check-als mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -1068,7 +1090,7 @@ function MyProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
@@ -1273,7 +1295,7 @@ function MyProfile(props) {
 
             {/* Gifting preference details modal */}
 
-            <Modal show={giftingModal} size="lg">
+            <Modal show={giftingModal} size="lg" onHide={openGigitingModal}>
                 <Modal.Body className="gifting_pref">
                     <div className="girft_details">
                         <Modal.Header>
@@ -1282,11 +1304,11 @@ function MyProfile(props) {
                         </Modal.Header>
                         <div className="my_birthday mb-3">
                             <label className="form-label"><IntlMessages id="myaccount.myBirthday" /></label>
-                            <div className="birthdate">01 May 1990</div>
+                            <div className="birthdate">{custForm.dob}</div>
                         </div>
                     </div>
                     {/* <Modal.Body> */}
-                    <div className="row">
+                    {/* <div className="row">
                         <div className="col-sm-6">
                             <div className="width-100">
                                 <div className="dobfeild_gift row">
@@ -1345,16 +1367,16 @@ function MyProfile(props) {
                         </div>
 
 
-                    </div>
+                    </div> */}
 
-                    <div className="row">
+                    {/* <div className="row">
                         <div className="col-sm-12 mt-3 mb-5">
                             <div className="form-check form-switch custom-switch">
                                 <label className="form-check-label" htmlFor="flexSwitchCheckChecked"><IntlMessages id="myaccount.notifyMe" /></label>
                                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="row">
                         <div className="col-sm-6">
@@ -1524,11 +1546,9 @@ function MyProfile(props) {
                                 <div className="favt_dragdrop  mt-3">
                                     <div className="favdesignr_size_sec">
                                         <ul>
-                                            <li><Link to="#">John / 20 May 1988</Link></li>
-                                            <li><Link to="#">Mom / 20 June 1964</Link></li>
-                                            <li><Link to="#">Dad / 20 July 1962</Link></li>
+                                            <li><Link to="#">{customerPrefer.gifting_preferencees['name']}/{customerPrefer.gifting_preferencees['dobDate']} {customerPrefer.gifting_preferencees['dobMonth']}  {customerPrefer.gifting_preferencees['dobYear']}</Link></li>
                                         </ul>
-                                        <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div>
+                                        {/* <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div> */}
                                     </div>
                                 </div>
                             </div>
@@ -1635,10 +1655,13 @@ const mapStateToProps = (state) => {
     }
 
     return {
-        languages: languages
+        languages: languages,
+        token: state.session.user,
+        prefrences: state.Cart.isPrepOpen
     }
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { closePrefPopup }
 )(MyProfile);

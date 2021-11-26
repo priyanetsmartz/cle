@@ -3,57 +3,92 @@ import { connect } from 'react-redux'
 import { Link, useLocation, useParams } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import appAction from "../../../redux/app/actions";
-import { addWhishlist, getAllProducts, getWhishlistItemsForUser, getProductByCategory, removeWhishlist, createGuestToken, getGuestCart, addToCartApi, addToCartApiGuest } from '../../../redux/cart/productApi';
+import { addWhishlist, getWhishlistItemsForUser, removeWhishlist, getProductsFilterRestCollection, getProductsFilterRestCollectionProducts } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Recomendations from './product-details/recomendations';
 import Description from '../categories/description';
-import Filter from './filter';
-import { formatprice } from '../../../components/utility/allutils';
+// import Filter from './filter';
+import { useIntl } from 'react-intl';
+import { capitalize, formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
-import Login from '../../../redux/auth/Login';
+
 import { siteConfig } from '../../../settings/index'
+import { getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
 const commonFunctions = new CommonFunctions();
-const loginApi = new Login();
+
 const baseUrl = commonFunctions.getBaseUrl();
 const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
-const { addToCart, productList, addToCartTask, addToWishlistTask, sortingFilterProducts, setPageFilter } = cartAction;
-const { showSignin } = appAction;
+const { addToCart, productList, addToCartTask, addToWishlistTask, sortingFilterProducts, setPageFilter, loaderProducts } = cartAction;
+const { showSignin, showLoader } = appAction;
 
 
 function Products(props) {
+    const { category, subcat, childcat, greatchildcat } = useParams();
     const location = useLocation();
-    const { category } = useParams();
-    let imageD = '', description = '';
-    let catID = getCookie("_TESTCOOKIE");
+    let imageD = '', description = '', url = '';
+    const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
     const [isHoverImage, setIsHoverImage] = useState(0);
-    const [isCategory, setIsCategory] = useState(props.match.path.split('/')[2] ? true : false);
-    const [catId, setCatId] = useState(catID);// change to dynamic id
+    const [urlp, seturlp] = useState('');
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
-    const [pageSize, setPageSize] = useState(12);
+    const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
     const [page, setCurrent] = useState(1);
     const [token, setToken] = useState('');
-    const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
-    const [sort, setSort] = useState(0);
+    const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
+    const [sort, setSort] = useState('');
+    const [filters, setFilters] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [catState, setCatState] = useState(0);
+    const [currentFilter, setCurrentFilter] = useState('')
+    const [clearFilter, setclearFilter] = useState(false)
     const language = getCookie('currentLanguage');
-
+    const [nameHeader, setNameHeader] = useState('')
 
     useEffect(() => {
-        let catID = getCookie("_TESTCOOKIE");
-        const localToken = localStorage.getItem('token');
+         console.log(filters)
+        let urlPath = '', nameTop = '';
+        if (category && subcat && childcat && greatchildcat) {
+            urlPath = category + "/" + subcat + "/" + childcat + '/' + greatchildcat;
+            nameTop = greatchildcat;
+        } else if (category && subcat && childcat) {
+            urlPath = category + "/" + subcat + "/" + childcat;
+            nameTop = childcat;
+        } else if (category && subcat) {
+            urlPath = category + "/" + subcat;
+            nameTop = subcat;
+        } else {
+            urlPath = category;
+            nameTop = category;
+        }
+        setNameHeader(nameTop)
+        seturlp(urlPath)
+        //    let catID = getCookie("_TESTCOOKIE");
+        const localToken = props.token.token;
         setToken(localToken)
-        //   getProducts(catID);
+        if (urlPath) {
+            getProducts(urlPath);
+        }
+
 
         return () => {
             props.addToCartTask(false);
             props.addToWishlistTask(true);
         }
-    }, [sortValue, page, pageSize, props.languages, location])
+    }, [props.languages, location, clearFilter, props.token])
+
+    useEffect(() => {
+        //   console.log('www')
+        if (catState === 0) {
+            getProductById(178);
+        } else {
+            getProductById(catState)
+        }
+    }, [sortValue, page, pageSize, sort, catState])
 
     useEffect(() => {
         if (props.prodloader === true) {
@@ -64,44 +99,57 @@ function Products(props) {
 
     }, [props.prodloader])
 
-    async function getProducts(catID) {
+    async function getProducts(urlPath) {
+        //console.log(urlPath)
         let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
-        let customer_id = localStorage.getItem('cust_id');
-        let result: any;
-        if (category) {
+        let result1: any = await getCategoryDetailsbyUrlPath(props.languages, urlPath, siteConfig.pageSize);
+        let catID = result1 && result1.data && result1.data.items && result1.data.items.length > 0 ? result1.data.items[0].id : '';
+        setCatState(catID)
+        getProductById(catID)
+    }
 
-            result = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue, props.languages);
-        } else {
+    async function getProductById(catID) {
+        //    console.log(catID)
+        let filter: any = await getProductsFilterRestCollection(catID, props.languages, sortValue, pageSize, page);
+        let customer_id =props.token.cust_id;
+        let total = 0, aggregations = [], items = [];
 
-            result = await getAllProducts(lang, page, pageSize, sortValue.sortBy, sortValue.sortByValue);
-        }
-        //  console.log(Math.ceil(result.data.total_count / 9))
-        setPagination(Math.ceil(result.data.total_count / pageSize));
-        let productResult = result.data.items;
-        if (customer_id) {
-            let whishlist: any = await getWhishlistItemsForUser();
-            let products = result.data.items;
-            let WhishlistData = whishlist.data;
-            if (WhishlistData && WhishlistData.length > 0) {
-                const mergeById = (a1, a2) =>
-                    a1.map(itm => ({
-                        ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
-                        ...itm
-                    }));
+        if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
+            aggregations = filter.data[0].data.products.aggregations;
+            total = filter.data[0].data.products.total_count;
+            items = filter.data[0].data.products.items;
+            let productResult = filter.data[0].data.products.items;
+            //   console.log(total);
+            setPagination(Math.ceil(total / pageSize));
+            // setPagination(total);
+            if (customer_id) {
+                let whishlist: any = await getWhishlistItemsForUser();
+                let products = items;
+                let WhishlistData = whishlist.data;
+                if (WhishlistData && WhishlistData.length > 0) {
+                    const mergeById = (a1, a2) =>
+                        a1.map(itm => ({
+                            ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
+                            ...itm
+                        }));
 
-                productResult = mergeById(products, WhishlistData);
+                    productResult = mergeById(products, WhishlistData);
+                }
             }
-
-
+            props.loaderProducts(false);
+            props.productList(productResult);
         }
         setOpacity(1);
-        props.productList(productResult);
-
+        setTotal(total)
+        setFilters(aggregations)
     }
+
     const filtterData = (event) => {
-        let sortBy = "created_at";
-        let sortByValue = "DESC";
+        setOpacity(0.3);
+        setCurrent(1)
+        let sortBy = "";
+        let sortByValue = "";
         if (event.target.value === "1") {
             sortBy = "price";
             sortByValue = "DESC";
@@ -111,7 +159,7 @@ function Products(props) {
         }
 
         setSort(event.target.value);
-        //   setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
+        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
         props.sortingFilterProducts({ sortBy: sortBy, sortByValue: sortByValue })
 
     }
@@ -125,13 +173,13 @@ function Products(props) {
             if (result.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
-                notification("success", "", 'Your product has been successfully added to your wishlist');
-                getProducts(catID)
+                notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
+                getProducts(urlp)
             } else {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
-                notification("error", "", "Something went wrong!");
-                getProducts(catID)
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+                getProducts(urlp)
             }
         } else {
             props.showSignin(true);
@@ -145,21 +193,23 @@ function Products(props) {
             setDelWishlist(0)
             props.addToWishlistTask(true);
             notification("success", "", del.data[0].message);
-            getProducts(catID)
+            getProducts(urlp)
         } else {
             setDelWishlist(0)
             props.addToWishlistTask(true);
-            notification("error", "", "Something went wrong!");
-            getProducts(catID)
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            getProducts(urlp)
         }
     }
-    const handlePageSize = (page:number) => {
+    const handlePageSize = (page: number) => {
         setPageSize(page)
+        setCurrent(1)
         props.setPageFilter(page)
     }
     const getPaginationGroup = () => {
-        let start = Math.floor((page - 1) / 4) * 4;
+        let start = Math.floor((page - 1) / pageSize) * pageSize;
         let fill = pagination > 5 ? 4 : pagination;
+        //  console.log (new Array(fill).fill(fill).map((_, idx) => start + idx + 1))
         return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
     };
 
@@ -192,108 +242,168 @@ function Products(props) {
         setIsHoverImage(0)
     }
 
+    const clearfilter = (e) => {
+        let nameTop = '';
+        if (category && subcat && childcat && greatchildcat) {
+            nameTop = greatchildcat;
+        } else if (category && subcat && childcat) {
+            nameTop = childcat;
+        } else if (category && subcat) {
+            nameTop = subcat;
+        } else {
+            nameTop = category;
+        }
+        setNameHeader(nameTop)
+        setclearFilter(true)
+
+    }
+
     async function handleCart(id: number, sku: string) {
-        //console.log(productDetails)
         setIsShow(id);
-        let cartData = {};
-        let cartSucces: any;
-        let cartQuoteId = '';
-        let customer_id = localStorage.getItem('cust_id');
-        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        //console.log(cartQuoteIdLocal)
-        if (cartQuoteIdLocal || customer_id) {
-            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
-            cartQuoteId = cartQuoteIdLocal;
-            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
-                cartQuoteId = customerCart.data;
-            }
-        } else {
-
-            let guestToken: any = await createGuestToken();
-            localStorage.setItem('cartQuoteToken', guestToken.data);
-            let result: any = await getGuestCart();
-            cartQuoteId = result.data.id
-        }
-        localStorage.setItem('cartQuoteId', cartQuoteId);
-        cartData = {
-            "cartItem": {
-                "sku": sku,
-                "qty": 1,
-                "quote_id": cartQuoteId
-            }
-        }
-
-
-        if (customer_id) {
-            cartSucces = await addToCartApi(cartData)
-        } else {
-            cartSucces = await addToCartApiGuest(cartData)
-        }
-        if (cartSucces.data.item_id) {
+        let cartResults: any = await handleCartFxn(id, sku);
+        if (cartResults.item_id) {
             props.addToCartTask(true);
-            notification("success", "", "Item added to cart!");
+            notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            notification("error", "", "Something went wrong!");
+            if (cartResults.message) {
+                notification("error", "", cartResults.message);
+            } else {
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
             setIsShow(0);
         }
     }
 
 
+    const currentvalue = async (e) => {
+        e.preventDefault();
+        let customer_id =props.token.cust_id;
+        let catID = catState ? catState : 178;
+        setCurrent(1)
+        // console.log(e.target.value)
+        setCurrentFilter(e.target.value)
+        let attribute_code = e.target.getAttribute("data-remove");
+        let value = attribute_code === 'price' ? e.target.getAttribute("data-access") : e.target.value;
+        let catt: any;
+        if (attribute_code === 'category_id') {
+            // console.log(e.target.getAttribute("data-access"))
+            catt = e.target.value ? e.target.value : catID;
+            setCatState(e.target.value)
+            setNameHeader(e.target.getAttribute("data-access"))
+        } else {
+            catt = catID;
+            setCatState(catID)
+        }
+        props.loaderProducts(true);
+        let filter: any = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, sortValue, pageSize);
+        let total = 0, items = [];
+        if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
+            total = filter.data[0].data.products.total_count;
+            items = filter.data[0].data.products.items;
+            let productResult = filter.data[0].data.products.items;
+            setPagination(Math.ceil(total / pageSize));
+            if (customer_id) {
+                let whishlist: any = await getWhishlistItemsForUser();
+                let products = items;
+                let WhishlistData = whishlist.data;
+                if (WhishlistData && WhishlistData.length > 0) {
+                    const mergeById = (a1, a2) =>
+                        a1.map(itm => ({
+                            ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
+                            ...itm
+                        }));
+
+                    productResult = mergeById(products, WhishlistData);
+                }
+            }
+            props.productList(productResult);
+        }
+        props.loaderProducts(false);
+        setTotal(total)
+    }
+
     return (
         <main>
             {/* <Promotion /> */}
-            {/* <section>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <nav aria-label="breadcrumb">
-                                <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="#">Home</Link></li>
-                                    <li className="breadcrumb-item"><Link to="#">Products</Link></li>
-
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-
-            </section> */}
-
-
             <section>
                 <div className="container">
                     <div className="row">
                         {/* Filter sidebar start*/}
-                        <Filter />
-                        {/* Filter sidebar end */}
-                        <div className="col-sm-9">
-                            <div className="resltspage_sec">
-                                <div className="paginatn_result">
-                                    <span><IntlMessages id="product.results" /></span>
-                                    <ul>
-                                        <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-                                        <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
-                                        <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
-                                    </ul>
-                                </div>
-                                <div className="sort_by">
-                                    <div className="sortbyfilter">
-                                        <select className="form-select customfliter" aria-label="Default select example" defaultValue={sort} onChange={filtterData} >
-                                            <option value={3} key="3" >Our picks</option>
-                                            <option value={0} key="0" >Newest First</option>
-                                            <option value={1} key="1" >High to low -- price </option>
-                                            <option value={2} key="2" >Low to High -- price</option>
 
-                                        </select>
+                        <div className="col-sm-3">
+                            {filters && filters.length > 0 && (
+                                <div>
+                                    <Link to="#" className="clear-filter" onClick={clearfilter}><IntlMessages id="clear-all" /></Link>
+                                    <div className="pro_categry_sidebar">
+                                        <div className="width-100">
+                                        <div className="results_show">{total ? `${total +' '+ intl.formatMessage({ id: "results-all" })}` : ""}</div>
+                                        </div>
+                                        <div className="sidebar_nav">
+                                            <div className="flex-shrink-0 p-0 bg-white">
+                                                {filters && filters.length > 0 && (
+                                                    <ul className="list-unstyled ps-0">
+                                                        {filters.map((item, i) => {
+                                                            return (
+                                                                <li className="mb-3" key={i}>
+                                                                    <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                                        data-bs-target={`#home-collapse-${i}`} aria-expanded="false">
+                                                                        {item.label}
+                                                                    </button>
+                                                                    {item.options.length > 0 && (
+                                                                        // <div className={i === 0 ? "collapse show" : "collapse"} id={`home-collapse-${i}`}>
+                                                                        <div className="collapse" id={`home-collapse-${i}`}>
+                                                                            <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                                                                {item.options.map((val, j) => {
+                                                                                    return (
+                                                                                        <li key={j} data-access={val.label} data-remove={item.attribute_code} className={parseInt(currentFilter) === parseInt(val.value) ? 'active' : ''} value={val.value} onClick={currentvalue} >{val.label}</li>)
+                                                                                })}
+                                                                            </ul>
+                                                                        </div>
+                                                                    )}
+
+                                                                </li>
+                                                            )
+                                                        })}
+
+                                                    </ul>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            {props.items.length > 0 ?
-                                <div className="product-listing" style={{ 'opacity': opacity }}>
+                            )}
+                        </div>
+
+                        {/* Filter sidebar end */}
+                        {props.items.length > 0 ?
+                            <div className="col-sm-9">
+                                <div className="search_keyword"><h1>{nameHeader ? capitalize(nameHeader) : "All"}</h1></div>
+                                <div className="resltspage_sec">
+                                    <div className="paginatn_result">
+                                        <span><IntlMessages id="product.results" /></span>
+                                        <ul>
+                                            <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
+                                            <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
+                                            <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
+                                        </ul>
+                                    </div>
+                                    <div className="sort_by">
+                                        <div className="sortbyfilter">
+                                            <select className="form-select customfliter" aria-label="Default select example" defaultValue={sort} onChange={filtterData} >
+                                                <option value={0} key="0" >{intl.formatMessage({ id: "filterNewestFirst" })}</option>
+                                                <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                                <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                                <option value={3} key="3" >{intl.formatMessage({ id: "filterourpicks" })}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="product-listing plp-listing" style={{ 'opacity': opacity }}>
                                     <div className="row g-2">
                                         {props.items.map(item => {
-                                            // console.log(item)
+                                            url = parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus';
                                             return (
                                                 <div className="col-md-4" key={item.id}>
                                                     {/* <Link to={'/product-details/' + item.sku}> */}
@@ -322,15 +432,18 @@ function Products(props) {
                                                                         description = attributes.value;
                                                                     }
                                                                 })
+
                                                             }
                                                             <Link to={'/product-details/' + item.sku}>
                                                                 {isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries && item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD ? imageD : item.image.url} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD ? imageD : item.image.url} className="image-fluid" alt={item.name} height="150" />
                                                                 }</Link>
                                                         </div>
                                                         <div className="about text-center">
-                                                            <h5>{item.name}</h5>
-                                                            <div className="tagname" dangerouslySetInnerHTML={{ __html: description ? description : item.short_description.html ? item.short_description.html : '' }} />
-                                                            <div className="pricetag"> {siteConfig.currency}{formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)}</div>
+                                                            <div className="product_name"><Link to={'/search/' + url}>{parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus'}</Link></div>
+                                                            <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                                            {/* <h5>{item.name}</h5>
+                                                            <div className="tagname" dangerouslySetInnerHTML={{ __html: description ? description : item.short_description && item.short_description.html ? item.short_description.html : '' }} /> */}
+                                                            <div className="pricetag">{siteConfig.currency} {formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)} </div>
                                                         </div>
                                                         {/* {item.type_id === 'simple' && (
                                                         <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>
@@ -351,32 +464,30 @@ function Products(props) {
                                         })}
                                     </div>
                                 </div>
-                                : <IntlMessages id="NotFound" />}
-                            <div className="resltspage_sec footer-pagints">
-                                <div className="paginatn_result">
-                                    <span>Results per page</span>
-                                    <ul>
-                                        <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-                                        <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
-                                        <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
-                                    </ul>
-                                </div>
-                                <div className="page_by">
-                                    <div className="pagination">
-
+                                <div className="resltspage_sec footer-pagints">
+                                    <div className="paginatn_result">
+                                        <span><IntlMessages id="product.results" /></span>
+                                        <ul>
+                                            <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
+                                            <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
+                                            <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
+                                        </ul>
+                                    </div>
+                                    <div className="page_by">
                                         <div className="col-md-12 pagination">
+                                            {/* //   {console.log(pagination)} */}
                                             {pagination > 1 && (<nav aria-label="Page navigation example">
                                                 <ul className="pagination justify-content-center">
                                                     <li
                                                         className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                                        <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true">Previous</Link>
+                                                        <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><IntlMessages id="pagination-prev" /></Link>
                                                     </li>
                                                     {getPaginationGroup().map((i, index) => (
-                                                        <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
+                                                        <li className="page-item" key={i}><Link className={`page-link ${page === i ? 'active' : ''}`} onClick={changePage} to="#">{i}</Link></li>
                                                     ))}
                                                     <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
                                                         <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                                            to="/">Next</Link>
+                                                            to="/"><IntlMessages id="pagination-next" /></Link>
                                                     </li>
                                                 </ul>
                                             </nav>
@@ -385,8 +496,8 @@ function Products(props) {
                                     </div>
                                 </div>
                             </div>
+                            : <IntlMessages id="NotFound" />}
 
-                        </div>
 
                     </div>
                 </div>
@@ -432,7 +543,7 @@ function Products(props) {
                 <div className="container">
                     <div className="row">
                         <div className="versace_sec">
-                            <h4>CLé Versace</h4>
+                            <h4>CLÉ Versace</h4>
                             <p>Founded in 1978 in Milan, Gianni Versace S.r.l. is one of the leading international fashion design houses
                                 and a symbol of Italian luxury world-wide. It designs, manufactures, distributes and retails fashion and
                                 lifestyle products including haute couture, prèt-à-porter, accessories, jewellery, watches, eyewear,
@@ -463,11 +574,12 @@ const mapStateToProps = (state) => {
         items: state.Cart.items,
         wishlist: state.Cart.addToWishlistTask,
         languages: languages,
-        prodloader: load
+        prodloader: load,
+        token: state.session.user
     }
 }
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList, addToCartTask, addToWishlistTask, showSignin, sortingFilterProducts, setPageFilter }
+    { showLoader, addToCart, productList, addToCartTask, addToWishlistTask, showSignin, sortingFilterProducts, setPageFilter, loaderProducts }
 )(Products);

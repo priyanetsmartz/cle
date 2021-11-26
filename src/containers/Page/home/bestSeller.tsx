@@ -3,16 +3,13 @@ import { connect } from 'react-redux';
 import Slider from "react-slick";
 import cartAction from "../../../redux/cart/productAction";
 import appAction from "../../../redux/app/actions";
-import { formatprice } from '../../../components/utility/allutils';
+import { formatprice, getHomePageProductsFxn, handleCartFxn } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
-import { menu } from '../../../redux/pages/allPages';
-import { getHomePageProducts } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import notification from "../../../components/notification";
 import { siteConfig } from '../../../settings';
-import { addToCartApi, addToCartApiGuest, addWhishlist, createGuestToken, getGuestCart, getWhishlistItemsForUser, removeWhishlist } from '../../../redux/cart/productApi';
-import Login from '../../../redux/auth/Login';
-const loginApi = new Login();
+import { addWhishlist, getCategoryList, removeWhishlist } from '../../../redux/cart/productApi';
+import { useIntl } from 'react-intl';
 const { addToWishlistTask, addToCartTask } = cartAction;
 const { showSignin } = appAction;
 function BestSeller(props) {
@@ -21,12 +18,11 @@ function BestSeller(props) {
     const [categoriesList, setCategoriesList] = useState([]);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
-    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
     const [bestseller, setBestseller] = useState([]);
     const [opacity, setOpacity] = useState(1);
     const [isHoverImage, setIsHoverImage] = useState(0);
-    const [catId, setCatId] = useState(52); //set default category here
-
+    const [catId, setCatId] = useState(props.categoryD);
+    const intl = useIntl();
     const settings = {
         dots: false,
         infinite: false,
@@ -62,65 +58,39 @@ function BestSeller(props) {
         ]
 
     };
-
     useEffect(() => {
-        const localToken = localStorage.getItem('token');
+        const localToken = props.token.token;
         setToken(localToken)
-        getData(0);
-
+        setBestseller(props.bestSeller)
         getCategories()
-    }, [props.languages]);
+        return () => {
+            setBestseller([]);
+        }
+    }, [props.bestSeller, props.currentCAT])
 
     const getData = async (catId) => {
-       // console.log(catId)
-        let result: any = await getHomePageProducts(props.languages, 12, catId);
-        let customer_id = localStorage.getItem('cust_id');
-        if (result) {
-            let productResult = result.data[0].bestSellers;
-            // console.log(productResult)
-            if (customer_id) {
-                let whishlist: any = await getWhishlistItemsForUser();
-                let products = result.data[0].bestSellers;
-                let WhishlistData = whishlist.data;
-                //  console.log(WhishlistData)
-                const mergeById = (a1, a2) =>
-                    a1.map(itm => ({
-                        ...a2.find((item) => (parseInt(item.id) === parseInt(itm.id)) && item),
-                        ...itm
-                    }));
-
-                productResult = mergeById(products, WhishlistData);
-                //   console.log(typeof (productResult))
-            } else {
-                productResult = result.data[0].bestSellers;
-
-            }
-            //  console.log(productResult)
-            setBestseller(productResult);
-            setOpacity(1);
-        }
+        let result: any = await getHomePageProductsFxn(props.languages, catId);
+        //console.log(result['bestSeller']) 
+        setBestseller(result['bestSeller']);
     }
 
     //get categories for the filter dropdown
     const getCategories = async () => {
-        let result: any = await menu(props.languages);
-        //console.log(result.data[0].parent.child[1]);
-        let catList = [];
-        if (result && result.data[0] && result.data[0].parent.child[1].child) {
-            result.data[0].parent.child[1].child.forEach(el => {
-                catList.push(el);
-            })
+        let results: any = await getCategoryList(props.languages, props.categoryD);
+        if (results && results.data && results.data.items) {
+            setCategoriesList(results.data.items)
         }
-        setCategoriesList(catList);
+
     }
 
     const changeCategory = (e) => {
         setCatId(e.target.value);
-        getData(e.target.value !== 'All' ? e.target.value : 0);
+        getData(e.target.value !== 'All' ? e.target.value : 178);
         setOpacity(0.3);
     }
 
     async function handleWhishlist(id: number) {
+        const token = props.token.token;
         if (token) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
@@ -128,12 +98,12 @@ function BestSeller(props) {
             if (result.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
-                notification("success", "", 'Your product has been successfully added to your wishlist');
+                notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
                 getData(catId);
             } else {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
-                notification("error", "", "Something went wrong!");
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
                 getData(catId);
             }
         } else {
@@ -153,7 +123,7 @@ function BestSeller(props) {
         } else {
             setDelWishlist(0)
             props.addToWishlistTask(true);
-            notification("error", "", "Something went wrong!");
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
             getData(catId);
         }
     }
@@ -169,51 +139,22 @@ function BestSeller(props) {
     }
 
     async function handleCart(id: number, sku: string) {
-        //console.log(productDetails)
         setIsShow(id);
-        let cartData = {};
-        let cartSucces: any;
-        let cartQuoteId = '';
-        let customer_id = localStorage.getItem('cust_id');
-        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        //console.log(cartQuoteIdLocal)
-        if (cartQuoteIdLocal || customer_id) {
-            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
-            cartQuoteId = cartQuoteIdLocal
-            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
-                cartQuoteId = customerCart.data;
-            }
-        } else {
-
-            let guestToken: any = await createGuestToken();
-            localStorage.setItem('cartQuoteToken', guestToken.data);
-            let result: any = await getGuestCart();
-            cartQuoteId = result.data.id
-        }
-        localStorage.setItem('cartQuoteId', cartQuoteId);
-        cartData = {
-            "cartItem": {
-                "sku": sku,
-                "qty": 1,
-                "quote_id": cartQuoteId
-            }
-        }
-
-
-        if (customer_id) {
-            cartSucces = await addToCartApi(cartData)
-        } else {
-            cartSucces = await addToCartApiGuest(cartData)
-        }
-        if (cartSucces.data.item_id) {
+        let cartResults: any = await handleCartFxn(id, sku);
+        if (cartResults.item_id) {
             props.addToCartTask(true);
-            notification("success", "", "Item added to cart!");
+            notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            notification("error", "", "Something went wrong!");
+            if (cartResults.message) {
+                notification("error", "", cartResults.message);
+            } else {
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
             setIsShow(0);
         }
     }
+
     return (
         <section className="width-100 my-5">
             <div className="container">
@@ -231,7 +172,7 @@ function BestSeller(props) {
                                 <div className="sortbyfilter">
                                     <h3><IntlMessages id="home.show" /></h3>
                                     <select className="form-select customfliter" value={catId} aria-label="Default select example" onChange={changeCategory}>
-                                        <option>All</option>
+                                        <option>{intl.formatMessage({ id: "selectcat" })}</option>
                                         {categoriesList.map((cat, i) => {
                                             return (<option value={cat.id} key={i}>{cat.name} </option>)
                                         })}
@@ -241,7 +182,7 @@ function BestSeller(props) {
                         </div>
                     </div>
                 </div>
-                {bestseller.length > 0 ? (
+                {bestseller && bestseller.length > 0 ? (
                     <div className="row" style={{ 'opacity': opacity }}>
                         <div className="col-sm-12">
                             <div className="new-in-slider product-listing">
@@ -269,9 +210,9 @@ function BestSeller(props) {
                                                             }
                                                         </div>
                                                     </Link>
-                                                    <div className="product_name"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                    <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div>
-                                                    <div className="product_price"> {siteConfig.currency}{formatprice(item.price)}</div>
+                                                    <div className="product_name"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
+                                                    <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                                    <div className="product_price">{siteConfig.currency}{formatprice(item.price)} </div>
                                                     <div className="cart-button mt-3 px-2">
                                                         {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                             <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
@@ -293,7 +234,9 @@ function BestSeller(props) {
 const mapStateToProps = (state) => {
     return {
         items: state.Cart.items,
-        languages: state.LanguageSwitcher.language
+        token: state.session.user,
+        currentCAT: state.Cart.catname,
+        categoryD: state.Cart.catIdd,
     }
 }
 

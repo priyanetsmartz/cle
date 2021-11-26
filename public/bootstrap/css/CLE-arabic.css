@@ -1,6 +1,7 @@
-body, a{
+body{
 	font-family: "Greta Arabic Regular" !important;
 	/* font-family: 'Conv_Meshki' !important; */
+	direction:rtl;
 	}
 .hamburger-close {float: left;}
 .hamburger a span{float:left;}
@@ -138,7 +139,7 @@ top: 30%;
 .footer-last-links a{font-size: 16px;margin: 0 5px;}
 .prive-top-banner{direction: rtl;}
 .prive-banner-left-content{direction: initial;}
-.breadcrumb{direction: rtl;}
+
 .social-menu-head{
 	font-family: "Greta Arabic Regular" !important;
 }
@@ -264,12 +265,232 @@ text-align: right;}
 }
 .minitotl_amnt .minicart_amount{text-align: left;}
 .slider-text-inner {right: 60px;left:auto; text-align:right;}
-.slick-list{direction: rtl;}
-.discover-bg{direction: rtl;}
-.discover-bg::before{left: auto;right: 0;}
-.discoverleft{width: 85%;padding: 116px 0px 90px 130px;}
+/* .slick-list{direction: rtl;} */
+
 .list-prodctsale .accordion-item .accordion-button::after{margin-left: 0;margin-right: auto;}
 .list-prodctsale .accordion-button .list-number{float: right;margin-right: 0;margin-left: 15px;}
 .become-part-inner{text-align: right;}
 
+/*******************/
+/*.discover-bg{direction: rtl;} */
+.product-listing .product{
+	direction: rtl;
+}
+.product-listing .product:hover .off{
+	left: unset;
+    right: 0;
+}
+.product-listing .cart-button a:before{
+	margin-right: 0;
+	margin-left: 4px;
+}
 
+.discover-bg::before{
+	left: auto;right: 0;
+}
+.discoverleft{
+	float:right;
+}
+.company-logo {
+    left: -108px;
+    right: unset;
+}
+
+.DC-top-banner .DC-top-ban-inner{
+	left:unset;
+	right:100px;
+}
+
+.sort_by .customfliter{
+	float: left;
+}
+
+.modal-header .btn-close{
+	margin: 0;
+}
+
+.accodian_descrpt .accordion-button::after{
+	margin-right: auto;
+    margin-left: 0;
+}
+
+.sidebar_nav .btn-toggle::after{
+	left:0;
+	right:unset;
+}
+
+.product_description,
+.accodian_descrpt{
+	margin-left:0;
+	margin-right:20%;
+}
+
+.pdp-favorite{
+	left:0;
+	right:unset;
+}
+
+.select-wearing ul li a{
+	font-size: 22px;
+}
+.megamenu_bar ul.megamenugrid h3, 
+.megamenu_bar ul.megamenugrid h3 a{
+	font-size: 22px;
+}
+
+.megamenu_bar ul.megamenugrid li a{
+	font-size: 18px;
+}
+
+.cart-total-price p span{
+	float:left;
+}
+
+.order-detail-sec,
+.qus-contactUs{
+	float:left;
+}
+
+.accordion-button::after{
+	margin-right:auto;
+	margin-left:unset;
+}
+
+.megamenugrid.last-images-menu{
+float: left !important;
+}
+.cta-dicover a{
+	font-size: 18px;
+}
+.choose-shopping .btn{
+	font-size: 18px;
+}
+.categoriy-list a.btn.details{
+	font-size: 18px;
+}
+.categoriy-list a.cart{
+	font-size: 28px;
+}
+.pro_categry_sidebar{
+	float:right;
+}
+.breadcrumb-item+.breadcrumb-item::before{
+	float:right;
+}
+
+.marketing_secs h2 {
+    font-family: "Conv_Meshki" !important;
+    font-size: 34px;
+}
+.marketing_secs p {
+    font-size: 22px;
+}
+.no-worries h3 {
+    font-size: 14px;
+}
+
+.dis-catgry h1,
+.new-in-title h1,
+.new-in-title h1 a,
+.choose-foryou-sec .new-in-title h1,
+.DC-section-title{
+	font-family: "Conv_Meshki" !important;
+	font-size: 40px;
+}
+
+.white-text{
+	font-size: 22px;
+}
+
+.white-text .btn{
+	font-size: 16px;
+}
+
+.list-prodctsale .accordion-button:not(.collapsed),
+.list-prodctsale .accordion-button{
+	font-size: 24px;
+}
+
+.become-part-inner h1,
+.banner-content-2 h4{
+	font-family: "Conv_Meshki" !important;
+	font-size: 40px;
+}
+.become-part-inner p{
+	font-size:20px;
+}
+
+.become-part-inner a{
+	font-size: 22px;
+}
+
+.terms-text{
+	font-size:14px;
+}
+
+.exclusive-tab ul.nav .nav-item .nav-link,
+.exclusive-tab ul.nav .nav-item .nav-link.active,
+.exclusive-tab ul.nav .nav-item .nav-link:hover{
+	font-family: "Conv_Meshki" !important;
+	font-size:28px;
+}
+
+.view-all-btn{
+	font-size: 28px;
+}
+
+h1.mb-4.text-center{
+	font-family: "Conv_Meshki" !important;
+	font-size: 40px;
+}
+
+.DC-top-banner .DC-top-ban-inner h2{
+	font-family: "Conv_Meshki" !important;
+	font-size: 40px;
+}
+
+.DC-top-banner .DC-top-ban-inner p{
+	font-size:22px;
+}
+
+.DC-top-banner .DC-top-ban-inner a.ban-btn{
+	font-size:18px;
+}
+
+.product_details h1, .product_details h1 a{
+	font-family: "Conv_Meshki" !important;
+	font-size:28px;
+}
+.product_details h2{
+	font-size:22px;
+}
+
+.accordion-flush .accordion-item .accordion-button{
+	font-size: 22px;
+}
+.product_description .btn-primary{
+	font-size: 14px;
+}
+
+.product_description .btn-primary:before {
+    margin-left: 4px;
+    margin-right: 0;
+}
+
+.miniaccount_details ul li a span.minicartprodt_img{
+	float:right;
+}
+
+.miniaccount_details ul li a span.minicartprodt_name{
+	float:right;
+	padding-left:0;
+	padding-right:4px;
+}
+
+.minicartprodt_name > h6{
+	text-align:right;
+}
+
+.miniaccount_details ul li a span.minicartprodt_name span.minicart_pname{
+	text-align:right;
+}	

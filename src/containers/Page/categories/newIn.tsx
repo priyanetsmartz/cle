@@ -1,45 +1,41 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
-import { formatprice } from '../../../components/utility/allutils';
+import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import {
-    addToCartApi,
-    addToCartApiGuest,
-    addWhishlist, createGuestToken, getGuestCart, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
+    addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
 } from '../../../redux/cart/productApi';
-import { useParams } from "react-router-dom";
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useLocation } from 'react-router-dom';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
-import Login from '../../../redux/auth/Login';
+
+import appAction from "../../../redux/app/actions";
 import cartAction from "../../../redux/cart/productAction";
-import { siteConfig } from '../../../settings/index'
-const loginApi = new Login();
+import { siteConfig } from '../../../settings/index';
+import { useIntl } from 'react-intl';
+const { showSignin } = appAction;
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 
 const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
-const { addToCart, productList, addToCartTask } = cartAction;
+const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 
 function NewIn(props) {
+    const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
     const location = useLocation()
-    let imageD = '', description = '';
-    let catID = getCookie("_TESTCOOKIE");
-    const { category, subcat } = useParams();
-    const [pageSize, setPageSize] = useState(12);
-    const [pagination, setPagination] = useState(1);
+    let imageD = '', description = '', brand = '';
+    const [isWishlist, setIsWishlist] = useState(0);
+    const [delWishlist, setDelWishlist] = useState(0);
     const [opacity, setOpacity] = useState(1);
-    const [page, setCurrent] = useState(1);
+    const [products, setProducts] = useState([]);
     const [token, setToken] = useState('');
     const [isHoverImage, setIsHoverImage] = useState(0);
-    const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
-    const [sort, setSort] = useState(0);
     const language = getCookie('currentLanguage');
     useEffect(() => {
-        const localToken = localStorage.getItem('token');
+        const localToken = props.token.token;
         setToken(localToken)
         getProducts(props.ctId);
 
@@ -47,16 +43,15 @@ function NewIn(props) {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [sortValue, page, pageSize, location, props.ctId])
+    }, [location, props.ctId, props.token])
 
     async function getProducts(catID) {
-        console.log(props.ctId)
+        // console.log(props.ctId)
         setOpacity(0.3);
-        let customer_id = localStorage.getItem('cust_id');
-        let result: any = await getProductByCategory(page, pageSize, catID, sortValue.sortBy, sortValue.sortByValue, props.languages);
-        //  console.log(Math.ceil(result.data.total_count / 9))
-        setPagination(Math.ceil(result.data.total_count / pageSize));
+        let customer_id = props.token.cust_id;
+        let result: any = await getProductByCategory(1, siteConfig.pageSize, catID, 'created_at', 'DESC', props.languages);
         let productResult = result.data.items;
+
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
             let products = result.data.items;
@@ -70,28 +65,45 @@ function NewIn(props) {
             productResult = mergeById(products, WhishlistData);
 
         }
+        setProducts(productResult);
         setOpacity(1);
-        //console.log(productResult)
-        props.productList(productResult);
-        // get product page filter
-        //let result1: any = await getProductFilter(9);
-        // console.log(result1)
 
     }
 
     async function handleWhishlist(id: number) {
-        let result: any = await addWhishlist(id);
-        notification("success", "", result.data[0].message);
-        getProducts(catID)
-
+        if (token) {
+            setIsWishlist(id)
+            let result: any = await addWhishlist(id);
+            if (result.data) {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("success", "", intl.formatMessage({ id: "addedtowishlist" }));
+                getProducts(props.ctId);
+            } else {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+                getProducts(props.ctId);
+            }
+        } else {
+            props.showSignin(true);
+        }
     }
+
     async function handleDelWhishlist(id: number) {
-        //need to get whishlist id first
-        // console.log(id);
+        setDelWishlist(id)
         let del: any = await removeWhishlist(id);
-        //  console.log(del);
-        notification("success", "", del.data[0].message);
-        getProducts(catID)
+        if (del.data[0].message) {
+            setDelWishlist(0)
+            props.addToWishlistTask(true);
+            notification("success", "", del.data[0].message);
+            getProducts(props.ctId)
+        } else {
+            setDelWishlist(0)
+            props.addToWishlistTask(true);
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            getProducts(props.ctId)
+        }
     }
 
     const someHandler = (id) => {
@@ -102,49 +114,20 @@ function NewIn(props) {
     const someOtherHandler = (e) => {
         setIsHoverImage(0)
     }
+
     async function handleCart(id: number, sku: string) {
-        //console.log(productDetails)
         setIsShow(id);
-        let cartData = {};
-        let cartSucces: any;
-        let cartQuoteId = '';
-        let customer_id = localStorage.getItem('cust_id');
-        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        //console.log(cartQuoteIdLocal)
-        if (cartQuoteIdLocal || customer_id) {
-            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
-            cartQuoteId = cartQuoteIdLocal
-            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
-                cartQuoteId = customerCart.data;
-            }
-        } else {
-
-            let guestToken: any = await createGuestToken();
-            localStorage.setItem('cartQuoteToken', guestToken.data);
-            let result: any = await getGuestCart();
-            cartQuoteId = result.data.id
-        }
-        localStorage.setItem('cartQuoteId', cartQuoteId);
-        cartData = {
-            "cartItem": {
-                "sku": sku,
-                "qty": 1,
-                "quote_id": cartQuoteId
-            }
-        }
-
-
-        if (customer_id) {
-            cartSucces = await addToCartApi(cartData)
-        } else {
-            cartSucces = await addToCartApiGuest(cartData)
-        }
-        if (cartSucces.data.item_id) {
+        let cartResults: any = await handleCartFxn(id, sku);
+        if (cartResults.item_id) {
             props.addToCartTask(true);
-            notification("success", "", "Item added to cart!");
+            notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            notification("error", "", "Something went wrong!");
+            if (cartResults.message) {
+                notification("error", "", cartResults.message);
+            } else {
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
             setIsShow(0);
         }
     }
@@ -152,50 +135,54 @@ function NewIn(props) {
     return (
         <>
             {
-                props.items.length > 0 && (
+                products.length > 0 && (
                     <div className=" container" style={{ 'opacity': opacity }}>
-                        <h1 className="mb-4"><IntlMessages id="category.explore"></IntlMessages></h1>
-                        <div className="row product-listing g-2">
+                        <h1 className="mb-4 text-center"><IntlMessages id="category.explore"></IntlMessages></h1>
+                        <div className="row product-listing plp-listing g-2">
 
-                            {props.items.slice(0, props.items.length - 1).map(item => {
+                            {products.slice(0, products.length > 1 ? products.length - 1 : products.length - 0).map(item => {
                                 return (
                                     <div className="col-md-3" key={item.id}>
                                         <div className="product py-4">
-                                            {token && (
-                                                <span className="off bg-favorite">
-                                                    {!item.wishlist_item_id && (
-                                                        <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
-                                                    )}
-                                                    {item.wishlist_item_id && (
-                                                        <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                                    )}
-                                                </span>
-                                            )
-                                            }
+                                            <span className="off bg-favorite">
+                                                {!item.wishlist_item_id && (
+                                                    <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
+                                                    </div>
+                                                )}
+                                                {item.wishlist_item_id && (
+                                                    <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
+                                                    </div>
+                                                )}
+                                            </span>
 
                                             <div className="text-center">
-                                                <div className="product_img" onMouseEnter={() => someHandler(item.id)}
-                                                    onMouseLeave={() => someOtherHandler(item.id)}>
+                                                <Link to={'/product-details/' + item.sku}>
+                                                    <div className="product_img" onMouseEnter={() => someHandler(item.id)}
+                                                        onMouseLeave={() => someOtherHandler(item.id)}>
 
-                                                    {
-                                                        item.custom_attributes && item.custom_attributes.length > 0 && item.custom_attributes.map((attributes) => {
-                                                            if (attributes.attribute_code === 'image') {
-                                                                imageD = attributes.value;
-                                                            }
-                                                            if (attributes.attribute_code === 'short_description') {
-                                                                description = attributes.value;
-                                                            }
-                                                        })
-                                                    }
-                                                    {
-                                                        isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD} className="image-fluid" alt={item.name} height="150" />
-                                                    }
-                                                </div >
+                                                        {
+                                                            item.custom_attributes && item.custom_attributes.length > 0 && item.custom_attributes.map((attributes) => {
+                                                                if (attributes.attribute_code === 'image') {
+                                                                    imageD = attributes.value;
+                                                                }
+                                                                if (attributes.attribute_code === 'short_description') {
+                                                                    description = attributes.value;
+                                                                }
+                                                                if (attributes.attribute_code === 'brand') {
+                                                                    brand = attributes.value;
+                                                                }
+                                                            })
+                                                        }
+                                                        {
+                                                            isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries && item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD} className="image-fluid" alt={item.name} height="150" />
+                                                        }
+                                                    </div >
+                                                </Link>
                                             </div>
                                             <div className="about text-center">
-                                                <h5>{item.name}</h5>
-                                                <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />
-                                                <div className="pricetag">{siteConfig.currency} {formatprice(item.price)}</div>
+                                                <div className="product_name"><Link to={'/search/' + brand}>{brand}</Link></div>
+                                                <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                                <div className="pricetag"> {siteConfig.currency} {formatprice(item.price)}</div>
                                             </div>
                                             {/* {token && ( */}
                                             <div className="cart-button mt-3 px-2">
@@ -209,13 +196,11 @@ function NewIn(props) {
                                 )
                             })}
                             <div className="col-md-3">
-                                <div className="view-all-btn">
-                                    {
-                                        <Link to={props.urls} > <IntlMessages id="category.viewAll" /></Link>
-                                    }
-
-                                </div>
+                                <Link to={props.urls} className="view-all-btn" >
+                                    <IntlMessages id="category.viewAll" />
+                                </Link>
                             </div>
+
                         </div>
                     </div >
                 )
@@ -226,11 +211,12 @@ function NewIn(props) {
 const mapStateToProps = (state) => {
     return {
         items: state.Cart.items,
-        languages: state.LanguageSwitcher.language
+        languages: state.LanguageSwitcher.language,
+        token: state.session.user
     }
 }
 
 export default connect(
     mapStateToProps,
-    { addToCart, productList, addToCartTask }
+    { addToCart, productList, addToCartTask, showSignin, addToWishlistTask }
 )(NewIn);

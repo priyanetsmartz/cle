@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getHomePageProducts, getWeChooseForYou } from '../../../redux/pages/customers';
 import HomeBanner from './banner';
+import { useParams } from "react-router-dom";
 import HtmlContent from '../../partials/htmlContent';
 import Personal from './personal';
 import BestSeller from './bestSeller';
@@ -13,101 +12,67 @@ import BecomePartner from './becomePartner';
 import Footer from '../../../containers/partials/footer-new';
 import Header from '../../../containers/partials/headerMenu';
 import appAction from "../../../redux/app/actions";
-import { getCookie, setCookie } from '../../../helpers/session';
+import cartAction from "../../../redux/cart/productAction";
+import { getCategoryDetailsbyUrlKeyFxn, getHomePageProductsFxn } from '../../../components/utility/allutils';
 const { showLoader } = appAction;
+const { setCatSearch } = cartAction;
 function HomePage(props) {
-    let relevantCookies = getCookie("relevant");
-    const [token, setToken] = useState('');
-    const [customerId, setCustomerId] = useState(localStorage.getItem('cust_id'));
-    const [choosen, setChoose] = useState([]);
+    const { categoryname } = useParams();
+    const [categoryId, setCategoryId] = useState(props.currentId);
     const [products, setProducts] = useState({
         newInProducts: [],
         customerProducts: []
     });
+
     useEffect(() => {
-       // props.showLoader(true)
-        const header = document.getElementById("headerrr");
-        const sticky = header.offsetTop;
-        const scrollCallBack: any = window.addEventListener("scroll", () => {
-            if (window.pageYOffset > sticky) {
-                header.classList.add("sticky-fullpage");
-            } else {
-                header.classList.remove("sticky-fullpage");
-            }
-        });
-        const localToken = localStorage.getItem('token');
-        setToken(localToken)
-        getData();
-
-        return () => {
-            window.removeEventListener("scroll", scrollCallBack);
-        };
-    }, [props.languages]);
-
-    const getData = async () => {
-        let result: any = await getHomePageProducts(props.languages, 12, '');
-        if (result) {
-            setProducts(result.data[0]);
+        let categoryNAME = categoryname === props.currentCAT ? props.currentCAT : categoryname === undefined ? 'women' : categoryname;
+        console.log(categoryNAME)
+        if (categoryNAME) {
+            getData(categoryNAME);
         }
-        // if (relevantCookies === 'true') {
-        //     console.log(typeof (relevantCookies), relevantCookies)
-        // }
+        return () => {
+            // window.removeEventListener("scroll", scrollCallBack);
+        };
+    }, [props.languages, props.currentCAT]);
 
-        if (customerId) {
-            let result: any = await getWeChooseForYou(props.languages, customerId);
 
-            if (result && result.data && result.data[0] && result.data[0].customerProducts.length > 0) {
-                setCookie("relevant", true)
-                setChoose(result.data[0].customerProducts);
-            } else {
-                setCookie("relevant", false)
-            }
 
-        } else {
-            setCookie("relevant", false)
+    const getData = async (categoryNAME) => {
+
+        let cateData: any = await getCategoryDetailsbyUrlKeyFxn(props.languages, categoryNAME);
+        if (cateData.items && cateData.items.length > 0) {
+            setCategoryId(cateData.items[0].id)
+            props.setCatSearch(cateData.items[0].id)
+            let result: any = await getHomePageProductsFxn(props.languages, cateData.items[0].id)
+            setProducts(result);
         }
     }
-
-
-
-    // const onLeave = () => { }
-
-    // const afterLoad = () => { }
-
     return (
-        <div className="sectiosn" >
+        <div className="sectiosn" id='topheaderrr' >
             <div className="section headerrr" id="headerrr" key='uniqueKey'>
                 <Header />
             </div>
             <div className="section banner">
-                <HomeBanner />
-                {/* <Personal /> */}
+                <HomeBanner categoryName={categoryname === props.currentCAT ? props.currentCAT : categoryname} />
             </div>
             <div className="section personal-section" >
-                <Personal />
+                <Personal categoryName={categoryname === props.currentCAT ? props.currentCAT : categoryname} />
             </div>
             <div className="section" >
-                <HtmlContent identifier="home_page_discover_categories" />
+                <HtmlContent identifier={categoryname === props.currentCAT ? `home_page_discover_categories_${props.currentCAT}` : categoryname ? `home_page_discover_categories_${categoryname}` : 'home_page_discover_categories'} />
             </div>
             <div className="section" >
-                <NewIn newInProducts={products.newInProducts} />
+                <NewIn newInProducts={products['newInProducts']} />
             </div>
-            {relevantCookies == 'true' && (
-                <div className="section" key='uniqueKey2' >
-                    <WeChooseForYou choosenData={choosen} />
-                </div>)}
+            <div className="section wechoose" key='uniqueKey2' >
+                <WeChooseForYou />
+            </div>
             <div className="section" >
                 <HtmlContent identifier="home_page_pre-owned_category" />
             </div>
-            {/* <div className="section">
-                <HtmlContent identifier="home_page_brown_london_section" />
-            </div> */}
             <div className="section">
-                <BestSeller />
+                <BestSeller bestSeller={products['bestSeller']} />
             </div>
-            {/* <div className="section">
-                <Magazine />
-            </div> */}
             <div className="section">
                 <BecomePartner />
             </div>
@@ -118,6 +83,8 @@ function HomePage(props) {
     )
 }
 const mapStateToProps = (state) => {
+    //console.log(state.Cart.catname)
+
     let languages = '';
 
     if (state && state.LanguageSwitcher) {
@@ -125,11 +92,14 @@ const mapStateToProps = (state) => {
     }
 
     return {
-        languages: languages
+        languages: languages,
+        token: state.session.user,
+        currentId: state.Cart.catIdd,
+        currentCAT: state.Cart.catname
     }
 }
 
 export default connect(
     mapStateToProps,
-    { showLoader }
+    { showLoader, setCatSearch }
 )(HomePage);

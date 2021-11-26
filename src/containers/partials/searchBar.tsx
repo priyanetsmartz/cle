@@ -21,29 +21,26 @@ function SearchBar(props) {
     const intl = useIntl();
     useEffect(() => {
         getCategoryListAPi();
-    }, [props.languages]);
+    }, [props.languages, props.categoryD]);
 
-    // useEffect(() => {
-    //     document.addEventListener("mousedown", handleClick);
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, []);
 
-    //     return () => {
-    //         document.removeEventListener("mousedown", handleClick);
-    //     };
-    // }, []);
+    const handleClick = e => {
+        if (node.current.contains(e.target)) {
+            return;
+        }
+        // outside click
+        SetIsShow(false);
 
-    // const handleClick = e => {
-    //     if (node.current.contains(e.target)) {
-    //         // inside click
-    //         console.log('here inside')
-    //         return;
-    //     }
-    //     // outside click
-    //     SetNothingFound("")
-    //     SetIsShow(false);
-
-    // };
+    };
     const getCategoryListAPi = async () => {
-        let results: any = await getCategoryList(props.languages);
+     //  console.log(props.categoryD)
+        let results: any = await getCategoryList(props.languages, props.categoryD);
         if (results && results.data && results.data.items) {
             setCategories(results.data.items)
         }
@@ -75,22 +72,23 @@ function SearchBar(props) {
 
     const searchwithCategory = async (e) => {
         const { value } = e.target;
+        //console.log(searchKeyword)
         SetSelectedCat(value)
         if (searchKeyword) {
-
-            history.push(`/search/${searchKeyword}/${value}`);
+            window.location.href = `/search/${searchKeyword}/${value}`;
             SetIsShow(false);
         } else if (value) {
-            history.push(`/search/all/${value}`);
+            window.location.href = `/search/all/${value}`;
         } else {
-            history.push(`/search/all/all`);
+            window.location.href = `/search/all/all`;
         }
     }
     const handleKeyDown = async (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && e.target.value) {
             let serachVal = e.target.value;
             setSearchKeyword(serachVal)
-            history.push(`/search/${serachVal}/all`);
+            window.location.href = `/search/${serachVal}/all`;
+            //   history.push(`/search/${serachVal}/all`);
             SetIsShow(false);
         }
     }
@@ -104,10 +102,10 @@ function SearchBar(props) {
                         <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} onChange={updateInput} onKeyDown={handleKeyDown} className="form-control me-1" />
                         {
                             categories.length > 0 && (
-                                <select className="form-select" onChange={searchwithCategory} aria-label="Default select example">
-
+                                <select className="form-select"  onChange={searchwithCategory} aria-label="Default select example">
+                                    <option value=''>{intl.formatMessage({ id: "selectcat" })}</option>
                                     {categories.map((item, i) => {
-                                        return (<option key={i} selected={item.name === selectedCat} value={item.id}>{item.name}</option>)
+                                        return (<option key={i} value={item.id}>{item.name}</option>)
                                     })
                                     }
                                 </select>
@@ -120,7 +118,6 @@ function SearchBar(props) {
                             <div className="serach-results-inner">
                                 <ul>
                                     {autoSuggestions.map((item, i) => {
-                                        //  console.log(item.custom_attributes);
                                         return (
                                             <li key={i}>
                                                 {
@@ -159,9 +156,10 @@ function SearchBar(props) {
 }
 
 const mapStateToProps = (state) => {
-    //console.log(state)
+    // console.log(state)
     return {
         languages: state.LanguageSwitcher.language,
+        categoryD: state.Cart.catIdd
     }
 }
 export default connect(

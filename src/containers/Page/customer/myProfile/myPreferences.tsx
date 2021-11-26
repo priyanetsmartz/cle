@@ -5,11 +5,14 @@ import { Link } from "react-router-dom";
 import { savePreference } from '../../../../redux/pages/customers';
 import notification from '../../../../components/notification';
 import IntlMessages from "../../../../components/utility/intlMessages";
+import cartAction from "../../../../redux/cart/productAction";
+import { useIntl } from 'react-intl';
+const { closePrefPopup } = cartAction;
 
 function MyPreferences(props) {
     let result: any = props.preferences;
     let preference = result.data && result.data[0] ? result.data[0].preference : "";
-    const [custId, setCustid] = useState(localStorage.getItem('cust_id'));
+    const [custId, setCustid] = useState(props.token.cust_id);
     const [attributesAll, setAttributesAll]: any = useState(preference);
     const [attributes, setAttributes]: any = useState(preference);
     const [catFilter, setCatFilter]: any = useState('');
@@ -17,25 +20,19 @@ function MyPreferences(props) {
     const [activeDesigner, setActiveDesigner] = useState(0);
     const [activeCategory, setActiveCategory] = useState(0);
     const [isShow, setIsShow] = useState(false);
-
+    const intl = useIntl();
     useEffect(() => {
-        // console.log(attributes)
+       // console.log(props.preferences, props.custData)
         getAttributes();
         return () => {
             //
         }
-    }, []);
+    }, [props.preferences, props.custData]);
 
-    useEffect(() => {
-        //  console.log(favCat)
-        // attributes.categories[activeCategory] = favCat;
-        setAttributes(prevState => ({
-            ...prevState,
-            categories: attributes.categories
-        }));
-    }, [favCat])
+
 
     const getAttributes = async () => {
+
         let result: any = props.preferences;
         let preference = result.data && result.data[0] ? result.data[0].preference : ""
 
@@ -70,6 +67,7 @@ function MyPreferences(props) {
                     })
                 }
                 if (el.attribute_code === 'favourite_categories') {
+
                     let favcategoryArray = preference.categories && preference.categories[activeCategory] ? preference.categories[activeCategory] : [];
                     if (favcategoryArray.length > 0) {
                         favcategoryArray.forEach(favCat => {
@@ -80,20 +78,24 @@ function MyPreferences(props) {
                             });
                         })
                     }
+                    // console.log(preference) 
 
                 }
+
             });
 
         }
+        //console.log(preference) 
+        props.closePrefPopup(false);
         setAttributes(preference);
-        setAttributesAll(preference);
+        //setAttributesAll(preference);
     }
 
     const selectMostlyIntersted = (i) => {
         setActiveIndex(i);
         // attributes.mostly_intersted[i].isChecked = !attributes.mostly_intersted[i].isChecked;
         attributes.mostly_intersted.forEach(el => {
-            if (el.id == attributes.mostly_intersted[i].id) {
+            if (el.id === attributes.mostly_intersted[i].id) {
                 el.isChecked = true;
             } else {
                 el.isChecked = false;
@@ -269,7 +271,10 @@ function MyPreferences(props) {
         const res = await savePreference(data);
         if (res) {
             setIsShow(false);
-            notification("success", "", "Customer Preferences Updated");
+            props.closePrefPopup(false);
+            notification("success", "", intl.formatMessage({ id: "preferencessuccess" }));
+        } else {
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
     }
 
@@ -429,7 +434,9 @@ function MyPreferences(props) {
                         <div className="favt_dragdrop">
                             <div className="favdesignr_size_sec">
                                 <ul>
+                                    {/* {console.log(attributes)} */}
                                     {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length && attributes.categories[activeCategory].map(cat => {
+                                        //  console.log(cat)
                                         return cat.isChecked &&
                                             (<li key={cat.id}><Link to="#"> {cat.name}</Link></li>)
                                     })}
@@ -456,6 +463,7 @@ function MyPreferences(props) {
 }
 
 const mapStateToProps = (state) => {
+    //console.log(state)
     let languages = '';
 
     if (state && state.LanguageSwitcher) {
@@ -463,10 +471,12 @@ const mapStateToProps = (state) => {
     }
 
     return {
-        languages: languages
+        languages: languages,
+        token: state.session.user
     }
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { closePrefPopup }
 )(MyPreferences);

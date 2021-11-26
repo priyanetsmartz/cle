@@ -9,6 +9,8 @@ import { history } from "../../../redux/store";
 import Login from "../../../redux/auth/Login";
 import { setCookie } from '../../../helpers/session';
 import notification from "../../../components/notification";
+import { sessionService } from 'redux-react-session';
+
 const loginApi = new Login();
 const { showSignin, openSignUp } = appAction;
 const { register, loginSuccess } = authAction;
@@ -18,7 +20,7 @@ function GoogleLoginButton(props) {
     const responseGoogle = (response) => {
         if (response.accessToken) {
             let name = response.profileObj.name.split(" ");
-            if(props.isVendor){
+            if (props.isVendor) {
                 return saveVendorLogin(response, name);
             }
             // console.log(name[0],name[1])
@@ -41,22 +43,29 @@ function GoogleLoginButton(props) {
             email: res.profileObj.email,
             telephone: '',
             country_id: '',
-          }
-          localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
-          history.push(`/vendor/profile`);
+        }
+        localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
+        history.push(`/vendor/profile`);
     }
 
     async function fetchMyAPI(userInfo) {
         let result: any = await loginApi.getAuthRegister(userInfo.email);
         var jsonData = result.data[0];
         if (jsonData) {
-            localStorage.setItem('id_token', jsonData.new_token);
-            localStorage.setItem('cust_id', jsonData.entity_id);
-            localStorage.setItem('token', jsonData.group_id);
+         
+            let id_token = jsonData.new_token;
+            let data = {
+                'cust_id': jsonData.entity_id,
+                'token_email': userInfo.email,
+                'token': jsonData.group_id,
+                'id_token': jsonData.new_token
+            }
+            sessionService.saveSession({ id_token })
+            sessionService.saveUser(data)
             setCookie("username", jsonData.email)
             props.loginSuccess(jsonData.new_token)
 
-          
+
             if (jsonData.group_id === "4") {
                 history.push("/prive-user");
             }

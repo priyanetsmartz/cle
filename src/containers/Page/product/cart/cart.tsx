@@ -4,15 +4,20 @@ import { Link } from 'react-router-dom'
 import cartAction from "../../../../redux/cart/productAction";
 import { getCookie } from "../../../../helpers/session";
 import cardPlaceholder from '../../../../image/cards.png';
+import appAction from "../../../../redux/app/actions";
 import { addWhishlistBySku, getCartItems, getCartTotal, getGiftMessage, getGuestCart, getGuestCartTotal, getWhishlistItemsForUser, giftMessageDelete, removeItemFromCart, removeItemFromGuestCart, removeWhishlist, updateCartItem, updateGuestCartItem } from '../../../../redux/cart/productApi';
 import notification from "../../../../components/notification";
 import RelevantProducts from './relevantProducts';
 import Modal from "react-bootstrap/Modal";
 import GiftMessage from "../product-details/GiftMessage";
 import IntlMessages from "../../../../components/utility/intlMessages";
+import { siteConfig } from '../../../../settings';
+import { formatprice } from '../../../../components/utility/allutils';
+import { useIntl } from 'react-intl';
 const { openGiftBoxes, addToCartTask, addToWishlistTask } = cartAction;
-
+const { showSignin } = appAction;
 function CartItemPage(props) {
+    const intl = useIntl();
     const language = getCookie('currentLanguage');
     const [token, setToken] = useState('');
     const [isShow, setIsShow] = useState(0);
@@ -26,12 +31,13 @@ function CartItemPage(props) {
     const [cartTotals, setCartTotal] = useState({});
     const [cartRelevants, setCartRelevants] = useState({});
     const [isGiftMessage, setIsGiftMessage] = useState(false);
+    const [delGiftMsg, setDelGiftMsg] = useState(0);
 
 
 
     useEffect(() => {
         //  console.log(props)
-        const localToken = localStorage.getItem('token');
+        const localToken = props.token.token;
         setToken(localToken)
         if (props.cart || !props.cart) {
             callGetCartItems()
@@ -40,7 +46,7 @@ function CartItemPage(props) {
             props.addToCartTask(false);
             props.openGiftBoxes(0);
         }
-    }, [props.cart])
+    }, [props.languages, props.cart,props.token])
 
     useEffect(() => {
         // console.log(props.items.Cart);
@@ -67,7 +73,7 @@ function CartItemPage(props) {
 
     async function someAPICall(product) {
         let giftCall: any = await getGiftMessage(product.item_id);
-        console.log(giftCall.data)
+        //    console.log(giftCall.data)
         let prod: any;
         if (giftCall.data && giftCall.data.gift_message_id) {
             prod = { ...product, isGift: true, gift_message_id: giftCall.data.gift_message_id }
@@ -82,10 +88,10 @@ function CartItemPage(props) {
     const callGetCartItems = async () => {
         setOpacity(0.3);
         let cartData = [], cartItems: any, cartTotal: any;
-        let customer_id = localStorage.getItem('cust_id');
+        let customer_id = props.token.cust_id;
         const cartQuoteId = localStorage.getItem('cartQuoteId');
         if (customer_id && cartQuoteId) {
-            cartItems = await getCartItems();
+            cartItems = await getCartItems(props.languages);
             let products = cartItems.data.items;
             // get cart total 
             cartTotal = await getCartTotal();
@@ -101,11 +107,11 @@ function CartItemPage(props) {
                 }));
 
             cartData = mergeById(productNew, WhishlistData);
-            // console.log(cartData)
+            //console.log(cartData)
         } else {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
-                cartItems = await getGuestCart();
+                cartItems = await getGuestCart(props.languages);
                 let products = cartItems.data.items;
                 cartData = await getgidtMessageCall(products)
                 cartTotal = await getGuestCartTotal();
@@ -134,7 +140,7 @@ function CartItemPage(props) {
 
     async function handleRemove(item_id) {
         setIsShow(item_id)
-        let customer_id = localStorage.getItem('cust_id');
+        let customer_id = props.token.cust_id;
         let deleteCartItem: any
         if (customer_id) {
             deleteCartItem = await removeItemFromCart(item_id);
@@ -144,9 +150,9 @@ function CartItemPage(props) {
         if (deleteCartItem.data === true) {
             props.addToCartTask(true);
             callGetCartItems()
-            notification("success", "", "Item removed from cart!");
+            notification("success", "",  intl.formatMessage({ id: "removedcart" }));
         } else {
-            notification("error", "", "Something went wrong!");
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
             setIsShow(0)
         }
     }
@@ -155,7 +161,7 @@ function CartItemPage(props) {
         // console.log(data)
         setValue(data.item_id);
         setQty(data.qty + 1);
-        let customer_id = localStorage.getItem('cust_id');
+        let customer_id = props.token.cust_id;
         let cartData = {
             "cartItem": {
                 "sku": data.sku,
@@ -171,14 +177,14 @@ function CartItemPage(props) {
 
         callGetCartItems()
         props.addToCartTask(true);
-        notification("success", "", "Cart Updated");
+        notification("success", "", intl.formatMessage({ id: "cartupdated" }));
     }
 
     //to substruct from the quantity
     async function handleSubtractQuantity(data) {
         setValue(data.item_id);
         setQty(data.qty - 1);
-        let customer_id = localStorage.getItem('cust_id');
+        let customer_id = props.token.cust_id;
         let cartData = {
             "cartItem": {
                 "sku": data.sku,
@@ -203,24 +209,30 @@ function CartItemPage(props) {
         }
         callGetCartItems()
         props.addToCartTask(true);
-        notification("success", "", "Cart Updated");
+        notification("success", "", intl.formatMessage({ id: "cartupdated" }));
     }
     async function handleWhishlist(sku: any) {
-        setIsWishlist(sku)
-        let result: any = await addWhishlistBySku(sku);
-        if (result.data[0].message) {
-            setIsWishlist(0)
-            props.addToWishlistTask(true);
-            notification("success", "", result.data[0].message);
-            callGetCartItems()
+        if (token) {
+            setIsWishlist(sku)
+            let result: any = await addWhishlistBySku(sku);
+            if (result.data[0].message) {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("success", "", result.data[0].message);
+                callGetCartItems()
+            } else {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+                callGetCartItems()
+            }
         } else {
-            setIsWishlist(0)
-            props.addToWishlistTask(true);
-            notification("error", "", "Something went wrong!");
-            callGetCartItems()
+            props.showSignin(true);
         }
 
     }
+
+
     async function handleDelWhishlist(id: number) {
         setDelWishlist(id)
         let del: any = await removeWhishlist(id);
@@ -232,7 +244,7 @@ function CartItemPage(props) {
         } else {
             setDelWishlist(0)
             props.addToWishlistTask(true);
-            notification("error", "", "Something went wrong!");
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
             callGetCartItems()
         }
     }
@@ -243,9 +255,19 @@ function CartItemPage(props) {
         setIsGiftMessage(true)
     }
     const handleGiftRemove = async (giftId, itemId) => {
+        setDelGiftMsg(itemId)
         let lang = props.languages ? props.languages : language;
         let result: any = await giftMessageDelete(giftId, itemId, lang);
-        console.log(result);
+        if (result.data) {
+            setDelGiftMsg(0)
+            callGetCartItems()
+            notification("success", "", intl.formatMessage({ id: "giftmessagedeleted" }));
+        } else {
+            setDelGiftMsg(0)
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        }
+
+        // console.log(result);
     }
     const hideGiftModalModal = () => {
         props.openGiftBoxes(0);
@@ -253,12 +275,19 @@ function CartItemPage(props) {
     }
     return (
         <main>
+
             <section className="cart-main">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8">
+                        <Link to="/products" ><IntlMessages id="cart-back-link" /></Link>
                             <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                 <h2><IntlMessages id="cart.Title" /></h2>
+                                {opacity === 0.3 && (
+                                    <div className="checkout-loading" >
+                                        <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                    </div>
+                                )}
                                 {cartItemsVal['items'] && cartItemsVal['items'].length ?
                                     (
                                         <ul className="cart-pro-list">
@@ -266,7 +295,7 @@ function CartItemPage(props) {
                                                 // console.log(item)
                                                 return (
                                                     <div key={i}>
-                                                        <li >
+                                                        <li>
                                                             <div className="row">
                                                                 <div className="col-md-3">
                                                                     <div className="product-image">
@@ -275,11 +304,13 @@ function CartItemPage(props) {
                                                                 </div>
                                                                 <div className="col-md-9">
                                                                     <div className="pro-name-tag">
-                                                                        <div className="float-start">
-                                                                            <p><strong><Link to={'/product-details/' + item.sku}>{item.name}</Link></strong></p>
-                                                                            <p>{item.desc}</p>
+                                                                        <div className="cart-info-l">
+                                                                            {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand}>{item.extension_attributes.brand}</Link></div>
+                                                                            )}
+                                                                            <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                                         </div>
-                                                                        {token && (
+                                                                        <div className="cart-info-r">
+                                                                            <p>{item.desc}</p>
                                                                             <span className="off bg-favorite">
                                                                                 {!item.wishlist_item_id && (
                                                                                     <Link to="#" onClick={() => { handleWhishlist(item['sku']) }} className="float-end text-end">{isWishlist === item['sku'] ? "Adding....." : <IntlMessages id="cart.addWishlist" />}</Link>
@@ -288,8 +319,10 @@ function CartItemPage(props) {
                                                                                     <Link to="#" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} className="float-end text-end">{delWishlist === parseInt(item.wishlist_item_id) ? "Removing....." : <IntlMessages id="cart.removeWishlist" />}</Link>
                                                                                 )}
                                                                             </span>
-                                                                        )
-                                                                        }
+                                                                        </div>
+
+
+
                                                                         <div className="clearfix"></div>
                                                                     </div>
                                                                     <div className="qty-size">
@@ -308,7 +341,7 @@ function CartItemPage(props) {
                                                                         </div> */}
                                                                         </div>
                                                                     </div>
-                                                                    <div className="cart-pro-price">${item.price}</div>
+                                                                    <div className="cart-pro-price">{siteConfig.currency}{formatprice(item.price)} </div>
                                                                     <div className="pro-remove-tag"  >
                                                                         {/* <p className="float-start">Ready tp ship to the contiguous SA in 1-14 days</p> */}
                                                                         <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" >{isShow === item.item_id ? "Removing....." : <IntlMessages id="cart.remove" />}</Link>
@@ -318,7 +351,9 @@ function CartItemPage(props) {
                                                         </li>
                                                         <div className="save-cart-btns">
                                                             {item.isGift ?
-                                                                <Link to="#" className="" onClick={() => { handleGiftRemove(item.gift_message_id, item.item_id) }}  ><IntlMessages id="cart.removeGift" /></Link>
+                                                                delGiftMsg === item.item_id ? <Link to="#" ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                                    <Link to="#"  onClick={() => { handleGiftRemove(item.gift_message_id, item.item_id) }}  ><IntlMessages id="cart.removeGift" /></Link>
+
                                                                 : <Link to="#" onClick={() => {
                                                                     handleGiftMEssage(item.item_id);
                                                                 }}><IntlMessages id="cart.addGift" /> </Link>}
@@ -328,9 +363,7 @@ function CartItemPage(props) {
                                                     </div>
                                                 )
                                             })}
-                                        </ul>) :
-
-                                    (
+                                        </ul>) : (
                                         <p><IntlMessages id="cart.cartEmpty" /></p>
                                     )}
 
@@ -342,11 +375,11 @@ function CartItemPage(props) {
                                 <h5><IntlMessages id="orderDetail" /> </h5>
 
                                 <div className="cart-total-price">
-                                    <p><IntlMessages id="subTotal" /><span className="text-end">${cartTotals['sub_total'] ? cartTotals['sub_total'] : 0}</span></p>
-                                    <p><IntlMessages id="shipping" /><span className="text-end">${cartTotals['shipping_charges'] ? cartTotals['shipping_charges'] : 0}</span></p>
-                                    <p><IntlMessages id="tax" /><span className="text-end">${cartTotals['tax'] ? cartTotals['tax'] : 0}</span></p>
+                                    <p><IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{cartTotals['sub_total'] ? formatprice(cartTotals['sub_total']) : 0} </span></p>
+                                    <p><IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency} {cartTotals['shipping_charges'] ? formatprice(cartTotals['shipping_charges']) : 0}</span></p>
+                                    <p><IntlMessages id="tax" /><span className="text-end">{siteConfig.currency} {cartTotals['tax'] ? formatprice(cartTotals['tax']) : 0} </span></p>
                                     <hr />
-                                    <Link to="/checkout"><IntlMessages id="checkout" /></Link>
+                                    {cartItemsVal['items'] && cartItemsVal['items'].length ? (<Link to="/checkout"><IntlMessages id="checkout" /></Link>) : ''}
                                 </div>
                                 <div className="we-accept">
                                     <p><strong><IntlMessages id="we-accept" />:</strong></p>
@@ -357,7 +390,7 @@ function CartItemPage(props) {
                             </div>
                             <div className="qus-contactUs">
                                 <p><IntlMessages id="questionCart" /></p>
-                                <Link to="/contact-us"><IntlMessages id="menu_contact" /> </Link>
+                                <Link to="/contact-us"><IntlMessages id="menu_contactnew" /> </Link>
                             </div>
                         </div>
                     </div>
@@ -376,15 +409,19 @@ function CartItemPage(props) {
 }
 
 
+
+
 const mapStateToProps = (state) => {
-    // console.log(state)
+    // console.log(state.session)
     return {
         items: state.Cart.addedItems,
         giftCart: state,
-        cart: state.Cart.addToCartTask
+        cart: state.Cart.addToCartTask,
+        token: state.session.user,
+        languages: state.LanguageSwitcher.language,
     }
 }
 export default connect(
     mapStateToProps,
-    { openGiftBoxes, addToCartTask, addToWishlistTask }
+    { openGiftBoxes, addToCartTask, addToWishlistTask, showSignin }
 )(CartItemPage);

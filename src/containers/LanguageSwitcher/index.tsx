@@ -14,6 +14,11 @@ function LanguageSwitcher(props) {
     props.changeLanguage(lang)
     setHighlight(lang);
     setValue(lang);
+    if (lang === 'arabic') {
+      document.body.setAttribute('dir',"rtl")
+    } else {
+      document.body.removeAttribute('dir')
+    }
   }
   useEffect(() => {
     setHighlight(props.languages);

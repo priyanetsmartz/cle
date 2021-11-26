@@ -9,6 +9,7 @@ const initState = {
     addToWishlist: false,
     openAccountPop: false,
     openMiniCartPop: false,
+    isPrepOpen: false,
     paymentMethods: [],
     ship: {},
     billing: {},
@@ -18,7 +19,9 @@ const initState = {
     },
     prods: false,
     filters: { sortBy: 'price', sortByValue: "DESC" },
-    pageeSize: 12
+    pageeSize: 12,
+    catIdd: 0,
+    catname: 'women',
 }
 
 
@@ -62,6 +65,12 @@ const cartReducer = (state = initState, action) => {
             return { ...state, filters: action.payload };
         case actions.SET_PAGESIZE:
             return { ...state, pageeSize: action.payload };
+        case actions.SET_CATAEARCH:
+            return { ...state, catIdd: action.catId };
+        case actions.SET_CATANAME:
+            return { ...state, catname: action.catname };
+        case actions.OPEN_PREP_BOX:
+            return { ...state, isPrepOpen: action.isOpen };
         default:
             return state;
     }

@@ -5,6 +5,7 @@ import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
 import reducers from "./reducers";
 import rootSaga from "./sagas";
+import { sessionService } from 'redux-react-session';
 const history = createBrowserHistory()
 
 const sagaMiddleware = createSagaMiddleware();
@@ -18,6 +19,7 @@ const store = createStore(
   }),
   compose(applyMiddleware(...middlewares))
 );
+sessionService.initSessionService(store);
 sagaMiddleware.run(rootSaga,"");
 export { store, history };
 

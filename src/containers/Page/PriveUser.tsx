@@ -28,14 +28,7 @@ function PriveUser(props) {
     }
   }, [props.languages, language])
   return (
-    <>
-      <div className="container magazine-inner">
-        <div className="row mt-3 mag-list-head">
-          <div className="col-md-6 offset-md-3 text-center">
-
-          </div>
-        </div>
-      </div>
+    <div className='customwrapper' >
       <div className="prive-top-banner">
         <img src={banner} alt="prive-banner" />
         <div className="prive-banner-content container">
@@ -55,11 +48,21 @@ function PriveUser(props) {
         </div>
       </div>
       <div className="container">
-
-        <div className="row">
-          <div className="col-md-12 breadcrumb my-3"><Link to="/"><IntlMessages id="prive.home" /> </Link> / <IntlMessages id="prive.onboard" /></div>
-        </div>
-
+        <section>
+          <div className="container">
+            <div className="row">
+              <div className="col-sm-12">
+                {/* <AppBreadcrumbs />  */}
+                <nav aria-label="breadcrumb" className="new-breadcrumb">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                    <li className="breadcrumb-item active"><IntlMessages id="prive.onboard" /></li>
+                  </ol>
+                </nav >
+              </div>
+            </div>
+          </div>
+        </section>
         <div className="row">
           <div className="col-md-8 offset-md-2 prive-benefits">
             <h2><IntlMessages id="prive.benefits" /> </h2>
@@ -101,7 +104,7 @@ function PriveUser(props) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

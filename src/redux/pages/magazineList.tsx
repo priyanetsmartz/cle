@@ -1,4 +1,5 @@
 import API from "../../restApi/AdminApi";
+import { sessionService } from 'redux-react-session';
 const Api = new API();
 
 export function MagazineList(language: string) {
@@ -58,11 +59,13 @@ export function SendNewsletter(payload, language = 'english') {
     return Api.request(`rest/all/V1/newsletter/subscriber`, data, "POST", "");
 }
 
-export function postViews(language, id, ip) {
+export async function postViews(language, id, ip) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const localToken = user.id_token;
     const data = {
         "postId": id,
         "customerId": null,
-        "sessionId": localStorage.getItem('id_token') ? localStorage.getItem('id_token') : ip,
+        "sessionId": localToken ? localToken : ip,
         "remoteAddr": ip,
         "store_id": language === 'english' ? 3 : 2
     }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import IntlMessages from "../../components/utility/intlMessages";
-import notification from '../../components/notification';
+
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
 // import { Link } from "react-router-dom";
@@ -96,114 +96,57 @@ function ContactUS(props) {
         return formIsValid;
     }
 
-    const Capitalize = (str) => {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-    const handleChange = (e) => {
-        const { id, value } = e.target
-        setState(prevState => ({
-            ...prevState,
-            [id]: value
-        }))
-    }
-
-    const handleSubmitClick = async (e) => {
-        e.preventDefault();
-        //  const { register } = props;
-        if (handleValidation()) {
-            setIsShow(true);
-            let data: any = {};
-            form.form_json[0].forEach(el => {
-                data[el.name] = {
-                    value: state[el.name],
-                    label: el.label,
-                    type: el.type
-                }
-            });
-
-            payload.response_json = JSON.stringify(data);
-            payload.form_id = form.form_id;
-            payload.store_id = form.store_id;
-            payload.form_name = form.title;
-            payload.form_code = form.code;
-            setPayload(payload);
-            let result: any = await SubmitContactUs({ answer: payload });
-            if (result) {
-                notification("success", "", "Message sent!");
-                setIsShow(false);
-                setState(prevState => ({
-                    ...prevState,
-                    name: "",
-                    email: "",
-                    reason: "",
-                    message: ""
-                }))
-            }
-        } else {
-            setIsShow(false);
-            notification("warning", "", "Please enter required values");
-        }
-    }
     return (
         <div className="container about-inner inner-pages"  >
-            <figure className="text-center page-head">
-                <svg xmlns="http://www.w3.org/2000/svg" width="850" height="144" viewBox="0 0 850 144">
-                    <text id="Contact Us" data-name="Contact Us" transform="translate(425 108)" fill="none" stroke="#2E2BAA"
-                        strokeWidth="1" fontSize="110" fontFamily="Monument Extended Book">
-                        <tspan x="-423.555" y="0"><IntlMessages id="contact.title" /></tspan>
-                    </text>
-                </svg>
-            </figure>
-            <div className="row">
-                <div className="col-md-6 offset-md-3">
-                    <div>
-                        <div>
+            <div className="my_orders_returns_sec">
+                <div className="width-100">
+                    <h1><IntlMessages id="footer.customer" /></h1>
+                    <h2><IntlMessages id="mysupport.weWantToBe" /></h2>
+                </div>
 
-                            <div className="row g-3 arabic-rtl-direction">
-                                {/* <div className="text-center">
-                                    <h3><IntlMessages id="contact.reach" /></h3>
-                                    <p><IntlMessages id="contact.do_you_have_question" /></p>
-                                </div> */}
-                                <iframe title="contact form" style={{ "height": "800px", "width": "99%", "border": "none" }} src='https://forms.zohopublic.com/cleportal692/form/ContactusTeaser/formperma/ChqWeIlStcsFpEqH1XolNHheBwaVh9Huwq8bZ6pXOIQ'></iframe>
-                                {/* {form && form.form_json[0] && form.form_json[0].map(item => {
-                                    return item.type === 'textinput' ?
-                                        <div className="col-sm-12" key={item.name}>
-                                            <label htmlFor=""> <b>{item.label}</b></label>
-                                            <input type="text"
-                                                className={item.className}
-                                                id={item.name}
-                                                aria-describedby={item.name}
-                                                placeholder={Capitalize(item.label)}
-                                                value={state[item.name]}
-                                                onChange={handleChange}
-                                            />
-                                            <span className="error">{errors.errors[item.name]}</span>
-                                        </div> : item.type === 'textarea' ? <div className="col-sm-12" key={item.name}>
-                                            <label htmlFor=""> <b>{item.label}</b></label>
-                                            <textarea id={item.name} value={state.message} className={item.className} placeholder={Capitalize(item.label)} onChange={handleChange}></textarea>
-                                            <span className="error">{errors.errors[item.name]}</span>
-                                        </div> : <div className="col-sm-12" key={item.name}>
-                                            <label htmlFor=""> <b>{item.label}</b></label>
-                                            <select value={state.reason} onChange={handleChange} id={item.name} className={item.className}>
-                                                <option value="">{item.label}</option>
-                                                {item.values && item.values.map(opt => {
-                                                    return (<option key={opt.value} value={opt.value}>{opt.label}</option>);
-                                                })}
-                                            </select>
-                                            <span className="error">{errors.errors[item.name]}</span>
-                                        </div>
+                <section className="customer-s">
+                    <div className="row">
+                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <div className="customer-d">
+                                <div className="customer-d-wrap">
+                                    <i className="fas fa-phone" aria-hidden="true"></i>
+                                    <h4><IntlMessages id="myaccount.phoneNo" /></h4>
+                                    <a href="tel:+966555028568"><p>+966 55 502 8568</p></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <div className="customer-d">
+                                <div className="customer-d-wrap">
+                                    <i className="fas fa-envelope" aria-hidden="true"></i>
+                                    <h4><IntlMessages id="login.email" /></h4>
+                                    <a href="mailto:contact@cle.com"><p>contact@cle.com</p></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <div className="customer-d">
+                                <div className="customer-d-wrap">
+                                    <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
+                                    <a href="https://www.google.com/maps/search/?api=1&query=24.6537488,46.8341752" target="_blank">
+                                        <h4><IntlMessages id="myaccount.address" /></h4></a>
 
-                                })}
-
-                                <div className="d-flex justify-content-end">
-                                    <Link to="/" className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}> <IntlMessages id="contact.send" /></Link>
-                                    <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
-                                </div> */}
+                                    <p>6934 AlWaqit - AlMuhammadia Unit No 1<br />
+                                        Riyadh 12361 - 4883<br />
+                                        KSA</p><br />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
 
+                <section className="support-form">
+                    <div className="row">
+                        <div className="col-xs-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2">
+                            <iframe title="contact form" style={{ "height": "800px", "width": "99%", "border": "none" }} src='https://forms.zohopublic.com/cleportal692/form/ContactusTeaser/formperma/ChqWeIlStcsFpEqH1XolNHheBwaVh9Huwq8bZ6pXOIQ'></iframe>                      
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     );

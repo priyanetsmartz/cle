@@ -1,6 +1,7 @@
 import Notification from "../components/notification";
 import { apiConfig } from '../settings';
 import CommonFunctions from "../commonFunctions/CommonFunctions";
+import { sessionService } from 'redux-react-session';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const axios = require("axios");
@@ -8,7 +9,7 @@ const processResponse = true;
 
 class ForgotPassApi {
     //Request Method
-    request(name, postData, method, queryString) {
+    async  request(name, postData, method, queryString) {
         //Check Internet connection is in working mode
         const connection = navigator.onLine ? true : false;
         if (!connection) {
@@ -26,8 +27,8 @@ class ForgotPassApi {
         }
 
         let authtoken = '';
-
-        const token = localStorage.getItem('id_token') ? localStorage.getItem('id_token') :  apiConfig.adminToken;
+        let id_token = await sessionService.loadSession().then(session => { return session.id_token }).catch(err => console.log(''))
+        const token =id_token ? id_token :  apiConfig.adminToken;
         authtoken = `Bearer ${token}`;
         return new Promise(function (resolve, reject) {
             var url = baseUrl + name

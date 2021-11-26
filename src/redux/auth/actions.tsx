@@ -20,6 +20,7 @@ const actions = {
   REGISTER_SUCCESS: "REGISTER_SUCCESS",
   GET_GLOBALAUTH: "GET_GLOBALAUTH",
   REGISTER_AFTER: "REGISTER_AFTER",
+  VENDOR_DATA:"VENDOR_DATA",
 
   checkAuthorization: () => ({ type: actions.CHECK_AUTHORIZATION }),
   login: (payload: Payload) => ({
@@ -51,6 +52,10 @@ const actions = {
   }),
   getglobalauth: (payload: Payload) => ({
     type: actions.GET_GLOBALAUTH,
+    payload
+  }),
+  vendorrrr: (payload: Payload) => ({
+    type: actions.VENDOR_DATA,
     payload
   })
 };

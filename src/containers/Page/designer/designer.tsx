@@ -37,7 +37,7 @@ function DesignerCategories(props) {
                                 <div className="section">
                                     <HtmlContent identifier="design_category_banner_image" />
                                 </div>
-                                {localStorage.getItem('token') === '4' && <div className="section" >
+                                {props.token.token === '4' && <div className="section" >
                                     <PriveExclusive />
                                 </div>}
                                 <div className="section" >
@@ -62,7 +62,7 @@ function DesignerCategories(props) {
                     <div className="section">
                         <HtmlContent identifier="design_category_banner_image" />
                     </div>
-                    {localStorage.getItem('token') == '4' && <div className="section" >
+                    {props.token.token == '4' && <div className="section" >
                         <PriveExclusive />
                     </div>}
                     <div className="section" >
@@ -84,7 +84,8 @@ function DesignerCategories(props) {
 }
 const mapStateToProps = (state) => {
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        token: state.session.user
     }
 }
 
