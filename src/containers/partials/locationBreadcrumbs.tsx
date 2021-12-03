@@ -31,7 +31,7 @@ function Breadcrumbs(props) {
         <nav aria-label="breadcrumb" className="new-breadcrumb">
             {(location.pathname !== "/home") && (
                 <ol className="breadcrumb">
-                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                    <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
                     {breadcrumsState.map((local, j) => {
                       //  console.log(local)
                         if (j === breadcrumsState.length - 1) {
@@ -89,6 +89,10 @@ function Breadcrumbs(props) {
                                 } else if (local === 'customer') {
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={"/customer/dashboard"}>My Account</Link></li>
+                                    )
+                                }else if (local === 'vendor') {
+                                    return (
+                                        <li key={j} className="breadcrumb-item"><Link to={"/customer/dashboard"}>My Business Account</Link></li>
                                     )
                                 } else if (local === category) {
                                     return (

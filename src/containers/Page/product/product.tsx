@@ -9,6 +9,7 @@ import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Recomendations from './product-details/recomendations';
 import Description from '../categories/description';
+import { Slider } from 'antd';
 // import Filter from './filter';
 import { useIntl } from 'react-intl';
 import { capitalize, formatprice, handleCartFxn } from '../../../components/utility/allutils';
@@ -50,7 +51,7 @@ function Products(props) {
     const [nameHeader, setNameHeader] = useState('')
 
     useEffect(() => {
-         console.log(filters)
+        //console.log(filters)
         let urlPath = '', nameTop = '';
         if (category && subcat && childcat && greatchildcat) {
             urlPath = category + "/" + subcat + "/" + childcat + '/' + greatchildcat;
@@ -112,7 +113,7 @@ function Products(props) {
     async function getProductById(catID) {
         //    console.log(catID)
         let filter: any = await getProductsFilterRestCollection(catID, props.languages, sortValue, pageSize, page);
-        let customer_id =props.token.cust_id;
+        let customer_id = props.token.cust_id;
         let total = 0, aggregations = [], items = [];
 
         if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
@@ -275,19 +276,49 @@ function Products(props) {
         }
     }
 
+    const handlePriceRange = async (range) => {
+        setCurrent(1)
+        let customer_id = props.token.cust_id;
+        let catID = catState ? catState : 178;
+        setCatState(catID)
+        props.loaderProducts(true);
+        let r = range[0] + '-' + range[1];
+        let filter: any = await getProductsFilterRestCollectionProducts(catID, props.languages, 'price', r, sortValue, pageSize);
+        let total = 0, items = [];
+        if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
+            total = filter.data[0].data.products.total_count;
+            items = filter.data[0].data.products.items;
+            let productResult = filter.data[0].data.products.items;
+            setPagination(Math.ceil(total / pageSize));
+            if (customer_id) {
+                let whishlist: any = await getWhishlistItemsForUser();
+                let products = items;
+                let WhishlistData = whishlist.data;
+                if (WhishlistData && WhishlistData.length > 0) {
+                    const mergeById = (a1, a2) =>
+                        a1.map(itm => ({
+                            ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
+                            ...itm
+                        }));
 
+                    productResult = mergeById(products, WhishlistData);
+                }
+            }
+            props.productList(productResult);
+        }
+        props.loaderProducts(false);
+        setTotal(total)
+    }
     const currentvalue = async (e) => {
         e.preventDefault();
-        let customer_id =props.token.cust_id;
+        let customer_id = props.token.cust_id;
         let catID = catState ? catState : 178;
         setCurrent(1)
-        // console.log(e.target.value)
         setCurrentFilter(e.target.value)
         let attribute_code = e.target.getAttribute("data-remove");
         let value = attribute_code === 'price' ? e.target.getAttribute("data-access") : e.target.value;
         let catt: any;
         if (attribute_code === 'category_id') {
-            // console.log(e.target.getAttribute("data-access"))
             catt = e.target.value ? e.target.value : catID;
             setCatState(e.target.value)
             setNameHeader(e.target.getAttribute("data-access"))
@@ -337,27 +368,44 @@ function Products(props) {
                                     <Link to="#" className="clear-filter" onClick={clearfilter}><IntlMessages id="clear-all" /></Link>
                                     <div className="pro_categry_sidebar">
                                         <div className="width-100">
-                                        <div className="results_show">{total ? `${total +' '+ intl.formatMessage({ id: "results-all" })}` : ""}</div>
+                                            <div className="results_show">{total ? `${total + ' ' + intl.formatMessage({ id: "results-all" })}` : ""}</div>
                                         </div>
                                         <div className="sidebar_nav">
                                             <div className="flex-shrink-0 p-0 bg-white">
                                                 {filters && filters.length > 0 && (
                                                     <ul className="list-unstyled ps-0">
                                                         {filters.map((item, i) => {
+                                                            let phigh = '', plow = '';
                                                             return (
                                                                 <li className="mb-3" key={i}>
                                                                     <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                                                         data-bs-target={`#home-collapse-${i}`} aria-expanded="false">
-                                                                        {item.label}
+                                                                        {item.label === 'Price' ? <IntlMessages id="order.price" /> : item.label === 'Category' ? <IntlMessages id="category" /> : item.label}
                                                                     </button>
                                                                     {item.options.length > 0 && (
-                                                                        // <div className={i === 0 ? "collapse show" : "collapse"} id={`home-collapse-${i}`}>
                                                                         <div className="collapse" id={`home-collapse-${i}`}>
                                                                             <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                                                {item.options.map((val, j) => {
-                                                                                    return (
-                                                                                        <li key={j} data-access={val.label} data-remove={item.attribute_code} className={parseInt(currentFilter) === parseInt(val.value) ? 'active' : ''} value={val.value} onClick={currentvalue} >{val.label}</li>)
-                                                                                })}
+                                                                                {item.label === 'Price' ?
+                                                                                    <div className="sliderAnt">{(() => {
+                                                                                        phigh = item.options[item.options.length - 1].value;
+                                                                                        plow = item.options[0].value;
+                                                                                        let priceh = phigh.split('_');
+                                                                                        let pricel = plow.split('_');
+                                                                                        let priceLow = parseInt(pricel[0]);
+                                                                                        let priceHigh = parseInt(priceh[1]);
+                                                                                        return (
+                                                                                            <div className="sliderInner">
+                                                                                                {/* <p className="sliderlower">{priceLow}</p> */}
+                                                                                                <Slider min={priceLow} max={priceHigh} range onAfterChange={handlePriceRange} />
+                                                                                                {/* <p className="sliderupper">{priceHigh}</p> */}
+                                                                                            </div>)
+                                                                                    })()}</div>
+                                                                                    :
+                                                                                    item.options.map((val, j) => {
+                                                                                        return (
+                                                                                            <li key={j} data-access={val.label} data-remove={item.attribute_code} className={parseInt(currentFilter) === parseInt(val.value) ? 'active' : ''} value={val.value} onClick={currentvalue} >{val.label}</li>)
+                                                                                    })
+                                                                                }
                                                                             </ul>
                                                                         </div>
                                                                     )}

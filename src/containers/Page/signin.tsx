@@ -14,6 +14,8 @@ import FacebookLoginButton from '../socialMediaLogin/FaceBook';
 import GoogleLoginButton from '../socialMediaLogin/Google';
 import ForgottenPassword from '../Page/forgotPassword';
 import { useIntl } from 'react-intl';
+import { apiConfig } from '../../settings';
+var CryptoJS = require("crypto-js");
 const { showSignin, openSignUp, toggleOpenDrawer } = appAction;
 const { login, logout } = authAction;
 
@@ -34,7 +36,9 @@ function SignIn(props) {
   useEffect(() => {
     if (getCookie("remember_me") === "true") {
       setRememberMe(true);
-      setState({ email: getCookie("username"), password: getCookie("password") })
+      let bytes = CryptoJS.AES.decrypt(getCookie("password"), apiConfig.encryptionkey);
+      let decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+      setState({ email: getCookie("username"), password: decryptedData })
     }
     return () => {
       // componentwillunmount in functional component.
@@ -46,7 +50,10 @@ function SignIn(props) {
     setIsLoaded(props.showLogin)
     if (!props.showLogin) {
       if (getCookie("remember_me") === "true") {
-        setState({ email: getCookie("username"), password: getCookie("password") })
+        let bytes = CryptoJS.AES.decrypt(getCookie("password"), apiConfig.encryptionkey);
+        let decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+
+        setState({ email: getCookie("username"), password: decryptedData })
       } else {
         setState({ email: '', password: '' })
       }

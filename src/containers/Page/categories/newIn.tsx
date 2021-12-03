@@ -50,7 +50,7 @@ function NewIn(props) {
         setOpacity(0.3);
         let customer_id = props.token.cust_id;
         let result: any = await getProductByCategory(1, siteConfig.pageSize, catID, 'created_at', 'DESC', props.languages);
-        let productResult = result.data.items;
+        let productResult = result && result.data && result.data.items ? result.data.items : {};
 
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();

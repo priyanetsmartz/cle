@@ -57,13 +57,9 @@ class Login {
     //console.log('hetre');
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     const language = getCookie('currentLanguage');
+    var storeId = language === 'arabic' ? 'ar' : 'en';
     if (cartQuoteToken && !localToken) {
-      var storeId = language === 'arabic' ? 2 : 3;
-      // let cartData = {
-      //   "customerId": parseInt(localToken),
-      //   "storeId": storeId// check for language input
-      // }
-      return Api.request(`rest/V1/guest-carts/${cartQuoteToken}`, '', "PUT", "")
+      return Api.request(`rest/${storeId}/V1/guest-carts/${cartQuoteToken}`, '', "PUT", "")
     } else {
       localStorage.removeItem('cartQuoteToken');
       return AdminApi.request(`rest/V1/customers/${localToken}/carts`, "", "POST", "")

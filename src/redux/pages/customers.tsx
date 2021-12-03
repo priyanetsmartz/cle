@@ -127,12 +127,12 @@ export function getCategoryDetails(language, catId) {
 
 export function getCategoryDetailsbyUrlPath(language, url, pageSize) {
     const storeId = language === 'english' ? "en" : "ar";
-    return adminApi.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_path&searchCriteria[filterGroups][0][filters][0][value]=${url}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&storeId=${storeId}`, "", "GET", "");
+    return adminApi.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_path&searchCriteria[filterGroups][0][filters][0][value]=${url}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}`, "", "GET", "");
 }
 
 export function getCategoryDetailsbyUrlKey(language, urlkey, pageSize) {
     const storeId = language === 'english' ? "en" : "ar";
-    return adminApi.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_key&searchCriteria[filterGroups][0][filters][0][value]=${urlkey}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&storeId=${storeId}`, "", "GET", "");
+    return adminApi.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_key&searchCriteria[filterGroups][0][filters][0][value]=${urlkey}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}`, "", "GET", "");
 }
 
 
@@ -149,14 +149,14 @@ export function getWeChooseForYou(language, custId) {
 
 
 export function getHomePageBanner(language, categoryname = '') {
-    let bannerName ='';
-    if (categoryname === 'women' || categoryname === '' ) {
+    let bannerName = '';
+    if (categoryname === 'women' || categoryname === '') {
         bannerName = language === 'english' ? 'home_page_slider' : 'home_page_banner_arabic';
-    }else{
+    } else {
         bannerName = language === 'english' ? `home_page_slider_${categoryname}` : `home_page_slider_${categoryname}_arabic`;
     }
 
-   
+
 
     return adminApi.request(`rest/V1/lof/bannerslider/getList?searchCriteria[filterGroups][0][filters][0][field]=tags&searchCriteria[filterGroups][0][filters][0][value]=${bannerName}`, "", "GET", "");
 }

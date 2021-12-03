@@ -112,11 +112,13 @@ function MyWishList(props) {
     async function handleCart(id: number, sku: string) {
         setIsShow(id);
         let cartResults: any = await handleCartFxn(id, sku);
+        console.log(cartResults)
         if (cartResults.item_id) {
             props.addToCartTask(true);
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
+           
             if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
@@ -173,18 +175,20 @@ function MyWishList(props) {
                                                     {/* need sku from api  */}
                                                     {/* <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.product_id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button></div> */}
 
+
                                                 </div>
-                                                <div className="about text-center">
+                                                <div className="wish-cart cart-button">
+                                                    {isShow === parseInt(item.product_id) ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                        <Link to="#" onClick={() => { handleCart(parseInt(item.product_id), item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
+                                                </div>
+                                                <div className="wish text-left">
                                                     <h5><Link to={'/search/' + item.brand}>{item.brand}</Link></h5>
                                                     <div className="tagname"><Link to={'/product-details/' + item.sku}>{item.name}</Link></div>
                                                     {/* <div className="tagname" dangerouslySetInnerHTML={{ __html: item.description }} /> */}
                                                     <div className="pricetag">{siteConfig.currency} {formatprice(item.price)} </div>
                                                 </div>
-                                                <div className="cart-button mt-3 px-2">
-                                                    {isShow === parseInt(item.product_id) ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
-                                                        <Link to="#" onClick={() => { handleCart(parseInt(item.product_id), item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
-                                                </div>
                                             </div>
                                         </div>
                                     );

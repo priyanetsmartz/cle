@@ -100,7 +100,7 @@ function BusinessProfile(props) {
         if (ven) {
             setVendorData(JSON.parse(ven))
         }
-        getData();
+       // getData();
         getCountries();
         return () => {
             setIsShow(false)

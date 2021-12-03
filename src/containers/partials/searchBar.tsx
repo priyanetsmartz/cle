@@ -39,8 +39,8 @@ function SearchBar(props) {
 
     };
     const getCategoryListAPi = async () => {
-     //  console.log(props.categoryD)
-        let results: any = await getCategoryList(props.languages, props.categoryD);
+        let cate = props.categoryD ? props.categoryD : 178;
+        let results: any = await getCategoryList(props.languages, cate);
         if (results && results.data && results.data.items) {
             setCategories(results.data.items)
         }
@@ -102,7 +102,7 @@ function SearchBar(props) {
                         <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} onChange={updateInput} onKeyDown={handleKeyDown} className="form-control me-1" />
                         {
                             categories.length > 0 && (
-                                <select className="form-select"  onChange={searchwithCategory} aria-label="Default select example">
+                                <select className="form-select" onChange={searchwithCategory} aria-label="Default select example">
                                     <option value=''>{intl.formatMessage({ id: "selectcat" })}</option>
                                     {categories.map((item, i) => {
                                         return (<option key={i} value={item.id}>{item.name}</option>)

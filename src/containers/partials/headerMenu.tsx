@@ -37,7 +37,7 @@ function HeaderMenu(props) {
     const [activeMobileMenuLevel3, setActiveMobileMenuLevel3] = useState('');
     const [mobileMenu, setMobileMenu] = useState(false);
     const [menuData, SetMenuData] = useState([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
-    const [activeCat, SetActiveCat] = useState('')
+    const [activeCat, SetActiveCat] = useState('women')
     const [activeOne, SetActiveOne] = useState('');
 
     useEffect(() => {
@@ -129,6 +129,7 @@ function HeaderMenu(props) {
         SetActiveCat(urlKey)
         props.setCatSearch(id)
         props.setCurrentCat(urlKey)
+        setMobileMenu(!mobileMenu);
         //console.log(id, urlKey)
         // if (urlKey === 'all') {
         //     window.location.href = `/`;
@@ -177,14 +178,16 @@ function HeaderMenu(props) {
     const menuMObileclicK = () => {
         setMobileMenu(!mobileMenu);
     }
-    const logout = () => {
+    const logout = async () => {
         if (cle_vendor) { //vendor logout
             localStorage.removeItem('cle_vendor');
             history.replace('/vendor-login');
             return;
         }
-        sessionService.deleteSession();
-        sessionService.deleteUser();
+        await sessionService.deleteSession();
+        await sessionService.deleteUser();
+        // sessionService.deleteSession();
+        // sessionService.deleteUser();
 
         localStorage.removeItem('cartQuoteId');
         props.logout();
@@ -322,7 +325,7 @@ function HeaderMenu(props) {
                             </div>
                             <div className="col-4">
                                 <div className="cli_logo">
-                                    <Link className=" me-2" to="/">
+                                    <Link className=" me-2" onClick={() => window.location.href = '/'} to="/">
                                         <img src={CLELogo} className="img-fluid" alt="logo" />
                                     </Link>
                                 </div>
@@ -339,7 +342,7 @@ function HeaderMenu(props) {
                                         <div className="cartuser-info">
                                             <ul>
                                                 <LanguageSwitcher />
-                                                <li><Link to="#">{customerName ? capitalize(customerName) : ""} </Link></li>
+                                                <li><Link to="/customer/profile">{customerName ? capitalize(customerName) : ""} </Link></li>
                                                 {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
                                                 <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 
@@ -380,7 +383,7 @@ function HeaderMenu(props) {
                     )}
                     <div className="col-4">
                         <div className="cli_logo">
-                            <Link className=" me-2" to="/">
+                            <Link className=" me-2" onClick={() => window.location.href = '/'} to="/">
                                 <img src={CLELogo} className="img-fluid" alt="logo" />
                             </Link>
                         </div>
@@ -395,9 +398,10 @@ function HeaderMenu(props) {
                                 <ul className="list-unstyled">
                                     {
                                         menuData.map((val, i) => {
+                                            let routering = val.url_key === 'women' ? '' : '/category/' + val.url_key;
                                             return (
                                                 <li className="dropdownuuu" key={i} >
-                                                    <Link to="#" >{val.name}</Link>
+                                                    <Link to={routering} onClick={(e) => { handleTopMenuClick(val.url_key, val.id); }} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
                                                     <span className="dropdown-toggle" id={`menukey-${val.name}`} onClick={(e) => { stopFunction1(e); }} data-bs-toggle="dropdownzcz"></span>
                                                     {val && val.child && val.child.length > 0 && (
 
@@ -493,8 +497,8 @@ function HeaderMenu(props) {
                                             {customerName && (
                                                 <li> <Link to="/customer/wish-list"><svg xmlns="http://www.w3.org/2000/svg" width="24.083" height="20.83" viewBox="0 0 24.083 20.83" className="wishlist-icon">
                                                     <g id="Group_136" data-name="Group 136" transform="translate(-373.892 -360.898)">
-                                                        <path id="Path_34" data-name="Path 34" d="M374.892,367.708c0,7.809,11.041,13.02,11.041,13.02s11.041-6.063,11.041-13.02a5.811,5.811,0,0,0-11.041-2.532,5.811,5.811,0,0,0-11.041,2.532" transform="translate(0 0)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" stroke-width="2" />
-                                                        <path id="Path_35" data-name="Path 35" d="M374.892,367.708c0,7.809,11.041,13.02,11.041,13.02s11.041-6.063,11.041-13.02a5.811,5.811,0,0,0-11.041-2.532,5.811,5.811,0,0,0-11.041,2.532" transform="translate(0 0)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" stroke-width="2" />
+                                                        <path id="Path_34" data-name="Path 34" d="M374.892,367.708c0,7.809,11.041,13.02,11.041,13.02s11.041-6.063,11.041-13.02a5.811,5.811,0,0,0-11.041-2.532,5.811,5.811,0,0,0-11.041,2.532" transform="translate(0 0)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                                        <path id="Path_35" data-name="Path 35" d="M374.892,367.708c0,7.809,11.041,13.02,11.041,13.02s11.041-6.063,11.041-13.02a5.811,5.811,0,0,0-11.041-2.532,5.811,5.811,0,0,0-11.041,2.532" transform="translate(0 0)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                                                     </g>
                                                 </svg></Link> </li>
                                             )}

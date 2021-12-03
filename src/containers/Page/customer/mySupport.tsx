@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import IntlMessages from "../../../components/utility/intlMessages";
 
 import { connect } from "react-redux";
 
 import { getCookie } from "../../../helpers/session";
-import { getContactUsForm, Pages } from '../../../redux/pages/allPages';
+import {  Pages } from '../../../redux/pages/allPages';
 import ContactBannerFooter from './contact-banner';
 
 

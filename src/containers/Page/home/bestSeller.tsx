@@ -66,7 +66,7 @@ function BestSeller(props) {
         return () => {
             setBestseller([]);
         }
-    }, [props.bestSeller, props.currentCAT])
+    }, [props.bestSeller, props.currentCAT, props.languages])
 
     const getData = async (catId) => {
         let result: any = await getHomePageProductsFxn(props.languages, catId);
@@ -90,6 +90,7 @@ function BestSeller(props) {
     }
 
     async function handleWhishlist(id: number) {
+        console.log(catId)
         const token = props.token.token;
         if (token) {
             setIsWishlist(id)
@@ -232,11 +233,18 @@ function BestSeller(props) {
     )
 }
 const mapStateToProps = (state) => {
+    let languages = '';
+
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
+
     return {
         items: state.Cart.items,
         token: state.session.user,
         currentCAT: state.Cart.catname,
         categoryD: state.Cart.catIdd,
+        languages: languages,
     }
 }
 

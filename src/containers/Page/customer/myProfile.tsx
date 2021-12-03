@@ -201,30 +201,33 @@ function MyProfile(props) {
                 return o1.value === o2; // return the ones with equal id
             });
         });
-        //console.log(categories_array)
+
         if (intersted_in[0] && intersted_in[0].name === "kid") {
             catToShow = categories_array[1];
-        } else if (intersted_in[0] && intersted_in[0].name === "women") {
+        } else if (intersted_in[0] && intersted_in[0].name === "Women") {
             catToShow = categories_array[0];
         } else {
             catToShow = categories_array[2];
         }
+
+      //  console.log(catToShow, intersted_in[0].name)
         var favCategoryArray = [];
         if (catToShow && catToShow.length > 0) {
             favCategoryArray = catToShow.filter(function (o1) {
                 return favourite_categories.some(function (o2) {
+                  //  console.log(o1.id, o2)
                     return o1.id === o2; // return the ones with equal id
                 });
             });
         }
 
-        //console.log(favCategoryArray)
+        
         var favDesignerArray = designer_array[0].filter(function (o1) {
             return favourite_designers.some(function (o2) {
                 return o1.id === o2; // return the ones with equal id
             });
         });
-        //  console.log(gifting_preferencees)
+         console.log(favCategoryArray)
         setCustomerPrefer(prevState => ({
             ...prevState,
             interestedIn: intersted_in[0] ? intersted_in[0].name : "",

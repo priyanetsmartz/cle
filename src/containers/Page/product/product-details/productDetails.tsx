@@ -200,7 +200,7 @@ function ProductDetails(props) {
             }
             let productExtras: any;
             if (result && result.data) {
-                productExtras = await getProductExtras(result.data.id);
+                productExtras = await getProductExtras(result.data.id, lang);
             }
 
             let posts = productExtras && productExtras.data[0] && productExtras.data[0].posts ? productExtras.data[0].posts : [];

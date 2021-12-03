@@ -1,18 +1,20 @@
 import AdminApi from "../../restApi/AdminApi";
+import Api from "../../restApi/Api";
 import { sessionService } from 'redux-react-session';
 const APi = new AdminApi();
+const customerApi = new Api();
 
 
 export async function getAllProducts(language, page, pageSize, sortBy, sortByValue) {
     let localToken = await sessionService.loadSession().then(session => { return session }).catch(err => console.log(''))
-    var storeId = language === 'english' ? 3 : 2;
+    var storeId = language === 'english' ? 'en' : 'ar';
     let priveQuery = localToken && parseInt(localToken) === 4 ? '' : `searchCriteria[filter_groups][1][filters][0][field]=prive&searchCriteria[filter_groups][1][filters][0][value]=0&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&`;
-    return APi.request(`rest/all/V1/products/?${priveQuery}searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "");
+    return APi.request(`rest/${storeId}/V1/products/?${priveQuery}searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[currentPage]=${page}&searchCriteria[sortOrders][0][direction]=${sortByValue}`, "", "GET", "");
 }
 
 export function getProductByCategory(page, pageSize, category, sortBy, sortByValue, language) {
-    var storeId = language === 'english' ? 3 : 2;
-    return APi.request(`rest/all/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=category_id&searchCriteria[filter_groups][1][filters][0][value]=${category}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&searchCriteria[filter_groups][2][filters][0][field]=status&searchCriteria[filter_groups][2][filters][0][value]=1&searchCriteria[filter_groups][2][filters][0][condition_type]=eq&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&searchCriteria[currentPage]=${page}&searchCriteria[pageSize]=${pageSize}&storeId=${storeId}`, "", "GET", "");
+    var storeId = language === 'english' ? 'en' : 'ar'
+    return APi.request(`rest/${storeId}/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=category_id&searchCriteria[filter_groups][1][filters][0][value]=${category}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&searchCriteria[filter_groups][2][filters][0][field]=status&searchCriteria[filter_groups][2][filters][0][value]=1&searchCriteria[filter_groups][2][filters][0][condition_type]=eq&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&searchCriteria[currentPage]=${page}&searchCriteria[pageSize]=${pageSize}`, "", "GET", "");
 }
 
 export async function addWhishlist(id: number) {
@@ -45,7 +47,7 @@ export async function getWhishlistItemsForUser() {
 }
 
 export function addToCartApi(cartData) {
-    return APi.request(`rest/V1/carts/mine/items`, cartData, "POST", "")
+    return customerApi.request(`rest/V1/carts/mine/items`, cartData, "POST", "")
 }
 
 export function getCartItems(language) {
@@ -61,7 +63,7 @@ export function getCartTotal() {
 
 export async function getcustomercartquoet() {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.token;  
+    const localToken = user.token;
     return APi.request(`rest/V1/customers/${localToken}/carts`, "", "POST", "");
 }
 export function removeItemFromCart(id: number) {
@@ -182,10 +184,11 @@ export function getProductDetails(sku: string, language: string) {
     return APi.request(`rest/${storeId}/V1/products/${sku} `, "", "GET", "");
 }
 
-export async function getProductExtras(productId: number) {
+export async function getProductExtras(productId: number, language: string) {
+    var storeId = language === 'arabic' ? '2' : '3';
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const localToken = user.cust_id;
-    return APi.request(`rest/V1/product/recommendation?storeId=3&customerId=${localToken}&productId=${productId}`, "", "GET", "");
+    return APi.request(`rest/V1/product/recommendation?storeId=${storeId}&customerId=${localToken}&productId=${productId}`, "", "GET", "");
 }
 
 export function addToCartApiGuest(cartData) {

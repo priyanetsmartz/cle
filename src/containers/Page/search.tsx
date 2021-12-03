@@ -6,7 +6,7 @@ import { getCookie } from '../../helpers/session';
 import { siteConfig } from '../../settings/index';
 import IntlMessages from "../../components/utility/intlMessages";
 import notification from "../../components/notification";
-import Filter from '../Page/product/filter';
+import { Slider } from 'antd';
 import { searchFields, addWhishlist, getWhishlistItemsForUser, removeWhishlist, getProductsFilterRestCollectionProducts } from '../../redux/cart/productApi';
 import { useIntl } from 'react-intl';
 import { capitalize, formatprice, handleCartFxn } from '../../components/utility/allutils';
@@ -206,11 +206,43 @@ function SearchResults(props) {
             setIsShow(0);
         }
     }
-    
+    const handlePriceRange = async (range) => {
+        setCurrent(1)
+        let customer_id = props.token.cust_id;
+        let catID = catState ? catState : 178;
+        setCatState(catID)
+        props.loaderProducts(true);
+        let r = range[0] + '-' + range[1];
+        let filter: any = await getProductsFilterRestCollectionProducts(catID, props.languages, 'price', r, sortValue, pageSize);
+        let total = 0, items = [];
+        if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
+            total = filter.data[0].data.products.total_count;
+            items = filter.data[0].data.products.items;
+            let productResult = filter.data[0].data.products.items;
+            setPagination(Math.ceil(total / pageSize));
+            if (customer_id) {
+                let whishlist: any = await getWhishlistItemsForUser();
+                let products = items;
+                let WhishlistData = whishlist.data;
+                if (WhishlistData && WhishlistData.length > 0) {
+                    const mergeById = (a1, a2) =>
+                        a1.map(itm => ({
+                            ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
+                            ...itm
+                        }));
+
+                    productResult = mergeById(products, WhishlistData);
+                }
+            }
+            SetAutoSuggestions(productResult);
+        }
+        props.loaderProducts(false);
+        setTotal(total)
+    }
     const currentvalue = async (e) => {
         //  console.log(searchText)
         e.preventDefault();
-        let customer_id =  props.token.cust_id;
+        let customer_id = props.token.cust_id;
         let catID = catState;
         setCurrent(1)
         let attribute_code = e.target.getAttribute("data-remove");
@@ -256,7 +288,7 @@ function SearchResults(props) {
 
 
             }
-            console.log(productResult);
+            // console.log(productResult);
             SetAutoSuggestions(productResult);
         }
         props.loaderProducts(false);
@@ -274,26 +306,44 @@ function SearchResults(props) {
                                 <Link to="#" className="clear-filter" onClick={clearfilter}><IntlMessages id="clear-all" /></Link>
                                 <div className="pro_categry_sidebar">
                                     <div className="width-100">
-                                    <div className="results_show">{total ? `${total +''+ intl.formatMessage({ id: "results-all" })}` : ""}</div>
+                                        <div className="results_show">{total ? `${total + ' ' + intl.formatMessage({ id: "results-all" })}` : ""}</div>
                                     </div>
                                     <div className="sidebar_nav">
                                         <div className="flex-shrink-0 p-0 bg-white">
                                             {filters && filters.length > 0 && (
                                                 <ul className="list-unstyled ps-0">
                                                     {filters.map((item, i) => {
+                                                        let phigh = '', plow = '';
                                                         return (
                                                             <li className="mb-3" key={i}>
                                                                 <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                                                                     data-bs-target={`#home-collapse-${i}`} aria-expanded="false">
-                                                                    {item.label}
+                                                                    {item.label === 'Price' ? <IntlMessages id="order.price" /> : item.label === 'Category' ? <IntlMessages id="category" /> : item.label}
                                                                 </button>
                                                                 {item.options.length > 0 && (
                                                                     <div className="collapse" id={`home-collapse-${i}`}>
                                                                         <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                                            {item.options.map((val, j) => {
-                                                                                return (
-                                                                                    <li key={j} data-access={val.label} data-remove={item.attribute_code} className={parseInt(currentFilter) === parseInt(val.value) ? 'active' : ''} value={val.value} onClick={currentvalue} >{val.label}</li>)
-                                                                            })}
+                                                                            {item.label === 'Price' ?
+                                                                                <div className="sliderAnt">{(() => {
+                                                                                    phigh = item.options[item.options.length - 1].value;
+                                                                                    plow = item.options[0].value;
+                                                                                    let priceh = phigh.split('_');
+                                                                                    let pricel = plow.split('_');
+                                                                                    let priceLow = parseInt(pricel[0]);
+                                                                                    let priceHigh = parseInt(priceh[1]);
+                                                                                    return (
+                                                                                        <div className="sliderInner">
+                                                                                            {/* <p className="sliderlower">{priceLow}</p> */}
+                                                                                            <Slider min={priceLow} max={priceHigh} range onAfterChange={handlePriceRange} />
+                                                                                            {/* <p className="sliderupper" >{priceHigh}</p> */}
+                                                                                        </div>)
+                                                                                })()}</div>
+                                                                                :
+                                                                                item.options.map((val, j) => {
+                                                                                    return (
+                                                                                        <li key={j} data-access={val.label} data-remove={item.attribute_code} className={parseInt(currentFilter) === parseInt(val.value) ? 'active' : ''} value={val.value} onClick={currentvalue} >{val.label}</li>)
+                                                                                })
+                                                                            }
                                                                         </ul>
                                                                     </div>
                                                                 )}
@@ -392,12 +442,12 @@ function SearchResults(props) {
                                     )
                                 })}
                             </div>
-                        ) : "Nothing found!"}
+                        ) : <IntlMessages id="no_data" />}
                     </div>
 
                     <div className="resltspage_sec footer-pagints">
                         <div className="paginatn_result">
-                            {searchText && (<span>Results per page</span>)}
+                            {searchText && (<span><IntlMessages id="product.results" /></span>)}
                             {searchText && (<ul>
                                 <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
                                 <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>

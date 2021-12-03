@@ -5,8 +5,9 @@ import appAction from "../app/actions"
 import Login from "./Login";
 import notification from "../../components/notification";
 import { sessionService } from 'redux-react-session';
-
 import { setCookie, removeCookie, getCookie } from "../../helpers/session";
+import { apiConfig } from '../../settings';
+var CryptoJS = require("crypto-js");
 const loginApi = new Login();
 
 export function* loginRequest() {
@@ -21,11 +22,11 @@ export function* loginRequest() {
       var userInfo = payload.payload.userInfo;
       //API call to login request
       const response = yield call(loginApi.login, email, password, type);
-      if (response.data !== "") {
+      if (response.data !== "" && !response.data.message) {
         //Check if remember me is clicked
         if (userInfo) {
           const token = yield call(loginApi.getAuthRegister, userInfo.email);
-   
+
           let id_token = response.data;
           let data = {
             'cust_id': token.data[0].entity_id,
@@ -34,7 +35,13 @@ export function* loginRequest() {
             'token': token.data[0].group_id,
             'id_token': response.data
           }
-     
+          const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
+          // console.log(cartToken);
+          if (cartToken.data === true) {
+            localStorage.removeItem('cartQuoteToken');
+          } else {
+            localStorage.setItem('cartQuoteId', cartToken.data);
+          }
           sessionService.saveSession({ id_token })
           sessionService.saveUser(data)
           yield put({
@@ -46,25 +53,19 @@ export function* loginRequest() {
             }
           });
           if (userInfo.rememberme === true) {
+            let ciphertext = CryptoJS.AES.encrypt(userInfo.password, apiConfig.encryptionkey).toString();
+            //  console.log(ciphertext);
+
             //set username and password and remember me into cookie
             yield setCookie("username", userInfo.email);
-            yield setCookie("password", userInfo.password);
+            yield setCookie("password", ciphertext);
             yield setCookie("remember_me", userInfo.rememberme);
+
           } else {
             //remove username and password and remember me from cookie
             removeCookie("username");
             removeCookie("password");
             removeCookie("remember_me");
-          }
-
-
-
-          const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
-          console.log(cartToken);
-          if (cartToken.data === true) {
-            localStorage.removeItem('cartQuoteToken');
-          } else {
-            localStorage.setItem('cartQuoteId', cartToken.data);
           }
 
           yield put({
@@ -84,7 +85,12 @@ export function* loginRequest() {
           // }
         }
       } else {
-        notification("error", "", "Invalid Username or password.");
+        if (response.data.message) {
+          notification("error", "", response.data.message);
+        } else {
+          notification("error", "", "Invalid Username or password.");
+        }
+
         yield put({ type: actions.LOGIN_ERROR });
       }
     } catch (e) {

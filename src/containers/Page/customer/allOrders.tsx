@@ -166,7 +166,7 @@ function OrdersAndReturns(props) {
                                 <div className="col-sm-4 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" />:</span>
-                                        <Slider range max={20000} defaultValue={[0, 5]} onChange={handlePriceRange} />
+                                        <Slider range max={20000} defaultValue={[0, 5]} onAfterChange={handlePriceRange} />
 
                                     </div>
                                 </div>

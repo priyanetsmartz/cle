@@ -1,19 +1,20 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { footer, analyticsFetch } from '../../redux/pages/allPages';
+import { footer } from '../../redux/pages/allPages';
 import SignUp from '../Page/signup';
 import SignIn from '../Page/signin';
+import Recaptcha from 'react-google-invisible-recaptcha';
 
 function FooterExtra(props) {
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
-    const [analyticsCode, SetAnalyticsCode] = useState({ status: 0, accountNo: 0 })
+    // const [analyticsCode, SetAnalyticsCode] = useState({ status: 0, accountNo: 0 })
     useEffect(() => {
-        
+
         async function fetchMyAPI() {
             let result: any = await footer(props.languages);
-            var jsonData = result.data.items[0];
-            SetPagesData(jsonData);          
+            var jsonData = result && result.data && result.data.items && result.data.items.length > 0 ? result.data.items[0] : {};
+            SetPagesData(jsonData);
         }
         fetchMyAPI()
         return () => {
@@ -22,12 +23,17 @@ function FooterExtra(props) {
         }
     }, [props.languages])
 
-
+    const refRecaptcha = React.useRef(null);
     return (
         <div style={{ "clear": "both" }}>
+            {/* <Recaptcha
+                ref={refRecaptcha}
+                sitekey={"ddd"}
+                locale={props.languages === 'arabic' ? 'ar' : 'en'}
+                onResolved={() => console.log('Human detected.')} /> */}
             <SignIn showLogin={props.showLogin} />
             <SignUp signupModel={props.signupModel} />
-            {pagesData ? <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> : ""}            
+            {pagesData ? <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> : ""}
         </div>
     );
 }

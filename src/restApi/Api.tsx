@@ -30,6 +30,7 @@ class AdminApi {
 
         //  console.log(postData, token)
         // const token = apiConfig.adminToken;
+       // console.log(token)
         authtoken = `Bearer ${token}`;
         return new Promise(function (resolve, reject) {
             var url = baseUrl + name
@@ -51,7 +52,7 @@ class AdminApi {
                     }
                 })
                 .catch(function (err) {
-                    reject(err.response);
+                    resolve(err.response);
                 });
         });
     }

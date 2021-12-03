@@ -19,6 +19,7 @@ function LanguageSwitcher(props) {
     } else {
       document.body.removeAttribute('dir')
     }
+    window.location.reload();
   }
   useEffect(() => {
     setHighlight(props.languages);

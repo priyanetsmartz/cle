@@ -38,8 +38,8 @@ export function GetHelpUsForm(language,categoryname) {
     var storeId = language === 'english' ? 3 : 2;
 
     let formCode ='';
-    if (categoryname === 'women' || categoryname === '' ) {
-        formCode = language === 'english' ? 'home_page_survey' : 'Home_page_survery_arabic';
+    if (categoryname === 'women' || categoryname === '' || categoryname === undefined) {
+        formCode = language === 'english' ? 'home_page_survey' : 'Home_page_survey_arabic';
     }else{
         formCode = language === 'english' ? `home_page_survey_${categoryname}` : `home_page_survey_${categoryname}_arabic`;
     }

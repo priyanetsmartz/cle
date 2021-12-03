@@ -24,7 +24,7 @@ function Checkout(props) {
     });
     const [promoCode, setPromoCode] = useState('');
     const [state, setState] = useState({
-        email: ""
+        email: props.token.token_email
     })
     //for customer address starts here------
     const [custId, setCustid] = useState(props.token.cust_id);
@@ -184,6 +184,71 @@ function Checkout(props) {
         setLoaderOnCheckout(false)
         //  console.log(checkoutData)
     }
+
+
+    const getCountries = async () => {
+        let result: any = await getCountriesList();
+        setCountries(result.data);
+    }
+
+    //customer address functinonality start here
+    const getCutomerDetails = async () => {
+        let addresses = {};
+        let result: any = await getCustomerDetails();
+        setCustForm(result.data);
+        // console.log(result.data)
+        addresses['addresses'] = result.data ? result.data.addresses : '';
+        SetItems(prevState => ({
+            ...prevState,
+            address: addresses
+        }))
+    }
+
+    const applyPromo = async () => {
+        setLoaderOnCheckout(true)
+        let result: any;
+        if (promoCode === '') {
+            setErrorPromo(intl.formatMessage({ id: "promoreq" }));
+            return false;
+        }
+        let customer_id = props.token.cust_id;
+        if (customer_id) {
+            result = await applyPromoCode(promoCode, props.languages);
+        } else {
+            result = await applyPromoCodeGuest(promoCode, props.languages)
+        }
+        //console.log(result.data)
+        if (!result.data.message) {
+            setErrorPromo("");
+            checkoutScreen();
+            notification("success", "", intl.formatMessage({ id: "promosucc" }));
+        } else {
+            setErrorPromo("");
+            return notification("error", "", result.data.message);
+        }
+    }
+
+
+    const checkEmailData = async () => {
+        console.log(props.token.token_email);
+        if (props.token.token_email === undefined || props.token.token_email === '') {
+            console.log("collapsed");
+
+            // const CheckoutTwo = document.getElementById("CheckoutTwo");
+
+            // acc.classList.add("show");
+            // CheckoutTwo.classList.add("show");
+            // acc.classList.remove("collapsed");
+            let error = {};
+            error["email"] = "Email is required";
+            setEmailError({ errors: error });
+        } else {
+            const acc = document.getElementById("accordion-buttonacc");
+            acc.removeAttribute("disabled");
+
+        }
+    }
+
     const handleChange = (e) => {
         const { id, value } = e.target
         setState(prevState => ({
@@ -191,6 +256,7 @@ function Checkout(props) {
             [id]: value
         }))
     }
+
     const handleBlur = (e) => {
         //console.log('herer')
         let error = {};
@@ -208,56 +274,29 @@ function Checkout(props) {
             formIsValid = false;
             error["email"] = "Email is required";
         }
-        const acc = document.getElementById("accordion-buttonacc");
-        const CheckoutTwo = document.getElementById("CheckoutTwo");
-        acc.classList.remove("show");
-        CheckoutTwo.classList.remove("show");
-        setEmailError({ errors: error });
-        return formIsValid;
-    }
-    //customer address functinonality start here
-    const getCutomerDetails = async () => {
-        let addresses = {};
-        let result: any = await getCustomerDetails();
-        setCustForm(result.data);
-        // console.log(result.data)
-        addresses['addresses'] = result.data ? result.data.addresses : '';
-        SetItems(prevState => ({
-            ...prevState,
-            address: addresses
-        }))
-    }
-
-    const checkEmailData = async () => {
-
-        if (state.email === "" && custId === "") {
-            console.log("collapsed");
-            const acc = document.getElementById("accordion-buttonacc");
-            const CheckoutTwo = document.getElementById("CheckoutTwo");
-
-            acc.classList.add("show");
-            CheckoutTwo.classList.add("show");
-            acc.classList.remove("collapsed");
-            let error = {};
-            error["email"] = "Email is required";
+        if (Object.keys(error).length > 0) {
+            console.log(error)
             setEmailError({ errors: error });
+            return formIsValid;
         } else {
-            // console.log('no here')
+            const acc = document.getElementById("accordion-buttonacc");
+            const CheckoutThree = document.getElementById("CheckoutThree");
+            acc.removeAttribute("disabled");
+            acc.classList.remove("collapsed");
+            acc.classList.add("show");
+            CheckoutThree.classList.add("show");
+            const accone = document.getElementById("accordion-buttonaccone");
+            accone.classList.remove("show");
+            accone.classList.add("collapsed");
+            const CheckoutTwo = document.getElementById("CheckoutTwo");
+            CheckoutTwo.classList.remove("show");
         }
-    }
-
-
-    const getCountries = async () => {
-        let result: any = await getCountriesList();
-        setCountries(result.data);
     }
 
     const toggleAddressModal = () => {
         setAddNewAddressModal(!addNewAddressModal);
     }
-    const toggleBillingAddressModal = () => {
-        setAddBillingAddress(!addBillingAddress);
-    }
+
     const handleAddChange = (e) => {
         const { id, value } = e.target;
         setCustAddForm(prevState => ({
@@ -266,58 +305,138 @@ function Checkout(props) {
         }))
     }
 
-    const handleBillingAddressChange = (e) => {
+    const handleCountryChange = async (e) => {
+        setChangeCountryLoader(true)
         const { id, value } = e.target;
-        setBillingAddress(prevState => ({
+        setCustAddForm(prevState => ({
             ...prevState,
             [id]: value
-        }))
+        }));
+
+        const res: any = await getRegionsByCountryID(value);
+        if (res.data.available_regions === undefined) {
+            setChangeCountryLoader(false)
+            setRegions([]);
+        } else {
+            setChangeCountryLoader(false)
+            setRegions(res.data.available_regions);
+        }
+
     }
 
+    const validateAddress = () => {
+        let error = {};
+        let formIsValid = true;
+
+        if (!custAddForm.telephone) {
+            formIsValid = false;
+            error['telephone'] = intl.formatMessage({ id: "phonereq" });
+        }
+        if (!custAddForm.postcode) {
+            formIsValid = false;
+            error["postcode"] = intl.formatMessage({ id: "pinreq" });
+        }
+        if (!custAddForm.city) {
+            formIsValid = false;
+            error["city"] = intl.formatMessage({ id: "cityreq" });
+        }
+
+        if (!custAddForm.country_id) {
+            formIsValid = false;
+            error['country_id'] = intl.formatMessage({ id: "countryreq" });
+        }
+        if (!custAddForm.street) {
+            formIsValid = false;
+            error["street"] = intl.formatMessage({ id: "addressreq" });
+        }
+        if (!custAddForm.firstname) {
+            formIsValid = false;
+            error["firstname"] = intl.formatMessage({ id: "firstnamerequired" });
+        }
+        if (!custAddForm.lastname) {
+            formIsValid = false;
+            error["lastname"] = intl.formatMessage({ id: "lastnamerequired" });
+        }
+
+        setError({ errors: error });
+        return formIsValid;
+    }
+
+    // for customer address popup window starts here
+    const saveCustAddress = async () => {
+        let result: any
+        setAddShippingAddressLoader(true)
+        if (validateAddress()) {
+
+            let customer_id = props.token.cust_id;
+            let address: any = {};
+            let addressInformation: any = {};
+
+            let obj: any = { ...custAddForm };
+            obj.street = [obj.street];
+            if (!customer_id) {
+                obj.email = state.email;
+            }
+            let shippingAddress = obj;
 
 
+            delete shippingAddress['default_billing'];
+            if (customer_id) {
+                custForm.addresses.push(obj);
 
-    const handleAddressChange = async (e) => {
-        const { name, value, checked } = e.target;
-        let selectedValue = parseInt(value);
-        //console.log(typeof (selectedValue))
-        if (checked) {
-            setIsSetAddress(selectedValue)
-            const address: any = await getAddressById(selectedValue);
-            if (address.data) {
-                let addressData: any = {};
-                let addressInformation: any = {};
+                let newAddress: any = await saveCustomerDetails(custId, { customer: custForm });
+                // console.log(newAddress.data)
+                delete shippingAddress['default_shipping'];
 
-                let shippingAddress = {
-                    customer_id: custId ? custId : 0,
-                    firstname: address.data.firstname,
-                    lastname: address.data.lastname,
-                    telephone: address.data.telephone,
-                    postcode: address.data.postcode,
-                    city: address.data.city,
-                    country_id: address.data.country_id,
-                    region_id: address.data.region_id,
-                    street: address.data.street,
-                    // email: localStorage.getItem('token_email')
-                };
+                delete shippingAddress['customer_id'];
+                delete shippingAddress['id'];
+                // delete shippingAddress['save_in_address_book'];
                 addressInformation.shippingAddress = shippingAddress;
-                addressData.addressInformation = addressInformation;
-                //console.log(addressData)
-                let saveDelivery: any = await setUserDeliveryAddress(addressData);
-                setIsSetAddress(0)
-                if (saveDelivery && saveDelivery.data && (saveDelivery.data.message === '' || saveDelivery.data.message === undefined)) {
-                    checkoutScreen()
-                    notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
-                } else {
-                    notification("error", "", saveDelivery.data.message);
+                address.addressInformation = addressInformation;
+
+                // console.log(obj)
+                result = await setUserDeliveryAddress(address);
+                if (newAddress.data) {
+                    getCutomerDetails();
                 }
 
+
             } else {
-                setIsSetAddress(0)
-                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+                //dkdkdk
+                props.shippingAddressState(shippingAddress)
+                delete shippingAddress['customer_id'];
+                delete shippingAddress['id'];
+                delete shippingAddress['default_shipping'];
+                addressInformation.shippingAddress = shippingAddress;
+                address.addressInformation = addressInformation;
+                // console.log(address)
+                result = await setGuestUserDeliveryAddress(address);
             }
+            if (result && result.data && (result.data.message === '' || result.data.message === undefined)) {
+                checkoutScreen();
+                toggleAddressModal();
+                await getshippingMethods();
+                notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
+                const acc = document.getElementById("accordion-buttonaccone");
+                const Checkoutfour = document.getElementById("Checkoutfour");
+                acc.removeAttribute("disabled");
+                acc.classList.remove("collapsed");
+                acc.classList.add("show");
+                Checkoutfour.classList.add("show");
+                const accone = document.getElementById("accordion-buttonacc");
+                accone.classList.remove("show");
+                accone.classList.add("collapsed");
+                const CheckoutTwo = document.getElementById("CheckoutThree");
+                CheckoutTwo.classList.remove("show");
+            } else {
+                notification("error", "", result.data.message);
+            }
+        } else {
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
+        setAddShippingAddressLoader(false)
     }
+
 
     const handleBillingChange = async (e) => {
         let addId = e.target.value;
@@ -391,96 +510,186 @@ function Checkout(props) {
             }
         }
     }
-    const handleCountryChange = async (e) => {
-        setChangeCountryLoader(true)
-        const { id, value } = e.target;
-        setCustAddForm(prevState => ({
-            ...prevState,
-            [id]: value
-        }));
 
-        const res: any = await getRegionsByCountryID(value);
-        if (res.data.available_regions === undefined) {
-            setChangeCountryLoader(false)
-            setRegions([]);
-        } else {
-            setChangeCountryLoader(false)
-            setRegions(res.data.available_regions);
-        }
 
-    }
-    // get shipping methods
-    const getshippingMethods = async () => {
-        if (itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) {
-            notification("error", "", intl.formatMessage({ id: "selectdeliveryaddress" }));
-        } else {
-            let result: any = await getShippinMethods();
-            SetShippingMethods(result.data)
-        }
-    }
+    const handleAddressChange = async (e) => {
+        const { name, value, checked } = e.target;
+        let selectedValue = parseInt(value);
+        //console.log(typeof (selectedValue))
+        if (checked) {
+            setIsSetAddress(selectedValue)
+            const address: any = await getAddressById(selectedValue);
+            if (address.data) {
+                let addressData: any = {};
+                let addressInformation: any = {};
 
-    // for customer address popup window starts here
-    const saveCustAddress = async () => {
-        let result: any
-        setAddShippingAddressLoader(true)
-        if (validateAddress()) {
-
-            let customer_id = props.token.cust_id;
-            let address: any = {};
-            let addressInformation: any = {};
-
-            let obj: any = { ...custAddForm };
-            obj.street = [obj.street];
-            if (!customer_id) {
-                obj.email = state.email;
-            }
-            let shippingAddress = obj;
-            delete shippingAddress['default_billing'];
-            if (customer_id) {
-                custForm.addresses.push(obj);
-
-                let newAddress: any = await saveCustomerDetails(custId, { customer: custForm });
-                // console.log(newAddress.data)
-                delete shippingAddress['default_shipping'];
-
-                delete shippingAddress['customer_id'];
-                delete shippingAddress['id'];
-                // delete shippingAddress['save_in_address_book'];
+                let shippingAddress = {
+                    customer_id: custId ? custId : 0,
+                    firstname: address.data.firstname,
+                    lastname: address.data.lastname,
+                    telephone: address.data.telephone,
+                    postcode: address.data.postcode,
+                    city: address.data.city,
+                    country_id: address.data.country_id,
+                    region_id: address.data.region_id,
+                    street: address.data.street,
+                    // email: localStorage.getItem('token_email')
+                };
                 addressInformation.shippingAddress = shippingAddress;
-                address.addressInformation = addressInformation;
-                result = await setUserDeliveryAddress(address);
-                console.log(result)
-                if (newAddress.data) {
-                    getCutomerDetails();
+                // addressData.shippingMethodCode = "free";
+                addressData.addressInformation = addressInformation;
+                //  console.log(addressData)
+                let saveDelivery: any = await setUserDeliveryAddress(addressData);
+                setIsSetAddress(0)
+                if (saveDelivery && saveDelivery.data && (saveDelivery.data.message === '' || saveDelivery.data.message === undefined)) {
+                    checkoutScreen()
+                    notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
+                    await getshippingMethods()
+                    const acc = document.getElementById("accordion-buttonaccthree");
+                    const CheckoutThree = document.getElementById("CheckoutFour");
+                    acc.removeAttribute("disabled");
+                    acc.classList.remove("collapsed");
+                    acc.classList.add("show");
+                    CheckoutThree.classList.add("show");
+                    const accone = document.getElementById("accordion-buttonaccone");
+                    accone.classList.remove("show");
+                    accone.classList.add("collapsed");
+                    const CheckoutTwo = document.getElementById("CheckoutThree");
+                    CheckoutTwo.classList.remove("show");
+                } else {
+                    notification("error", "", saveDelivery.data.message);
                 }
 
             } else {
-                //dkdkdk
-                props.shippingAddressState(shippingAddress)
-                delete shippingAddress['customer_id'];
-                delete shippingAddress['id'];
-                delete shippingAddress['default_shipping'];
-                addressInformation.shippingAddress = shippingAddress;
-                address.addressInformation = addressInformation;
-                // console.log(address)
-                result = await setGuestUserDeliveryAddress(address);
+                setIsSetAddress(0)
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
             }
-            if (result && result.data && (result.data.message === '' || result.data.message === undefined)) {
-                checkoutScreen();
-                toggleAddressModal();
-                notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
-            }
-        } else {
-
-            // notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
-        setAddShippingAddressLoader(false)
+    }
+
+ // get shipping methods
+ const getshippingMethods = async () => {
+    if (itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) {
+        notification("error", "", intl.formatMessage({ id: "selectdeliveryaddress" }));
+    } else {
+        let result: any = await getShippinMethods();
+        SetShippingMethods(result.data)
+    }
+}
+    //PLACE ORDER CODE GOES HERE
+    const placeOrder = async () => {
+        // console.log('add')
+        setIsShow(true);
+        let customer_id = props.token.cust_id;
+        let orderPlace: any;
+        let billAddress: any = {};
+        if (customer_id) {
+            const add: any = itemsVal.address;
+            //  console.log(add)
+            add.addresses.forEach(el => {
+                if (el.default_billing || el.default_shipping || add.addresses.length === 1) {
+                    billAddress.street = el.street[0];
+                    billAddress.address = el.city;
+                    billAddress.phone = el.telephone;
+                    billAddress.name = el.firstname + ' ' + el.lastname;
+                }
+            })
+        } else {
+            if (state.email) {
+                if (props.guestBilling) {
+                    billAddress.CustomerEmail = state.email;
+                    billAddress.street = props.guestBilling && props.guestBilling.street ? props.guestBilling.street[0] : '';
+                    billAddress.address = props.guestBilling ? props.guestBilling.city : "";
+                    billAddress.phone = props.guestBilling ? props.guestBilling.telephone : "";
+                    billAddress.name = props.guestBilling ? props.guestBilling.firstname + ' ' + props.guestBilling.lastname : "";
+                }
+            } else {
+                setIsShow(false)
+                return notification("error", "", intl.formatMessage({ id: "emailrequired" }));
+            }
+
+        }
+        //  console.log(selectedPaymentMethod);
+        if (selectedPaymentMethod === 'myfatoorah_gateway') {
+            // console.log('fscfsd', billAddress)
+            const payment: any = await myFatoora(billAddress);
+            if (payment && payment.data && payment.data.length > 0 && payment.data[0].IsSuccess) {
+                let url = payment.data[0].Data.PaymentURL;
+                if (url) {
+                    window.location.href = url;
+                    // history.push(url);
+                }
+            }
+
+        } else {
+            //  console.log(selectedShippingMethod)
+            if (customer_id) {
+                orderPlace = await placeUserOrder('checkmo');
+            } else {
+                if (!props.guestBilling.firstname) {
+                    setIsShow(false)
+                    return notification("error", "", intl.formatMessage({ id: "addbillingaddress" }));
+                    // return false;
+                }
+
+                if (!props.guestShipp.firstname) {
+                    return notification("error", "", intl.formatMessage({ id: "addshippingaddress" }));
+                }
+
+                if (!state.email) {
+                    return notification("error", "", intl.formatMessage({ id: "emailrequired" }));
+                }
+                setIsShow(true)
+                orderPlace = await placeGuestOrder('checkmo');
+
+            }
+            if (orderPlace && orderPlace.data && orderPlace.data !== undefined && orderPlace.data.message === undefined) {
+                setIsShow(false)
+                props.addToCartTask(true)
+                localStorage.removeItem('cartQuoteId');
+                localStorage.removeItem('cartQuoteToken');
+                let orderId = parseInt(orderPlace.data);
+                //return <Redirect to={'/thankyou/' + orderId} />
+                history.push('/thankyou?id=' + orderId);
+            } else {
+                setIsShow(false)
+                if (orderPlace.data.message === 'Some of the products are currently out of stock') {
+                    return notification("error", "", intl.formatMessage({ id: "outofstock" }));
+                } else if (orderPlace.data.message === 'The requested qty is not available') {
+                    return notification("error", "", intl.formatMessage({ id: "qtrynotfound" }));
+                } else {
+                    return notification("error", "", orderPlace.data.message);
+                }
+            }
+        }
+
+    }
+
+    const handleShippingMethodSelect = async (e) => {
+        setSelectedShippingMethod(e.target.value)
+
+        
+    }
+    const selectPayment = async (code) => {
+        setSelectedPaymentMethod(code)
+    }
+
+
+    const toggleBillingAddressModal = () => {
+        setAddBillingAddress(!addBillingAddress);
+    }
+
+    const handleBillingAddressChange = (e) => {
+        const { id, value } = e.target;
+        setBillingAddress(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
     }
 
     const saveBillingAddress = async () => {
         let result: any
         if (validateBillingAddress()) {
-
             let customer_id = props.token.cust_id;
             let address: any = {};
             let addressInformation: any = {};
@@ -571,7 +780,7 @@ function Checkout(props) {
                     telephone: "",
                     postcode: "",
                     city: "",
-                    country_id: "AD",
+                    country_id: "",
                     region_id: 0,
                     street: "",
                     default_shipping: true,
@@ -585,44 +794,6 @@ function Checkout(props) {
             //  console.log(errors)
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
-    }
-
-    const validateAddress = () => {
-        let error = {};
-        let formIsValid = true;
-
-        if (!custAddForm.telephone) {
-            formIsValid = false;
-            error['telephone'] = intl.formatMessage({ id: "phonereq" });
-        }
-        if (!custAddForm.postcode) {
-            formIsValid = false;
-            error["postcode"] = intl.formatMessage({ id: "pinreq" });
-        }
-        if (!custAddForm.city) {
-            formIsValid = false;
-            error["city"] = intl.formatMessage({ id: "cityreq" });
-        }
-
-        if (!custAddForm.country_id) {
-            formIsValid = false;
-            error['country_id'] = intl.formatMessage({ id: "countryreq" });
-        }
-        if (!custAddForm.street) {
-            formIsValid = false;
-            error["street"] = intl.formatMessage({ id: "addressreq" });
-        }
-        if (!custAddForm.firstname) {
-            formIsValid = false;
-            error["firstname"] = intl.formatMessage({ id: "firstnamerequired" });
-        }
-        if (!custAddForm.lastname) {
-            formIsValid = false;
-            error["lastname"] = intl.formatMessage({ id: "lastnamerequired" });
-        }
-
-        setError({ errors: error });
-        return formIsValid;
     }
 
     const validateBillingAddress = () => {
@@ -661,125 +832,6 @@ function Checkout(props) {
 
         setBillingError({ errors: error });
         return formIsValid;
-    }
-    const applyPromo = async () => {
-        setLoaderOnCheckout(true)
-        let result: any;
-        if (promoCode === '') {
-            setErrorPromo(intl.formatMessage({ id: "promoreq" }));
-            return false;
-        }
-        let customer_id = props.token.cust_id;
-        if (customer_id) {
-            result = await applyPromoCode(promoCode, props.languages);
-        } else {
-            result = await applyPromoCodeGuest(promoCode, props.languages)
-        }
-        //console.log(result.data)
-        if (!result.data.message) {
-            setErrorPromo("");
-            checkoutScreen();
-            notification("success", "", intl.formatMessage({ id: "promosucc" }));
-        } else {
-            setErrorPromo("");
-            return notification("error", "", result.data.message);
-        }
-    }
-
-    //PLACE ORDER CODE GOES HERE
-    const placeOrder = async () => {
-        // console.log('add')
-        setIsShow(true);
-        let customer_id = props.token.cust_id;
-        let orderPlace: any;
-        let billAddress: any = {};
-        if (customer_id) {
-            const add: any = itemsVal.address;
-            //  console.log(add)
-            add.addresses.forEach(el => {
-                if (el.default_billing || el.default_shipping || add.addresses.length === 1) {
-                    billAddress.street = el.street[0];
-                    billAddress.address = el.city;
-                    billAddress.phone = el.telephone;
-                    billAddress.name = el.firstname + ' ' + el.lastname;
-                }
-            })
-        } else {
-            if (state.email) {
-                if (props.guestBilling) {
-                    billAddress.CustomerEmail = state.email;
-                    billAddress.street = props.guestBilling && props.guestBilling.street ? props.guestBilling.street[0] : '';
-                    billAddress.address = props.guestBilling ? props.guestBilling.city : "";
-                    billAddress.phone = props.guestBilling ? props.guestBilling.telephone : "";
-                    billAddress.name = props.guestBilling ? props.guestBilling.firstname + ' ' + props.guestBilling.lastname : "";
-                }
-            } else {
-                setIsShow(false)
-                return notification("error", "", intl.formatMessage({ id: "emailrequired" }));
-            }
-
-        }
-        //  console.log(selectedPaymentMethod);
-        if (selectedPaymentMethod === 'myfatoorah_gateway') {
-            // console.log('fscfsd', billAddress)
-            const payment: any = await myFatoora(billAddress);
-            if (payment && payment.data && payment.data.length > 0 && payment.data[0].IsSuccess) {
-                let url = payment.data[0].Data.PaymentURL;
-                if (url) {
-                    window.location.href = url;
-                    // history.push(url);
-                }
-            }
-
-        } else {
-            //  console.log(selectedShippingMethod)
-            if (customer_id) {
-                orderPlace = await placeUserOrder('checkmo');
-            } else {
-                if (!props.guestBilling.firstname) {
-                    setIsShow(false)
-                    return notification("error", "", intl.formatMessage({ id: "addbillingaddress" }));
-                    // return false;
-                }
-
-                if (!props.guestShipp.firstname) {
-                    return notification("error", "", intl.formatMessage({ id: "addshippingaddress" }));
-                }
-
-                if (!state.email) {
-                    return notification("error", "", intl.formatMessage({ id: "emailrequired" }));
-                }
-                setIsShow(true)
-                orderPlace = await placeGuestOrder('checkmo');
-
-            }
-            if (orderPlace && orderPlace.data && orderPlace.data !== undefined && orderPlace.data.message === undefined) {
-                setIsShow(false)
-                props.addToCartTask(true)
-                localStorage.removeItem('cartQuoteId');
-                localStorage.removeItem('cartQuoteToken');
-                let orderId = parseInt(orderPlace.data);
-                //return <Redirect to={'/thankyou/' + orderId} />
-                history.push('/thankyou?id=' + orderId);
-            } else {
-                setIsShow(false)
-                if (orderPlace.data.message === 'Some of the products are currently out of stock') {
-                    return notification("error", "", intl.formatMessage({ id: "outofstock" }));
-                } else if (orderPlace.data.message === 'The requested qty is not available') {
-                    return notification("error", "", intl.formatMessage({ id: "qtrynotfound" }));
-                } else {
-                    return notification("error", "", orderPlace.data.message);
-                }
-            }
-        }
-
-    }
-    const handleShippingMethodSelect = async (e) => {
-        setSelectedShippingMethod(e.target.value)
-    }
-    const selectPayment = async (code) => {
-
-        setSelectedPaymentMethod(code)
     }
 
     const getPaymentStatusAPi = async (getPaymentStatusAPi) => {
@@ -849,44 +901,31 @@ function Checkout(props) {
                 </div>
             )}
             <section className="checkout-main">
-
                 <div className="container">
                     <Link to="/my-cart" ><IntlMessages id="checkout-back-link" /></Link>
-                    {/* {Object.keys(orderError).forEach((key) => {
-                     //   console.log(orderError[key])
-                        return (
-                            <div className="alert alert-warning alert-dismissible fade show" role="alert">
-                                <strong>Error</strong> {orderError[key]}
-                                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        )
-                    })} */}
                     <div className="row">
                         <div className="col-md-8">
-
                             <div className="accordion" id="accordionExample">
                                 <div className="accordion-item">
                                     <h2 className="accordion-header" id="CheckoutHOne">
-                                        <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#CheckoutOne"
-                                            aria-expanded="true" aria-controls="CheckoutOne">
+                                        <button className="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#CheckoutOne" aria-expanded="true" aria-controls="CheckoutOne">
                                             <IntlMessages id="checkout.promoTitle" />
                                         </button>
                                     </h2>
-                                    <div id="CheckoutOne" className="accordion-collapse collapse show" aria-labelledby="CheckoutH	One"
-                                        data-bs-parent="#accordionExample">
+                                    <div id="CheckoutOne" className="accordion-collapse collapse show"
+                                        aria-labelledby="CheckoutH	One" data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
                                             <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                                 <li className="nav-item" role="presentation">
                                                     <button className="nav-link active" id="pills-promo-tab" data-bs-toggle="pill"
-                                                        data-bs-target="#pills-promo" type="button" role="tab" aria-controls="pills-promo"
-                                                        aria-selected="true"> <IntlMessages id="promo" /></button>
+                                                        data-bs-target="#pills-promo" type="button" role="tab"
+                                                        aria-controls="pills-promo" aria-selected="true"><IntlMessages id="promo" /></button>
                                                 </li>
                                                 <li className="nav-item" role="presentation">
                                                     <button className="nav-link" id="pills-voucher-tab" data-bs-toggle="pill"
-                                                        data-bs-target="#pills-voucher" type="button" role="tab" aria-controls="pills-voucher"
-                                                        aria-selected="false"><IntlMessages id="voucher" /></button>
+                                                        data-bs-target="#pills-voucher" type="button" role="tab"
+                                                        aria-controls="pills-voucher" aria-selected="false"><IntlMessages id="voucher" /></button>
                                                 </li>
                                             </ul>
                                             <div className="tab-content" id="pills-tabContent">
@@ -915,7 +954,8 @@ function Checkout(props) {
                                                         <li><IntlMessages id="needtoknow2" /></li>
                                                     </ul>
                                                 </div>
-                                                <div className="tab-pane fade" id="pills-voucher" role="tabpanel" aria-labelledby="pills-voucher-tab">
+                                                <div className="tab-pane fade" id="pills-voucher" role="tabpanel"
+                                                    aria-labelledby="pills-voucher-tab">
                                                     <p><IntlMessages id="addvoucher" /></p>
                                                     <div>
                                                         <label htmlFor="exampleFormControlInput1" className="form-label"><IntlMessages id="add16voucher" /></label>
@@ -941,9 +981,9 @@ function Checkout(props) {
                                     </div>
                                 </div>
                                 <div className="accordion-item">
-                                    <h2 className="accordion-header" id="CheckoutHTwo">
+                                    <h2 className="accordion-header" onClick={checkEmailData} id="CheckoutHTwo">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#CheckoutTwo" id="accordion-buttonacc" aria-expanded="false" aria-controls="CheckoutTwo">
+                                            data-bs-target="#CheckoutTwo" id="accordion-buttonaccone" aria-expanded="false" aria-controls="CheckoutTwo">
                                             <IntlMessages id="checkoutemail_address" />
                                         </button>
                                     </h2>
@@ -960,16 +1000,14 @@ function Checkout(props) {
                                                     onChange={handleChange}
                                                     onBlur={handleBlur}
                                                 />}</p>
-
+                                            <span className="error">{emailError.errors["email"]}</span>
                                         </div>
-                                        <span className="error">{emailError.errors["email"]}</span>
                                     </div>
                                 </div>
                                 <div className="accordion-item">
-                                    <h2 className="accordion-header" onClick={checkEmailData} id="CheckoutHThree">
-                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#CheckoutThree" aria-expanded="false" aria-controls="CheckoutThree">
-                                            <IntlMessages id="deliveryAddress" />
+                                    <h2 className="accordion-header" id="CheckoutHThree" >
+                                        <button className="accordion-button collapsed" disabled type="button" data-bs-toggle="collapse" data-bs-target="#CheckoutThree" id="accordion-buttonacc" aria-expanded="false" aria-controls="CheckoutThree">
+                                            Delivery address
                                         </button>
                                     </h2>
                                     <div id="CheckoutThree" className="accordion-collapse collapse" aria-labelledby="CheckoutHThree"
@@ -1020,10 +1058,10 @@ function Checkout(props) {
 
                                                                         <div className="form-check">
                                                                             <input
-                                                                                type="checkbox"
+                                                                                type="radio"
                                                                                 style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
                                                                                 defaultValue={item.id}
-                                                                                name={item.id}
+                                                                                name='billingcheck'
                                                                                 onChange={handleBillingChange}
                                                                                 className="form-check-input"
                                                                                 defaultChecked={item.id === isBillingAddress ? true : false}
@@ -1039,12 +1077,12 @@ function Checkout(props) {
                                                                 </div>
                                                                 <div className="col-md-5">
                                                                     <div className="select-address">
-                                                                        <div className="select-address-inner">
+                                                                        <div className="select-address-inner form-check">
 
                                                                             <input
                                                                                 style={{ "display": isSetAddress === item.id ? "none" : "inline-block" }}
-                                                                                type="checkbox"
-                                                                                name={item.id}
+                                                                                type="radio"
+                                                                                name='shippincheck'
                                                                                 defaultValue={item.id}
                                                                                 onChange={handleAddressChange}
                                                                                 className="form-check-input"
@@ -1071,8 +1109,8 @@ function Checkout(props) {
                                 </div>
                                 <div className="accordion-item">
                                     <h2 className="accordion-header" id="CheckoutHfour">
-                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#Checkoutfour" aria-expanded="false" aria-controls="Checkoutfour" onClick={getshippingMethods}>
+                                        <button className="accordion-button collapsed" disabled type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#Checkoutfour" id="accordion-buttonaccthree" aria-expanded="false" aria-controls="Checkoutfour">
                                             <IntlMessages id="deliveryOption" />
                                         </button>
                                     </h2>
@@ -1112,122 +1150,120 @@ function Checkout(props) {
                                 </div>
                                 <div className="accordion-item">
                                     <h2 className="accordion-header" id="CheckoutHfive">
-                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#Checkoutfive" aria-expanded="false" aria-controls="Checkoutfive">
+                                        <button className="accordion-button collapsed" disabled type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#Checkoutfive" id="accordion-buttonaccfour" aria-expanded="false" aria-controls="Checkoutfive">
                                             <IntlMessages id="payment" />
                                         </button>
                                     </h2>
                                     <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"
                                         data-bs-parent="#accordionExample">
-                                        <div className="accordion-body">
-                                            {props.guestBilling && (
+                                        {props.guestBilling && (
 
-                                                <div className="row" >
-                                                    <div className="col-md-7">
-                                                        <div className="single-address">
-                                                            <div>
-                                                                <p> {props.guestBilling.firstname} {props.guestBilling.lastname}</p>
-                                                                {props.guestBilling.street ? props.guestBilling.street.map((street, j) => {
-                                                                    <p key={j}>{street}</p>
-                                                                }) : ""}
-                                                                <p>{props.guestBilling.postcode}</p>
-                                                                <p>{props.guestBilling.city}</p>
-                                                                <p>{props.guestBilling.country_id}</p>
-                                                            </div>
+                                            <div className="row" >
+                                                <div className="col-md-7">
+                                                    <div className="single-address">
+                                                        <div>
+                                                            <p> {props.guestBilling.firstname} {props.guestBilling.lastname}</p>
+                                                            {props.guestBilling.street ? props.guestBilling.street.map((street, j) => {
+                                                                <p key={j}>{street}</p>
+                                                            }) : ""}
+                                                            <p>{props.guestBilling.postcode}</p>
+                                                            <p>{props.guestBilling.city}</p>
+                                                            <p>{props.guestBilling.country_id}</p>
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                            )}
-                                            {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
-                                                <div className="row">
-
-                                                    <b><IntlMessages id="checkout.billingAdd" /></b>
-                                                    {itemsVal.address['addresses'].map((item, i) => {
-                                                        // console.log(item.firstname)
-                                                        return (
-                                                            <div className="row" key={i}>
-                                                                <div className="col-md-7">
-                                                                    <div className="single-address">
-
-                                                                        <div>
-                                                                            <p> {item.firstname} {item.lastname}</p>
-                                                                            {item.street.map((street, j) => {
-                                                                                <p key={j}>{street}</p>
-                                                                            })}
-                                                                            <p>{item.postcode}</p>
-                                                                            <p>{item.city}</p>
-                                                                            <p>{item.country_id}</p>
-                                                                        </div>
-                                                                        {item.id === parseInt(custForm.default_billing) ?
-                                                                            <p className="text-muted">
-                                                                                <IntlMessages id="myaccount.defaultBillingAddress" />
-                                                                            </p> : ""}
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-md-5">
-                                                                    <div className="select-address-inner">
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
-                                                                            defaultValue={item.id}
-                                                                            onChange={handleBillingChange}
-                                                                            className="form-check-input"
-                                                                            defaultChecked={item.id === isBillingAddress ? true : false}
-                                                                        // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
-                                                                        />
-                                                                        <Link to="#" style={{ "display": isBillingAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                                                        </Link>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    })}
-                                                </div>
-                                            )
-                                            }
-                                            <div className="add-address-btn">
-                                                <hr />
-                                                <button className="add-ad-btn btn btn-link" onClick={() => {
-                                                    toggleBillingAddressModal();
-                                                }} >
-                                                    <IntlMessages id="checkout.addNewBillingAdd" />
-                                                </button>
                                             </div>
 
+                                        )}
+                                        {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
                                             <div className="row">
 
-                                                <div className="we-accept">
-                                                    <p><strong><IntlMessages id="we-accept" />:</strong></p>
-                                                    <img src={cardPlaceholder} alt="cards" />
-                                                </div>
-                                            </div>
-                                            <div className="choose-method">
-                                                <hr />
+                                                <b><IntlMessages id="checkout.billingAdd" /></b>
+                                                {itemsVal.address['addresses'].map((item, i) => {
+                                                    // console.log(item.firstname)
+                                                    return (
+                                                        <div className="row" key={i}>
+                                                            <div className="col-md-7">
+                                                                <div className="single-address">
 
-                                                {
-                                                    props.payTrue.length > 0 && (
-                                                        // console.log(props.payTrue.length) 
-                                                        <div className="d-grid gap-2 col-6">
-                                                            {props.payTrue.map((item, i) => {
-                                                                //  console.log(i)
-                                                                return (
-                                                                    <div key={i}>
-                                                                        <button type="button" onClick={() => {
-                                                                            selectPayment(item.code);
-                                                                        }} className={selectedPaymentMethod === item.code ? 'active btn btn-outline-dark' : "btn btn-outline-dark"}>{item.title}</button>
-                                                                        {i >= props.payTrue.length - 1 ? ""
-                                                                            : <p><IntlMessages id="signup.or" /></p>}
+                                                                    <div>
+                                                                        <p> {item.firstname} {item.lastname}</p>
+                                                                        {item.street.map((street, j) => {
+                                                                            <p key={j}>{street}</p>
+                                                                        })}
+                                                                        <p>{item.postcode}</p>
+                                                                        <p>{item.city}</p>
+                                                                        <p>{item.country_id}</p>
                                                                     </div>
-                                                                )
-                                                            })}
+                                                                    {item.id === parseInt(custForm.default_billing) ?
+                                                                        <p className="text-muted">
+                                                                            <IntlMessages id="myaccount.defaultBillingAddress" />
+                                                                        </p> : ""}
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-md-5">
+                                                                <div className="select-address-inner">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
+                                                                        defaultValue={item.id}
+                                                                        onChange={handleBillingChange}
+                                                                        className="form-check-input"
+                                                                        defaultChecked={item.id === isBillingAddress ? true : false}
+                                                                    // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
+                                                                    />
+                                                                    <Link to="#" style={{ "display": isBillingAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                    </Link>
+
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     )
-                                                }
-                                                
-
+                                                })}
                                             </div>
+                                        )
+                                        }
+                                        <div className="add-address-btn">
+                                            <hr />
+                                            <button className="add-ad-btn btn btn-link" onClick={() => {
+                                                toggleBillingAddressModal();
+                                            }} >
+                                                <IntlMessages id="checkout.addNewBillingAdd" />
+                                            </button>
+                                        </div>
+
+                                        <div className="row">
+
+                                            <div className="we-accept">
+                                                <p><strong><IntlMessages id="we-accept" />:</strong></p>
+                                                <img src={cardPlaceholder} alt="cards" />
+                                            </div>
+                                        </div>
+                                        <div className="choose-method">
+                                            <hr />
+
+                                            {
+                                                props.payTrue.length > 0 && (
+                                                    // console.log(props.payTrue.length) 
+                                                    <div className="d-grid gap-2 col-6">
+                                                        {props.payTrue.map((item, i) => {
+                                                            //  console.log(i)
+                                                            return (
+                                                                <div key={i}>
+                                                                    <button type="button" onClick={() => {
+                                                                        selectPayment(item.code);
+                                                                    }} className={selectedPaymentMethod === item.code ? 'active btn btn-outline-dark' : "btn btn-outline-dark"}>{item.title}</button>
+                                                                    {i >= props.payTrue.length - 1 ? ""
+                                                                        : <p><IntlMessages id="signup.or" /></p>}
+                                                                </div>
+                                                            )
+                                                        })}
+                                                    </div>
+                                                )
+                                            }
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -1235,18 +1271,10 @@ function Checkout(props) {
 
                             <div className="d-grid gap-2 col-8 mx-auto">
                                 {!isShow ?
-                                    <button className="btn btn-secondary" disabled={(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) ? true : false} onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> </button>
+                                    <button className="btn btn-secondary" disabled onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> </button>
                                     : <div className="spinner"> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>}
-
-                                {/* {(itemsVal.shippingData['firstname'] !== null && itemsVal.shippingData['postcode'] !== null) && (<button className="btn btn-secondary" onClick={placeOrder} type="button" style={{ "display": !isShow ? "inline-block" : "none" }}><IntlMessages id="place-Order" /> </button>)}
-
-                                {(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) && (<button className="btn btn-secondary" disabled={true} onClick={placeOrder} type="button" style={{ "display": !isShow ? "inline-block" : "none" }}><IntlMessages id="place-Order" /> </button>)}
-
-                                <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div> */}
-
                             </div>
                         </div>
-                        {/* <CheckoutSidebar sidebarData={itemsVal} /> */}
                         <div className="col-md-4">
                             <div className="order-detail-sec">
                                 <h5>{itemsVal.checkData['total_items'] ? itemsVal.checkData['total_items'] : 0} <IntlMessages id="item" /></h5>
@@ -1293,7 +1321,6 @@ function Checkout(props) {
                         </div>
                     </div>
                 </div>
-
                 {/* change delivery address modalc */}
                 <Modal show={addNewAddressModal}>
                     <div className="CLE_pf_details">
@@ -1491,9 +1518,7 @@ function Checkout(props) {
                         </Modal.Body>
                     </div>
                 </Modal>
-
-            </section >
-
+            </section>
 
         </main >
     )

@@ -1,24 +1,23 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../../components/utility/intlMessages";
-import { GetHelpUsForm, GetOrderUsForm, SaveAnswers } from '../../../redux/pages/allPages';
+import { GetOrderUsForm, SaveAnswers } from '../../../redux/pages/allPages';
 import { connect } from "react-redux";
-import { setCookie, getCookie } from "../../../helpers/session";
+import { getCookie } from "../../../helpers/session";
 import appAction from "../../../redux/app/actions";
-import { Link } from "react-router-dom";
-import cross from '../../../image/cross.svg';
+import moment from 'moment';
 const { showSignin } = appAction;
 
 function OrderForm(props) {
-//    let statuspop = getCookie('help-us-hide') === 'true' ? false : true;
+    //    let statuspop = getCookie('help-us-hide') === 'true' ? false : true;
     const [customerId, setCustomerId] = useState(props.token.cust_id);
     const [isSurvey, setIsSurvey] = useState(true);
 
-    const [onLogin, setOnLogin] = useState(false);
+    // const [onLogin, setOnLogin] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
     const [isSurveyEnd, setIsSurveyEnd] = useState(false);
     const [isHidden, setIsHidden] = useState(false);
     const [loading, setloading] = useState(false);
-   // const [hidePersonal, setHidePersonal] = useState(statuspop);
+    // const [hidePersonal, setHidePersonal] = useState(statuspop);
     const [activeIndex, setActiveIndex] = useState(0);
 
     const [form, setForm] = useState({
@@ -32,7 +31,7 @@ function OrderForm(props) {
             "answer_id": null,
             "form_id": null,
             "store_id": null,
-            "created_at": "",
+            "created_at": moment(),
             "ip": "122.173.115.173",
             "response_json": {},
             "customer_id": null,
@@ -62,12 +61,12 @@ function OrderForm(props) {
     }, [props.languages]);
 
     useEffect(() => {
-        let tokenCheck =  props.token.id_token;
+        let tokenCheck = props.token.id_token;
         let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
         if (!tokenCheckFilter) {
-            setOnLogin(false);
+            //  setOnLogin(false);
         } else {
-            setOnLogin(true);
+            //setOnLogin(true);
             setCustomerId(props.token.cust_id);
             setIsSurvey(true);
         }
@@ -78,7 +77,7 @@ function OrderForm(props) {
     })
 
     const optionHandler = async (optionIndex) => {
-        if (!onLogin) return handleClick();
+        // if (!onLogin) return handleClick();
 
         const tempObj = {
             value: form.form_json[activeIndex][0].values[optionIndex].label,
@@ -87,6 +86,7 @@ function OrderForm(props) {
         }
         var formCode = props.language === 'english' ? 'checkout_process_feedback' : 'checkout_process_feedback_arabic';
         answers[form.form_json[activeIndex][0].name] = tempObj
+        console.log(answers)
         setAnswers(answers);
         payload.answer.response_json = JSON.stringify(answers);
         payload.answer.form_id = form.form_id;
@@ -104,12 +104,12 @@ function OrderForm(props) {
             if (result.data) {
                 setIsSurveyEnd(true);
                 setloading(false);
-              //  setCookie("help-us", customerId);
+                //  setCookie("help-us", customerId);
             }
         }
     }
 
-  
+
 
     const handleClick = () => {
         const { showSignin } = props;
@@ -157,14 +157,14 @@ function OrderForm(props) {
                                     })}
                                 </div>
                             </>}
-                            <div className="no-worries">
+                            {/* <div className="no-worries">
                                 <h3><IntlMessages id="home.noWorries" /></h3>
-                            </div>
+                            </div> */}
 
                         </div>
                     </div>
                 </div>
-            </div>           
+            </div>
         </>
     );
 }

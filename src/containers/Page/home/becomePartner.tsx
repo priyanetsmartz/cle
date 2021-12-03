@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
@@ -12,7 +11,8 @@ import { Link } from "react-router-dom";
 function BecomePartner(props) {
     const intl = useIntl();
     const language = getCookie('currentLanguage');
-    const [radio, setRadio] = useState('Womenswear');
+    const [radio, setRadio] = useState(intl.formatMessage({ id: "newsletter.option1" }));
+    console.log(radio)
     const [isShow, setIsShow] = useState(false);
     const [state, setState] = useState({
         email: ""
@@ -99,12 +99,12 @@ function BecomePartner(props) {
                             <p><IntlMessages id="home.signUpForExclusive" /></p>
                             <div className="wear-ckeckbox">
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" checked={radio === "Womenswear"} onChange={onValueChange} name="inlineRadioOptions" id="inlineRadio1" value="Womenswear" />
+                                    <input className="form-check-input" type="radio" checked={radio === intl.formatMessage({ id: "newsletter.option1" })} onChange={onValueChange} name="inlineRadioOptions" id="inlineRadio1" value={intl.formatMessage({ id: "newsletter.option1" })} />
                                     <label className="form-check-label" htmlFor="inlineRadio1"><IntlMessages
                                         id="newsletter.option1" /></label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" onChange={onValueChange} name="inlineRadioOptions" id="inlineRadio2" value="Menswear" />
+                                    <input className="form-check-input" type="radio" onChange={onValueChange} name="inlineRadioOptions" id="inlineRadio2" value={intl.formatMessage({ id: "newsletter.option2" })} />
                                     <label className="form-check-label" htmlFor="inlineRadio2"><IntlMessages
                                         id="newsletter.option2" /></label>
                                 </div>

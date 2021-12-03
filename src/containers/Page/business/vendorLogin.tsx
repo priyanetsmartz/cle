@@ -9,12 +9,12 @@ import Modal from "react-bootstrap/Modal";
 import ForgottenPassword from '../forgotPassword';
 import { vendorLogin } from '../../../redux/pages/vendorLogin';
 import { useHistory } from "react-router-dom";
-import FacebookLoginButton from '../../socialMediaLogin/FaceBook';
-import GoogleLoginButton from '../../socialMediaLogin/Google';
+import { useIntl } from 'react-intl';
 const { login, logout ,vendorrrr} = authAction;
 
 function VendorLogin(props) {
   const history = useHistory();
+  const intl = useIntl();
   const [loginForm, setLoginForm] = useState({
     email: '',
     password: ''
@@ -48,7 +48,7 @@ function VendorLogin(props) {
       }
       // login({ userInfo });
       const result: any = await vendorLogin(userInfo);
-      if (result && result.data && result.data) {
+      if (result && result.data && result.data && !result.data.message) {
         setIsShow(false);
         const vendorObj = {
           vendor_id: result.data[0].vendor_id,
@@ -67,9 +67,11 @@ function VendorLogin(props) {
         //   history.push(`/vendor/profile`);
         // }, 3000);
 
+      }else {
+        notification("warning", "", result.data.message);
       }
     } else {
-      notification("warning", "", "Please enter valid email and password");
+      notification("warning", "", intl.formatMessage({ id: "valiemailpass" }));
     }
   }
 

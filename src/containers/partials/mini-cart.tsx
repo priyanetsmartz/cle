@@ -17,7 +17,7 @@ function MiniCart(props) {
 
     useEffect(() => {
         if (props.items || !props.items) {
-            //   console.log(props.items)
+            //  console.log('dddd')
             callGetCartItems()
         }
 
@@ -29,18 +29,19 @@ function MiniCart(props) {
 
     const callGetCartItems = async () => {
         let cartData = [], total = 0, cartItems: any, cartTotal: any;
-        let customer_id =props.token.cust_id;
-       
+        let customer_id = props.token.cust_id;
+
         const cartQuoteId = localStorage.getItem('cartQuoteId');
         const cartQuoteToken = localStorage.getItem('cartQuoteToken');
         if (customer_id && cartQuoteId) {
-            
+
             cartItems = await getCartItems(props.languages);
-            cartData = cartItems.data.items;
-          
+            cartData = cartItems && cartItems.data ? cartItems.data.items : {};
+
             // get cart total 
             cartTotal = await getCartTotal();
-            total = cartTotal.data.grand_total;
+            total = cartTotal && cartTotal.data ? cartTotal.data.grand_total : {};
+
 
             //console.log(total) 
 
@@ -57,7 +58,7 @@ function MiniCart(props) {
 
         let cartValues = {};
         cartValues['items'] = cartData;
-      //  console.log(cartValues);
+        //  console.log(cartValues);
         setCartItems(cartValues)
         setCartTotal(total);
 
@@ -122,7 +123,7 @@ function MiniCart(props) {
                         {cartItemsVal && cartItemsVal['items'] && cartItemsVal['items'].length ?
                             (
                                 <Link to="/my-cart" className="btn btn-secondary" type="button"><IntlMessages id="cart.menu" /></Link>
-                            ) : ""} 
+                            ) : ""}
 
                         {/* {cartItemsVal && cartItemsVal['items'] && cartItemsVal['items'].length ?
                             (
@@ -137,7 +138,7 @@ function MiniCart(props) {
 
 
 const mapStateToProps = (state) => {
-    // console.log(state);
+    //console.log(state.session.user);
     return {
         items: state.Cart.addToCartTask,
         showMiniCart: state.Cart.openMiniCartPop,

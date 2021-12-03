@@ -254,7 +254,7 @@ function LatestProducts(props) {
                                         </div >
                                     </div >
 
-                                ) : <p className="no-data">No Data Found</p>}
+                                ) : <p className="no-data"><IntlMessages id="no_data" /></p>}
                             </div >
 
                             <div className="tab-pane fade" id="D-maylike" role="tabpanel" aria-labelledby="D-maylike-tab">

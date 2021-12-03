@@ -53,6 +53,7 @@ function Personal(props) {
         async function getData() {
             let lang = props.languages ? props.languages : language;
             let result: any = await GetHelpUsForm(lang, props.currentCAT);
+          //  console.log(result.data[0].form_json.length)
             if (result && result.data && result.data.length > 0) {
                 setForm(result.data[0]);
             } else {
@@ -80,7 +81,13 @@ function Personal(props) {
         } else {
             setOnLogin(true);
             setCustomerId(props.token.cust_id);
-            setIsSurvey(customerId && (customerId === getCookie('help-us')) ? true : false);
+            let formCode = '';
+            if (props.categoryName === 'women' || props.categoryName === '' || props.categoryName === undefined) {
+                formCode = props.languages === 'english' ? 'home_page_survey' : 'Home_page_survery_arabic';
+            } else {
+                formCode = props.languages === 'english' ? `home_page_survey_${props.categoryName}` : `home_page_survey_${props.categoryName}_arabic`;
+            }
+            setIsSurvey(customerId && (customerId === getCookie(formCode)) ? true : false);
         }
         return () => {
             // componentwillunmount in functional component.
@@ -98,8 +105,8 @@ function Personal(props) {
         }
 
         let formCode = '';
-        if (props.categoryName === 'women' || props.categoryName === '') {
-            formCode = props.languages === 'english' ? 'home_page_survey' : 'Home_page_survery_arabic';
+        if (props.categoryName === 'women' || props.categoryName === '' || props.categoryName === undefined) {
+            formCode = props.languages === 'english' ? 'home_page_survey' : 'Home_page_survey_arabic';
         } else {
             formCode = props.languages === 'english' ? `home_page_survey_${props.categoryName}` : `home_page_survey_${props.categoryName}_arabic`;
         }
@@ -122,7 +129,7 @@ function Personal(props) {
             if (result.data) {
                 setIsSurveyEnd(true);
                 setloading(false);
-                setCookie("help-us", customerId);
+                setCookie(formCode, customerId);
             }
         }
     }
@@ -142,8 +149,8 @@ function Personal(props) {
     }
 
     return (
-        <>{form.form_json.length > 1 && (
-            <section className="width-100 mb-5" style={{ 'display': hidePersonal ? 'block' : 'none' }}>
+        <>{form.form_json.length > 0 && (
+            <section className="width-100 mb-5" style={{ 'display': hidePersonal ? 'block' : 'none' }}>              
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -153,7 +160,7 @@ function Personal(props) {
                                         {!isSurvey && <div className="persnalize-select">
                                             <div className="marketing_secs">
                                                 <div className="width-100%">
-                                                    {form.form_json.length > 1 && (
+                                                    {form.form_json.length > 0 && (
                                                         <div className="steps-sec">
                                                             <div className="stepwizard">
                                                                 <div className="stepwizard-row">
@@ -174,6 +181,7 @@ function Personal(props) {
 
 
                                                 {form && <h2>{form.title}</h2>}
+                                                {form && <p><IntlMessages id="helpus.subtitle" /></p>}
                                                 {isSurveyEnd && !loading && <div className="question-sec"><h2><IntlMessages id="helpus.thankyou" /></h2></div>}
                                                 {!isSurveyEnd && loading && <div className="question-sec"><h2><IntlMessages id="helpus.response_saving" /></h2></div>}
 

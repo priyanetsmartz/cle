@@ -49,8 +49,8 @@ export async function getHomePageProductsFxn(languages: string, categoryId = '')
   let result: any = await getHomePageProducts(languages, siteConfig.pageSize, categoryId);
   let productResult = [];
 
-  products['newInProducts'] = result.data[0].newInProducts;
-  products['bestSeller'] = result.data[0].bestSellers;
+  products['newInProducts'] = result && result.data && result.data.length > 0 ? result.data[0].newInProducts : [];
+  products['bestSeller'] = result && result.data && result.data.length > 0 ? result.data[0].bestSellers : [];
 
   let user = await sessionService.loadUser().then(user => { return user }).catch(err => { // test 
   })
@@ -78,10 +78,12 @@ export async function handleCartFxn(id: number, sku: string) {
   let cartSucces: any;
   let cartQuoteId = '';
   let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+ // console.log(user)
   const customerId = user ? user.cust_id : '';
   let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-  if (customerId && cartQuoteIdLocal && customerId) {
-    console.log(customerId)
+ // console.log(cartQuoteIdLocal)
+  if (customerId) {
+   // console.log(customerId)
     let customerCart: any = await loginApi.genCartQuoteID(customerId)
     cartQuoteId = cartQuoteIdLocal
     if (customerCart.data !== parseInt(cartQuoteIdLocal)) {

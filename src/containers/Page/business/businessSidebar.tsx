@@ -115,7 +115,7 @@ function BusinessSidebar(props) {
                                         </li> */}
                                         <li className={activeTab === 'profile' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('profile')}>
-                                                <img src={supportIcon} alt="" className="img-fluid" />
+                                                <i className="fas fa-user"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.businessProfile" /></span>
                                             </Link>
                                         </li>
@@ -127,7 +127,7 @@ function BusinessSidebar(props) {
                                         </li> */}
                                         <li className={activeTab === 'support' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('support')}>
-                                                <img src={supportIcon} alt="" className="img-fluid" />
+                                                <i className="fas fa-phone-alt"></i>
                                                 <span className="pl-2"><IntlMessages id="customer.mySupport" /></span>
                                             </Link>
                                         </li>
