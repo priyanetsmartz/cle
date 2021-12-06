@@ -11,7 +11,7 @@ const PriveRoute = ({ component: Component, auth, token, ...rest }) => (
     <Route
         {...rest}
         render={props =>
-            (auth || token) ? (
+            (auth || (token && token.type === "user")) ? (
                 <div className="sectiosn" id='topheaderrr'>
                     <div className="section headerrr" id="headerrr" key='uniqueKey'>
                         <Header />

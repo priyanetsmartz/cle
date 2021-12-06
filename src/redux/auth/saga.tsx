@@ -12,7 +12,7 @@ const loginApi = new Login();
 
 export function* loginRequest() {
 
-  yield takeEvery("LOGIN_REQUEST", function* (payload: any) {
+  yield takeEvery("LOGIN_REQUEST",  function* (payload: any) {
     try {
       // console.log(payload.payload.userInfo);
       //user details
@@ -33,7 +33,8 @@ export function* loginRequest() {
             'token_email': token.data[0].email,
             'token_name': token.data[0].firstname + ' ' + token.data[0].lastname,
             'token': token.data[0].group_id,
-            'id_token': response.data
+            'id_token': response.data,
+            'type':"user"
           }
           const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
           // console.log(cartToken);
@@ -42,8 +43,8 @@ export function* loginRequest() {
           } else {
             localStorage.setItem('cartQuoteId', cartToken.data);
           }
-          sessionService.saveSession({ id_token })
-          sessionService.saveUser(data)
+           sessionService.saveSession({ id_token })
+           sessionService.saveUser(data)
           yield put({
             type: actions.LOGIN_SUCCESS,
             token: response.data,
@@ -77,12 +78,17 @@ export function* loginRequest() {
             showHelpus: true
           });
           notification("success", "", "Successfully Logged in");
-          // if (token.data[0].group_id === "4") {
-          //   //yield put(push("/prive-user"));
-          //   window.location.href = '/prive-user';
-          // } else {
-          //   window.location.href = '/';
-          // }
+          if (token.data[0].group_id === "4") {
+            //yield put(push("/prive-user"));
+            setTimeout(() => {
+              window.location.href = '/prive-user';
+            }, 3000);
+           
+          } else {
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 3000);
+          }
         }
       } else {
         if (response.data.message) {

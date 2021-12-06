@@ -10,6 +10,7 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { DROPDOWN } from '../../../config/constants';
 import moment from 'moment';
+import { sessionService } from 'redux-react-session';
 import { useIntl } from 'react-intl';
 function BusinessProfile(props) {
     const intl = useIntl();
@@ -96,29 +97,34 @@ function BusinessProfile(props) {
 
     //--------------------------------------------------------------
     useEffect(() => {
-        const ven = localStorage.getItem('cle_vendor');
-        if (ven) {
-            setVendorData(JSON.parse(ven))
-        }
-       // getData();
+        getVendor();
+        //    getData();
         getCountries();
         return () => {
             setIsShow(false)
         }
     }, []);
-
-    async function getData() {
-        let result: any = await getCustomerDetails();
-        const d = result.data.dob ? result.data.dob.split("-") : moment().format("YYYY-MM-DD").split("-");
-        dob.day = d[2];
-        dob.month = d[1];
-        dob.year = d[0];
-        setDob(dob);
-
-        if (result) {
-            setCustForm(result.data);
+    async function getVendor() {
+        let vendor = await sessionService.loadUser()
+        if (vendor && vendor.type === "vendor") {
+           // console.log(vendor)
+            setVendorData(vendor);
+        } else {
+            window.location.href = '/';
         }
     }
+    // async function getData() {
+    //     let result: any = await getCustomerDetails();
+    //     const d = result.data.dob ? result.data.dob.split("-") : moment().format("YYYY-MM-DD").split("-");
+    //     dob.day = d[2];
+    //     dob.month = d[1];
+    //     dob.year = d[0];
+    //     setDob(dob);
+
+    //     if (result) {
+    //         setCustForm(result.data);
+    //     }
+    // }
     //-----------------------------------------------------------------------------------------------------
 
     const getCountries = async () => {
@@ -383,7 +389,7 @@ function BusinessProfile(props) {
 
         if (!changeEmail["password"]) {
             formIsValid = false;
-            error["password"] =intl.formatMessage({ id: "passwordreq" })
+            error["password"] = intl.formatMessage({ id: "passwordreq" })
         }
 
         if (changeEmail["confirmNewEmail"] !== changeEmail["newEmail"]) {

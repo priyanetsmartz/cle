@@ -14,6 +14,7 @@ import wishlistIcon from '../../../image/mywish_list.svg';
 import profileIcon from '../../../image/my_profile.svg';
 import notificationIcon from '../../../image/my_notification.svg';
 import supportIcon from '../../../image/my_support.svg';
+import { sessionService } from 'redux-react-session';
 import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
 // import MyTrades from './mytrades';
@@ -34,15 +35,22 @@ function BusinessSidebar(props) {
 
     useEffect(() => {
         setActiveTab(key);
-        let myJSONString = localStorage.getItem('cle_vendor')
-        setVandor(JSON.parse(myJSONString));
+        getVendor();
+
     }, [key]);
 
     const changeTab = (tab) => {
         history.push(`/vendor/${tab}`);
         setActiveTab(tab);
     }
-
+    async function getVendor() {
+        let user = await sessionService.loadUser()
+        if (user && user.type === "vendor") {
+            setVandor(user);
+        }else{
+            window.location.href = '/';
+        }
+    }
     const changeMobTab = (e) => {
         changeTab(e.target.value);
     }

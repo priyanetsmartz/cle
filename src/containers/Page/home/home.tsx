@@ -83,7 +83,7 @@ function HomePage(props) {
     )
 }
 const mapStateToProps = (state) => {
-    //console.log(state.Cart.catname)
+    // console.log(state)
 
     let languages = '';
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 function Faq(props) {
 
@@ -19,7 +20,7 @@ function Faq(props) {
                             <li>Shipping Methods</li>
                             <li>Premier Delivery Shipping</li>
                         </ul>
-                        <div className="faq-view-all"><a href="">View all</a></div>
+                        <div className="faq-view-all"><Link to="#">View all</Link></div>
                     </div>
                     <div className="col-md-4 FAQ-qus-sec">
                         <h5><i className="fas fa-wallet"></i> <span>Returnes & Refunds</span></h5>
@@ -28,7 +29,7 @@ function Faq(props) {
                             <li>How to return from the US</li>
                             <li>Can I exchange?</li>
                         </ul>
-                        <div className="faq-view-all"><a href="">View all</a></div>
+                        <div className="faq-view-all"><Link to="#">View all</Link></div>
                     </div>
                     <div className="col-md-4 FAQ-qus-sec">
                         <h5><i className="fas fa-box"></i> <span>Order Issues</span></h5>
@@ -37,7 +38,7 @@ function Faq(props) {
                             <li>Missing Item</li>
                             <li>Wrong item received</li>
                         </ul>
-                        <div className="faq-view-all"><a href="">View all</a></div>
+                        <div className="faq-view-all"><Link to="#">View all</Link></div>
                     </div>
                     <div className="col-md-4 FAQ-qus-sec">
                         <h5><i className="far fa-credit-card"></i> <span>Payments, Codes & Vouchers</span></h5>
@@ -46,7 +47,7 @@ function Faq(props) {
                             <li>Help with a promo code</li>
                             <li>Student Promo Codes</li>
                         </ul>
-                        <div className="faq-view-all"><a href="">View all</a></div>
+                        <div className="faq-view-all"><Link to="#">View all</Link></div>
                     </div>
                     <div className="col-md-4 FAQ-qus-sec">
                         <h5><i className="fas fa-tag"></i> <span>Products & Stock</span></h5>
@@ -55,7 +56,7 @@ function Faq(props) {
                             <li>Product information</li>
                             <li>Size guide</li>
                         </ul>
-                        <div className="faq-view-all"><a href="">View all</a></div>
+                        <div className="faq-view-all"><Link to="#">View all</Link></div>
                     </div>
                     <div className="col-md-4 FAQ-qus-sec">
                         <h5><i className="fas fa-cog"></i> <span>Technical</span></h5>
@@ -64,7 +65,7 @@ function Faq(props) {
                             <li>Changing account details</li>
                             <li>Forgotten your password?</li>
                         </ul>
-                        <div className="faq-view-all"><a href="">View all</a></div>
+                        <div className="faq-view-all"><Link to="#">View all</Link></div>
                     </div>
                 </div>
             </div>

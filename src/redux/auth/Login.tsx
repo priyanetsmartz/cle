@@ -46,11 +46,11 @@ class Login {
     return Api.request("rest/V1/cmsPage/search?searchCriteria[filterGroups][0][filters][0][field]=identifier&searchCriteria[filterGroups][0][filters][0][value]=partnership", payload, "GET", "");
   }
 
-  getAuthRegister(email: any) {
+  async getAuthRegister(email: any) {
     var payload = {
       email: email
     }
-    return AdminApi.request("rest/V1/customer/detail?email=" + email, payload, "GET", "");
+    return await AdminApi.request("rest/V1/customer/detail?email=" + email, payload, "GET", "");
   }
 
   genCartQuoteID(localToken) {

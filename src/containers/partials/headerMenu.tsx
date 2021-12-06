@@ -190,6 +190,7 @@ function HeaderMenu(props) {
         // sessionService.deleteUser();
 
         localStorage.removeItem('cartQuoteId');
+        localStorage.removeItem('cartQuoteToken');
         props.logout();
         props.addToCartTask(true);
         window.location.href = '/';
@@ -342,13 +343,14 @@ function HeaderMenu(props) {
                                         <div className="cartuser-info">
                                             <ul>
                                                 <LanguageSwitcher />
-                                                <li><Link to="/customer/profile">{customerName ? capitalize(customerName) : ""} </Link></li>
+                                                {customerName ? <li><Link to="/customer/profile">{capitalize(customerName)}</Link></li> :""}
+                                                {props.token && props.token.vendor_name ? <li><Link to="/vendor/profile">{capitalize(props.token.vendor_name)}</Link></li> :""}
                                                 {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
                                                 <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 
                                                     <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
                                                         <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
-                                                        {Object.keys(props.token).length > 0 && (
+                                                        {(Object.keys(props.token).length > 0 && props.token.type === 'user') && (
                                                             <ul>
                                                                 {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
                                                                 <li><Link to="/customer/profile"><IntlMessages id="dashboard" /> </Link></li>
@@ -357,9 +359,18 @@ function HeaderMenu(props) {
                                                                 <li><Link to="/customer/support"><IntlMessages id="myspport" /></Link> </li>
                                                             </ul>
                                                         )}
+                                                        {(Object.keys(props.token).length > 0 && props.token.type === 'vendor') && (
+                                                            <ul>
+                                                                {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
+                                                                <li><Link to="/vendor/profile"><IntlMessages id="dashboard" /> </Link></li>
+                                                                {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
+                                                                <li><Link to="/vendor/profile"><IntlMessages id="myprofile" /></Link></li>
+                                                                <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
+                                                            </ul>
+                                                        )}
                                                         <div className="d-grid">
                                                             {
-                                                                (Object.keys(props.token).length > 0 || cle_vendor) ? <button className="btn btn-secondary" onClick={() => { logout(); }} type="button"><IntlMessages id="logout" /></button> :
+                                                                (Object.keys(props.token).length > 0) ? <button className="btn btn-secondary" onClick={() => { logout(); }} type="button"><IntlMessages id="logout" /></button> :
                                                                     <button className="btn btn-secondary" type="button" onClick={(e) => { handlesigninClick(e); }} ><IntlMessages id="menu_Sign_in" /></button>
                                                             }
 
@@ -367,7 +378,7 @@ function HeaderMenu(props) {
                                                     </div>
 
                                                 </li>
-                                                {Object.keys(props.token).length > 0 && (
+                                                {(Object.keys(props.token).length > 0 && props.token.type === 'user') && (
                                                     <li> <Link to="/customer/wish-list"><img src={favorit} alt="wishlist" /></Link> </li>
                                                 )}
                                                 {!Object.keys(props.token).length && (
@@ -486,7 +497,7 @@ function HeaderMenu(props) {
                                                     )}
                                                     <div className="d-grid">
                                                         {
-                                                            (Object.keys(props.token).length > 0 || cle_vendor) ? <button className="btn btn-secondary" onClick={() => { logout(); }} type="button"><IntlMessages id="logout" /></button> :
+                                                            (Object.keys(props.token).length > 0) ? <button className="btn btn-secondary" onClick={() => { logout(); }} type="button"><IntlMessages id="logout" /></button> :
                                                                 <button className="btn btn-secondary" type="button" onClick={(e) => { handlesigninClickMobile(e); }} ><IntlMessages id="menu_Sign_in" /></button>
                                                         }
 
@@ -519,7 +530,7 @@ function HeaderMenu(props) {
 
 const mapStateToProps = (state) => {
     // sessionService.loadSession().then(session => console.log(session));
-
+    //console.log(state.session.user);
     return {
         items: state.Cart.items,
         languages: state.LanguageSwitcher.language,

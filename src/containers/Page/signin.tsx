@@ -176,10 +176,10 @@ function SignIn(props) {
     showSignin(false);
   };
 
-  const hideModall = (e) => {
-    setForgotPopup(false);
-  }
-
+  // const hideModall = (e) => {
+  //   setForgotPopup(false);
+  // }
+  const hideModall = () =>   setForgotPopup(false);
   const togglePasswordVisiblity = () => {
     setPasswordShown(passwordShown ? false : true);
   };

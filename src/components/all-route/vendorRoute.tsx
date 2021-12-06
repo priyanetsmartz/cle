@@ -5,16 +5,14 @@ import { withRouter } from 'react-router-dom';
 import Header from '../../containers/partials/headerMenu';
 import Footer from '../../containers/partials/footer-new';
 import AppBreadcrumbs from "../../containers/partials/breadCrumbs";
-const vendorLocal = localStorage.getItem('cle_vendor');
-// console.log(vendor.id)
-let vendor = vendorLocal ? JSON.parse(vendorLocal) : '';
 
-const VendorRoute = ({ component: Component, vendordata, ...rest }) => (
+
+const VendorRoute = ({ component: Component, token, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      (vendordata || (vendor && vendor.vendor_id)) ? (
-        <div className="sectiosn"  id='topheaderrr'>
+      (token && token.type === 'vendor') ? (
+        <div className="sectiosn" id='topheaderrr'>
           <div className="section headerrr" id="headerrr" key='uniqueKey'>
             <Header />
           </div>
@@ -35,9 +33,10 @@ const VendorRoute = ({ component: Component, vendordata, ...rest }) => (
 
 
 function mapStateToProps(state) {
-  //console.log(state)
+  //console.log(state.session)
   return {
-    vendordata: state.Auth.vendorr
+    vendordata: state.Auth.vendorr,
+    token: state.session.user
   }
 }
 
