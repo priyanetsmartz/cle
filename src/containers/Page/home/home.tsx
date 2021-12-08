@@ -16,6 +16,7 @@ import cartAction from "../../../redux/cart/productAction";
 import { getCategoryDetailsbyUrlKeyFxn, getHomePageProductsFxn } from '../../../components/utility/allutils';
 const { showLoader } = appAction;
 const { setCatSearch } = cartAction;
+
 function HomePage(props) {
     const { categoryname } = useParams();
     const [categoryId, setCategoryId] = useState(props.currentId);
@@ -26,7 +27,7 @@ function HomePage(props) {
 
     useEffect(() => {
         let categoryNAME = categoryname === props.currentCAT ? props.currentCAT : categoryname === undefined ? 'women' : categoryname;
-        console.log(categoryNAME)
+        //console.log(categoryNAME)
         if (categoryNAME) {
             getData(categoryNAME);
         }

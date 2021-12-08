@@ -44,11 +44,6 @@ function Categories(props) {
                 header.classList.remove("sticky-fullpage");
             }
         });
-        return () => {
-            window.removeEventListener("scroll", scrollCallBack);
-        };
-    }, [location]);
-    useEffect(() => {
 
         let urlPath = '';
         if (category && subcat && childcat && greatchildcat) {
@@ -64,9 +59,9 @@ function Categories(props) {
         setUrlPath(urlPathdata);
         getData(urlPath)
         return () => {
-            //
+            window.removeEventListener("scroll", scrollCallBack);
         };
-    }, [props.languages, location, category, subcat, childcat, greatchildcat]);
+    }, [props.languages, location]);
 
     const getData = async (urlPath) => {
         let result: any = await getCategoryDetailsbyUrlPath(props.languages, urlPath, siteConfig.pageSize);
@@ -81,9 +76,19 @@ function Categories(props) {
                 }
                 result.data.custom = obj;
             });
-          //  console.log(result.data.items[0].id)
+            //  console.log(result.data.items[0].id)
             setCategoryId(result.data.items[0].id)
             setCategory(result.data);
+        } else {
+            setCategoryId(0)
+            setCategory({
+                name: '',
+                custom_attributes: [],
+                custom: {
+                    image: '',
+                    desc: ''
+                }
+            })
         }
     }
 

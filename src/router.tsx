@@ -1,3 +1,4 @@
+import { Suspense} from 'react';
 import { Route, Switch } from 'react-router' // react-router v4/v5
 import { ConnectedRouter } from 'connected-react-router';
 import SinglePost from './containers/Page/singlePost';
@@ -7,7 +8,7 @@ import Pages from './containers/Page/pages';
 import VendorRoute from "./components/all-route/vendorRoute";
 import ProductRoutes from "./components/all-route/ProductRoutes";
 import ProductHome from "./components/all-route/productHomeRoute"
-import PrivateRoute from "./components/all-route/LoggedinRoute";
+import LoggedInRoute from "./components/all-route/LoggedinRoute";
 import PriveRoute from "./components/all-route/priveRoute";
 import AllPosts from './containers/Page/magazineCategory';
 import ThankYou from './containers/Page/ThankYou';
@@ -32,11 +33,12 @@ import Search from './containers/Page/search';
 import orderThankyou from './containers/Page/product/orderThankyou';
 import Product from './containers/Page/product/product';
 import Cart from './containers/Page/product/cart/cart';
-
+import Loader from '../src/image/CLE_LogoMotionGraphics.gif';
 
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
+      <Suspense fallback={<Loader />}>
       <Switch>
         <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
         <ProductRoutes exact path="/search/:brandname" component={Search} />
@@ -46,7 +48,7 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/products/:category/:subcat/:childcat/all" component={Product} />
         <ProductRoutes exact path="/products/:category/:subcat/all" component={Product} />
         <ProductRoutes exact path="/products/:category/all" component={Product} />
-        
+
         <ProductHome exact path="/products/:category/:subcat/:childcat/:greatchildcat" component={Categories} />
         <ProductHome exact path="/products/:category/:subcat/:childcat" component={Categories} />
         <ProductHome exact path="/products/:category/:subcat/:id" component={Categories} />
@@ -54,19 +56,19 @@ const PublicRoutes = ({ history }) => {
         <ProductHome exact path="/products/:category" component={Categories} />
 
         <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
-        <PrivateRoute exact path="/notifications" component={Notifications} />
-        <PrivateRoute exact path="/customer/:tab" component={Customer} />
-        <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />    
-        <ProductHome exact path="/category/:categoryname" component={HomePage} />   
+        <LoggedInRoute exact path="/notifications" component={Notifications}  />
+        <LoggedInRoute exact path="/customer/:tab" component={Customer}  />
+        <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
+        <ProductHome exact path="/category/:categoryname" component={HomePage} />
         <ProductHome exact path="/" component={HomePage} />
         <ProductHome exact path="/:signup/:member" component={HomePage} />
         <ProductRoutes exact path="/return-order" component={ReturnPage} />
 
-        <PrivateRoute exact path="/explore-desginer" component={ExploreDesigner} />
+        <LoggedInRoute exact path="/explore-desginer" component={ExploreDesigner} />
         <ProductRoutes exact path="/magazines/:category" component={AllPosts} />
         <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />
         <ProductRoutes exact path="/magazines" component={AllPosts} />
-    
+
 
         <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
         <ProductRoutes exact path="/contact-us" component={contact} />
@@ -87,6 +89,7 @@ const PublicRoutes = ({ history }) => {
         <ProductRoutes exact path="/checkout" component={Checkout} />
         <ProductRoutes path="/:id" component={Pages} />
       </Switch>
+      </Suspense>
     </ConnectedRouter >
   );
 }

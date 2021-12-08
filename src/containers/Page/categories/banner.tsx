@@ -1,4 +1,4 @@
-import { useState ,useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
@@ -6,17 +6,17 @@ import IntlMessages from "../../../components/utility/intlMessages";
 
 function CategoryBanner(props) {
     const [categoryData, setCategory] = useState([])
-
+    console.log(props.ctId)
     useEffect(() => {
         if (props.cateData) {
             let cat = [];
             cat['name'] = props.cateData && props.cateData.items && props.cateData.items.length > 0 ? props.cateData.items[0].name : '';
             cat['image'] = props.cateData.custom.image;
             cat['description'] = props.cateData.custom.desc;
-            setCategory(cat);           
+            setCategory(cat);
         }
 
-    }, [props.languages, props.cateData, props.ctId]);
+    }, [props.languages, props.cateData]);
 
 
     return (

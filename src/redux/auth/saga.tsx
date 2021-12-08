@@ -12,7 +12,7 @@ const loginApi = new Login();
 
 export function* loginRequest() {
 
-  yield takeEvery("LOGIN_REQUEST",  function* (payload: any) {
+  yield takeEvery("LOGIN_REQUEST", function* (payload: any) {
     try {
       // console.log(payload.payload.userInfo);
       //user details
@@ -34,17 +34,19 @@ export function* loginRequest() {
             'token_name': token.data[0].firstname + ' ' + token.data[0].lastname,
             'token': token.data[0].group_id,
             'id_token': response.data,
-            'type':"user"
+            'type': "user"
           }
+          // console.log(data);
+          sessionService.saveSession({ id_token })
+          sessionService.saveUser(data)
           const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
-          // console.log(cartToken);
+
           if (cartToken.data === true) {
             localStorage.removeItem('cartQuoteToken');
           } else {
             localStorage.setItem('cartQuoteId', cartToken.data);
           }
-           sessionService.saveSession({ id_token })
-           sessionService.saveUser(data)
+
           yield put({
             type: actions.LOGIN_SUCCESS,
             token: response.data,
@@ -83,7 +85,7 @@ export function* loginRequest() {
             setTimeout(() => {
               window.location.href = '/prive-user';
             }, 3000);
-           
+
           } else {
             setTimeout(() => {
               window.location.href = '/';
@@ -129,7 +131,7 @@ export function* registerRequest() {
       const response = yield call(loginApi.register, firstname, lastname, email, password, type, storeId);
       if (response.data.id !== "") {
         const token = yield call(loginApi.getAuthRegister, email);
-        //  console.log(token.data[0].new_token, console.log(typeof (token)))
+        //  console.log(token)
         if (token.data[0].new_token) {
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
           yield put({
@@ -147,7 +149,8 @@ export function* registerRequest() {
             'token_email': token.data[0].email,
             'token_name': token.data[0].firstname + ' ' + token.data[0].lastname,
             'token': token.data[0].group_id,
-            'id_token': response.data
+            'id_token': response.data,
+            'type': "user"
           }
 
           sessionService.saveSession({ id_token })

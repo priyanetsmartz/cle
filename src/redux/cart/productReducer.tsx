@@ -70,7 +70,7 @@ const cartReducer = (state = initState, action) => {
         case actions.SET_CATANAME:
             return { ...state, catname: action.catname };
         case actions.OPEN_PREP_BOX:
-            return { ...state, isPrepOpen: action.isOpen };
+            return { ...state, isPrepOpen: action.isPrepOpen };
         default:
             return state;
     }

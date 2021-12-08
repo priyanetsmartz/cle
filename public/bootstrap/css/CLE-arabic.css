@@ -471,7 +471,7 @@ p.signup-policy-links {
   float: right;
 }
 .select-wearing ul li a.up-arrow::before {
-  bottom: -32px;
+  bottom: -30px;
 }
 .megamenu_bar {
   right: 0;

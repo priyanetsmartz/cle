@@ -3,13 +3,15 @@ import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
 import {
-    getCustomerDetails, saveCustomerDetails, getCountriesList, changePassword,
-    updateCustEmail, deleteAddress, getPreference, getRegionsByCountryID
+    saveCustomerDetails, getCountriesList, changePassword,
+    updateCustEmail, deleteAddress, getRegionsByCountryID
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { DROPDOWN } from '../../../config/constants';
-import moment from 'moment';
+import callIcon from '../../../image/call-icon.png';
+import deleteIcon from '../../../image/delete-icon.png';
+import timerIcon from '../../../image/timer_icon.png';
 import { sessionService } from 'redux-react-session';
 import { useIntl } from 'react-intl';
 function BusinessProfile(props) {
@@ -25,6 +27,8 @@ function BusinessProfile(props) {
     });
 
     const [custId, setCustid] = useState(props.token.cust_id);
+    const [businessDetails, setBusinessDetails] = useState({});
+    const [bankDetails, setBankDetails] = useState({});
     const [custForm, setCustForm] = useState({
         id: custId,
         email: "",
@@ -44,8 +48,10 @@ function BusinessProfile(props) {
 
 
     const [myDetailsModel, setMyDetailsModel] = useState(false);
+    const [myBussinessModel, setMyBussinessModel] = useState(false);
+    const [openBankModal, setOpenBankModal] = useState(false);
+
     const [myAddressModal, setMyAddressModal] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState(false);
     const [addCard, setAddCard] = useState(false);
     const [passMask, setPassMask] = useState({
         password: true,
@@ -102,12 +108,14 @@ function BusinessProfile(props) {
         getCountries();
         return () => {
             setIsShow(false)
+            setBankDetails({})
+            setBusinessDetails({})
         }
     }, []);
     async function getVendor() {
         let vendor = await sessionService.loadUser()
         if (vendor && vendor.type === "vendor") {
-           // console.log(vendor)
+            // console.log(vendor)
             setVendorData(vendor);
         } else {
             window.location.href = '/';
@@ -139,7 +147,14 @@ function BusinessProfile(props) {
             [id]: value
         }))
     }
+    const handlebussinessChange = (e) => {
+        const { id, value } = e.target
+        setBusinessDetails(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
 
+    }
     const saveCustDetails = async (e) => {
         e.preventDefault();
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
@@ -184,6 +199,13 @@ function BusinessProfile(props) {
                 setIsShow(false);
             }
         }
+    }
+
+    const saveBankDetails = async (e) => {
+        console.log(bankDetails['companyname'])
+    }
+    const saveBussinessDetails = async (e) => {
+        console.log(businessDetails)
     }
 
     const validateAddress = () => {
@@ -251,6 +273,14 @@ function BusinessProfile(props) {
     const handleAddChange = (e) => {
         const { id, value } = e.target;
         setCustAddForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }))
+    }
+
+    const handleBankChange = (e) => {
+        const { id, value } = e.target;
+        setBankDetails(prevState => ({
             ...prevState,
             [id]: value
         }))
@@ -406,6 +436,13 @@ function BusinessProfile(props) {
         setMyDetailsModel(!myDetailsModel);
     }
 
+    const openBussinessModel = () => {
+        setMyBussinessModel(!myBussinessModel);
+    }
+
+    const openBankDetailsModal = () => {
+        setOpenBankModal(!openBankModal)
+    }
     // const openMyPreferences = () => {
     //     getAttributes();
     //     setMyPreferenceModel(!myPreferenceModel);
@@ -419,9 +456,7 @@ function BusinessProfile(props) {
     //     setGiftingModal(!giftingModal);
     // }
 
-    const openPaymentMethodModal = () => {
-        setPaymentMethod(!paymentMethod);
-    }
+
 
     const OpenCardModal = () => {
         setAddCard(!addCard);
@@ -501,7 +536,7 @@ function BusinessProfile(props) {
                 </div>
             </section>
 
-            {/* <section className="my_profile_sect mb-4">
+            <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -546,16 +581,16 @@ function BusinessProfile(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary" onClick={openMyDetails}>
+                                <button type="button" className="btn btn-secondary" onClick={openBussinessModel}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section> */}
+            </section>
 
-            {/* <section className="my_profile_sect mb-4">
+            <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -594,9 +629,9 @@ function BusinessProfile(props) {
 
                     </div>
                 </div>
-            </section> */}
+            </section>
 
-            {/* <section className="my_profile_sect mb-4">
+            <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -604,43 +639,46 @@ function BusinessProfile(props) {
                             <p><IntlMessages id="myaccount.addOrChangePayments" /> </p>
                         </div>
                     </div>
-                    <div className="add_changeaddress">
-                        <div className="addnew_address" onClick={openPaymentMethodModal}>
-                            <div className="addressnew_addressblue">
-                                <span> <IntlMessages id="myaccount.addNewPayment" /> </span>
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h5>Bank Account</h5>
+                            <p><IntlMessages id="myaccount.addOrChangePayments" /> </p>
+                        </div>
+                        <div className="col-sm-12">
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <div className="field_details mb-4">
+                                        <label className="form-label">Company Name</label>
+                                        <div className="field-name">HugoBoss</div>
+                                    </div>
+                                </div>
+                                <div className="col-sm-4">
+                                    <div className="field_details  mb-4">
+                                        <label className="form-label">Bank Name</label>
+                                        <div className="field-name">www.boss.com</div>
+                                    </div>
+                                </div>
+                                <div className="col-sm-4">
+                                    <div className="field_details mb-4">
+                                        <label className="form-label">Account Number</label>
+                                        <div className="field-name">123 </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                        <div className="addressnew_addressbodr bank_card">
-                            <h3><IntlMessages id="myaccount.bankCard" /></h3>
-                            <ul>
-                                <li>Mastercard</li>
-                                <li>**** **** **** 0356</li>
-                                <li>Exp: 06/25</li>
-                                <li>Ann Smith</li>
-                            </ul>
-                            <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                            <div className="address-action bank_card">
-                                <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className="edit_btn" ><IntlMessages id="myaccount.edit" /></Link>
-                            </div>
-                        </div>
-                        <div className="addressnew_addressbodr">
-                            <h3>PayPal</h3>
-                            <ul>
-                                <li><IntlMessages id="myaccount.youWillNeedToEnter" /></li>
-                                <li><IntlMessages id="myaccount.setAsDefault" /></li>
-                            </ul>
-                            <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                            <div className="address-action paypal_card">
-                                <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className="edit_btn"><IntlMessages id="myaccount.edit" /></Link>
+                        <div className="col-sm-3">
+                            <div className="d-grid ">
+                                <button type="button" className="btn btn-secondary" onClick={openBankDetailsModal}>
+                                    <IntlMessages id="myaccount.edit" />
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section> */}
+            </section>
 
-            {/* <section className="my_profile_sect change_passwordsec mb-4">
+            <section className="my_profile_sect change_passwordsec mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -653,14 +691,10 @@ function BusinessProfile(props) {
                             <label className="form-label heading_lbl"><IntlMessages id="login.password" /></label>
                             <div className="password_edit">&#9728;&#9728;&#9728;&#9728;&#9728;</div>
                         </div>
-                        <div className="col-sm-6">
-                            <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                            <div className="password_edit">{custForm.email}</div>
-                        </div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-6">
-                            <div className="change-paswd-sec">
+                        <div className="col-sm-12">
+                            <div className="change-paswd-sec col-sm-6">
                                 <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" /></label>
@@ -711,8 +745,15 @@ function BusinessProfile(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-6">
-                            <div className="newemail-sec">
+                        <div className="row">
+
+                            <div className="col-sm-6">
+                                <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
+                                <div className="password_edit">{custForm.email}</div>
+                            </div>
+                        </div>
+                        <div className="col-sm-12">
+                            <div className="newemail-sec col-sm-6">
                                 <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
                                 <div className="width-100 mb-3">
                                     <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
@@ -773,7 +814,7 @@ function BusinessProfile(props) {
                                         <h2 className="accordion-header" id="flush-headingOne">
                                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                                <img src="images/call-icon.png" className="img-fluid" alt="" /> Step 1: Contact Customer Care
+                                                <img src={callIcon} className="img-fluid" alt="" /> Step 1: Contact Customer Care
                                             </button>
                                         </h2>
                                         <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne"
@@ -786,7 +827,7 @@ function BusinessProfile(props) {
                                         <h2 className="accordion-header" id="flush-headingTwo">
                                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                                <img src="images/delete-icon.png" className="img-fluid" alt="" /> Step II: We'll deactivate your
+                                                <img src={deleteIcon} className="img-fluid" alt="" /> Step II: We'll deactivate your
                                                 account
                                             </button>
                                         </h2>
@@ -801,7 +842,7 @@ function BusinessProfile(props) {
                                         <h2 className="accordion-header" id="flush-headingThree">
                                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                <img src="images/timer_icon.png" className="img-fluid" alt="" /> Don't want to close your account but
+                                                <img src={timerIcon} className="img-fluid" alt="" /> Don't want to close your account but
                                                 fancy a break?
                                             </button>
                                         </h2>
@@ -853,7 +894,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section> */}
+            </section>
 
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
@@ -941,6 +982,69 @@ function BusinessProfile(props) {
                 </div>
             </Modal>
 
+            {/* my bussiness details  */}
+            <Modal show={myBussinessModel} >
+                <div className="CLE_pf_details">
+                    <Modal.Header>
+                        <h1>Business Details</h1>
+                        <Link to="#" onClick={openBussinessModel} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                    </Modal.Header>
+                    <Modal.Body className="arabic-rtl-direction">
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Company name</label>
+                            <input type="text" className="form-control" placeholder="Hugo Boss"
+                                id="companyname"
+                                value={businessDetails['companyname']}
+                                onChange={handlebussinessChange} />
+                            <span className="error">{errors.errors["companyname"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">IBAM Number</label>
+                            <input type="text" className="form-control" placeholder="7894561230" id="ibam"
+                                value={businessDetails['ibam']}
+                                onChange={handlebussinessChange} />
+                            <span className="error">{errors.errors["ibam"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">TAX</label>
+                            <input type="text" className="form-control" placeholder="VAT 5%" id="tax"
+                                value={businessDetails['tax']}
+                                onChange={handlebussinessChange} />
+                            <span className="error">{errors.errors["tax"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Website</label>
+                            <input type="text" className="form-control" placeholder="www.hugoboss.com" id="webite"
+                                value={businessDetails['webite']}
+                                onChange={handlebussinessChange} />
+                            <span className="error">{errors.errors["webite"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Facebook</label>
+                            <input type="text" className="form-control" placeholder="facebook.com/hugoboss" id="facebook"
+                                value={businessDetails['facebook']}
+                                onChange={handlebussinessChange} />
+                            <span className="error">{errors.errors["facebook"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Instagram</label>
+                            <input type="text" className="form-control" placeholder="instagram/boss" id="instagram"
+                                value={businessDetails['instagram']}
+                                onChange={handlebussinessChange} />
+                            <span className="error">{errors.errors["instagram"]}</span>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer className="width-100 mb-3 form-field">
+                        <div className="Frgt_paswd">
+                            <div className="confirm-btn">
+                                <button type="button" className="btn btn-secondary" onClick={saveBussinessDetails}>Confirm</button>
+                            </div>
+                        </div>
+                    </Modal.Footer>
+
+                </div>
+            </Modal>
+
 
             {/* my details modal */}
             <Modal show={myAddressModal}>
@@ -956,7 +1060,6 @@ function BusinessProfile(props) {
                                 value={custAddForm.firstname}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["firstname"]}</span>
-
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
@@ -1046,27 +1149,53 @@ function BusinessProfile(props) {
 
 
             {/* add payment method modal */}
-            <Modal show={paymentMethod}>
+            <Modal show={openBankModal}>
                 <Modal.Body className="CLE_pf_details">
                     <Modal.Header>
-                        <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
-                        <Link to="#" onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                        <h1 className="mb-3">Bank Account</h1>
+                        <Link to="#" onClick={openBankDetailsModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     </Modal.Header>
                     <div className="payment_medt">
-                        <div className="width-100">
-                            <div className="d-grid gap-2 mx-auto">
-                                <button type="button" className="btn btn-outline-primary" onClick={OpenCardModal}>
-                                    <IntlMessages id="checkout.addCards" /></button>
-                            </div>
-                            <div className="or_diivdr">
-                                <IntlMessages id="signup.or" />
-                            </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Company Name<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" placeholder="Hugo Boss"
+                                id="companyname"
+                                value={bankDetails['companyname']}
+                                onChange={handleBankChange} />
+                            <span className="error">{errors.errors["companyname"]}</span>
                         </div>
-                        <div className="width-100">
-                            <div className="d-grid gap-2 mx-auto">
-                                <button type="button" className="btn btn-outline-primary"> <IntlMessages id="checkout.addpaypal" /></button>
-                            </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Bank Name<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" placeholder="Deutsche Dank"
+                                id="bankname"
+                                value={bankDetails['bankname']}
+                                onChange={handleBankChange} />
+                            <span className="error">{errors.errors["bankname"]}</span>
                         </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label">Account Number<span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" placeholder="**** **** **** ****"
+                                id="accountnumber"
+                                pattern="[+-]?\d+(?:[.,]\d+)?"
+                                value={bankDetails['accountnumber']}
+                                onChange={handleBankChange} />
+                            <span className="error">{errors.errors["accountnumber"]}</span>
+                        </div>
+                        <Modal.Footer>
+                            <div className="width-100 mb-3 form-field">
+                                <div className="Frgt_paswd">
+                                    <div className="confirm-btn">
+                                        <button type="button" className="btn btn-secondary" onClick={saveBankDetails} style={{ "display": !isShow ? "inline-block" : "none" }}>
+                                            <IntlMessages id="myaccount.confirm" />
+                                        </button>
+                                        <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}>
+                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                            <IntlMessages id="loading" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Modal.Footer>
                     </div>
                 </Modal.Body>
             </Modal>

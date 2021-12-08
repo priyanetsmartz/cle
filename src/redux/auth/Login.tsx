@@ -38,6 +38,7 @@ class Login {
         "is_subscribed": false
       }
     }
+    //console.log(payload)
     return Api.request("rest/V1/customers", payload, "POST", "");
   }
 

@@ -3,13 +3,14 @@ import { connect } from "react-redux";
 
 import Header from '../../containers/partials/headerMenu';
 import Footer from '../../containers/partials/footer-new';
-
-const PriveRoute = ({ component: Component, auth, token,tokenSession, ...rest }) => (
+let localData = localStorage.getItem('redux-react-session/USER_DATA');
+let localToken = JSON.parse((localData));
+const PriveRoute = ({ component: Component, auth, tokenSession, ...rest }) => (
     <Route
         {...rest}
         render={props =>
-            (auth && token === "4") || tokenSession.token === "4" ? (
-                <div className="sectiosn"  id='topheaderrr'>
+            ( (localToken && localToken.type === "user" && localToken.token === "4") || (tokenSession && tokenSession.type === "user" && tokenSession.token === "4")) ? (
+                <div className="sectiosn" id='topheaderrr'>
                     <div className="section headerrr" id="headerrr" key='uniqueKey'>
                         <Header />
                     </div>
@@ -24,7 +25,7 @@ const PriveRoute = ({ component: Component, auth, token,tokenSession, ...rest })
 );
 
 function mapStateToProps(state) {
-    // console.log(state.Auth);
+    // console.log(state.session.user.token);
     return {
         auth: state.Auth.idToken,
         token: state.Auth && state.Auth.userInfo ? state.Auth.userInfo.group_id : "",

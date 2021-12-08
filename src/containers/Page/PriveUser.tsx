@@ -37,7 +37,7 @@ function PriveUser(props) {
               <text id="Privé" transform="translate(20 79.25)" fill="none" stroke="#fff" strokeWidth="1.25" fontSize="79" fontFamily="Monument Extended" fontWeight="700"><tspan x="0" y="0"><IntlMessages id="prive.top1" /></tspan></text>
               <text id="account" transform="translate(0 111.75)" fill="#017abb" fontSize="60" fontFamily="Monument Extended" fontWeight="500"><tspan x="0" y="0"><IntlMessages id="prive.top2" /></tspan></text> </svg>
 
-            <div dangerouslySetInnerHTML={{ __html: pagesData ? pagesData.content : "Ooops Page not found...." }} />
+            <div className="text-light" dangerouslySetInnerHTML={{ __html: pagesData ? pagesData.content : "Ooops Page not found...." }} />
 
             {/* <Link className="signup-btn" to="/profile"><IntlMessages id="prive.cta" /></Link> */}
           </div>

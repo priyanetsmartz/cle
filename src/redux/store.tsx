@@ -19,7 +19,7 @@ const store = createStore(
   }),
   compose(applyMiddleware(...middlewares))
 );
-sessionService.initSessionService(store);
+sessionService.initSessionService(store,{ driver: 'LOCALSTORAGE' });
 sagaMiddleware.run(rootSaga,"");
 export { store, history };
 

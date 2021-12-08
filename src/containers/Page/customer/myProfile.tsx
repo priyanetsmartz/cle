@@ -121,15 +121,7 @@ function MyProfile(props) {
         return () => {
             setIsShow(false)
         }
-    }, [props.token]);
-
-    useEffect(() => {
-        //setMyPreferenceModel(props.prefrences);
-        return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
-        }
-    }, [props.prefrences]);
+    }, [props.token, props.prefrences]);
 
 
     async function getData() {
@@ -203,31 +195,31 @@ function MyProfile(props) {
         });
 
         if (intersted_in[0] && intersted_in[0].name === "kid") {
-            catToShow = categories_array[1];
+            catToShow = categories_array[2];
         } else if (intersted_in[0] && intersted_in[0].name === "Women") {
             catToShow = categories_array[0];
         } else {
-            catToShow = categories_array[2];
+            catToShow = categories_array[1];
         }
 
-      //  console.log(catToShow, intersted_in[0].name)
+        //  console.log(catToShow, intersted_in[0].name)
         var favCategoryArray = [];
         if (catToShow && catToShow.length > 0) {
             favCategoryArray = catToShow.filter(function (o1) {
                 return favourite_categories.some(function (o2) {
-                  //  console.log(o1.id, o2)
+                    //  console.log(o1.id, o2)
                     return o1.id === o2; // return the ones with equal id
                 });
             });
         }
 
-        
+
         var favDesignerArray = designer_array[0].filter(function (o1) {
             return favourite_designers.some(function (o2) {
                 return o1.id === o2; // return the ones with equal id
             });
         });
-         console.log(favCategoryArray)
+        //    console.log(favCategoryArray)
         setCustomerPrefer(prevState => ({
             ...prevState,
             interestedIn: intersted_in[0] ? intersted_in[0].name : "",
@@ -572,7 +564,9 @@ function MyProfile(props) {
     const openMyPreferences = () => {
         getAttributes();
         props.closePrefPopup(true);
-        setMyPreferenceModel(!myPreferenceModel)
+    }
+    const closeMyPreferences = () => {
+        props.closePrefPopup(false);
     }
 
     const openAddressModal = () => {
@@ -740,7 +734,7 @@ function MyProfile(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary" onClick={openMyPreferences}>
+                                <button type="button" className="btn btn-secondary" onClick={() => { openMyPreferences() }}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
@@ -1184,11 +1178,11 @@ function MyProfile(props) {
             </Modal>
 
             {/* my preference details modal */}
-            <Modal show={myPreferenceModel} size="lg">
+            <Modal show={props.prefrences} size="lg">
                 <Modal.Header>
                     <div className="CLE_pf_details">
                         <h1><IntlMessages id="myaccount.myPreferences" /></h1>
-                        <Link to="#" onClick={openMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                        <Link to="#" onClick={closeMyPreferences} className="cross_icn"> <i className="fas fa-times"></i></Link>
                         <MyPreferences custData={custForm} preferences={attributes} />
                     </div>
                 </Modal.Header>
@@ -1652,6 +1646,7 @@ function MyProfile(props) {
 }
 const mapStateToProps = (state) => {
     let languages = '';
+    console.log(state.Cart.isPrepOpen)
 
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language

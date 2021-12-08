@@ -618,6 +618,7 @@ const mapStateToProps = (state) => {
     if (state && state.Cart) {
         load = state.Cart.prods
     }
+    
     return {
         items: state.Cart.items,
         wishlist: state.Cart.addToWishlistTask,

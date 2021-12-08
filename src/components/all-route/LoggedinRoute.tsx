@@ -5,13 +5,14 @@ import { withRouter } from 'react-router-dom';
 import Footer from '../../containers/partials/footer-new';
 import Header from '../../containers/partials/headerMenu';
 import AppBreadcrumbs from "../../containers/partials/breadCrumbs";
+let localData = localStorage.getItem('redux-react-session/USER_DATA');
+let localToken = JSON.parse((localData));
 
-
-const PriveRoute = ({ component: Component, auth, token, ...rest }) => (
+const LoggedInRoute = ({ component: Component, auth, token, ...rest }) => (
     <Route
         {...rest}
         render={props =>
-            (auth || (token && token.type === "user")) ? (
+            ( (localToken && localToken.type === "user") || (token && token.type === "user")) ? (
                 <div className="sectiosn" id='topheaderrr'>
                     <div className="section headerrr" id="headerrr" key='uniqueKey'>
                         <Header />
@@ -30,11 +31,10 @@ const PriveRoute = ({ component: Component, auth, token, ...rest }) => (
 );
 
 function mapStateToProps(state) {
-    // console.log(state.Auth.idToken)
     return {
         auth: state.Auth.idToken,
         token: state.session.user
     }
 }
 
-export default withRouter(connect(mapStateToProps)(PriveRoute))
+export default withRouter(connect(mapStateToProps)(LoggedInRoute))

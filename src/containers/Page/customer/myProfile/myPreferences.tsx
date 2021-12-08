@@ -86,7 +86,7 @@ function MyPreferences(props) {
 
         }
         //console.log(preference) 
-        props.closePrefPopup(false);
+       // props.closePrefPopup(false);
         setAttributes(preference);
         //setAttributesAll(preference);
     }

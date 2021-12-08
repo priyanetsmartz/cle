@@ -19,6 +19,10 @@ export function capitalize(str) {
 
 }
 
+export async function getSession() {
+  return  await sessionService.loadUser().then(user => { return user }).catch(err => { return err 
+  })
+}
 export function createBreadCrums(key: string) {
   let string = key.replace(/\//g, " ");
   return string.split(' ');
@@ -78,12 +82,12 @@ export async function handleCartFxn(id: number, sku: string) {
   let cartSucces: any;
   let cartQuoteId = '';
   let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
- // console.log(user)
+  // console.log(user)
   const customerId = user ? user.cust_id : '';
   let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
- // console.log(cartQuoteIdLocal)
+  // console.log(cartQuoteIdLocal)
   if (customerId) {
-   // console.log(customerId)
+    // console.log(customerId)
     let customerCart: any = await loginApi.genCartQuoteID(customerId)
     cartQuoteId = cartQuoteIdLocal
     if (customerCart.data !== parseInt(cartQuoteIdLocal)) {

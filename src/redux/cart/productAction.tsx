@@ -121,9 +121,9 @@ const actions = {
         type: actions.SET_CATANAME,
         catname
     }),
-    closePrefPopup: isOpen => ({
+    closePrefPopup: isPrepOpen => ({
         type: actions.OPEN_PREP_BOX,
-        isOpen: isOpen
+        isPrepOpen: isPrepOpen
     }),
 };
 export default actions;
