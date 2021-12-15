@@ -1,12 +1,24 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
-
+import { getCookie } from '../../../helpers/session';
+import { GetDataOfCategory } from '../../../redux/pages/magazineList';
 
 function Dashboard(props) {
+    const language = getCookie('currentLanguage');
+    let lang = props.languages ? props.languages : language;
+    const [items, setItems] = useState([]);
+    const [pagination, setPagination] = useState(1);
+
     useEffect(() => {
+        getDataOfCategory(lang, 9, 1, 'published_at', 'desc')
     }, [])
 
+    async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
+        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue);
+        console.log(result.data);
+        setItems(result.data);
+
+    }
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
@@ -17,43 +29,29 @@ function Dashboard(props) {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-9">
-                            <div id="page-wrapper" className="container">
-
+                        <div id="page-wrapper" className="container">
+                            {items.length > 0 && (
                                 <div className="row">
-                                    <div className="col-lg-6">
-                                        <div className="panel panel-info">
-                                            <div className="panel-heading">
-                                                <div className="row">
-                                                    <div className="col-xs-6">
-                                                        <i className="fa fa-users fa-5x"></i>
-                                                    </div>
-                                                    <div className="col-xs-6 text-right">
-                                                        <p className="announcement-heading">1</p>
-                                                        <p className="announcement-text">Users</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-6">
-                                        <div className="panel panel-warning">
-                                            <div className="panel-heading">
-                                                <div className="row">
-                                                    <div className="col-xs-6">
-                                                        <i className="fa fa-check fa-5x"></i>
-                                                    </div>
-                                                    <div className="col-xs-6 text-right">
-                                                        <p className="announcement-heading">12</p>
-                                                        <p className="announcement-text">To-Do Items</p>
+                                    {items.map((item, i) => {
+                                        return (<div className="col-sm-6" key={i}>
+                                            <div className="panel panel-info">
+                                                <div className="panel-heading">
+                                                    <div className="row">
+                                                        <div className="col-sm-4">
+                                                            <i className="fa fa-users"></i>
+                                                        </div>
+                                                        <div className="col-sm-8 text-right">
+                                                            <p className="announcement-heading">{item.title}</p>
+                                                            <p className="announcement-text"><div dangerouslySetInnerHTML={{ __html: item.full_content }} /></p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        )
+                                    })}
                                 </div>
-                            </div>
-
+                            )}
                         </div>
                     </div>
                 </div>
@@ -63,7 +61,7 @@ function Dashboard(props) {
 }
 const mapStateToProps = (state) => {
     return {
-        items: state.Cart.items
+       
     }
 }
 

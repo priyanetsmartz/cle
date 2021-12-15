@@ -1,4 +1,4 @@
-import { Suspense} from 'react';
+import { Suspense } from 'react';
 import { Route, Switch } from 'react-router' // react-router v4/v5
 import { ConnectedRouter } from 'connected-react-router';
 import SinglePost from './containers/Page/singlePost';
@@ -39,56 +39,58 @@ const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Suspense fallback={<Loader />}>
-      <Switch>
-        <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
-        <ProductRoutes exact path="/search/:brandname" component={Search} />
-        <ProductRoutes exact path="/thankyou" component={orderThankyou} />
-        <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
-        <ProductRoutes exact path="/products/:category/:subcat/:childcat/:greatchildcat/all" component={Product} />
-        <ProductRoutes exact path="/products/:category/:subcat/:childcat/all" component={Product} />
-        <ProductRoutes exact path="/products/:category/:subcat/all" component={Product} />
-        <ProductRoutes exact path="/products/:category/all" component={Product} />
+        <Switch>
 
-        <ProductHome exact path="/products/:category/:subcat/:childcat/:greatchildcat" component={Categories} />
-        <ProductHome exact path="/products/:category/:subcat/:childcat" component={Categories} />
-        <ProductHome exact path="/products/:category/:subcat/:id" component={Categories} />
-        <ProductHome exact path="/products/:category/:subcat" component={Categories} />
-        <ProductHome exact path="/products/:category" component={Categories} />
+          <ProductRoutes exact path="/faq-listing/:url_key" component={FaqListing} />
+          <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
+          <ProductRoutes exact path="/search/:brandname" component={Search} />
+          <ProductRoutes exact path="/thankyou" component={orderThankyou} />
+          <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
+          <ProductRoutes exact path="/products/:category/:subcat/:childcat/:greatchildcat/all" component={Product} />
+          <ProductRoutes exact path="/products/:category/:subcat/:childcat/all" component={Product} />
+          <ProductRoutes exact path="/products/:category/:subcat/all" component={Product} />
+          <ProductRoutes exact path="/products/:category/all" component={Product} />
 
-        <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
-        <LoggedInRoute exact path="/notifications" component={Notifications}  />
-        <LoggedInRoute exact path="/customer/:tab" component={Customer}  />
-        <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
-        <ProductHome exact path="/category/:categoryname" component={HomePage} />
-        <ProductHome exact path="/" component={HomePage} />
-        <ProductHome exact path="/:signup/:member" component={HomePage} />
-        <ProductRoutes exact path="/return-order" component={ReturnPage} />
+          <ProductHome exact path="/products/:category/:subcat/:childcat/:greatchildcat" component={Categories} />
+          <ProductHome exact path="/products/:category/:subcat/:childcat" component={Categories} />
+          <ProductHome exact path="/products/:category/:subcat/:id" component={Categories} />
+          <ProductHome exact path="/products/:category/:subcat" component={Categories} />
+          <ProductHome exact path="/products/:category" component={Categories} />
 
-        <LoggedInRoute exact path="/explore-desginer" component={ExploreDesigner} />
-        <ProductRoutes exact path="/magazines/:category" component={AllPosts} />
-        <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />
-        <ProductRoutes exact path="/magazines" component={AllPosts} />
+          <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
+          <LoggedInRoute exact path="/notifications" component={Notifications} />
+          <LoggedInRoute exact path="/customer/:tab" component={Customer} />
+          <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
+          <ProductHome exact path="/category/:categoryname" component={HomePage} />
+          <ProductHome exact path="/" component={HomePage} />
+          <ProductHome exact path="/:signup/:member" component={HomePage} />
+          <ProductRoutes exact path="/return-order" component={ReturnPage} />
+
+          <LoggedInRoute exact path="/explore-desginer" component={ExploreDesigner} />
+          <ProductRoutes exact path="/magazines/:category" component={AllPosts} />
+          <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />
+          <ProductRoutes exact path="/magazines" component={AllPosts} />
 
 
-        <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
-        <ProductRoutes exact path="/contact-us" component={contact} />
-        <ProductRoutes exact path="/faq" component={Faq} />
-        <ProductRoutes exact path="/faq-listing" component={FaqListing} />
+          <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
+          <ProductRoutes exact path="/contact-us" component={contact} />
+          <ProductRoutes exact path="/faq" component={Faq} />
 
-        <ProductRoutes exact path="/vendor-login" component={VendorLogin} />
-        <ProductRoutes exact path="/forgot-password" component={ForgottenPassword} />
-        <ProductRoutes exact path="/reset-password" component={ResetPassword} />
-        <PriveRoute exact path="/prive-user" component={PriveUser} />
 
-        <ProductRoutes exact path="/password-link-expired" component={PasswordLinkExpired} />
-        <Route exact path="/post-comment">
-          <PostComment />
-        </Route>
-        <ProductRoutes exact path="/products" component={Product} />
-        <ProductRoutes exact path="/my-cart" component={Cart} />
-        <ProductRoutes exact path="/checkout" component={Checkout} />
-        <ProductRoutes path="/:id" component={Pages} />
-      </Switch>
+          <ProductRoutes exact path="/vendor-login" component={VendorLogin} />
+          <ProductRoutes exact path="/forgot-password" component={ForgottenPassword} />
+          <ProductRoutes exact path="/reset-password" component={ResetPassword} />
+          <PriveRoute exact path="/prive-user" component={PriveUser} />
+
+          <ProductRoutes exact path="/password-link-expired" component={PasswordLinkExpired} />
+          <Route exact path="/post-comment">
+            <PostComment />
+          </Route>
+          <ProductRoutes exact path="/products" component={Product} />
+          <ProductRoutes exact path="/my-cart" component={Cart} />
+          <ProductRoutes exact path="/checkout" component={Checkout} />
+          <ProductRoutes path="/:id" component={Pages} />
+        </Switch>
       </Suspense>
     </ConnectedRouter >
   );

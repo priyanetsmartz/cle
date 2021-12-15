@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import { getFaqlabels } from '../../../redux/pages/allPages';
 import { siteConfig } from '../../../settings';
-
+import { Link } from "react-router-dom";
 function Faq(props) {
 	const [faqData, setFaqData] = useState([])
 	useEffect(() => {
@@ -127,7 +127,7 @@ function Faq(props) {
 		}
 
 		results = deummyData;
-		//console.log("results", results)
+		console.log("results", results)
 		setFaqData(results['items'])
 	}
 	return (
@@ -176,13 +176,13 @@ function Faq(props) {
 											<h4><i className="fas fa-truck"></i>{item['title']} </h4>
 											<ul className="list-unstyled">
 												{
-													item['questionArray'].map(question => (
-														<li><a href={item.relative_url + question.question_id}>{question['title']}</a></li>
+													item['questionArray'].map((question, i) => (
+														<li key={i}><Link to={`faq-listing/` + item['url_key']}>{question['title']}</Link></li>
 													))
 												}
 											</ul>
 											<div className="faq-view-all">
-												<a href="/faq-listing">View all</a>
+												<Link to={`faq-listing/` + item['url_key']}>View all</Link>
 											</div>
 										</div>
 									))

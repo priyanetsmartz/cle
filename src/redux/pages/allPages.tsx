@@ -97,7 +97,7 @@ export function getFaqlabels(language: string, pageSize: number, limit: number) 
     return AdminApi.request(`rest/all/V1/customFaq/all?searchCriteria[pageSize]=${pageSize}&questionLimit=${limit}&storeId=${storeId}`, "", "GET", "")
 }
 
-export function getFaqListinglabels(language: string) {
+export function getFaqListinglabels(language: string, urlkey: string) {
     var storeId = language === 'english' ? 3 : 2;
-    return AdminApi.request(`rest/all/V1/customFaq/all?searchCriteria[pageSize]=100&questionLimit=3`, "", "GET", "")
+    return AdminApi.request(`rest/all/V1/customFaq/categoryurl?storeId=${storeId}&urlKey=${urlkey}`, "", "GET", "")
 }
