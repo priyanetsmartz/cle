@@ -47,7 +47,7 @@ function BusinessSidebar(props) {
         let user = await sessionService.loadUser()
         if (user && user.type === "vendor") {
             setVandor(user);
-        }else{
+        } else {
             window.location.href = '/';
         }
     }
@@ -83,7 +83,7 @@ function BusinessSidebar(props) {
                                 </div>
                                 <div className="myorder_sidebar">
                                     <ul>
-                                        {/* <li className={activeTab === 'dashboard' ? 'active' : ''} >
+                                        <li className={activeTab === 'dashboard' ? 'active' : ''} >
                                             <Link to="#" onClick={() => changeTab('dashboard')}>
                                                 <img src={dashboardIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2">
@@ -91,7 +91,7 @@ function BusinessSidebar(props) {
                                                 </span>
                                             </Link>
                                         </li>
-                                        <li className={activeTab === 'sales-orders' ? 'active' : ''}>
+                                        {/*<li className={activeTab === 'sales-orders' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('sales-orders')}>
                                                 <img src={ordersIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.salesOrders" /></span>
@@ -143,7 +143,7 @@ function BusinessSidebar(props) {
                                 </div>
                             </div>
                         </div>
-                        {activeTab === 'dashboard' ? <BusinessProfile /> :
+                        {activeTab === 'dashboard' ? <Dashboard /> :
                             activeTab === 'sales-orders' ? <MySalesOrders /> :
                                 activeTab === 'product-listing' ? <MyProductListing /> :
                                     activeTab === 'returns-complaints' ? <MyReturnsComplaints /> :

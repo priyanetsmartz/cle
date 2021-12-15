@@ -10,7 +10,8 @@ const siteConfig = {
   instagram: 'https://www.instagram.com/werecle',
   linkedin: 'https://sa.linkedin.com/company/werecle',
   twitter: 'https://www.twitter.com/',
-  pageSize: 12
+  pageSize: 12,
+  questionLimitFaq:3
 };
 const apiConfig = {
   fetchUrl: '',

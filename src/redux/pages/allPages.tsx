@@ -34,13 +34,13 @@ export function Pages(value: string, language: string) {
     return AdminApi.request("rest/V1/cmsPage/search?searchCriteria[filterGroups][0][filters][0][field]=store_id&searchCriteria[filterGroups][0][filters][0][value]=" + storeId + "&searchCriteria[filterGroups][0][filters][0][condition_type]==&searchCriteria[filterGroups][1][filters][0][field]=identifier&searchCriteria[filterGroups][1][filters][0][value]=" + value + "&searchCriteria[filterGroups][1][filters][0][condition_type]==", payload, "GET", "");
 }
 
-export function GetHelpUsForm(language,categoryname) {
+export function GetHelpUsForm(language, categoryname) {
     var storeId = language === 'english' ? 3 : 2;
 
-    let formCode ='';
+    let formCode = '';
     if (categoryname === 'women' || categoryname === '' || categoryname === undefined) {
         formCode = language === 'english' ? 'home_page_survey' : 'Home_page_survey_arabic';
-    }else{
+    } else {
         formCode = language === 'english' ? `home_page_survey_${categoryname}` : `home_page_survey_${categoryname}_arabic`;
     }
     return AdminApi.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=${formCode}`, "", "GET", "");
@@ -86,18 +86,18 @@ export function analyticsFetch() {
     return AdminApi.request('rest/V1/google/analytics?storeId=1', "", "GET", "")
 }
 
-export function  menu(language: string) {
+export function menu(language: string) {
     var storeId = language === 'english' ? 3 : 2;
     return AdminApi.request(`rest/all/V1/menu/items?storeId=${storeId}`, "", "GET", "")
 }
 
 
-export function getFaqlabels(language: string) {
+export function getFaqlabels(language: string, pageSize: number, limit: number) {
     var storeId = language === 'english' ? 3 : 2;
-    return AdminApi.request(`rest/all/V1/customFaq/all?searchCriteria[pageSize]=100&questionLimit=1`, "", "GET", "")
+    return AdminApi.request(`rest/all/V1/customFaq/all?searchCriteria[pageSize]=${pageSize}&questionLimit=${limit}&storeId=${storeId}`, "", "GET", "")
 }
 
 export function getFaqListinglabels(language: string) {
     var storeId = language === 'english' ? 3 : 2;
-    return AdminApi.request(`http://4a83875b65.nxcli.net/default/rest/all/V1/customFaq/all?searchCriteria[pageSize]=100&questionLimit=3`, "", "GET", "")
+    return AdminApi.request(`rest/all/V1/customFaq/all?searchCriteria[pageSize]=100&questionLimit=3`, "", "GET", "")
 }
