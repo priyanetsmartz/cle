@@ -536,7 +536,7 @@ function BusinessProfile(props) {
                 </div>
             </section>
 
-            <section className="my_profile_sect mb-4">
+            {/* <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -894,7 +894,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
