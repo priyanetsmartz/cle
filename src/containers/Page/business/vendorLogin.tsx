@@ -152,7 +152,7 @@ function VendorLogin(props) {
     setForgotPopup(true);
   }
 
-  const hideModal = (e) => {
+  const hideModal = () => {
     setForgotPopup(false);
   }
 

@@ -90,3 +90,14 @@ export function  menu(language: string) {
     var storeId = language === 'english' ? 3 : 2;
     return AdminApi.request(`rest/all/V1/menu/items?storeId=${storeId}`, "", "GET", "")
 }
+
+
+export function getFaqlabels(language: string) {
+    var storeId = language === 'english' ? 3 : 2;
+    return AdminApi.request(`rest/all/V1/customFaq/all?searchCriteria[pageSize]=100&questionLimit=1`, "", "GET", "")
+}
+
+export function getFaqListinglabels(language: string) {
+    var storeId = language === 'english' ? 3 : 2;
+    return AdminApi.request(`http://4a83875b65.nxcli.net/default/rest/all/V1/customFaq/all?searchCriteria[pageSize]=100&questionLimit=3`, "", "GET", "")
+}
