@@ -3,12 +3,18 @@ import { connect } from 'react-redux'
 import { getCookie } from '../../../helpers/session';
 import { GetDataOfCategory } from '../../../redux/pages/magazineList';
 
+import Modal from "react-bootstrap/Modal";
+
+import { Link } from "react-router-dom";
+import HtmlContent from '../../partials/htmlContent';
+
 function Dashboard(props) {
     const language = getCookie('currentLanguage');
     let lang = props.languages ? props.languages : language;
     const [items, setItems] = useState([]);
     const [pagination, setPagination] = useState(1);
 
+    const [myDashboardModal, setMyDashboardModal] = useState(true);
     useEffect(() => {
         getDataOfCategory(lang, 9, 1, 'published_at', 'desc')
     }, [])
@@ -18,6 +24,9 @@ function Dashboard(props) {
         console.log(result.data);
         setItems(result.data);
 
+    }
+    const openDashboardModal = () => {
+        setMyDashboardModal(!myDashboardModal);
     }
     return (
         <div className="col-sm-9">
@@ -54,14 +63,34 @@ function Dashboard(props) {
                             )}
                         </div>
                     </div>
+
+
+
+                    <Modal show={myDashboardModal} >
+                        <div className="CLE_pf_details">
+                            <Modal.Header>
+                                <h1>Dashboard Details</h1>
+                                <Link to="#" onClick={openDashboardModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
+                            </Modal.Header>
+                            <Modal.Body className="arabic-rtl-direction">
+                                <div className="section" >
+                                    <HtmlContent identifier="login_popup" />
+                                </div>
+                            </Modal.Body>
+
+
+                        </div>
+                    </Modal>
                 </div>
             </section>
         </div>
     )
+
+
 }
 const mapStateToProps = (state) => {
     return {
-       
+
     }
 }
 
