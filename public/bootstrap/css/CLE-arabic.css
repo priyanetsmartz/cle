@@ -535,6 +535,17 @@ p.signup-policy-links {
   text-align: right;
 }
 
+.resltspage_sec.bestseller-sec .sort_by .sortbyfilter{
+	right:unset;
+	left:0;
+	display: flex;
+}
+
+.resltspage_sec.bestseller-sec .sort_by .customfliter{
+	margin-left:0;
+	margin-right:14px;
+}
+
 /*******************/
 /*.discover-bg{direction: rtl;} */
 .product-listing .product {
@@ -898,8 +909,11 @@ p.sliderupper {
     right: unset;
   }
   .resltspage_sec.bestseller-sec .sort_by .sortbyfilter {
-    top: 95px;
-  }
+    top: 100px;
+    width: 170px;
+    left: unset;
+    right: unset;
+}
   .cust-mob-menu li a {
     font-size: 18px;
     text-align: right;

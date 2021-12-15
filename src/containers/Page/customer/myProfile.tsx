@@ -60,7 +60,7 @@ function MyProfile(props) {
     });
     const [country, setCountry] = useState("");
     const [custForm, setCustForm] = useState({
-        id: custId,
+        id: props.token.cust_id,
         email: "",
         firstname: "",
         lastname: "",
@@ -73,7 +73,7 @@ function MyProfile(props) {
 
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
-        customer_id: custId,
+        customer_id: props.token.cust_id,
         firstname: "",
         lastname: "",
         telephone: "",
@@ -266,12 +266,12 @@ function MyProfile(props) {
     const saveCustDetails = async (e) => {
         setSaveCustDetailsLoader(true)
         e.preventDefault();
-        // console.log(custForm)
+        console.log(props.token.cust_id)
         custForm.email = props.token.token_email;
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
             custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
         }
-        let result: any = await saveCustomerDetails(custId, { customer: custForm });
+        let result: any = await saveCustomerDetails(props.token.cust_id, { customer: custForm });
         if (result) {
             setMyDetailsModel(false);
             setSaveCustDetailsLoader(false)
@@ -297,12 +297,12 @@ function MyProfile(props) {
                 custForm.addresses[addIndex] = obj;
             }
             //console.log(custAddForm);
-            let result: any = await saveCustomerDetails(custId, { customer: custForm });
+            let result: any = await saveCustomerDetails(props.token.cust_id, { customer: custForm });
             if (result) {
                 openAddressModal();
                 setCustAddForm({
                     id: 0,
-                    customer_id: custId,
+                    customer_id: props.token.cust_id,
                     firstname: "",
                     lastname: "",
                     telephone: "",
@@ -482,7 +482,7 @@ function MyProfile(props) {
         if (handleValidationEmail()) {
             setloaderEmailChange(true)
             const req = {
-                customerId: custId,
+                customerId: props.token.cust_id,
                 newEmail: changeEmail.newEmail,
                 password: changeEmail.password
             }
@@ -546,7 +546,7 @@ function MyProfile(props) {
     const saveGiftingPrefer = async () => {
         // console.log(giftingPrefer);
         let data = {
-            customerId: custId,
+            customerId: props.token.cust_id,
             gifting_preference: giftingPrefer
         }
 

@@ -127,7 +127,7 @@ export function getCategoryDetails(language, catId) {
 
 export function getCategoryDetailsbyUrlPath(language, url, pageSize) {
     const storeId = language === 'english' ? "en" : "ar";
-    return adminApi.request(`rest/all/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_path&searchCriteria[filterGroups][0][filters][0][value]=${url}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}`, "", "GET", "");
+    return adminApi.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_path&searchCriteria[filterGroups][0][filters][0][value]=${url}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}`, "", "GET", "");
 }
 
 export function getCategoryDetailsbyUrlKey(language, urlkey, pageSize) {
