@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
-import { getCookie } from '../../../helpers/session';
+import { getCookie, setCookie } from '../../../helpers/session';
 import { GetDataOfCategory } from '../../../redux/pages/magazineList';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
@@ -21,9 +21,12 @@ function Dashboard(props) {
     const [flagDates, setflagDates] = useState([]);
     const [active, setActive] = useState(0);
     const [vendorName, SetVendorName] = useState(localToken.vendor_name);
-
     const [myDashboardModal, setMyDashboardModal] = useState(true);
     useEffect(() => {
+        if(getCookie("popUp"))
+            setMyDashboardModal(false)
+        else 
+            setMyDashboardModal(true)
         getDataOfCategory(lang, 9, 1, 'published_at', 'desc')
         let currentDate = moment().format('DD/MM/YYYY');
         let oldDate = moment().subtract(1, 'months').format('DD/MM/YYYY');
@@ -37,6 +40,7 @@ function Dashboard(props) {
 
     }
     const openDashboardModal = () => {
+        setCookie("popUp", true)
         setMyDashboardModal(!myDashboardModal);
     }
     async function getDataTiles(oldDate, currentDate) {
