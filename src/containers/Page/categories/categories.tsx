@@ -18,7 +18,7 @@ const { getCategoryData } = cartAction;
 
 
 function Categories(props) {
-    const { category, subcat, childcat, greatchildcat } = useParams();
+    const { category, subcat, childcat, greatchildcat }: any = useParams();
     // console.log(category, subcat, childcat, greatchildcat)
     const baseUrl = process.env.REACT_APP_API_URL;
     const location = useLocation()

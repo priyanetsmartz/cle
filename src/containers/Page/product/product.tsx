@@ -26,7 +26,7 @@ const { showSignin, showLoader } = appAction;
 
 
 function Products(props) {
-    const { category, subcat, childcat, greatchildcat } = useParams();
+    const { category, subcat, childcat, greatchildcat }: any = useParams();
     const location = useLocation();
     let imageD = '', description = '', url = '';
     const intl = useIntl();
@@ -618,7 +618,7 @@ const mapStateToProps = (state) => {
     if (state && state.Cart) {
         load = state.Cart.prods
     }
-    
+
     return {
         items: state.Cart.items,
         wishlist: state.Cart.addToWishlistTask,

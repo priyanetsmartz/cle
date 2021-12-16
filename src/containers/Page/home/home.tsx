@@ -18,7 +18,7 @@ const { showLoader } = appAction;
 const { setCatSearch } = cartAction;
 
 function HomePage(props) {
-    const { categoryname } = useParams();
+    const { categoryname }: any = useParams();
     const [categoryId, setCategoryId] = useState(props.currentId);
     const [products, setProducts] = useState({
         newInProducts: [],

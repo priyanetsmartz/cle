@@ -4,7 +4,7 @@ import { capitalize } from "../../components/utility/allutils";
 
 function Breadcrumbs(props) {
     const location = useLocation()
-    const { category, subcat, childcat, greatchildcat } = useParams();
+    const { category, subcat, childcat, greatchildcat }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [keyUl, setKey] = useState('');
@@ -33,7 +33,7 @@ function Breadcrumbs(props) {
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
                     {breadcrumsState.map((local, j) => {
-                      //  console.log(local)
+                        //  console.log(local)
                         if (j === breadcrumsState.length - 1) {
                             let data = local.split('-')
                             if (local === 'orders-and-returns' || local === 'wish-list' || local === 'profile' || local === 'support') {
@@ -47,17 +47,17 @@ function Breadcrumbs(props) {
                                     </li>
 
                                 )
-                            }else if (local === 'checkout' ) {
+                            } else if (local === 'checkout') {
                                 return (
                                     <>
-                                    <li key={0}  className="breadcrumb-item"><Link to='my-cart'>My Cart </Link></li>
-                                    <li key={j} className="breadcrumb-item active"> 
-                                        {
-                                            data.map((answer, i) => {
-                                                return (<span key={i}>{capitalize(answer)} </span>)
-                                            })
-                                        }
-                                    </li>
+                                        <li key={0} className="breadcrumb-item"><Link to='my-cart'>My Cart </Link></li>
+                                        <li key={j} className="breadcrumb-item active">
+                                            {
+                                                data.map((answer, i) => {
+                                                    return (<span key={i}>{capitalize(answer)} </span>)
+                                                })
+                                            }
+                                        </li>
                                     </>
                                 )
                             } else {
@@ -90,7 +90,7 @@ function Breadcrumbs(props) {
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={"/customer/dashboard"}>My Account</Link></li>
                                     )
-                                }else if (local === 'vendor') {
+                                } else if (local === 'vendor') {
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={"/customer/dashboard"}>My Business Account</Link></li>
                                     )

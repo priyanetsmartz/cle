@@ -27,7 +27,7 @@ const loginApi = new Login();
 const { showSignin, showLoader } = appAction;
 const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, openSizeGuide } = cartAction;
 function ProductDetails(props) {
-    const { sku } = useParams();
+    const { sku }: any = useParams();
     const intl = useIntl();
     const language = getCookie('currentLanguage');
     const [opacity, setOpacity] = useState(1);

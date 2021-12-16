@@ -4,7 +4,7 @@ import { getFaqListinglabels } from '../../../redux/pages/allPages';
 import { useParams } from "react-router-dom";
 function FaqListing(props) {
   const [categoryData, setCategoryData] = useState([])
-  const { url_key } = useParams();
+  const { url_key }: any = useParams();
   useEffect(() => {
     getData();
 

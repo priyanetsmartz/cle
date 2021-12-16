@@ -12,7 +12,7 @@ function MagazineCategory(props) {
     const [isShow, setIsShow] = useState(false);
     const language = getCookie('currentLanguage');
     const intl = useIntl();
-    const { category } = useParams();
+    const { category }: any = useParams();
     const [state, setState] = useState({
         email: ""
     })
@@ -205,7 +205,7 @@ function MagazineCategory(props) {
     }
     return (
         <>
-            <div className="container magazine-inner"  style={{ opacity: opacityVal }}>
+            <div className="container magazine-inner" style={{ opacity: opacityVal }}>
 
                 <div className="row mt-3 mag-list-head">
                     <div className="col-md-6 offset-md-3 text-center">

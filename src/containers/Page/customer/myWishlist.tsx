@@ -49,7 +49,7 @@ function MyWishList(props) {
         setLoaderOrders(true)
       //  console.log(sortValue.sortBy, sortValue.sortByValue) 
         let result: any = await wishListSearchSort(custId, pageSize, sortValue.sortBy, sortValue.sortByValue, searchName);
-        if (result.data) {
+        if (result && result.data ) {
             setWishList(result.data);
             setOpacity(1)
             setLoaderOrders(false)

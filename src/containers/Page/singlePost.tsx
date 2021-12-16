@@ -24,7 +24,7 @@ function SinglePost(props) {
     });
 
     const [shareUrl, setShareUrl] = useState('');
-    const { slug } = useParams();
+    const { slug }: any = useParams();
     const [related, setRelated] = useState([]);
     const [catMenu, setCatMenu] = useState([]);
     const [opacityVal, setOpacity] = useState(1);
@@ -140,19 +140,19 @@ function SinglePost(props) {
                             </ul>
                         </div>
                         <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
-						<div className="col-md-10 offset-md-1">
-                        <h6 className="author-name"><IntlMessages id="magazinepost.author" />: {post.author_name ? post.author_name : "Admin"}</h6>
+                        <div className="col-md-10 offset-md-1">
+                            <h6 className="author-name"><IntlMessages id="magazinepost.author" />: {post.author_name ? post.author_name : "Admin"}</h6>
 
-                        <div className="cate-keywords">
-                            {catMenu.map((item, i) => {
-                                return (
-                                    <button type="button" className="btn btn-outline-dark" key={i}>
-                                        <Link to={`/magazines/${item.category_id}`}>{item.name}</Link>
-                                    </button>
-                                );
-                            })}
+                            <div className="cate-keywords">
+                                {catMenu.map((item, i) => {
+                                    return (
+                                        <button type="button" className="btn btn-outline-dark" key={i}>
+                                            <Link to={`/magazines/${item.category_id}`}>{item.name}</Link>
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
-						</div>
 
                         <div className="row">
                             <div className="col-md-12">

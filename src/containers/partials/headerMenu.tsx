@@ -343,8 +343,8 @@ function HeaderMenu(props) {
                                         <div className="cartuser-info">
                                             <ul>
                                                 <LanguageSwitcher />
-                                                {customerName ? <li><Link to="/customer/profile">{capitalize(customerName)}</Link></li> :""}
-                                                {props.token && props.token.vendor_name ? <li><Link to="/vendor/profile">{capitalize(props.token.vendor_name)}</Link></li> :""}
+                                                {customerName ? <li><Link to="/customer/profile">{capitalize(customerName)}</Link></li> : ""}
+                                                {props.token && props.token.vendor_name ? <li><Link to="/vendor/profile">{capitalize(props.token.vendor_name)}</Link></li> : ""}
                                                 {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
                                                 <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 
@@ -362,7 +362,7 @@ function HeaderMenu(props) {
                                                         {(Object.keys(props.token).length > 0 && props.token.type === 'vendor') && (
                                                             <ul>
                                                                 {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
-                                                                <li><Link to="/vendor/profile"><IntlMessages id="dashboard" /> </Link></li>
+                                                                <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li>
                                                                 {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
                                                                 <li><Link to="/vendor/profile"><IntlMessages id="myprofile" /></Link></li>
                                                                 <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
@@ -486,13 +486,22 @@ function HeaderMenu(props) {
 
                                                 <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
                                                     <Link to="#" className="cross_icn" onClick={() => { hideAccountFxnMobile() }} > <i className="fas fa-times"></i></Link>
-                                                    {Object.keys(props.token).length > 0 && (
+                                                    {(Object.keys(props.token).length > 0 && props.token.type === 'user') && (
                                                         <ul>
                                                             {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
                                                             <li><Link to="/customer/profile"><IntlMessages id="dashboard" /> </Link></li>
                                                             <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
                                                             <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
                                                             <li><Link to="/customer/support"><IntlMessages id="myspport" /></Link> </li>
+                                                        </ul>
+                                                    )}
+                                                    {(Object.keys(props.token).length > 0 && props.token.type === 'vendor') && (
+                                                        <ul>
+                                                            {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
+                                                            <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li>
+                                                            {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
+                                                            <li><Link to="/vendor/profile"><IntlMessages id="myprofile" /></Link></li>
+                                                            <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
                                                         </ul>
                                                     )}
                                                     <div className="d-grid">

@@ -19,7 +19,7 @@ const { showSignin } = appAction;
 function SearchResults(props) {
     let pageSizeNumber = siteConfig.pageSize;
     const intl = useIntl();
-    const { searchText, cat, brandname } = useParams();
+    const { searchText, cat, brandname }: any = useParams();
     const [isShow, setIsShow] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
