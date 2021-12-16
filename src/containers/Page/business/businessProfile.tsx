@@ -14,6 +14,8 @@ import deleteIcon from '../../../image/delete-icon.png';
 import timerIcon from '../../../image/timer_icon.png';
 import { sessionService } from 'redux-react-session';
 import { useIntl } from 'react-intl';
+import { getVendorDetails } from '../../../redux/pages/allPages';
+
 function BusinessProfile(props) {
     const intl = useIntl();
     const [vendorData, setVendorData] = useState({
@@ -29,6 +31,7 @@ function BusinessProfile(props) {
     const [custId, setCustid] = useState(props.token.cust_id);
     const [businessDetails, setBusinessDetails] = useState({});
     const [bankDetails, setBankDetails] = useState({});
+    const [billingAddressDetails, setBillingAddrssDetails] = useState({});
     const [custForm, setCustForm] = useState({
         id: custId,
         email: "",
@@ -104,12 +107,14 @@ function BusinessProfile(props) {
     //--------------------------------------------------------------
     useEffect(() => {
         getVendor();
-        //    getData();
+           getData();
+         
         getCountries();
         return () => {
             setIsShow(false)
             setBankDetails({})
             setBusinessDetails({})
+            setBillingAddrssDetails({})
         }
     }, []);
     async function getVendor() {
@@ -120,6 +125,14 @@ function BusinessProfile(props) {
         } else {
             window.location.href = '/';
         }
+    }
+
+    async function getData() {
+        let result: any = await getVendorDetails('english');
+        setBankDetails(result['data'][0]['bankDetails'])
+        setBusinessDetails(result['data'][0]['businessDetails'])
+        setBillingAddrssDetails(result['data'][0]['billingAddress'])
+        
     }
     // async function getData() {
     //     let result: any = await getCustomerDetails();
@@ -536,7 +549,7 @@ function BusinessProfile(props) {
                 </div>
             </section>
 
-            {/* <section className="my_profile_sect mb-4">
+            <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -550,31 +563,31 @@ function BusinessProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label">Company Name</label>
-                                        <div className="field-name">HugoBoss</div>
+                                        <div className="field-name">{businessDetails['businessCompanyName']}</div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label">Website</label>
-                                        <div className="field-name">www.boss.com</div>
+                                        <div className="field-name">{businessDetails['businessWebsite']}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label">IBAM Number</label>
-                                        <div className="field-name">123 </div>
+                                        <div className="field-name">{businessDetails['businessIbamNo']} </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label">Facebook</label>
-                                        <div className="field-name">facebook.com/boss</div>
+                                        <div className="field-name">{businessDetails['businessFacebook']}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label">Tax</label>
-                                        <div className="field-name">{custForm.dob}</div>
+                                        <div className="field-name">{businessDetails['businessTax']}</div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label">Instagram</label>
-                                        <div className="field-name">instagram.com/boss</div>
+                                        <div className="field-name">{businessDetails['businessInstagram']}</div>
                                     </div>
                                 </div>
                             </div>
@@ -649,19 +662,19 @@ function BusinessProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-4">
                                         <label className="form-label">Company Name</label>
-                                        <div className="field-name">HugoBoss</div>
+                                        <div className="field-name">{bankDetails['bankName']}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details  mb-4">
                                         <label className="form-label">Bank Name</label>
-                                        <div className="field-name">www.boss.com</div>
+                                        <div className="field-name">{bankDetails['bankName']}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-4">
                                         <label className="form-label">Account Number</label>
-                                        <div className="field-name">123 </div>
+                                        <div className="field-name">{bankDetails['accountNumber']} </div>
                                     </div>
 
                                 </div>
@@ -894,7 +907,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section> */}
+            </section>
 
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
@@ -992,44 +1005,44 @@ function BusinessProfile(props) {
                     <Modal.Body className="arabic-rtl-direction">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Company name</label>
-                            <input type="text" className="form-control" placeholder="Hugo Boss"
+                            <input type="text" className="form-control" placeholder="Company Name"
                                 id="companyname"
-                                value={businessDetails['companyname']}
+                                value={businessDetails['businessCompanyName']}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["companyname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">IBAM Number</label>
-                            <input type="text" className="form-control" placeholder="7894561230" id="ibam"
-                                value={businessDetails['ibam']}
+                            <input type="text" className="form-control" placeholder="IBAM Number" id="ibam"
+                                value={businessDetails['businessIbamNo']}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["ibam"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">TAX</label>
-                            <input type="text" className="form-control" placeholder="VAT 5%" id="tax"
-                                value={businessDetails['tax']}
+                            <input type="text" className="form-control" placeholder="TAX" id="tax"
+                                value={businessDetails['businessTax']}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["tax"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Website</label>
-                            <input type="text" className="form-control" placeholder="www.hugoboss.com" id="webite"
-                                value={businessDetails['webite']}
+                            <input type="text" className="form-control" placeholder="Website" id="webite"
+                                value={businessDetails['businessWebsite']}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["webite"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Facebook</label>
-                            <input type="text" className="form-control" placeholder="facebook.com/hugoboss" id="facebook"
-                                value={businessDetails['facebook']}
+                            <input type="text" className="form-control" placeholder="Facebook" id="facebook"
+                                value={businessDetails['businessFacebook']}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["facebook"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Instagram</label>
-                            <input type="text" className="form-control" placeholder="instagram/boss" id="instagram"
-                                value={businessDetails['instagram']}
+                            <input type="text" className="form-control" placeholder="Instagram"  id="instagram"
+                                value={businessDetails['businessInstagram']}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["instagram"]}</span>
                         </div>
@@ -1045,9 +1058,109 @@ function BusinessProfile(props) {
                 </div>
             </Modal>
 
+             {/* my Billing adrress details modal */}
+             <Modal show={myAddressModal}>
+                <Modal.Body className="CLE_pf_details">
+                    <Modal.Header><h1><IntlMessages id="myaccount.myAddress" /></h1>
+                        <Link to="#" className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></Link>
+                    </Modal.Header>
+                    <div className="">
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" placeholder="Ann"
+                                id="firstname"
+                                value={custAddForm.firstname}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["firstname"]}</span>
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" id="lastname"
+                                placeholder="Surname"
+                                value={custAddForm.lastname}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["lastname"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" id="telephone"
+                                placeholder="Phone"
+                                value={billingAddressDetails['billing_telephone']}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["telephone"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" id="street"
+                                placeholder="Address"
+                                value={billingAddressDetails['billing_street']}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["street"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" id="city"
+                                placeholder="City"
+                                value={billingAddressDetails['billing_city']}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["city"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
+                            <input type="text" className="form-control" id="postcode"
+                                placeholder="Post Code"
+                                value={billingAddressDetails['billing_zip']}
+                                onChange={handleAddChange} />
+                            <span className="error">{errors.errors["postcode"]}</span>
+
+                        </div>
+                        <div className="width-100 mb-3 form-field">
+                            <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
+                            <select value={billingAddressDetails['billing_country_id']} onChange={handleCountryChange} id="country_id" className="form-select">
+                                {countries && countries.map(opt => {
+                                    return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
+                                })}
+                            </select>
+                            <span className="error">{errors.errors["country_id"]}</span>
+                        </div>
+                        {regions.length > 0 &&
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">
+                                    <IntlMessages id="myaccount.region" /></label>
+                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                    <option value="">Select</option>
+                                    {regions && regions.map(opt => {
+                                        return (<option key={opt.id} value={opt.id} >
+                                            {opt.name}</option>);
+                                    })}
+                                </select>
+                                <span className="error">{errors.errors["region_id"]}</span>
+                            </div>}
+                        <Modal.Footer>
+                            <div className="width-100 mb-3 form-field">
+                                <div className="Frgt_paswd">
+                                    <div className="confirm-btn">
+                                        <button type="button" className="btn btn-secondary" onClick={saveCustAddress} style={{ "display": !isShow ? "inline-block" : "none" }}>
+                                            <IntlMessages id="myaccount.confirm" />
+                                        </button>
+                                        <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}>
+                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                            <IntlMessages id="loading" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Modal.Footer>
+                    </div>
+                </Modal.Body>
+            </Modal>
 
             {/* my details modal */}
-            <Modal show={myAddressModal}>
+            {/* <Modal show={myAddressModal}>
                 <Modal.Body className="CLE_pf_details">
                     <Modal.Header><h1><IntlMessages id="myaccount.myAddress" /></h1>
                         <Link to="#" className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></Link>
@@ -1145,7 +1258,7 @@ function BusinessProfile(props) {
                         </Modal.Footer>
                     </div>
                 </Modal.Body>
-            </Modal>
+            </Modal> */}
 
 
             {/* add payment method modal */}
@@ -1158,17 +1271,17 @@ function BusinessProfile(props) {
                     <div className="payment_medt">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Company Name<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Hugo Boss"
+                            <input type="text" className="form-control" placeholder="Company Name"
                                 id="companyname"
-                                value={bankDetails['companyname']}
+                                value={businessDetails['businessCompanyName']}
                                 onChange={handleBankChange} />
                             <span className="error">{errors.errors["companyname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Bank Name<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Deutsche Dank"
+                            <input type="text" className="form-control" placeholder="Bank Name"
                                 id="bankname"
-                                value={bankDetails['bankname']}
+                                value={bankDetails['bankName']}
                                 onChange={handleBankChange} />
                             <span className="error">{errors.errors["bankname"]}</span>
                         </div>
@@ -1177,7 +1290,7 @@ function BusinessProfile(props) {
                             <input type="text" className="form-control" placeholder="**** **** **** ****"
                                 id="accountnumber"
                                 pattern="[+-]?\d+(?:[.,]\d+)?"
-                                value={bankDetails['accountnumber']}
+                                value={bankDetails['accountNumber']}
                                 onChange={handleBankChange} />
                             <span className="error">{errors.errors["accountnumber"]}</span>
                         </div>

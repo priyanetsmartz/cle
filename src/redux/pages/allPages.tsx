@@ -101,3 +101,8 @@ export function getFaqListinglabels(language: string, urlkey: string) {
     var storeId = language === 'english' ? 3 : 2;
     return AdminApi.request(`rest/all/V1/customFaq/categoryurl?storeId=${storeId}&urlKey=${urlkey}`, "", "GET", "")
 }
+
+export function getVendorDetails(language: string) {
+    var storeId = language === 'english' ? 3 : 2;
+    return AdminApi.request(`/rest/all/V1/vendor/personaldetails?vendorId=9`, "", "GET", "")
+}
