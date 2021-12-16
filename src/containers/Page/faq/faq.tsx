@@ -177,7 +177,7 @@ function Faq(props) {
 											<ul className="list-unstyled">
 												{
 													item['questionArray'].map((question, i) => (
-														<li key={i}><Link to={`faq-listing/` + item['url_key']}>{question['title']}</Link></li>
+														<li key={i}><Link to={`faq-listing/` + item['url_key'] + '/' + question['question_id']}>{question['title']}</Link></li>
 													))
 												}
 											</ul>

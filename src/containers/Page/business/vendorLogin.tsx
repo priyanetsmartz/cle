@@ -100,7 +100,7 @@ function VendorLogin(props) {
         // window.location.href = '/vendor/profile';
         setTimeout(() => {
           setIsShow(false);
-          history.push(`/vendor/profile`);
+          history.push(`/vendor/dashboard`);
         }, 3000);
 
       } else {

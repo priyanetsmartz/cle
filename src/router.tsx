@@ -40,7 +40,7 @@ const PublicRoutes = ({ history }) => {
     <ConnectedRouter history={history}>
       <Suspense fallback={<Loader />}>
         <Switch>
-
+        <ProductRoutes exact path="/faq-listing/:url_key/:question_id" component={FaqListing} />
           <ProductRoutes exact path="/faq-listing/:url_key" component={FaqListing} />
           <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
           <ProductRoutes exact path="/search/:brandname" component={Search} />
