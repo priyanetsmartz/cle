@@ -4,10 +4,10 @@ import { getFaqListinglabels } from '../../../redux/pages/allPages';
 import { useParams } from "react-router-dom";
 function FaqListing(props) {
   const [categoryData, setCategoryData] = useState([])
-  const { url_key }: any = useParams();
+  const { url_key, question_id }: any = useParams();
+  // console.log(question_id)
   useEffect(() => {
     getData();
-
     return () => {
       //
     }
@@ -82,13 +82,7 @@ function FaqListing(props) {
       ]
 
     let results = deummyData;
-    console.log("results", results)
-    //return deummyData['items'];
     setCategoryData(results)
-    // console.log(deummyData)
-    // console.log(faqData);
-    // console.log(faqData['items'][0]['title'])
-    // console.log(faqData[0]['title'])
   }
 
   return (
@@ -123,11 +117,11 @@ function FaqListing(props) {
                           category['questionArray'].map((question, i) => (
                             <div key={i} className="accordion-item">
                               <h2 className="accordion-header" id={`heading${i}`}>
-                                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapseSecOne${question['question_id']}`} aria-expanded="false" aria-controls={`collapseSectwo${question['question_id']}`}>
                                   {question['title']}
                                 </button>
                               </h2>
-                              <div id={`collapse${question['question_id']}`} className={i === 0 ? `accordion-collapse collapse show` : `accordion-collapse collapse`} aria-labelledby={`heading${i}`} data-bs-parent="#accordionExample">
+                              <div id={`collapseSecOne${question['question_id']}`} className={question['question_id'] === question_id || i === 0 ? `accordion-collapse collapse show` : `accordion-collapse collapse`} aria-labelledby={`heading${i}`} data-bs-parent="#accordionExample">
                                 <div className="accordion-body">
                                   <p>{question['short_answer']}</p>
                                 </div>
@@ -148,12 +142,12 @@ function FaqListing(props) {
                       {
                         category['relatedquestions_array'].map((question, i) => (
                           <div className="accordion-item">
-                            <h2 className="accordion-header" id="headingOne">
-                              <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            <h2 className="accordion-header" id={`headingTwo${i}`}>
+                              <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapseSectwo${question['question_id']}`} aria-expanded="false" aria-controls={`collapseSectwo${question['question_id']}`}>
                                 {question['title']}
                               </button>
                             </h2>
-                            <div id="collapseOne" className={i === 0 ? `accordion-collapse collapse show` : `accordion-collapse collapse`} aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div id={`collapseSectwo${question['question_id']}`} className={i === 0 ? `accordion-collapse collapse show` : `accordion-collapse collapse`} aria-labelledby={`headingTwo${i}`} data-bs-parent="#accordionExample">
                               <div className="accordion-body">
                                 <p>{question['short_answer']}</p>
                               </div>
