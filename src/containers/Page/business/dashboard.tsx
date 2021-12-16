@@ -10,9 +10,12 @@ import HtmlContent from '../../partials/htmlContent';
 
 function Dashboard(props) {
     const language = getCookie('currentLanguage');
+    let localData = localStorage.getItem('redux-react-session/USER_DATA');
+    let localToken = JSON.parse((localData));
     let lang = props.languages ? props.languages : language;
     const [items, setItems] = useState([]);
     const [pagination, setPagination] = useState(1);
+    const [vendorName, SetVendorName] = useState(localToken.vendor_name);
 
     const [myDashboardModal, setMyDashboardModal] = useState(true);
     useEffect(() => {
@@ -63,22 +66,16 @@ function Dashboard(props) {
                             )}
                         </div>
                     </div>
-
-
-
-                    <Modal show={myDashboardModal} >
+                    <Modal show={myDashboardModal} className="cookie_popup_login">
                         <div className="CLE_pf_details">
-                            <Modal.Header>
-                                <h1>Dashboard Details</h1>
-                                <Link to="#" onClick={openDashboardModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
-                            </Modal.Header>
                             <Modal.Body className="arabic-rtl-direction">
+                                <Link to="#" onClick={openDashboardModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
                                 <div className="section" >
+                                    <h2 className="head-ble">Hi,</h2>
+                                    <h2>{vendorName}</h2>
                                     <HtmlContent identifier="login_popup" />
                                 </div>
                             </Modal.Body>
-
-
                         </div>
                     </Modal>
                 </div>

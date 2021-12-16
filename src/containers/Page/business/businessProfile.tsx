@@ -179,7 +179,7 @@ function BusinessProfile(props) {
             } else {
                 custForm.addresses[addIndex] = obj;
             }
-            console.log(custAddForm);
+            //console.log(custAddForm);
             let result: any = await saveCustomerDetails(custId, { customer: custForm });
             if (result) {
                 openAddressModal();

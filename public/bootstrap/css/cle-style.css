@@ -6584,25 +6584,25 @@ p.sliderupper {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-        width:100%;
+    width: 100%;
 }
 
-.help-center-ban h1{
-        text-align:center;
-        font-family: 'Monument Extended';
-        font-size: 40px;
+.help-center-ban h1 {
+    text-align: center;
+    font-family: 'Monument Extended';
+    font-size: 40px;
     font-weight: 500;
-        color:#fff;
+    color: #fff;
 }
 
-.help-center-ban p{
-        text-align:center;
-        font-size: 18px;
-        color:#fff;
+.help-center-ban p {
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
 }
 
-.help-center-ban .has-search{
-        margin:40px 0;
+.help-center-ban .has-search {
+    margin: 40px 0;
 }
 
 .help-center-ban .has-search .form-control {
@@ -6620,16 +6620,16 @@ p.sliderupper {
     text-align: center;
     pointer-events: none;
     color: #000;
-        display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-        font-size: 18px;
+    font-size: 18px;
 }
 
-.faq-topics{
-        padding:60px 0;
+.faq-topics {
+    padding: 60px 0;
 }
-        
+
 .faq-topics h2 {
     font-family: 'Monument Extended';
     font-size: 24px;
@@ -6637,8 +6637,8 @@ p.sliderupper {
     margin-bottom: 15px;
 }
 
-.faq-topics .col-sm-4{
-        margin-bottom:20px;
+.faq-topics .col-sm-4 {
+    margin-bottom: 20px;
 }
 
 .faq-topics h4 {
@@ -6666,27 +6666,27 @@ p.sliderupper {
     color: #000;
     font-size: 16px;
     font-weight: 600;
-        display:inline-block;
-        transition: all .3s ease;
+    display: inline-block;
+    transition: all .3s ease;
 }
 
-.faq-topics li a:after{
-        content:"";
-        border-bottom: 1px solid transparent;
+.faq-topics li a:after {
+    content: "";
+    border-bottom: 1px solid transparent;
     display: block;
 }
 
-.faq-topics li a:hover:after{
-        border-bottom: 1px solid #000;
+.faq-topics li a:hover:after {
+    border-bottom: 1px solid #000;
 }
 
-.faq-view-all{
-        position:relative;
-        min-height:40px;
+.faq-view-all {
+    position: relative;
+    min-height: 40px;
 }
 
-.faq-view-all a{
-        font-size: 18px;
+.faq-view-all a {
+    font-size: 18px;
     font-family: 'Monument Extended';
     font-style: normal;
     font-weight: 400;
@@ -6698,18 +6698,18 @@ p.sliderupper {
     margin-right: 20px;
 }
 
-.faq-view-all a:after{
-        content: "";
-        border-bottom: 1px solid transparent;
-        display: block;
-        transition: all .5s ease-in-out;
-        bottom: -5px;
-        position: absolute;
-        width: 100%;
+.faq-view-all a:after {
+    content: "";
+    border-bottom: 1px solid transparent;
+    display: block;
+    transition: all .5s ease-in-out;
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
 }
 
-.faq-view-all a:hover{
-        padding-top: 5px;
+.faq-view-all a:hover {
+    padding-top: 5px;
     color: #2e2baa;
 }
 
@@ -6718,47 +6718,47 @@ p.sliderupper {
     bottom: 2px;
 }
 
-.faq-form{
-        background-color: #F7F7FC;
+.faq-form {
+    background-color: #F7F7FC;
     padding: 60px 15px;
 }
 
-.faq-form h3{
-        text-align:center;
-        font-family: 'Monument Extended';
+.faq-form h3 {
+    text-align: center;
+    font-family: 'Monument Extended';
     font-weight: 500;
     margin: 20px 0;
     font-size: 24px;
 }
 
-.faq-form p{
-        text-align:center;
-        font-size:16px;
+.faq-form p {
+    text-align: center;
+    font-size: 16px;
 }
 
-.faq-list{
-        padding: 60px 0;
+.faq-list {
+    padding: 60px 0;
 }
 
-.faq-list h2{
-        font-family: 'Monument Extended';
+.faq-list h2 {
+    font-family: 'Monument Extended';
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 20px;
 }
 
-.faq-list .accordion{
-        margin-bottom: 50px;
+.faq-list .accordion {
+    margin-bottom: 50px;
 }
 
-.faq-list .accordion-header{
-        margin-bottom:0;
+.faq-list .accordion-header {
+    margin-bottom: 0;
 }
 
-.faq-list .accordion-button:not(.collapsed){
-        background-color:#fff;
-        color:#000;
-        border-radius: 0;
+.faq-list .accordion-button:not(.collapsed) {
+    background-color: #fff;
+    color: #000;
+    border-radius: 0;
 }
 
 .faq-list .accordion-button {
@@ -6770,9 +6770,79 @@ p.sliderupper {
     color: #000;
 }
 
-.faq-list .accordion-item{
-        border-left:0;
-        border-right:0;
+.faq-list .accordion-item {
+    border-left: 0;
+    border-right: 0;
+}
+
+.login-popup {
+    margin: 40px 0 0;
+}
+
+.cookie_popup_login h2 {
+    font-family: 'Monument Extended';
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.cookie_popup_login h2.head-ble {
+    color: #2E2BAA;
+}
+
+.login-popup p {
+    font-size: 16px;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    color: #000;
+}
+
+.log-benefit {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 40px 0;
+}
+
+.log-ban {
+    background-color: #2E2BAA;
+    width: 75%;
+    right: 0;
+    position: absolute;
+}
+
+.log-ban img {
+    height: 400px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.log-benefit .log-bullet {
+    background-color: #000;
+    min-height: 100px;
+    min-width: 40%;
+    padding: 30px 20px;
+    position: absolute;
+    left: 0;
+    z-index: 2;
+}
+
+.log-bullet h4 {
+    color: #fff;
+    font-family: 'Monument Extended';
+    font-size: 20px;
+}
+
+.log-bullet ol {
+    padding-left: 17px;
+    margin: 0;
+}
+
+.log-bullet li {
+    color: #fff;
+    margin-bottom: 10px;
 }
 
 /* All media screen below */
@@ -7123,6 +7193,10 @@ p.sliderupper {
 @media only screen and (min-width: 320px) and (max-width: 991px) {
     .h-mob-l, .h-mob-r {
         display: none;
+    }
+
+    .log-ban {
+        width: 100%;
     }
 
     .mob-hide {
