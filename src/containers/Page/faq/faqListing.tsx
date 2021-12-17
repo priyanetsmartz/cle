@@ -6,9 +6,9 @@ import IntlMessages from "../../../components/utility/intlMessages";
 function FaqListing(props) {
   const [categoryData, setCategoryData] = useState([])
   const { url_key, question_id }: any = useParams();
-  const search = useLocation().search;
-  const idParam = new URLSearchParams(search).get('id');
-  const [idparams, setIdparams] = useState(idParam ? idParam : '1')
+  const search = useLocation().hash;
+  let ser = search.replace(/%20/g, '')
+  const [idparams, setIdparams] = useState(ser ? ser : '')
   useEffect(() => {
     getData();
     return () => {
@@ -36,14 +36,15 @@ function FaqListing(props) {
                       <div className="accordion" id="accordionExample">
                         {
                           category['questionArray'].map((question, i) => (
+
                             <div key={i} className="accordion-item">
-                              {console.log(typeof (question['question_id']), typeof (idparams), idparams)}
+                              {/* {console.log(ser.replace(/ /g, ''), '#' + question['title'].replace(/ /g, ''))} */}
                               <h2 className="accordion-header" id={`heading${i}`}>
-                                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapseSecOne${question['question_id']}`} aria-expanded="false" aria-controls={`collapseSectwo${question['question_id']}`}>
+                                <button className={'#' + question['title'].replace(/ /g, '') === ser.replace(/ /g, '') ? `accordion-button` : `accordion-button collapsed`} type="button" data-bs-toggle="collapse" data-bs-target={`#collapseSecOne${question['question_id']}`} aria-expanded="false" aria-controls={`collapseSectwo${question['question_id']}`}>
                                   {question['title']}
                                 </button>
                               </h2>
-                              <div id={`collapseSecOne${question['question_id']}`} className={question['question_id'] === idparams ? `accordion-collapse collapse show` : `accordion-collapse collapse`} aria-labelledby={`heading${i}`} data-bs-parent="#accordionExample">
+                              <div id={`collapseSecOne${question['question_id']}`} className={'#' + question['title'].replace(/ /g, '') === ser.replace(/ /g, '') ? `accordion-collapse collapse show` : `accordion-collapse collapse`} aria-labelledby={`heading${i}`} data-bs-parent="#accordionExample">
                                 <div className="accordion-body">
                                   <p dangerouslySetInnerHTML={{ __html: question['answer'] }} />
                                 </div>

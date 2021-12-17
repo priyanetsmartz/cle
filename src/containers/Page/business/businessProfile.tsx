@@ -920,7 +920,7 @@ function BusinessProfile(props) {
             <Modal show={myDetailsModel} >
                 <div className="CLE_pf_details">
                     <Modal.Header>
-                        <h1>My Details</h1>
+                        <h1><IntlMessages id="myaccount.myDetails" /></h1>
                         <Link to="#" onClick={openMyDetails} className="cross_icn"> <i className="fas fa-times"></i></Link>
                     </Modal.Header>
                     <Modal.Body className="arabic-rtl-direction">

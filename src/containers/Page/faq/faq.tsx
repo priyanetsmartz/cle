@@ -4,7 +4,6 @@ import { getFaqlabels } from '../../../redux/pages/allPages';
 import { siteConfig } from '../../../settings';
 import { Link } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
-import FaqHeader from './faq-header';
 function Faq(props) {
 
 	const [faqData, setFaqData] = useState([])
@@ -38,7 +37,7 @@ function Faq(props) {
 												<ul className="list-unstyled">
 													{
 														item['questionArray'].map((question, i) => (
-															<li key={i}><Link to={`help-center/` + item['url_key'] + '?id=' + question['question_id']}>{question['title']}</Link></li>
+															<li key={i}><Link to={`help-center/` + item['url_key'] + '?#' + question['title']}>{question['title']}</Link></li>
 														))
 													}
 												</ul>
