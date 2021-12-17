@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import DataTable from 'react-data-table-component';
-
+import IntlMessages from "../../../components/utility/intlMessages";
+import { useIntl } from 'react-intl';
+import { Slider } from 'antd';
+import moment from 'moment';
 function MySalesOrders(props) {
+    const intl = useIntl();
     useEffect(() => {
     }, [])
 
@@ -62,6 +66,70 @@ function MySalesOrders(props) {
                         <div className="col-sm-12">
                             <h1>My Sales and Order</h1>
                             <p>You can manage your customer's orders here. Execute and ship orders.<br/>Below is the list of sold products.</p>
+                        </div>
+                    </div>
+                    <div className="range_slider">
+                        <div className="range_inner">
+                            <div className="row">
+                                <div className="col-sm-3 mb-4">
+                                    <div className="form-group">
+                                        <span className="form-label">Status</span>
+                                        <select className="form-select" aria-label="Default select example" >
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
+                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
+                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
+                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="col-sm-3 mb-4">
+                                    <div className="form-group">
+                                        <span className="form-label"><IntlMessages id="order.date" /></span>
+                                        <select className="form-select" aria-label="Default select example" >
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
+                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
+                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
+                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="col-sm-3 mb-2">
+                                    <div className="form-group">
+                                        <span className="form-label"><IntlMessages id="order.price" /></span>
+                                        <Slider range max={20000} defaultValue={[0, 5]}  />
+                                    </div>
+                                </div>
+                                <div className="col-sm-3">
+                                    <div className="form-group">
+                                        <span className="form-label">&nbsp;</span>
+                                        <div className="search_results">
+                                            <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-6 mb-4">
+                                    <div className="form-group">
+                                        <span className="form-label">Change Status:</span>
+                                        <select className="form-select" aria-label="Default select example" >
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
+                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
+                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
+                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="d-grid col-sm-4 mb-4">
+                                        <button type="button" className="btn btn-secondary" >
+                                            <IntlMessages id="myaccount.edit" />
+                                        </button>
+                                    </div>
+                            </div>
                         </div>
                     </div>
                 </div>

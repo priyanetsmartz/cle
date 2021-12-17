@@ -72,8 +72,8 @@ function BusinessSidebar(props) {
                                     <select className="form-select" aria-label="Default select example" onChange={changeMobTab}>
                                         <option value="dashboard">{intl.formatMessage({ id: 'customer.dashboard' })}</option>
                                         <option value="sales-orders">{intl.formatMessage({ id: 'vendor.salesOrders' })}</option>
-                                        {/*  <option value="product-listing">{intl.formatMessage({ id: 'vendor.productListing' })}</option>
-                                        <option value="returns-complaints">{intl.formatMessage({ id: 'vendor.returnComplaints' })}</option>
+                                        <option value="product-listing">{intl.formatMessage({ id: 'vendor.productListing' })}</option>
+                                        {/*  <option value="returns-complaints">{intl.formatMessage({ id: 'vendor.returnComplaints' })}</option>
                                         <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
                                         <option value="analysis">{intl.formatMessage({ id: 'vendor.myAnalysis' })}</option>
                                         <option value="profile">{intl.formatMessage({ id: 'vendor.businessProfile' })}</option>
@@ -97,13 +97,13 @@ function BusinessSidebar(props) {
                                                 <span className="pl-2"><IntlMessages id="vendor.salesOrders" /></span>
                                             </Link>
                                         </li>
-                                        {/* <li className={activeTab === 'product-listing' ? 'active' : ''}>
+                                        <li className={activeTab === 'product-listing' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('product-listing')}>
                                                 <img src={wishlistIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.productListing" /></span>
                                             </Link>
                                         </li>
-                                        <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
+                                        {/*  <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('returns-complaints')}>
                                                 <img src={profileIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>

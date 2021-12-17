@@ -13,12 +13,9 @@ const ProductRoutes = ({ component: Component, auth, ...rest }) => (
         <div className="section headerrr" id="headerrr" key='uniqueKey'>
           <Header />
         </div>
-        {console.log(Component.WrappedComponent.name)}
+        {/* {console.log(props.location.pathname)} */}
         <div className='customwrapper' >
-          {(Component.WrappedComponent.name === 'Faq') && (
-            <FaqHeader />
-          )}
-          {(Component.WrappedComponent.name === 'FaqListing') && (
+          {(props.location.pathname.includes('help-center')) && (
             <FaqHeader />
           )}
           <AppBreadcrumbs />

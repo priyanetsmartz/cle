@@ -25,3 +25,10 @@ export async function getVendorDetails(language: string) {
     const vendorId = vendor.vendor_id;
     return adminToken.request(`/rest/all/V1/vendor/personaldetails?vendorId=${vendorId}`, "", "GET", "")
 }
+
+export async function getVendorProducts(language: string) {
+    var storeId = language === 'english' ? 'en' : 'ar';
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`/rest/${storeId}/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=udropship_vendor&searchCriteria[filter_groups][1][filters][0][value]=${vendorId}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq&searchCriteria[sortOrders][0][field]=created_at&searchCriteria[sortOrders][0][direction]=DESC&fields=items[sku,name,id,price,status,custom_attributes,created_at]`, "", "GET", "");
+}
