@@ -105,5 +105,6 @@ export function getFaqListinglabels(language: string, urlkey: string) {
 export function faqSearch(language: string, search: string, pageSize: number) {
     var storeId = language === 'english' ? 3 : 2;
     return AdminApi.request(`rest/all/V1/amasty_faq/question/all?searchCriteria[filterGroups][0][filters][0][field]=title&searchCriteria[filterGroups][0][filters][0][value]=%${search}%&searchCriteria[filterGroups][0][filters][0][conditionType]=like&searchCriteria[pageSize]=${pageSize}&searchCriteria[sortOrders][0][field]=created_at&searchCriteria[sortOrders][0][direction]=DESC&storeId=${storeId}`, "", "GET", "")
-
 }
+
+

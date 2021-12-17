@@ -18,3 +18,10 @@ export async function dataTiles(from, to) {
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/vendor/tiles?vendorId=${vendorId}&po_date_from=${from}&po_date_to=${to}`, "", "GET", "");
 }
+
+export async function getVendorDetails(language: string) {
+    var storeId = language === 'english' ? 3 : 2;
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`/rest/all/V1/vendor/personaldetails?vendorId=${vendorId}`, "", "GET", "")
+}
