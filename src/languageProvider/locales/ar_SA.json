@@ -277,7 +277,6 @@
   "orderDetail": "تفاصيل الطلب",
   "subTotal": "المجموع الفرعي",
   "shipping": "شحن",
-  "tax": "ضريبة",
   "total": "المجموع",
   "checkout": "باشرالخروج من الفندق",
   "we-accept": "نحن نقبل",
@@ -473,7 +472,18 @@
   "seller.announcements":"إعلانات مهمة",
   "faq.subtitle":"نريد أن نكون هناك من أجلك متى احتجت إلينا. ابحث عن الإجابة التي تحتاجها في قسم الأسئلة الشائعة.",
   "related.faq":"الأسئلة الشائعة ذات الصلة",
-  "topic.faq":"مواضيع التعليمات"
+  "topic.faq":"مواضيع التعليمات",
+  "myaccount.street":"شارع",
+  "business.companyname":"اسم الشركة",
+  "business.Website":"موقع إلكتروني",
+  "business.IbamNo":"رقم الآيبان",
+  "business.Facebook":"موقع التواصل الاجتماعي الفيسبوك",
+  "tax": "ضريبة",
+  "businessInstagram": "انستغرام",
+  "business.Details":"تفاصيل العمل",
+  "myaccount.Bank":"حساب البنك",
+  "business.bankName":"اسم البنك",
+  "business.accountNumber":"رقم حساب"
   
   
 }

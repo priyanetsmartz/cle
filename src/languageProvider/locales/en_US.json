@@ -473,7 +473,18 @@
   "seller.announcements":"Important announcements",
   "faq.subtitle":"We want to be there for you whenever you need us. Find the answer you need in our FAQ's section.",
   "related.faq":"Related FAQ's",
-  "topic.faq":"FAQ topics"
+  "topic.faq":"FAQ topics",
+  "myaccount.street":"Street",
+  "business.companyname":"Company Name",
+  "business.Website":"Website",
+  "business.IbamNo":"IBAM Number",
+  "business.Facebook":"Facebook",
+  "businessInstagram": "Instagram",
+  "business.Details":"Business Details",
+  "myaccount.Bank":"Bank Account",
+  "business.bankName":"Bank Name",
+  "business.accountNumber":"Account Number"
+  
   
   
   
