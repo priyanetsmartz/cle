@@ -33,7 +33,7 @@ function Breadcrumbs(props) {
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
                     {breadcrumsState.map((local, j) => {
-                        //  console.log(local)
+                         //console.log(local)
                         if (j === breadcrumsState.length - 1) {
                             let data = local.split('-')
                             if (local === 'orders-and-returns' || local === 'wish-list' || local === 'profile' || local === 'support') {

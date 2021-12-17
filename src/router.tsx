@@ -40,8 +40,7 @@ const PublicRoutes = ({ history }) => {
     <ConnectedRouter history={history}>
       <Suspense fallback={<Loader />}>
         <Switch>
-        <ProductRoutes exact path="/faq-listing/:url_key/:question_id" component={FaqListing} />
-          <ProductRoutes exact path="/faq-listing/:url_key" component={FaqListing} />
+          <ProductRoutes exact path="/help-center/:url_key" component={FaqListing} />
           <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
           <ProductRoutes exact path="/search/:brandname" component={Search} />
           <ProductRoutes exact path="/thankyou" component={orderThankyou} />
@@ -74,7 +73,7 @@ const PublicRoutes = ({ history }) => {
 
           <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
           <ProductRoutes exact path="/contact-us" component={contact} />
-          <ProductRoutes exact path="/faq" component={Faq} />
+          <ProductRoutes exact path="/help-center" component={Faq} />
 
 
           <ProductRoutes exact path="/vendor-login" component={VendorLogin} />

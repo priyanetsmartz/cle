@@ -31,6 +31,15 @@ function Dashboard(props) {
         let currentDate = moment().format('DD/MM/YYYY');
         let oldDate = moment().subtract(1, 'months').format('DD/MM/YYYY');
         getDataTiles(oldDate, currentDate);
+        return () => {
+            setItems([]);
+            setMyDashboardModal(false)
+            setDataTilesData([])
+            setActive(0)
+            setPagination(1)
+            setflagDates([])
+            SetVendorName('')
+		}
     }, [])
 
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
@@ -131,7 +140,7 @@ function Dashboard(props) {
                                                         </div>
                                                         <div className="col-sm-8 text-right">
                                                             <p className="announcement-heading">{item.title}</p>
-                                                            <p className="announcement-text"><div dangerouslySetInnerHTML={{ __html: item.full_content }} /></p>
+                                                            <div className="announcement-text"><div dangerouslySetInnerHTML={{ __html: item.full_content }} /></div>
                                                         </div>
                                                     </div>
                                                 </div>

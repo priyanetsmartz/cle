@@ -470,6 +470,10 @@
   "customer.wish-list":"قائمة امنياتي",
   "customer.profile":"ملفي",
   "category":"فئة",
-  "seller.announcements":"إعلانات مهمة"
+  "seller.announcements":"إعلانات مهمة",
+  "faq.subtitle":"نريد أن نكون هناك من أجلك متى احتجت إلينا. ابحث عن الإجابة التي تحتاجها في قسم الأسئلة الشائعة.",
+  "related.faq":"الأسئلة الشائعة ذات الصلة",
+  "topic.faq":"مواضيع التعليمات"
+  
   
 }

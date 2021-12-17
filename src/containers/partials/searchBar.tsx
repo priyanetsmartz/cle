@@ -144,7 +144,9 @@ function SearchBar(props) {
                                     )}
                                 </ul>
                             </div>
-                        ) : "Nothing found!"}
+                        ) : <div className="nothing_found">
+                            {nothingFound}
+                        </div>}
                     </div>
                     <div className="nothing_found">
                         {nothingFound}

@@ -470,9 +470,10 @@
   "customer.wish-list":"My Wish List",
   "customer.profile":"My Profile",
   "category":"Category",
-  "seller.announcements":"Important announcements"
-  
-  
+  "seller.announcements":"Important announcements",
+  "faq.subtitle":"We want to be there for you whenever you need us. Find the answer you need in our FAQ's section.",
+  "related.faq":"Related FAQ's",
+  "topic.faq":"FAQ topics"
   
   
   
