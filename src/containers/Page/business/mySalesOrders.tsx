@@ -64,8 +64,8 @@ function MySalesOrders(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>My Sales and Order</h1>
-                            <p>You can manage your customer's orders here. Execute and ship orders.<br/>Below is the list of sold products.</p>
+                            <h1><IntlMessages id = "salesOrder.title"/></h1>
+                            <p><IntlMessages id = "salesOrder.description.1"/><br/><IntlMessages id = "salesOrder.description.2"/></p>
                         </div>
                     </div>
                     <div className="range_slider">
@@ -73,7 +73,7 @@ function MySalesOrders(props) {
                             <div className="row">
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
-                                        <span className="form-label">Status</span>
+                                        <span className="form-label"><IntlMessages id ="status"/></span>
                                         <select className="form-select" aria-label="Default select example" >
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
@@ -114,7 +114,7 @@ function MySalesOrders(props) {
                             <div className="row">
                                 <div className="col-sm-6 mb-4">
                                     <div className="form-group">
-                                        <span className="form-label">Change Status:</span>
+                                        <span className="form-label"><IntlMessages id = "changeStatus"/>:</span>
                                         <select className="form-select" aria-label="Default select example" >
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "last_month" })}</option>

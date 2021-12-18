@@ -158,11 +158,11 @@ function Dashboard(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>Data Tiles</h1>
+                            <h1><IntlMessages id="datatiles" /></h1>
                             <ul className='filter-tiles'>
-                                <li className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} >Month</li>
-                                <li className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} >Quater</li>
-                                <li className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} >Year</li>
+                                <li className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></li>
+                                <li className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></li>
+                                <li className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></li>
                             </ul>
                         </div>
                     </div>
@@ -171,19 +171,19 @@ function Dashboard(props) {
                             <div className="card-columns" style={{ columnCount: 3 }}>
                                 <div className="card bg-light">
                                     <div className="card-body text-center">
-                                        <h3>Users</h3>
-                                        <p className="card-text">Some text inside the fifth card</p>
+                                        <h3><IntlMessages id="users" /></h3>
+                                        <p className="card-text"><IntlMessages id="sometextinsidethefilthcard" /></p>
                                     </div>
                                 </div>
                                 <div className="card bg-light ">
                                     <div className="card-body text-center">
-                                        <h3>Orders</h3>
+                                        <h3><IntlMessages id="order.orders" /></h3>
                                         <p className="card-text">{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</p>
                                     </div>
                                 </div>
                                 <div className="card bg-light">
                                     <div className="card-body text-center">
-                                        <h3>Payments</h3>
+                                        <h3><IntlMessages id="payments" /></h3>
                                         <p className="card-text">{dataTilesData['payoutAmount'] ? dataTilesData['payoutAmount'] : 0}</p>
                                     </div>
                                 </div>
@@ -196,7 +196,7 @@ function Dashboard(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>My Orders</h1>
+                            <h1><IntlMessages id="myOrders" /></h1>
                         </div>
                     </div>
                     <div className="row">

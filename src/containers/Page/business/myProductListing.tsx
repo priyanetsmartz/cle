@@ -117,8 +117,8 @@ function MyProductListing(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>My Product Listing</h1>
-                            <p>You can manage your products here.<br />Below is the list of sold products.</p>
+                            <h1><IntlMessages id = "vendor.productListing"/></h1>
+                            <p><IntlMessages id = "products.description.1"/><br /><IntlMessages id = "products.description.2"/></p>
                         </div>
                     </div>
                     <div className="range_slider">
@@ -126,7 +126,7 @@ function MyProductListing(props) {
                             <div className="row">
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
-                                        <span className="form-label">Status</span>
+                                        <span className="form-label"><IntlMessages id = "status"/></span>
                                         <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
@@ -167,7 +167,7 @@ function MyProductListing(props) {
                             <div className="row">
                                 <div className="col-sm-6 mb-4">
                                     <div className="form-group">
-                                        <span className="form-label">Change Status:</span>
+                                        <span className="form-label"><IntlMessages id = "changeStatus"/>:</span>
                                         <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
@@ -203,15 +203,15 @@ function MyProductListing(props) {
                             <div className="icon-box">
                                 <i className="fa fa-times" aria-hidden="true"></i>
                             </div>
-                            <h4 className="modal-title w-100">Delete the Product</h4>
+                            <h4 className="modal-title w-100"><IntlMessages id = "deletetheproduct"/></h4>
                             <Link to="#" onClick={closePop} className="close"> <i className="fas fa-times"></i></Link>
                         </div>
                         <div className="modal-body">
-                            <p>Are you sure you want to delete the product from the listing?</p> 
+                            <p><IntlMessages id = "deleteProduct.confirmation"/></p> 
                         </div>
                         <div className="modal-footer justify-content-center">
-                            <button type="button" className="btn btn-secondary" onClick={closePop} data-dismiss="modal">Cancel</button>
-                            <button type="button" className="btn btn-danger" onClick={deleteProduct} >Delete</button>
+                            <button type="button" className="btn btn-secondary" onClick={closePop} data-dismiss="modal"><IntlMessages id = "productEdit.cancel"/></button>
+                            <button type="button" className="btn btn-danger" onClick={deleteProduct} ><IntlMessages id = "productEdit.delete"/></button>
                         </div>
                     </div>
                 </Modal.Body>

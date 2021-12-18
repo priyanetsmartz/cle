@@ -483,7 +483,24 @@
   "business.Details":"تفاصيل العمل",
   "myaccount.Bank":"حساب البنك",
   "business.bankName":"اسم البنك",
-  "business.accountNumber":"رقم حساب"
-  
-  
+  "business.accountNumber":"رقم حساب",
+  "datatiles":"مربعات البيانات",
+  "month":"شهر",
+  "quarter":"ربع",
+  "year":"عام",
+  "users":"المستخدمون",
+  "payments":"المدفوعات",
+  "sometextinsidethefilthcard":"بعض النصوص داخل البطاقة الخامسة",
+  "myOrders":"طلباتي",
+  "salesOrder.title":"مبيعاتي وطلبي",
+  "salesOrder.description.1":"يمكنك إدارة طلبات عميلك هنا. تنفيذ وشحن الطلبات.",
+  "salesOrder.description.2":"أدناه قائمة المنتجات المباعة.",
+  "status":"حالة",
+  "changeStatus":"تغيير الوضع",
+  "products.description.1":"يمكنك إدارة منتجاتك هنا.",
+  "products.description.2":"أدناه قائمة المنتجات المباعة.",
+  "deletetheproduct":"حذف المنتج",
+  "deleteProduct.confirmation":"هل أنت متأكد أنك تريد حذف المنتج من القائمة؟",  
+  "productEdit.cancel":"يلغي",
+  "productEdit.delete":"حذف"
 }

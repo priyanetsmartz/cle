@@ -483,9 +483,24 @@
   "business.Details":"Business Details",
   "myaccount.Bank":"Bank Account",
   "business.bankName":"Bank Name",
-  "business.accountNumber":"Account Number"
-  
-  
-  
-  
+  "business.accountNumber":"Account Number",
+  "datatiles":"Data Tiles",
+  "month":"Month",
+  "quarter":"Quarter",
+  "year":"Year",
+  "users":"Users",
+  "payments":"Payments",
+  "sometextinsidethefilthcard":"Some text inside the fifth card",
+  "myOrders":"My Orders",
+  "salesOrder.title":"My Sales and Order",
+  "salesOrder.description.1":"You can manage your customer's orders here. Execute and ship orders.",
+  "salesOrder.description.2":"Below is the list of sold products.",
+  "status":"Status",
+  "changeStatus":"Change Status",
+  "products.description.1":"You can manage your products here.",
+  "products.description.2":"Below is the list of sold products.",
+  "deletetheproduct":"Delete the Product",
+  "deleteProduct.confirmation":"Are you sure you want to delete the product from the listing?",
+  "productEdit.cancel":"Cancel",
+  "productEdit.delete":"Delete"
 }
