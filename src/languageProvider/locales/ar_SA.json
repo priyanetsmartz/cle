@@ -502,5 +502,14 @@
   "deletetheproduct":"حذف المنتج",
   "deleteProduct.confirmation":"هل أنت متأكد أنك تريد حذف المنتج من القائمة؟",  
   "productEdit.cancel":"يلغي",
-  "productEdit.delete":"حذف"
+  "productEdit.delete":"حذف",
+  "product.active":"نشيط",
+  "product.pending":"قيد الانتظار",
+  "product.sold":"تم البيع",
+  "product.rejected":"مرفوض",
+  "product.activateproduct":"قم بتنشيط المنتج",
+  "product.archieveproduct":"أرشِف المنتج",
+  "product.removeproduct":"قم بإزالة المنتج",
+  "product.soldproduct":"تغيير ساتوس إلى بيع",
+  "emailnotfound" : "البريد الإلكتروني غير موجود"
 }

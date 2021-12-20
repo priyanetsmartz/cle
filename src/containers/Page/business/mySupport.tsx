@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import { getCookie } from "../../../helpers/session";
-import {  Pages } from '../../../redux/pages/allPages';
+import { Pages } from '../../../redux/pages/allPages';
 
 
 function MySupport(props) {
@@ -16,15 +16,15 @@ function MySupport(props) {
             let result: any = await Pages('contact-us', lang);
             // let test: any = await Pages1(pageIdentifier);
             // console.log(test)
-            var jsonData = result.data.items[0];
+            var jsonData = result && result.data && result.data.items.length > 0 ? result.data.items[0] : [];
             SetPagesData(jsonData)
 
         }
         fetchMyAPI()
         return () => {
-           
+
         }
-    }, [ props.languages])
+    }, [props.languages])
     return (
         <div className='col-sm-9'>
             <div className="my_orders_returns_sec">

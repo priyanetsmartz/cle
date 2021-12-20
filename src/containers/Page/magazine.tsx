@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getCookie } from "../../helpers/session";
 import { MagazineList } from '../../redux/pages/magazineList';
-
+import { siteConfig } from '../../settings';
 function Magazine(props) {
     const [items, setItems] = useState([]);
     const language = getCookie('currentLanguage');
     useEffect(() => {
         async function getData() {
             let lang = props.languages ? props.languages : language;
-            let result: any = await MagazineList(lang);
+            let result: any = await MagazineList(lang, siteConfig.pageSize);
             setItems(result.data);
         }
         getData()

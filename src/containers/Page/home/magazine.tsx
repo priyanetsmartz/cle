@@ -14,8 +14,8 @@ function Magazine(props) {
     useEffect(() => {
         async function getData() {
             let lang = props.languages ? props.languages : language;
-            let result: any = await MagazineList(lang);
-            setItems(result.data.slice(0, 2));
+            let result: any = await MagazineList(lang, 2);
+            setItems(result.data);
         }
         getData()
         return () => {
@@ -32,7 +32,7 @@ function Magazine(props) {
                     <div className="magazine_article ">
                         <h1 className="mb-4"><IntlMessages id="menu_Magazine" /></h1>
                         <div className="row">
-                            {items.map((item,i) => {
+                            {items.map((item, i) => {
                                 return (
                                     <div className="col-sm-6" key={i}>
                                         <div className="magzine_blog">

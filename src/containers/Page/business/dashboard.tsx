@@ -28,9 +28,9 @@ function Dashboard(props) {
     const [myOrders, setMyOrders] = useState([]);
 
     useEffect(() => {
-        if(getCookie("popUp"))
+        if (getCookie("popUp"))
             setMyDashboardModal(false)
-        else 
+        else
             setMyDashboardModal(true)
         getDataOfCategory(lang, 9, 1, 'published_at', 'desc')
         let currentDate = moment().format('DD/MM/YYYY');
@@ -46,8 +46,8 @@ function Dashboard(props) {
             setflagDates([])
             SetVendorName('')
             setMyOrders([])
-		}
-    }, [props.languages])
+        }
+    }, [])
 
     async function getDataOfOrders(){
         let result = await getVendorOrders(props.languages, siteConfig.pageSize)
@@ -86,7 +86,8 @@ function Dashboard(props) {
         }
     ];
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
-        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue);
+        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, 2);
+        console.log(Math.ceil(result.data.length / 2))
         setPagination(Math.ceil(result.data.length / 2));
         setItems(result.data);
 
