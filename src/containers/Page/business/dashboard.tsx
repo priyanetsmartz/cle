@@ -9,14 +9,17 @@ import { Link } from "react-router-dom";
 import HtmlContent from '../../partials/htmlContent';
 import Magazine from '../home/magazine';
 import { dataTiles } from '../../../redux/pages/vendorLogin';
+import { siteConfig } from '../../../settings';
 import moment from 'moment';
 function Dashboard(props) {
     const language = getCookie('currentLanguage');
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
+    const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     let lang = props.languages ? props.languages : language;
     const [items, setItems] = useState([]);
     const [pagination, setPagination] = useState(1);
+    const [page, setCurrent] = useState(1);
     const [dataTilesData, setDataTilesData] = useState([]);
     const [flagDates, setflagDates] = useState([]);
     const [active, setActive] = useState(0);
@@ -44,8 +47,7 @@ function Dashboard(props) {
 
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, 2);
-        console.log(Math.ceil(result.data.length / 2))
-        setPagination(Math.ceil(result.data.length / 2));
+        setPagination(Math.ceil(6 / 2));
         setItems(result.data);
 
     }
@@ -56,6 +58,32 @@ function Dashboard(props) {
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
         setDataTilesData(results.data)
+    }
+    const goToNextPage = (e) => {
+        let lang = props.languages ? props.languages : language;
+        e.preventDefault();
+        setCurrent((page) => page + 1);
+
+    }
+    function changePage(event) {
+        let lang = props.languages ? props.languages : language;
+
+        event.preventDefault()
+        const pageNumber = Number(event.target.textContent);
+        setCurrent(pageNumber);
+    }
+    const getPaginationGroup = () => {
+        let start = Math.floor((page - 1) / pageSize) * pageSize;
+        let fill = pagination > 5 ? 4 : pagination;
+        //  console.log (new Array(fill).fill(fill).map((_, idx) => start + idx + 1))
+        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
+    };
+    const goToPreviousPage = (e) => {
+        let lang = props.languages ? props.languages : language;
+
+        e.preventDefault();
+        setCurrent((page) => page - 1);
+
     }
 
     const columns = [
@@ -151,6 +179,27 @@ function Dashboard(props) {
                                     })}
                                 </div>
                             )}
+                        </div>
+                        <div className="page_by">
+                            <div className="col-md-12 pagination">
+                                {/* //   {console.log(pagination)} */}
+                                {pagination > 1 && (<nav aria-label="Page navigation example">
+                                    <ul className="pagination justify-content-center">
+                                        <li
+                                            className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
+                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><IntlMessages id="pagination-prev" /></Link>
+                                        </li>
+                                        {getPaginationGroup().map((i, index) => (
+                                            <li className="page-item" key={i}><Link className={`page-link ${page === i ? 'active' : ''}`} onClick={changePage} to="#">{i}</Link></li>
+                                        ))}
+                                        <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
+                                            <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
+                                                to="/"><IntlMessages id="pagination-next" /></Link>
+                                        </li>
+                                    </ul>
+                                </nav>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div >
