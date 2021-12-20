@@ -10,6 +10,9 @@ import HtmlContent from '../../partials/htmlContent';
 import Magazine from '../home/magazine';
 import { dataTiles } from '../../../redux/pages/vendorLogin';
 import moment from 'moment';
+import { getVendorOrders } from '../../../redux/pages/vendorLogin';
+import { siteConfig } from '../../../settings';
+
 function Dashboard(props) {
     const language = getCookie('currentLanguage');
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
@@ -22,6 +25,8 @@ function Dashboard(props) {
     const [active, setActive] = useState(0);
     const [vendorName, SetVendorName] = useState(localToken.vendor_name);
     const [myDashboardModal, setMyDashboardModal] = useState(true);
+    const [myOrders, setMyOrders] = useState([]);
+
     useEffect(() => {
         if(getCookie("popUp"))
             setMyDashboardModal(false)
@@ -31,6 +36,7 @@ function Dashboard(props) {
         let currentDate = moment().format('DD/MM/YYYY');
         let oldDate = moment().subtract(1, 'months').format('DD/MM/YYYY');
         getDataTiles(oldDate, currentDate);
+        getDataOfOrders()
         return () => {
             setItems([]);
             setMyDashboardModal(false)
@@ -39,9 +45,46 @@ function Dashboard(props) {
             setPagination(1)
             setflagDates([])
             SetVendorName('')
+            setMyOrders([])
 		}
-    }, [])
+    }, [props.languages])
 
+    async function getDataOfOrders(){
+        let result = await getVendorOrders(props.languages, siteConfig.pageSize)
+
+        console.log("check result",result)
+        let dataObj = result[0]
+        console.log(dataObj)
+        const dataLListing = dataObj.map((data, index)=>{
+            let orderLoop:any = {};
+            orderLoop.orderNumber = data.increment_id;
+            orderLoop.status = data.status;
+            orderLoop.products = data.products;
+            orderLoop.total = data.total;
+            return orderLoop;
+        });
+        
+        setMyOrders(dataLListing)
+
+    }
+    const columns = [
+        {
+            name: 'Order number',
+            selector: row => row.orderNumber,
+        },
+        {
+            name: 'Status',
+            selector: row => row.status,
+        },
+        {
+            name: 'Products',
+            selector: row => row.products,
+        },
+        {
+            name: 'Total',
+            selector: row => row.total,
+        }
+    ];
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue);
         setPagination(Math.ceil(result.data.length / 2));
@@ -57,49 +100,7 @@ function Dashboard(props) {
         setDataTilesData(results.data)
     }
 
-    const columns = [
-        {
-            name: 'Order number',
-            selector: row => row.title,
-            sortable: true,
-        },
-        {
-            name: 'Status',
-            selector: row => row.status,
-            sortable: true,
-        },
-        {
-            name: 'Products',
-            selector: row => row.products,
-        },
-        {
-            name: 'Total',
-            selector: row => row.total,
-        },
-    ];
-    const data = [
-        {
-            id: 1,
-            title: 'Beetlejuice1',
-            status: 'Delivered',
-            products: 1,
-            total: 20000
-        },
-        {
-            id: 2,
-            title: 'Beetlejuice2',
-            status: 'Delivered',
-            products: 2,
-            total: 20000
-        },
-        {
-            id: 3,
-            title: 'Beetlejuice3',
-            status: 'Delivered',
-            products: 4,
-            total: 20000
-        }
-    ]
+    
     const handleChange = (flag) => {
         let dates = [];
         if (flag === 0) {
@@ -204,7 +205,7 @@ function Dashboard(props) {
                             <div className="row">
                                 <DataTable
                                     columns={columns}
-                                    data={data}
+                                    data={myOrders}
                                     highlightOnHover
                                     pointerOnHover
                                     striped={true}
