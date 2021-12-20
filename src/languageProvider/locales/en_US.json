@@ -502,5 +502,15 @@
   "deletetheproduct":"Delete the Product",
   "deleteProduct.confirmation":"Are you sure you want to delete the product from the listing?",
   "productEdit.cancel":"Cancel",
-  "productEdit.delete":"Delete"
+  "productEdit.delete":"Delete",
+  "product.active":"Active",
+  "product.pending":"Pending",
+  "product.sold":"Sold",
+  "product.rejected":"Rejected",
+  "product.activateproduct":"Activate the Product",
+  "product.archieveproduct":"Archieve the Product",
+  "product.removeproduct":"Remove the Product",
+  "product.soldproduct":"Change the Satus to sold",
+  "emailnotfound" : "Email not found"
+  
 }

@@ -59,7 +59,7 @@ function SinglePost(props) {
         setOpacity(0.3);
         let result: any = await PostData(lang, slug);
         let catId = result.data[0].categories[0];
-        let featuredResult: any = await GetDataOfCategory(lang, catId, 1, 'published_at', 'desc');
+        let featuredResult: any = await GetDataOfCategory(lang, catId, 1, 'published_at', 'desc', 12);
         const filteredItems = featuredResult.data.filter(item => item.post_id !== slug)
         setRelated(filteredItems);
         setPost(result.data[0]);

@@ -36,11 +36,17 @@ function ForgottenPassword(props) {
         }));
         setIsShow(false);
       } else {
+        console.log(result.message)
         setState(prevState => ({
           ...prevState,
           email1: ""
         }));
-        notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        if(result.message === 'Request failed with status code 404'){
+          notification("error", "", intl.formatMessage({ id: "emailnotfound" }));
+        }else{
+          notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        }
+       
         setIsShow(false);
       }
     } else {

@@ -70,7 +70,7 @@ function OrdersAndReturns(props) {
 
     const handlePriceRange = async (range) => {
         setLoaderOrders(true);
-        let result: any = await getCustomerOrdersByPrice((range[0] * 10), (range[1] * 10), pageSize);
+        let result: any = await getCustomerOrdersByPrice((range[0]), (range[1]), pageSize);
         if (result.data) {
             setOrders(result.data.items);
             setLoaderOrders(false);
@@ -142,7 +142,7 @@ function OrdersAndReturns(props) {
     }
     return (
         <>
-               <div className={isPriveUser ? 'prive-txt col-sm-9' : 'col-sm-9'}>
+            <div className={isPriveUser ? 'prive-txt col-sm-9' : 'col-sm-9'}>
                 <div className="my_orders_returns_sec">
                     <div className="width-100">
                         <h1><IntlMessages id="order.myOrders" /></h1>
@@ -212,7 +212,6 @@ function OrdersAndReturns(props) {
                                             </div>
                                             <div className="sort_by">
                                                 <div className="sortbyfilter">
-
                                                     <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
                                                         <option value="">{intl.formatMessage({ id: "sorting" })}</option>
                                                         <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>

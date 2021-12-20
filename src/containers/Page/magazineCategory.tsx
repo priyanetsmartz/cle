@@ -7,7 +7,7 @@ import notification from '../../components/notification';
 import { getCookie } from "../../helpers/session";
 import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-
+import { siteConfig } from '../../settings';
 function MagazineCategory(props) {
     const [isShow, setIsShow] = useState(false);
     const language = getCookie('currentLanguage');
@@ -65,7 +65,7 @@ function MagazineCategory(props) {
     }
 
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
-        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue);
+        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, siteConfig.pageSize);
         setItems(result.data);
         if (result.data) {
             setlatestItem(result.data.slice(-1)[0]);
