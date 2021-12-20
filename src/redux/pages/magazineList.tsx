@@ -32,7 +32,7 @@ export function GetCategoryList(language: string) {
 export function GetDataOfCategory(language: string, categroy_Id: number, page: number, sortBy: string, sortByValue: string, pageSize: number) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`rest/all/V1/category/bloglist?store_id=${storeId}&page_no=${page}&catId=${categroy_Id}&sortBy=${sortBy}&soryByValue=${sortByValue}&pageSize=${pageSize}`, payload, "GET", "");
+    return Api.request(`rest/all/V1/category/bloglist?store_id=${storeId}&page_no=${page}&catId=${categroy_Id}&sortBy=${sortBy}&soryByValue=${sortByValue}&pageSize=${pageSize}&announcement=1`, payload, "GET", "");
 }
 
 export function RelatedList(language: string, postId) {
@@ -71,3 +71,5 @@ export async function postViews(language, id, ip) {
     }
     return Api.request('rest/V1/addrecent/view', data, "POST", "");
 }
+
+

@@ -8,9 +8,11 @@ import DataTable from 'react-data-table-component';
 import { Link } from "react-router-dom";
 import HtmlContent from '../../partials/htmlContent';
 import Magazine from '../home/magazine';
-import { dataTiles } from '../../../redux/pages/vendorLogin';
-import { siteConfig } from '../../../settings';
+import { closePopup, dataTiles } from '../../../redux/pages/vendorLogin';
 import moment from 'moment';
+import { getVendorOrders } from '../../../redux/pages/vendorLogin';
+import { siteConfig } from '../../../settings';
+
 function Dashboard(props) {
     const language = getCookie('currentLanguage');
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
@@ -25,15 +27,18 @@ function Dashboard(props) {
     const [active, setActive] = useState(0);
     const [vendorName, SetVendorName] = useState(localToken.vendor_name);
     const [myDashboardModal, setMyDashboardModal] = useState(true);
+    const [myOrders, setMyOrders] = useState([]);
+
     useEffect(() => {
-        if (getCookie("popUp"))
+        let pop = getCookie('popUp');
+        if (localToken.showpop === 0 || pop === 'true')
             setMyDashboardModal(false)
         else
             setMyDashboardModal(true)
-        getDataOfCategory(lang, 9, 1, 'published_at', 'desc')
         let currentDate = moment().format('DD/MM/YYYY');
         let oldDate = moment().subtract(1, 'months').format('DD/MM/YYYY');
         getDataTiles(oldDate, currentDate);
+        getDataOfOrders()
         return () => {
             setItems([]);
             setMyDashboardModal(false)
@@ -42,23 +47,15 @@ function Dashboard(props) {
             setPagination(1)
             setflagDates([])
             SetVendorName('')
+            setMyOrders([])
         }
     }, [])
+    useEffect(() => {
+        getDataOfCategory(lang, 9, page, 'published_at', 'desc')
+    }, [page])
 
-    async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
-        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, 2);
-        setPagination(Math.ceil(6 / 2));
-        setItems(result.data);
 
-    }
-    const openDashboardModal = () => {
-        setCookie("popUp", true)
-        setMyDashboardModal(!myDashboardModal);
-    }
-    async function getDataTiles(oldDate, currentDate) {
-        let results: any = await dataTiles(oldDate, currentDate);
-        setDataTilesData(results.data)
-    }
+
     const goToNextPage = (e) => {
         let lang = props.languages ? props.languages : language;
         e.preventDefault();
@@ -85,17 +82,30 @@ function Dashboard(props) {
         setCurrent((page) => page - 1);
 
     }
+    async function getDataOfOrders() {
+        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize);
+        let dataObj = result && result.length > 0 ? result[0] : [];
+        // console.log(dataObj)
+        const dataLListing = dataObj.map((data, index) => {
+            let orderLoop: any = {};
+            orderLoop.orderNumber = data.increment_id;
+            orderLoop.status = data.status;
+            orderLoop.products = data.products;
+            orderLoop.total = data.total;
+            return orderLoop;
+        });
 
+        setMyOrders(dataLListing)
+
+    }
     const columns = [
         {
             name: 'Order number',
-            selector: row => row.title,
-            sortable: true,
+            selector: row => row.orderNumber,
         },
         {
             name: 'Status',
             selector: row => row.status,
-            sortable: true,
         },
         {
             name: 'Products',
@@ -104,31 +114,28 @@ function Dashboard(props) {
         {
             name: 'Total',
             selector: row => row.total,
-        },
-    ];
-    const data = [
-        {
-            id: 1,
-            title: 'Beetlejuice1',
-            status: 'Delivered',
-            products: 1,
-            total: 20000
-        },
-        {
-            id: 2,
-            title: 'Beetlejuice2',
-            status: 'Delivered',
-            products: 2,
-            total: 20000
-        },
-        {
-            id: 3,
-            title: 'Beetlejuice3',
-            status: 'Delivered',
-            products: 4,
-            total: 20000
         }
-    ]
+    ];
+    async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
+        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, 2);
+        // console.log(Math.ceil(result.data.length / 2))
+        let paginationSize = result && result.data && result.data.length > 0 ? result.data[0].total_page : 0;
+        //   console.log(paginationSize)
+        setPagination(paginationSize);
+        setItems(result.data);
+
+    }
+    async function openDashboardModal(oldDate, currentDate) {
+        let results: any = await closePopup(0);
+        setCookie("popUp", true)
+        setMyDashboardModal(!myDashboardModal);
+    }
+    async function getDataTiles(oldDate, currentDate) {
+        let results: any = await dataTiles(oldDate, currentDate);
+        setDataTilesData(results.data)
+    }
+
+
     const handleChange = (flag) => {
         let dates = [];
         if (flag === 0) {
@@ -184,17 +191,16 @@ function Dashboard(props) {
                             <div className="col-md-12 pagination">
                                 {/* //   {console.log(pagination)} */}
                                 {pagination > 1 && (<nav aria-label="Page navigation example">
+                                    {console.log(page, typeof (page), pagination, typeof (pagination))}
                                     <ul className="pagination justify-content-center">
                                         <li
-                                            className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><IntlMessages id="pagination-prev" /></Link>
+                                            className={`previousAnno ${page === 1 ? 'disabled' : ''}`}>
+                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
                                         </li>
-                                        {getPaginationGroup().map((i, index) => (
-                                            <li className="page-item" key={i}><Link className={`page-link ${page === i ? 'active' : ''}`} onClick={changePage} to="#">{i}</Link></li>
-                                        ))}
-                                        <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
-                                            <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                                to="/"><IntlMessages id="pagination-next" /></Link>
+                                        <li className='pageofpage'>Page {page} of {pagination}</li>
+                                        <li className={`nextAnno ${page === pagination ? 'disabled' : ''}`} >
+                                            <Link className={`page-link pagenextAnno ${page === pagination ? 'disabled' : ''}`} onClick={(e) => { goToNextPage(e); }}
+                                                to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
                                         </li>
                                     </ul>
                                 </nav>
@@ -254,7 +260,7 @@ function Dashboard(props) {
                             <div className="row">
                                 <DataTable
                                     columns={columns}
-                                    data={data}
+                                    data={myOrders}
                                     highlightOnHover
                                     pointerOnHover
                                     striped={true}
@@ -286,9 +292,14 @@ function Dashboard(props) {
 
 }
 const mapStateToProps = (state) => {
-    return {
-
+    let languages = '';
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
     }
+    return {
+        languages: languages
+
+    };
 }
 
 export default connect(

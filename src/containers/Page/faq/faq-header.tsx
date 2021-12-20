@@ -45,10 +45,10 @@ function FaqHeader(props) {
                                 <div className="serach-results-inner">
                                     <ul>
                                         {autoSuggestions.map((item, i) => {
-                                            console.log(item)
+                                            console.log(item.category_data[item.category_data.length - 1].category_url_key)
                                             return (
                                                 <li key={i}>
-                                                    <Link to="#"> {item.title}</Link>
+                                                    <Link to={`help-center/` + item.category_data[0].category_url_key + '?#' + item['title']}> {item.title}</Link>
 
                                                 </li>
                                             )

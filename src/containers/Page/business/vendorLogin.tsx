@@ -62,16 +62,17 @@ function VendorLogin(props) {
       // login({ userInfo });
       const result: any = await vendorLogin(userInfo);
       if (result && result.data && result.data && !result.data.message) {
-
+        // console.log(result.data)
         const vendorObj = {
-          vendor_id: result.data[0].vendor_id,
-          vendor_name: result.data[0].vendor_name,
-          email: result.data[0].email,
-          telephone: result.data[0].telephone,
-          country_id: result.data[0].country_id,
-          street: result.data[0].street,
-          city: result.data[0].city,
-          type: "vendor"
+          vendor_id: result.data[0].vendorData.vendor_id,
+          vendor_name: result.data[0].vendorData.vendor_name,
+          email: result.data[0].vendorData.email,
+          telephone: result.data[0].vendorData.telephone,
+          country_id: result.data[0].vendorData.country_id,
+          street: result.data[0].vendorData.street,
+          city: result.data[0].vendorData.city,
+          type: "vendor",
+          showpop: result.data[0].showPopUp
         }
         props.vendorrrr(vendorObj)
         await sessionService.saveSession(vendorObj)

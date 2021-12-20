@@ -40,3 +40,20 @@ export async function getVendorProducts(language: string, status = '', from = ''
     }
     return adminToken.request(`/rest/${storeId}/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=udropship_vendor&searchCriteria[filter_groups][1][filters][0][value]=${vendorId}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq${statusCriteria}&searchCriteria[sortOrders][0][field]=${sortValue.sortBy}&searchCriteria[sortOrders][0][direction]=${sortValue.sortByValue}&fields=items[sku,name,id,price,status,custom_attributes,created_at]`, "", "GET", "");
 }
+
+export async function getVendorOrders(language: string, pageSize: number) {
+    var storeId = language === 'english' ? '3' : '2';
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`rest/all/V1/vendor/Orders?vendorId=${vendorId}&pageSize=${pageSize}&store_id=${storeId}`, "", "GET", "");
+}
+
+export async function closePopup(flag: number) {
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    let payload = {
+        vendor_id: vendorId,
+        popUpClose: flag
+    }
+    return adminToken.request(`rest/all/V1/vendor/vendorPopUpClose`, payload, "PUT", "");
+}
