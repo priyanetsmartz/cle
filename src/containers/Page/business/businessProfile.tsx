@@ -16,6 +16,7 @@ import { sessionService } from 'redux-react-session';
 import { useIntl } from 'react-intl';
 import { getVendorDetails } from '../../../redux/pages/vendorLogin';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
+import user from '../../../image/user.png';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const companylogo = `${baseUrl}/pub/media/`;
@@ -564,7 +565,7 @@ function BusinessProfile(props) {
                         <div className="col-sm-12">
                             <div className="row">
                                 <div className="col-sm-3">
-                                    <div className='companylogo'> <img className="rounded-circle" src={companylogo + '/' + businessDetails['logoImagePath']} alt={businessDetails['businessCompanyName']} width="100%" height="100%" />
+                                    <div className='companylogo'> <img className="rounded-circle" src={businessDetails['logoImagePath'] ? companylogo + '/' + businessDetails['logoImagePath'] : user} alt={businessDetails['businessCompanyName']} width="100%" height="100%" />
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
