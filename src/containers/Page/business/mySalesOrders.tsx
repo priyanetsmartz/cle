@@ -5,9 +5,21 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import { Slider } from 'antd';
 import moment from 'moment';
+import { getVendorOrders } from '../../../redux/pages/vendorLogin';
+import { siteConfig } from '../../../settings';
+import { isArray } from 'util';
+
+
+
 function MySalesOrders(props) {
     const intl = useIntl();
+    const [myOrder, setMyOrders] = useState([]) 
     useEffect(() => {
+        getDataOfOrders()
+        return (
+            setMyOrders([])
+        )
+
     }, [])
 
     const columns = [
@@ -17,8 +29,8 @@ function MySalesOrders(props) {
             sortable: true,
         },
         {
-            name: 'Date',
-            selector: row => row.date,
+            name: 'Products',
+            selector: row => row.products,
             sortable: true,
         },
         {
@@ -30,29 +42,50 @@ function MySalesOrders(props) {
             selector: row => row.total,
         },
     ];
-    const data = [
-        {
-            id: 1,
-            ordernumber: 1001,
-            date: '05 july 2021',
-            status: 1,
-            total: 20000
-        },
-        {
-            id: 2,
-            ordernumber: 1002,
-            date: '06 july 2021',
-            status: 1,
-            total: 20000
-        },
-        {
-            id: 3,
-            ordernumber: 1003,
-            date: '07 july 2021',
-            status: 1,
-            total: 20000
-        }
-    ]
+    async function getDataOfOrders(){
+        let result :any = []
+        result = await getVendorOrders(props.languages, siteConfig.pageSize)
+
+        console.log("check result",result)
+        let dataObj = result && result.length >0 ? result[0] : [];
+        console.log(dataObj)
+        if(isArray(dataObj)){
+        const dataLListing = dataObj.map((data, index)=>{
+            let orderLoop:any = {};
+            orderLoop.orderNumber = data.increment_id;
+            orderLoop.status = data.status;
+            orderLoop.products = data.products;
+            orderLoop.total = data.total;
+            return orderLoop;
+        });
+        
+        setMyOrders(dataLListing)
+    }
+
+    }
+    // const data = [
+    //     {
+    //         id: 1,
+    //         ordernumber: 1001,
+    //         date: '05 july 2021',
+    //         status: 1,
+    //         total: 20000
+    //     },
+    //     {
+    //         id: 2,
+    //         ordernumber: 1002,
+    //         date: '06 july 2021',
+    //         status: 1,
+    //         total: 20000
+    //     },
+    //     {
+    //         id: 3,
+    //         ordernumber: 1003,
+    //         date: '07 july 2021',
+    //         status: 1,
+    //         total: 20000
+    //     }
+    // ]
 
     const handleChange = ({ selectedRows }) => {
         console.log('Selected Rows: ', selectedRows);
@@ -136,7 +169,7 @@ function MySalesOrders(props) {
           
                 <DataTable
                     columns={columns}
-                    data={data}
+                    data={myOrder}
                     selectableRows
                     onSelectedRowsChange={handleChange}
                 />
