@@ -13,7 +13,7 @@ import { isArray } from 'util';
 
 function MySalesOrders(props) {
     const intl = useIntl();
-    const [myOrder, setMyOrders] = useState([]) 
+    const [myOrder, setMyOrders] = useState([])
     useEffect(() => {
         getDataOfOrders()
         return (
@@ -25,7 +25,7 @@ function MySalesOrders(props) {
     const columns = [
         {
             name: 'Order number',
-            selector: row => row.ordernumber,
+            selector: row => row.increment_id,
             sortable: true,
         },
         {
@@ -42,50 +42,26 @@ function MySalesOrders(props) {
             selector: row => row.total,
         },
     ];
-    async function getDataOfOrders(){
-        let result :any = []
-        result = await getVendorOrders(props.languages, siteConfig.pageSize)
+    async function getDataOfOrders() {
+        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize)
 
-        console.log("check result",result)
-        let dataObj = result && result.length >0 ? result[0] : [];
+        console.log("check result", result)
+        let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
         console.log(dataObj)
-        if(isArray(dataObj)){
-        const dataLListing = dataObj.map((data, index)=>{
-            let orderLoop:any = {};
-            orderLoop.orderNumber = data.increment_id;
-            orderLoop.status = data.status;
-            orderLoop.products = data.products;
-            orderLoop.total = data.total;
-            return orderLoop;
-        });
-        
-        setMyOrders(dataLListing)
-    }
+        if (isArray(dataObj)) {
+            const dataLListing = dataObj.map((data, index) => {
+                let orderLoop: any = {};
+                orderLoop.increment_id = data.increment_id;
+                orderLoop.status = data.status;
+                orderLoop.products = data.products;
+                orderLoop.total = data.total;
+                return orderLoop;
+            });
+
+            setMyOrders(dataLListing)
+        }
 
     }
-    // const data = [
-    //     {
-    //         id: 1,
-    //         ordernumber: 1001,
-    //         date: '05 july 2021',
-    //         status: 1,
-    //         total: 20000
-    //     },
-    //     {
-    //         id: 2,
-    //         ordernumber: 1002,
-    //         date: '06 july 2021',
-    //         status: 1,
-    //         total: 20000
-    //     },
-    //     {
-    //         id: 3,
-    //         ordernumber: 1003,
-    //         date: '07 july 2021',
-    //         status: 1,
-    //         total: 20000
-    //     }
-    // ]
 
     const handleChange = ({ selectedRows }) => {
         console.log('Selected Rows: ', selectedRows);
@@ -97,8 +73,8 @@ function MySalesOrders(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id = "salesOrder.title"/></h1>
-                            <p><IntlMessages id = "salesOrder.description.1"/><br/><IntlMessages id = "salesOrder.description.2"/></p>
+                            <h1><IntlMessages id="salesOrder.title" /></h1>
+                            <p><IntlMessages id="salesOrder.description.1" /><br /><IntlMessages id="salesOrder.description.2" /></p>
                         </div>
                     </div>
                     <div className="range_slider">
@@ -106,7 +82,7 @@ function MySalesOrders(props) {
                             <div className="row">
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
-                                        <span className="form-label"><IntlMessages id ="status"/></span>
+                                        <span className="form-label"><IntlMessages id="status" /></span>
                                         <select className="form-select" aria-label="Default select example" >
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
@@ -131,7 +107,7 @@ function MySalesOrders(props) {
                                 <div className="col-sm-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
-                                        <Slider range max={20000} defaultValue={[0, 5]}  />
+                                        <Slider range max={20000} defaultValue={[0, 5]} />
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
@@ -147,7 +123,7 @@ function MySalesOrders(props) {
                             <div className="row">
                                 <div className="col-sm-6 mb-4">
                                     <div className="form-group">
-                                        <span className="form-label"><IntlMessages id = "changeStatus"/>:</span>
+                                        <span className="form-label"><IntlMessages id="changeStatus" />:</span>
                                         <select className="form-select" aria-label="Default select example" >
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
@@ -158,15 +134,15 @@ function MySalesOrders(props) {
                                     </div>
                                 </div>
                                 <div className="d-grid col-sm-4 mb-4">
-                                        <button type="button" className="btn btn-secondary" >
-                                            <IntlMessages id="myaccount.edit" />
-                                        </button>
-                                    </div>
+                                    <button type="button" className="btn btn-secondary" >
+                                        <IntlMessages id="myaccount.edit" />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-          
+
                 <DataTable
                     columns={columns}
                     data={myOrder}

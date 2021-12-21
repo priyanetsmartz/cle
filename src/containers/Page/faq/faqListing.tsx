@@ -3,18 +3,19 @@ import { connect } from "react-redux";
 import { getFaqListinglabels } from '../../../redux/pages/allPages';
 import { useParams, useLocation } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
+import { capitalize } from '../../../components/utility/allutils';
 function FaqListing(props) {
+  const location = useLocation();
   const [categoryData, setCategoryData] = useState([])
   const { url_key, question_id }: any = useParams();
   const search = useLocation().hash;
   let ser = search.replace(/%20/g, '')
-  const [idparams, setIdparams] = useState(ser ? ser : '')
   useEffect(() => {
     getData();
     return () => {
       //
     }
-  }, [props.languages]);
+  }, [props.languages, location]);
 
   async function getData() {
     let results: any = await getFaqListinglabels(props.languages, url_key);
@@ -31,7 +32,7 @@ function FaqListing(props) {
                 {
                   categoryData.map((category, index) => (
                     <div key={index}>
-                      <h2>{category['title']}</h2>
+                      <h2>{ capitalize(category['title'])}</h2>
 
                       <div className="accordion" id="accordionExample">
                         {

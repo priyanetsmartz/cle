@@ -33,7 +33,7 @@ function Breadcrumbs(props) {
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
                     {breadcrumsState.map((local, j) => {
-                         //console.log(local)
+                        //console.log(local)
                         if (j === breadcrumsState.length - 1) {
                             let data = local.split('-')
                             if (local === 'orders-and-returns' || local === 'wish-list' || local === 'profile' || local === 'support') {
@@ -65,7 +65,8 @@ function Breadcrumbs(props) {
                                     <li key={j} className="breadcrumb-item active">
                                         {
                                             data.map((answer, i) => {
-                                                return (<span key={i}> {capitalize(answer)} </span>)
+                                                let str = answer.replace(/-/g, ' ');
+                                                return (<span key={i}> {capitalize(str)} </span>)
                                             })
                                         }
                                     </li>
@@ -115,8 +116,9 @@ function Breadcrumbs(props) {
                                         <li key={j} className="breadcrumb-item"><Link to={"/"}>Search</Link></li>
                                     )
                                 } else {
+                                    let str = local.replace(/-/g, ' ');
                                     return (
-                                        <li key={j} className="breadcrumb-item"><Link to={local === 'product-details' ? '/products' : "/" + local}>{local === 'product-details' ? 'Products' : capitalize(local)}</Link></li>
+                                        <li key={j} className="breadcrumb-item"><Link to={local === 'product-details' ? '/products' : "/" + local}>{local === 'product-details' ? 'Products' : capitalize(str)}</Link></li>
                                     )
                                 }
 

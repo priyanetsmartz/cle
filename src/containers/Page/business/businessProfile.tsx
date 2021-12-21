@@ -33,6 +33,7 @@ function BusinessProfile(props) {
     });
 
     const [custId, setCustid] = useState(props.token.cust_id);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [businessDetails, setBusinessDetails] = useState({});
     const [bankDetails, setBankDetails] = useState({});
     const [billingAddressDetails, setBillingAddrssDetails] = useState({});
@@ -133,9 +134,9 @@ function BusinessProfile(props) {
 
     async function getData() {
         let result: any = await getVendorDetails('english');
-        setBankDetails(result['data'] && result['data'].length > 0 ? result['data'][0]['bankDetails'] : [])
-        setBusinessDetails(result['data'] && result['data'].length > 0 ? result['data'][0]['businessDetails'] : [])
-        setBillingAddrssDetails(result['data'] && result['data'].length > 0 ? result['data'][0]['billingAddress'] : [])
+        setBankDetails(result && result['data'] && result['data'].length > 0 ? result['data'][0]['bankDetails'] : [])
+        setBusinessDetails(result && result['data'] && result['data'].length > 0 ? result['data'][0]['businessDetails'] : [])
+        setBillingAddrssDetails(result && result['data'] && result['data'].length > 0 ? result['data'][0]['billingAddress'] : [])
 
     }
     // async function getData() {
@@ -154,7 +155,8 @@ function BusinessProfile(props) {
 
     const getCountries = async () => {
         let result: any = await getCountriesList();
-        setCountries(result.data);
+        let country = result && result.result ? result.data : []
+        setCountries(country);
     }
 
     const handleChange = (e) => {
@@ -494,6 +496,16 @@ function BusinessProfile(props) {
             [id]: val
         }));
     }
+    const onFileChange = (event) => {
+        const formData = new FormData();
+        formData.append(
+            "vendorprofile",
+            event.target.files[0],
+            event.target.files[0].name
+        );
+        setSelectedFile(event.target.files[0]);
+        console.log(event.target.files[0], event.target.files[0].name)
+    }
 
     return (
         <div className="col-sm-9">
@@ -542,13 +554,13 @@ function BusinessProfile(props) {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="col-sm-3">
+                        <div className="col-sm-3">
                             <div className="d-grid ">
                                 <button type="button" className="btn btn-secondary" onClick={openMyDetails}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -566,6 +578,7 @@ function BusinessProfile(props) {
                             <div className="row">
                                 <div className="col-sm-3">
                                     <div className='companylogo'> <img className="rounded-circle" src={businessDetails['logoImagePath'] ? companylogo + '/' + businessDetails['logoImagePath'] : user} alt={businessDetails['businessCompanyName']} width="100%" height="100%" />
+                                        <div className='onhoveredit'> <input type="file" onChange={onFileChange} /></div>
                                     </div>
                                 </div>
                                 <div className="col-sm-3">

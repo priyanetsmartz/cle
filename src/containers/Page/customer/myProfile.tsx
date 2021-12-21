@@ -266,7 +266,7 @@ function MyProfile(props) {
     const saveCustDetails = async (e) => {
         setSaveCustDetailsLoader(true)
         e.preventDefault();
-        console.log(props.token.cust_id)
+      //  console.log(props.token.cust_id)
         custForm.email = props.token.token_email;
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
             custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;

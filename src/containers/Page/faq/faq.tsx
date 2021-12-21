@@ -37,12 +37,12 @@ function Faq(props) {
 												<ul className="list-unstyled">
 													{
 														item['questionArray'].map((question, i) => (
-															<li key={i}><Link to={`help-center/` + item['url_key'] + '?#' + question['title']}>{question['title']}</Link></li>
+															<li key={i}><Link to={`/help-center/` + item['url_key'] + '?#' + question['title']}>{question['title']}</Link></li>
 														))
 													}
 												</ul>
 												<div className="faq-view-all">
-													<Link to={`help-center/` + item['url_key']}><IntlMessages id="category.viewAll" /></Link>
+													<Link to={`/help-center/` + item['url_key']}><IntlMessages id="category.viewAll" /></Link>
 												</div>
 											</div>
 										))
