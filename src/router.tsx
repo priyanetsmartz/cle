@@ -41,6 +41,7 @@ const PublicRoutes = ({ history }) => {
       <Suspense fallback={<Loader />}>
         <Switch>
           <ProductRoutes exact path="/help-center/:url_key" component={FaqListing} page='faq' />
+          <ProductRoutes exact path="/vendor/forgot-password" component={ResetPassword} />
           <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
           <ProductRoutes exact path="/search/:brandname" component={Search} />
           <ProductRoutes exact path="/thankyou" component={orderThankyou} />
@@ -77,6 +78,7 @@ const PublicRoutes = ({ history }) => {
 
 
           <ProductRoutes exact path="/vendor-login" component={VendorLogin} />
+          
           <ProductRoutes exact path="/forgot-password" component={ForgottenPassword} />
           <ProductRoutes exact path="/reset-password" component={ResetPassword} />
           <PriveRoute exact path="/prive-user" component={PriveUser} />
