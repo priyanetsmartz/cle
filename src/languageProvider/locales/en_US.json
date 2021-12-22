@@ -511,6 +511,8 @@
   "product.archieveproduct":"Archieve the Product",
   "product.removeproduct":"Remove the Product",
   "product.soldproduct":"Change the Satus to sold",
-  "emailnotfound" : "Email not found"
+  "emailnotfound" : "Email not found",
+  "vendorName":"First name is required",
+  "surname":"Surname is required"
   
 }

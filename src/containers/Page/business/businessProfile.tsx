@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
 import {
-    saveCustomerDetails, getCountriesList, changePassword,
-    updateCustEmail, deleteAddress, getRegionsByCountryID
+    getCountriesList, changePassword,
+    updateCustEmail, getRegionsByCountryID
 } from '../../../redux/pages/customers';
+import moment from 'moment';
+import { language } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { DROPDOWN } from '../../../config/constants';
@@ -23,54 +25,27 @@ const companylogo = `${baseUrl}/pub/media/`;
 function BusinessProfile(props) {
     const intl = useIntl();
     const [vendorId, setVendorId] = useState(props.token.vendor_id)
-    const [vendorData, setVendorData] = useState({
-        vendorId:vendorId,
-        vendor_name: '',
-        telephone: '',
-        country_id: '',
-        dob: '',
+    const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
+    const [vendorForm, setVendorForm] = useState({
+        vendorId: vendorId,
         email: '',
+        vendorName: '',
+        vendorTelephone: '',
+        countryName: '',
+        countryId: '',
+        vendorDateofBirth: '',
+        vendorSurname: '',
+        gender: "0",
         street: '',
         city: '',
-        surname:'',
-        gender:''
+        addresses: [],
     });
 
-    const [vendorForm, setVendorForm] = useState({
-        vendorId:vendorId,
-        vendorName: '',
-        telephone: '',
-        countryId: '',
-        dateofbirth: '',
-        surname:'',
-        gender:''
-    });
-
-    
-
-    const [custId, setCustid] = useState(props.token.cust_id);
     const [selectedFile, setSelectedFile] = useState(null);
     const [businessDetails, setBusinessDetails] = useState({});
     const [bankDetails, setBankDetails] = useState({});
     const [billingAddressDetails, setBillingAddrssDetails] = useState({});
-    const [custForm, setCustForm] = useState({
-        id: custId,
-        email: "",
-        firstname: "",
-        lastname: "",
-        gender: "",
-        dob: "",
-        website_id: 1,
-        addresses: [],
-        custom_attributes: []
-    });
-
-    
-
-
-    const userGroup = props.token.token;
     const [isShow, setIsShow] = useState(false);
-    // const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
 
 
     const [myDetailsModel, setMyDetailsModel] = useState(false);
@@ -90,16 +65,16 @@ function BusinessProfile(props) {
     const [regions, setRegions] = useState([]); // for regions dropdown
 
     const [dob, setDob] = useState({
-        day: '',
-        month: '',
-        year: ''
+        day: moment().format("DD"),
+        month: moment().format("MM"),
+        year: moment().format("YYYY")
     });
-    const [country, setCountry] = useState("");
 
 
-    const [custAddForm, setCustAddForm] = useState({
+
+    const [vendorAddForm, setVendorAddForm] = useState({
         id: 0,
-        customer_id: custId,
+        customer_id: vendorId,
         firstname: "",
         lastname: "",
         telephone: "",
@@ -109,8 +84,6 @@ function BusinessProfile(props) {
         region_id: "",
         street: ""
     });
-    const [addIndex, setAddIndex] = useState(null);
-
     const [changePass, setChangePass] = useState({
         password: "",
         newPassword: "",
@@ -126,7 +99,9 @@ function BusinessProfile(props) {
     const [errors, setError] = useState({
         errors: {}
     });
-
+    const [errorsPersonal, setErrorPersonal] = useState({
+        errors: {}
+    });
     //--------------------------------------------------------------
     useEffect(() => {
         getVendor();
@@ -143,37 +118,32 @@ function BusinessProfile(props) {
     async function getVendor() {
         let vendor = await sessionService.loadUser()
         if (vendor && vendor.type === "vendor") {
-             console.log("vendor",vendor)
-            setVendorData(vendor);
+            // setVendorForm(vendor);
         } else {
             window.location.href = '/';
         }
     }
 
     async function getData() {
-        let result: any = await getVendorDetails('english');
+        let lang = props.languages ? props.languages : language;
+        let result: any = await getVendorDetails(lang);
+        //  console.log(result['data'][0]['vendorPersonalDetails']);
+        const d = result && result['data'] && result['data'].length > 0 ? result['data'][0]['vendorPersonalDetails'].vendorDateofBirth.split("/") : moment().format("YYYY-MM-DD").split("/");
+        dob.day = d[0];
+        dob.month = d[1];
+        dob.year = d[2];
+        setDob(dob);
+        setVendorForm(result && result['data'] && result['data'].length > 0 ? result['data'][0]['vendorPersonalDetails'] : [])
         setBankDetails(result && result['data'] && result['data'].length > 0 ? result['data'][0]['bankDetails'] : [])
         setBusinessDetails(result && result['data'] && result['data'].length > 0 ? result['data'][0]['businessDetails'] : [])
         setBillingAddrssDetails(result && result['data'] && result['data'].length > 0 ? result['data'][0]['billingAddress'] : [])
 
     }
-    // async function getData() {
-    //     let result: any = await getCustomerDetails();
-    //     const d = result.data.dob ? result.data.dob.split("-") : moment().format("YYYY-MM-DD").split("-");
-    //     dob.day = d[2];
-    //     dob.month = d[1];
-    //     dob.year = d[0];
-    //     setDob(dob);
-
-    //     if (result) {
-    //         setCustForm(result.data);
-    //     }
-    // }
-    //-----------------------------------------------------------------------------------------------------
 
     const getCountries = async () => {
         let result: any = await getCountriesList();
-        let country = result && result.result ? result.data : []
+        // console.log(result.data)
+        let country = result && result.data ? result.data : []
         setCountries(country);
     }
 
@@ -193,50 +163,46 @@ function BusinessProfile(props) {
 
     }
     const saveCustDetails = async (e) => {
+        setSaveCustDetailsLoader(true)
         e.preventDefault();
-        if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
-            vendorForm.dateofbirth = `${dob.day}/${dob.month}/${dob.year}`;
+        if (validatePersonalDetails()) {
+            if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
+                vendorForm.vendorDateofBirth = `${dob.day}/${dob.month}/${dob.year}`;
+            }
+            let payload = {
+                "vendorId": props.token.vendor_id,
+                "surname": vendorForm.vendorSurname,
+                "vendorName": vendorForm.vendorName,
+                "telephone": vendorForm.vendorTelephone,
+                "dateofbirth": vendorForm.vendorDateofBirth,
+                "countryId": vendorForm.countryId,
+                "gender": vendorForm.gender
+            }
+            let result: any = await editVendor(payload);
+            if (result) {
+                getData();
+                setSaveCustDetailsLoader(false)
+                setMyDetailsModel(false);
+                notification("success", "", intl.formatMessage({ id: "customerdetailsupdated" }));
+            } else {
+                setSaveCustDetailsLoader(false)
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
         }
-        vendorForm.vendorId = props.token.vendor_id;
-        let result: any = await editVendor(vendorForm);
-        if (result) {
-            setMyDetailsModel(false);
-            notification("success", "", intl.formatMessage({ id: "customerdetailsupdated" }));
-        }
+    }
+
+    const handleCountryChange = async (e) => {
+        const { id, value } = e.target;
+        setVendorForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }));
+        getRegions(value);
     }
 
     // for customer address popup window starts here
     const saveCustAddress = async (e) => {
-        if (validateAddress()) {
-            setIsShow(true);
-            let obj: any = { ...custAddForm };
-            if (obj.region_id == '') delete obj.region_id;
-            obj.street = [obj.street];
-            if (obj.id === 0) {
-                custForm.addresses.push(obj);
-            } else {
-                custForm.addresses[addIndex] = obj;
-            }
-            //console.log(custAddForm);
-            let result: any = await saveCustomerDetails(custId, { customer: custForm });
-            if (result) {
-                openAddressModal();
-                setCustAddForm({
-                    id: 0,
-                    customer_id: custId,
-                    firstname: "",
-                    lastname: "",
-                    telephone: "",
-                    postcode: "",
-                    city: "",
-                    country_id: "",
-                    region_id: "",
-                    street: ""
-                });
-                notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
-                setIsShow(false);
-            }
-        }
+
     }
 
     const saveBankDetails = async (e) => {
@@ -246,36 +212,60 @@ function BusinessProfile(props) {
         console.log(businessDetails)
     }
 
+    const validatePersonalDetails = () => {
+        let error = {};
+        let formIsValid = true;
+
+        if (!vendorForm.vendorName) {
+            formIsValid = false;
+            error['vendorName'] = intl.formatMessage({ id: "vendorName" });
+        }
+        if (!vendorForm.vendorSurname) {
+            formIsValid = false;
+            error["surname"] = intl.formatMessage({ id: "surname" });
+        }
+
+        if (!vendorForm.vendorTelephone) {
+            formIsValid = false;
+            error['vendorTelephone'] = intl.formatMessage({ id: "phonereq" });
+        }
+        if (!vendorForm.countryId) {
+            formIsValid = false;
+            error["countryId"] = intl.formatMessage({ id: "countryreq" });
+        }
+        setErrorPersonal({ errors: error });
+        return formIsValid;
+    }
     const validateAddress = () => {
         let error = {};
         let formIsValid = true;
 
-        if (!custAddForm.telephone) {
+        if (!vendorAddForm.telephone) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" });
         }
-        if (!custAddForm.postcode) {
+        if (!vendorAddForm.postcode) {
             formIsValid = false;
             error["postcode"] = intl.formatMessage({ id: "pinreq" });
         }
-        if (!custAddForm.city) {
+        if (!vendorAddForm.city) {
             formIsValid = false;
             error["city"] = intl.formatMessage({ id: "pinreq" });
         }
 
-        if (!custAddForm.country_id) {
+        if (!vendorAddForm.country_id) {
             formIsValid = false;
             error['country_id'] = intl.formatMessage({ id: "countryreq" });
         }
-        if (!custAddForm.street) {
+        if (!vendorAddForm.street) {
             formIsValid = false;
             error["street"] = intl.formatMessage({ id: "addressreq" });
         }
-        if (!custAddForm.firstname) {
+        if (!vendorAddForm.firstname) {
             formIsValid = false;
             error["firstname"] = intl.formatMessage({ id: "firstnamerequired" });
         }
-        if (!custAddForm.lastname) {
+        if (!vendorAddForm.lastname) {
             formIsValid = false;
             error["lastname"] = intl.formatMessage({ id: "lastnamerequired" });
         }
@@ -287,22 +277,11 @@ function BusinessProfile(props) {
 
     //edit existing address starts here------------->
     const editAddress = (index) => {
-        delete custForm.addresses[index].region;
-        getRegions(custForm.addresses[index].country_id, index);
-        setAddIndex(index);
-        custForm.addresses[index].street = custForm.addresses[index].street[0];
-        setCustAddForm(custForm.addresses[index]);
-        openAddressModal();
+
     }
 
     const deleteAdd = async (index) => {
-        if (!custForm.addresses[index]) return;
-        let result: any = await deleteAddress(custForm.addresses[index].id);
-        if (result) {
-            custForm.addresses.splice(index, 1);
-            setCustForm(custForm);
-            notification("success", "", intl.formatMessage({ id: "customerAddressDelete" }));
-        }
+
     }
     //edit existing address ends here--------------->
 
@@ -310,7 +289,7 @@ function BusinessProfile(props) {
     //for customer address
     const handleAddChange = (e) => {
         const { id, value } = e.target;
-        setCustAddForm(prevState => ({
+        setVendorAddForm(prevState => ({
             ...prevState,
             [id]: value
         }))
@@ -324,21 +303,12 @@ function BusinessProfile(props) {
         }))
     }
 
-    const handleCountryChange = async (e) => {
-        const { id, value } = e.target;
-        setCustAddForm(prevState => ({
-            ...prevState,
-            [id]: value
-        }));
-        getRegions(value);
-    }
-
     const getRegions = async (value, i?) => {
         const res: any = await getRegionsByCountryID(value);
         if (res.data.available_regions === undefined) {
             setRegions([]);
             if (i) {
-                setCustAddForm(prevState => ({
+                setVendorAddForm(prevState => ({
                     ...prevState,
                     region_id: ''
                 }));
@@ -411,7 +381,7 @@ function BusinessProfile(props) {
     const handleChangeEmail = async () => {
         if (handleValidationEmail()) {
             const req = {
-                customerId: custId,
+                customerId: vendorId,
                 newEmail: changeEmail.newEmail,
                 password: changeEmail.password
             }
@@ -542,33 +512,33 @@ function BusinessProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.name" /></label>
-                                        <div className="field-name">{vendorData.vendor_name}</div>
+                                        <div className="field-name">{vendorForm.vendorName}</div>
+                                    </div>
+                                    <div className="field_details">
+                                        <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
+                                        <div className="field-name">{vendorForm.vendorSurname}</div>
+                                    </div>
+                                </div>
+                                <div className="col-sm-4">
+
+                                    <div className="field_details mb-3">
+                                        <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
+                                        <div className="field-name">{vendorForm.gender === "0" ? "Male" : "Female"} </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
-                                        <div className="field-name">{vendorData.telephone}</div>
-                                    </div>
-                                    {/* <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
-                                        <div className="field-name"></div>
-                                    </div> */}
-                                </div>
-                                <div className="col-sm-4">
-                                    <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.street" /></label>
-                                        <div className="field-name">{vendorData.street} </div>
-                                    </div>
-                                    <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.city" /></label>
-                                        <div className="field-name">{vendorData.city} </div>
+                                        <div className="field-name">{vendorForm.vendorTelephone}</div>
                                     </div>
 
                                 </div>
                                 <div className="col-sm-4">
-
+                                    <div className="field_details mb-3">
+                                        <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
+                                        <div className="field-name">{vendorForm.vendorDateofBirth} </div>
+                                    </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.country" /></label>
-                                        <div className="field-name">{vendorData.country_id}</div>
+                                        <div className="field-name">{vendorForm.countryName}</div>
                                     </div>
                                 </div>
                             </div>
@@ -657,8 +627,8 @@ function BusinessProfile(props) {
                                 <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
                             </div>
                         </div>
-                        {(custForm && custForm.addresses && custForm.addresses.length > 0) && (<>
-                            {custForm && custForm.addresses.map((address, i) => {
+                        {(vendorForm && vendorForm.addresses && vendorForm.addresses.length > 0) && (<>
+                            {vendorForm && vendorForm.addresses.map((address, i) => {
                                 return (<div className="addressnew_addressbodr" key={i}>
                                     <h3><IntlMessages id="myaccount.address" /></h3>
                                     <ul>
@@ -802,7 +772,7 @@ function BusinessProfile(props) {
 
                             <div className="col-sm-6">
                                 <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                                <div className="password_edit">{custForm.email}</div>
+                                <div className="password_edit">{vendorForm.email}</div>
                             </div>
                         </div>
                         <div className="col-sm-12">
@@ -963,33 +933,33 @@ function BusinessProfile(props) {
                                 id="vendorName"
                                 value={vendorForm.vendorName}
                                 onChange={handleChange} />
-                            <span className="error">{errors.errors["firstname"]}</span>
+                            <span className="error">{errorsPersonal.errors["vendorName"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Surname<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Smith" id="surname"
-                                value={vendorForm.surname}
+                            <input type="text" className="form-control" placeholder="Smith" id="vendorSurname"
+                                value={vendorForm.vendorSurname}
                                 onChange={handleChange} />
-                            <span className="error">{errors.errors["lastname"]}</span>
+                            <span className="error">{errorsPersonal.errors["surname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Gender</label>
-                            <select className="form-select" value={vendorForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
+                            <select className="form-select" defaultValue={parseInt(vendorForm.gender)} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">Select</option>
                                 {DROPDOWN.gender.map(opt => {
                                     return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                 })}
                             </select>
-                            <span className="error">{errors.errors["gender"]}</span>
+                            <span className="error">{errorsPersonal.errors["gender"]}</span>
                         </div>
-                        {/* <div className="width-100 mb-3 form-field">
+                        <div className="width-100 mb-3 form-field">
                             <label className="form-label">Phone number</label>
-                            <input type="number" className="form-control" placeholder="+48 123 456 789" id="phone"
-                                value={telephone}
-                                onChange={(e) => { setTelephone(e.target.value) }}
+                            <input type="number" className="form-control" placeholder="+48 123 456 789" id="vendorTelephone"
+                                value={vendorForm.vendorTelephone}
+                                onChange={handleChange}
                             />
-                            <span className="error">{errors.errors["phone"]}</span>
-                        </div> */}
+                            <span className="error">{errorsPersonal.errors["vendorTelephone"]}</span>
+                        </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
@@ -1016,9 +986,9 @@ function BusinessProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Country<span className="maindatory">*</span></label>
-                            <select value={country} onChange={(e) => { setCountry(e.target.value) }} id="country" className="form-select" aria-label="Default select example">
+                            <select value={vendorForm.countryId} onChange={handleCountryChange} id="countryId" className="form-select" aria-label="Default select example">
                                 {countries && countries.map(opt => {
-                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
@@ -1027,7 +997,9 @@ function BusinessProfile(props) {
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">
                             <div className="confirm-btn">
-                                <button type="button" className="btn btn-secondary" onClick={saveCustDetails}>Confirm</button>
+                                <button type="button" className="btn btn-secondary" style={{ "display": !saveCustDetailsLoader ? "inline-block" : "none" }} onClick={saveCustDetails}><IntlMessages id="myaccount.confirm" /></button>
+
+                                <button className="spinner" style={{ "display": saveCustDetailsLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</button>
                             </div>
                         </div>
                     </Modal.Footer>
@@ -1109,7 +1081,7 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.first_name" })}
                                 id="firstname"
-                                value={custAddForm.firstname}
+                                value={vendorAddForm.firstname}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["firstname"]}</span>
                         </div>
@@ -1117,7 +1089,7 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="lastname"
                                 placeholder={intl.formatMessage({ id: "myaccount.surName" })}
-                                value={custAddForm.lastname}
+                                value={vendorAddForm.lastname}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["lastname"]}</span>
 
@@ -1171,7 +1143,7 @@ function BusinessProfile(props) {
                             <div className="width-100 mb-3 form-field">
                                 <label className="form-label">
                                     <IntlMessages id="myaccount.region" /></label>
-                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                <select value={vendorAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
                                     <option value="">Select</option>
                                     {regions && regions.map(opt => {
                                         return (<option key={opt.id} value={opt.id} >
@@ -1210,7 +1182,7 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Ann"
                                 id="firstname"
-                                value={custAddForm.firstname}
+                                value={vendorAddForm.firstname}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["firstname"]}</span>
                         </div>
@@ -1218,7 +1190,7 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="lastname"
                                 placeholder="Surname"
-                                value={custAddForm.lastname}
+                                value={vendorAddForm.lastname}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["lastname"]}</span>
 
@@ -1227,7 +1199,7 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="telephone"
                                 placeholder="Phone"
-                                value={custAddForm.telephone}
+                                value={vendorAddForm.telephone}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["telephone"]}</span>
 
@@ -1236,7 +1208,7 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="street"
                                 placeholder="Address"
-                                value={custAddForm.street}
+                                value={vendorAddForm.street}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["street"]}</span>
 
@@ -1245,7 +1217,7 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="city"
                                 placeholder="City"
-                                value={custAddForm.city}
+                                value={vendorAddForm.city}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["city"]}</span>
 
@@ -1254,14 +1226,14 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="postcode"
                                 placeholder="Post Code"
-                                value={custAddForm.postcode}
+                                value={vendorAddForm.postcode}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["postcode"]}</span>
 
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-                            <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
+                            <select value={vendorAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
                                 {countries && countries.map(opt => {
                                     return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
@@ -1272,7 +1244,7 @@ function BusinessProfile(props) {
                             <div className="width-100 mb-3 form-field">
                                 <label className="form-label">
                                     <IntlMessages id="myaccount.region" /></label>
-                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                <select value={vendorAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
                                     <option value="">Select</option>
                                     {regions && regions.map(opt => {
                                         return (<option key={opt.id} value={opt.id} >
