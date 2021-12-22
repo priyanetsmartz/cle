@@ -4,11 +4,10 @@
   "private": true,
   "dependencies": {
     "-": "0.0.1",
+    "@babel/preset-react": "^7.16.5",
     "@fullpage/react-fullpage": "^0.1.19",
-    "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.23",
     "@types/node": "^15.14.0",
     "@types/react": "^17.0.13",
     "@types/react-dom": "^17.0.8",
@@ -47,6 +46,7 @@
     "react-router-dynamic-breadcrumbs": "^2.2.0",
     "react-router-hash-link": "^2.4.3",
     "react-router-redux": "^4.0.8",
+    "react-router-sitemap-generator": "0.0.8",
     "react-scripts": "4.0.3",
     "react-share": "^4.4.0",
     "react-slick": "^0.28.1",
@@ -60,21 +60,24 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/node": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-typescript": "^7.16.5",
     "env-cmd": "^10.1.0"
   },
   "scripts": {
-    "homepage": "https://domain.com/",
     "start": "react-scripts start",
     "start:prod": "env-cmd -f .env.production react-scripts start",
     "build": "react-scripts build",
     "build:prod": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "sitemap": "babel-node ./src/sitemap-generator.js"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
