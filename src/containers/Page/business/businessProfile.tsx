@@ -7,6 +7,7 @@ import {
     updateCustEmail, getRegionsByCountryID
 } from '../../../redux/pages/customers';
 import moment from 'moment';
+import { language } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { DROPDOWN } from '../../../config/constants';
@@ -24,18 +25,19 @@ const companylogo = `${baseUrl}/pub/media/`;
 function BusinessProfile(props) {
     const intl = useIntl();
     const [vendorId, setVendorId] = useState(props.token.vendor_id)
-
+    const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
     const [vendorForm, setVendorForm] = useState({
         vendorId: vendorId,
         email: '',
         vendorName: '',
-        telephone: '',
+        vendorTelephone: '',
+        countryName: '',
         countryId: '',
-        dateofbirth: '',
-        surname: '',
-        gender: 0,
+        vendorDateofBirth: '',
+        vendorSurname: '',
+        gender: "0",
         street: '',
-        city:'',
+        city: '',
         addresses: [],
     });
 
@@ -67,7 +69,7 @@ function BusinessProfile(props) {
         month: moment().format("MM"),
         year: moment().format("YYYY")
     });
-    const [country, setCountry] = useState("");
+
 
 
     const [vendorAddForm, setVendorAddForm] = useState({
@@ -116,14 +118,22 @@ function BusinessProfile(props) {
     async function getVendor() {
         let vendor = await sessionService.loadUser()
         if (vendor && vendor.type === "vendor") {
-            setVendorForm(vendor);
+            // setVendorForm(vendor);
         } else {
             window.location.href = '/';
         }
     }
 
     async function getData() {
-        let result: any = await getVendorDetails('english');
+        let lang = props.languages ? props.languages : language;
+        let result: any = await getVendorDetails(lang);
+        //  console.log(result['data'][0]['vendorPersonalDetails']);
+        const d = result && result['data'] && result['data'].length > 0 ? result['data'][0]['vendorPersonalDetails'].vendorDateofBirth.split("/") : moment().format("YYYY-MM-DD").split("/");
+        dob.day = d[0];
+        dob.month = d[1];
+        dob.year = d[2];
+        setDob(dob);
+        setVendorForm(result && result['data'] && result['data'].length > 0 ? result['data'][0]['vendorPersonalDetails'] : [])
         setBankDetails(result && result['data'] && result['data'].length > 0 ? result['data'][0]['bankDetails'] : [])
         setBusinessDetails(result && result['data'] && result['data'].length > 0 ? result['data'][0]['businessDetails'] : [])
         setBillingAddrssDetails(result && result['data'] && result['data'].length > 0 ? result['data'][0]['billingAddress'] : [])
@@ -153,18 +163,31 @@ function BusinessProfile(props) {
 
     }
     const saveCustDetails = async (e) => {
+        setSaveCustDetailsLoader(true)
         e.preventDefault();
         if (validatePersonalDetails()) {
             if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
-                vendorForm.dateofbirth = `${dob.day}/${dob.month}/${dob.year}`;
+                vendorForm.vendorDateofBirth = `${dob.day}/${dob.month}/${dob.year}`;
             }
-            vendorForm.vendorId = props.token.vendor_id;
-            console.log(vendorForm)
-            // let result: any = await editVendor(vendorForm);
-            // if (result) {
-            //     setMyDetailsModel(false);
-            //     notification("success", "", intl.formatMessage({ id: "customerdetailsupdated" }));
-            // }
+            let payload = {
+                "vendorId": props.token.vendor_id,
+                "surname": vendorForm.vendorSurname,
+                "vendorName": vendorForm.vendorName,
+                "telephone": vendorForm.vendorTelephone,
+                "dateofbirth": vendorForm.vendorDateofBirth,
+                "countryId": vendorForm.countryId,
+                "gender": vendorForm.gender
+            }
+            let result: any = await editVendor(payload);
+            if (result) {
+                getData();
+                setSaveCustDetailsLoader(false)
+                setMyDetailsModel(false);
+                notification("success", "", intl.formatMessage({ id: "customerdetailsupdated" }));
+            } else {
+                setSaveCustDetailsLoader(false)
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
         }
     }
 
@@ -197,14 +220,14 @@ function BusinessProfile(props) {
             formIsValid = false;
             error['vendorName'] = intl.formatMessage({ id: "vendorName" });
         }
-        if (!vendorForm.surname) {
+        if (!vendorForm.vendorSurname) {
             formIsValid = false;
-            error["surname"] = intl.formatMessage({ id: "pinreq" });
+            error["surname"] = intl.formatMessage({ id: "surname" });
         }
 
-        if (!vendorForm.telephone) {
+        if (!vendorForm.vendorTelephone) {
             formIsValid = false;
-            error['telephone'] = intl.formatMessage({ id: "phonereq" });
+            error['vendorTelephone'] = intl.formatMessage({ id: "phonereq" });
         }
         if (!vendorForm.countryId) {
             formIsValid = false;
@@ -493,28 +516,29 @@ function BusinessProfile(props) {
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.surName" /></label>
-                                        <div className="field-name"></div>
+                                        <div className="field-name">{vendorForm.vendorSurname}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
+
                                     <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.street" /></label>
-                                        <div className="field-name">{vendorForm.street} </div>
+                                        <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
+                                        <div className="field-name">{vendorForm.gender === "0" ? "Male" : "Female"} </div>
                                     </div>
-                                    <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.city" /></label>
-                                        <div className="field-name">{vendorForm.city} </div>
+                                    <div className="field_details">
+                                        <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
+                                        <div className="field-name">{vendorForm.vendorTelephone}</div>
                                     </div>
 
                                 </div>
                                 <div className="col-sm-4">
-                                    <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
-                                        <div className="field-name">{vendorForm.telephone}</div>
+                                    <div className="field_details mb-3">
+                                        <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
+                                        <div className="field-name">{vendorForm.vendorDateofBirth} </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.country" /></label>
-                                        <div className="field-name">{vendorForm.countryId}</div>
+                                        <div className="field-name">{vendorForm.countryName}</div>
                                     </div>
                                 </div>
                             </div>
@@ -913,14 +937,14 @@ function BusinessProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Surname<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Smith" id="surname"
-                                value={vendorForm.surname}
+                            <input type="text" className="form-control" placeholder="Smith" id="vendorSurname"
+                                value={vendorForm.vendorSurname}
                                 onChange={handleChange} />
                             <span className="error">{errorsPersonal.errors["surname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Gender</label>
-                            <select className="form-select" defaultValue={vendorForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
+                            <select className="form-select" defaultValue={parseInt(vendorForm.gender)} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">Select</option>
                                 {DROPDOWN.gender.map(opt => {
                                     return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
@@ -930,11 +954,11 @@ function BusinessProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Phone number</label>
-                            <input type="number" className="form-control" placeholder="+48 123 456 789" id="telephone"
-                                value={vendorForm.telephone}
+                            <input type="number" className="form-control" placeholder="+48 123 456 789" id="vendorTelephone"
+                                value={vendorForm.vendorTelephone}
                                 onChange={handleChange}
                             />
-                            <span className="error">{errorsPersonal.errors["telephone"]}</span>
+                            <span className="error">{errorsPersonal.errors["vendorTelephone"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Date of birth</label>
@@ -962,31 +986,20 @@ function BusinessProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Country<span className="maindatory">*</span></label>
-                            <select value={country} onChange={handleCountryChange} id="country" className="form-select" aria-label="Default select example">
+                            <select value={vendorForm.countryId} onChange={handleCountryChange} id="countryId" className="form-select" aria-label="Default select example">
                                 {countries && countries.map(opt => {
                                     return (<option key={opt.id} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
                         </div>
-                        {regions.length > 0 &&
-                            <div className="width-100 mb-3 form-field">
-                                <label className="form-label">
-                                    <IntlMessages id="myaccount.region" /></label>
-                                <select value={vendorAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-                                    <option value="">Select</option>
-                                    {regions && regions.map(opt => {
-                                        return (<option key={opt.id} value={opt.id} >
-                                            {opt.name}</option>);
-                                    })}
-                                </select>
-                                <span className="error">{errors.errors["region_id"]}</span>
-                            </div>}
                     </Modal.Body>
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">
                             <div className="confirm-btn">
-                                <button type="button" className="btn btn-secondary" onClick={saveCustDetails}>Confirm</button>
+                                <button type="button" className="btn btn-secondary" style={{ "display": !saveCustDetailsLoader ? "inline-block" : "none" }} onClick={saveCustDetails}><IntlMessages id="myaccount.confirm" /></button>
+
+                                <button className="spinner" style={{ "display": saveCustDetailsLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</button>
                             </div>
                         </div>
                     </Modal.Footer>
