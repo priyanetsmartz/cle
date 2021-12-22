@@ -6644,9 +6644,9 @@ p.sliderupper {
 .faq-topics h4 {
     border-bottom: 1px solid #9f9393;
     padding: 20px 0;
-    margin-bottom: 20px;
-    font-size: 16px;
-    font-weight: 900;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
     display: flex;
     align-items: center;
     color: #000;
@@ -6654,7 +6654,7 @@ p.sliderupper {
 
 .faq-topics h4 i {
     margin-right: 20px;
-    font-size: 22px;
+    font-size: 20px;
 }
 
 .faq-topics li {
@@ -6771,8 +6771,9 @@ p.sliderupper {
 }
 
 .faq-list .accordion-item {
-    border-left: 0;
-    border-right: 0;
+    border-left: 0!important;
+    border-right: 0!important;
+	margin: -1px;
 }
 
 .login-popup {
