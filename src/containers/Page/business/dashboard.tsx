@@ -62,36 +62,21 @@ function Dashboard(props) {
         setCurrent((page) => page + 1);
 
     }
-    function changePage(event) {
-        let lang = props.languages ? props.languages : language;
-
-        event.preventDefault()
-        const pageNumber = Number(event.target.textContent);
-        setCurrent(pageNumber);
-    }
-    const getPaginationGroup = () => {
-        let start = Math.floor((page - 1) / pageSize) * pageSize;
-        let fill = pagination > 5 ? 4 : pagination;
-        //  console.log (new Array(fill).fill(fill).map((_, idx) => start + idx + 1))
-        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
-    };
     const goToPreviousPage = (e) => {
-        let lang = props.languages ? props.languages : language;
-
         e.preventDefault();
         setCurrent((page) => page - 1);
 
     }
     async function getDataOfOrders() {
         let result: any = await getVendorOrders(props.languages, siteConfig.pageSize);
-        let dataObj = result && result.length > 0 ? result[0] : [];
+        let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
         // console.log(dataObj)
-        const dataLListing = dataObj.map((data, index) => {
+        const dataLListing = dataObj.slice(0, 5).map((data, index) => {
             let orderLoop: any = {};
             orderLoop.orderNumber = data.increment_id;
             orderLoop.status = data.status;
-            orderLoop.products = data.products;
-            orderLoop.total = data.total;
+            orderLoop.products = parseInt(data.products);
+            orderLoop.total = siteConfig.currency + ' ' + data.total;
             return orderLoop;
         });
 

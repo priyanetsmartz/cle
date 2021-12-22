@@ -7,7 +7,8 @@ import { Slider } from 'antd';
 import moment from 'moment';
 import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
-import { isArray } from 'util';
+
+
 
 
 
@@ -48,13 +49,13 @@ function MySalesOrders(props) {
         console.log("check result", result)
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
         console.log(dataObj)
-        if (isArray(dataObj)) {
+        if (dataObj.length > 0) {
             const dataLListing = dataObj.map((data, index) => {
                 let orderLoop: any = {};
                 orderLoop.increment_id = data.increment_id;
                 orderLoop.status = data.status;
-                orderLoop.products = data.products;
-                orderLoop.total = data.total;
+                orderLoop.products = parseInt(data.products);
+                orderLoop.total = siteConfig.currency + ' ' + data.total;
                 return orderLoop;
             });
 
@@ -147,6 +148,7 @@ function MySalesOrders(props) {
                     columns={columns}
                     data={myOrder}
                     selectableRows
+                    pagination={true}
                     onSelectedRowsChange={handleChange}
                 />
             </section>
@@ -154,6 +156,7 @@ function MySalesOrders(props) {
 
     )
 }
+
 const mapStateToProps = (state) => {
     return {
         items: state.Cart.items
