@@ -31,10 +31,10 @@ function LanguageSwitcher(props) {
       <Link to="#" style={{ "display": highlight === 'arabic' ? "none" : "inline-block" }} className={highlight === 'arabic' ? 'highlighted' : ''} onClick={() => {
         handleChange('arabic');
       }}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="31" height="19" viewBox="0 0 31 19">
+        <svg xmlns="http://www.w3.org/2000/svg" width="31" height="19" viewBox="0 0 31 19" fill="#000000">
           <g id="Component_82_1" data-name="Component 82 – 1" transform="translate(0 2)">
             <text id="عربى" transform="translate(0 13)" fontSize="14" fontFamily="SegoeUI-Bold, Segoe UI"
-              fontWeight="700" opacity="0.497">
+              fontWeight="700" fill="#000000">
               <tspan x="0" y="0">عربى</tspan>
             </text>
           </g>
