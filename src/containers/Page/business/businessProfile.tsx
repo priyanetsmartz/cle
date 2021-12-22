@@ -40,6 +40,7 @@ function BusinessProfile(props) {
         city: '',
         addresses: [],
     });
+    const [saveBusinessDetailsLoader, setSaveBusinessDetailsLoader] = useState(false);
     const [businessDetailsForm, setbussinessDetailsForm] = useState({
         vendorId: vendorId,
         companyName: "",
@@ -219,6 +220,7 @@ function BusinessProfile(props) {
         console.log(bankDetails['companyname'])
     }
     const saveBussinessDetails = async (e) => {
+        setSaveBusinessDetailsLoader(true)
         e.preventDefault()
         let payload = {
             "vendorId": props.token.vendor_id,
@@ -232,8 +234,10 @@ function BusinessProfile(props) {
         }
         let result: any = await editBusinessDetails(payload);
         if (result) {
+            setSaveBusinessDetailsLoader(false)
             notification("success", "", intl.formatMessage({ id: "customerdetailsupdated" }));
         } else {
+            setSaveBusinessDetailsLoader(false)
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
     }
@@ -1090,7 +1094,9 @@ function BusinessProfile(props) {
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">
                             <div className="confirm-btn">
-                                <button type="button" className="btn btn-secondary" onClick={saveBussinessDetails}><IntlMessages id="gift.confirm" /></button>
+                                <button type="button" className="btn btn-secondary" style={{ "display": !saveBusinessDetailsLoader ? "inline-block" : "none" }} onClick={saveBussinessDetails}><IntlMessages id="gift.confirm" /></button>
+
+                                <button className="spinner" style={{ "display": saveBusinessDetailsLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</button>
                             </div>
                         </div>
                     </Modal.Footer>
