@@ -889,6 +889,26 @@ p.sliderupper {
   text-align: left;
 }
 
+.help-center-ban p{
+	font-size: 22px;
+}
+
+.help-center-ban .offset-lg-3,
+.faq-form .offset-lg-3{
+	margin-left: 0;
+	margin-right:25%;
+}
+
+.faq-topics h4 i {
+    margin-left: 20px;
+	margin-right:0;
+}
+
+.help-center-ban .has-search .form-control {
+    padding-right: 2.375rem;
+	padding-left:.75rem;
+}
+
 @media only screen and (min-width: 320px) and (max-width: 991px) {
   .cle-mobile-menu {
     float: left;
