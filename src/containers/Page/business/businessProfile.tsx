@@ -14,7 +14,7 @@ import deleteIcon from '../../../image/delete-icon.png';
 import timerIcon from '../../../image/timer_icon.png';
 import { sessionService } from 'redux-react-session';
 import { useIntl } from 'react-intl';
-import { getVendorDetails } from '../../../redux/pages/vendorLogin';
+import { getVendorDetails, editVendor } from '../../../redux/pages/vendorLogin';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import user from '../../../image/user.png';
 const commonFunctions = new CommonFunctions();
@@ -22,15 +22,31 @@ const baseUrl = commonFunctions.getBaseUrl();
 const companylogo = `${baseUrl}/pub/media/`;
 function BusinessProfile(props) {
     const intl = useIntl();
+    const [vendorId, setVendorId] = useState(props.token.vendor_id)
     const [vendorData, setVendorData] = useState({
+        vendorId:vendorId,
         vendor_name: '',
         telephone: '',
         country_id: '',
         dob: '',
         email: '',
         street: '',
-        city: ''
+        city: '',
+        surname:'',
+        gender:''
     });
+
+    const [vendorForm, setVendorForm] = useState({
+        vendorId:vendorId,
+        vendorName: '',
+        telephone: '',
+        countryId: '',
+        dateofbirth: '',
+        surname:'',
+        gender:''
+    });
+
+    
 
     const [custId, setCustid] = useState(props.token.cust_id);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -48,6 +64,8 @@ function BusinessProfile(props) {
         addresses: [],
         custom_attributes: []
     });
+
+    
 
 
     const userGroup = props.token.token;
@@ -125,7 +143,7 @@ function BusinessProfile(props) {
     async function getVendor() {
         let vendor = await sessionService.loadUser()
         if (vendor && vendor.type === "vendor") {
-            // console.log(vendor)
+             console.log("vendor",vendor)
             setVendorData(vendor);
         } else {
             window.location.href = '/';
@@ -161,7 +179,7 @@ function BusinessProfile(props) {
 
     const handleChange = (e) => {
         const { id, value } = e.target
-        setCustForm(prevState => ({
+        setVendorForm(prevState => ({
             ...prevState,
             [id]: value
         }))
@@ -177,9 +195,10 @@ function BusinessProfile(props) {
     const saveCustDetails = async (e) => {
         e.preventDefault();
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
-            custForm.dob = `${dob.day}/${dob.month}/${dob.year}`;
+            vendorForm.dateofbirth = `${dob.day}/${dob.month}/${dob.year}`;
         }
-        let result: any = await saveCustomerDetails(custId, { customer: custForm });
+        vendorForm.vendorId = props.token.vendor_id;
+        let result: any = await editVendor(vendorForm);
         if (result) {
             setMyDetailsModel(false);
             notification("success", "", intl.formatMessage({ id: "customerdetailsupdated" }));
@@ -941,21 +960,21 @@ function BusinessProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">First name<span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Ann"
-                                id="firstname"
-                                value={custForm.firstname}
+                                id="vendorName"
+                                value={vendorForm.vendorName}
                                 onChange={handleChange} />
                             <span className="error">{errors.errors["firstname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Surname<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Smith" id="lastname"
-                                value={custForm.lastname}
+                            <input type="text" className="form-control" placeholder="Smith" id="surname"
+                                value={vendorForm.surname}
                                 onChange={handleChange} />
                             <span className="error">{errors.errors["lastname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Gender</label>
-                            <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
+                            <select className="form-select" value={vendorForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">Select</option>
                                 {DROPDOWN.gender.map(opt => {
                                     return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
