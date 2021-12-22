@@ -30,6 +30,7 @@ function VendorLogin(props) {
   const [rememberMe, setRememberMe] = useState(false);
   const [forgotPopup, setForgotPopup] = useState(false);
   useEffect(() => {
+    checkIfLoggedIn();
     if (getCookie("vendorremember_me") === "true") {
       setRememberMe(true);
       let bytes = CryptoJS.AES.decrypt(getCookie("vendorpassword"), apiConfig.encryptionkey);
@@ -41,6 +42,12 @@ function VendorLogin(props) {
     }
   }, [])
 
+  const checkIfLoggedIn = async () => {
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''));
+    if (vendor && vendor.vendor_id) {
+      history.push(`/vendor/dashboard`);
+    }
+  }
   const handleChange = (e) => {
     const { id, value } = e.target
     setLoginForm(prevState => ({
@@ -256,6 +263,7 @@ function mapStateToProps(state) {
   return {
     auth: state.Auth.idToken,
     loading: state.Auth.loading,
+    token: state.session.user
   }
 }
 
