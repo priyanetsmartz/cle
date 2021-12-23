@@ -61,3 +61,7 @@ export async function closePopup(flag: number) {
 export function editVendor(userInfo) {
     return adminToken.request(`rest/all/V1/vendor/editvendordetails`, userInfo, "PUT", "");
 }
+
+export function editBusinessDetails(businessDetails) {
+    return adminToken.request(`rest/all/V1/vendor/updatebusinessdetails`, businessDetails, "PUT", "");
+}

@@ -16,7 +16,7 @@ import deleteIcon from '../../../image/delete-icon.png';
 import timerIcon from '../../../image/timer_icon.png';
 import { sessionService } from 'redux-react-session';
 import { useIntl } from 'react-intl';
-import { getVendorDetails, editVendor } from '../../../redux/pages/vendorLogin';
+import { getVendorDetails, editBusinessDetails, editVendor } from '../../../redux/pages/vendorLogin';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import user from '../../../image/user.png';
 const commonFunctions = new CommonFunctions();
@@ -39,6 +39,17 @@ function BusinessProfile(props) {
         street: '',
         city: '',
         addresses: [],
+    });
+    const [saveBusinessDetailsLoader, setSaveBusinessDetailsLoader] = useState(false);
+    const [businessDetailsForm, setbussinessDetailsForm] = useState({
+        vendorId: vendorId,
+        companyName: "",
+        businessIBAMNo: "",
+        businessTax: "",
+        businessWebsite: "",
+        businessFacebook: "",
+        businessInstagram: "",
+        logoImagePath: ""
     });
 
     const [selectedFile, setSelectedFile] = useState(null);
@@ -156,7 +167,7 @@ function BusinessProfile(props) {
     }
     const handlebussinessChange = (e) => {
         const { id, value } = e.target
-        setBusinessDetails(prevState => ({
+        setbussinessDetailsForm(prevState => ({
             ...prevState,
             [id]: value
         }))
@@ -209,8 +220,28 @@ function BusinessProfile(props) {
         console.log(bankDetails['companyname'])
     }
     const saveBussinessDetails = async (e) => {
-        console.log(businessDetails)
+        setSaveBusinessDetailsLoader(true)
+        e.preventDefault()
+        let payload = {
+            "vendorId": props.token.vendor_id,
+            "companyName": businessDetailsForm.companyName,
+            "businessIBAMNo": businessDetailsForm.businessIBAMNo,
+            "businessTax": businessDetailsForm.businessTax,
+            "businessWebsite": businessDetailsForm.businessWebsite,
+            "businessFacebook": businessDetailsForm.businessFacebook,
+            "businessInstagram": businessDetailsForm.businessInstagram,
+            "logoImagePath": ""
+        }
+        let result: any = await editBusinessDetails(payload);
+        if (result) {
+            setSaveBusinessDetailsLoader(false)
+            notification("success", "", intl.formatMessage({ id: "customerdetailsupdated" }));
+        } else {
+            setSaveBusinessDetailsLoader(false)
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        }
     }
+
 
     const validatePersonalDetails = () => {
         let error = {};
@@ -1018,43 +1049,44 @@ function BusinessProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="business.companyname" /></label>
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.companyname" })}
-                                id="companyname"
-                                value={businessDetails['businessCompanyName']}
+                                id="companyName"
+                                value={businessDetailsForm.companyName}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["companyname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="business.IbamNo" /></label>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.IbamNo" })} id="ibam"
-                                value={businessDetails['businessIbamNo']}
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.IbamNo" })}
+                                id="businessIBAMNo"
+                                value={businessDetailsForm.businessIBAMNo}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["ibam"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="tax" /></label>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "tax" })} id="tax"
-                                value={businessDetails['businessTax']}
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "tax" })} id="businessTax"
+                                value={businessDetailsForm.businessTax}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["tax"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="business.Website" /></label>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.Website" })} id="webite"
-                                value={businessDetails['businessWebsite']}
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.Website" })} id="businessWebsite"
+                                value={businessDetailsForm.businessWebsite}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["webite"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="business.Facebook" /></label>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.Facebook" })} id="facebook"
-                                value={businessDetails['businessFacebook']}
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.Facebook" })} id="businessFacebook"
+                                value={businessDetailsForm.businessFacebook}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["facebook"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="businessInstagram" /></label>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "businessInstagram" })} id="instagram"
-                                value={businessDetails['businessInstagram']}
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "businessInstagram" })} id="businessInstagram"
+                                value={businessDetailsForm.businessInstagram}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errors.errors["instagram"]}</span>
                         </div>
@@ -1062,7 +1094,9 @@ function BusinessProfile(props) {
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">
                             <div className="confirm-btn">
-                                <button type="button" className="btn btn-secondary" onClick={saveBussinessDetails}><IntlMessages id="gift.confirm" /></button>
+                                <button type="button" className="btn btn-secondary" style={{ "display": !saveBusinessDetailsLoader ? "inline-block" : "none" }} onClick={saveBussinessDetails}><IntlMessages id="gift.confirm" /></button>
+
+                                <button className="spinner" style={{ "display": saveBusinessDetailsLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</button>
                             </div>
                         </div>
                     </Modal.Footer>
