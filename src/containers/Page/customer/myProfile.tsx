@@ -18,6 +18,7 @@ import callIcon from '../../../image/call-icon.png';
 import deleteIcon from '../../../image/delete-icon.png';
 import timerIcon from '../../../image/timer_icon.png';
 import cartAction from "../../../redux/cart/productAction";
+import ForgottenPassword from '../../Page/forgotPassword';
 const { closePrefPopup } = cartAction;
 function MyProfile(props) {
     const intl = useIntl();
@@ -49,7 +50,7 @@ function MyProfile(props) {
         confirmNewPassword: true,
         emailPass: true
     })
-
+    const [forgotPopup, setForgotPopup] = useState(false);
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [regions, setRegions] = useState([]); // for regions dropdown
     const [telephone, setTelephone] = useState("");
@@ -123,6 +124,11 @@ function MyProfile(props) {
         }
     }, [props.token, props.prefrences]);
 
+    const handleForgetPopup = (e) => {
+        e.preventDefault();
+        setForgotPopup(true);
+    }
+    const hideModall = () => setForgotPopup(false);
 
     async function getData() {
         let lang = props.languages ? props.languages : language;
@@ -883,11 +889,7 @@ function MyProfile(props) {
                     <div className="row">
                         <div className="col-sm-6">
                             <label className="form-label heading_lbl"><IntlMessages id="login.password" /></label>
-                            <div className="password_edit">&#9728;&#9728;&#9728;&#9728;&#9728;</div>
-                        </div>
-                        <div className="col-sm-6">
-                            <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                            <div className="password_edit">{custForm.email}</div>
+                            <div className="password_edit">********</div>
                         </div>
                     </div>
                     <div className="row">
@@ -931,7 +933,7 @@ function MyProfile(props) {
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
-                                        <Link to="/forgot-password" className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
+                                        <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
 
                                     </div>
                                     <div className="Frgt_paswd">
@@ -947,6 +949,14 @@ function MyProfile(props) {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
+                            <div className="password_edit">{custForm.email}</div>
+                        </div>
+                    </div>
+                    <div className="row">
                         <div className="col-sm-6">
                             <div className="newemail-sec">
                                 <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
@@ -1640,6 +1650,14 @@ function MyProfile(props) {
                         </div>
                     </div>
                 </div>
+            </Modal>
+
+            {/*  forgot passord popup */}
+            <Modal show={forgotPopup} className="forgot-modal" onHide={hideModall}>
+                <Modal.Body className="arabic-rtl-direction">
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModall} aria-label="Close"></button>
+                    <ForgottenPassword />
+                </Modal.Body>
             </Modal>
         </div>
     )

@@ -20,11 +20,13 @@ import { getVendorDetails, editBusinessDetails, editVendor, editBankDetails, edi
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import user from '../../../image/user.png';
 import { capitalize } from '../../../components/utility/allutils';
+import ForgottenPassword from './bussinessForgotpassword';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const companylogo = `${baseUrl}pub/media/`;
 function BusinessProfile(props) {
     const intl = useIntl();
+    const [forgotPopup, setForgotPopup] = useState(false);
     const [vendorId, setVendorId] = useState(props.token.vendor_id)
     const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
     const [saveBusinessDetailsLoader, setSaveBusinessDetailsLoader] = useState(false);
@@ -639,6 +641,14 @@ function BusinessProfile(props) {
             };
         });
     };
+
+
+    const handleForgetPopup = (e) => {
+        e.preventDefault();
+        setForgotPopup(true);
+    }
+    const hideModall = () => setForgotPopup(false);
+
     return (
         <div className="col-sm-9">
 
@@ -899,8 +909,7 @@ function BusinessProfile(props) {
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
-                                        <Link to="forget-password" className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
-
+                                        <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
                                     </div>
                                     <div className="Frgt_paswd">
                                         <div className="confirm-btn">
@@ -1353,7 +1362,13 @@ function BusinessProfile(props) {
                     </div>
                 </Modal.Body>
             </Modal>
-
+            {/*  forgot passord popup */}
+            <Modal show={forgotPopup} className="forgot-modal" onHide={hideModall}>
+                <Modal.Body className="arabic-rtl-direction">
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModall} aria-label="Close"></button>
+                    <ForgottenPassword />
+                </Modal.Body>
+            </Modal>
 
         </div>
     )

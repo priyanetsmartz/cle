@@ -73,3 +73,8 @@ export function editBankDetails(bankdetails) {
 export function editVendorAddress(address) {
     return adminToken.request(`rest/all/V1/vendor/updateVendorAddress`, address, "PUT", "");
 }
+
+export function vendorRestpassword(payload) {
+    return adminToken.request(`rest/all/V1/vendor/resetPassword`, payload, "PUT", "");
+
+}

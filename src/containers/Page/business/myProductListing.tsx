@@ -6,6 +6,7 @@ import moment from 'moment';
 import { siteConfig } from '../../../settings/index'
 import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import searchIcon from '../../../image/Icon_zoom_in.svg';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import { Slider } from 'antd';
@@ -206,7 +207,7 @@ function MyProductListing(props) {
                                     <div className="form-group">
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
-                                            <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
+                                            <img src={searchIcon} alt="" className="me-1 search_icn" />
                                             <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" />
                                         </div>
                                     </div>
