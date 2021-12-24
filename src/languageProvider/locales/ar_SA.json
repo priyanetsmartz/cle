@@ -359,7 +359,7 @@
   "vendor.salesOrders": "طلبات المبيعات الخاصة بي",
   "vendor.productListing": "قائمة المنتجات الخاصة بي",
   "vendor.returnComplaints": "عوائدي وشكاوي",
-  "vendor.payouts": "مدفوعاتي",
+  "vendor.payouts": "طرق الدفع",
   "vendor.myAnalysis": "تحليلي",
   "vendor.businessProfile": "ملفي التجاري",
   "vendor.notification": "الإشعارات الخاصة بي",
@@ -513,5 +513,15 @@
   "product.soldproduct":"تغيير ساتوس إلى بيع",
   "emailnotfound" : "البريد الإلكتروني غير موجود",
   "vendorName":"الإسم الأول مطلوب",
-  "surname":"اللقب مطلوب"
+  "surname":"اللقب مطلوب",  
+  "companyreq":"اسم الشركة مطلوب",
+  "bankname":"اسم البنك مطلوب",
+  "accountnumber":"رقم الحساب مطلوب",
+  "phoneinvalid": "رقم الهاتف غير صالح",
+  "websitereq":"الموقع مطلوب",
+  "IBAMreq":"رقم IBAM مطلوب",
+  "businessTaxreq":"الضريبة مطلوبة",
+  "websiteinvalid":"عنوان موقع الويب غير صالح",
+  "vendor.feelFreeToEdit":"لا تتردد في تحرير أي من التفاصيل الخاصة بك أدناه حتى يكون حساب الأعمال الخاص بك في CLÉ محدثًا تمامًا.",
+  "vendor.myDetails":"نقطة الاتصال"
 }

@@ -360,7 +360,7 @@
   "vendor.salesOrders": "My Sales Orders",
   "vendor.productListing": "My Product Listing",
   "vendor.returnComplaints": "My Returns and Complaints",
-  "vendor.payouts": "My Payouts",
+  "vendor.payouts": "Payout Methods",
   "vendor.myAnalysis": "My Analysis",
   "vendor.businessProfile": "My Business Profile",
   "vendor.notification": "My Notifications",
@@ -428,7 +428,7 @@
   "passwordvalidation": "The password should contain at least one digit, one lower case, one upper case, Special Character from amongst these $@$!%*?&#^ and at least 8 from the mentioned characters.",
   "firstnamerequired": "First Name is required",
   "lastnamerequired": "Last Name is required",
-  "customerdetailsupdated": "Your details has beedn updated",
+  "customerdetailsupdated": "Your details has been updated",
   "phonereq": "Phone number is required",
   "pinreq": "Post Code is required",
   "cityreq": "City is required",
@@ -513,6 +513,18 @@
   "product.soldproduct":"Change the Satus to sold",
   "emailnotfound" : "Email not found",
   "vendorName":"First name is required",
-  "surname":"Surname is required"
-  
+  "surname":"Surname is required",
+  "companyreq":"Company Name is required",
+  "bankname":"Bank Name is required",
+  "accountnumber":"Account Number is required",
+  "phoneinvalid": "Phone number is invalid",
+  "websitereq":"Website is required",
+  "IBAMreq":"IBAM number is required",
+  "businessTaxreq":"Tax is required",
+  "websiteinvalid":"Invalid website address",
+  "vendor.feelFreeToEdit":"Feel free to edit any of your details below so your CLÉ business account is totally up to date.",
+  "vendor.myDetails":"Point of contact",
+  "vendor.fullname":"Full name",
+  "vendor.location":"Location",
+  "vendor.contactMethod":"Preferred contact method"
 }

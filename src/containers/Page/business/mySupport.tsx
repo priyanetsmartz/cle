@@ -22,7 +22,7 @@ function MySupport(props) {
         }
         fetchMyAPI()
         return () => {
-
+            SetPagesData({ title: '', content: '' })
         }
     }, [props.languages])
     return (

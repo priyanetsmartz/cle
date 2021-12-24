@@ -57,7 +57,7 @@ function MyProductListing(props) {
 
     const columns = [
         {
-            name: 'Image',
+            name: <i className="fa fa-camera" aria-hidden="true"></i>,
             selector: row => row.image,
             cell: row => <img height="84px" width="56px" alt={row.image} src={row.image} />,
         },
@@ -248,8 +248,7 @@ function MyProductListing(props) {
 
                 <DataTable
                     columns={columns}
-                    data={listingData}
-                    selectableRows
+                    data={listingData}                    
                     pagination={true}
                     onSelectedRowsChange={handleChange}
                 />

@@ -65,3 +65,11 @@ export function editVendor(userInfo) {
 export function editBusinessDetails(businessDetails) {
     return adminToken.request(`rest/all/V1/vendor/updatebusinessdetails`, businessDetails, "PUT", "");
 }
+
+export function editBankDetails(bankdetails) {
+    return adminToken.request(`rest/all/V1/vendor/updatebankdetails`, bankdetails, "PUT", "");
+}
+
+export function editVendorAddress(address) {
+    return adminToken.request(`rest/all/V1/vendor/updateVendorAddress`, address, "PUT", "");
+}
