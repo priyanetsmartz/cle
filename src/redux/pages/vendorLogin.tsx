@@ -81,3 +81,7 @@ export async function searchProductListing(language,term){
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/product/searchProducts?vendorId=${vendorId}&storeId=${storeId}&searchterm=${term}`,"" , "GET", "")
 }
+
+export function removeProduct(deleteInfo) {
+    return adminToken.request(`rest/all/V1/products`, deleteInfo, "POST", "");
+}
