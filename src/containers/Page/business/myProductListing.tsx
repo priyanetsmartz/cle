@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import DataTable from 'react-data-table-component';
-import { getVendorProducts } from '../../../redux/pages/vendorLogin';
+import { getVendorProducts, searchProductListing } from '../../../redux/pages/vendorLogin';
 import moment from 'moment';
 import { siteConfig } from '../../../settings/index'
 import { Link } from "react-router-dom";
@@ -11,9 +11,13 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import { Slider } from 'antd';
 import './deletepop.css';
+import { getCookie } from '../../../helpers/session';
+import { useLocation } from 'react-router-dom'; 
 
 function MyProductListing(props) {
     let brand = '';
+    const language = getCookie('currentLanguage');
+    const [searchTerm, setSearchTerm] = useState('');
     const [listingData, setListingData] = useState([])
     const [deleteId, setDeleteID] = useState(0)
     const [sortOrder, setSortOrder] = useState('');
@@ -75,7 +79,7 @@ function MyProductListing(props) {
                     <p className='prodbrand'>{brand}</p>
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span>ID:</span>{row.product.id}</p>
-                    <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" >View</Link></li><li><Link onClick={() => { handleDelete(row.product.id) }} >Delete</Link></li></ul></div>
+                    <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" >View</Link></li><li><Link to="#" onClick={() => { handleDelete(row.product.id) }} >Delete</Link></li></ul></div>
                 </div>
             ),
         },
@@ -159,6 +163,34 @@ function MyProductListing(props) {
         setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
     }
 
+    const updateInput = async (e) => {
+        let lang = props.languages ? props.languages : language;
+        if (e.target.value.length >= 3) {
+            setSearchTerm(e.target.value)
+            let result: any = await searchProductListing(lang, searchTerm);
+            console.log("lets see response come from api", result)
+            
+            let dataObj = result && result.data && result.data.length > 0 ? result.data : [];
+            let imageD = '';
+            const renObjData = dataObj.map(function (data, idx) {
+            data.custom_attributes && data.custom_attributes.length > 0 && data.custom_attributes.map((attributes) => {
+                if (attributes.attribute_code === 'image') {
+                    imageD = attributes.value;
+                }
+            })
+            let productLoop: any = {};
+
+            productLoop.id = data.id;
+            productLoop.image = imageD;
+            productLoop.product = data;
+            productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+            productLoop.status = data.status;
+            productLoop.price = siteConfig.currency + data.price;
+            return productLoop;
+        });
+        setListingData(renObjData);
+        }
+    }
 
     return (
         <div className="col-sm-9">
@@ -207,8 +239,8 @@ function MyProductListing(props) {
                                     <div className="form-group">
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
-                                            <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" />
+                                            <img src={searchIcon}  alt="" className="me-1 search_icn" />
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} onChange={updateInput} onKeyDown={useLocation.hash} className="form-control me-1" />
                                         </div>
                                     </div>
                                 </div>

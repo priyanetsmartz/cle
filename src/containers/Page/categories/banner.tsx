@@ -6,7 +6,7 @@ import IntlMessages from "../../../components/utility/intlMessages";
 
 function CategoryBanner(props) {
     const [categoryData, setCategory] = useState([])
-    console.log(props.ctId)
+  //  console.log(props.ctId)
     useEffect(() => {
         if (props.cateData) {
             let cat = [];
@@ -16,7 +16,7 @@ function CategoryBanner(props) {
             setCategory(cat);
         }
 
-    }, [props.languages, props.cateData]);
+    }, [props.cateData]);
 
 
     return (

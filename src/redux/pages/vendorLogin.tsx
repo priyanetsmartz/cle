@@ -1,6 +1,7 @@
 import ADMINAPI from "../../restApi/Api";
 import ADMINTOKEN from "../../restApi/AdminApi";
 import { sessionService } from 'redux-react-session';
+import { store } from "../store";
 const AdminApi = new ADMINAPI();
 const adminToken = new ADMINTOKEN();
 
@@ -76,5 +77,10 @@ export function editVendorAddress(address) {
 
 export function vendorRestpassword(payload) {
     return adminToken.request(`rest/all/V1/vendor/resetPassword`, payload, "PUT", "");
-
+}
+export async function searchProductListing(language, term) {
+    var storeId = language === 'english' ? '3' : '2';
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`rest/all/V1/product/searchProducts?vendorId=${vendorId}&storeId=${storeId}&searchterm=${term}`, "", "GET", "")
 }

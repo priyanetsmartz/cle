@@ -164,13 +164,13 @@ a:hover {
 
 .btn-secondary:hover {
     color: #2E2BAA !important;
-    background-color: transparent!important;
+    background-color: transparent !important;
 }
 
 .prive-txt .btn-secondary {
     background-color: #017ABB !important;
     border-color: #017ABB !important;
-	color: #fff!important;
+    color: #fff !important;
 }
 
 .btn-white-outline {
@@ -2151,7 +2151,9 @@ span.maindatory {
     list-style: none;
     padding: 2px 5px;
     float: left;
+    width: 150px;
     margin-top: 5px;
+    text-align: center;
 }
 
 .favdesignr_size_sec li a {
@@ -2642,6 +2644,7 @@ span.maindatory {
 .modal-body .form-check-input:checked {
     background-color: #2E2BAA;
     border-color: #2E2BAA;
+    background-image: none !important;
 }
 
 .versace_sec {
@@ -6248,25 +6251,25 @@ height: auto;
 }
 
 .product-listing .slick-prev:before {
-	content: " " !important;
+    content: " " !important;
     background-image: url("images/arrow-left.svg") !important;
-	background-size: 12px 12px;
+    background-size: 12px 12px;
     background-position: center;
-	background-repeat: no-repeat;
+    background-repeat: no-repeat;
     width: 15px;
     height: 15px;
-	display: inline-block;
+    display: inline-block;
 }
 
 .product-listing .slick-next:before {
     content: " " !important;
-	background-image: url(images/arrow-right.svg) !important;
+    background-image: url(images/arrow-right.svg) !important;
     background-size: 12px 12px;
     background-position: center;
-	background-repeat: no-repeat;
+    background-repeat: no-repeat;
     width: 15px;
     height: 15px;
-	display: inline-block;
+    display: inline-block;
 }
 
 .product-listing .slick-slide {
@@ -6789,9 +6792,9 @@ p.sliderupper {
 }
 
 .faq-list .accordion-item {
-    border-left: 0!important;
-    border-right: 0!important;
-	margin: -1px;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    margin: -1px;
 }
 
 .login-popup {
@@ -6862,6 +6865,10 @@ p.sliderupper {
 .log-bullet li {
     color: #fff;
     margin-bottom: 10px;
+}
+
+.profilemagazine .magazine_article h1 {
+    text-align: left;
 }
 
 /* All media screen below */

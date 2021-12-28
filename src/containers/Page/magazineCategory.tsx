@@ -332,14 +332,12 @@ function MagazineCategory(props) {
                                     <ul className="pagination justify-content-center">
                                         <li
                                             className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><IntlMessages id="pagination-prev" /></Link>
+                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
                                         </li>
-                                        {getPaginationGroup().map((i, index) => (
-                                            <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
-                                        ))}
+                                        <li className='pageofpage'>Page {page} of {pagination}</li>
                                         <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
                                             <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                                to="/"><IntlMessages id="pagination-next" /></Link>
+                                                to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
                                         </li>
                                     </ul>
                                 </nav>

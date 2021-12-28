@@ -4,8 +4,9 @@ import { connect } from "react-redux";
 import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders, getCustomerOrdersByPrice } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import ReturnSection from './allReturns';
+import searchIcon from '../../../image/Icon_zoom_in.svg';
 import IntlMessages from "../../../components/utility/intlMessages";
-import { Slider } from 'antd';
+import { InputNumber, Slider } from 'antd';
 import { getCookie } from '../../../helpers/session';
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings/index'
@@ -22,6 +23,7 @@ function OrdersAndReturns(props) {
     const [sortOrder, setSortOrder] = useState('');
     const [orders, setOrders] = useState([]);
     const [page, setCurrent] = useState(1);
+    const [price, setPrice] = useState({ low: 1000, high: 2500 })
     const [loaderOrders, setLoaderOrders] = useState(false);
     const language = getCookie('currentLanguage');
     const intl = useIntl();
@@ -70,6 +72,11 @@ function OrdersAndReturns(props) {
 
     const handlePriceRange = async (range) => {
         setLoaderOrders(true);
+        setPrice(prevState => ({
+            ...prevState,
+            low: range[0],
+            high: range[1]
+        }))
         let result: any = await getCustomerOrdersByPrice((range[0]), (range[1]), pageSize);
         if (result.data) {
             setOrders(result.data.items);
@@ -153,7 +160,7 @@ function OrdersAndReturns(props) {
                             <div className="row">
                                 <div className="col-sm-4 mb-4">
                                     <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="order.date" />:</span>
+                                        <span className="form-label"><IntlMessages id="order.date" /></span>
                                         <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
@@ -165,8 +172,25 @@ function OrdersAndReturns(props) {
                                 </div>
                                 <div className="col-sm-4 mb-2">
                                     <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="order.price" />:</span>
-                                        <Slider range max={20000} defaultValue={[0, 5]} onAfterChange={handlePriceRange} />
+                                        <span className="form-label"><IntlMessages id="order.price" /></span>
+                                        <div className='pricerangeouter' ><InputNumber
+                                            min={1}
+                                            max={20000}
+                                            readOnly={true}
+                                            value={price.low}
+                                            onChange={handlePriceRange}
+                                        />
+                                            <span>-</span>
+                                            <InputNumber
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={price.high}
+                                                onChange={handlePriceRange}
+                                            />
+                                        </div>
+                                        <Slider range max={20000} defaultValue={[price.low, price.high]} onAfterChange={handlePriceRange} />
+
 
                                     </div>
                                 </div>
@@ -174,7 +198,7 @@ function OrdersAndReturns(props) {
                                     <div className="form-group">
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
-                                            <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
+                                            <img src={searchIcon} alt="" className="me-1 search_icn" />
                                             <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} value={orderId}
                                                 onChange={handleSearch} className="form-control me-1" />
                                         </div>
@@ -341,14 +365,12 @@ function OrdersAndReturns(props) {
                                                     <ul className="pagination justify-content-center">
                                                         <li
                                                             className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><IntlMessages id="pagination-prev" /></Link>
+                                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
                                                         </li>
-                                                        {getPaginationGroup().map((i, index) => (
-                                                            <li className="page-item" key={i}><Link className="page-link" onClick={changePage} to="#">{i}</Link></li>
-                                                        ))}
+                                                        <li className='pageofpage'>Page {page} of {pagination}</li>
                                                         <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
                                                             <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                                                to="/"><IntlMessages id="pagination-next" /></Link>
+                                                                to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
                                                         </li>
                                                     </ul>
                                                 </nav>

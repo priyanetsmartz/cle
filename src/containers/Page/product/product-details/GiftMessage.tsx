@@ -177,7 +177,7 @@ function GiftMessage(props) {
                                 type="text"
                                 id="for"
                                 className="form-control"
-                                placeholder={intl.formatMessage({ id: "gift.for" })}
+                                placeholder="John"
                                 value={state.for}
                                 onChange={handleChange}
                                 required />
@@ -188,7 +188,7 @@ function GiftMessage(props) {
                                 type="text"
                                 id="from"
                                 className="form-control"
-                                placeholder={intl.formatMessage({ id: "gift.from" })}
+                                placeholder="Ann"
                                 value={state.from}
                                 onChange={handleChange}
                                 required />

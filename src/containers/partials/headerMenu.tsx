@@ -130,12 +130,6 @@ function HeaderMenu(props) {
         props.setCatSearch(id)
         props.setCurrentCat(urlKey)
         setMobileMenu(!mobileMenu);
-        //console.log(id, urlKey)
-        // if (urlKey === 'all') {
-        //     window.location.href = `/`;
-        // } else {
-        //     window.location.href = `/category/${urlKey}`;
-        // }
     }
 
 
@@ -186,8 +180,6 @@ function HeaderMenu(props) {
         }
         await sessionService.deleteSession();
         await sessionService.deleteUser();
-        // sessionService.deleteSession();
-        // sessionService.deleteUser();
 
         localStorage.removeItem('cartQuoteId');
         localStorage.removeItem('cartQuoteToken');
@@ -205,9 +197,7 @@ function HeaderMenu(props) {
         props.showSignin(true);
     }
     const handleMenuClick = (e, id) => {
-        // // e.preventDefault();
-        // setCookie("_TESTCOOKIE", id);
-        // props.menuSetup(id);
+
     }
     const handleMenuClickMob = (e, id) => {
         setMobileMenu(false);
@@ -379,7 +369,7 @@ function HeaderMenu(props) {
 
                                                 </li>
                                                 {(Object.keys(props.token).length > 0 && props.token.type === 'user') && (
-                                                    <li> <Link to="/customer/wish-list"><img src={favorit} alt="wishlist" /></Link> </li>
+                                                    <li> <Link to="/customer/wishlist"><img src={favorit} alt="wishlist" /></Link> </li>
                                                 )}
                                                 {!Object.keys(props.token).length && (
                                                     <li> <Link to="#" onClick={(e) => { handlesigninClickMobile(e); }}><img src={favorit} alt="wishlist" /></Link> </li>
@@ -515,7 +505,7 @@ function HeaderMenu(props) {
 
                                             </li>
                                             {customerName && (
-                                                <li> <Link to="/customer/wish-list"><svg xmlns="http://www.w3.org/2000/svg" width="24.083" height="20.83" viewBox="0 0 24.083 20.83" className="wishlist-icon">
+                                                <li> <Link to="/customer/wishlist"><svg xmlns="http://www.w3.org/2000/svg" width="24.083" height="20.83" viewBox="0 0 24.083 20.83" className="wishlist-icon">
                                                     <g id="Group_136" data-name="Group 136" transform="translate(-373.892 -360.898)">
                                                         <path id="Path_34" data-name="Path 34" d="M374.892,367.708c0,7.809,11.041,13.02,11.041,13.02s11.041-6.063,11.041-13.02a5.811,5.811,0,0,0-11.041-2.532,5.811,5.811,0,0,0-11.041,2.532" transform="translate(0 0)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                                                         <path id="Path_35" data-name="Path 35" d="M374.892,367.708c0,7.809,11.041,13.02,11.041,13.02s11.041-6.063,11.041-13.02a5.811,5.811,0,0,0-11.041-2.532,5.811,5.811,0,0,0-11.041,2.532" transform="translate(0 0)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />

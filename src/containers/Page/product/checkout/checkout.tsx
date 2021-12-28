@@ -679,10 +679,13 @@ function Checkout(props) {
         //console.log(result.data)
         if (!result.data.message) {
             setErrorPromo("");
+            setLoaderOnCheckout(false)
             checkoutScreen();
             notification("success", "", intl.formatMessage({ id: "promosucc" }));
         } else {
             setErrorPromo("");
+            setLoaderOnCheckout(false)
+            setErrorPromo(result.data.message)
             return notification("error", "", result.data.message);
         }
     }
@@ -925,10 +928,12 @@ function Checkout(props) {
                                                         <div className="col-auto">
                                                             <label htmlFor="input16-digit" className="visually-hidden">1234 5678 9101 2131</label>
                                                             <input type="text" className="form-control" id="input16-digit"
+                                                                onChange={(e) => setPromoCode(e.target.value)}
                                                                 placeholder="1234 5678 9101 2131" />
+                                                            <span className="error">{errorPromo}</span>
                                                         </div>
                                                         <div className="col-auto">
-                                                            <button type="submit" className="btn btn-primary mb-3"><IntlMessages id="applyCode" /></button>
+                                                            <button type="submit" onClick={applyPromo} className="btn btn-primary mb-3"><IntlMessages id="applyCode" /></button>
                                                         </div>
                                                     </div>
                                                     <p><IntlMessages id="needtoknow" /></p>
@@ -952,6 +957,7 @@ function Checkout(props) {
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
                                             <label><IntlMessages id="profile.email" /></label>
+                                            {props.token.token_email ? <span className="note"><IntlMessages id="emailchangenote" /></span> : '' }
                                             <p>{props.token.token_email ?
                                                 props.token.token_email :
                                                 <input type="email"

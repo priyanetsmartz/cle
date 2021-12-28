@@ -17,11 +17,11 @@ const { register, loginSuccess } = authAction;
 function FacebookLoginButton(props) {
 
     const responseFacebook = (response) => {
-        
+
         if (response.accessToken) {
             let name = response.name ? response.name.split(" ") : "";
             //console.log(name[0],name[1])
-            if(props.isVendor){
+            if (props.isVendor) {
                 return saveVendorLogin(response, name);
             }
             const userInfo = {
@@ -31,26 +31,30 @@ function FacebookLoginButton(props) {
                 "accessToken": response.accessToken,
                 "type": props.userSetype,
             }
-           // console.log(userInfo)
+            // console.log(userInfo)
             fetchMyAPI(userInfo)
         }
     }
     async function fetchMyAPI(userInfo) {
         let result: any = await loginApi.getAuthRegister(userInfo.email);
-        var jsonData = result.data[0];
+        var jsonData = result && result.data && result.data.length > 0 ? result.data[0] : [];
         if (jsonData) {
             let id_token = jsonData.new_token;
+            let firstname = jsonData.firstname ? jsonData.firstname : '';
+            let lastname = jsonData.lastname ? jsonData.lastname : '';
             let data = {
                 'cust_id': jsonData.entity_id,
                 'token_email': userInfo.email,
+                'token_name': firstname + ' ' + lastname,
                 'token': jsonData.group_id,
-                'id_token': jsonData.new_token
+                'id_token': jsonData.new_token,
+                'type': "user"
             }
             sessionService.saveSession({ id_token })
             sessionService.saveUser(data)
             setCookie("username", jsonData.email)
             props.loginSuccess(jsonData.new_token)
-           //console.log(jsonData.group_id)
+            //console.log(jsonData.group_id)
             if (jsonData.group_id === "4") {
                 history.push("/prive-user");
             }

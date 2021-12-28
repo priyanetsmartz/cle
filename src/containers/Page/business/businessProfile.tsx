@@ -864,7 +864,7 @@ function BusinessProfile(props) {
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
-                            <label className="form-label heading_lbl"><IntlMessages id="login.password" /></label>
+                            <label className="form-label heading_lbl"><IntlMessages id="login.password" />*</label>
                             <div className="password_edit">*******</div>
                         </div>
                     </div>
@@ -873,7 +873,7 @@ function BusinessProfile(props) {
                             <div className="change-paswd-sec col-sm-6">
                                 <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="login.password" /></label>
+                                    <label className="form-label"><IntlMessages id="login.password" />*</label>
                                     <input type={passMask.password ? 'password' : 'text'} className="form-control" placeholder=""
                                         id="password"
                                         value={changePass.password}
@@ -946,7 +946,7 @@ function BusinessProfile(props) {
                                     <span className="error">{errors.errors["confirmNewEmail"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="login.password" /><span
+                                    <label className="form-label"><IntlMessages id="login.password" />*<span
                                         className="maindatory"></span></label>
                                     <input type={passMask.emailPass ? 'password' : 'text'} className="form-control" placeholder=""
                                         id="password"

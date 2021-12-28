@@ -33,7 +33,7 @@ function SearchResults(props) {
     const [currentFilter, setCurrentFilter] = useState('')
     const [catState, setCatState] = useState(0);
     const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
-    const [sort, setSort] = useState(0);
+    const [sort, setSort] = useState('');
 
 
     const language = getCookie('currentLanguage');
@@ -376,6 +376,7 @@ function SearchResults(props) {
                         <div className="sort_by">
                             <div className="sortbyfilter">
                                 <select className="form-select customfliter" aria-label="Default select example" defaultValue={sort} onChange={filtterData} >
+                                    <option value="" key="4" >{intl.formatMessage({ id: "sorting" })}</option>
                                     <option value={0} key="0" >{intl.formatMessage({ id: "filterNewestFirst" })}</option>
                                     <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
                                     <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>Our picks
@@ -463,14 +464,12 @@ function SearchResults(props) {
                                         <ul className="pagination justify-content-center">
                                             <li
                                                 className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                                <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><IntlMessages id="pagination-prev" /></Link>
+                                                <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
                                             </li>
-                                            {getPaginationGroup().map((i, index) => (
-                                                <li className="page-item" key={i}><Link className={`page-link ${page === i ? 'active' : ''}`} onClick={changePage} to="#">{i}</Link></li>
-                                            ))}
+                                            <li className='pageofpage'>Page {page} of {pagination}</li>
                                             <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
                                                 <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                                    to="/"><IntlMessages id="pagination-next" /></Link>
+                                                    to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
                                             </li>
                                         </ul>
                                     </nav>

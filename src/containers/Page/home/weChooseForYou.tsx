@@ -22,7 +22,7 @@ function WeChooseForYou(props) {
     const [isShow, setIsShow] = useState(0);
     const [isHoverImage, setIsHoverImage] = useState(0);
     const [isWishlist, setIsWishlist] = useState(0);
-    const [delWishlist, setDelWishlist] = useState(0);  
+    const [delWishlist, setDelWishlist] = useState(0);
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -68,13 +68,13 @@ function WeChooseForYou(props) {
         ]
     };
 
-   
+
 
     const getData = async () => {
-        let customerId=  props.token.cust_id
+        let customerId = props.token.cust_id
         let result: any = await getWeChooseForYou(props.languages, customerId);
         if (result && result.data && result.data[0] && result.data[0].customerProducts.length > 0) {
-           // setCookie("relevant", true)
+            // setCookie("relevant", true)
 
             let whishlist: any = await getgidtMessageCall();
             let products = result.data[0].customerProducts;
@@ -85,10 +85,10 @@ function WeChooseForYou(props) {
                     ...itm
                 }));
             let productResult = await mergeById(products, whishlist);
-            
+
             setProducts(productResult);
         } else {
-           // setCookie("relevant", false)
+            // setCookie("relevant", false)
         }
     }
     async function getgidtMessageCall() {
@@ -107,7 +107,7 @@ function WeChooseForYou(props) {
             getData();
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
-        } else {           
+        } else {
             if (cartResults.message) {
                 getData();
                 notification("error", "", cartResults.message);
@@ -176,9 +176,11 @@ function WeChooseForYou(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <div className="new-in-title">
-                                <h1><IntlMessages id="home.weChooseForYou" /></h1>
-                            </div>
+                            {(props.show && props.show === true) && (
+                                <div className="new-in-title">
+                                    <h1><IntlMessages id="home.weChooseForYou" /></h1>
+                                </div>
+                            )}
                         </div>
                     </div>
                     {

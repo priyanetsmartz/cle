@@ -208,7 +208,7 @@ function SignIn(props) {
               <input type={passwordShown ? "text" : "password"}
                 className="form-control"
                 id="password"
-                placeholder={intl.formatMessage({ id: "login.password" })}
+                placeholder={intl.formatMessage({ id: "login.password" })+'*'}
                 value={state.password}
                 onChange={handleChange}
                 aria-describedby="basic-addon2"
