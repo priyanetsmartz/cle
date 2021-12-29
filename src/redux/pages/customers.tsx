@@ -98,11 +98,12 @@ export function removeItemFromWishList(custId, wishlist_item_id) {
     return Api.request(`rest/V1/wishlist/delete/${wishlist_item_id}?customerId=${custId}`, "", "DELETE", "");
 }
 
-export async function wishListSearchSort(custId, pageSize, sortOrder, sortBy, searchName) {
+export async function wishListSearchSort(language, pageSize, sortOrder, sortBy, searchName) {
+    const storeId = language === 'english' ? 'en' : 'ar';
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const localToken = user.cust_id;
-    // return adminApi.request(`rest/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&sortBy=${sortBy}&soryByValue=${sortOrder}&name=${searchName}`, "", "GET", "");
-    return adminApi.request(`rest/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&sortBy=${sortOrder}&soryByValue=${sortBy}&name=${searchName}`, "", "GET", "");
+
+    return adminApi.request(`rest/${storeId}/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&sortBy=${sortOrder}&soryByValue=${sortBy}&name=${searchName}`, "", "GET", "");
 }
 
 //apis for the home page

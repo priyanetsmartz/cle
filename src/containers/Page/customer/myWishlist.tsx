@@ -24,7 +24,7 @@ function MyWishList(props) {
     const [wishList, setWishList] = useState([]);
     const [searchName, setSearchName] = useState('');
     const [sortOrder, setSortOrder] = useState('');
-  
+
     const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
     const [pageSize, setPageSize] = useState(10);
     const [loaderOrders, setLoaderOrders] = useState(true);
@@ -41,15 +41,15 @@ function MyWishList(props) {
             setSearchName('')
             setWishList([])
             setSortOrder('')
-            setDelWishlist(0)          
+            setDelWishlist(0)
         }
     }, [props.items, props.languages, sortOrder])
 
     const getData = async () => {
         setLoaderOrders(true)
-      //  console.log(sortValue.sortBy, sortValue.sortByValue) 
-        let result: any = await wishListSearchSort(custId, pageSize, sortValue.sortBy, sortValue.sortByValue, searchName);
-        if (result && result.data ) {
+        //  console.log(sortValue.sortBy, sortValue.sortByValue) 
+        let result: any = await wishListSearchSort(props.languages, pageSize, sortValue.sortBy, sortValue.sortByValue, searchName);
+        if (result && result.data) {
             setWishList(result.data);
             setOpacity(1)
             setLoaderOrders(false)
@@ -74,10 +74,10 @@ function MyWishList(props) {
 
         }
     }
- 
+
 
     const filtterData = (event) => {
-      //  setOpacity(0.3);
+        //  setOpacity(0.3);
         // setCurrent(1)
         let sortBy = "";
         let sortByValue = "";
@@ -90,7 +90,7 @@ function MyWishList(props) {
         }
 
         setSortOrder(event.target.value);
-        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })       
+        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
 
     }
     async function handleDelWhishlist(id: number) {
@@ -118,7 +118,7 @@ function MyWishList(props) {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-           
+
             if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {

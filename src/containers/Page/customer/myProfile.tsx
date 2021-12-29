@@ -831,7 +831,7 @@ function MyProfile(props) {
                                         <div className="field-name">
                                             {
                                                 customerPrefer.clothing_size.map((favs, i) => {
-                                                    return (<span key={i}>{favs.label}{i === customerPrefer.clothing_size.length - 1 ? '' : ','}  </span>)
+                                                    return (<span key={i}>{favs.label}{i === customerPrefer.clothing_size.length - 1 ? '' : '/'}  </span>)
                                                 })
                                             }
                                         </div>
@@ -843,7 +843,7 @@ function MyProfile(props) {
                                         <div className="field-name">
                                             {
                                                 customerPrefer.shoes_size.map((favs, i) => {
-                                                    return (<span key={i}>{favs.label}{i === customerPrefer.shoes_size.length - 1 ? '' : ','} </span>)
+                                                    return (<span key={i}>{favs.label}{i === customerPrefer.shoes_size.length - 1 ? '' : '/'} </span>)
                                                 })
                                             }
                                         </div>
@@ -866,7 +866,7 @@ function MyProfile(props) {
                                             {customerPrefer.favCat.map((favs, i) => {
                                                 return (
                                                     <span key={favs.id} >{favs.name}{i === customerPrefer.favCat.length - 1 ?
-                                                        '' : ','} </span>
+                                                        '' : '/'} </span>
                                                 )
                                             })
                                             }
