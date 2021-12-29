@@ -2639,6 +2639,21 @@ span.maindatory {
     border-radius: 0 !important;
     width: 20px;
     height: 20px;
+    background-image: none !important;
+}
+
+.form-check-input:checked[type=radio]+label {
+    font-weight: bold;
+    display: block;
+}
+
+.form-check-input[type=radio]+label {
+    display: none;
+}
+
+.form-check-input:checked {
+    background-color: #2e2baa !important;
+    border-color: #2e2baa !important;
 }
 
 .modal-body .form-check-input:checked {
@@ -6871,6 +6886,10 @@ p.sliderupper {
     text-align: left;
 }
 
+.addressInlineForm.col-md-6 {
+    clear: both;
+    display: flex;
+}
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */

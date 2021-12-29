@@ -82,5 +82,9 @@ export async function searchProductListing(language, term) {
     var storeId = language === 'english' ? '3' : '2';
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    return adminToken.request(`rest/all/V1/product/searchProducts?vendorId=${vendorId}&storeId=${storeId}&searchterm=${term}`, "", "GET", "")
+    return adminToken.request(`rest/all/V1/product/searchProducts?vendorId=${vendorId}&storeId=${storeId}&searchterm=${term}`,"" , "GET", "")
+}
+
+export function removeProduct(deleteInfo) {
+    return adminToken.request(`rest/all/V1/products`, deleteInfo, "POST", "");
 }

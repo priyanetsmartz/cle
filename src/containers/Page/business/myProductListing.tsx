@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import DataTable from 'react-data-table-component';
-import { getVendorProducts, searchProductListing } from '../../../redux/pages/vendorLogin';
+import { getVendorProducts, searchProductListing, removeProduct, vendorLogout } from '../../../redux/pages/vendorLogin';
 import moment from 'moment';
 import { siteConfig } from '../../../settings/index'
 import { Link } from "react-router-dom";
@@ -27,12 +27,18 @@ function MyProductListing(props) {
     const [deletePop, setDeletePop] = useState(false);
     const [sortValue, setSortValue] = useState({ sortBy: "created_at", sortByValue: "DESC" });
     const intl = useIntl();
+    const [allData, setAllData] = useState([]);
+    const [vendorId, setVendorId] = useState(1);
     useEffect(() => {
         getData()
     }, [props.languages, sortValue])
 
     async function getData(status = '', from = '', to = '', type = '') {
         console.log('gere')
+        let userData = JSON.parse((localStorage.getItem('redux-react-session/USER_DATA')))
+        console.log(localStorage.getItem('redux-react-session/USER_DATA'))
+        console.log(userData,typeof(userData), userData['vendor_id'])
+        setVendorId(userData['vendor_id'])
         let result: any = await getVendorProducts(props.languages, status, from, to, type, sortValue);
         let dataObj = result && result.data && result.data.items && result.data.items.length > 0 ? result.data.items : [];
         let imageD = '';
@@ -53,6 +59,7 @@ function MyProductListing(props) {
             return productLoop;
         });
         setListingData(renObjData)
+        setAllData(renObjData)
 
     }
     const handleDelete = (prodId) => {
@@ -79,7 +86,7 @@ function MyProductListing(props) {
                     <p className='prodbrand'>{brand}</p>
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span>ID:</span>{row.product.id}</p>
-                    <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" >View</Link></li><li><Link to="#" onClick={() => { handleDelete(row.product.id) }} >Delete</Link></li></ul></div>
+                    <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" >View</Link></li><li><Link onClick={() => { handleDelete(row.product.sku) }} >Delete</Link></li></ul></div>
                 </div>
             ),
         },
@@ -110,8 +117,22 @@ function MyProductListing(props) {
         console.log('Selected Rows: ', selectedRows);
     };
 
-    const deleteProduct = () => {
-        console.log(deleteId);
+    async function deleteProduct() {
+      let  payload = {
+            "product": {
+                "sku": deleteId,
+                "status": 2,
+                "custom_attributes": [{
+                    "attribute_code": "udropship_vendor",
+                    "value": vendorId
+                }]
+            },
+            "saveOptions": true
+        }
+        //console.log(payload)
+        let result : any = await removeProduct(payload)
+        //console.log(deleteId);
+        closePop();
     }
     const closePop = () => {
         setDeletePop(false);
@@ -167,7 +188,7 @@ function MyProductListing(props) {
         let lang = props.languages ? props.languages : language;
         if (e.target.value.length >= 3) {
             setSearchTerm(e.target.value)
-            let result: any = await searchProductListing(lang, searchTerm);
+            let result: any = await searchProductListing(lang, e.target.value);
             console.log("lets see response come from api", result)
             
             let dataObj = result && result.data && result.data.length > 0 ? result.data : [];
@@ -189,6 +210,9 @@ function MyProductListing(props) {
             return productLoop;
         });
         setListingData(renObjData);
+        }
+        else{
+            setListingData(allData);
         }
     }
 

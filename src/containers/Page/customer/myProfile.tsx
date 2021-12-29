@@ -311,7 +311,7 @@ function MyProfile(props) {
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
             custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
         }
-        let result: any = await saveCustomerDetails(props.token.cust_id, { customer: custForm });
+        let result: any = await saveCustomerDetails({ customer: custForm });
         if (result) {
             setMyDetailsModel(false);
             setSaveCustDetailsLoader(false)
@@ -337,7 +337,7 @@ function MyProfile(props) {
                 custForm.addresses[addIndex] = obj;
             }
             //console.log(custAddForm);
-            let result: any = await saveCustomerDetails(props.token.cust_id, { customer: custForm });
+            let result: any = await saveCustomerDetails({ customer: custForm });
             if (result) {
                 openAddressModal();
                 setCustAddForm({

@@ -21,7 +21,9 @@ export async function getCustomerDetails() {
     return adminApi.request(`rest/V1/customers/${custId}`, "", "GET", "");
 }
 
-export function saveCustomerDetails(custId, data) {
+export async function saveCustomerDetails(data) {
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const custId = user.cust_id;
     return adminApi.request(`default/rest/all/V1/customers/${custId}`, data, "PUT", "");
 }
 

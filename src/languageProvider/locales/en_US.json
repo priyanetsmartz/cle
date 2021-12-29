@@ -556,5 +556,6 @@
   "notifyEmail":"By email",
   "notofyWhatsapp":"By Whatsapp",
   "deliveryDateoption1":"Same Date as event",
-  "deliveryDateoption2":"Set custom date"
+  "deliveryDateoption2":"Set custom date",
+  "great":"Great!"
 }
