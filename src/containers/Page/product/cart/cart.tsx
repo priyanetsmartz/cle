@@ -325,7 +325,10 @@ function CartItemPage(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8">
-                            <Link to="/products" ><IntlMessages id="cart-back-link" /></Link>
+							<div className="back-block">
+							<i className="fas fa-chevron-left back-icon"></i>
+                            <Link className="back-to-shop" to="/products" ><IntlMessages id="cart-back-link" /></Link>
+							</div>
                             <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                 <h2><IntlMessages id="cart.Title" /></h2>
                                 {opacity === 0.3 && (

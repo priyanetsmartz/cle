@@ -138,7 +138,7 @@ function NewIn(props) {
             {
                 products.length > 0 && (
                     <div className=" container" style={{ 'opacity': opacity }}>
-                        <h1 className="mb-4 text-center"><IntlMessages id="category.explore"></IntlMessages></h1>
+                        <h1 className="new-arrival"><IntlMessages id="category.explore"></IntlMessages></h1>
                         {console.log(products)}
                         <div className="row product-listing plp-listing g-2">
 
