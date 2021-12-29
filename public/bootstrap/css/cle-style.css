@@ -2966,7 +2966,7 @@ left: auto; */
 }
 
 .range_slider .range_inner {
-    width: 66%;
+    width: 100%;
     float: left;
 }
 
@@ -3776,23 +3776,23 @@ left: auto; */
 .choose-foryou-sec .product-listing .slick-prev:before {
     content: "\f104" !important;
 	font-family: 'Font Awesome 5 Free';
-	opacity:1;
+	font-weight: 900;
+	
 	background-image:none!important;
 	color:#2E2BAA;
 	display: inline-block;
-	font-size:22px;
+	font-size:16px;
 }
 
 .choose-foryou-sec .product-listing .slick-next:before {
     content: "\f105" !important;
 	font-family: 'Font Awesome 5 Free';
-    font-style: normal;
-    font-weight: normal;
-	opacity:1;
+	font-weight: 600;
+	
 	background-image:none!important;
 	color:#2E2BAA;
 	display: inline-block;
-	font-size:22px;
+	font-size:16px;
 }
 
 .choose-foryou-sec .product_img {
@@ -3843,6 +3843,48 @@ left: auto; */
     line-height: 42px;
     color: #000;
 }
+
+.wishlist-head{
+    margin-bottom: 20px;
+}
+
+.giftmessagebox .modal-header {
+    display: block;
+    position: relative;
+}
+
+.giftmessagebox .modal-header h5{
+	font-family: 'Monument Extended';
+	 font-size: 22px;
+    line-height: 32px;
+    color: #000;
+}
+
+.giftmessagebox .modal-header div {
+    font-family: "Lato";
+    font-size: 18px;
+    color: #000;
+}
+
+.giftmessagebox .modal-header .btn-close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: blue;
+}
+
+.giftmessagebox label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 7px;
+    color: #000;
+}
+
+.giftmessagebox .form-control{
+	margin-bottom: 10px;
+}
+
+
 
 .discoverleft {
     width: 78%;
@@ -4987,24 +5029,38 @@ left: auto; */
 
 /* cart page design */
 
-.cart-main .col-md-8>a {
+.back-block {
+    display: flex;
+    align-items: center;
+    height: 30px;
+}
+
+.back-icon {
+    font-size: 14px;
+	display:none;
+	transition: all .3s ease;
+}
+
+.cart-main .back-block .back-to-shop {
     font-family: 'Monument Extended';
     font-weight: 500;
     font-size: 12px;
     text-decoration: none;
     color: #000;
-    /* transform: translateX(0%);
+   transform: translateX(0%);
     display: inline-block;
     transition: all .3s ease;
     line-height: 24px;
-    padding: 10px 0;
-	width:200px; */
+	width:200px;
 }
 
-/* .cart-main .col-md-8 > a:hover {
-    transform: translateX(10%);
-} */
+.cart-main .back-block:hover .back-to-shop {
+    transform: translateX(7%);
+}
 
+.cart-main .back-block:hover .back-icon{
+	display:block;
+}
 
 
 
