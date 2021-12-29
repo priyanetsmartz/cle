@@ -86,7 +86,7 @@ function ForgottenPassword(props) {
         <div className="col-md-12">
           <div className="row">
             <div className="col-md-12 text-center">
-              <h3><IntlMessages id="forgot_pass" /></h3>
+              <h3><IntlMessages id="forgot_pass" />?</h3>
               <p><IntlMessages id="forgotpass-subtitle" /></p>
             </div>
           </div>

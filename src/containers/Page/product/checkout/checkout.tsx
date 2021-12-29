@@ -18,6 +18,8 @@ const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressS
 
 function Checkout(props) {
     const intl = useIntl();
+    let localData = localStorage.getItem('redux-react-session/USER_DATA');
+    let localToken = JSON.parse((localData));
     let history = useHistory();
     const [itemsVal, SetItems] = useState({
         checkData: {}, items: {}, address: {}, shippingAddress: 0, shippingData: {}
@@ -26,6 +28,14 @@ function Checkout(props) {
     const [state, setState] = useState({
         email: ""
     })
+    // set state for checked data
+    const [checkedData, setCheckedData] = useState({
+        address: false,
+        email: localToken && localToken.cust_id ? true : false,
+        shipping: false,
+        billingAddress: false
+    })
+
     //for customer address starts here------
     const [custId, setCustid] = useState(props.token.cust_id);
     const [countries, setCountries] = useState([]); // for countries dropdown
@@ -99,7 +109,20 @@ function Checkout(props) {
         errors: {}
     });
     //for customer address ends here-------
-
+    useEffect(() => {
+        const header = document.getElementById("checkoutsidebar");
+        const sticky = header.offsetTop;
+        const scrollCallBack: any = window.addEventListener("scroll", () => {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky-sidebar-checkout");
+            } else {
+                header.classList.remove("sticky-sidebar-checkout");
+            }
+        });
+        return () => {
+            window.removeEventListener("scroll", scrollCallBack);
+        };
+    },[])
     useEffect(() => {
         const queries = new URLSearchParams(props.location.search);
         let paymentId = queries.get('paymentId');
@@ -151,7 +174,7 @@ function Checkout(props) {
         checkItems['items'] = cartItems && cartItems.data ? cartItems.data.items : [];
         //  console.log(cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.id)
         let shipingAdd = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.id : 0;
-        // console.log(shipingAdd)
+        //  console.log(cartItems.data.extension_attributes.shipping_assignments[0].shipping.address)
         ship['firstname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.firstname : '';
 
         ship['lastname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.lastname : '';
@@ -220,7 +243,7 @@ function Checkout(props) {
         let addresses = {};
         let result: any = await getCustomerDetails();
         setCustForm(result.data);
-        // console.log(result.data)
+        console.log(result.data.addresses)
         addresses['addresses'] = result.data ? result.data.addresses : '';
         SetItems(prevState => ({
             ...prevState,
@@ -280,7 +303,7 @@ function Checkout(props) {
     const handleAddressChange = async (e) => {
         const { name, value, checked } = e.target;
         let selectedValue = parseInt(value);
-        //console.log(typeof (selectedValue))
+        console.log('selecting user shipping address');
         if (checked) {
             setIsSetAddress(selectedValue)
             const address: any = await getAddressById(selectedValue);
@@ -307,6 +330,10 @@ function Checkout(props) {
                 setIsSetAddress(0)
                 if (saveDelivery && saveDelivery.data && (saveDelivery.data.message === '' || saveDelivery.data.message === undefined)) {
                     checkoutScreen()
+                    setCheckedData(prevState => ({
+                        ...prevState,
+                        address: true
+                    }))
                     notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
                 } else {
                     notification("error", "", saveDelivery.data.message);
@@ -377,6 +404,10 @@ function Checkout(props) {
                 // console.log(addressData)
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
                 if (saveDelivery.data.payment_methods && (saveDelivery.data.message === undefined || saveDelivery.data.message === '')) {
+                    setCheckedData(prevState => ({
+                        ...prevState,
+                        billingAddress: true
+                    }))
                     setIsBillingAddress(0);
                     props.showPaymentMethods(saveDelivery.data.payment_methods);
                     notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
@@ -484,6 +515,10 @@ function Checkout(props) {
                     default_shipping: true,
                     default_billing: true,
                 });
+                setCheckedData(prevState => ({
+                    ...prevState,
+                    address: true
+                }))
                 notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
             } else {
                 notification("error", "", result.data.message);
@@ -795,6 +830,10 @@ function Checkout(props) {
 
     }
     const handleShippingMethodSelect = async (e) => {
+        setCheckedData(prevState => ({
+            ...prevState,
+            shipping: true
+        }))
         setSelectedShippingMethod(e.target.value)
     }
     const selectPayment = async (code) => {
@@ -967,15 +1006,16 @@ function Checkout(props) {
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutTwo" id="accordion-buttonacc" aria-expanded="false" aria-controls="CheckoutTwo">
                                             <IntlMessages id="checkoutemail_address" />
+                                            {checkedData.email && (<span><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="CheckoutTwo" className="accordion-collapse collapse" aria-labelledby="CheckoutHTwo"
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
-                                           
+
                                             {props.token.token_email ? <span className="note"><IntlMessages id="emailchangenote" /></span> : ''}
                                             <label><IntlMessages id="profile.email" /></label>
-                                            
+
                                             <p>{props.token.token_email ?
                                                 props.token.token_email :
                                                 <input type="email"
@@ -994,7 +1034,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" onClick={checkEmailData} id="CheckoutHThree">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutThree" aria-expanded="false" aria-controls="CheckoutThree">
-                                            <IntlMessages id="deliveryAddress" />
+                                            <IntlMessages id="deliveryAddress" /> {checkedData.address && (<span><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="CheckoutThree" className="accordion-collapse collapse" aria-labelledby="CheckoutHThree"
@@ -1046,7 +1086,7 @@ function Checkout(props) {
                                                                         <div className="form-check">
                                                                             <input
                                                                                 type="radio"
-                                                                                style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
+                                                                                style={{ "display": isBillingAddress === parseInt(item.id) ? "none" : "inline-block" }}
                                                                                 defaultValue={item.id}
                                                                                 name={`billingaddress`}
                                                                                 onChange={handleBillingChange}
@@ -1054,7 +1094,7 @@ function Checkout(props) {
                                                                                 defaultChecked={item.id === isBillingAddress ? true : false}
                                                                             />
 
-                                                                            <Link to="#" style={{ "display": isBillingAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                            <Link to="#" style={{ "display": isBillingAddress === parseInt(item.id) ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
                                                                             </Link>
                                                                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                                                                 <IntlMessages id="usethisAddress" />
@@ -1197,7 +1237,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfour">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfour" aria-expanded="false" aria-controls="Checkoutfour" onClick={getshippingMethods}>
-                                            <IntlMessages id="deliveryOption" />
+                                            <IntlMessages id="deliveryOption" />   {checkedData.shipping && (<span><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="Checkoutfour" className="accordion-collapse collapse" aria-labelledby="CheckoutHfour"
@@ -1239,7 +1279,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfive">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfive" aria-expanded="false" aria-controls="Checkoutfive">
-                                            <IntlMessages id="payment" />
+                                            <IntlMessages id="payment" />{checkedData.billingAddress && (<span><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"
@@ -1294,7 +1334,7 @@ function Checkout(props) {
                                                                     <div className="select-address-inner form-check">
                                                                         <input
                                                                             type="radio"
-                                                                            style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
+                                                                            style={{ "display": isBillingAddress === parseInt(item.id) ? "none" : "inline-block" }}
                                                                             defaultValue={`billingaddress`}
                                                                             onChange={handleBillingChange}
                                                                             className="form-check-input"
@@ -1302,7 +1342,7 @@ function Checkout(props) {
                                                                         // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
                                                                         />
                                                                         <label htmlFor="rad1"> <IntlMessages id="great" /></label>
-                                                                        <Link to="#" style={{ "display": isBillingAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                        <Link to="#" style={{ "display": isBillingAddress === parseInt(item.id) ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
                                                                         </Link>
 
                                                                     </div>
@@ -1373,7 +1413,7 @@ function Checkout(props) {
                             </div>
                         </div>
                         {/* <CheckoutSidebar sidebarData={itemsVal} /> */}
-                        <div className="col-md-4">
+                        <div className="col-md-4" id="checkoutsidebar">
                             <div className="order-detail-sec">
                                 <h5>{itemsVal.checkData['total_items'] ? itemsVal.checkData['total_items'] : 0} <IntlMessages id="item" /></h5>
                                 {itemsVal.items['items'] && itemsVal.items['items'].length > 0 && (

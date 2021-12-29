@@ -909,7 +909,7 @@ function BusinessProfile(props) {
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
-                                        <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
+                                        <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" />?</Link>
                                     </div>
                                     <div className="Frgt_paswd">
                                         <div className="confirm-btn">

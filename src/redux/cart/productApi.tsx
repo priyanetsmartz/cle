@@ -126,22 +126,22 @@ export function getProductsFilterRestCollectionProducts(category_id: number, lan
         data = '{products(' + selection + ' filter:{category_id:{ eq: "' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
     else if (testing === 'test') {
-        console.log('test')
+        // console.log('test')
         data = '{products(search: "' + value + '", pageSize: ' + pageSize + ' ,currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
     else if (category_id === undefined && branding) {
-        console.log('sasvs')
+        //   console.log('sasvs')
         data = '{products(search: "' + branding + '", pageSize: ' + pageSize + ',currentPage: ' + currentPage + '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
     else {
-        console.log(attribute)
+        //console.log(attribute)
         data = '{products(' + selection + ' filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ': { eq:"' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
 
     let query = {
         "query": data,
         "storeCode": storeId,
-        "catId": category_id
+        "catId": category_id ? category_id : 0
     }
     return APi.request(`rest/all/V1/product/filtersCollection`, query, "POST", "");
 }

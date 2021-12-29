@@ -128,6 +128,10 @@ function GiftMessage(props) {
                 notification("success", "", intl.formatMessage({ id: "addedgift" }));
                 history.push('/my-cart');
                 window.location.href = '/my-cart';
+            } else {
+                props.openGiftBoxes(0);
+                setIsShow(false);
+                notification("error", "", result.data.message);
             }
         } else {
             setIsShow(false);
@@ -151,7 +155,7 @@ function GiftMessage(props) {
 
         if (!state["message"]) {
             formIsValid = false;
-            error["message"] =intl.formatMessage({ id: "giftmessage" })
+            error["message"] = intl.formatMessage({ id: "giftmessage" })
         }
         setError({ errors: error });
         setIsShow(false);

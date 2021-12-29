@@ -136,7 +136,7 @@ function MyProfile(props) {
         return () => {
             setIsShow(false)
         }
-    }, []);
+    }, [props.prefrences]);
 
     const handleForgetPopup = (e) => {
         e.preventDefault();
@@ -213,7 +213,8 @@ function MyProfile(props) {
         let intersted_in = mostly_intersted_inArray.filter((eq) => {
             return eq.id === mostly_intersted_in;
         });
-
+        // console.log(mostly_intersted_inArray)
+        // console.log(categories_array);
         let shoes_sizeData = shoes_size_inArray.filter(function (o1) {
             return shoes_size.some(function (o2) {
                 return o1.value === o2; // return the ones with equal id
@@ -225,16 +226,12 @@ function MyProfile(props) {
                 return o1.value === o2; // return the ones with equal id
             });
         });
+        // console.log(intersted_in);
+        let index = mostly_intersted_inArray.findIndex(x => x.name === intersted_in[0].name);
+        catToShow = categories_array[index];
 
-        if (intersted_in[0] && intersted_in[0].name === "kid") {
-            catToShow = categories_array[2];
-        } else if (intersted_in[0] && intersted_in[0].name === "Women") {
-            catToShow = categories_array[0];
-        } else {
-            catToShow = categories_array[1];
-        }
 
-        //  console.log(catToShow, intersted_in[0].name)
+        // console.log(catToShow)
         var favCategoryArray = [];
         if (catToShow && catToShow.length > 0) {
             favCategoryArray = catToShow.filter(function (o1) {
@@ -296,6 +293,8 @@ function MyProfile(props) {
         const { id, value } = e.target;
         if (id === 'DateOfDelivery' && value === "2") {
             setShowCustomdate(true);
+        } else {
+            setShowCustomdate(false);
         }
         setGiftingPrefer(prevState => ({
             ...prevState,
@@ -402,6 +401,7 @@ function MyProfile(props) {
         delete custForm.addresses[index].region;
         getRegions(custForm.addresses[index].country_id, index);
         setAddIndex(index);
+        getData();
         custForm.addresses[index].street = custForm.addresses[index].street[0];
         setCustAddForm(custForm.addresses[index]);
         openAddressModal();
@@ -413,6 +413,7 @@ function MyProfile(props) {
         if (result) {
             custForm.addresses.splice(index, 1);
             setCustForm(custForm);
+            getData();
             notification("success", "", intl.formatMessage({ id: "customerAddressDelete" }));
         }
     }
@@ -700,6 +701,7 @@ function MyProfile(props) {
     }
 
     const openGigitingModal = () => {
+        setGiftErrors({ errors: {} })
         setGiftingModal(!giftingModal);
     }
 
@@ -1083,7 +1085,7 @@ function MyProfile(props) {
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
-                                        <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
+                                        <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" />?</Link>
 
                                     </div>
                                     <div className="Frgt_paswd">
