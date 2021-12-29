@@ -259,7 +259,7 @@ function LatestProducts(props) {
 
                             <div className="tab-pane fade" id="D-maylike" role="tabpanel" aria-labelledby="D-maylike-tab">
                                 <div className="row">
-                                    <WeChooseForYou />
+                                    <WeChooseForYou  />
                                 </div>
                             </div>
                         </div >

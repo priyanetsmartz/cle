@@ -79,12 +79,12 @@ function RegistrationForm(props) {
 
         if (state["confirmPassword"] !== state["password"]) {
             formIsValid = false;
-            error["confirmPassword"] =intl.formatMessage({ id: "confirmpasswordnotmatched" });
+            error["confirmPassword"] = intl.formatMessage({ id: "confirmpasswordnotmatched" });
         }
 
         if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#^])([A-Za-z\d$@$!%*?&#^]{8,})$/.test(state["password"]))) {
             formIsValid = false;
-            error["password"] =  intl.formatMessage({ id: "passwordvalidation" });
+            error["password"] = intl.formatMessage({ id: "passwordvalidation" });
         }
 
         //password
@@ -96,7 +96,7 @@ function RegistrationForm(props) {
 
         if (!state["confirmPassword"]) {
             formIsValid = false;
-            error["confirmPassword"] =  intl.formatMessage({ id: "confirmpasswordreq" });
+            error["confirmPassword"] = intl.formatMessage({ id: "confirmpasswordreq" });
         }
 
 
@@ -169,13 +169,16 @@ function RegistrationForm(props) {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
             <Modal.Body className="arabic-rtl-direction"><h2 className="sign-head"><IntlMessages id="signup.sign_up" /></h2>
                 <p><IntlMessages id="signup.be_the_first_one" /></p>
+                <div className="danger">
+                    <p>* Indicates mandatory fields</p>
+                </div>
                 <div className="row g-3">
                     <div className="col-sm-12">
                         <input type="text"
                             className="form-control"
                             id="first_name"
                             aria-describedby="nameHelp"
-                            placeholder={intl.formatMessage({ id: 'register.first_name' })}
+                            placeholder={intl.formatMessage({ id: 'register.first_name' }) + `*`}
                             value={state.first_name}
                             onChange={handleChange}
                         />
@@ -186,7 +189,7 @@ function RegistrationForm(props) {
                             className="form-control"
                             id="last_name"
                             aria-describedby="nameHelp"
-                            placeholder={intl.formatMessage({ id: 'register.last_name' })}
+                            placeholder={intl.formatMessage({ id: 'register.last_name' }) + `*`}
                             value={state.last_name}
                             onChange={handleChange}
                         />
@@ -197,7 +200,7 @@ function RegistrationForm(props) {
                             className="form-control"
                             id="email"
                             aria-describedby="emailHelp"
-                            placeholder={intl.formatMessage({ id: 'register.email' })}
+                            placeholder={intl.formatMessage({ id: 'register.email' }) + `*`}
                             value={state.email}
                             onChange={handleChange}
                         />

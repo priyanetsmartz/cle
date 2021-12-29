@@ -1,6 +1,7 @@
 import ADMINAPI from "../../restApi/Api";
 import ADMINTOKEN from "../../restApi/AdminApi";
 import { sessionService } from 'redux-react-session';
+import { store } from "../store";
 const AdminApi = new ADMINAPI();
 const adminToken = new ADMINTOKEN();
 
@@ -60,4 +61,30 @@ export async function closePopup(flag: number) {
 
 export function editVendor(userInfo) {
     return adminToken.request(`rest/all/V1/vendor/editvendordetails`, userInfo, "PUT", "");
+}
+
+export function editBusinessDetails(businessDetails) {
+    return adminToken.request(`rest/all/V1/vendor/updatebusinessdetails`, businessDetails, "PUT", "");
+}
+
+export function editBankDetails(bankdetails) {
+    return adminToken.request(`rest/all/V1/vendor/updatebankdetails`, bankdetails, "PUT", "");
+}
+
+export function editVendorAddress(address) {
+    return adminToken.request(`rest/all/V1/vendor/updateVendorAddress`, address, "PUT", "");
+}
+
+export function vendorRestpassword(payload) {
+    return adminToken.request(`rest/all/V1/vendor/resetPassword`, payload, "PUT", "");
+}
+export async function searchProductListing(language, term) {
+    var storeId = language === 'english' ? '3' : '2';
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`rest/all/V1/product/searchProducts?vendorId=${vendorId}&storeId=${storeId}&searchterm=${term}`,"" , "GET", "")
+}
+
+export function removeProduct(deleteInfo) {
+    return adminToken.request(`rest/all/V1/products`, deleteInfo, "POST", "");
 }

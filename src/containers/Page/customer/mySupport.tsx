@@ -25,7 +25,8 @@ function MySupport(props) {
         }
         fetchMyAPI()
         return () => {
-           
+            SetPagesData({ title: '', content: '' }) 
+            setIsPriveUser(false)
         }
     }, [ props.languages])
 

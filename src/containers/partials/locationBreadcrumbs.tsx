@@ -36,7 +36,7 @@ function Breadcrumbs(props) {
                         //console.log(local)
                         if (j === breadcrumsState.length - 1) {
                             let data = local.split('-')
-                            if (local === 'orders-and-returns' || local === 'wish-list' || local === 'profile' || local === 'support') {
+                            if (local === 'orders-and-returns' || local === 'wishlist' || local === 'profile' || local === 'support') {
                                 return (
                                     <li key={j} className="breadcrumb-item active">My
                                         {

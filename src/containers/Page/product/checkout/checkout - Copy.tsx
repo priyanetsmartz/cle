@@ -384,7 +384,7 @@ function Checkout(props) {
             if (customer_id) {
                 custForm.addresses.push(obj);
 
-                let newAddress: any = await saveCustomerDetails(custId, { customer: custForm });
+                let newAddress: any = await saveCustomerDetails( { customer: custForm });
                 // console.log(newAddress.data)
                 delete shippingAddress['default_shipping'];
 
@@ -727,7 +727,7 @@ function Checkout(props) {
 
                 custForm.addresses.push(billingObj);
                 // console.log(custForm)
-                let newAddress: any = await saveCustomerDetails(custId, { customer: custForm });
+                let newAddress: any = await saveCustomerDetails({ customer: custForm });
                 // console.log(newAddress.data)
                 // delete billingAddress['default_shipping'];
                 delete billingAddress['default_billing'];

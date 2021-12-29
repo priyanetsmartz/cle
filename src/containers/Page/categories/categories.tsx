@@ -65,6 +65,7 @@ function Categories(props) {
 
     const getData = async (urlPath) => {
         let result: any = await getCategoryDetailsbyUrlPath(props.languages, urlPath, siteConfig.pageSize);
+       
         if (result && result.data && result.data.items && result.data.items.length > 0 && result.data.items[0].custom_attributes && result.data.items[0].custom_attributes.length > 0) {
             let obj: any = {};
 
@@ -107,7 +108,6 @@ function Categories(props) {
                                 {/* <AppBreadcrumbs />  */}
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                                    <li className="breadcrumb-item"><Link to="/products">Products</Link></li>
                                     <li className="breadcrumb-item"><Link to={`/products/${category}`}>{capitalize(category)}</Link></li>
                                     {subcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}`}>{capitalize(subcat)}</Link></li>)}
                                     {childcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}/${childcat}`}>{capitalize(childcat)}</Link></li>)}

@@ -134,7 +134,7 @@ function MyWishList(props) {
                     <h1><IntlMessages id="Profile.Wishlist-title" /></h1>
                     <h2><IntlMessages id="Profile.Wishlist-subTitle" /></h2>
                 </div>
-                <div className="col-md-6"></div>
+               
                 <div className="col-md-6">
                     <div className="row">
                         <div className="col-md-6">
@@ -156,6 +156,7 @@ function MyWishList(props) {
                         </div>
                     </div>
                 </div>
+				 <div className="col-md-6"></div>
                 <div className="product-listing" style={{ 'opacity': opacity }} >
                     <div className="row g-2">
                         {loaderOrders && (

@@ -43,6 +43,7 @@ function GoogleLoginButton(props) {
             email: res.profileObj.email,
             telephone: '',
             country_id: '',
+            type: "vendor",
         }
         localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
         history.push(`/vendor/profile`);
@@ -50,15 +51,20 @@ function GoogleLoginButton(props) {
 
     async function fetchMyAPI(userInfo) {
         let result: any = await loginApi.getAuthRegister(userInfo.email);
-        var jsonData = result.data[0];
+      //  console.log(result)
+        var jsonData = result && result.data && result.data.length > 0 ? result.data[0] : [];
         if (jsonData) {
-         
             let id_token = jsonData.new_token;
+            let firstname = jsonData.firstname ? jsonData.firstname : '';
+            let lastname = jsonData.lastname ? jsonData.lastname : '';
+
             let data = {
                 'cust_id': jsonData.entity_id,
                 'token_email': userInfo.email,
+                'token_name': firstname + ' ' + lastname,
                 'token': jsonData.group_id,
-                'id_token': jsonData.new_token
+                'id_token': jsonData.new_token,
+                'type': "user"
             }
             sessionService.saveSession({ id_token })
             sessionService.saveUser(data)

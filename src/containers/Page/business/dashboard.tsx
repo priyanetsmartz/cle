@@ -255,7 +255,54 @@ function Dashboard(props) {
                     </div>
                 </div >
             </section>
+            {/* My Returns & Complaints */}
             <section className="my_profile_sect mb-4">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h1><IntlMessages id="vendor.returnandcomplaints" /></h1>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div id="page-wrapper" className="container">
+                            <div className="row">
+                                <DataTable
+                                    columns={columns}
+                                    data={myOrders}
+                                    highlightOnHover
+                                    pointerOnHover
+                                    striped={true}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div >
+            </section>
+            {/* My Payouts */}
+            <section className="my_profile_sect mb-4">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h1><IntlMessages id="vendor.mypayouts" /></h1>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div id="page-wrapper" className="container">
+                            <div className="row">
+                                <DataTable
+                                    columns={columns}
+                                    data={myOrders}
+                                    highlightOnHover
+                                    pointerOnHover
+                                    striped={true}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div >
+            </section>
+
+            <section className="my_profile_sect profilemagazine mb-4">
                 <Magazine />
             </section>
             <Modal show={myDashboardModal} className="cookie_popup_login">

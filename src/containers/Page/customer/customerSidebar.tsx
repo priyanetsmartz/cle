@@ -25,17 +25,29 @@ const { showLoader } = appAction;
 
 function Customer(props) {
     const intl = useIntl();
-    const userGroup = props.token.token
+    let localData = localStorage.getItem('redux-react-session/USER_DATA');
+    let localToken = JSON.parse((localData));
+    const userGroup = localToken.token
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
-    const [name, setName] = useState(props.token.token_name);
+    const [name, setName] = useState(localToken.token_name);
     const history = useHistory();
     const key = props.match.params.tab;
     const [activeTab, setActiveTab] = useState('');
 
     useEffect(() => {
-        //  props.showLoader(true)
+        const header = document.getElementById("customersidebar");
+        const sticky = header.offsetTop;
+        const scrollCallBack: any = window.addEventListener("scroll", () => {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky-sidebar");
+            } else {
+                header.classList.remove("sticky-sidebar");
+            }
+        });
         setActiveTab(key);
-
+        return () => {
+            window.removeEventListener("scroll", scrollCallBack);
+        };
     }, [key]);
 
     const changeTab = (tab) => {
@@ -59,7 +71,7 @@ function Customer(props) {
             <section className="mt-5">
                 <div className="container">
                     <div className="row">
-                        <div className="col-sm-3">
+                        <div className="col-sm-3" id="customersidebar">
                             <div className="pro_categry_sidebar">
                                 <div className="my-userdetails">
                                     <div className="user_show" style={priveColor}><IntlMessages id="customer.hi" /></div>
@@ -71,7 +83,7 @@ function Customer(props) {
                                         <option value="orders-and-returns">{intl.formatMessage({ id: 'customer.ordersAndReturns' })}</option>
                                         {/* <option value="mytrades">{intl.formatMessage({ id: 'customer.myTrades' })}</option> */}
                                         {/* <option value="rewards"><IntlMessages id="customer.myReward" /></option> */}
-                                        <option value="wish-list">{intl.formatMessage({ id: 'customer.myWishlist' })}</option>
+                                        <option value="wishlist">{intl.formatMessage({ id: 'customer.myWishlist' })}</option>
                                         <option value="profile">{intl.formatMessage({ id: 'customer.myProfile' })}</option>
                                         {/* <option value="notifications"><IntlMessages id="customer.myNotifications" /></option> */}
                                         <option value="support">{intl.formatMessage({ id: 'customer.mySupport' })}</option>
@@ -102,8 +114,8 @@ function Customer(props) {
                                                 <span className="pl-2"> <IntlMessages id="customer.myReward" /></span>
                                             </Link>
                                         </li> */}
-                                        <li className={activeTab === 'wish-list' ? 'active' : ''}>
-                                            <Link to="#" onClick={() => changeTab('wish-list')} className={isPriveUser ? 'prive-txt' : ''}>
+                                        <li className={activeTab === 'wishlist' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('wishlist')} className={isPriveUser ? 'prive-txt' : ''}>
                                                 <i className="fas fa-heart"></i>
                                                 <span className="pl-2"><IntlMessages id="customer.myWishlist" /></span>
                                             </Link>
@@ -134,7 +146,7 @@ function Customer(props) {
                             activeTab === 'orders-and-returns' ? <OrdersAndReturns /> :
                                 // activeTab === 'mytrades' ? <MyTrades /> :
                                 activeTab === 'profile' ? <MyProfile /> :
-                                    activeTab === 'wish-list' ? <MyWishList /> :
+                                    activeTab === 'wishlist' ? <MyWishList /> :
                                         activeTab === 'rewards' ? <MyRewards /> :
                                             activeTab === 'notifications' ? <MyNotifications /> : <MySupport />}
 

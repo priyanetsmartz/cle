@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
+import searchIcon from '../../../../image/Icon_zoom_in.svg';
 import { savePreference } from '../../../../redux/pages/customers';
 import notification from '../../../../components/notification';
 import IntlMessages from "../../../../components/utility/intlMessages";
@@ -14,6 +15,7 @@ function MyPreferences(props) {
     let preference = result.data && result.data[0] ? result.data[0].preference : "";
     const [custId, setCustid] = useState(props.token.cust_id);
     const [attributesAll, setAttributesAll]: any = useState(preference);
+    const [isShown, setIsShown] = useState(0);
     const [attributes, setAttributes]: any = useState(preference);
     const [catFilter, setCatFilter]: any = useState('');
     const [favCat, setFavCat]: any = useState({});
@@ -22,7 +24,7 @@ function MyPreferences(props) {
     const [isShow, setIsShow] = useState(false);
     const intl = useIntl();
     useEffect(() => {
-       // console.log(props.preferences, props.custData)
+        // console.log(props.preferences, props.custData)
         getAttributes();
         return () => {
             //
@@ -78,22 +80,20 @@ function MyPreferences(props) {
                             });
                         })
                     }
-                    // console.log(preference) 
+
 
                 }
 
             });
 
         }
-        //console.log(preference) 
-       // props.closePrefPopup(false);
+
         setAttributes(preference);
-        //setAttributesAll(preference);
+        setAttributesAll(preference);
     }
 
     const selectMostlyIntersted = (i) => {
         setActiveIndex(i);
-        // attributes.mostly_intersted[i].isChecked = !attributes.mostly_intersted[i].isChecked;
         attributes.mostly_intersted.forEach(el => {
             if (el.id === attributes.mostly_intersted[i].id) {
                 el.isChecked = true;
@@ -149,13 +149,27 @@ function MyPreferences(props) {
     }
 
     //for selecting categories in the my prefernce modal
-    const selectCategories = (i) => {
-        attributes.categories[activeCategory][i].isChecked = !attributes.categories[activeCategory][i].isChecked;
+    const selectCategories = (i, cat) => {       
+        attributes.categories[activeCategory] = attributes.categories[activeCategory].map(el => (
+            el.id === cat.id ? { ...el, isChecked: true } : el
+        ))
+   
         setAttributes(prevState => ({
             ...prevState,
             categories: attributes.categories
         }));
     }
+    const removeSelectedCategories = (cat) => {       
+        attributes.categories[activeCategory] = attributes.categories[activeCategory].map(el => (
+            el.id === cat.id ? { ...el, isChecked: false } : el
+        ))
+   
+        setAttributes(prevState => ({
+            ...prevState,
+            categories: attributes.categories
+        }));
+    }
+    
 
     //remove all selected categores in my preference modal
     const removeAllCat = () => {
@@ -191,17 +205,18 @@ function MyPreferences(props) {
     const filterCategories = (e) => {
         let value = e.target.value.toLowerCase();
         let result = [];
-        let newObj = { ...attributesAll }
+        let newObj = { ...attributes }
         setCatFilter(value)
-        result = newObj.categories[activeCategory].filter((eq) => {
-            return eq.name.toLowerCase().includes(e.target.value.toLowerCase());
-        });
-        setFilter(result)
-    }
-
-    const setFilter = (result) => {
+        if (value.length > 0) {
+            result = newObj.categories[activeCategory].filter((eq) => {
+                return eq.name.toLowerCase().includes(e.target.value.toLowerCase());
+            });
+        }
         setFavCat(result);
     }
+    // const setFilter = (result) => {
+    //     setFavCat(result);
+    // }
 
     const saveMyPreferences = async () => {
         setIsShow(true);
@@ -351,7 +366,7 @@ function MyPreferences(props) {
 
                     <div className="col-sm-6">
                         <div className="search_results">
-                            <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
+                            <img src={searchIcon} alt="" className="me-1 search_icn" />
                             <input type="search" placeholder="Search..." className="form-control me-1" />
                         </div>
                     </div>
@@ -402,9 +417,9 @@ function MyPreferences(props) {
 
                     <div className="col-sm-6">
                         <div className="search_results">
-                            <img src="images/Icon_zoom_in.svg" alt="" className="me-1 search_icn" />
+                            <img src={searchIcon} alt="" className="me-1 search_icn" />
                             <input type="search" placeholder="Search..." className="form-control me-1"
-                                value={catFilter} onChange={filterCategories} />
+                                defaultValue={catFilter} onChange={filterCategories} />
                         </div>
                     </div>
 
@@ -413,32 +428,47 @@ function MyPreferences(props) {
                     <div className="col-sm-6">
                         <div className="favt_section">
 
-                            <ul>
-                                {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length > 0 && attributes.categories[activeCategory].map((cat, i) => {
+                            {(favCat && favCat.length > 0) ?
+                                <ul> {favCat.map((cat, i) => {
                                     return (
                                         // <li key={cat.id}>
                                         <div className="form-check" key={cat.id}>
                                             <input className="form-check-input" type="checkbox" value="" id={cat.name}
-                                                checked={cat.isChecked} onChange={() => selectCategories(i)} />
+                                                checked={cat.isChecked} onChange={() => selectCategories(i, cat)} />
                                             <label className="form-check-label" htmlFor={cat.name}>
                                                 {cat.name}
                                             </label>
                                         </div>
                                         // </li>
                                     )
-                                })}
-                            </ul>
+                                })} </ul> :
+                                <ul>
+                                    {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length > 0 && attributes.categories[activeCategory].map((cat, i) => {
+                                        return (
+                                            // <li key={cat.id}>
+                                            <div className="form-check" key={cat.id}>
+                                                <input className="form-check-input" type="checkbox" value="" id={cat.name}
+                                                    checked={cat.isChecked} onChange={() => selectCategories(i, cat)} />
+                                                <label className="form-check-label" htmlFor={cat.name}>
+                                                    {cat.name}
+                                                </label>
+                                            </div>
+                                            // </li>
+                                        )
+                                    })}
+                                </ul>
+                            }
                         </div>
                     </div>
                     <div className="col-sm-6">
                         <div className="favt_dragdrop">
                             <div className="favdesignr_size_sec">
                                 <ul>
-                                    {/* {console.log(attributes)} */}
-                                    {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length && attributes.categories[activeCategory].map(cat => {
-                                        //  console.log(cat)
+                                    {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length && attributes.categories[activeCategory].map((cat, i) => {
                                         return cat.isChecked &&
-                                            (<li key={cat.id}><Link to="#"> {cat.name}</Link></li>)
+                                            (<li key={i} onMouseEnter={() => setIsShown(cat.id)} onMouseLeave={() => setIsShown(0)} ><Link to="#"  >
+                                                {isShown == parseInt(cat.id) ? <span className='textname' onClick={() => removeSelectedCategories(cat)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textname' > {cat.name}</span>
+                                                }</Link></li>)
                                     })}
                                 </ul>
                                 <div className="save-btn removel_allbtn">

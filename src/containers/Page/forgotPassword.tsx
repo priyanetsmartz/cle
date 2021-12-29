@@ -6,9 +6,12 @@ import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
 
 function ForgottenPassword(props) {
+  let localData = localStorage.getItem('redux-react-session/USER_DATA');
+  let localToken = JSON.parse((localData));
+  console.log(localToken)
   const intl = useIntl();
   const [state, setState] = useState({
-    email1: ""
+    email1: localToken && localToken.token_email ? localToken.token_email : ""
   })
   const [isShow, setIsShow] = useState(false);
   const [errors, setError] = useState({
@@ -41,12 +44,12 @@ function ForgottenPassword(props) {
           ...prevState,
           email1: ""
         }));
-        if(result.message === 'Request failed with status code 404'){
+        if (result.message === 'Request failed with status code 404') {
           notification("error", "", intl.formatMessage({ id: "emailnotfound" }));
-        }else{
+        } else {
           notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
-       
+
         setIsShow(false);
       }
     } else {
@@ -68,7 +71,7 @@ function ForgottenPassword(props) {
     }
     if (!state["email1"]) {
       formIsValid = false;
-      error["email1"] =  intl.formatMessage({ id: "emailrequired" });
+      error["email1"] = intl.formatMessage({ id: "emailrequired" });
     }
 
     setError({ errors: error });
@@ -107,7 +110,7 @@ function ForgottenPassword(props) {
             <div className="row">
               <div className="col-md-12">
                 <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}>  <IntlMessages id="retrieve_password" /></Link>
-                <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
+                <div className="spinner signup-btn" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
               </div>
             </div>
           </form>

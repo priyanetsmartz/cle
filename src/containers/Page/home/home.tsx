@@ -66,7 +66,7 @@ function HomePage(props) {
                 <NewIn newInProducts={products['newInProducts']} />
             </div>
             <div className="section wechoose" key='uniqueKey2' >
-                <WeChooseForYou />
+                <WeChooseForYou show={true}/>
             </div>
             <div className="section" >
                 <HtmlContent identifier="home_page_pre-owned_category" />

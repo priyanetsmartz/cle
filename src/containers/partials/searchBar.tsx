@@ -66,8 +66,6 @@ function SearchBar(props) {
             SetIsShow(false);
             SetNothingFound("")
         }
-
-        //  console.log(autoSuggestions.items)
     }
 
     const searchwithCategory = async (e) => {

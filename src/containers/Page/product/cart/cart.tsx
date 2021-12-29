@@ -46,7 +46,7 @@ function CartItemPage(props) {
             props.addToCartTask(false);
             props.openGiftBoxes(0);
         }
-    }, [props.languages, props.cart,props.token])
+    }, [props.languages, props.cart, props.token])
 
     useEffect(() => {
         // console.log(props.items.Cart);
@@ -150,7 +150,7 @@ function CartItemPage(props) {
         if (deleteCartItem.data === true) {
             props.addToCartTask(true);
             callGetCartItems()
-            notification("success", "",  intl.formatMessage({ id: "removedcart" }));
+            notification("success", "", intl.formatMessage({ id: "removedcart" }));
         } else {
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
             setIsShow(0)
@@ -180,6 +180,38 @@ function CartItemPage(props) {
         notification("success", "", intl.formatMessage({ id: "cartupdated" }));
     }
 
+    async function handleChangeQty(e, data) {
+        setValue(data.item_id);
+        let value = parseInt(e.target.value);
+        setQty(value);
+        console.log(value)
+        let customer_id = props.token.cust_id;
+        let cartData = {
+            "cartItem": {
+                "sku": data.sku,
+                "qty": value,
+                "quote_id": localStorage.getItem('cartQuoteId')
+            }
+        }
+        if (customer_id) {
+            if (value === 0) {
+                await removeItemFromCart(data.item_id);
+
+            } else {
+                await updateCartItem(data.item_id, cartData);
+            }
+        } else {
+            if (value === 0) {
+                await removeItemFromGuestCart(data.item_id);
+
+            } else {
+                await updateGuestCartItem(data.item_id, cartData);
+            }
+        }
+        callGetCartItems()
+        props.addToCartTask(true);
+        notification("success", "", intl.formatMessage({ id: "cartupdated" }));
+    }
     //to substruct from the quantity
     async function handleSubtractQuantity(data) {
         setValue(data.item_id);
@@ -280,7 +312,7 @@ function CartItemPage(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8">
-                        <Link to="/products" ><IntlMessages id="cart-back-link" /></Link>
+                            <Link to="/products" ><IntlMessages id="cart-back-link" /></Link>
                             <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                 <h2><IntlMessages id="cart.Title" /></h2>
                                 {opacity === 0.3 && (
@@ -329,9 +361,16 @@ function CartItemPage(props) {
                                                                         <div className="row mb-3">
                                                                             <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
                                                                             <div className="col-sm-5 cartschanger">
-                                                                                <div className="value-button" id="decrease" onClick={() => { handleSubtractQuantity(item) }} >-</div>
+                                                                                <select defaultValue={value === item.item_id ? qty : item.qty} className="form-select" onChange={(e) => { handleChangeQty(e, item) }}>
+                                                                                    {Array.from(Array(11), (e, i) => {
+                                                                                        return <option value={i}
+                                                                                            key={i}>{i}</option>
+                                                                                    })}
+
+                                                                                </select>
+                                                                                {/* <div className="value-button" id="decrease" onClick={() => { handleSubtractQuantity(item) }} >-</div>
                                                                                 <input type="number" id="number" disabled value={value === item.item_id ? qty : item.qty} />
-                                                                                <div className="value-button" id="increase" onClick={() => { handleAddQuantity(item) }}>+</div>
+                                                                                <div className="value-button" id="increase" onClick={() => { handleAddQuantity(item) }}>+</div> */}
                                                                             </div>
                                                                             {/* <div className="col-sm-5">
                                                                             <select className="form-select">
@@ -352,7 +391,7 @@ function CartItemPage(props) {
                                                         <div className="save-cart-btns">
                                                             {item.isGift ?
                                                                 delGiftMsg === item.item_id ? <Link to="#" ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
-                                                                    <Link to="#"  onClick={() => { handleGiftRemove(item.gift_message_id, item.item_id) }}  ><IntlMessages id="cart.removeGift" /></Link>
+                                                                    <Link to="#" onClick={() => { handleGiftRemove(item.gift_message_id, item.item_id) }}  ><IntlMessages id="cart.removeGift" /></Link>
 
                                                                 : <Link to="#" onClick={() => {
                                                                     handleGiftMEssage(item.item_id);

@@ -179,7 +179,7 @@ function SignIn(props) {
   // const hideModall = (e) => {
   //   setForgotPopup(false);
   // }
-  const hideModall = () =>   setForgotPopup(false);
+  const hideModall = () => setForgotPopup(false);
   const togglePasswordVisiblity = () => {
     setPasswordShown(passwordShown ? false : true);
   };
@@ -208,7 +208,7 @@ function SignIn(props) {
               <input type={passwordShown ? "text" : "password"}
                 className="form-control"
                 id="password"
-                placeholder={intl.formatMessage({ id: "login.password" })}
+                placeholder={intl.formatMessage({ id: "login.password" })+'*'}
                 value={state.password}
                 onChange={handleChange}
                 aria-describedby="basic-addon2"
@@ -253,9 +253,8 @@ function SignIn(props) {
       </Modal>
       {/*  forgot passord popup */}
       <Modal show={forgotPopup} className="forgot-modal" onHide={hideModall}>
-        <Modal.Header>
-          <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModall} aria-label="Close"></button></Modal.Header>
         <Modal.Body className="arabic-rtl-direction">
+          <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModall} aria-label="Close"></button>
           <ForgottenPassword />
         </Modal.Body>
       </Modal>

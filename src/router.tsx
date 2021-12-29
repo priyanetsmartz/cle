@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router' // react-router v4/v5
 import { ConnectedRouter } from 'connected-react-router';
 import SinglePost from './containers/Page/singlePost';
 import ForgottenPassword from './containers/Page/forgotPassword';
+import BusinessResetPassword from './containers/Page/business/bussinessForgotpassword';
 import PostComment from './containers/Page/postComments';
 import Pages from './containers/Page/pages';
 import VendorRoute from "./components/all-route/vendorRoute";
@@ -34,14 +35,14 @@ import orderThankyou from './containers/Page/product/orderThankyou';
 import Product from './containers/Page/product/product';
 import Cart from './containers/Page/product/cart/cart';
 import Loader from '../src/image/CLE_LogoMotionGraphics.gif';
-
+import BussinessResetpassword from './containers/Page/business/bussinessResetpassword';
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Suspense fallback={<Loader />}>
         <Switch>
           <ProductRoutes exact path="/help-center/:url_key" component={FaqListing} page='faq' />
-          <ProductRoutes exact path="/vendor/forgot-password" component={ResetPassword} />
+          <ProductRoutes exact path="/vendor/forgot-password" component={BussinessResetpassword} />
           <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
           <ProductRoutes exact path="/search/:brandname" component={Search} />
           <ProductRoutes exact path="/thankyou" component={orderThankyou} />
@@ -82,7 +83,7 @@ const PublicRoutes = ({ history }) => {
           <ProductRoutes exact path="/forgot-password" component={ForgottenPassword} />
           <ProductRoutes exact path="/reset-password" component={ResetPassword} />
           <PriveRoute exact path="/prive-user" component={PriveUser} />
-
+          <ProductRoutes exact path="/vendor-forgot-password" component={BusinessResetPassword} />
           <ProductRoutes exact path="/password-link-expired" component={PasswordLinkExpired} />
           <Route exact path="/post-comment">
             <PostComment />

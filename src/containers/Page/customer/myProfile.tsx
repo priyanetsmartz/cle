@@ -18,12 +18,15 @@ import callIcon from '../../../image/call-icon.png';
 import deleteIcon from '../../../image/delete-icon.png';
 import timerIcon from '../../../image/timer_icon.png';
 import cartAction from "../../../redux/cart/productAction";
+import ForgottenPassword from '../../Page/forgotPassword';
 const { closePrefPopup } = cartAction;
 function MyProfile(props) {
     const intl = useIntl();
     const userGroup = props.token.token;
     const [isShow, setIsShow] = useState(false);
+    const [showCustomdate, setShowCustomdate] = useState(false);
     const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
+    const [isShown, setIsShown] = useState(-1);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
     const [custId, setCustid] = useState(props.token.cust_id);
     const [attributes, setAttributes]: any = useState({});
@@ -49,7 +52,9 @@ function MyProfile(props) {
         confirmNewPassword: true,
         emailPass: true
     })
+    const [ishowGifting, setIshowGifting] = useState(false);
 
+    const [forgotPopup, setForgotPopup] = useState(false);
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [regions, setRegions] = useState([]); // for regions dropdown
     const [telephone, setTelephone] = useState("");
@@ -66,6 +71,8 @@ function MyProfile(props) {
         lastname: "",
         gender: 0,
         dob: "",
+        country: "",
+        phone: "",
         website_id: 1,
         addresses: [],
         custom_attributes: []
@@ -105,13 +112,21 @@ function MyProfile(props) {
         dobDate: "",
         dobMonth: "",
         dobYear: "",
+        dodDate: "",
+        dodMonth: "",
+        dodYear: "",
+        dateofevent: "",
         DateOfDelivery: "",
-        gender: 0,
+        gender: "",
         categoryPreference: "",
         notifyMe: ""
     });
 
     const [errors, setError] = useState({
+        errors: {}
+    });
+
+    const [giftErrors, setGiftErrors] = useState({
         errors: {}
     });
 
@@ -121,15 +136,20 @@ function MyProfile(props) {
         return () => {
             setIsShow(false)
         }
-    }, [props.token, props.prefrences]);
+    }, []);
 
+    const handleForgetPopup = (e) => {
+        e.preventDefault();
+        setForgotPopup(true);
+    }
+    const hideModall = () => setForgotPopup(false);
 
     async function getData() {
         let lang = props.languages ? props.languages : language;
         // to get cutomer preferences
         let result: any = await getCustomerDetails();
         // const today = moment();
-        // console.log(today.format());
+        // console.log(result.data);
         const d = result.data.dob ? result.data.dob.split("-") : moment().format("YYYY-MM-DD").split("-");
         dob.day = d[2];
         dob.month = d[1];
@@ -138,7 +158,7 @@ function MyProfile(props) {
         let custom_attributes = result.data.custom_attributes;
 
         let clothing_size = [], shoes_size = [], mostly_intersted_in = 0, favourite_categories = [], favourite_designers = [];
-        let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [], gifting_preferencees = [];
+        let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [], gifting_preferencees = [], phone = '', country = '';
         //console.log(custom_attributes)
         // match keys and extract values//
         if (custom_attributes && custom_attributes.length > 0) {
@@ -164,11 +184,23 @@ function MyProfile(props) {
                     favourite_designers = favDesigns.split(",");
                 }
                 if (attributes.attribute_code === "gifting_preference") {
-                    let gifting = attributes.value
+                    let gifting = attributes.value;
                     gifting_preferencees = JSON.parse(gifting);
+                }
+                if (attributes.attribute_code === "mp_sms_telephone") {
+                    let phoneNo = attributes.value;
+                    // console.log(phoneNo)
+                    phone = phoneNo
+                }
+                if (attributes.attribute_code === "country") {
+                    let countryId = attributes.value;
+                    // console.log(countryId)
+                    country = countryId;
                 }
             })
         }
+
+        // console.log(custForm)
         // to get all the preferences list
         let preference: any = await getPreference(lang);
         setAttributes(preference);
@@ -219,7 +251,7 @@ function MyProfile(props) {
                 return o1.id === o2; // return the ones with equal id
             });
         });
-        //    console.log(favCategoryArray)
+        //    console.log(preference.data[0].preference.mostly_intersted)
         setCustomerPrefer(prevState => ({
             ...prevState,
             interestedIn: intersted_in[0] ? intersted_in[0].name : "",
@@ -233,6 +265,11 @@ function MyProfile(props) {
 
         if (result) {
             setCustForm(result.data);
+            setCustForm(prevState => ({
+                ...prevState,
+                country: country,
+                phone: phone
+            }))
             //  getAttributes(result.data);
         }
     }
@@ -256,7 +293,10 @@ function MyProfile(props) {
     }
 
     const handleGiftingChange = (e) => {
-        const { id, value } = e.target
+        const { id, value } = e.target;
+        if (id === 'DateOfDelivery' && value === "2") {
+            setShowCustomdate(true);
+        }
         setGiftingPrefer(prevState => ({
             ...prevState,
             [id]: value
@@ -266,12 +306,12 @@ function MyProfile(props) {
     const saveCustDetails = async (e) => {
         setSaveCustDetailsLoader(true)
         e.preventDefault();
-        //  console.log(props.token.cust_id)
+        // console.log(custForm)
         custForm.email = props.token.token_email;
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
             custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
         }
-        let result: any = await saveCustomerDetails(props.token.cust_id, { customer: custForm });
+        let result: any = await saveCustomerDetails({ customer: custForm });
         if (result) {
             setMyDetailsModel(false);
             setSaveCustDetailsLoader(false)
@@ -297,7 +337,7 @@ function MyProfile(props) {
                 custForm.addresses[addIndex] = obj;
             }
             //console.log(custAddForm);
-            let result: any = await saveCustomerDetails(props.token.cust_id, { customer: custForm });
+            let result: any = await saveCustomerDetails({ customer: custForm });
             if (result) {
                 openAddressModal();
                 setCustAddForm({
@@ -544,19 +584,105 @@ function MyProfile(props) {
     //change email ends here----------------------------------------->
 
     const saveGiftingPrefer = async () => {
-        // console.log(giftingPrefer);
-        let data = {
-            customerId: props.token.cust_id,
-            gifting_preference: giftingPrefer
-        }
 
-        const res = await savePreference(data);
-        if (res) {
-            setIsShow(false);
-            notification("success", "", intl.formatMessage({ id: "giftingsuccess" }));
+        if (handleValidationGifting()) {
+            setIshowGifting(true);
+            // console.log(giftingPrefer)
+            let dateofevent = giftingPrefer.dobDate + '/' + giftingPrefer.dobMonth + '/' + giftingPrefer.dobYear;
+            let customDod = giftingPrefer.dodDate + '/' + giftingPrefer.dodMonth + '/' + giftingPrefer.dodYear;
+            let dateOfdelivery = giftingPrefer.DateOfDelivery === "1" ? dateofevent : customDod;
+
+            giftingPrefer.dateofevent = dateofevent;
+            giftingPrefer.DateOfDelivery = dateOfdelivery;
+
+            let newObj = { ...customerPrefer }
+            newObj.gifting_preferencees.push(giftingPrefer)
+            let data = {
+                customerId: props.token.cust_id,
+                gifting_preference: newObj.gifting_preferencees
+            }
+            // console.log(data)
+            const res = await savePreference(data);
+            if (res) {
+                setGiftingPrefer({
+                    name: "",
+                    surName: "",
+                    occasion: "",
+                    annualReminder: "",
+                    dobDate: "",
+                    dobMonth: "",
+                    dobYear: "",
+                    dodDate: "",
+                    dodMonth: "",
+                    dodYear: "",
+                    dateofevent: "",
+                    DateOfDelivery: "",
+                    gender: "",
+                    categoryPreference: "",
+                    notifyMe: ""
+                });
+                getData();
+                setGiftingModal(false);
+                setIshowGifting(false);
+                notification("success", "", intl.formatMessage({ id: "giftingsuccess" }));
+            } else {
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
         }
     }
 
+    const handleValidationGifting = () => {
+        let error = {};
+        let formIsValid = true;
+        if (!giftingPrefer['name']) {
+            formIsValid = false;
+            error["name"] = intl.formatMessage({ id: "gifting.name" });
+        }
+        if (!giftingPrefer['surName']) {
+            formIsValid = false;
+            error["surName"] = intl.formatMessage({ id: "surname" });
+        }
+        if (!giftingPrefer['occasion']) {
+            formIsValid = false;
+            error["occasion"] = intl.formatMessage({ id: "gifting.occasion" });
+        }
+        if (!giftingPrefer['annualReminder']) {
+            formIsValid = false;
+            error["annualReminder"] = intl.formatMessage({ id: "gifting.annualReminder" });
+        }
+        if (!giftingPrefer['dobDate']) {
+            formIsValid = false;
+            error["dobDate"] = intl.formatMessage({ id: "gifting.dobDate" });
+        }
+        if (!giftingPrefer['dobMonth']) {
+            formIsValid = false;
+            error["dobMonth"] = intl.formatMessage({ id: "gifting.dobMonth" });
+        }
+
+        if (!giftingPrefer['dobYear']) {
+            formIsValid = false;
+            error["dobYear"] = intl.formatMessage({ id: "gifting.dobYear" });
+        }
+        if (!giftingPrefer['DateOfDelivery']) {
+            formIsValid = false;
+            error["DateOfDelivery"] = intl.formatMessage({ id: "gifting.DateOfDelivery" });
+        }
+        if (!giftingPrefer['gender']) {
+            formIsValid = false;
+            error["gender"] = intl.formatMessage({ id: "gifting.gender" });
+        }
+        if (!giftingPrefer['categoryPreference']) {
+            formIsValid = false;
+            error["categoryPreference"] = intl.formatMessage({ id: "gifting.categoryPreference" });
+        }
+        if (!giftingPrefer['notifyMe']) {
+            formIsValid = false;
+            error["notifyMe"] = intl.formatMessage({ id: "gifting.notifyMe" });
+        }
+
+        setGiftErrors({ errors: error });
+        return formIsValid;
+    }
     const openMyDetails = () => {
         setMyDetailsModel(!myDetailsModel);
     }
@@ -600,6 +726,25 @@ function MyProfile(props) {
             [id]: val
         }));
     }
+    const removeSeleted = async (i) => {
+        let newObj = { ...customerPrefer }
+
+        newObj.gifting_preferencees.splice(i)
+
+        let data = {
+            customerId: props.token.cust_id,
+            gifting_preference: newObj.gifting_preferencees
+        }
+
+        // console.log(newObj.gifting_preferencees);
+
+        const res = await savePreference(data);
+        if (res) {
+            getData();
+            setGiftingModal(false);
+            notification("success", "", intl.formatMessage({ id: "giftingsuccess" }));
+        }
+    }
 
     return (
         <div className={isPriveUser ? 'prive-txt col-sm-9' : 'col-sm-9'}>
@@ -633,20 +778,20 @@ function MyProfile(props) {
                                             })}
                                         </div>
                                     </div>
-                                    {/* <div className="field_details">
+                                    <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
-                                        <div className="field-name">{custForm.addresses[0]?.telephone}</div>
-                                    </div> */}
+                                        <div className="field-name">{custForm.phone}</div>
+                                    </div>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
                                         <div className="field-name">{custForm.dob}</div>
                                     </div>
-                                    {/* <div className="field_details">
+                                    <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.country" /></label>
-                                        <div className="field-name">{custForm.addresses[0]?.country_id}</div>
-                                    </div> */}
+                                        <div className="field-name">{custForm.country}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -767,7 +912,17 @@ function MyProfile(props) {
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.listOfBirthdays" /></label>
-                                        <div className="field-name">{customerPrefer.gifting_preferencees['name']}/{customerPrefer.gifting_preferencees['dobDate']} {customerPrefer.gifting_preferencees['dobMonth']}  {customerPrefer.gifting_preferencees['dobYear']}</div>
+                                        <div className="field-name">
+
+                                            <ul className='giftingPreflist'>
+                                                {customerPrefer.gifting_preferencees.map((opt, i) => {
+                                                    return (<li key={i}>{opt.name}</li>);
+                                                })}
+                                            </ul>
+                                            {/* {customerPrefer.gifting_preferencees
+                                            ['name']}/{customerPrefer.gifting_preferencees['dobDate']} {customerPrefer.gifting_preferencees['dobMonth']}  {customerPrefer.gifting_preferencees['dobYear']}
+                                             */}
+                                        </div>
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label">&nbsp;</label>
@@ -799,6 +954,7 @@ function MyProfile(props) {
                         <div className={`addnew_address ${isPriveUser ? 'prive-bg' : ''}`} onClick={openAddressModal}>
                             <div className="addressnew_addressblue">
                                 <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
+								<i className="fas fa-plus"></i>
                             </div>
                         </div>
 
@@ -882,12 +1038,8 @@ function MyProfile(props) {
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
-                            <label className="form-label heading_lbl"><IntlMessages id="login.password" /></label>
-                            <div className="password_edit">&#9728;&#9728;&#9728;&#9728;&#9728;</div>
-                        </div>
-                        <div className="col-sm-6">
-                            <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                            <div className="password_edit">{custForm.email}</div>
+                            <label className="form-label heading_lbl"><IntlMessages id="login.password" /><span className="maindatory">&#42;</span></label>
+                            <div className="password_edit">********</div>
                         </div>
                     </div>
                     <div className="row">
@@ -895,8 +1047,8 @@ function MyProfile(props) {
                             <div className="change-paswd-sec">
                                 <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="login.password" /></label>
-                                    <input type={passMask.password ? 'password' : 'text'} className="form-control" placeholder="****"
+                                    <label className="form-label"><IntlMessages id="login.password" />*</label>
+                                    <input type={passMask.password ? 'password' : 'text'} className="form-control"
                                         id="password"
                                         value={changePass.password}
                                         onChange={handlePassword} />
@@ -906,9 +1058,9 @@ function MyProfile(props) {
                                     <span className="error">{errors.errors["password"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.newPassword" /> <span
+                                    <label className="form-label"><IntlMessages id="myaccount.newPassword" /><span
                                         className="maindatory">&#42;</span></label>
-                                    <input type={passMask.newPassword ? 'password' : 'text'} className="form-control" placeholder="****" id="newPassword"
+                                    <input type={passMask.newPassword ? 'password' : 'text'} className="form-control" id="newPassword"
                                         value={changePass.newPassword}
                                         onChange={handlePassword} />
                                     <span className="hidden-pass" onClick={() => togglePasswordVisiblity('newPassword')}>
@@ -918,9 +1070,9 @@ function MyProfile(props) {
                                     <span className="error">{errors.errors["newPassword"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /> <span
+                                    <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /><span
                                         className="maindatory">&#42;</span></label>
-                                    <input type={passMask.confirmNewPassword ? 'password' : 'text'} className="form-control" placeholder="****"
+                                    <input type={passMask.confirmNewPassword ? 'password' : 'text'} className="form-control"
                                         id="confirmNewPassword"
                                         value={changePass.confirmNewPassword}
                                         onChange={handlePassword} />
@@ -931,7 +1083,7 @@ function MyProfile(props) {
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
-                                        <Link to="/forgot-password" className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
+                                        <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" /></Link>
 
                                     </div>
                                     <div className="Frgt_paswd">
@@ -947,12 +1099,20 @@ function MyProfile(props) {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
+                            <div className="password_edit">{custForm.email}</div>
+                        </div>
+                    </div>
+                    <div className="row">
                         <div className="col-sm-6">
                             <div className="newemail-sec">
                                 <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
                                 <div className="width-100 mb-3">
                                     <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
-                                    <input type="email" className="form-control" placeholder={intl.formatMessage({ id: "myaccount.newEmailAddress" })} id="newEmail"
+                                    <input type="email" className="form-control" id="newEmail"
                                         value={changeEmail.newEmail}
                                         onChange={handleEmail} />
                                     <span className="error">{errors.errors["newEmail"]}</span>
@@ -960,7 +1120,7 @@ function MyProfile(props) {
                                 <div className="width-100 mb-3">
                                     <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
                                         className="maindatory"></span></label>
-                                    <input type="email" className="form-control" placeholder={intl.formatMessage({ id: "myaccount.confirmNewEmailAddress" })} id="confirmNewEmail"
+                                    <input type="email" className="form-control" id="confirmNewEmail"
                                         value={changeEmail.confirmNewEmail}
                                         onChange={handleEmail} />
                                     <span className="error">{errors.errors["confirmNewEmail"]}</span>
@@ -968,7 +1128,7 @@ function MyProfile(props) {
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" /><span
                                         className="maindatory">&#42;</span></label>
-                                    <input type={passMask.emailPass ? 'password' : 'text'} className="form-control" placeholder={intl.formatMessage({ id: "login.password" })}
+                                    <input type={passMask.emailPass ? 'password' : 'text'} className="form-control"
                                         id="password"
                                         value={changeEmail.password}
                                         onChange={handleEmail} />
@@ -1122,14 +1282,14 @@ function MyProfile(props) {
                             </select>
                             <span className="error">{errors.errors["gender"]}</span>
                         </div>
-                        {/* <div className="width-100 mb-3 form-field">
+                        <div className="width-100 mb-3 form-field">
                             <label className="form-label">Phone number</label>
                             <input type="number" className="form-control" placeholder="+48 123 456 789" id="phone"
-                                value={telephone}
-                                onChange={(e) => { setTelephone(e.target.value) }}
+                                value={custForm.phone}
+                                onChange={handleChange}
                             />
                             <span className="error">{errors.errors["phone"]}</span>
-                        </div> */}
+                        </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
                             <div className="dobfeild">
@@ -1154,15 +1314,15 @@ function MyProfile(props) {
                                 </select>
                             </div>
                         </div>
-                        {/* <div className="width-100 mb-3 form-field">
+                        <div className="width-100 mb-3 form-field">
                             <label className="form-label">Country<span className="maindatory">*</span></label>
-                            <select value={country} onChange={(e) => { setCountry(e.target.value) }} id="country" className="form-select" aria-label="Default select example">
-                                {countries && countries.map(opt => {
-                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                            <select value={custForm.country} onChange={handleChange} id="country" className="form-select" aria-label="Default select example">
+                                {countries && countries.map((opt, i) => {
+                                    return (<option key={i} value={opt.name}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
-                        </div> */}
+                        </div>
                     </Modal.Body>
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">
@@ -1304,76 +1464,6 @@ function MyProfile(props) {
                             <div className="birthdate">{custForm.dob}</div>
                         </div>
                     </div>
-                    {/* <Modal.Body> */}
-                    {/* <div className="row">
-                        <div className="col-sm-6">
-                            <div className="width-100">
-                                <div className="dobfeild_gift row">
-                                    <div className="col-sm-4">
-                                        <label className="form-label"><IntlMessages id="myaccount.iLike" /></label>
-                                        <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">01</option>
-                                            <option value="1">01</option>
-                                            <option value="2">02</option>
-                                            <option value="3">03</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <label className="form-label">&nbsp;</label>
-                                        <select className="form-select me-3" aria-label="Default select example">
-                                            <option value="">Select</option>
-                                            {DROPDOWN.months.map(opt => {
-                                                return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
-                                            })}
-                                        </select>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <label className="form-label">&nbsp;</label>
-                                        <select className="form-select" aria-label="Default select example">
-                                            <option value="">1988</option>
-                                            <option value="1">1990</option>
-                                            <option value="2">1991</option>
-                                            <option value="3">1993</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-6">
-                            <div className="dobfeild_gift row">
-                                <div className="col-sm-6">
-                                    <label className="form-label"><IntlMessages id="myaccount.iLike" /></label>
-                                    <select className="form-select " aria-label="Default select example">
-                                        <option value="">Watches</option>
-                                        <option value="1">01</option>
-                                        <option value="2">02</option>
-                                        <option value="3">03</option>
-                                    </select>
-                                </div>
-                                <div className="col-sm-6">
-                                    <label className="form-label">Style</label>
-                                    <select className="form-select " aria-label="Default select example">
-                                        <option value="">Contemporary</option>
-                                        <option value="1">May</option>
-                                        <option value="2">June</option>
-                                        <option value="3">July</option>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div> */}
-
-                    {/* <div className="row">
-                        <div className="col-sm-12 mt-3 mb-5">
-                            <div className="form-check form-switch custom-switch">
-                                <label className="form-check-label" htmlFor="flexSwitchCheckChecked"><IntlMessages id="myaccount.notifyMe" /></label>
-                                <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
-                            </div>
-                        </div>
-                    </div> */}
 
                     <div className="row">
                         <div className="col-sm-6">
@@ -1383,156 +1473,142 @@ function MyProfile(props) {
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.name" /><span className="maindatory">*</span></label>
                                     <input type="text" className="form-control" placeholder="John" value={giftingPrefer.name} id="name"
                                         onChange={handleGiftingChange} />
+                                    <span className="error">{giftErrors.errors["name"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.surName" /></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.surName" /></label><span className="maindatory">*</span>
                                     <input type="text" className="form-control" placeholder="Doe" value={giftingPrefer.surName} id="surName"
                                         onChange={handleGiftingChange} />
+                                    <span className="error">{giftErrors.errors["surName"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.occasion" /></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.occasion" /></label><span className="maindatory">*</span>
                                     <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.occasion} id="occasion"
                                         onChange={handleGiftingChange}>
-                                        <option value="">Select</option>
-                                        <option value="Birthday">Birthday</option>
-                                        <option value="Graduation">Graduation</option>
-                                        <option value="Engagement">Engagement</option>
-                                        <option value="Wedding">Wedding</option>
-                                        <option value="Ramadan">Ramadan</option>
-                                        <option value="Eid">Eid</option>
-                                        <option value="Other">Other</option>
+                                        <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                        <option value={intl.formatMessage({ id: "gifting.occasionlist1" })}>{intl.formatMessage({ id: "gifting.occasionlist1" })}</option>
+                                        <option value={intl.formatMessage({ id: "gifting.occasionlist2" })}>{intl.formatMessage({ id: "gifting.occasionlist2" })}</option>
+                                        <option value={intl.formatMessage({ id: "gifting.occasionlist3" })}>{intl.formatMessage({ id: "gifting.occasionlist3" })}</option>
+                                        <option value={intl.formatMessage({ id: "gifting.occasionlist4" })}>{intl.formatMessage({ id: "gifting.occasionlist4" })}</option>
+                                        <option value={intl.formatMessage({ id: "gifting.occasionlist5" })}>{intl.formatMessage({ id: "gifting.occasionlist5" })}</option>
+                                        <option value={intl.formatMessage({ id: "gifting.occasionlist6" })}>{intl.formatMessage({ id: "gifting.occasionlist6" })}</option>
+                                        <option value={intl.formatMessage({ id: "gifting.occasionlist7" })}>{intl.formatMessage({ id: "gifting.occasionlist7" })}</option>
                                     </select>
+                                    <span className="error">{giftErrors.errors["occasion"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.annualReminder" /></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.annualReminder" /></label><span className="maindatory">*</span>
                                     <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.annualReminder} id="annualReminder"
                                         onChange={handleGiftingChange}>
-                                        <option value="">Select</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                        <option value={intl.formatMessage({ id: "yes" })}>{intl.formatMessage({ id: "yes" })}</option>
+                                        <option value={intl.formatMessage({ id: "no" })}>{intl.formatMessage({ id: "no" })}</option>
                                     </select>
+                                    <span className="error">{giftErrors.errors["annualReminder"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dob" /></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.date" /></label><span className="maindatory">*</span>
                                     <div className="dobfeild">
                                         <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobDate} id="dobDate"
                                             onChange={handleGiftingChange}>
-                                            <option value="">Select</option>
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             {DROPDOWN.dates.map(opt => {
                                                 return (<option value={opt} key={opt}>{opt}</option>);
                                             })}
                                         </select>
+                                        <span className="error">{giftErrors.errors["dobDate"]}</span>
                                         <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobMonth} id="dobMonth"
                                             onChange={handleGiftingChange}>
-                                            <option value="">Select</option>
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             {DROPDOWN.months.map(opt => {
                                                 return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                             })}
                                         </select>
+                                        <span className="error">{giftErrors.errors["dobMonth"]}</span>
                                         <select className="form-select" aria-label="Default select example" value={giftingPrefer.dobYear} id="dobYear"
                                             onChange={handleGiftingChange}>
-                                            <option value="">Select</option>
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             {DROPDOWN.years.map(opt => {
                                                 return (<option value={opt} key={opt}>{opt}</option>);
                                             })}
                                         </select>
+                                        <span className="error">{giftErrors.errors["dobYear"]}</span>
                                     </div>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dateOfDelivery" /></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dateOfDelivery" /></label><span className="maindatory">*</span>
                                     <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.DateOfDelivery} id="DateOfDelivery"
                                         onChange={handleGiftingChange}>
-                                        <option value="">Select</option>
-                                        <option value="1">Same Date as event</option>
-                                        <option value="2">Set custom date</option>
+                                        <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                        <option value="1">{intl.formatMessage({ id: "deliveryDateoption1" })}</option>
+                                        <option value="2">{intl.formatMessage({ id: "deliveryDateoption2" })}</option>
                                     </select>
+                                    <span className="error">{giftErrors.errors["DateOfDelivery"]}</span>
                                 </div>
+                                {showCustomdate && (
+                                    <div className="width-100 mb-3 form-field">
+                                        <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.datedelivry" /></label><div className="dobfeild">
+                                            <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodDate} id="dodDate"
+                                                onChange={handleGiftingChange}>
+                                                <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                                {DROPDOWN.dates.map(opt => {
+                                                    return (<option value={opt} key={opt}>{opt}</option>);
+                                                })}
+                                            </select>
+                                            <span className="error">{giftErrors.errors["dodDate"]}</span>
+                                            <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodMonth} id="dodMonth"
+                                                onChange={handleGiftingChange}>
+                                                <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                                {DROPDOWN.months.map(opt => {
+                                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                                })}
+                                            </select>
+                                            <span className="error">{giftErrors.errors["dodMonth"]}</span>
+                                            <select className="form-select" aria-label="Default select example" value={giftingPrefer.dodYear} id="dodYear"
+                                                onChange={handleGiftingChange}>
+                                                <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                                {DROPDOWN.years.map(opt => {
+                                                    return (<option value={opt} key={opt}>{opt}</option>);
+                                                })}
+                                            </select>
+                                            <span className="error">{giftErrors.errors["dodYear"]}</span>
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.gender" /></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.gender" /></label><span className="maindatory">*</span>
                                     <select className="form-select" aria-label="Default select example" value={giftingPrefer.gender} id="gender"
                                         onChange={handleGiftingChange}>
-                                        <option value="">Select</option>
+                                        <option value="">{intl.formatMessage({ id: "select" })}</option>
                                         {DROPDOWN.gender.map(opt => {
                                             return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                         })}
                                     </select>
+                                    <span className="error">{giftErrors.errors["gender"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.categoryPrefer" /></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.categoryPrefer" /></label><span className="maindatory">*</span>
                                     <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.categoryPreference} id="categoryPreference"
                                         onChange={handleGiftingChange}>
-                                        <option value="">Select</option>
-                                        <option value="1">Jewelry</option>
-                                        <option value="2">Watches</option>
-                                        <option value="3">Accessories</option>
-                                        <option value="4">Gift Card</option>
+                                        <option value="">{intl.formatMessage({ id: "select" })}</option>
+
+                                        {attributes.data && attributes.data.length > 0 && attributes.data[0].preference && attributes.data[0].preference.mostly_intersted && attributes.data[0].preference.mostly_intersted.map((inter, i) => {
+                                            return (<option key={i} value={inter.id}>{inter.name}</option>)
+                                        })}
+
                                     </select>
+                                    <span className="error">{giftErrors.errors["categoryPreference"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.notify" /></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.notify" /></label><span className="maindatory">*</span>
                                     <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.notifyMe} id="notifyMe"
                                         onChange={handleGiftingChange}>
-                                        <option value="">Select</option>
-                                        <option value="1">By email</option>
-                                        <option value="2">By Whatsapp </option>
+                                        <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                        <option value="1">{intl.formatMessage({ id: "notifyEmail" })}</option>
+                                        <option value="2">{intl.formatMessage({ id: "notofyWhatsapp" })}</option>
                                     </select>
+                                    <span className="error">{giftErrors.errors["notifyMe"]}</span>
                                 </div>
-
-
-                                {/* <div className="width-100 mb-3 form-field">
-                                    <div className="dobfeild_gift row">
-                                        <div className="col-sm-6">
-                                            <label className="form-label">Gift for</label>
-                                            <select className="form-select " aria-label="Default select example">
-                                                <option value="">Watches</option>
-                                                <option value="1">01</option>
-                                                <option value="2">02</option>
-                                                <option value="3">03</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <label className="form-label">Who loves</label>
-                                            <select className="form-select " aria-label="Default select example">
-                                                <option value="">Watches</option>
-                                                <option value="1">May</option>
-                                                <option value="2">June</option>
-                                                <option value="3">July</option>
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                </div> */}
-
-                                {/* <div className="width-100 mb-3 form-field">
-                                    <div className="dobfeild_gift row">
-                                        <div className="width-100">
-                                            <label className="form-label">Style</label>
-                                        </div>
-                                        <div className="col-sm-6">
-
-                                            <select className="form-select " aria-label="Default select example">
-                                                <option value="">Contemporary</option>
-                                                <option value="1">01</option>
-                                                <option value="2">02</option>
-                                                <option value="3">03</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="float-end">
-                                                <button type="button" className="btn btn-secondary">Add date</button>
-                                            </div>
-                                        </div>
-                                        <div className="width-100 my-4">
-                                            <div className="form-check form-switch custom-switch">
-                                                <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Notify me via
-                                                    emial</label>
-                                                <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                                    checked={false} />
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div> */}
                             </div>
                         </div>
                         <div className="col-sm-6">
@@ -1543,7 +1619,17 @@ function MyProfile(props) {
                                 <div className="favt_dragdrop  mt-3">
                                     <div className="favdesignr_size_sec">
                                         <ul>
-                                            <li><Link to="#">{customerPrefer.gifting_preferencees['name']}/{customerPrefer.gifting_preferencees['dobDate']} {customerPrefer.gifting_preferencees['dobMonth']}  {customerPrefer.gifting_preferencees['dobYear']}</Link></li>
+                                            <ul className='giftingPreflistpop'>
+                                                {customerPrefer.gifting_preferencees.map((opt, i) => {
+                                                    return (
+                                                        <li key={i} onMouseEnter={() => setIsShown(i)} onMouseLeave={() => setIsShown(-1)} ><Link to="#">{isShown === parseInt(i) ? <span className='textevents' onClick={() => removeSeleted(i)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textevents' > {opt['name']}/{opt['dobDate']} {opt['dobMonth']}  {opt['dobYear']}</span>
+                                                        }
+
+                                                        </Link></li>
+                                                    );
+                                                })}
+                                            </ul>
+
                                         </ul>
                                         {/* <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div> */}
                                     </div>
@@ -1553,7 +1639,11 @@ function MyProfile(props) {
                         <Modal.Footer>
                             <div className="width-100 mb-4">
                                 <div className="float-end">
-                                    <button type="button" className="btn btn-secondary" onClick={saveGiftingPrefer}><IntlMessages id="myaccount.confirm" /></button>
+                                    <button type="button" style={{ "display": !ishowGifting ? "inline-block" : "none" }} className="btn btn-secondary" onClick={saveGiftingPrefer}><IntlMessages id="myaccount.confirm" /></button>
+                                    <div className="spinner" style={{ "display": ishowGifting ? "inline-block" : "none" }}>
+                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                        <IntlMessages id="loading" />
+                                    </div>
                                 </div>
                             </div>
                         </Modal.Footer>
@@ -1597,7 +1687,7 @@ function MyProfile(props) {
                     <div className="payment_mode">
                         <h2><IntlMessages id="checkout.addCards" /></h2>
                         <div className="width-100 mb-3 form-field">
-                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.cardNumber" />*<span className="maindatory">*</span></label>
+                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.cardNumber" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="XXXX XXXX XXXX XXXX" />
                         </div>
                         <div className="width-100 mb-3 form-field">
@@ -1618,7 +1708,7 @@ function MyProfile(props) {
                             </div>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.nameOnCard" />*<span className="maindatory">*</span></label>
+                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.nameOnCard" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Baker Street 105" />
                         </div>
                         <div className="width-100 mb-3 form-field">
@@ -1641,12 +1731,20 @@ function MyProfile(props) {
                     </div>
                 </div>
             </Modal>
+
+            {/*  forgot passord popup */}
+            <Modal show={forgotPopup} className="forgot-modal" onHide={hideModall}>
+                <Modal.Body className="arabic-rtl-direction">
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModall} aria-label="Close"></button>
+                    <ForgottenPassword />
+                </Modal.Body>
+            </Modal>
         </div>
     )
 }
 const mapStateToProps = (state) => {
     let languages = '';
-    console.log(state.Cart.isPrepOpen)
+    // console.log(state.Cart.isPrepOpen)
 
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
