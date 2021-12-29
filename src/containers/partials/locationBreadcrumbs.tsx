@@ -81,7 +81,7 @@ function Breadcrumbs(props) {
                                 //  console.log(local)
                                 if (local === 'product-details') {
                                     return (
-                                        <li key={j} className="breadcrumb-item"><Link to={local === 'product-details' ? '/products' : "/" + local}>{local === 'product-details' ? 'Products' : local}</Link></li>
+                                        ''
                                     )
                                 } else if (local === 'order-details') {
                                     return (

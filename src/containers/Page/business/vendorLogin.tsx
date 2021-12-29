@@ -230,7 +230,7 @@ function VendorLogin(props) {
                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
                         <IntlMessages id="loading" />
                       </div>
-                      <Link to="#" onClick={(e) => { handleForgetPopup(e); }} className="forgot-pswd-new float-end"><IntlMessages id="forgot_pass" /></Link>
+                      <Link to="#" onClick={(e) => { handleForgetPopup(e); }} className="forgot-pswd-new float-end"><IntlMessages id="forgot_pass" />?</Link>
                     </div>
                     <div className="clearfix"></div>
                   </div>

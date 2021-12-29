@@ -23,6 +23,7 @@ function Categories(props) {
     const baseUrl = process.env.REACT_APP_API_URL;
     const location = useLocation()
     const [categoryId, setCategoryId] = useState(0);
+    const [catname, setCatname] = useState('');
     const [urlPathLink, setUrlPath] = useState('');
     const [categories, setCategory] = useState({
         name: '',
@@ -65,10 +66,10 @@ function Categories(props) {
 
     const getData = async (urlPath) => {
         let result: any = await getCategoryDetailsbyUrlPath(props.languages, urlPath, siteConfig.pageSize);
-       
+        let catname = '';
         if (result && result.data && result.data.items && result.data.items.length > 0 && result.data.items[0].custom_attributes && result.data.items[0].custom_attributes.length > 0) {
             let obj: any = {};
-
+            catname = result.data.items[0].name;
             result.data.items[0].custom_attributes.forEach(el => {
                 if (el.attribute_code === "image") {
                     obj.image = baseUrl + el.value;
@@ -77,8 +78,10 @@ function Categories(props) {
                 }
                 result.data.custom = obj;
             });
+
             //  console.log(result.data.items[0].id)
             setCategoryId(result.data.items[0].id)
+            setCatname(catname)
             setCategory(result.data);
         } else {
             setCategoryId(0)

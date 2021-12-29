@@ -649,7 +649,7 @@ function ProductDetails(props) {
             <Modal show={measuringGuideModal} size="lg">
                 <MeasuringGuide measuringDetailsg={measuringDetails} />
             </Modal>
-            <Modal show={isGiftMessage} size="lg" data={productDetails} onHide={hideGiftModalModal} data-backdrop="static" data-keyboard="false">
+            <Modal show={isGiftMessage} size="lg" className="giftmessagebox" data={productDetails} onHide={hideGiftModalModal} data-backdrop="static" data-keyboard="false">
                 <Modal.Header>
                     <h5 className="modal-title"><IntlMessages id="gift.title" /></h5>
                     <p className="gifting-subtitle"><IntlMessages id="gift.subTitle" /> </p>

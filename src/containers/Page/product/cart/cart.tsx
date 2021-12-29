@@ -33,7 +33,20 @@ function CartItemPage(props) {
     const [isGiftMessage, setIsGiftMessage] = useState(false);
     const [delGiftMsg, setDelGiftMsg] = useState(0);
 
-
+    useEffect(() => {
+        const header = document.getElementById("cartsidebar");
+        const sticky = header.offsetTop;
+        const scrollCallBack: any = window.addEventListener("scroll", () => {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky-sidebar-cart");
+            } else {
+                header.classList.remove("sticky-sidebar-cart");
+            }
+        });
+        return () => {
+            window.removeEventListener("scroll", scrollCallBack);
+        };
+    },[])
 
     useEffect(() => {
         //  console.log(props)
@@ -409,7 +422,7 @@ function CartItemPage(props) {
                                 {token && (<RelevantProducts cartItem={cartRelevants} />)}
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-md-4" id="cartsidebar">
                             <div className="order-detail-sec">
                                 <h5><IntlMessages id="orderDetail" /> </h5>
 
@@ -435,7 +448,7 @@ function CartItemPage(props) {
                     </div>
                 </div>
             </section>
-            <Modal show={isGiftMessage} size="lg" data={prodId} onHide={hideGiftModalModal} >
+            <Modal show={isGiftMessage} className="giftmessagebox" size="lg" data={prodId} onHide={hideGiftModalModal} >
                 <Modal.Header>
                     <h5 className="modal-title"><IntlMessages id="gift.title" /></h5>
                     <div><IntlMessages id="gift.subTitle" /> </div>
