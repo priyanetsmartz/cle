@@ -1898,6 +1898,14 @@ span.maindatory {
     margin-left: 2px;
 }
 
+.modal-header,
+.modal-footer{
+	border-width: 0!important;
+}
+
+.accordion-button:not(.collapsed){
+	box-shadow:none!important;
+}
 
 
 .CLE_pf_details {
@@ -1907,12 +1915,16 @@ span.maindatory {
     border: 0px solid #f0f0f0;
 }
 
+.CLE_pf_details .modal-header{
+	border-bottom: 0px solid #dee2e6;
+}
+
 
 .CLE_pf_details h1 {
     font-size: 24px;
     font-family: 'Monument Extended';
     font-style: normal;
-    margin-top: 30px;
+    margin-top: 15px;
     font-weight: 500;
 }
 
@@ -2755,7 +2767,9 @@ span.maindatory {
 }
 
 .product-listing .product:hover .off {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #fff;
     border-radius: 0px;
     padding: 0px 5px;
@@ -2764,6 +2778,8 @@ span.maindatory {
     top: 10px;
     left: 0px;
     background-color: #fff !important;
+	width: 45px;
+    height: 45px;
 }
 
 .product-listing .product:hover .off i {
@@ -6261,7 +6277,7 @@ height: auto;
 .product-listing .slick-next:before {
     content: " " !important;
 	background-image: url(images/arrow-right.svg) !important;
-    background-size: 12px 12px;
+    background-size: 10px 10px;
     background-position: center;
 	background-repeat: no-repeat;
     width: 15px;
