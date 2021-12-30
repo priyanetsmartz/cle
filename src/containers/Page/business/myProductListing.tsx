@@ -194,15 +194,10 @@ function MyProductListing(props) {
             let dataObj = result && result.data && result.data.length > 0 ? result.data : [];
             let imageD = '';
             const renObjData = dataObj.map(function (data, idx) {
-            data.custom_attributes && data.custom_attributes.length > 0 && data.custom_attributes.map((attributes) => {
-                if (attributes.attribute_code === 'image') {
-                    imageD = attributes.value;
-                }
-            })
             let productLoop: any = {};
 
             productLoop.id = data.id;
-            productLoop.image = imageD;
+            productLoop.image = data.img;
             productLoop.product = data;
             productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
             productLoop.status = data.status;
