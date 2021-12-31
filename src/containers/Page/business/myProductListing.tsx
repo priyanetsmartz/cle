@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import DataTable from 'react-data-table-component';
-import { getVendorProducts, searchProductListing, removeProduct, vendorLogout } from '../../../redux/pages/vendorLogin';
+import { getVendorProducts, searchProductListing, removeProduct, vendorLogout, searchProducts } from '../../../redux/pages/vendorLogin';
 import moment from 'moment';
 import { siteConfig } from '../../../settings/index'
 import { Link } from "react-router-dom";
@@ -139,8 +139,28 @@ function MyProductListing(props) {
     }
     const getProductbyStatus = async (e) => {
         const { value } = e.target;
-        setStatus(value)
-        getData(value)
+        await setStatus(e.target.value)
+        let term = searchTerm?searchTerm:null;
+        let frDate = orderDate?orderDate:null;
+        let toDate = orderDate?orderDate:null;
+        let fromPrice = range[0]?range[0]:null;
+        let toPrice = range[1]?range[1]:null;
+        let stat = status?status:null;
+        let result:any = await searchProducts(language, term, frDate, toDate, fromPrice, toPrice, e.target.value);
+        console.log(result);
+        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
+            const renObjData = dataObj.map(function (data, idx) {
+            let productLoop: any = {};
+
+            productLoop.id = data.id;
+            productLoop.image = data.img;
+            productLoop.product = data;
+            productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+            productLoop.status = data.status;
+            productLoop.price = siteConfig.currency + data.price;
+            return productLoop;
+        });
+        setListingData(renObjData);
     }
 
 
@@ -194,15 +214,10 @@ function MyProductListing(props) {
             let dataObj = result && result.data && result.data.length > 0 ? result.data : [];
             let imageD = '';
             const renObjData = dataObj.map(function (data, idx) {
-            data.custom_attributes && data.custom_attributes.length > 0 && data.custom_attributes.map((attributes) => {
-                if (attributes.attribute_code === 'image') {
-                    imageD = attributes.value;
-                }
-            })
             let productLoop: any = {};
 
             productLoop.id = data.id;
-            productLoop.image = imageD;
+            productLoop.image = data.img;
             productLoop.product = data;
             productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
             productLoop.status = data.status;

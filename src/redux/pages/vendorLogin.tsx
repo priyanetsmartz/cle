@@ -88,3 +88,25 @@ export async function searchProductListing(language, term) {
 export function removeProduct(deleteInfo) {
     return adminToken.request(`rest/all/V1/products`, deleteInfo, "POST", "");
 }
+
+export async function searchProducts(language, term, fromDate, toDate, fromPrice, toPrice, status){
+    var storeId = language === 'english' ? '3' : '2';
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    let queryString = "vendorId="+vendorId+"&storeId="+storeId;
+    if (term!=null)
+        queryString  += "&searchterm"+term;
+    if(fromDate!=null)
+        queryString += "&fromDate="+fromDate;
+    if(toDate!=null)
+        queryString += "&toDate="+toDate;
+    if(fromPrice!=null)
+        queryString += "&fromPrice="+fromPrice;
+    if(toPrice!=null)
+        queryString += "&toPrice="+toPrice;
+    if(status!=null)
+        queryString += "&status="+status;
+    console.log("check here", vendorId, storeId, term, fromDate, toDate, fromPrice, toPrice, status)
+    return adminToken.request(`rest/all/V1/product/searchProducts?${queryString}`,"" , "GET", "")
+
+}
