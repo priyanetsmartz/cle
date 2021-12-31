@@ -29,6 +29,8 @@ function MyProductListing(props) {
     const intl = useIntl();
     const [allData, setAllData] = useState([]);
     const [vendorId, setVendorId] = useState(1);
+    const [fromDate, setFromDate] = useState('');
+    const [toDates, setToDates] = useState('');
     useEffect(() => {
         getData()
     }, [props.languages, sortValue])
@@ -141,8 +143,8 @@ function MyProductListing(props) {
         const { value } = e.target;
         await setStatus(e.target.value)
         let term = searchTerm?searchTerm:null;
-        let frDate = orderDate?orderDate:null;
-        let toDate = orderDate?orderDate:null;
+        let frDate = fromDate?fromDate:null;
+        let toDate = toDates?toDates:null;
         let fromPrice = range[0]?range[0]:null;
         let toPrice = range[1]?range[1]:null;
         let stat = status?status:null;
@@ -179,14 +181,60 @@ function MyProductListing(props) {
         const dateFrom = moment(fromDate).format("YYYY-MM-DD");
         const dateTo = moment(currentDate.toJSON()).format("YYYY-MM-DD")
 
-        getData('', dateFrom, dateTo, 'created_at');
+        setFromDate(dateFrom);
+        setToDates(dateTo);
+
+        let term = searchTerm?searchTerm:null;
+        let frDate = fromDate?fromDate:null;
+        let toDate = toDates?toDates:null;
+        let fromPrice = range[0]?range[0]:null;
+        let toPrice = range[1]?range[1]:null;
+        let stat = status?status:null;
+        let result:any = await searchProducts(language, term, dateFrom, dateTo, fromPrice, toPrice, stat);
+        console.log(result);
+        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
+            const renObjData = dataObj.map(function (data, idx) {
+            let productLoop: any = {};
+
+            productLoop.id = data.id;
+            productLoop.image = data.img;
+            productLoop.product = data;
+            productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+            productLoop.status = data.status;
+            productLoop.price = siteConfig.currency + data.price;
+            return productLoop;
+        });
+        setListingData(renObjData);
+        //getData('', dateFrom, dateTo, 'created_at');
     }
 
     const handlePriceRange = async (range) => {
         let from = range[0];
         let to = range[1];
         setRange([from, to])
-        getData('', from, to, 'price');
+
+        let term = searchTerm?searchTerm:null;
+        let frDate = fromDate?fromDate:null;
+        let toDate = toDates?toDates:null;
+        let fromPrice = range[0]?range[0]:null;
+        let toPrice = range[1]?range[1]:null;
+        let stat = status?status:null;
+        let result:any = await searchProducts(language, term, frDate, toDate, from, to, stat);
+        console.log(result);
+        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
+            const renObjData = dataObj.map(function (data, idx) {
+            let productLoop: any = {};
+
+            productLoop.id = data.id;
+            productLoop.image = data.img;
+            productLoop.product = data;
+            productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+            productLoop.status = data.status;
+            productLoop.price = siteConfig.currency + data.price;
+            return productLoop;
+        });
+        setListingData(renObjData);
+        //getData('', from, to, 'price');
     }
 
     const sortOrdersHandler = async (e) => {
@@ -208,11 +256,15 @@ function MyProductListing(props) {
         let lang = props.languages ? props.languages : language;
         if (e.target.value.length >= 3) {
             setSearchTerm(e.target.value)
-            let result: any = await searchProductListing(lang, e.target.value);
-            console.log("lets see response come from api", result)
-            
-            let dataObj = result && result.data && result.data.length > 0 ? result.data : [];
-            let imageD = '';
+            let term = searchTerm?searchTerm:null;
+        let frDate = fromDate?fromDate:null;
+        let toDate = toDates?toDates:null;
+        let fromPrice = range[0]?range[0]:null;
+        let toPrice = range[1]?range[1]:null;
+        let stat = status?status:null;
+        let result:any = await searchProducts(language, e.target.value, frDate, toDate, fromPrice, toPrice, stat);
+        console.log(result);
+        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
             const renObjData = dataObj.map(function (data, idx) {
             let productLoop: any = {};
 
@@ -225,6 +277,8 @@ function MyProductListing(props) {
             return productLoop;
         });
         setListingData(renObjData);
+            //let result: any = await searchProductListing(lang, e.target.value);
+            
         }
         else{
             setListingData(allData);
