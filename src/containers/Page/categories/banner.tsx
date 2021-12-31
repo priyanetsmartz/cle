@@ -6,7 +6,7 @@ import IntlMessages from "../../../components/utility/intlMessages";
 
 function CategoryBanner(props) {
     const [categoryData, setCategory] = useState([])
-  //  console.log(props.ctId)
+    //  console.log(props.ctId)
     useEffect(() => {
         if (props.cateData) {
             let cat = [];
@@ -30,7 +30,7 @@ function CategoryBanner(props) {
                                 <h2>{categoryData['name']}</h2>
                                 <div dangerouslySetInnerHTML={{ __html: categoryData['description'] }} />
                                 {
-                                    props.urls !== undefined ? <Link to={props.urls} className="ban-btn" > <IntlMessages id="category.viewAll" /></Link> : <Link to={`/products`} className="ban-btn"> <IntlMessages id="category.viewAll" /></Link>
+                                    props.urls !== undefined && categoryData['name'] !== '' ? <Link to={props.urls} className="ban-btn" > <IntlMessages id="category.viewAll" /></Link> : <Link to={`/products`} className="ban-btn"> <IntlMessages id="category.viewAll" /></Link>
                                 }
                             </div>
                         </div>

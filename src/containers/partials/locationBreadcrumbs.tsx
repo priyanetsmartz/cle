@@ -4,7 +4,7 @@ import { capitalize } from "../../components/utility/allutils";
 
 function Breadcrumbs(props) {
     const location = useLocation()
-    const { category, subcat, childcat, greatchildcat }: any = useParams();
+    const { category, subcat, childcat, greatchildcat, cat }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [keyUl, setKey] = useState('');
@@ -19,7 +19,7 @@ function Breadcrumbs(props) {
         } else {
             urlPath = category;
         }
-        //   console.log(urlPath)
+
         // let test = urlPath.split("/");
         //console.log(test)
         setKey(urlPath)
@@ -33,7 +33,11 @@ function Breadcrumbs(props) {
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
                     {breadcrumsState.map((local, j) => {
-                        //console.log(local)
+                        // console.log(local)
+                        let result = local.includes("new-in");
+                        if (result) {
+                            local = 'New in';
+                        }
                         if (j === breadcrumsState.length - 1) {
                             let data = local.split('-')
                             if (local === 'orders-and-returns' || local === 'wishlist' || local === 'profile' || local === 'support') {
@@ -49,19 +53,22 @@ function Breadcrumbs(props) {
                                 )
                             } else if (local === 'checkout') {
                                 return (
-                                    <>
-                                        <li key={0} className="breadcrumb-item"><Link to='my-cart'>My Cart </Link></li>
-                                        <li key={j} className="breadcrumb-item active">
+                                    <p style={{ 'display': 'inline-flex' }} key="-3">
+                                        <li key={-1} className="breadcrumb-item"><Link to='my-cart'> / My Cart </Link></li>
+                                        <li key={-2} className="breadcrumb-item active">
                                             {
-                                                data.map((answer, i) => {
-                                                    return (<span key={i}>{capitalize(answer)} </span>)
+                                                data.map((answer, k) => {
+                                                    return (<span key={k}>{capitalize(answer)} </span>)
                                                 })
                                             }
                                         </li>
-                                    </>
+                                    </p>
                                 )
+                            } else if (local === 'all' || local === cat) {
+                                return ('')
                             } else {
                                 return (
+
                                     <li key={j} className="breadcrumb-item active">
                                         {
                                             data.map((answer, i) => {
@@ -79,7 +86,7 @@ function Breadcrumbs(props) {
                                 return "";
                             } else {
                                 //  console.log(local)
-                                if (local === 'product-details') {
+                                if (local === 'product-details' || local === 'products') {
                                     return (
                                         ''
                                     )
@@ -113,7 +120,7 @@ function Breadcrumbs(props) {
                                     )
                                 } else if (local === 'search') {
                                     return (
-                                        <li key={j} className="breadcrumb-item"><Link to={"/"}>Search</Link></li>
+                                        <li key={j} className="breadcrumb-item"><Link to={"/"}>Search Results</Link></li>
                                     )
                                 } else {
                                     let str = local.replace(/-/g, ' ');

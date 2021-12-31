@@ -47,6 +47,7 @@ function Categories(props) {
         });
 
         let urlPath = '';
+
         if (category && subcat && childcat && greatchildcat) {
             urlPath = category + "/" + subcat + "/" + childcat + '/' + greatchildcat;
         } else if (category && subcat && childcat) {
@@ -112,7 +113,7 @@ function Categories(props) {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item"><Link to={`/products/${category}`}>{capitalize(category)}</Link></li>
-                                    {subcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}`}>{capitalize(subcat)}</Link></li>)}
+                                    {subcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}`}>{subcat.includes("new-in") ? 'New in' : capitalize(subcat)}</Link></li>)}
                                     {childcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}/${childcat}`}>{capitalize(childcat)}</Link></li>)}
                                     {greatchildcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}/${childcat}/${greatchildcat}`}>{capitalize(greatchildcat)}</Link></li>)}
                                 </ol>

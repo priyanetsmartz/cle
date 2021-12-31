@@ -84,12 +84,12 @@ export function* loginRequest() {
             //yield put(push("/prive-user"));
             setTimeout(() => {
               window.location.href = '/prive-user';
-            }, 3000);
+            }, 1000);
 
           } else {
             setTimeout(() => {
               window.location.href = '/';
-            }, 3000);
+            }, 1000);
           }
         }
       } else {

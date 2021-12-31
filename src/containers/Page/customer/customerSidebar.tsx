@@ -27,9 +27,10 @@ function Customer(props) {
     const intl = useIntl();
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
-    const userGroup = localToken.token
+    const userGroup = localToken ? localToken.token : "";
+    const usrername = localToken ? localToken.token_name : "";
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
-    const [name, setName] = useState(localToken.token_name);
+    const [name, setName] = useState(usrername);
     const history = useHistory();
     const key = props.match.params.tab;
     const [activeTab, setActiveTab] = useState('');

@@ -345,7 +345,7 @@ function ProductDetails(props) {
         cartData = {
             "cartItem": {
                 "sku": sku,
-                "qty": 1,
+                "qty": quantity,
                 "quote_id": cartQuoteId
             }
         }
@@ -575,7 +575,7 @@ function ProductDetails(props) {
                                                 <div className="accordion-body">
                                                     <div className="details_product">
                                                         <ul>
-                                                            <li>Colour: {productDetails['watch_color']}</li>
+                                                            <li>     <IntlMessages id="Colour" />: {productDetails['watch_color']}</li>
                                                             {/* <li>Composition: 18kt gold-plated sterling silver.</li>
                                                             <li>Country of origin: Italy</li>
                                                             <li>Curb-chain links</li>

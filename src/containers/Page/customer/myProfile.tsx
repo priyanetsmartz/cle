@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { language } from '../../../settings';
 import MyPreferences from './myProfile/myPreferences';
 import { DROPDOWN } from '../../../config/constants';
+import { COUNTRIES } from '../../../config/counties';
 import moment from 'moment';
 import { capitalize } from '../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
@@ -41,7 +42,6 @@ function MyProfile(props) {
     const [loaderPassChange, setLoaderPassChange] = useState(false);
     const [loaderEmailChange, setloaderEmailChange] = useState(false);
     const [myDetailsModel, setMyDetailsModel] = useState(false);
-    const [myPreferenceModel, setMyPreferenceModel] = useState(false);
     const [myAddressModal, setMyAddressModal] = useState(false);
     const [giftingModal, setGiftingModal] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState(false);
@@ -63,7 +63,6 @@ function MyProfile(props) {
         month: '',
         year: ''
     });
-    const [country, setCountry] = useState("");
     const [custForm, setCustForm] = useState({
         id: props.token.cust_id,
         email: "",
@@ -101,7 +100,7 @@ function MyProfile(props) {
     const [changeEmail, setChangeEmail] = useState({
         newEmail: "",
         confirmNewEmail: "",
-        password: "",
+        password2: "",
     });
 
     const [giftingPrefer, setGiftingPrefer] = useState({
@@ -293,7 +292,7 @@ function MyProfile(props) {
         const { id, value } = e.target;
         if (id === 'DateOfDelivery' && value === "2") {
             setShowCustomdate(true);
-        } else {
+        } else if (id === 'DateOfDelivery' && value === "1") {
             setShowCustomdate(false);
         }
         setGiftingPrefer(prevState => ({
@@ -310,14 +309,21 @@ function MyProfile(props) {
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
             custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
         }
+        // setCustomerPrefer(prevState => ({
+        //     ...prevState,
+        //     country: custForm.country,
+        //     mp_sms_telephone: custForm.phone
+        // }));
         let result: any = await saveCustomerDetails({ customer: custForm });
-        if (result) {
+        // console.log(result.data)
+        if (result && result.data && !result.data.message) {
             setMyDetailsModel(false);
             setSaveCustDetailsLoader(false)
             getData()
             notification("success", "", intl.formatMessage({ id: "customerUpdate" }));
         } else {
-
+            getData()
+            setMyDetailsModel(false);
             setSaveCustDetailsLoader(false)
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
@@ -487,7 +493,10 @@ function MyProfile(props) {
     const handleValidation = () => {
         let error = {};
         let formIsValid = true;
-
+        if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#^])([A-Za-z\d$@$!%*?&#^]{8,})$/.test(changePass["newPassword"]))) {
+            formIsValid = false;
+            error["newPassword"] = intl.formatMessage({ id: "passwordvalidation" });
+        }
         if (!changePass["password"]) {
             formIsValid = false;
             error["password"] = intl.formatMessage({ id: "passwordreq" })
@@ -525,7 +534,7 @@ function MyProfile(props) {
             const req = {
                 customerId: props.token.cust_id,
                 newEmail: changeEmail.newEmail,
-                password: changeEmail.password
+                password: changeEmail.password2
             }
 
             let result: any = await updateCustEmail(req);
@@ -534,7 +543,7 @@ function MyProfile(props) {
                 setChangeEmail({
                     confirmNewEmail: "",
                     newEmail: "",
-                    password: ""
+                    password2: ""
                 })
                 setloaderEmailChange(false)
             } else {
@@ -569,14 +578,14 @@ function MyProfile(props) {
             error["confirmNewEmail"] = intl.formatMessage({ id: "confirmneemailreq" });
         }
 
-        if (!changeEmail["password"]) {
+        if (!changeEmail["password2"]) {
             formIsValid = false;
-            error["password"] = intl.formatMessage({ id: "passwordreq" });
+            error["password2"] = intl.formatMessage({ id: "passwordreq" });
         }
 
         if (changeEmail["confirmNewEmail"] !== changeEmail["newEmail"]) {
             formIsValid = false;
-            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmnewnotmatched" });
+            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmnewemailtmatched" });
         }
 
         setError({ errors: error });
@@ -863,13 +872,16 @@ function MyProfile(props) {
                                     <div className="field_details mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.favoriteCategories" /></label>
                                         <div className="field-name">
-                                            {customerPrefer.favCat.map((favs, i) => {
+                                            {customerPrefer && customerPrefer.favCat && customerPrefer.favCat.length > 0 && (
+                                                customerPrefer.favCat[0].name + ' ' + (customerPrefer.favCat.length - 1 > 0 ? ' /+ ' + (customerPrefer.favCat.length - 1) + ' ' + intl.formatMessage({ id: "more" }) : '')
+                                            )}
+                                            {/* {customerPrefer.favCat.map((favs, i) => {
                                                 return (
                                                     <span key={favs.id} >{favs.name}{i === customerPrefer.favCat.length - 1 ?
                                                         '' : '/'} </span>
                                                 )
                                             })
-                                            }
+                                            } */}
                                         </div>
                                     </div>
                                     <div className="field_details">
@@ -917,9 +929,12 @@ function MyProfile(props) {
                                         <div className="field-name">
 
                                             <ul className='giftingPreflist'>
-                                                {customerPrefer.gifting_preferencees.map((opt, i) => {
+                                                {/* {customerPrefer.gifting_preferencees.map((opt, i) => {
                                                     return (<li key={i}>{opt.name}</li>);
-                                                })}
+                                                })} */}
+                                                {customerPrefer && customerPrefer.gifting_preferencees && customerPrefer.gifting_preferencees.length > 0 && (
+                                                    customerPrefer.gifting_preferencees[0].name + ' ' + (customerPrefer.gifting_preferencees.length - 1 > 0 ? ' /+ ' + (customerPrefer.gifting_preferencees.length - 1) + ' ' + intl.formatMessage({ id: "more" }) : '')
+                                                )}
                                             </ul>
                                             {/* {customerPrefer.gifting_preferencees
                                             ['name']}/{customerPrefer.gifting_preferencees['dobDate']} {customerPrefer.gifting_preferencees['dobMonth']}  {customerPrefer.gifting_preferencees['dobYear']}
@@ -956,11 +971,13 @@ function MyProfile(props) {
                         <div className={`addnew_address ${isPriveUser ? 'prive-bg' : ''}`} onClick={openAddressModal}>
                             <div className="addressnew_addressblue">
                                 <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
-								<i className="fas fa-plus"></i>
+                                <i className="fas fa-plus"></i>
                             </div>
                         </div>
 
                         {custForm && custForm.addresses.map((address, i) => {
+                            let countryList: any = COUNTRIES.filter(obj => obj.id === address.country_id);
+                            // console.log(address)
                             return (<div className="addressnew_addressbodr" key={i}>
                                 <h3><IntlMessages id="myaccount.address" /></h3>
                                 <ul>
@@ -968,7 +985,7 @@ function MyProfile(props) {
                                     <li>{address.street}</li>
                                     <li>{address.postcode}</li>
                                     <li>{address.city}</li>
-                                    <li>{address.country_id}</li>
+                                    <li>{countryList[0].full_name_locale}</li>
                                 </ul>
                                 {i == 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                     <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
@@ -986,49 +1003,6 @@ function MyProfile(props) {
                 </div>
             </section>
 
-            {/* <section className="my_profile_sect mb-4">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.paymentMethods" /></h1>
-                            <p><IntlMessages id="myaccount.addOrChangePayments" /> </p>
-                        </div>
-                    </div>
-                    <div className="add_changeaddress">
-                        <div className={`addnew_address ${isPriveUser ? 'prive-bg' : ''}`} onClick={openPaymentMethodModal}>
-                            <div className="addressnew_addressblue">
-                                <span> <IntlMessages id="myaccount.addNewPayment" /> </span>
-                            </div>
-                        </div>
-                        <div className="addressnew_addressbodr bank_card">
-                            <h3><IntlMessages id="myaccount.bankCard" /></h3>
-                            <ul>
-                                <li>Mastercard</li>
-                                <li>**** **** **** 0356</li>
-                                <li>Exp: 06/25</li>
-                                <li>Ann Smith</li>
-                            </ul>
-                            <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                            <div className="address-action bank_card">
-                                <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`}><IntlMessages id="myaccount.edit" /></Link>
-                            </div>
-                        </div>
-                        <div className="addressnew_addressbodr">
-                            <h3>PayPal</h3>
-                            <ul>
-                                <li><IntlMessages id="myaccount.youWillNeedToEnter" /></li>
-                                <li><IntlMessages id="myaccount.setAsDefault" /></li>
-                            </ul>
-                            <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                            <div className="address-action paypal_card">
-                                <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`}><IntlMessages id="myaccount.edit" /></Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section> */}
 
             <section className="my_profile_sect change_passwordsec mb-4">
                 <div className="container">
@@ -1131,13 +1105,13 @@ function MyProfile(props) {
                                     <label className="form-label"><IntlMessages id="login.password" /><span
                                         className="maindatory">&#42;</span></label>
                                     <input type={passMask.emailPass ? 'password' : 'text'} className="form-control"
-                                        id="password"
-                                        value={changeEmail.password}
+                                        id="password2"
+                                        value={changeEmail.password2}
                                         onChange={handleEmail} />
                                     <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
                                         {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
                                     </span>
-                                    <span className="error">{errors.errors["password"]}</span>
+                                    <span className="error">{errors.errors["password2"]}</span>
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
@@ -1222,34 +1196,7 @@ function MyProfile(props) {
                 </div>
             </section>
 
-            {/* <section className="my_profile_sect check-als mb-4">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1 className="text-center mb-4"><IntlMessages id="myaccount.checkAlso" /></h1>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-4 mb-1">
-                            <div className="d-grid ">
-                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg' : ''}`}>
-                                    <IntlMessages id="myaccount.myOrdersReturns" /></Link>
-                            </div>
-                        </div>
-                        <div className="col-sm-4 mb-1">
-                            <div className="d-grid ">
-                                <Link to="customer-orders" className={`btn btn-secondary ${isPriveUser ? 'prive-bg' : ''}`}>
-                                    <IntlMessages id="myaccount.orderDetails" /></Link>
-                            </div>
-                        </div>
-                        <div className="col-sm-4 mb-1">
-                            <div className="d-grid ">
-                                <button type="button" className={`btn btn-secondary ${isPriveUser ? 'prive-bg' : ''}`}><IntlMessages id="myaccount.returnDetails" /></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section> */}
+
 
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
@@ -1655,84 +1602,7 @@ function MyProfile(props) {
 
             </Modal>
 
-            {/* add payment method modal */}
-            <Modal show={paymentMethod}>
-                <Modal.Body className="CLE_pf_details">
-                    <Modal.Header>
-                        <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
-                        <Link to="#" onClick={openPaymentMethodModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
-                    </Modal.Header>
-                    <div className="payment_medt">
-                        <div className="width-100">
-                            <div className="d-grid gap-2 mx-auto">
-                                <button type="button" className="btn btn-outline-primary" onClick={OpenCardModal}>
-                                    <IntlMessages id="checkout.addCards" /></button>
-                            </div>
-                            <div className="or_diivdr">
-                                <IntlMessages id="signup.or" />
-                            </div>
-                        </div>
-                        <div className="width-100">
-                            <div className="d-grid gap-2 mx-auto">
-                                <button type="button" className="btn btn-outline-primary"> <IntlMessages id="checkout.addpaypal" /></button>
-                            </div>
-                        </div>
-                    </div>
-                </Modal.Body>
-            </Modal>
 
-            {/* add credit card modal */}
-            <Modal show={addCard}>
-                <div className="CLE_pf_detahils">
-                    <h1 className="mb-3"><IntlMessages id="myaccount.paymentMethods" /></h1>
-                    <Link to="#" onClick={OpenCardModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
-                    <div className="payment_mode">
-                        <h2><IntlMessages id="checkout.addCards" /></h2>
-                        <div className="width-100 mb-3 form-field">
-                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.cardNumber" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="XXXX XXXX XXXX XXXX" />
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.expiryDate" />*</label>
-                            <div className="dobfeild">
-                                <select className="form-select me-3" aria-label="Default select example">
-                                    <option value="">Month</option>
-                                    <option value="1">01</option>
-                                    <option value="2">02</option>
-                                    <option value="3">03</option>
-                                </select>
-                                <select className="form-select me-3" aria-label="Default select example">
-                                    <option value="">Year</option>
-                                    <option value="1">May</option>
-                                    <option value="2">June</option>
-                                    <option value="3">July</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="checkout.nameOnCard" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Baker Street 105" />
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label htmlFor="exampleInputEmail1" className="form-label">CVV<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control cvv_inpt" placeholder="XXX" />
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <div className="form-check">
-                                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                <label className="form-check-label" htmlFor="flexCheckDefault">
-                                    <IntlMessages id="myaccount.saveCardDetails" />
-                                </label>
-                            </div>
-                        </div>
-                        <div className="width-100 mb-4">
-                            <div className="float-end">
-                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.confirm" /></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </Modal>
 
             {/*  forgot passord popup */}
             <Modal show={forgotPopup} className="forgot-modal" onHide={hideModall}>

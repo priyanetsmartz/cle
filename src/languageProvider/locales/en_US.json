@@ -385,11 +385,11 @@
   "somethingwrong": "Something went wrong!",
   "customerUpdate": "Customer details Updated",
   "customerAddressUpdate": "Your address has been Updated",
-  "customerAddressDelete": "Your address has been deleted!",
-  "passwordUpdate": "Password updated",
-  "passwordInvalid": "Invalid password!",
-  "newEmailUpdate": "New email Updated",
-  "errorNewEmailUpdate": "Error while updating your email address!",
+  "customerAddressDelete": "Your address has been deleted",
+  "passwordUpdate": "Password updated successfully",
+  "passwordInvalid": "Invalid password",
+  "newEmailUpdate": "New email Updated successfully",
+  "errorNewEmailUpdate": "Error while updating your email address",
   "searchPlaceholder": "Search...",
   "searchCategory": "Select category",
   "sorting": "SortBy",
@@ -439,6 +439,7 @@
   "confirmnewnotmatched": "Confirm New password not matched",
   "confirmneemailreq": "Enter confirm email is required",
   "confirmneemailvalid": "Confirm New Email is not valid",
+  "confirmnewemailtmatched":"Confirm New Email is not matched",
   "addedtowishlist": "Product has been successfully added to your wishlist",
   "giftingsuccess": "Gifiting Preferences has been Updated",
   "preferencessuccess": "Your Preferences has been updated",
@@ -557,5 +558,7 @@
   "notofyWhatsapp":"By Whatsapp",
   "deliveryDateoption1":"Same Date as event",
   "deliveryDateoption2":"Set custom date",
-  "great":"Great!"
+  "great":"Great!",
+  "more":"more",
+  "Colour":"Colour"
 }

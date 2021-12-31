@@ -46,7 +46,7 @@ function NewIn(props) {
     }, [props.ctId])
 
     async function getProducts(catID) {
-        console.log(props.ctId)
+       // console.log(props.ctId)
         setOpacity(0.3);
         let customer_id = props.token.cust_id;
         let result: any = await getProductByCategory(1, siteConfig.pageSize, props.ctId, 'created_at', 'DESC', props.languages);
@@ -65,7 +65,7 @@ function NewIn(props) {
             productResult = mergeById(products, WhishlistData);
 
         }
-        console.log(productResult)
+        // console.log(productResult)
         setProducts(productResult);
         setOpacity(1);
 
@@ -139,7 +139,7 @@ function NewIn(props) {
                 products.length > 0 && (
                     <div className=" container" style={{ 'opacity': opacity }}>
                         <h1 className="new-arrival"><IntlMessages id="category.explore"></IntlMessages></h1>
-                        {console.log(products)}
+                        {/* {console.log(products)} */}
                         <div className="row product-listing plp-listing g-2">
 
                             {products.slice(0, products.length > 1 ? products.length - 1 : products.length - 0).map(item => {

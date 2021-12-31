@@ -66,7 +66,7 @@ function Products(props) {
             urlPath = category;
             nameTop = category;
         }
-        setNameHeader(nameTop)
+        // setNameHeader(nameTop)
         seturlp(urlPath)
         //    let catID = getCookie("_TESTCOOKIE");
         const localToken = props.token.token;
@@ -104,8 +104,10 @@ function Products(props) {
         //console.log(urlPath)
         let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
-        let result1: any = await getCategoryDetailsbyUrlPath(props.languages, urlPath, siteConfig.pageSize);
+        let result1: any = await getCategoryDetailsbyUrlPath(lang, urlPath, siteConfig.pageSize);
         let catID = result1 && result1.data && result1.data.items && result1.data.items.length > 0 ? result1.data.items[0].id : '';
+        let catName = result1 && result1.data && result1.data.items && result1.data.items.length > 0 ? result1.data.items[0].name : '';
+        setNameHeader(catName);
         setCatState(catID)
         getProductById(catID)
     }

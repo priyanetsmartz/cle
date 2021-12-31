@@ -165,7 +165,7 @@ function Checkout(props) {
                 cartTotal = await getGuestCartTotal();
             }
         }
-        //console.log(cartItems)
+        console.log(cartItems)
         let checkoutData = {}, checkItems = {}, ship = {};
         checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
         checkoutData['sub_total'] = cartTotal && cartTotal.data ? cartTotal.data.base_subtotal : 0;
@@ -250,7 +250,7 @@ function Checkout(props) {
         let addresses = {};
         let result: any = await getCustomerDetails();
         setCustForm(result.data);
-        console.log(result.data.addresses)
+        // console.log(result.data.addresses)
         addresses['addresses'] = result.data ? result.data.addresses : '';
         SetItems(prevState => ({
             ...prevState,
@@ -360,7 +360,7 @@ function Checkout(props) {
         // console.log(itemsVal.shippingData['firstname'])
         if (checked) {
             setIsBillingAddress(selectedValue);
-            setIsBillingAddressConfirm(selectedValue);
+            
             const address: any = await getAddressById(addId);
             if (address.data) {
                 let addressData: any = {};
@@ -417,15 +417,18 @@ function Checkout(props) {
                         billingAddress: true
                     }))
                     setIsBillingAddress(0);
+                    setIsBillingAddressConfirm(selectedValue);
                     props.showPaymentMethods(saveDelivery.data.payment_methods);
                     notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
                 } else {
                     setIsBillingAddress(0);
+                    setIsBillingAddressConfirm(selectedValue);
                     notification("error", "", saveDelivery.data.message);
                 }
 
             } else {
                 setIsBillingAddress(0);
+                setIsBillingAddressConfirm(selectedValue);
                 notification("error", "", intl.formatMessage({ id: "selectcorrectaddress" }));
             }
         }
@@ -1137,7 +1140,9 @@ function Checkout(props) {
                                                                                 name={`billingaddress`}
                                                                                 onChange={handleBillingChange}
                                                                                 className="form-check-input"
-                                                                                defaultChecked={item.id === isBillingAddress ? true : false}
+
+                                                                                // checked={item.id === isBillingAddressConfirm ? true : false}
+                                                                                checked={item.id === isBillingAddressConfirm ? true : false}
                                                                             />
 
                                                                             <Link to="#" style={{ "display": isBillingAddress === parseInt(item.id) ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
@@ -1152,7 +1157,7 @@ function Checkout(props) {
                                                                 <div className="col-md-5">
                                                                     <div className="select-address">
                                                                         <div className="select-address-inner form-check">
-                                                                            {console.log(isSetAddress, item.id)}
+                                                                        
                                                                             <div className='greateAddress form-check'> <input
                                                                                 style={{ "display": isSetAddress === item.id ? "none" : "inline-block" }}
                                                                                 type="radio"
@@ -1378,17 +1383,16 @@ function Checkout(props) {
                                                                 </div>
                                                                 <div className="col-md-5">
                                                                     <div className="select-address-inner form-check">
-                                                                        {console.log(isBillingAddress, item.id, typeof (item.id))}
+
                                                                         <input
                                                                             type="radio"
                                                                             style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
-                                                                            name={`billingaddress`}
+                                                                            name={`billingaddress2`}
                                                                             defaultValue={item.id}
                                                                             onChange={handleBillingChange}
                                                                             className="form-check-input"
-                                                                            defaultChecked={item.id === isBillingAddress ? true : false}
                                                                             // checked={item.id === isBillingAddressConfirm ? true : false}
-                                                                        // defaultChecked={item.id === parseInt(custForm.default_billing) ? true : false}
+                                                                            checked={item.id === isBillingAddressConfirm ? true : false}
                                                                         />
 
                                                                         <label htmlFor="rad1"> <IntlMessages id="great" /></label>

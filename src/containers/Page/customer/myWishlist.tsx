@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { wishListSearchSort } from '../../../redux/pages/customers';
 import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import { removeWhishlist } from '../../../redux/cart/productApi';
+import IconZoomIn from '../../../image/Icon_zoom_in.svg';
 import cartAction from "../../../redux/cart/productAction";
 import IntlMessages from "../../../components/utility/intlMessages";
 import Login from '../../../redux/auth/Login';
@@ -26,16 +27,12 @@ function MyWishList(props) {
     const [sortOrder, setSortOrder] = useState('');
 
     const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
-    const [pageSize, setPageSize] = useState(10);
+
     const [loaderOrders, setLoaderOrders] = useState(true);
     const [opacity, setOpacity] = useState(1);
 
     useEffect(() => {
-        if (props.items || !props.items) {
-            //   console.log(props.items)
-            getData();
-        }
-
+        getData();
         return () => {
             props.addToWishlistTask(false);
             setSearchName('')
@@ -43,12 +40,12 @@ function MyWishList(props) {
             setSortOrder('')
             setDelWishlist(0)
         }
-    }, [props.items, props.languages, sortOrder])
+    }, [props.languages, sortOrder])
 
     const getData = async () => {
         setLoaderOrders(true)
         //  console.log(sortValue.sortBy, sortValue.sortByValue) 
-        let result: any = await wishListSearchSort(props.languages, pageSize, sortValue.sortBy, sortValue.sortByValue, searchName);
+        let result: any = await wishListSearchSort(props.languages, siteConfig.pageSize, sortValue.sortBy, sortValue.sortByValue, '');
         if (result && result.data) {
             setWishList(result.data);
             setOpacity(1)
@@ -59,25 +56,35 @@ function MyWishList(props) {
         }
 
     }
+
+    const getSearchData = async (search) => {
+        setLoaderOrders(true)
+        //  console.log(sortValue.sortBy, sortValue.sortByValue) 
+        let result: any = await wishListSearchSort(props.languages, siteConfig.pageSize, sortValue.sortBy, sortValue.sortByValue, search);
+        if (result && result.data) {
+            setWishList(result.data);
+            setOpacity(1)
+            setLoaderOrders(false)
+        } else {
+            setOpacity(1)
+            setLoaderOrders(false)
+        }
+
+    }
+
     const searchHandler = (e) => {
         setOpacity(0.3)
-        //   console.log(e.target.value.length)
-        if (e.target.value && e.target.value.length >= 3) {
-            setSearchName(e.target.value);
-            getData();
-        } else if (e.target.value.length === 0) {
-            setSearchName(e.target.value);
-            getData();
-        } else {
-            setSearchName(e.target.value);
-            getData();
-
-        }
+        setSearchName(e.target.value);
+        setTimeout(() => {
+            getSearchData(e.target.value);
+        }, 3000);
+        // if (e.target.value && e.target.value.length >= 3) {
+        //     getData(e.target.value);
+        // }
     }
 
 
-    const filtterData = (event) => {
-        //  setOpacity(0.3);
+    const filtterData = (event) => {  
         // setCurrent(1)
         let sortBy = "";
         let sortByValue = "";
@@ -134,16 +141,18 @@ function MyWishList(props) {
                     <h1><IntlMessages id="Profile.Wishlist-title" /></h1>
                     <h2><IntlMessages id="Profile.Wishlist-subTitle" /></h2>
                 </div>
-               
+
                 <div className="col-md-6">
                     <div className="row">
                         <div className="col-md-6">
-                            <input type="text"
-                                className="form-control"
-                                placeholder="Search"
-                                value={searchName}
-                                onChange={searchHandler}
-                            />
+                            <div className='wishlistsearch'> <img src={IconZoomIn} alt="searchIcon" className="me-1" />
+                                <input type="text"
+                                    className="form-control"
+                                    placeholder={intl.formatMessage({ id: "searchPlaceholder" })}
+                                    value={searchName}
+                                    onChange={searchHandler}
+                                />
+                            </div>
                         </div>
                         <div className="col-md-6">
                             <select className="form-control" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
@@ -156,7 +165,7 @@ function MyWishList(props) {
                         </div>
                     </div>
                 </div>
-				 <div className="col-md-6"></div>
+                <div className="col-md-6"></div>
                 <div className="product-listing" style={{ 'opacity': opacity }} >
                     <div className="row g-2">
                         {loaderOrders && (

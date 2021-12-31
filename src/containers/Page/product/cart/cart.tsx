@@ -46,7 +46,7 @@ function CartItemPage(props) {
         return () => {
             window.removeEventListener("scroll", scrollCallBack);
         };
-    },[])
+    }, [])
 
     useEffect(() => {
         //  console.log(props)
@@ -325,10 +325,10 @@ function CartItemPage(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8">
-							<div className="back-block">
-							<i className="fas fa-chevron-left back-icon"></i>
-                            <Link className="back-to-shop" to="/products" ><IntlMessages id="cart-back-link" /></Link>
-							</div>
+                            <div className="back-block">
+                                <i className="fas fa-chevron-left back-icon"></i>
+                                <Link className="back-to-shop" to="/products" ><IntlMessages id="cart-back-link" /></Link>
+                            </div>
                             <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                 <h2><IntlMessages id="cart.Title" /></h2>
                                 {opacity === 0.3 && (
@@ -377,8 +377,9 @@ function CartItemPage(props) {
                                                                         <div className="row mb-3">
                                                                             <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
                                                                             <div className="col-sm-5 cartschanger">
+                                                                                {/* {console.log(item.qty)} */}
                                                                                 <select defaultValue={value === item.item_id ? qty : item.qty} className="form-select" onChange={(e) => { handleChangeQty(e, item) }}>
-                                                                                    {Array.from(Array(11), (e, i) => {
+                                                                                    {Array.from(Array(item.qty + 10), (e, i) => {
                                                                                         return <option value={i}
                                                                                             key={i}>{i}</option>
                                                                                     })}

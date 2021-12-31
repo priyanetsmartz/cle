@@ -438,6 +438,7 @@
   "confirmnewnotmatched": "تأكيد كلمة المرور الجديدة غير متطابقة",
   "confirmneemailreq": "أدخل تأكيد البريد الإلكتروني مطلوب",
   "confirmneemailvalid": "تأكيد البريد الإلكتروني الجديد غير صالح",
+  "confirmnewemailtmatched":"تأكيد البريد الإلكتروني الجديد غير مطابق",
   "addedtowishlist": "تمت إضافة المنتج بنجاح إلى قائمة الرغبات الخاصة بك",
   "giftingsuccess": "تم تحديث تفضيلات Gifiting",
   "preferencessuccess": "تم تحديث تفضيلاتك",
@@ -557,5 +558,7 @@
   "notofyWhatsapp":"بواسطة Whatsapp",
   "deliveryDateoption1":"نفس تاريخ الحدث",
   "deliveryDateoption2":"تعيين تاريخ مخصص",
-  "great":"باهر!"
+  "great":"باهر!",
+  "more":"أكثر",
+  "Colour":"لون"
 }

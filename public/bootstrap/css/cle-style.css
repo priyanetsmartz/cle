@@ -6884,7 +6884,9 @@ p.sliderupper {
     position: relative;
     min-height: 40px;
 }
-
+.Frgt_paswd .save-btn {
+    float: left;
+}
 .faq-view-all a {
     font-size: 18px;
     font-family: 'Monument Extended';
@@ -7053,6 +7055,15 @@ p.sliderupper {
 .addressInlineForm.col-md-6 {
     clear: both;
     display: flex;
+}
+
+.wear-ckeckbox .form-check-input[type=radio]+label {
+    display: block;
+}
+.wishlistsearch {
+    display: flex;
+    width: 100%;
+    float: left;
 }
 /* All media screen below */
 
