@@ -620,7 +620,7 @@ p.promotion_alert {
     padding: 0 5px;
     line-height: 0px;
     font-size: 16px;
-    font-family: "Lato",sans-serif;
+    font-family: "Lato", sans-serif;
     color: #000;
 }
 
@@ -1546,16 +1546,16 @@ p.promotion_alert {
     font-family: 'Monument Extended';
     font-weight: normal;
     font-style: normal;
-	margin-bottom: 30px
+    margin-bottom: 30px
 }
 
 .addressnew_addressbodr {
     width: 265px;
-	min-height: 275px;
+    min-height: 275px;
     float: left;
     border: 1px solid #707070;
     padding: 20px;
-	margin-bottom: 30px;
+    margin-bottom: 30px;
     margin-right: 20px;
 }
 
@@ -1571,11 +1571,11 @@ p.promotion_alert {
 .addressnew_addressblue {
     width: 100%;
     float: left;
-	display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     height: 285px;
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .addnew_address .addressnew_addressblue span {
@@ -1585,15 +1585,15 @@ p.promotion_alert {
     align-self: flex-end;
 }
 
-.addnew_address .addressnew_addressblue i{
-	font-size:22px;
-	color:#fff;
-	display:none;
-	transition: all .3s ease;
+.addnew_address .addressnew_addressblue i {
+    font-size: 22px;
+    color: #fff;
+    display: none;
+    transition: all .3s ease;
 }
 
-.addnew_address .addressnew_addressblue:hover i{
-	display:block;
+.addnew_address .addressnew_addressblue:hover i {
+    display: block;
 }
 
 .btn-outline-success {
@@ -1648,7 +1648,7 @@ p.promotion_alert {
     justify-content: space-between;
     text-decoration: none;
     margin-top: 28px;
-	position: relative;
+    position: relative;
 }
 
 .address-action a.delete_btn {
@@ -1658,10 +1658,10 @@ p.promotion_alert {
     font-family: 'Monument Extended';
     font-weight: normal;
     font-style: normal;
-	position: absolute;
-	display:inline-block;
-	left:0;
-	transition: all .5s ease-in-out;
+    position: absolute;
+    display: inline-block;
+    left: 0;
+    transition: all .5s ease-in-out;
 }
 
 .address-action a.edit_btn {
@@ -1671,15 +1671,15 @@ p.promotion_alert {
     font-family: 'Monument Extended';
     font-weight: normal;
     font-style: normal;
-	position: absolute;
-	display:inline-block;
-	right:0;
-	transition: all .5s ease-in-out;
+    position: absolute;
+    display: inline-block;
+    right: 0;
+    transition: all .5s ease-in-out;
 }
 
 .address-action a.delete_btn:after,
 .address-action a.edit_btn:after {
-	content: "";
+    content: "";
     border-bottom: 1px solid transparent;
     display: block;
     transition: all .5s ease-in-out;
@@ -1689,14 +1689,14 @@ p.promotion_alert {
 }
 
 .address-action a.delete_btn:hover,
-.address-action a.edit_btn:hover{
-	padding-top: 5px;
+.address-action a.edit_btn:hover {
+    padding-top: 5px;
     color: #000000;
 }
 
 .address-action a.delete_btn:hover:after,
-.address-action a.edit_btn:hover:after{
-	border-color: #222;
+.address-action a.edit_btn:hover:after {
+    border-color: #222;
     bottom: 2px;
 }
 
@@ -1969,12 +1969,12 @@ span.maindatory {
 }
 
 .modal-header,
-.modal-footer{
-	border-width: 0!important;
+.modal-footer {
+    border-width: 0 !important;
 }
 
-.accordion-button:not(.collapsed){
-	box-shadow:none!important;
+.accordion-button:not(.collapsed) {
+    box-shadow: none !important;
 }
 
 
@@ -1985,8 +1985,8 @@ span.maindatory {
     border: 0px solid #f0f0f0;
 }
 
-.CLE_pf_details .modal-header{
-	border-bottom: 0px solid #dee2e6;
+.CLE_pf_details .modal-header {
+    border-bottom: 0px solid #dee2e6;
 }
 
 
@@ -2428,6 +2428,7 @@ span.maindatory {
 .resltspage_sec .paginatn_result {
     padding: 4px 0;
 }
+
 .sticky-fliter {
     position: fixed;
     width: 250px;
@@ -2871,7 +2872,7 @@ span.maindatory {
     top: 10px;
     left: 0px;
     background-color: #fff !important;
-	width: 45px;
+    width: 45px;
     height: 45px;
 }
 
@@ -3781,8 +3782,8 @@ left: auto; */
     color: #000;
 }
 
-.choose-foryou-sec .productcalr .product_price{
-	color: #2E2BAA;
+.choose-foryou-sec .productcalr .product_price {
+    color: #2E2BAA;
 }
 
 .choose-foryou-sec .product-listing .product:hover .cart-button a {
@@ -3796,7 +3797,7 @@ left: auto; */
 }
 
 .choose-foryou-sec .product-listing .slick-prev:before {
-	content: " " !important;
+    content: " " !important;
     background-image: url(images/arrow-left.svg) !important;
     background-size: 9px 9px;
     background-position: center;
@@ -3807,7 +3808,7 @@ left: auto; */
 }
 
 .choose-foryou-sec .product-listing .slick-next:before {
-	content: " " !important;
+    content: " " !important;
     background-image: url(images/arrow-right.svg) !important;
     background-size: 9px 9px;
     background-position: center;
@@ -3850,23 +3851,23 @@ left: auto; */
 	color:#fff;
 } */
 
-.new-arrival{
-	font-size: 32px;
+.new-arrival {
+    font-size: 32px;
     line-height: 40px;
     color: #000;
     font-family: 'Monument Extended';
     margin-bottom: 20px;
-	text-align: center;
+    text-align: center;
 }
 
-.search_keyword h1{
-	 font-family: 'Monument Extended';
-	 font-size: 36px;
+.search_keyword h1 {
+    font-family: 'Monument Extended';
+    font-size: 36px;
     line-height: 42px;
     color: #000;
 }
 
-.wishlist-head{
+.wishlist-head {
     margin-bottom: 20px;
 }
 
@@ -3875,9 +3876,9 @@ left: auto; */
     position: relative;
 }
 
-.giftmessagebox .modal-header h5{
-	font-family: 'Monument Extended';
-	 font-size: 22px;
+.giftmessagebox .modal-header h5 {
+    font-family: 'Monument Extended';
+    font-size: 22px;
     line-height: 32px;
     color: #000;
 }
@@ -3902,8 +3903,8 @@ left: auto; */
     color: #000;
 }
 
-.giftmessagebox .form-control{
-	margin-bottom: 10px;
+.giftmessagebox .form-control {
+    margin-bottom: 10px;
 }
 
 
@@ -4330,8 +4331,8 @@ left: auto; */
     transition: all .3s ease;
 }
 
-.DC-top-banner .DC-top-ban-inner a.ban-btn:hover{
-	background-color: transparent;
+.DC-top-banner .DC-top-ban-inner a.ban-btn:hover {
+    background-color: transparent;
 }
 
 .DC-top-banner .DC-top-ban-inner h2 {
@@ -4811,8 +4812,8 @@ left: auto; */
     color: #fff;
 }
 
-.newsletter-signup button.btn{
-	font-family: 'Monument Extended';
+.newsletter-signup button.btn {
+    font-family: 'Monument Extended';
     font-size: 11px;
     font-weight: 500;
 }
@@ -4824,14 +4825,14 @@ left: auto; */
     max-width: 100%;
     display: block;
     margin-left: 67px;
-	background-color: #fff;
+    background-color: #fff;
 }
 
 
 .order-detail-sec {
     border: 1px solid rgba(0, 0, 0, .125) !important;
     padding: 20px;
-	background-color: #fff;
+    background-color: #fff;
 }
 
 .order-detail-checkout {
@@ -5072,13 +5073,13 @@ left: auto; */
     display: flex;
     align-items: center;
     height: 30px;
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .back-icon {
     font-size: 14px;
-	display:none;
-	transition: all .3s ease;
+    display: none;
+    transition: all .3s ease;
 }
 
 .back-block .back-to-shop {
@@ -5087,19 +5088,19 @@ left: auto; */
     font-size: 12px;
     text-decoration: none;
     color: #000;
-   transform: translateX(0%);
+    transform: translateX(0%);
     display: inline-block;
     transition: all .3s ease;
     line-height: 24px;
-	width:300px;
+    width: 300px;
 }
 
 .back-block:hover .back-to-shop {
     transform: translateX(7%);
 }
 
-.back-block:hover .back-icon{
-	display:block;
+.back-block:hover .back-icon {
+    display: block;
 }
 
 
@@ -6406,8 +6407,8 @@ p.no-data {
 }
 
 .mini-cart-btn a:hover,
-.mini-cart-btn .btn-secondary:hover{
-	color: #2e2baa !important;
+.mini-cart-btn .btn-secondary:hover {
+    color: #2e2baa !important;
 }
 
 .accordion-button:focus {
@@ -6483,7 +6484,7 @@ height: auto;
 
 .product-listing .slick-next:before {
     content: " " !important;
-	background-image: url(images/arrow-right.svg) !important;
+    background-image: url(images/arrow-right.svg) !important;
     background-size: 9px 9px;
     background-position: center;
     background-repeat: no-repeat;
@@ -6512,7 +6513,6 @@ height: auto;
 
 .share-btn {
     background: #fff;
-    border: 1px solid #000;
     color: #000;
     padding: 4px 10px 10px;
 }
@@ -6925,9 +6925,11 @@ p.sliderupper {
     position: relative;
     min-height: 40px;
 }
+
 .Frgt_paswd .save-btn {
     float: left;
 }
+
 .faq-view-all a {
     font-size: 18px;
     font-family: 'Monument Extended';
@@ -7101,11 +7103,54 @@ p.sliderupper {
 .wear-ckeckbox .form-check-input[type=radio]+label {
     display: block;
 }
+
 .wishlistsearch {
     display: flex;
     width: 100%;
     float: left;
 }
+
+.pdp-share {
+    display: flex;
+    margin: 10px 0;
+}
+
+.share-toggle {
+    background-color: #fff;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000;
+}
+
+.share-toggle i {
+    color: #000;
+    font-size: 20px;
+}
+
+.share-options {
+    display: flex;
+    align-items: center;
+    background-color: #000;
+    padding: 0 10px;
+    border: 1px solid #000;
+}
+
+.share-options ul {
+    margin: 0;
+}
+
+.share-options ul li {
+    margin: 0 4px;
+}
+
+.share-options ul li i {
+    color: #fff;
+    font-size: 20px;
+}
+
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */

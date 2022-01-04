@@ -25,6 +25,7 @@ function MyProfile(props) {
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
     const intl = useIntl();
+    const currentDate = moment().format("YYYY-MM-DD").split("-");
     const userGroup = localToken ? localToken.token : '';
     const [isShow, setIsShow] = useState(false);
     const [showCustomdate, setShowCustomdate] = useState(false);
@@ -682,18 +683,9 @@ function MyProfile(props) {
             formIsValid = false;
             error["annualReminder"] = intl.formatMessage({ id: "gifting.annualReminder" });
         }
-        if (!giftingPrefer['dobDate']) {
+        if (!giftingPrefer['dobDate'] && !giftingPrefer['dobMonth'] && !giftingPrefer['dobYear']) {
             formIsValid = false;
             error["dobDate"] = intl.formatMessage({ id: "gifting.dobDate" });
-        }
-        if (!giftingPrefer['dobMonth']) {
-            formIsValid = false;
-            error["dobMonth"] = intl.formatMessage({ id: "gifting.dobMonth" });
-        }
-
-        if (!giftingPrefer['dobYear']) {
-            formIsValid = false;
-            error["dobYear"] = intl.formatMessage({ id: "gifting.dobYear" });
         }
         if (!giftingPrefer['DateOfDelivery']) {
             formIsValid = false;
@@ -1480,15 +1472,14 @@ function MyProfile(props) {
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.date" /></label><span className="maindatory">*</span>
                                     <div className="dobfeild">
-                                        <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobDate} id="dobDate"
+                                        <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobDate ? giftingPrefer.dobDate : currentDate[2]} id="dobDate"
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             {DROPDOWN.dates.map(opt => {
                                                 return (<option value={opt} key={opt}>{opt}</option>);
                                             })}
-                                        </select>
-                                        <span className="error">{giftErrors.errors["dobDate"]}</span>
-                                        <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobMonth} id="dobMonth"
+                                        </select>                                       
+                                        <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobMonth ? giftingPrefer.dobMonth : currentDate[1]} id="dobMonth"
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             {DROPDOWN.months.map(opt => {
@@ -1496,7 +1487,7 @@ function MyProfile(props) {
                                             })}
                                         </select>
                                         <span className="error">{giftErrors.errors["dobMonth"]}</span>
-                                        <select className="form-select" aria-label="Default select example" value={giftingPrefer.dobYear} id="dobYear"
+                                        <select className="form-select" aria-label="Default select example" value={giftingPrefer.dobYear ? giftingPrefer.dobYear : currentDate[0]} id="dobYear"
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             {DROPDOWN.years.map(opt => {
@@ -1505,6 +1496,7 @@ function MyProfile(props) {
                                         </select>
                                         <span className="error">{giftErrors.errors["dobYear"]}</span>
                                     </div>
+                                    <span className="error">{giftErrors.errors["dobDate"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dateOfDelivery" /></label><span className="maindatory">*</span>
@@ -1519,7 +1511,7 @@ function MyProfile(props) {
                                 {showCustomdate && (
                                     <div className="width-100 mb-3 form-field">
                                         <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.datedelivry" /></label><div className="dobfeild">
-                                            <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodDate} id="dodDate"
+                                            <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodDate ? giftingPrefer.dodDate : currentDate[2]} id="dodDate"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                                 {DROPDOWN.dates.map(opt => {
@@ -1527,7 +1519,7 @@ function MyProfile(props) {
                                                 })}
                                             </select>
                                             <span className="error">{giftErrors.errors["dodDate"]}</span>
-                                            <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodMonth} id="dodMonth"
+                                            <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodMonth ? giftingPrefer.dodMonth : currentDate[1]} id="dodMonth"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                                 {DROPDOWN.months.map(opt => {
@@ -1535,7 +1527,7 @@ function MyProfile(props) {
                                                 })}
                                             </select>
                                             <span className="error">{giftErrors.errors["dodMonth"]}</span>
-                                            <select className="form-select" aria-label="Default select example" value={giftingPrefer.dodYear} id="dodYear"
+                                            <select className="form-select" aria-label="Default select example" value={giftingPrefer.dodYear ? giftingPrefer.dodYear : currentDate[0]} id="dodYear"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                                 {DROPDOWN.years.map(opt => {

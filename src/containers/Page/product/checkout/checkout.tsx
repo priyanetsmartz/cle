@@ -1060,7 +1060,7 @@ function Checkout(props) {
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutTwo" id="accordion-buttonacc" aria-expanded="false" aria-controls="CheckoutTwo">
                                             <IntlMessages id="checkoutemail_address" />
-                                            {checkedData.email && (<span><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                            {checkedData.email && (<span className='confirmedPoint' ><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="CheckoutTwo" className="accordion-collapse collapse" aria-labelledby="CheckoutHTwo"
@@ -1088,7 +1088,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" onClick={checkEmailData} id="CheckoutHThree">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutThree" aria-expanded="false" aria-controls="CheckoutThree">
-                                            <IntlMessages id="deliveryAddress" /> {checkedData.address && (<span><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                            <IntlMessages id="deliveryAddress" /> {checkedData.address && (<span className='confirmedPoint'><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="CheckoutThree" className="accordion-collapse collapse" aria-labelledby="CheckoutHThree"
@@ -1293,7 +1293,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfour">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfour" aria-expanded="false" aria-controls="Checkoutfour" onClick={getshippingMethods}>
-                                            <IntlMessages id="deliveryOption" />   {checkedData.shipping && (<span><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                            <IntlMessages id="deliveryOption" />   {checkedData.shipping && (<span className='confirmedPoint'><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="Checkoutfour" className="accordion-collapse collapse" aria-labelledby="CheckoutHfour"
@@ -1335,7 +1335,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfive">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfive" aria-expanded="false" aria-controls="Checkoutfive">
-                                            <IntlMessages id="payment" />{checkedData.billingAddress && (<span><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                            <IntlMessages id="payment" />{checkedData.billingAddress && (<span className='confirmedPoint'><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"

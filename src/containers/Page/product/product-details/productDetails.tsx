@@ -87,7 +87,7 @@ function ProductDetails(props) {
     }, [props.attributeConfig]);
 
     const handleClick = () => {
-        setIsLoaded(true);
+        setIsLoaded(!isShare);
     }
 
 
@@ -95,9 +95,7 @@ function ProductDetails(props) {
         props.openGiftBoxes(0);
         setIsGiftMessage(false)
     }
-    const hideModal = () => {
-        setIsLoaded(false);
-    }
+ 
     const handleChange = (e) => {
         //  console.log(e.target[e.target.selectedIndex].getAttribute('data-order'));
         const index = e.target.selectedIndex;
@@ -539,21 +537,32 @@ function ProductDetails(props) {
                                                     handleGiftMEssage();
                                                 }} > <IntlMessages id="product.sendAGift" /></button>
                                             )}
-                                            <div className="pdp-share">
-                                                <div className="share-toggle"><a href="#"><i className="fas fa-share-alt"></i></a></div>
-                                                <div className="share-options">
+                                            <div className="pdp-share share-btn">
+                                                <div className="share-toggle" onClick={() => {
+                                                    handleClick();
+                                                }}   ><Link to="#"><i className="fas fa-share-alt"></i></Link></div>
+                                                {isShare && (<div className="share-options">
                                                     <ul className="list-inline">
-                                                        <li className="list-inline-item"><a href="#"><i className="fab fa-facebook"></i></a></li>
-                                                        <li className="list-inline-item"><a href="#"><i className="fab fa-instagram"></i></a></li>
-                                                        <li className="list-inline-item"><a href="#"><i className="fab fa-twitter"></i></a></li>
-                                                        <li className="list-inline-item"><a href="#"><i className="fas fa-link"></i></a></li>
+                                                        <li className="list-inline-item"> <FacebookShareButton
+                                                            url={shareUrl}
+                                                            quote={productDetails['name']}>
+                                                            <i className="fab fa-facebook" aria-hidden="true"></i>
+                                                        </FacebookShareButton></li>
+                                                        <li className="list-inline-item"><LinkedinShareButton
+                                                            url={shareUrl}
+                                                            title={productDetails['name']}>
+                                                            <i className="fab fa-linkedin" aria-hidden="true"></i>
+                                                        </LinkedinShareButton></li>
+                                                        <li className="list-inline-item"><TwitterShareButton
+                                                            url={shareUrl}
+                                                            title={productDetails['name']}>
+                                                            <i className='fab fa-twitter'></i>
+                                                        </TwitterShareButton></li>
                                                     </ul>
                                                 </div>
+                                                )}
                                             </div>
-                                            <button type="button" className="share-btn" onClick={() => {
-                                                handleClick();
-                                            }} ><img src={ShareIcon} alt=""
-                                                className="pe-1" /> </button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -667,36 +676,6 @@ function ProductDetails(props) {
                     <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideGiftModalModal} aria-label="Close"></button>
                 </Modal.Header>
                 <GiftMessage />
-            </Modal>
-            <Modal show={isShare} onHide={hideModal}>
-                <Modal.Header>
-                    <h5 className="modal-title"><IntlMessages id="products.shareProduct" /></h5>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
-                <Modal.Body className="arabic-rtl-direction">
-                    <ul className="list-inline share">
-                        <li className="list-inline-item">
-                            <FacebookShareButton
-                                url={shareUrl}
-                                quote={productDetails['name']}>
-                                <i className="fab fa-facebook" aria-hidden="true"></i>
-                            </FacebookShareButton>
-                        </li>
-                        <li className="list-inline-item">
-                            <LinkedinShareButton
-                                url={shareUrl}
-                                title={productDetails['name']}>
-                                <i className="fab fa-linkedin" aria-hidden="true"></i>
-                            </LinkedinShareButton>
-                        </li>
-                        <li className="list-inline-item">
-                            <TwitterShareButton
-                                url={shareUrl}
-                                title={productDetails['name']}>
-                                <i className='fab fa-twitter'></i>
-                            </TwitterShareButton>
-                        </li>
-                    </ul>
-                </Modal.Body>
             </Modal>
         </>
     )
