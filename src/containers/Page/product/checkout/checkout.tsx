@@ -300,7 +300,7 @@ function Checkout(props) {
         // console.log(addressData)
         let saveDelivery: any = await setUserDeliveryAddress(addressData);
         // console.log(saveDelivery)
-        props.showPaymentMethods(saveDelivery.data.payment_methods);
+        // props.showPaymentMethods(saveDelivery.data.payment_methods);
         setLoaderOnCheckout(false)
         if (result.data.addresses.length === 1) {
             setCheckedData(prevState => ({
@@ -964,6 +964,7 @@ function Checkout(props) {
 
         let saveDelivery: any = await setUserDeliveryAddress(addressData);
         if (saveDelivery.data) {
+            props.showPaymentMethods(saveDelivery.data.payment_methods);
             setSelectedShippingMethod(e.target.value)
             checkoutScreen()
         } else {
@@ -1436,7 +1437,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfive">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfive" aria-expanded="false" aria-controls="Checkoutfive">
-                                            <IntlMessages id="payment" />{checkedData.billingAddress ||checkedData.paymentmethod   && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                            <IntlMessages id="payment" />{(checkedData.billingAddress ||checkedData.paymentmethod )  && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"
