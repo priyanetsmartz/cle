@@ -95,7 +95,7 @@ export async function searchProducts(language, term, fromDate, toDate, fromPrice
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId="+vendorId+"&storeId="+storeId;
     if (term!=null)
-        queryString  += "&searchterm"+term;
+        queryString  += "&searchterm="+term;
     if(fromDate!=null)
         queryString += "&fromDate="+fromDate;
     if(toDate!=null)

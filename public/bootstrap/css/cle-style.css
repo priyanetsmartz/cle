@@ -157,7 +157,7 @@ a:hover {
     font-family: 'Monument Extended';
     font-weight: 500 !important;
     font-style: normal;
-    font-size: 12px !important;
+    font-size: 11px !important;
     padding: 12px 40px !important;
     margin-bottom: 10px;
 }
@@ -619,52 +619,54 @@ p.promotion_alert {
 .search_top .form-control {
     padding: 0 5px;
     line-height: 0px;
-    font-size: 14px;
+    font-size: 16px;
+    font-family: "Lato",sans-serif;
+    color: #000;
 }
 
 .search_top .form-control::-webkit-input-placeholder {
     opacity: 1;
-    color: #212529;
+    color: #000;
 }
 
 .search_top .form-control::-moz-placeholder {
     opacity: 1;
-    color: #212529;
+    color: #000;
 }
 
 .search_top .form-control:-ms-input-placeholder {
     opacity: 1;
-    color: #212529;
+    color: #000;
 }
 
 .search_top .form-control::-ms-input-placeholder {
     opacity: 1;
-    color: #212529;
+    color: #000;
 }
 
 .search_top .form-control::placeholder {
     opacity: 1;
-    color: #212529;
+    color: #000;
 }
 
 .search_top .form-control:-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: #212529;
+    color: #000;
 }
 
 .search_top .form-control:-moz-placeholder {
     /* Firefox 19+ */
-    color: #212529;
+    color: #000;
 }
 
 .search_top .form-control:-ms-input-placeholder {
     /* IE 10+ */
-    color: #212529;
+    color: #000;
 }
 
 .search_top .form-control:-moz-placeholder {
     /* Firefox 18- */
-    color: #212529;
+    color: #000;
 }
 
 .breadcrumb {
@@ -1009,12 +1011,12 @@ p.promotion_alert {
 
 .releveant-slider .product .cart-button a {
     font-family: 'Monument Extended';
-    font-weight: normal;
+    font-weight: 500;
     font-style: normal;
     background: #2E2BAA !important;
     text-align: center;
     border-radius: 0;
-    font-size: 10px;
+    font-size: 11px;
     text-transform: capitalize !important;
     border: 0;
     display: -webkit-box;
@@ -1063,11 +1065,25 @@ p.promotion_alert {
 }
 
 .releveant-slider .slick-prev:before {
-    content: url(images/arrow-left.svg) !important;
+    content: " " !important;
+    background-image: url(images/arrow-left.svg) !important;
+    background-size: 9px 9px;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
 }
 
 .releveant-slider .slick-next:before {
-    content: url(images/arrow-right.svg) !important;
+    content: " " !important;
+    background-image: url(images/arrow-right.svg) !important;
+    background-size: 9px 9px;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
 }
 
 .product .product_name,
@@ -1535,6 +1551,7 @@ p.promotion_alert {
 
 .addressnew_addressbodr {
     width: 265px;
+	min-height: 275px;
     float: left;
     border: 1px solid #707070;
     padding: 20px;
@@ -2411,9 +2428,14 @@ span.maindatory {
 .resltspage_sec .paginatn_result {
     padding: 4px 0;
 }
+.sticky-fliter {
+    position: fixed;
+    width: 250px;
+    background-color: #fff;
+}
 
 .pro_categry_sidebar {
-    width: 80%;
+    width: 100%;
     float: left;
 }
 
@@ -2804,12 +2826,12 @@ span.maindatory {
 
 .product-listing .cart-button a {
     font-family: 'Monument Extended';
-    font-weight: normal;
+    font-weight: 500;
     font-style: normal;
     background: #2E2BAA !important;
     text-align: center;
     border-radius: 0;
-    font-size: 12px;
+    font-size: 11px;
     text-transform: capitalize !important;
     border: 0;
     margin-top: 7px;
@@ -3702,12 +3724,12 @@ left: auto; */
 
 .DC-carousel .cart-button a {
     font-family: 'Monument Extended';
-    font-weight: normal;
+    font-weight: 500;
     font-style: normal;
     background: #2E2BAA !important;
     text-align: center;
     border-radius: 0;
-    font-size: 12px;
+    font-size: 11px;
     text-transform: capitalize !important;
     border: 0;
     margin-top: 7px;
@@ -3774,25 +3796,25 @@ left: auto; */
 }
 
 .choose-foryou-sec .product-listing .slick-prev:before {
-    content: "\f104" !important;
-	font-family: 'Font Awesome 5 Free';
-	font-weight: 900;
-	
-	background-image:none!important;
-	color:#2E2BAA;
-	display: inline-block;
-	font-size:16px;
+	content: " " !important;
+    background-image: url(images/arrow-left.svg) !important;
+    background-size: 9px 9px;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
 }
 
 .choose-foryou-sec .product-listing .slick-next:before {
-    content: "\f105" !important;
-	font-family: 'Font Awesome 5 Free';
-	font-weight: 600;
-	
-	background-image:none!important;
-	color:#2E2BAA;
-	display: inline-block;
-	font-size:16px;
+	content: " " !important;
+    background-image: url(images/arrow-right.svg) !important;
+    background-size: 9px 9px;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
 }
 
 .choose-foryou-sec .product_img {
@@ -4771,7 +4793,7 @@ left: auto; */
 }
 
 .become-part-inner a {
-    font-size: 12px;
+    font-size: 11px;
     line-height: 18px;
     font-family: 'Monument Extended';
     font-weight: 500;
@@ -4789,16 +4811,33 @@ left: auto; */
     color: #fff;
 }
 
-/* checkout page */
+.newsletter-signup button.btn{
+	font-family: 'Monument Extended';
+    font-size: 11px;
+    font-weight: 500;
+}
 
+/* checkout page */
+.sticky-cart {
+    position: fixed;
+    width: 320px;
+    max-width: 100%;
+    display: block;
+    margin-left: 67px;
+	background-color: #fff;
+}
 
 
 .order-detail-sec {
     border: 1px solid rgba(0, 0, 0, .125) !important;
     padding: 20px;
-    width: 320px;
-    max-width: 100%;
-    float: right;
+	background-color: #fff;
+}
+
+.order-detail-checkout {
+    border: 1px solid rgba(0, 0, 0, .125) !important;
+    padding: 20px;
+    background-color: #fff;
 }
 
 .Ordered-pro-list {
@@ -4936,7 +4975,7 @@ left: auto; */
     font-family: 'Monument Extended';
     font-weight: 500;
     margin-bottom: 20px;
-    font-size: 12px;
+    font-size: 11px;
     text-decoration: none;
     color: #000;
     display: block;
@@ -5033,6 +5072,7 @@ left: auto; */
     display: flex;
     align-items: center;
     height: 30px;
+	margin-bottom: 20px;
 }
 
 .back-icon {
@@ -5041,7 +5081,7 @@ left: auto; */
 	transition: all .3s ease;
 }
 
-.cart-main .back-block .back-to-shop {
+.back-block .back-to-shop {
     font-family: 'Monument Extended';
     font-weight: 500;
     font-size: 12px;
@@ -5051,14 +5091,14 @@ left: auto; */
     display: inline-block;
     transition: all .3s ease;
     line-height: 24px;
-	width:200px;
+	width:300px;
 }
 
-.cart-main .back-block:hover .back-to-shop {
+.back-block:hover .back-to-shop {
     transform: translateX(7%);
 }
 
-.cart-main .back-block:hover .back-icon{
+.back-block:hover .back-icon{
 	display:block;
 }
 
@@ -5316,9 +5356,7 @@ color: #017abb;
 
 .qus-contactUs {
     margin: 25px 0 0;
-    float: right;
-    width: 320px;
-    max-width: 100%;
+    background-color: #fff;
 }
 
 .qus-contactUs a {
@@ -6356,17 +6394,20 @@ p.no-data {
 
 .mini-cart-btn a,
 .mini-cart-btn .btn-secondary {
-    font-size: 12px !important;
-    ;
+    font-size: 11px !important;
     font-family: 'Monument Extended';
     text-decoration: none;
-    font-weight: 400 !important;
-    ;
+    font-weight: 500 !important;
     color: #fff !important;
     background: #2e2baa;
     border-radius: 0 !important;
     margin-bottom: 7px;
     -webkit-appearance: unset;
+}
+
+.mini-cart-btn a:hover,
+.mini-cart-btn .btn-secondary:hover{
+	color: #2e2baa !important;
 }
 
 .accordion-button:focus {
@@ -6432,7 +6473,7 @@ height: auto;
 .product-listing .slick-prev:before {
     content: " " !important;
     background-image: url("images/arrow-left.svg") !important;
-    background-size: 12px 12px;
+    background-size: 9px 9px;
     background-position: center;
     background-repeat: no-repeat;
     width: 15px;
@@ -6443,7 +6484,7 @@ height: auto;
 .product-listing .slick-next:before {
     content: " " !important;
 	background-image: url(images/arrow-right.svg) !important;
-    background-size: 10px 10px;
+    background-size: 9px 9px;
     background-position: center;
     background-repeat: no-repeat;
     width: 15px;
