@@ -22,14 +22,16 @@ import cartAction from "../../../redux/cart/productAction";
 import ForgottenPassword from '../../Page/forgotPassword';
 const { closePrefPopup } = cartAction;
 function MyProfile(props) {
+    let localData = localStorage.getItem('redux-react-session/USER_DATA');
+    let localToken = JSON.parse((localData));
     const intl = useIntl();
-    const userGroup = props.token.token;
+    const userGroup = localToken ? localToken.token : '';
     const [isShow, setIsShow] = useState(false);
     const [showCustomdate, setShowCustomdate] = useState(false);
     const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
     const [isShown, setIsShown] = useState(-1);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
-    const [custId, setCustid] = useState(props.token.cust_id);
+    const [custId, setCustid] = useState(localToken.cust_id);
     const [attributes, setAttributes]: any = useState({});
     const [customerPrefer, setCustomerPrefer]: any = useState({
         interestedIn: '',
@@ -70,13 +72,17 @@ function MyProfile(props) {
         lastname: "",
         gender: 0,
         dob: "",
-        country: "",
-        phone: "",
+        country: '',
+        phone: '',
         website_id: 1,
         addresses: [],
         custom_attributes: []
     });
 
+    const [customAttribute, setCustomAttribute] = useState({
+        country: '',
+        mp_sms_telephone: ''
+    });
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: props.token.cust_id,
@@ -255,16 +261,16 @@ function MyProfile(props) {
             clothing_size: clothing_sizeData,
             favCat: favCategoryArray,
             favDesigner: favDesignerArray,
-            gifting_preferencees: gifting_preferencees,
+            gifting_preferencees: gifting_preferencees
         }));
 
 
         if (result) {
             setCustForm(result.data);
-            setCustForm(prevState => ({
+            setCustomAttribute(prevState => ({
                 ...prevState,
-                country: country,
-                phone: phone
+                mp_sms_telephone: phone,
+                country: country
             }))
             //  getAttributes(result.data);
         }
@@ -282,10 +288,17 @@ function MyProfile(props) {
 
     const handleChange = (e) => {
         const { id, value } = e.target
-        setCustForm(prevState => ({
-            ...prevState,
-            [id]: value
-        }))
+        if (id === 'country' || id === 'mp_sms_telephone') {
+            setCustomAttribute(prevState => ({
+                ...prevState,
+                [id]: value
+            }))
+        } else {
+            setCustForm(prevState => ({
+                ...prevState,
+                [id]: value
+            }))
+        }
     }
 
     const handleGiftingChange = (e) => {
@@ -309,14 +322,23 @@ function MyProfile(props) {
         if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
             custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
         }
-        // setCustomerPrefer(prevState => ({
-        //     ...prevState,
-        //     country: custForm.country,
-        //     mp_sms_telephone: custForm.phone
-        // }));
+
+        custForm.custom_attributes = [
+            {
+                "attribute_code": "mp_sms_telephone",
+                "value": customAttribute.mp_sms_telephone
+            },
+            {
+                "attribute_code": "country",
+                "value": customAttribute.country
+            }
+        ]
         let result: any = await saveCustomerDetails({ customer: custForm });
-        // console.log(result.data)
+
         if (result && result.data && !result.data.message) {
+            let newObj = { ...localToken };
+            newObj.token_name = custForm.firstname + ' ' + custForm.lastname;
+            localStorage.setItem('redux-react-session/USER_DATA', JSON.stringify(newObj));
             setMyDetailsModel(false);
             setSaveCustDetailsLoader(false)
             getData()
@@ -791,7 +813,7 @@ function MyProfile(props) {
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
-                                        <div className="field-name">{custForm.phone}</div>
+                                        <div className="field-name">{customAttribute.mp_sms_telephone}</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-4">
@@ -801,7 +823,7 @@ function MyProfile(props) {
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="myaccount.country" /></label>
-                                        <div className="field-name">{custForm.country}</div>
+                                        <div className="field-name">{customAttribute.country}</div>
                                     </div>
                                 </div>
                             </div>
@@ -1233,8 +1255,8 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Phone number</label>
-                            <input type="number" className="form-control" placeholder="+48 123 456 789" id="phone"
-                                value={custForm.phone}
+                            <input type="number" className="form-control" placeholder="+48 123 456 789" id="mp_sms_telephone"
+                                value={customAttribute.mp_sms_telephone}
                                 onChange={handleChange}
                             />
                             <span className="error">{errors.errors["phone"]}</span>
@@ -1265,7 +1287,7 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Country<span className="maindatory">*</span></label>
-                            <select value={custForm.country} onChange={handleChange} id="country" className="form-select" aria-label="Default select example">
+                            <select value={customAttribute.country} onChange={handleChange} id="country" className="form-select" aria-label="Default select example">
                                 {countries && countries.map((opt, i) => {
                                     return (<option key={i} value={opt.name}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}

@@ -360,7 +360,7 @@ function Checkout(props) {
         // console.log(itemsVal.shippingData['firstname'])
         if (checked) {
             setIsBillingAddress(selectedValue);
-            
+
             const address: any = await getAddressById(addId);
             if (address.data) {
                 let addressData: any = {};
@@ -1091,7 +1091,7 @@ function Checkout(props) {
                                         <div className="accordion-body">
                                             <b><IntlMessages id="order.deliveryAddress" /></b>
 
-                                            {props.guestShipp && (
+                                            {(props.guestShipp && props.guestShipp.length > 0) && (
 
                                                 <div className="row" >
                                                     <div className="col-md-7">
@@ -1157,7 +1157,7 @@ function Checkout(props) {
                                                                 <div className="col-md-5">
                                                                     <div className="select-address">
                                                                         <div className="select-address-inner form-check">
-                                                                        
+
                                                                             <div className='greateAddress form-check'> <input
                                                                                 style={{ "display": isSetAddress === item.id ? "none" : "inline-block" }}
                                                                                 type="radio"

@@ -539,6 +539,17 @@ function ProductDetails(props) {
                                                     handleGiftMEssage();
                                                 }} > <IntlMessages id="product.sendAGift" /></button>
                                             )}
+                                            <div className="pdp-share">
+                                                <div className="share-toggle"><a href="#"><i className="fas fa-share-alt"></i></a></div>
+                                                <div className="share-options">
+                                                    <ul className="list-inline">
+                                                        <li className="list-inline-item"><a href="#"><i className="fab fa-facebook"></i></a></li>
+                                                        <li className="list-inline-item"><a href="#"><i className="fab fa-instagram"></i></a></li>
+                                                        <li className="list-inline-item"><a href="#"><i className="fab fa-twitter"></i></a></li>
+                                                        <li className="list-inline-item"><a href="#"><i className="fas fa-link"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                             <button type="button" className="share-btn" onClick={() => {
                                                 handleClick();
                                             }} ><img src={ShareIcon} alt=""

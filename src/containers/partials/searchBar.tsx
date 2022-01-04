@@ -47,25 +47,46 @@ function SearchBar(props) {
 
     }
 
-    const updateInput = async (e) => {
-        let lang = props.languages ? props.languages : language;
-        // console.log(e.target.value.length)
-        if (e.target.value.length >= 3) {
-            setSearchKeyword(e.target.value)
-            let results: any = await searchFields(e.target.value, 0, 3, lang, "created_at", "DESC");
-            if (results.data.items) {
-                SetIsShow(true);
-                SetNothingFound("")
-                SetAutoSuggestions(results.data.items);
 
-            } else {
-                SetIsShow(false);
-                SetNothingFound("Nothing Found!")
-            }
+    const searchResultsApiCall = async (value) => {
+        let lang = props.languages ? props.languages : language;
+        let results: any = await searchFields(value, 0, 3, lang, "created_at", "DESC");
+        if (results.data.items) {
+            SetIsShow(true);
+            SetNothingFound("")
+            SetAutoSuggestions(results.data.items);
+
+        } else {
+            SetIsShow(false);
+            SetNothingFound("Nothing Found!")
+        }
+    }
+    const updateInput = async (e) => {
+        if (e.target.value.length >= 3) {
+            setTimeout(() => {
+                searchResultsApiCall(e.target.value)
+            }, 3000)
         } else {
             SetIsShow(false);
             SetNothingFound("")
         }
+
+        // if (e.target.value.length >= 3) {
+        //     setSearchKeyword(e.target.value)
+        //     let results: any = await searchFields(e.target.value, 0, 3, lang, "created_at", "DESC");
+        //     if (results.data.items) {
+        //         SetIsShow(true);
+        //         SetNothingFound("")
+        //         SetAutoSuggestions(results.data.items);
+
+        //     } else {
+        //         SetIsShow(false);
+        //         SetNothingFound("Nothing Found!")
+        //     }
+        // } else {
+        //     SetIsShow(false);
+        //     SetNothingFound("")
+        // }
     }
 
     const searchwithCategory = async (e) => {
@@ -123,7 +144,7 @@ function SearchBar(props) {
                                                         if (attributes.attribute_code === 'image') {
                                                             imageD = attributes.value;
                                                         }
-                                                        if (attributes.attribute_code === 'short_description') {
+                                                        if (attributes.attribute_code === 'brand') {
                                                             description = attributes.value;
                                                         }
                                                     })
@@ -131,8 +152,9 @@ function SearchBar(props) {
                                                 <Link to={'/product-details/' + item.sku}><span className="minicartprodt_img">
                                                     <img src={imageD ? imageD : ""} alt={item.name} className="imge-fluid" /></span>
                                                     <span className="minicartprodt_name">
-                                                        <span className="minicart_pname">{item.name}</span>
-                                                        <span className="minicart_prodt_tag" dangerouslySetInnerHTML={{ __html: description }} />
+                                                        <h6 className="minicart_pname">{description}</h6>
+                                                        <span className="minicart_prodt_tag">{item.name}</span>
+                                                        {/* <span className="minicart_prodt_tag" dangerouslySetInnerHTML={{ __html: description }} /> */}
 
                                                     </span>
                                                 </Link>
