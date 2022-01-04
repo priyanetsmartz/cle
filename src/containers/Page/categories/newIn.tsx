@@ -198,9 +198,12 @@ function NewIn(props) {
                                 )
                             })}
                             <div className="col-md-3">
-                                <Link to={props.urls} className="view-all-btn" >
-                                    <IntlMessages id="category.viewAll" />
-                                </Link>
+								<div className="plp-viewall">
+									<Link to={props.urls} className="view-all-btn" >
+										<IntlMessages id="category.viewAll" />
+									</Link>
+									<i className="fas fa-chevron-right"></i>
+								</div>
                             </div>
 
                         </div>

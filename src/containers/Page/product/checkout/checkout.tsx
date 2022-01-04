@@ -33,7 +33,8 @@ function Checkout(props) {
         address: false,
         email: localToken && localToken.cust_id ? true : false,
         shipping: false,
-        billingAddress: false
+        billingAddress: false,
+        paymentmethod: false
     })
 
     //for customer address starts here------
@@ -201,6 +202,7 @@ function Checkout(props) {
             items: checkItems,
             shippingAddress: shipingAdd,
             shippingData: ship
+
         })
         let add = []
         let addresses = [...add, ship];
@@ -297,7 +299,9 @@ function Checkout(props) {
         addressData.addressInformation = addressInformation;
         // console.log(addressData)
         let saveDelivery: any = await setUserDeliveryAddress(addressData);
-
+        // console.log(saveDelivery)
+        props.showPaymentMethods(saveDelivery.data.payment_methods);
+        setLoaderOnCheckout(false)
         if (result.data.addresses.length === 1) {
             setCheckedData(prevState => ({
                 ...prevState,
@@ -935,10 +939,43 @@ function Checkout(props) {
             ...prevState,
             shipping: true
         }))
-        setSelectedShippingMethod(e.target.value)
+
+        let shippingAddress = {}
+        if (itemsVal.shippingData['country_id'] !== null) {
+            shippingAddress = {
+                customer_id: custId ? custId : 0,
+                firstname: itemsVal.shippingData['firstname'],
+                lastname: itemsVal.shippingData['lastname'],
+                telephone: itemsVal.shippingData['telephone'],
+                postcode: itemsVal.shippingData['postcode'],
+                city: itemsVal.shippingData['city'],
+                country_id: itemsVal.shippingData['country_id'],
+                region_id: itemsVal.shippingData['region_id'],
+                street: itemsVal.shippingData['street']
+            }
+        }
+        let addressData: any = {};
+        let addressInformation: any = {};
+        addressInformation.shippingAddress = shippingAddress;
+        addressInformation.shipping_method_code = e.target.value;
+        addressInformation.shipping_carrier_code = e.target.value;
+
+        addressData.addressInformation = addressInformation;
+
+        let saveDelivery: any = await setUserDeliveryAddress(addressData);
+        if (saveDelivery.data) {
+            setSelectedShippingMethod(e.target.value)
+            checkoutScreen()
+        } else {
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        }
+
     }
     const selectPayment = async (code) => {
-
+        setCheckedData(prevState => ({
+            ...prevState,
+            paymentmethod: true
+        }))
         setSelectedPaymentMethod(code)
     }
 
@@ -1112,7 +1149,9 @@ function Checkout(props) {
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutTwo" id="accordion-buttonacc" aria-expanded="false" aria-controls="CheckoutTwo">
                                             <IntlMessages id="checkoutemail_address" />
-                                            {checkedData.email && (<span className='confirmedPoint' ><i className="fa fa-check" aria-hidden="true"></i></span>)}
+
+                                            {checkedData.email && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
+
                                         </button>
                                     </h2>
                                     <div id="CheckoutTwo" className="accordion-collapse collapse" aria-labelledby="CheckoutHTwo"
@@ -1140,8 +1179,10 @@ function Checkout(props) {
                                     <h2 className="accordion-header" onClick={checkEmailData} id="CheckoutHThree">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutThree" aria-expanded="false" aria-controls="CheckoutThree">
-                                            <IntlMessages id="deliveryAddress" />
-                                            {checkedData.address && (<span className='confirmedPoint'><i className="fa fa-check" aria-hidden="true"></i></span>)}
+
+                                            <IntlMessages id="deliveryAddress" /> {checkedData.address && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
+
+
                                         </button>
                                     </h2>
                                     <div id="CheckoutThree" className="accordion-collapse collapse" aria-labelledby="CheckoutHThree"
@@ -1353,7 +1394,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfour">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfour" aria-expanded="false" aria-controls="Checkoutfour" onClick={getshippingMethods}>
-                                            <IntlMessages id="deliveryOption" />   {checkedData.shipping && (<span className='confirmedPoint'><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                            <IntlMessages id="deliveryOption" />   {checkedData.shipping && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="Checkoutfour" className="accordion-collapse collapse" aria-labelledby="CheckoutHfour"
@@ -1395,7 +1436,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfive">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfive" aria-expanded="false" aria-controls="Checkoutfive">
-                                            <IntlMessages id="payment" />{checkedData.billingAddress && (<span className='confirmedPoint'><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                            <IntlMessages id="payment" />{checkedData.billingAddress ||checkedData.paymentmethod   && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"
@@ -1658,11 +1699,11 @@ function Checkout(props) {
                                     )}
 
                                     <div className="product-total-price">
-                                        {loaderOnCheckout && (
+                                        {/* {loaderOnCheckout && (
                                             <div className="checkout-loading" >
                                                 <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
                                             </div>
-                                        )}
+                                        )} */}
                                         <p> <IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['sub_total'] ? formatprice(itemsVal.checkData['sub_total']) : 0} </span></p>
                                         <p> <IntlMessages id="order.discount" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['discount'] ? formatprice(itemsVal.checkData['discount']) : 0} </span></p>
                                         <p> <IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency}{itemsVal.checkData['shipping_charges'] ? formatprice(itemsVal.checkData['shipping_charges']) : 0}</span></p>
