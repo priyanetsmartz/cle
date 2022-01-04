@@ -39,6 +39,7 @@ function Products(props) {
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
     const [page, setCurrent] = useState(1);
+    const [filterArray, setFilterArray] = useState([]);
     const [token, setToken] = useState('');
     const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
     const [sort, setSort] = useState('');
@@ -319,6 +320,7 @@ function Products(props) {
         setCurrentFilter(e.target.value)
         let attribute_code = e.target.getAttribute("data-remove");
         let value = attribute_code === 'price' ? e.target.getAttribute("data-access") : e.target.value;
+        setFilterArray([...filterArray, e.target.getAttribute("data-access")]);
         let catt: any;
         if (attribute_code === 'category_id') {
             catt = e.target.value ? e.target.value : catID;
@@ -429,6 +431,12 @@ function Products(props) {
                         {props.items.length > 0 ?
                             <div className="col-sm-9">
                                 <div className="search_keyword"><h1>{nameHeader ? capitalize(nameHeader) : "All"}</h1></div>
+                                <div className='filter attay'> {filterArray.length > 0 && filterArray.map(item => {
+                                    return (<p>{item} </p>)
+                                })}</div>
+                                {/* <li key={i} onMouseEnter={() => } onMouseLeave={() => setIsShown(0)} ><Link to="#"  >
+                                        {isShown == parseInt(cat.id) ? <span className='textname' onClick={() => removeSelectedCategories(cat)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textname' > {cat.name}</span>
+                                        }</Link></li> */}
                                 <div className="resltspage_sec">
                                     <div className="paginatn_result">
                                         <span><IntlMessages id="product.results" /></span>
@@ -533,7 +541,7 @@ function Products(props) {
                                                         className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
                                                         <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
                                                     </li>
-                                                    <li className='pageofpage'>Page {page} of {pagination}</li>
+                                                    <li className='pageofpage'>Page <span className='active'>{page}</span> of {pagination}</li>
                                                     <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
                                                         <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
                                                             to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
@@ -606,7 +614,7 @@ function Products(props) {
                     </div>
                 </div>
             </section> */}
-            <Description catId={153} />
+            {/* <Description catId={153} /> */}
 
         </main>
     )
