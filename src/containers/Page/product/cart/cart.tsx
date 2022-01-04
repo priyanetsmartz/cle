@@ -376,7 +376,7 @@ function CartItemPage(props) {
                                                                     <div className="qty-size">
                                                                         <div className="row mb-3">
                                                                             <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
-                                                                            <div className="col-sm-5 cartschanger">
+                                                                            <div className="col-sm-3 cartschanger">
                                                                                 {/* {console.log(item.qty)} */}
                                                                                 <select defaultValue={value === item.item_id ? qty : item.qty} className="form-select" onChange={(e) => { handleChangeQty(e, item) }}>
                                                                                     {Array.from(Array(item.qty + 10), (e, i) => {
@@ -427,7 +427,8 @@ function CartItemPage(props) {
                             </div>
                         </div>
                         <div className="col-md-4" id="cartsidebar">
-                            <div className="order-detail-sec">
+                            <div className="sticky-cart">
+							<div className="order-detail-sec">
                                 <h5><IntlMessages id="orderDetail" /> </h5>
 
                                 <div className="cart-total-price">
@@ -448,6 +449,7 @@ function CartItemPage(props) {
                                 <p><IntlMessages id="questionCart" /></p>
                                 <Link to="/contact-us"><IntlMessages id="menu_contactnew" /> </Link>
                             </div>
+							</div>
                         </div>
                     </div>
                 </div>

@@ -959,7 +959,12 @@ function Checkout(props) {
             <section className="checkout-main">
 
                 <div className="container">
-                    <Link to="/my-cart" ><IntlMessages id="checkout-back-link" /></Link>
+				
+					<div className="back-block">
+                    <i className="fas fa-chevron-left back-icon"></i>
+					<Link className="back-to-shop" to="/my-cart" ><IntlMessages id="checkout-back-link" /></Link>
+					</div>
+					
                     {/* {Object.keys(orderError).forEach((key) => {
                      //   console.log(orderError[key])
                         return (
@@ -1567,7 +1572,8 @@ function Checkout(props) {
                         </div>
                         {/* <CheckoutSidebar sidebarData={itemsVal} /> */}
                         <div className="col-md-4" id="checkoutsidebar">
-                            <div className="order-detail-sec">
+                            <div className="sticky-cart">
+							<div className="order-detail-checkout">
                                 <h5>{itemsVal.checkData['total_items'] ? itemsVal.checkData['total_items'] : 0} <IntlMessages id="item" /></h5>
                                 {itemsVal.items['items'] && itemsVal.items['items'].length > 0 && (
                                     <ul className="Ordered-pro-list">
@@ -1608,7 +1614,9 @@ function Checkout(props) {
                                     <hr />
                                     <div className="final-price"><IntlMessages id="total" /> <span>{siteConfig.currency}{formatprice(itemsVal.checkData['total'])} </span></div>
                                 </div>
+								
                             </div>
+							</div>
                         </div>
                     </div>
                 </div>

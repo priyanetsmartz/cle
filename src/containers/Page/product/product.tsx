@@ -366,7 +366,7 @@ function Products(props) {
 
                         <div className="col-sm-3">
                             {filters && filters.length > 0 && (
-                                <div>
+                                <div className="sticky-fliter">
                                     <Link to="#" className="clear-filter" onClick={clearfilter}><IntlMessages id="clear-all" /></Link>
                                     <div className="pro_categry_sidebar">
                                         <div className="width-100">
