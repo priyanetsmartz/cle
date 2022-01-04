@@ -169,7 +169,9 @@ function RegistrationForm(props) {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
             <Modal.Body className="arabic-rtl-direction"><h2 className="sign-head"><IntlMessages id="signup.sign_up" /></h2>
                 <p><IntlMessages id="signup.be_the_first_one" /></p>
+
                 <div className="form-require">
+
                     <p>* Indicates mandatory fields</p>
                 </div>
                 <div className="row g-3">

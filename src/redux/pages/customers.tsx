@@ -99,11 +99,11 @@ export function removeItemFromWishList(custId, wishlist_item_id) {
 }
 
 export async function wishListSearchSort(language, pageSize, sortOrder, sortBy, searchName) {
-    const storeId = language === 'english' ? 'en' : 'ar';
+    const storeId = language === 'english' ? '3' : '2';
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const localToken = user.cust_id;
 
-    return adminApi.request(`rest/${storeId}/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&sortBy=${sortOrder}&soryByValue=${sortBy}&name=${searchName}`, "", "GET", "");
+    return adminApi.request(`rest/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&sortBy=${sortOrder}&soryByValue=${sortBy}&name=${searchName}&storeId=${storeId}`, "", "GET", "");
 }
 
 //apis for the home page
