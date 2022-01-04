@@ -745,7 +745,8 @@ p.promotion_alert {
 
 .product_description .btn-primary {
     border-radius: 0;
-    font-size: 12px;
+    font-size: 11px;
+	font-weight:500;
     padding: 10px 20px;
     align-items: center;
     justify-content: center;
@@ -856,6 +857,7 @@ p.promotion_alert {
     width: 375px;
     max-width: 100%;
     margin-left: 20%;
+	clear: both;
 }
 
 .accodian_descrpt .accordion-header {
@@ -1935,7 +1937,7 @@ span.hidden-pass i {
     font-size: 14px;
     color: #000;
     background-color: transparent;
-    padding: 20px;
+    padding: 20px 10px;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
@@ -1990,6 +1992,13 @@ span.maindatory {
     border-width: 0 !important;
 }
 
+.modal-header .btn-close,
+.modal-body .btn-close {
+    background-image: url(./images/times-solid.svg);
+    opacity: 1;
+    background-size: 15px 15px;
+}
+
 .accordion-button:not(.collapsed) {
     box-shadow: none !important;
 }
@@ -2004,6 +2013,7 @@ span.maindatory {
 
 .CLE_pf_details .modal-header {
     border-bottom: 0px solid #dee2e6;
+	padding: 10px 10px;
 }
 
 
@@ -2484,7 +2494,15 @@ span.maindatory {
 
 .page-item .page-link{
 	border:none;
-	padding: 2px 20px;
+	padding: 2px 15px;
+}
+
+.pagination .pageofpage{
+	padding: 0 10px;
+}
+
+.pagination .pageofpage .active{
+	color:#2e2baa;
 }
 
 .page-item .page-link:hover,
@@ -3444,7 +3462,7 @@ left: auto; */
     width: 100%;
     float: left;
     text-align: center;
-    padding: 28px 125px;
+    padding: 28px 113px;
 }
 
 .marketing_secs h2 {
@@ -5946,7 +5964,7 @@ h4.arrow-change:after {
 
 .customer-d-wrap p,
 .customer-d-wrap a {
-    font-size: 16px;
+    font-size: 15px;
     font-family: 'Lato', sans-serif;
     font-weight: 400;
     color: #212529;
@@ -7208,6 +7226,7 @@ p.sliderupper {
 .pdp-share {
     display: flex;
     margin: 10px 0;
+	clear: left;
 }
 
 .share-toggle {

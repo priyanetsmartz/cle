@@ -200,7 +200,7 @@ function Personal(props) {
                                                     <h3><IntlMessages id="home.noWorries" /></h3>
                                                 </div>
                                             </div>
-                                            <div className="alert_cross" onClick={closePopup}><Link to='#'>X </Link></div>
+                                            <div className="alert_cross" onClick={closePopup}><Link to='#'><i className="fas fa-times"></i> </Link></div>
                                         </div>}
 
                                         {isSurvey && (
@@ -208,7 +208,7 @@ function Personal(props) {
                                                 <div className="col-md-8 offset-md-2 mt-5 help-us-content py-4">
                                                     <h3><IntlMessages id="helpus.thankyou" /></h3>
                                                 </div>
-                                                <div className="alert_cross" onClick={closePopup}><Link to='#'>X </Link></div>
+                                                <div className="alert_cross" onClick={closePopup}><Link to='#'><i className="fas fa-times"></i></Link></div>
                                             </>
                                         )}
                                     </div>
