@@ -2368,9 +2368,13 @@ span.maindatory {
 }
 
 .forgot-pswd-new {
+    text-decoration: underline;
+    color: #707070;
+    font-size: 14px;	
+}
 
-    text-decoration: none;
-    color: #000;
+.forgot-pswd-new:hover{
+	color: #707070;
 }
 
 /* --- productlisting pages starts---  */
@@ -2453,8 +2457,14 @@ span.maindatory {
 }
 
 .pro_categry_sidebar {
-    width: 100%;
-    float: left;
+    position: fixed;
+    width: 275px;
+	background-color:#fff;
+}
+
+.textname i {
+    font-size: 20px;
+    color: #2E2BAA;
 }
 
 .paginatn_result ul {
@@ -2466,6 +2476,22 @@ span.maindatory {
     width: 100%;
     float: left;
     padding: 10px 0;
+}
+
+.pagination nav{
+	margin: 0;
+}
+
+.page-item .page-link{
+	border:none;
+	padding: 2px 20px;
+}
+
+.page-item .page-link:hover,
+.page-item .page-link:focus{
+	background: none;
+	box-shadow:none;
+	outline:none;
 }
 
 .paginatn_result ul li {
@@ -2788,7 +2814,7 @@ span.maindatory {
 }
 
 .resltspage_sec.footer-pagints {
-    margin: 40px 0;
+    margin: 10px 0;
 }
 
 .resltspage_sec.footer-pagints .paginatn_result {
@@ -4588,22 +4614,47 @@ left: auto; */
     text-decoration: none;
 }
 
-.view-all-btn {
-    display: block;
-    background: #2e2baa;
+.plp-viewall {
+   background: #2e2baa;
     height: 90%;
     position: relative;
-    text-decoration: none;
-    text-align: center;
-    font-size: 22px;
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    color: #fff;
+    justify-content: space-between;
+	transition: all .5s ease;
+}
+
+.plp-viewall a{
+	font-size: 22px;
     line-height: 24px;
     font-family: 'Monument Extended';
     text-decoration: none;
     font-weight: 500;
+    color: #fff;
+    transition: all .5s ease;
+    height: 100%;
+    width: 100%;
     display: flex;
     align-items: flex-end;
-    padding: 30px;
-    color: #fff;
+	margin-bottom: 10px;
+}
+
+.plp-viewall i{
+	display:none;
+	font-size:28px;	
+	position: absolute;
+    right: 10%;
+}
+
+.plp-viewall:hover i{
+	display:block;
+	transition: all .5s ease;
+}
+
+.plp-viewall:hover a{
+	margin-bottom: 0;
 }
 
 /* .view-all-btn a {
@@ -4809,6 +4860,7 @@ left: auto; */
     line-height: 28px;
     margin-bottom: 0;
     color: #fff;
+	margin-bottom: 20px;
 }
 
 /* .become-part-inner p:nth-child(3){
@@ -4830,7 +4882,7 @@ left: auto; */
     color: #fff;
     text-decoration: none;
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .become-partner:hover .become-part-inner a {
@@ -4842,6 +4894,14 @@ left: auto; */
     font-family: 'Monument Extended';
     font-size: 11px;
     font-weight: 500;
+    background-color: #2e2baa!important;
+    color: #fff;
+    border: 1px solid #2e2baa!important;
+}
+
+.newsletter-signup button.btn:hover{
+	background-color: transparent!important;
+	color: #2e2baa;
 }
 
 /* checkout page */
@@ -6513,6 +6573,7 @@ height: auto;
     width: 15px;
     height: 15px;
     display: inline-block;
+	opacity:1!important;
 }
 
 .product-listing .slick-next:before {
@@ -6524,6 +6585,7 @@ height: auto;
     width: 15px;
     height: 15px;
     display: inline-block;
+	opacity:1!important;
 }
 
 .product-listing .slick-slide {
@@ -6547,7 +6609,7 @@ height: auto;
 .share-btn {
     background: #fff;
     color: #000;
-    padding: 4px 10px 10px;
+    padding: 4px 0;
 }
 
 .accodian_descrpt .accordion-item {
@@ -7176,7 +7238,7 @@ p.sliderupper {
 }
 
 .share-options ul li {
-    margin: 0 4px;
+   margin: 0 7px!important;
 }
 
 .share-options ul li i {
