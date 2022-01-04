@@ -3456,6 +3456,21 @@ left: auto; */
     text-decoration: none;
     color: #2E2BAA;
     font-family: 'Lato';
+	transition: all .3s ease;
+}
+
+.persnalize-select .alert_cross a i{
+	-webkit-transition: 0.6s ease-out;
+    -moz-transition:  0.6s ease-out;
+    transition:  0.6s ease-out;
+	color: #2E2BAA;
+}
+
+.persnalize-select .alert_cross a:hover i,
+.alert_cross a:hover i{
+   -webkit-transform: rotateZ(180deg);
+      -moz-transform: rotateZ(180deg);
+      transform: rotateZ(180deg);
 }
 
 .marketing_secs {
