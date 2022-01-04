@@ -558,5 +558,6 @@
   "deliveryDateoption2":"Set custom date",
   "great":"Great!",
   "more":"more",
-  "Colour":"Colour"
+  "Colour":"Colour",
+  "order.adddeliveryaddress":"Add delivery address"
 }

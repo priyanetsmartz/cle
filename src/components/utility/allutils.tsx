@@ -4,13 +4,12 @@ import { siteConfig } from "../../settings";
 import Login from '../../redux/auth/Login';
 import { sessionService } from 'redux-react-session';
 import { getCookie } from "../../helpers/session";
+import { COUNTRIES } from "../../config/counties";
 const loginApi = new Login();
 
 
 
 export function formatprice(price) {
-  //return parseFloat(price).toFixed(2)
-
   return price ? price.toLocaleString(undefined, { maximumFractionDigits: 2 }) : price
 }
 export function capitalize(str) {
@@ -20,7 +19,8 @@ export function capitalize(str) {
 }
 
 export async function getSession() {
-  return  await sessionService.loadUser().then(user => { return user }).catch(err => { return err 
+  return await sessionService.loadUser().then(user => { return user }).catch(err => {
+    return err
   })
 }
 export function createBreadCrums(key: string) {
@@ -123,4 +123,20 @@ export async function handleCartFxn(id: number, sku: string) {
   }
 
   return cartSucces.data;
+}
+
+export function getCountryName(countryId) {
+  let countryList: any = COUNTRIES.filter(obj => obj.id === countryId);
+  // console.log(countryList[0].full_name_locale)
+  return countryList[0].full_name_locale;
+}
+
+export function getRegionName(countryId = "AL", regionId) {
+  let countryList: any = COUNTRIES.filter(obj => obj.id === countryId);
+
+  let regionList: any = countryList[0].available_regions.filter(obj2 => {
+    return parseInt(obj2.id) === parseInt(regionId)
+  });
+
+ return regionList[0].name
 }

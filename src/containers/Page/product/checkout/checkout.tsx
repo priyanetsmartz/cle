@@ -12,7 +12,7 @@ import cartAction from "../../../../redux/cart/productAction";
 import orderprocessing from "../../../../image/orderprocessing.gif";
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora, getPaymentStatus, addPaymentDetailstoOrder } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, getCountriesList, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
-import { formatprice } from '../../../../components/utility/allutils';
+import { formatprice, getCountryName, getRegionName } from '../../../../components/utility/allutils';
 
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
 
@@ -165,7 +165,7 @@ function Checkout(props) {
                 cartTotal = await getGuestCartTotal();
             }
         }
-        console.log(cartItems)
+        //  console.log(cartItems)
         let checkoutData = {}, checkItems = {}, ship = {};
         checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
         checkoutData['sub_total'] = cartTotal && cartTotal.data ? cartTotal.data.base_subtotal : 0;
@@ -193,13 +193,19 @@ function Checkout(props) {
         ship['region_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.region_id : '';
 
         ship['street'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.street : '';
+
+        ship['region_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.region_id : '';
+
         props.getCheckoutSideBar({
             checkData: checkoutData,
             items: checkItems,
             shippingAddress: shipingAdd,
             shippingData: ship
         })
-
+        let add = []
+        let addresses = [...add, ship];
+        let addobject = { addresses: addresses }
+        // let addresses1 = { addresses };
         SetItems(prevState => ({
             ...prevState,
             checkData: checkoutData,
@@ -207,8 +213,14 @@ function Checkout(props) {
             shippingAddress: shipingAdd,
             shippingData: ship
         }))
+
+        if (!customer_id) {
+            SetItems(prevState => ({
+                ...prevState,
+                address: addobject
+            }))
+        }
         setLoaderOnCheckout(false)
-        //  console.log(checkoutData)
     }
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -252,6 +264,46 @@ function Checkout(props) {
         setCustForm(result.data);
         // console.log(result.data.addresses)
         addresses['addresses'] = result.data ? result.data.addresses : '';
+        let address = result.data.addresses[0];
+        let addressData: any = {};
+        let addressInformation: any = {};
+
+        let billingAddress = {
+            customer_id: localToken.cust_id ? localToken.cust_id : 0,
+            firstname: address.firstname,
+            lastname: address.lastname,
+            telephone: address.telephone,
+            postcode: address.postcode,
+            city: address.city,
+            country_id: address.country_id,
+            region_id: address.region_id,
+            street: address.street
+        };
+        let shippingAddress = {}
+        shippingAddress = {
+            customer_id: localToken.cust_id ? localToken.cust_id : 0,
+            firstname: address.firstname,
+            lastname: address.lastname,
+            telephone: address.telephone,
+            postcode: address.postcode,
+            city: address.city,
+            country_id: address.country_id,
+            region_id: address.region_id,
+            street: address.street
+        }
+
+        addressInformation.shippingAddress = shippingAddress;
+        addressInformation.billingAddress = billingAddress;
+        addressData.addressInformation = addressInformation;
+        // console.log(addressData)
+        let saveDelivery: any = await setUserDeliveryAddress(addressData);
+
+        if (result.data.addresses.length === 1) {
+            setCheckedData(prevState => ({
+                ...prevState,
+                address: true
+            }))
+        }
         SetItems(prevState => ({
             ...prevState,
             address: addresses
@@ -959,12 +1011,12 @@ function Checkout(props) {
             <section className="checkout-main">
 
                 <div className="container">
-				
-					<div className="back-block">
-                    <i className="fas fa-chevron-left back-icon"></i>
-					<Link className="back-to-shop" to="/my-cart" ><IntlMessages id="checkout-back-link" /></Link>
-					</div>
-					
+
+                    <div className="back-block">
+                        <i className="fas fa-chevron-left back-icon"></i>
+                        <Link className="back-to-shop" to="/my-cart" ><IntlMessages id="checkout-back-link" /></Link>
+                    </div>
+
                     {/* {Object.keys(orderError).forEach((key) => {
                      //   console.log(orderError[key])
                         return (
@@ -1088,7 +1140,8 @@ function Checkout(props) {
                                     <h2 className="accordion-header" onClick={checkEmailData} id="CheckoutHThree">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#CheckoutThree" aria-expanded="false" aria-controls="CheckoutThree">
-                                            <IntlMessages id="deliveryAddress" /> {checkedData.address && (<span className='confirmedPoint'><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                            <IntlMessages id="deliveryAddress" />
+                                            {checkedData.address && (<span className='confirmedPoint'><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="CheckoutThree" className="accordion-collapse collapse" aria-labelledby="CheckoutHThree"
@@ -1096,7 +1149,7 @@ function Checkout(props) {
                                         <div className="accordion-body">
                                             <b><IntlMessages id="order.deliveryAddress" /></b>
 
-                                            {(props.guestShipp && props.guestShipp.length > 0) && (
+                                            {/* {props.guestShipp && (
 
                                                 <div className="row" >
                                                     <div className="col-md-7">
@@ -1108,15 +1161,17 @@ function Checkout(props) {
                                                                 }) : ""}
                                                                 <p>{props.guestShipp.postcode}</p>
                                                                 <p>{props.guestShipp.city}</p>
-                                                                <p>{props.guestShipp.country_id}</p>
+                                                                <p>{props.guestShipp.country_id ? getCountryName(props.guestShipp.country_id) : ""}</p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                             )}
+                                            {console.log(itemsVal)} */}
                                             {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
                                                 <>
+
                                                     {itemsVal.address['addresses'].map((item, i) => {
                                                         return (
                                                             <div className="row" key={i}>
@@ -1125,12 +1180,13 @@ function Checkout(props) {
 
                                                                         <div>
                                                                             <p> {item.firstname} {item.lastname}</p>
-                                                                            {item.street.map((street, j) => {
+                                                                            {item && item.street && item.street.length > 0 && item.street.map((street, j) => {
                                                                                 <p key={j}>{street}</p>
                                                                             })}
                                                                             <p>{item.postcode}</p>
                                                                             <p>{item.city}</p>
-                                                                            <p>{item.country_id}</p>
+                                                                            {item.region_id ? <p>{getRegionName(item.country_id, item.region_id)}</p> : ""}
+                                                                            {item.country_id ? <p>{getCountryName(item.country_id)}</p> : ""}
                                                                         </div>
                                                                         {item.id === parseInt(custForm.default_shipping) ?
                                                                             <p className="text-muted">
@@ -1163,7 +1219,7 @@ function Checkout(props) {
                                                                     <div className="select-address">
                                                                         <div className="select-address-inner form-check">
 
-                                                                            <div className='greateAddress form-check'> <input
+                                                                            {itemsVal.address['addresses'].length > 1 ? <div className='greateAddress form-check'> <input
                                                                                 style={{ "display": isSetAddress === item.id ? "none" : "inline-block" }}
                                                                                 type="radio"
                                                                                 name={`addressdelivery`}
@@ -1174,6 +1230,8 @@ function Checkout(props) {
                                                                             />
                                                                                 <label htmlFor="rad1"> <IntlMessages id="great" /></label>
                                                                             </div>
+                                                                                : ""}
+
                                                                             <Link to="#" style={{ "display": isSetAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
                                                                             </Link>
 
@@ -1192,6 +1250,8 @@ function Checkout(props) {
                                             {addNewAddressModal && (
                                                 <div className='addressInlineForm col-md-6'>
                                                     <div className="CLE_pf_details">
+                                                        <h1><IntlMessages id="order.deliveryAddress" /></h1>
+                                                        <h5><IntlMessages id="order.adddeliveryaddress" /></h5>
                                                         <div className="">
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
@@ -1365,7 +1425,7 @@ function Checkout(props) {
 
                                                     <b><IntlMessages id="checkout.billingAdd" /></b>
                                                     {itemsVal.address['addresses'].map((item, i) => {
-                                                        // console.log(item.firstname)
+
                                                         return (
                                                             <div className="row" key={i}>
                                                                 <div className="col-md-7">
@@ -1373,12 +1433,12 @@ function Checkout(props) {
 
                                                                         <div>
                                                                             <p> {item.firstname} {item.lastname}</p>
-                                                                            {item.street.map((street, j) => {
+                                                                            {item.street.length > 0 && item.street.map((street, j) => {
                                                                                 <p key={j}>{street}</p>
                                                                             })}
                                                                             <p>{item.postcode}</p>
                                                                             <p>{item.city}</p>
-                                                                            <p>{item.country_id}</p>
+                                                                            {item.country_id ? <p>{getCountryName(item.country_id)}</p> : ""}
                                                                         </div>
                                                                         {item.id === parseInt(custForm.default_billing) ?
                                                                             <p className="text-muted">
@@ -1387,8 +1447,8 @@ function Checkout(props) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-md-5">
-                                                                    <div className="select-address-inner form-check">
 
+                                                                    {itemsVal.address['addresses'].length > 1 ? <div className="select-address-inner form-check">
                                                                         <input
                                                                             type="radio"
                                                                             style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
@@ -1396,7 +1456,6 @@ function Checkout(props) {
                                                                             defaultValue={item.id}
                                                                             onChange={handleBillingChange}
                                                                             className="form-check-input"
-                                                                            // checked={item.id === isBillingAddressConfirm ? true : false}
                                                                             checked={item.id === isBillingAddressConfirm ? true : false}
                                                                         />
 
@@ -1405,6 +1464,7 @@ function Checkout(props) {
                                                                         </Link>
 
                                                                     </div>
+                                                                        : ""}
                                                                 </div>
                                                             </div>
                                                         )
@@ -1423,7 +1483,8 @@ function Checkout(props) {
                                             {addBillingAddress && (
                                                 <div className='addressInlineForm col-md-6'>
                                                     <div className="CLE_pf_details">
-                                                        <h1><IntlMessages id="myaccount.myBillingAddress" /></h1>
+                                                        <h1><IntlMessages id="payment" /></h1>
+                                                        <h5><IntlMessages id="myaccount.myBillingAddress" /></h5>
                                                         <div className="">
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
@@ -1562,169 +1623,59 @@ function Checkout(props) {
                                     <button className="btn btn-secondary" disabled={(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) ? true : false} onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> </button>
                                     : <div className="spinner"> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>}
 
-                                {/* {(itemsVal.shippingData['firstname'] !== null && itemsVal.shippingData['postcode'] !== null) && (<button className="btn btn-secondary" onClick={placeOrder} type="button" style={{ "display": !isShow ? "inline-block" : "none" }}><IntlMessages id="place-Order" /> </button>)}
-
-                                {(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) && (<button className="btn btn-secondary" disabled={true} onClick={placeOrder} type="button" style={{ "display": !isShow ? "inline-block" : "none" }}><IntlMessages id="place-Order" /> </button>)}
-
-                                <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div> */}
 
                             </div>
                         </div>
                         {/* <CheckoutSidebar sidebarData={itemsVal} /> */}
                         <div className="col-md-4" id="checkoutsidebar">
                             <div className="sticky-cart">
-							<div className="order-detail-checkout">
-                                <h5>{itemsVal.checkData['total_items'] ? itemsVal.checkData['total_items'] : 0} <IntlMessages id="item" /></h5>
-                                {itemsVal.items['items'] && itemsVal.items['items'].length > 0 && (
-                                    <ul className="Ordered-pro-list">
-                                        {itemsVal.items['items'].map(item => {
-                                            return (<li key={item.item_id} >
-                                                <div className="row">
-                                                    <div className="col-md-3">
-                                                        <div className="product-image">
-                                                            <Link to={'/product-details/' + item.sku}> <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} /></Link>
+                                <div className="order-detail-checkout">
+                                    <h5>{itemsVal.checkData['total_items'] ? itemsVal.checkData['total_items'] : 0} <IntlMessages id="item" /></h5>
+                                    {itemsVal.items['items'] && itemsVal.items['items'].length > 0 && (
+                                        <ul className="Ordered-pro-list">
+                                            {itemsVal.items['items'].map(item => {
+                                                return (<li key={item.item_id} >
+                                                    <div className="row">
+                                                        <div className="col-md-3">
+                                                            <div className="product-image">
+                                                                <Link to={'/product-details/' + item.sku}> <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} /></Link>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-md-9">
+                                                            <div className="pro-name-tag">
+                                                                {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand}>{item.extension_attributes.brand}</Link></div>
+                                                                )}
+                                                                <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                                                <p className="check-tag"><IntlMessages id="cart.qty" /> {item.qty}</p>
+                                                                {/* <br />One Size */}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-md-9">
-                                                        <div className="pro-name-tag">
-                                                            {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand}>{item.extension_attributes.brand}</Link></div>
-                                                            )}
-                                                            <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                            <p className="check-tag"><IntlMessages id="cart.qty" /> {item.qty}</p>
-                                                            {/* <br />One Size */}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>)
-                                        })}
+                                                </li>)
+                                            })}
 
-                                    </ul>
-                                )}
-
-                                <div className="product-total-price">
-                                    {loaderOnCheckout && (
-                                        <div className="checkout-loading" >
-                                            <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
-                                        </div>
+                                        </ul>
                                     )}
-                                    <p> <IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['sub_total'] ? formatprice(itemsVal.checkData['sub_total']) : 0} </span></p>
-                                    <p> <IntlMessages id="order.discount" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['discount'] ? formatprice(itemsVal.checkData['discount']) : 0} </span></p>
-                                    <p> <IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency}{itemsVal.checkData['shipping_charges'] ? formatprice(itemsVal.checkData['shipping_charges']) : 0}</span></p>
-                                    <p> <IntlMessages id="tax" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['tax'] ? formatprice(itemsVal.checkData['tax']) : 0} </span></p>
-                                    <hr />
-                                    <div className="final-price"><IntlMessages id="total" /> <span>{siteConfig.currency}{formatprice(itemsVal.checkData['total'])} </span></div>
+
+                                    <div className="product-total-price">
+                                        {loaderOnCheckout && (
+                                            <div className="checkout-loading" >
+                                                <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                            </div>
+                                        )}
+                                        <p> <IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['sub_total'] ? formatprice(itemsVal.checkData['sub_total']) : 0} </span></p>
+                                        <p> <IntlMessages id="order.discount" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['discount'] ? formatprice(itemsVal.checkData['discount']) : 0} </span></p>
+                                        <p> <IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency}{itemsVal.checkData['shipping_charges'] ? formatprice(itemsVal.checkData['shipping_charges']) : 0}</span></p>
+                                        <p> <IntlMessages id="tax" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['tax'] ? formatprice(itemsVal.checkData['tax']) : 0} </span></p>
+                                        <hr />
+                                        <div className="final-price"><IntlMessages id="total" /> <span>{siteConfig.currency}{formatprice(itemsVal.checkData['total'])} </span></div>
+                                    </div>
+
                                 </div>
-								
                             </div>
-							</div>
                         </div>
                     </div>
                 </div>
-
-                {/* change delivery address modalc */}
-                {/* <Modal show={addNewAddressModal}>
-                    <div className="CLE_pf_details">
-                        <Modal.Header>
-                            <h1><IntlMessages id="myaccount.myAddress" /></h1>
-                            <Link className="cross_icn" to="#" onClick={toggleAddressModal}> <i className="fas fa-times"></i></Link>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div className="">
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
-                                    <input type="text" className="form-control" placeholder="Ann"
-                                        id="firstname"
-                                        value={custAddForm.firstname}
-                                        onChange={handleAddChange} />
-                                    <span className="error">{errors.errors["firstname"]}</span>
-
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
-                                    <input type="text" className="form-control" id="lastname"
-                                        placeholder="Surname"
-                                        value={custAddForm.lastname}
-                                        onChange={handleAddChange} />
-                                    <span className="error">{errors.errors["lastname"]}</span>
-
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
-                                    <input type="text" className="form-control" id="telephone"
-                                        placeholder="Phone"
-                                        value={custAddForm.telephone}
-                                        onChange={handleAddChange} />
-                                    <span className="error">{errors.errors["telephone"]}</span>
-
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
-                                    <input type="text" className="form-control" id="street"
-                                        placeholder="Address"
-                                        value={custAddForm.street}
-                                        onChange={handleAddChange} />
-                                    <span className="error">{errors.errors["street"]}</span>
-
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.city" /></label>
-                                    <input type="text" className="form-control" id="city"
-                                        placeholder="City"
-                                        value={custAddForm.city}
-                                        onChange={handleAddChange} />
-                                    <span className="error">{errors.errors["city"]}</span>
-
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.postCode" /></label>
-                                    <input type="text" className="form-control" id="postcode"
-                                        placeholder="Post Code"
-                                        value={custAddForm.postcode}
-                                        onChange={handleAddChange} />
-                                    <span className="error">{errors.errors["postcode"]}</span>
-
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-                                    <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
-                                        {countries && countries.map(opt => {
-                                            return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                        })}
-                                    </select>
-                                    <span className="error">{errors.errors["country_id"]}</span>
-                                </div>
-                                {changeCountryLoader && (
-                                    <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
-                                )}
-                                {regions.length > 0 && <div className="width-100 mb-3 form-field">
-                                    <label className="form-label">
-                                        <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
-                                    <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-                                        {regions && regions.map(opt => {
-                                            return (<option key={opt.id} value={opt.id} >
-                                                {opt.name}</option>);
-                                        })}
-                                    </select>
-                                    <span className="error">{errors.errors["region_id"]}</span>
-                                </div>}
-                                <Modal.Footer>
-                                    <div className="width-100 mb-3 form-field">
-                                        <div className="Frgt_paswd">
-                                            <div className="confirm-btn">
-                                                <button type="button" className="btn btn-secondary" style={{ "display": !addShippingAddressLoader ? "inline-block" : "none" }} onClick={saveCustAddress}><IntlMessages id="myaccount.confirm" /></button>
-
-                                                <div className="spinner" style={{ "display": addShippingAddressLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Modal.Footer>
-                            </div>
-                        </Modal.Body>
-                    </div>
-                </Modal> */}
-
-
-
             </section >
 
 

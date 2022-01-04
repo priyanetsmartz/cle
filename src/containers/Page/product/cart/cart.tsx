@@ -384,17 +384,8 @@ function CartItemPage(props) {
                                                                                             key={i}>{i}</option>
                                                                                     })}
 
-                                                                                </select>
-                                                                                {/* <div className="value-button" id="decrease" onClick={() => { handleSubtractQuantity(item) }} >-</div>
-                                                                                <input type="number" id="number" disabled value={value === item.item_id ? qty : item.qty} />
-                                                                                <div className="value-button" id="increase" onClick={() => { handleAddQuantity(item) }}>+</div> */}
+                                                                                </select>                                                                               
                                                                             </div>
-                                                                            {/* <div className="col-sm-5">
-                                                                            <select className="form-select">
-                                                                                <option>One size</option>
-                                                                                <option>Two size</option>
-                                                                            </select>
-                                                                        </div> */}
                                                                         </div>
                                                                     </div>
                                                                     <div className="cart-pro-price">{siteConfig.currency}{formatprice(item.price)} </div>
