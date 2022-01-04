@@ -2494,10 +2494,14 @@ span.maindatory {
 
 .page-item .page-link{
 	border:none;
-	padding: 2px 20px;
+	padding: 2px 15px;
 }
 
-.page-item .pageofpage span.active{
+.pagination .pageofpage{
+	padding: 0 10px;
+}
+
+.pagination .pageofpage .active{
 	color:#2e2baa;
 }
 
