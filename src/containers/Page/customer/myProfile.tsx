@@ -1076,6 +1076,8 @@ function MyProfile(props) {
                             </div>
                         </div>
                     </div>
+					
+					<div className="profile-new-email">
                     <div className="row">
                         <div className="col-sm-6">
                             <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
@@ -1129,6 +1131,7 @@ function MyProfile(props) {
                             </div>
                         </div>
                     </div>
+					</div>
                 </div>
             </section>
 
