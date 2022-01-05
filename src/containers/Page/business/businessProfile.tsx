@@ -462,8 +462,13 @@ function BusinessProfile(props) {
                     newPassword: "",
                     password: ""
                 });
-            } else {
-                notification("error", "", intl.formatMessage({ id: "passwordInvalid" }));
+            } else  {
+                if (result.data.message) {
+                    notification("error", "", result.data.message);
+                } else {
+                    notification("error", "", intl.formatMessage({ id: "passwordInvalid" }));
+                }
+              
             }
         }
     }

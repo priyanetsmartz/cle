@@ -51,7 +51,7 @@ class ForgotPassApi {
                 })
                 .catch(function (err) {
                     // reject(err.response);
-                    resolve(err);
+                    resolve(err.response);
                 });
         });
     }

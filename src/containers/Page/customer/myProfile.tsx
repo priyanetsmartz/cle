@@ -32,7 +32,7 @@ function MyProfile(props) {
     const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
     const [isShown, setIsShown] = useState(-1);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
-    const [custId, setCustid] = useState(localToken.cust_id);
+    const [custId, setCustid] = useState(localToken && localToken.cust_id ? localToken.cust_id : '');
     const [attributes, setAttributes]: any = useState({});
     const [customerPrefer, setCustomerPrefer]: any = useState({
         interestedIn: '',
@@ -115,12 +115,12 @@ function MyProfile(props) {
         surName: "",
         occasion: "",
         annualReminder: "",
-        dobDate: "",
-        dobMonth: "",
-        dobYear: "",
-        dodDate: "",
-        dodMonth: "",
-        dodYear: "",
+        dobDate: currentDate[2],
+        dobMonth: currentDate[1],
+        dobYear: currentDate[0],
+        dodDate: currentDate[2],
+        dodMonth: currentDate[1],
+        dodYear: currentDate[0],
         dateofevent: "",
         DateOfDelivery: "",
         gender: "",
@@ -232,22 +232,21 @@ function MyProfile(props) {
                 return o1.value === o2; // return the ones with equal id
             });
         });
-        // console.log(intersted_in);
-        let index = mostly_intersted_inArray.findIndex(x => x.name === intersted_in[0].name);
-        catToShow = categories_array[index];
-
-
-        // console.log(catToShow)
-        var favCategoryArray = [];
-        if (catToShow && catToShow.length > 0) {
-            favCategoryArray = catToShow.filter(function (o1) {
-                return favourite_categories.some(function (o2) {
-                    //  console.log(o1.id, o2)
-                    return o1.id === o2; // return the ones with equal id
+        // console.log(mostly_intersted_inArray, intersted_in)
+        if (mostly_intersted_inArray.length > 0 && intersted_in.length > 0) {
+            let index = mostly_intersted_inArray.findIndex(x => x.name === intersted_in[0].name);
+            catToShow = categories_array[index];
+            // console.log(catToShow)
+            var favCategoryArray = [];
+            if (catToShow && catToShow.length > 0) {
+                favCategoryArray = catToShow.filter(function (o1) {
+                    return favourite_categories.some(function (o2) {
+                        //  console.log(o1.id, o2)
+                        return o1.id === o2; // return the ones with equal id
+                    });
                 });
-            });
+            }
         }
-
 
         var favDesignerArray = designer_array[0].filter(function (o1) {
             return favourite_designers.some(function (o2) {
@@ -496,7 +495,7 @@ function MyProfile(props) {
         if (handleValidation()) {
             setLoaderPassChange(true);
             let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
-            if (result.data) {
+            if (result.data && !result.data.message) {
                 // console.log(result.data)
                 notification("success", "", intl.formatMessage({ id: "passwordUpdate" }));
                 setChangePass({
@@ -506,9 +505,12 @@ function MyProfile(props) {
                 });
                 setLoaderPassChange(false);
             } else {
-
+                if (result.data.message) {
+                    notification("error", "", result.data.message);
+                } else {
+                    notification("error", "", intl.formatMessage({ id: "passwordInvalid" }));
+                }
                 setLoaderPassChange(false);
-                notification("error", "", intl.formatMessage({ id: "passwordInvalid" }));
             }
         }
     }
@@ -561,7 +563,7 @@ function MyProfile(props) {
             }
 
             let result: any = await updateCustEmail(req);
-            if (result.data) {
+            if (result.data && !result.data.message) {
                 notification("success", "", intl.formatMessage({ id: "newEmailUpdate" }));
                 setChangeEmail({
                     confirmNewEmail: "",
@@ -570,8 +572,14 @@ function MyProfile(props) {
                 })
                 setloaderEmailChange(false)
             } else {
+                // console.log(result.data)
+                if (result.data.message) {
+                    notification("error", "", result.data.message);
+                } else {
+                    notification("error", "", intl.formatMessage({ id: "genralerror" }));
+                }
                 setloaderEmailChange(false)
-                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+
             }
         }
     }
@@ -1090,54 +1098,55 @@ function MyProfile(props) {
                             </div>
                         </div>
                     </div>
-					
-					<div className="profile-new-email">
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                            <div className="password_edit">{custForm.email}</div>
+
+                    <div className="profile-new-email">
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
+                                <div className="password_edit">{custForm.email}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <div className="newemail-sec">
-                                <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
-                                <div className="width-100 mb-3">
-                                    <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
-                                    <input type="email" className="form-control" id="newEmail"
-                                        value={changeEmail.newEmail}
-                                        onChange={handleEmail} />
-                                    <span className="error">{errors.errors["newEmail"]}</span>
-                                </div>
-                                <div className="width-100 mb-3">
-                                    <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
-                                        className="maindatory"></span></label>
-                                    <input type="email" className="form-control" id="confirmNewEmail"
-                                        value={changeEmail.confirmNewEmail}
-                                        onChange={handleEmail} />
-                                    <span className="error">{errors.errors["confirmNewEmail"]}</span>
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="login.password" /><span
-                                        className="maindatory">&#42;</span></label>
-                                    <input type={passMask.emailPass ? 'password' : 'text'} className="form-control"
-                                        id="password2"
-                                        value={changeEmail.password2}
-                                        onChange={handleEmail} />
-                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
-                                        {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
-                                    </span>
-                                    <span className="error">{errors.errors["password2"]}</span>
-                                </div>
-                                <div className="forgot_paswd">
-                                    <div className="Frgt_paswd">
-                                        <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary" style={{ "display": !loaderEmailChange ? "inline-block" : "none" }} onClick={handleChangeEmail}>
-                                                <IntlMessages id="myaccount.confirm" />
-                                            </button>
-                                            <div className="btn btn-secondary" style={{ "display": loaderEmailChange ? "inline-block" : "none" }}>
-                                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                                <IntlMessages id="loading" />
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <div className="newemail-sec">
+                                    <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+                                    <div className="width-100 mb-3">
+                                        <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
+                                        <input type="email" className="form-control" id="newEmail"
+                                            value={changeEmail.newEmail}
+                                            onChange={handleEmail} />
+                                        <span className="error">{errors.errors["newEmail"]}</span>
+                                    </div>
+                                    <div className="width-100 mb-3">
+                                        <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
+                                            className="maindatory"></span></label>
+                                        <input type="email" className="form-control" id="confirmNewEmail"
+                                            value={changeEmail.confirmNewEmail}
+                                            onChange={handleEmail} />
+                                        <span className="error">{errors.errors["confirmNewEmail"]}</span>
+                                    </div>
+                                    <div className="width-100 mb-3 form-field">
+                                        <label className="form-label"><IntlMessages id="login.password" /><span
+                                            className="maindatory">&#42;</span></label>
+                                        <input type={passMask.emailPass ? 'password' : 'text'} className="form-control"
+                                            id="password2"
+                                            value={changeEmail.password2}
+                                            onChange={handleEmail} />
+                                        <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
+                                            {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                        </span>
+                                        <span className="error">{errors.errors["password2"]}</span>
+                                    </div>
+                                    <div className="forgot_paswd">
+                                        <div className="Frgt_paswd">
+                                            <div className="confirm-btn">
+                                                <button type="button" className="btn btn-secondary" style={{ "display": !loaderEmailChange ? "inline-block" : "none" }} onClick={handleChangeEmail}>
+                                                    <IntlMessages id="myaccount.confirm" />
+                                                </button>
+                                                <div className="btn btn-secondary" style={{ "display": loaderEmailChange ? "inline-block" : "none" }}>
+                                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                    <IntlMessages id="loading" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1145,7 +1154,6 @@ function MyProfile(props) {
                             </div>
                         </div>
                     </div>
-					</div>
                 </div>
             </section>
 
@@ -1481,7 +1489,7 @@ function MyProfile(props) {
                                             {DROPDOWN.dates.map(opt => {
                                                 return (<option value={opt} key={opt}>{opt}</option>);
                                             })}
-                                        </select>                                       
+                                        </select>
                                         <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobMonth ? giftingPrefer.dobMonth : currentDate[1]} id="dobMonth"
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1493,7 +1501,8 @@ function MyProfile(props) {
                                         <select className="form-select" aria-label="Default select example" value={giftingPrefer.dobYear ? giftingPrefer.dobYear : currentDate[0]} id="dobYear"
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            {DROPDOWN.years.map(opt => {
+
+                                            {DROPDOWN.nextYears && DROPDOWN.nextYears.length && DROPDOWN.nextYears.map(opt => {
                                                 return (<option value={opt} key={opt}>{opt}</option>);
                                             })}
                                         </select>
@@ -1533,7 +1542,7 @@ function MyProfile(props) {
                                             <select className="form-select" aria-label="Default select example" value={giftingPrefer.dodYear ? giftingPrefer.dodYear : currentDate[0]} id="dodYear"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                                {DROPDOWN.years.map(opt => {
+                                                {DROPDOWN.nextYears && DROPDOWN.nextYears.length && DROPDOWN.nextYears.map(opt => {
                                                     return (<option value={opt} key={opt}>{opt}</option>);
                                                 })}
                                             </select>

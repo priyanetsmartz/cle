@@ -54,7 +54,7 @@ function ResetPassword(props) {
         if (handleValidation()) {
             let result: any = await SaveNewPass({ email: "", resetToken: token, newPassword: state.password });
             //   console.log(result);
-            if (result.data) {
+            if (result.data && !result.data.message) {
                 notification("success", "", intl.formatMessage({ id: "resetPassword" }));
                 setState(prevState => ({
                     ...prevState,
@@ -116,7 +116,7 @@ function ResetPassword(props) {
                             <input type="password"
                                 className="form-control"
                                 id="password"
-                                placeholder="Enter password"
+                                placeholder={intl.formatMessage({ id: 'rest-password' }) + `*`}
                                 value={state.password}
                                 onChange={handleChange}
                             />
@@ -128,7 +128,7 @@ function ResetPassword(props) {
                             <input type="password"
                                 className="form-control"
                                 id="confirmPassword"
-                                placeholder="Enter Confirm Password"
+                                placeholder={intl.formatMessage({ id: 'reset-confirm-password' }) + `*`}
                                 value={state.confirmPassword}
                                 onChange={handleChange}
                             />

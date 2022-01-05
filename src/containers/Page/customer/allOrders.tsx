@@ -162,7 +162,7 @@ function OrdersAndReturns(props) {
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.date" /></span>
                                         <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="">{intl.formatMessage({ id: "top-cat-all" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
                                             <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
                                             <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
