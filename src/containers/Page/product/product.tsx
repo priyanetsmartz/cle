@@ -8,9 +8,9 @@ import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Recomendations from './product-details/recomendations';
-import Description from '../categories/description';
+
 import { Slider } from 'antd';
-// import Filter from './filter';
+
 import { useIntl } from 'react-intl';
 import { capitalize, formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
@@ -27,10 +27,11 @@ const { showSignin, showLoader } = appAction;
 
 function Products(props) {
     const { category, subcat, childcat, greatchildcat }: any = useParams();
-    const location = useLocation();
+
     let imageD = '', description = '', url = '';
     const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
+    const [isShown, setIsShown] = useState('');
     const [isHoverImage, setIsHoverImage] = useState(0);
     const [urlp, seturlp] = useState('');
     const [isWishlist, setIsWishlist] = useState(0);
@@ -39,7 +40,7 @@ function Products(props) {
     const [pagination, setPagination] = useState(1);
     const [opacity, setOpacity] = useState(1);
     const [page, setCurrent] = useState(1);
-    const [filterArray, setFilterArray] = useState([]);
+    const [filterArray, setFilterArray] = useState({ category: [], brand: [], price: '' });
     const [token, setToken] = useState('');
     const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
     const [sort, setSort] = useState('');
@@ -81,7 +82,7 @@ function Products(props) {
             props.addToCartTask(false);
             props.addToWishlistTask(true);
         }
-    }, [props.languages, location, clearFilter, props.token])
+    }, [props.languages, clearFilter])
 
     useEffect(() => {
         //   console.log('www')
@@ -92,14 +93,14 @@ function Products(props) {
         }
     }, [sortValue, page, pageSize, sort, catState])
 
-    useEffect(() => {
-        if (props.prodloader === true) {
-            setOpacity(0.3);
-        } else {
-            setOpacity(1);
-        }
+    // useEffect(() => {
+    //     if (props.prodloader === true) {
+    //         setOpacity(0.3);
+    //     } else {
+    //         setOpacity(1);
+    //     }
 
-    }, [props.prodloader])
+    // }, [props.prodloader])
 
     async function getProducts(urlPath) {
         //console.log(urlPath)
@@ -210,28 +211,14 @@ function Products(props) {
         setCurrent(1)
         props.setPageFilter(page)
     }
-    const getPaginationGroup = () => {
-        let start = Math.floor((page - 1) / pageSize) * pageSize;
-        let fill = pagination > 5 ? 4 : pagination;
-        //  console.log (new Array(fill).fill(fill).map((_, idx) => start + idx + 1))
-        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
-    };
+
 
     const goToNextPage = (e) => {
-        let lang = props.languages ? props.languages : language;
         e.preventDefault();
         setCurrent((page) => page + 1);
-
     }
-    function changePage(event) {
-        let lang = props.languages ? props.languages : language;
 
-        event.preventDefault()
-        const pageNumber = Number(event.target.textContent);
-        setCurrent(pageNumber);
-    }
     const goToPreviousPage = (e) => {
-        let lang = props.languages ? props.languages : language;
 
         e.preventDefault();
         setCurrent((page) => page - 1);
@@ -279,14 +266,9 @@ function Products(props) {
         }
     }
 
-    const handlePriceRange = async (range) => {
-        setCurrent(1)
+    async function makeFilterApicall(catID, languages, type, value, sortValue, pageSize) {
         let customer_id = props.token.cust_id;
-        let catID = catState ? catState : 178;
-        setCatState(catID)
-        props.loaderProducts(true);
-        let r = range[0] + '-' + range[1];
-        let filter: any = await getProductsFilterRestCollectionProducts(catID, props.languages, 'price', r, sortValue, pageSize);
+        let filter: any = await getProductsFilterRestCollectionProducts(catID, languages, type, value, sortValue, pageSize);
         let total = 0, items = [];
         if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
             total = filter.data[0].data.products.total_count;
@@ -312,50 +294,81 @@ function Products(props) {
         props.loaderProducts(false);
         setTotal(total)
     }
+
+    const handlePriceRange = async (range) => {
+        setCurrent(1)
+        let catID = catState ? catState : 178;
+        setCatState(catID)
+        props.loaderProducts(true);
+        let r = range[0] + '-' + range[1];
+        setFilterArray(prevState => ({
+            ...prevState,
+            price: r
+        }))
+        makeFilterApicall(catID, props.languages, 'price', r, sortValue, pageSize);
+    }
+
     const currentvalue = async (e) => {
         e.preventDefault();
-        let customer_id = props.token.cust_id;
         let catID = catState ? catState : 178;
         setCurrent(1)
         setCurrentFilter(e.target.value)
         let attribute_code = e.target.getAttribute("data-remove");
         let value = attribute_code === 'price' ? e.target.getAttribute("data-access") : e.target.value;
-        setFilterArray([...filterArray, e.target.getAttribute("data-access")]);
+
         let catt: any;
+        let catdata = [];
+        catdata['id'] = e.target.value;
+        catdata['value'] = e.target.getAttribute("data-access");
         if (attribute_code === 'category_id') {
             catt = e.target.value ? e.target.value : catID;
             setCatState(e.target.value)
             setNameHeader(e.target.getAttribute("data-access"))
+            setFilterArray(prevState => ({
+                ...prevState,
+                category: catdata
+            }))
         } else {
+            setFilterArray(prevState => ({
+                ...prevState,
+                brand: catdata,
+                price: ''
+            }))
             catt = catID;
             setCatState(catID)
         }
         props.loaderProducts(true);
-        let filter: any = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, sortValue, pageSize);
-        let total = 0, items = [];
-        if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
-            total = filter.data[0].data.products.total_count;
-            items = filter.data[0].data.products.items;
-            let productResult = filter.data[0].data.products.items;
-            setPagination(Math.ceil(total / pageSize));
-            if (customer_id) {
-                let whishlist: any = await getWhishlistItemsForUser();
-                let products = items;
-                let WhishlistData = whishlist.data;
-                if (WhishlistData && WhishlistData.length > 0) {
-                    const mergeById = (a1, a2) =>
-                        a1.map(itm => ({
-                            ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
-                            ...itm
-                        }));
+        makeFilterApicall(catt, props.languages, attribute_code, value, sortValue, pageSize)
+    }
 
-                    productResult = mergeById(products, WhishlistData);
-                }
+    const removeSelectedCategories = (type, value) => {
+        let catID = catState ? catState : 178;
+
+        if (type !== 'category_id') {
+            getProductById(catID);
+            if (type === 'price') {
+                setFilterArray(prevState => ({
+                    ...prevState,
+                    price: ''
+                }))
+
+            } else if (type === 'brand') {
+                setFilterArray(prevState => ({
+                    ...prevState,
+                    brand: []
+                }))
+
             }
-            props.productList(productResult);
+        } else {
+            setFilterArray(prevState => ({
+                ...prevState,
+                category: [],
+                price: '',
+                brand: []
+            }))
+            getProductById(catID);
         }
-        props.loaderProducts(false);
-        setTotal(total)
+
     }
 
     return (
@@ -399,9 +412,9 @@ function Products(props) {
                                                                                         let priceHigh = parseInt(priceh[1]);
                                                                                         return (
                                                                                             <div className="sliderInner">
-                                                                                                {/* <p className="sliderlower">{priceLow}</p> */}
+
                                                                                                 <Slider min={priceLow} max={priceHigh} range onAfterChange={handlePriceRange} />
-                                                                                                {/* <p className="sliderupper">{priceHigh}</p> */}
+
                                                                                             </div>)
                                                                                     })()}</div>
                                                                                     :
@@ -431,12 +444,24 @@ function Products(props) {
                         {props.items.length > 0 ?
                             <div className="col-sm-9">
                                 <div className="search_keyword"><h1>{nameHeader ? capitalize(nameHeader) : "All"}</h1></div>
-                                <div className='filter attay'> {filterArray.length > 0 && filterArray.map(item => {
-                                    return (<p>{item} </p>)
-                                })}</div>
-                                {/* <li key={i} onMouseEnter={() => } onMouseLeave={() => setIsShown(0)} ><Link to="#"  >
-                                        {isShown == parseInt(cat.id) ? <span className='textname' onClick={() => removeSelectedCategories(cat)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textname' > {cat.name}</span>
-                                        }</Link></li> */}
+                                <div className='filterarray'>
+                                    {filterArray.category['value'] && (<li onMouseEnter={() => setIsShown('category')} onMouseLeave={() => setIsShown('')} ><Link to="#"  ><span className='textname'  > {filterArray.category['value']}   {isShown === 'category' ? <span className='cross' onClick={(e) => removeSelectedCategories('category_id', filterArray.category['id'])}   >  <i className="fa fa-times" aria-hidden="true"></i></span> : ""
+                                    }</span>
+                                    </Link></li>
+                                    )}
+
+                                    {filterArray.brand['value'] && (<li onMouseEnter={() => setIsShown('brand')} onMouseLeave={() => setIsShown('')} ><Link to="#"  ><span className='textname'  > {filterArray.brand['value']}   {isShown === 'brand' ? <span className='cross' onClick={(e) => removeSelectedCategories('brand', filterArray.brand['id'])}   >  <i className="fa fa-times" aria-hidden="true"></i></span> : ""
+                                    }</span>
+                                    </Link></li>
+                                    )}
+
+                                    {filterArray.price && (<li onMouseEnter={() => setIsShown('price')} onMouseLeave={() => setIsShown('')} ><Link to="#"  ><span className='textname'  > {filterArray.price}   {isShown === 'price' ? <span className='cross' onClick={(e) => removeSelectedCategories('price', filterArray.price)}   >  <i className="fa fa-times" aria-hidden="true"></i></span> : ""
+                                    }</span>
+                                    </Link></li>
+                                    )}
+
+                                </div>
+                              
                                 <div className="resltspage_sec">
                                     <div className="paginatn_result">
                                         <span><IntlMessages id="product.results" /></span>
@@ -453,7 +478,7 @@ function Products(props) {
                                                 <option value={0} key="0" >{intl.formatMessage({ id: "filterNewestFirst" })}</option>
                                                 <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
                                                 <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                                <option value={3} key="3" >{intl.formatMessage({ id: "filterourpicks" })}</option>
+                                                {/* <option value={3} key="3" >{intl.formatMessage({ id: "filterourpicks" })}</option> */}
                                             </select>
                                         </div>
                                     </div>

@@ -160,7 +160,7 @@
   "myaccount.categoryPrefer": "تفضيل الفئة",
   "myaccount.notify": "أشعرني، أعلمني، بلغني",
   "myaccount.addAFriend": "أضف حدثًا لصديق",
-  "myaccount.listOfBirthdays": "قائمة أعياد الميلاد",
+  "myaccount.listOfBirthdays": "قائمة الأحداث",
   "myaccount.myAddresses": "عناويني",
   "myaccount.address": "عنوان",
   "myaccount.myAddress": "عنواني",
@@ -560,5 +560,8 @@
   "deliveryDateoption2":"تعيين تاريخ مخصص",
   "great":"باهر!",
   "more":"أكثر",
-  "Colour":"لون"
+  "Colour":"لون",
+  "order.adddeliveryaddress": "أضف عنوان التسليم",
+  "rest-password": "أدخل كلمة المرور",
+  "reset-confirm-password": "أدخل تأكيد كلمة المرور"
 }

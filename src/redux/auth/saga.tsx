@@ -157,7 +157,7 @@ export function* registerRequest() {
           sessionService.saveUser(data);
 
           yield setCookie("username", token.data[0].email);
-          if (token.data[0].group_id === "4") {
+          if (token.data[0].group_id === 4) {
             yield put(push("/prive-user"));
           } else {
             yield put(push("/"));

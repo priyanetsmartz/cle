@@ -71,11 +71,10 @@ function HeaderMenu(props) {
 
     useEffect(() => {
 
-        if (signup === 'true' && member === 'prive' && props.token.cust_id === undefined) {
-
+        if (signup === 'true' && member === 'prive' && props.token.token === undefined) {
             props.openSignUp(true);
             props.userType(4);
-        } else if (signup === 'true' && member === 'signup' && props.token.cust_id === undefined) {
+        } else if (signup === 'true' && member === 'signup' && props.token.token === undefined) {
             props.openSignUp(true);
             props.userType(1);
         }

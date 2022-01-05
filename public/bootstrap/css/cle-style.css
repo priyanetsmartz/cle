@@ -6817,7 +6817,7 @@ button:focus {
 
 .range_inner .form-group .form-select {
     border-radius: 0;
-    background: #f7f7f7;
+    /* background: #f7f7f7; */
     border: 0;
 }
 
@@ -6875,6 +6875,7 @@ button:focus {
     border-top: 1px solid #beb8b8;
     display: inline-block;
     padding: 7px 0;
+    width: 100%;
 }
 
 .serach-results-inner ul li a {
@@ -7292,6 +7293,25 @@ p.sliderupper {
 .share-options ul li i {
     color: #fff;
     font-size: 20px;
+}
+
+.filterarray li a {
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;
+    border: 2px solid #000;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    display: block;
+}
+
+.filterarray li {
+    list-style: none;
+    padding: 2px 5px;
+    float: left;
+    width: auto;
+    margin-top: 5px;
+    text-align: center;
 }
 
 /* All media screen below */

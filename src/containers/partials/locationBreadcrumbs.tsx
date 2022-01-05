@@ -38,6 +38,11 @@ function Breadcrumbs(props) {
                         if (result) {
                             local = 'New in';
                         }
+
+                        let result1 = local.includes("designer");
+                        if (result1) {
+                            local = 'Designer';
+                        }
                         if (j === breadcrumsState.length - 1) {
                             let data = local.split('-')
                             if (local === 'orders-and-returns' || local === 'wishlist' || local === 'profile' || local === 'support') {

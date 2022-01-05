@@ -31,7 +31,7 @@ function ForgottenPassword(props) {
     if (handleValidation()) {
       setIsShow(true);
       let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email1, websiteId: 1 });
-      if (result.data) {
+      if (result.data && !result.data.message ) {
         notification("success", "", intl.formatMessage({ id: "forgotpassmail" }));
         setState(prevState => ({
           ...prevState,

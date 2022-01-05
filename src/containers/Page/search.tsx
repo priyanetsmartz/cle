@@ -21,6 +21,7 @@ function SearchResults(props) {
     const intl = useIntl();
     const { searchText, cat, brandname }: any = useParams();
     const [isShow, setIsShow] = useState(0);
+    const [isShown, setIsShown] = useState('');
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [pageSize, setPageSize] = useState(pageSizeNumber);
@@ -29,6 +30,7 @@ function SearchResults(props) {
     const [page, setCurrent] = useState(1);
     const [filters, setFilters] = useState([]);
     const [total, setTotal] = useState(0);
+    const [filterArray, setFilterArray] = useState({ category: [], brand: [], price: '' });
     const [clearFilter, setclearFilter] = useState(false)
     const [currentFilter, setCurrentFilter] = useState('')
     const [catState, setCatState] = useState(0);
@@ -48,12 +50,12 @@ function SearchResults(props) {
     }, [searchText, sortValue, page, pageSize, props.languages, cat, props.token])
 
 
-    const getData = async (searchText) => {
+    const getData = async (searchText, catset = 178) => {
         setOpacity(0.3);
         let customer_id = props.token.cust_id;
         let lang = props.languages ? props.languages : language;
         let filter: any;
-        let catt = cat !== 'all' ? cat : 178;
+        let catt = cat !== 'all' ? cat : catset;
         setCatState(catt)
 
         if (brandname) {
@@ -130,7 +132,7 @@ function SearchResults(props) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
                 notification("success", "", result.data[0].message);
-                getData(searchText)
+                getData(searchText,)
             } else {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
@@ -162,28 +164,17 @@ function SearchResults(props) {
         setCurrent(1)
         //  props.setPageFilter(page)
     }
-    const getPaginationGroup = () => {
-        let start = Math.floor((page - 1) / pageSize) * pageSize;
-        let fill = pagination > 5 ? 4 : pagination;
-        //  console.log (new Array(fill).fill(fill).map((_, idx) => start + idx + 1))
-        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
-    };
+
 
     const goToNextPage = (e) => {
-        let lang = props.languages ? props.languages : language;
+
         e.preventDefault();
         setCurrent((page) => page + 1);
 
     }
-    function changePage(event) {
-        let lang = props.languages ? props.languages : language;
 
-        event.preventDefault()
-        const pageNumber = Number(event.target.textContent);
-        setCurrent(pageNumber);
-    }
     const goToPreviousPage = (e) => {
-        let lang = props.languages ? props.languages : language;
+
 
         e.preventDefault();
         setCurrent((page) => page - 1);
@@ -206,14 +197,10 @@ function SearchResults(props) {
             setIsShow(0);
         }
     }
-    const handlePriceRange = async (range) => {
-        setCurrent(1)
+
+    async function makeFilterApicall(catID, languages, type, value, sortValue, pageSize, brandname = '', testing = '', currentPage = 1, searchText = '') {
         let customer_id = props.token.cust_id;
-        let catID = catState ? catState : 178;
-        setCatState(catID)
-        props.loaderProducts(true);
-        let r = range[0] + '-' + range[1];
-        let filter: any = await getProductsFilterRestCollectionProducts(catID, props.languages, 'price', r, sortValue, pageSize);
+        let filter: any = await getProductsFilterRestCollectionProducts(catID, props.languages, type, value, sortValue, pageSize, brandname, testing, currentPage, searchText);
         let total = 0, items = [];
         if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
             total = filter.data[0].data.products.total_count;
@@ -239,61 +226,89 @@ function SearchResults(props) {
         props.loaderProducts(false);
         setTotal(total)
     }
+
+
+    const handlePriceRange = async (range) => {
+        setCurrent(1)
+        let catID = catState ? catState : 178;
+        setCatState(catID)
+        props.loaderProducts(true);
+        let r = range[0] + '-' + range[1];
+        setFilterArray(prevState => ({
+            ...prevState,
+            price: r
+        }))
+        makeFilterApicall(catID, props.languages, 'price', r, sortValue, pageSize)
+
+    }
     const currentvalue = async (e) => {
-        //  console.log(searchText)
         e.preventDefault();
-        let customer_id = props.token.cust_id;
         let catID = catState;
         setCurrent(1)
         let attribute_code = e.target.getAttribute("data-remove");
         let value = attribute_code === 'price' ? e.target.getAttribute("data-access") : e.target.value;
         //  console.log(e.target.getAttribute("data-access"))
         let catt = catID;
+        let catdata = [];
+        catdata['id'] = e.target.value;
+        catdata['value'] = e.target.getAttribute("data-access");
         if (attribute_code === 'category_id') {
             catt = e.target.value ? e.target.value : catID;
-            setCatState(e.target.value)
+            setCatState(178)
+            setFilterArray(prevState => ({
+                ...prevState,
+                category: catdata
+            }))
         } else {
+            setFilterArray(prevState => ({
+                ...prevState,
+                brand: catdata,
+                price: ''
+            }))
             setCatState(catID)
         }
-        // console.log(attribute_code, catt, value)
 
         setCurrentFilter(e.target.value)
         props.loaderProducts(true);
-        let filter: any;
+
         if (brandname) {
-            filter = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, sortValue, pageSize, brandname);
+            // filter = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, sortValue, pageSize, brandname);
+            makeFilterApicall(catt, props.languages, attribute_code, value, sortValue, pageSize, brandname)
         } else {
-            console.log('attribute_code', attribute_code)
-            filter = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, sortValue, pageSize, '', '', page, searchText);
+            // filter = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, sortValue, pageSize, '', '', page, searchText);
+
+            makeFilterApicall(catt, props.languages, attribute_code, value, sortValue, pageSize, '', '', page, searchText)
         }
+    }
 
-        let total = 0, items = [];
-        if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
-            total = filter.data[0].data.products.total_count;
-            items = filter.data[0].data.products.items;
-            let productResult = filter.data[0].data.products.items;
-            if (customer_id) {
-                let whishlist: any = await getWhishlistItemsForUser();
-                let products = items;
-                let WhishlistData = whishlist.data;
-                if (WhishlistData && WhishlistData.length > 0) {
-                    const mergeById = (a1, a2) =>
-                        a1.map(itm => ({
-                            ...a2.find((item) => (parseInt(item.id) === itm.id) && item),
-                            ...itm
-                        }));
+    const removeSelectedCategories = (type, value) => {
+        let catID = catState ? catState : 178;
 
-                    productResult = mergeById(products, WhishlistData);
-                }
+        if (type !== 'category_id') {
+            getData(searchText, catID)
+            if (type === 'price') {
+                setFilterArray(prevState => ({
+                    ...prevState,
+                    price: ''
+                }))
 
+            } else if (type === 'brand') {
+                setFilterArray(prevState => ({
+                    ...prevState,
+                    brand: []
+                }))
 
             }
-            // console.log(productResult);
-            SetAutoSuggestions(productResult);
+        } else {
+            setFilterArray(prevState => ({
+                ...prevState,
+                category: [],
+                price: '',
+                brand: []
+            }))
+            getData(searchText, catID)
         }
-        props.loaderProducts(false);
-        setTotal(total)
-        //   props.productList(items);
+
     }
     return (
         <div className="container">
@@ -364,6 +379,23 @@ function SearchResults(props) {
                 {/* Filter sidebar end */}
                 <div className={brandname ? "col-sm-12" : "col-sm-9"} >
                     <div className="search_keyword"><h1>"{searchText ? capitalize(searchText) : capitalize(brandname)}"</h1></div>
+                    <div className='filterarray'>
+                        {filterArray.category['value'] && (<li onMouseEnter={() => setIsShown('category')} onMouseLeave={() => setIsShown('')} ><Link to="#"  ><span className='textname'  > {filterArray.category['value']}   {isShown === 'category' ? <span className='cross' onClick={(e) => removeSelectedCategories('category_id', filterArray.category['id'])}   >  <i className="fa fa-times" aria-hidden="true"></i></span> : ""
+                        }</span>
+                        </Link></li>
+                        )}
+
+                        {filterArray.brand['value'] && (<li onMouseEnter={() => setIsShown('brand')} onMouseLeave={() => setIsShown('')} ><Link to="#"  ><span className='textname'  > {filterArray.brand['value']}   {isShown === 'brand' ? <span className='cross' onClick={(e) => removeSelectedCategories('brand', filterArray.brand['id'])}   >  <i className="fa fa-times" aria-hidden="true"></i></span> : ""
+                        }</span>
+                        </Link></li>
+                        )}
+
+                        {filterArray.price && (<li onMouseEnter={() => setIsShown('price')} onMouseLeave={() => setIsShown('')} ><Link to="#"  ><span className='textname'  > {filterArray.price}   {isShown === 'price' ? <span className='cross' onClick={(e) => removeSelectedCategories('price', filterArray.price)}   >  <i className="fa fa-times" aria-hidden="true"></i></span> : ""
+                        }</span>
+                        </Link></li>
+                        )}
+
+                    </div>
                     {searchText && (<div className="resltspage_sec">
                         <div className="paginatn_result">
                             <span><IntlMessages id="product.results" /></span>

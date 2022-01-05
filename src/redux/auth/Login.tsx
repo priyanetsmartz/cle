@@ -39,7 +39,7 @@ class Login {
       }
     }
     //console.log(payload)
-    return Api.request("rest/V1/customers", payload, "POST", "");
+    return AdminApi.request("default/rest/all/V1/customers", payload, "POST", "");
   }
 
   getPages() {

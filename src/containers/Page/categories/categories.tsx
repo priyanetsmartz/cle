@@ -113,7 +113,7 @@ function Categories(props) {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item"><Link to={`/products/${category}`}>{capitalize(category)}</Link></li>
-                                    {subcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}`}>{subcat.includes("new-in") ? 'New in' : capitalize(subcat)}</Link></li>)}
+                                    {subcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}`}>{subcat.includes("new-in") ? 'New in' : subcat.includes("designer") ? 'Designer' : capitalize(subcat)}</Link></li>)}
                                     {childcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}/${childcat}`}>{capitalize(childcat)}</Link></li>)}
                                     {greatchildcat && (<li className="breadcrumb-item"><Link to={`/products/${category}/${subcat}/${childcat}/${greatchildcat}`}>{capitalize(greatchildcat)}</Link></li>)}
                                 </ol>
