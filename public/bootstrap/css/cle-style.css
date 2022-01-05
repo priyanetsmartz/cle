@@ -1585,17 +1585,23 @@ p.promotion_alert {
     font-size: 22px;
     display: flex;
     align-self: flex-end;
+	margin-bottom: 10px;
+	transition: all .5s ease;
 }
 
 .addnew_address .addressnew_addressblue i {
     font-size: 22px;
     color: #fff;
     display: none;
-    transition: all .3s ease;
+    transition: all .5s ease;
 }
 
 .addnew_address .addressnew_addressblue:hover i {
     display: block;
+}
+
+.addnew_address .addressnew_addressblue:hover span{
+	margin:0;
 }
 
 .btn-outline-success {
@@ -2461,13 +2467,15 @@ span.maindatory {
 }
 
 .sticky-fliter {
-    position: fixed;
+     position: stickey;
+	top:10%;
     width: 250px;
     background-color: #fff;
 }
 
 .pro_categry_sidebar {
-    position: fixed;
+    position: stickey;
+	top:10%;
     width: 275px;
 	background-color:#fff;
 }
@@ -6634,9 +6642,10 @@ height: auto;
     font-size: 12px;
     font-family: 'Monument Extended';
     text-decoration: none;
-    padding: 10px 26px;
+    padding: 13px 26px;
     background: #fff;
     margin-right: 15px;
+	height: 40px;
 }
 
 .share-btn {
@@ -7239,9 +7248,8 @@ p.sliderupper {
 }
 
 .pdp-share {
-    display: flex;
-    margin: 10px 0;
-	clear: left;
+    display: inline-flex;
+	clear:left;
 }
 
 .share-toggle {
