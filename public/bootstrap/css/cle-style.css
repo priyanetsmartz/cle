@@ -6750,7 +6750,20 @@ button:focus {
     border-radius: 0;
     background: #f7f7f7;
     border: 1px solid #f7f7f7;
-    margin-bottom: 10px;
+	padding-left:0;
+}
+
+.my-wishlist-main .form-select{
+	background-color: #f7f7f7;
+	border-color:#f7f7f7;
+}
+
+.my-wishlist-main .form-control:focus,
+.my-wishlist-main .form-select:focus{
+	background-color: #f7f7f7;
+	border:none;
+	outline:none;
+	box-shadow:none!important;
 }
 
 .my-wishlist-main .product-listing {
@@ -7252,6 +7265,12 @@ p.sliderupper {
     display: flex;
     width: 100%;
     float: left;
+}
+
+.wishlistsearch .input-group-text {
+    background: #f7f7f7;
+    border: none;
+    border-radius: 0;
 }
 
 .pdp-share {
