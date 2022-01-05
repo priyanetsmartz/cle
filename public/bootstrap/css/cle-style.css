@@ -2467,14 +2467,14 @@ span.maindatory {
 }
 
 .sticky-fliter {
-     position: stickey;
+     position: static;
 	top:10%;
     width: 250px;
     background-color: #fff;
 }
 
 .pro_categry_sidebar {
-    position: stickey;
+    position: static;
 	top:10%;
     width: 275px;
 	background-color:#fff;
@@ -4947,7 +4947,7 @@ left: auto; */
 
 /* checkout page */
 .sticky-cart {
-    position: fixed;
+    position: static;
     width: 320px;
     max-width: 100%;
     display: block;
