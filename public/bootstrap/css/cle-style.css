@@ -6646,6 +6646,12 @@ height: auto;
     background: #fff;
     margin-right: 15px;
 	height: 40px;
+	transition: all .3s ease;
+}
+
+.send-a-gift-btn:hover{
+	background: #000;
+	color: #fff !important;
 }
 
 .share-btn {
