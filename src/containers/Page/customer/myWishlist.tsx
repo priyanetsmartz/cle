@@ -145,7 +145,8 @@ function MyWishList(props) {
                 <div className="col-md-6">
                     <div className="row">
                         <div className="col-md-6">
-                            <div className='wishlistsearch'> <img src={IconZoomIn} alt="searchIcon" className="me-1" />
+                            <div className='input-group wishlistsearch'> 
+							   <span className="input-group-text"><img src={IconZoomIn} alt="searchIcon" className="me-1" /></span>
                                 <input type="text"
                                     className="form-control"
                                     placeholder={intl.formatMessage({ id: "searchPlaceholder" })}
@@ -155,7 +156,7 @@ function MyWishList(props) {
                             </div>
                         </div>
                         <div className="col-md-6">
-                            <select className="form-control" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
+                            <select className="form-select" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                 <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
                                 <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>

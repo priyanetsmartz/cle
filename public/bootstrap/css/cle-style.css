@@ -2467,14 +2467,14 @@ span.maindatory {
 }
 
 .sticky-fliter {
-     position: stickey;
+     position: static;
 	top:10%;
     width: 250px;
     background-color: #fff;
 }
 
 .pro_categry_sidebar {
-    position: stickey;
+    position: static;
 	top:10%;
     width: 275px;
 	background-color:#fff;
@@ -4947,7 +4947,7 @@ left: auto; */
 
 /* checkout page */
 .sticky-cart {
-    position: fixed;
+    position: static;
     width: 320px;
     max-width: 100%;
     display: block;
@@ -5230,6 +5230,9 @@ left: auto; */
     display: block;
 }
 
+.checkout-main .accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+}
 
 
 .my-cart-left-sec h2 {
@@ -6646,6 +6649,12 @@ height: auto;
     background: #fff;
     margin-right: 15px;
 	height: 40px;
+	transition: all .3s ease;
+}
+
+.send-a-gift-btn:hover{
+	background: #000;
+	color: #fff !important;
 }
 
 .share-btn {
@@ -6744,7 +6753,20 @@ button:focus {
     border-radius: 0;
     background: #f7f7f7;
     border: 1px solid #f7f7f7;
-    margin-bottom: 10px;
+	padding-left:0;
+}
+
+.my-wishlist-main .form-select{
+	background-color: #f7f7f7;
+	border-color:#f7f7f7;
+}
+
+.my-wishlist-main .form-control:focus,
+.my-wishlist-main .form-select:focus{
+	background-color: #f7f7f7;
+	border:none;
+	outline:none;
+	box-shadow:none!important;
 }
 
 .my-wishlist-main .product-listing {
@@ -7246,6 +7268,12 @@ p.sliderupper {
     display: flex;
     width: 100%;
     float: left;
+}
+
+.wishlistsearch .input-group-text {
+    background: #f7f7f7;
+    border: none;
+    border-radius: 0;
 }
 
 .pdp-share {
