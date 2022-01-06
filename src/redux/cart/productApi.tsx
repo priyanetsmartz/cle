@@ -273,7 +273,7 @@ export function applyPromoCode(couponCode, language) {
 }
 
 export function applyPromoCodeGuest(couponCode, language) {
-    const cartQuoteId = localStorage.getItem('cartQuoteId');
+    const cartQuoteId = localStorage.getItem('cartQuoteToken');
     const lang = language === 'arabic' ? 'ar' : 'en';
     return APi.request(`rest/${lang}/V1/guest-carts/${cartQuoteId}/coupons/${couponCode}`, "", "PUT", "")
 }

@@ -34,7 +34,8 @@ function Checkout(props) {
         email: localToken && localToken.cust_id ? true : false,
         shipping: false,
         billingAddress: false,
-        paymentmethod: false
+        paymentmethod: false,
+        promo: false
     })
 
     //for customer address starts here------
@@ -204,10 +205,6 @@ function Checkout(props) {
             shippingData: ship
 
         })
-        let add = []
-        let addresses = [...add, ship];
-        let addobject = { addresses: addresses }
-        // let addresses1 = { addresses };
         SetItems(prevState => ({
             ...prevState,
             checkData: checkoutData,
@@ -215,13 +212,6 @@ function Checkout(props) {
             shippingAddress: shipingAdd,
             shippingData: ship
         }))
-
-        if (!customer_id) {
-            SetItems(prevState => ({
-                ...prevState,
-                address: addobject
-            }))
-        }
         setLoaderOnCheckout(false)
     }
     const handleChange = (e) => {
@@ -269,49 +259,50 @@ function Checkout(props) {
         let address = result.data.addresses[0];
         let addressData: any = {};
         let addressInformation: any = {};
+        if (result && result.data && result.data.addresses && result.data.addresses.length > 0) {
+            let billingAddress = {
+                customer_id: localToken.cust_id ? localToken.cust_id : 0,
+                firstname: address.firstname,
+                lastname: address.lastname,
+                telephone: address.telephone,
+                postcode: address.postcode,
+                city: address.city,
+                country_id: address.country_id,
+                region_id: address.region_id,
+                street: address.street
+            };
+            let shippingAddress = {}
+            shippingAddress = {
+                customer_id: localToken.cust_id ? localToken.cust_id : 0,
+                firstname: address.firstname,
+                lastname: address.lastname,
+                telephone: address.telephone,
+                postcode: address.postcode,
+                city: address.city,
+                country_id: address.country_id,
+                region_id: address.region_id,
+                street: address.street
+            }
 
-        let billingAddress = {
-            customer_id: localToken.cust_id ? localToken.cust_id : 0,
-            firstname: address.firstname,
-            lastname: address.lastname,
-            telephone: address.telephone,
-            postcode: address.postcode,
-            city: address.city,
-            country_id: address.country_id,
-            region_id: address.region_id,
-            street: address.street
-        };
-        let shippingAddress = {}
-        shippingAddress = {
-            customer_id: localToken.cust_id ? localToken.cust_id : 0,
-            firstname: address.firstname,
-            lastname: address.lastname,
-            telephone: address.telephone,
-            postcode: address.postcode,
-            city: address.city,
-            country_id: address.country_id,
-            region_id: address.region_id,
-            street: address.street
-        }
-
-        addressInformation.shippingAddress = shippingAddress;
-        addressInformation.billingAddress = billingAddress;
-        addressData.addressInformation = addressInformation;
-        // console.log(addressData)
-        let saveDelivery: any = await setUserDeliveryAddress(addressData);
-        // console.log(saveDelivery)
-        // props.showPaymentMethods(saveDelivery.data.payment_methods);
-        setLoaderOnCheckout(false)
-        if (result.data.addresses.length === 1) {
-            setCheckedData(prevState => ({
+            addressInformation.shippingAddress = shippingAddress;
+            addressInformation.billingAddress = billingAddress;
+            addressData.addressInformation = addressInformation;
+            // console.log(addressData)
+            let saveDelivery: any = await setUserDeliveryAddress(addressData);
+            // console.log(saveDelivery)
+            // props.showPaymentMethods(saveDelivery.data.payment_methods);
+            setLoaderOnCheckout(false)
+            if (result.data.addresses.length === 1) {
+                setCheckedData(prevState => ({
+                    ...prevState,
+                    address: true
+                }))
+            }
+            SetItems(prevState => ({
                 ...prevState,
-                address: true
+                address: addresses
             }))
         }
-        SetItems(prevState => ({
-            ...prevState,
-            address: addresses
-        }))
     }
 
     const checkEmailData = async () => {
@@ -834,6 +825,10 @@ function Checkout(props) {
         }
         //console.log(result.data)
         if (!result.data.message) {
+            setCheckedData(prevState => ({
+                ...prevState,
+                promo: true
+            }))
             setErrorPromo("");
             setLoaderOnCheckout(false)
             checkoutScreen();
@@ -892,9 +887,20 @@ function Checkout(props) {
             }
 
         } else {
-            //  console.log(selectedShippingMethod)
             if (customer_id) {
-                orderPlace = await placeUserOrder('checkmo');
+                if (selectedShippingMethod === '') {
+                    setIsShow(false)
+                    return notification("error", "", intl.formatMessage({ id: "shippingmodeerror" }));
+                }
+                if (selectedPaymentMethod === '') {
+                    setIsShow(false)
+                    return notification("error", "", intl.formatMessage({ id: "paymentmethoderror" }));
+                } else {
+
+                    orderPlace = await placeUserOrder(selectedPaymentMethod);
+                }
+
+
             } else {
                 if (!props.guestBilling.firstname) {
                     setIsShow(false)
@@ -903,14 +909,27 @@ function Checkout(props) {
                 }
 
                 if (!props.guestShipp.firstname) {
+                    setIsShow(false)
                     return notification("error", "", intl.formatMessage({ id: "addshippingaddress" }));
                 }
 
                 if (!state.email) {
+                    setIsShow(false)
                     return notification("error", "", intl.formatMessage({ id: "emailrequired" }));
                 }
-                setIsShow(true)
-                orderPlace = await placeGuestOrder('checkmo');
+                if (selectedShippingMethod === '') {
+                    setIsShow(false)
+                    return notification("error", "", intl.formatMessage({ id: "shippingmodeerror" }));
+                }
+
+                if (selectedPaymentMethod === '') {
+                    setIsShow(false)
+                    return notification("error", "", intl.formatMessage({ id: "paymentmethoderror" }));
+                } else {
+                    setIsShow(true)
+                    orderPlace = await placeGuestOrder(selectedPaymentMethod);
+                }
+
 
             }
             if (orderPlace && orderPlace.data && orderPlace.data !== undefined && orderPlace.data.message === undefined) {
@@ -1089,7 +1108,8 @@ function Checkout(props) {
                                                 <li className="nav-item" role="presentation">
                                                     <button className="nav-link" id="pills-voucher-tab" data-bs-toggle="pill"
                                                         data-bs-target="#pills-voucher" type="button" role="tab" aria-controls="pills-voucher"
-                                                        aria-selected="false"><IntlMessages id="voucher" /></button>
+                                                        aria-selected="false"><IntlMessages id="voucher" />
+                                                        {checkedData.promo && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}</button>
                                                 </li>
                                             </ul>
                                             <div className="tab-content" id="pills-tabContent">
@@ -1191,7 +1211,7 @@ function Checkout(props) {
                                         <div className="accordion-body">
                                             <b><IntlMessages id="order.deliveryAddress" /></b>
 
-                                            {/* {props.guestShipp && (
+                                            {props.guestShipp && (
 
                                                 <div className="row" >
                                                     <div className="col-md-7">
@@ -1210,7 +1230,6 @@ function Checkout(props) {
                                                 </div>
 
                                             )}
-                                            {console.log(itemsVal)} */}
                                             {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
                                                 <>
 
@@ -1234,27 +1253,28 @@ function Checkout(props) {
                                                                             <p className="text-muted">
                                                                                 <IntlMessages id="myaccount.defaultDeliveryAddress" />
                                                                             </p> : ""}
+                                                                        {itemsVal.address['addresses'].length > 0 && (
+                                                                            <div className="form-check">
+                                                                                <input
+                                                                                    type="radio"
+                                                                                    style={{ "display": isBillingAddress === parseInt(item.id) ? "none" : "inline-block" }}
+                                                                                    defaultValue={item.id}
+                                                                                    name={`billingaddress`}
+                                                                                    onChange={handleBillingChange}
+                                                                                    className="form-check-input"
 
-                                                                        <div className="form-check">
-                                                                            <input
-                                                                                type="radio"
-                                                                                style={{ "display": isBillingAddress === parseInt(item.id) ? "none" : "inline-block" }}
-                                                                                defaultValue={item.id}
-                                                                                name={`billingaddress`}
-                                                                                onChange={handleBillingChange}
-                                                                                className="form-check-input"
+                                                                                    // checked={item.id === isBillingAddressConfirm ? true : false}
+                                                                                    checked={item.id === isBillingAddressConfirm ? true : false}
+                                                                                />
 
-                                                                                // checked={item.id === isBillingAddressConfirm ? true : false}
-                                                                                checked={item.id === isBillingAddressConfirm ? true : false}
-                                                                            />
+                                                                                <Link to="#" style={{ "display": isBillingAddress === parseInt(item.id) ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                                </Link>
+                                                                                <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                                                    <IntlMessages id="usethisAddress" />
+                                                                                </label>
 
-                                                                            <Link to="#" style={{ "display": isBillingAddress === parseInt(item.id) ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                                                            </Link>
-                                                                            <label className="form-check-label" htmlFor="flexCheckDefault">
-                                                                                <IntlMessages id="usethisAddress" />
-                                                                            </label>
-
-                                                                        </div>
+                                                                            </div>
+                                                                        )}
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-md-5">
@@ -1270,12 +1290,13 @@ function Checkout(props) {
                                                                                 className="form-check-input"
                                                                                 defaultChecked={item.id === isSetAddress ? true : false}
                                                                             />
+                                                                                <Link to="#" style={{ "display": isSetAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                                </Link>
                                                                                 <label htmlFor="rad1"> <IntlMessages id="great" /></label>
                                                                             </div>
                                                                                 : ""}
 
-                                                                            <Link to="#" style={{ "display": isSetAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                                                            </Link>
+
 
                                                                         </div>
                                                                     </div>
@@ -1437,7 +1458,7 @@ function Checkout(props) {
                                     <h2 className="accordion-header" id="CheckoutHfive">
                                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#Checkoutfive" aria-expanded="false" aria-controls="Checkoutfive">
-                                            <IntlMessages id="payment" />{(checkedData.billingAddress ||checkedData.paymentmethod )  && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                            <IntlMessages id="payment" />{(checkedData.billingAddress && checkedData.paymentmethod) && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
                                         </button>
                                     </h2>
                                     <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"

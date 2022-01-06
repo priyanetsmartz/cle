@@ -149,27 +149,32 @@ function MyPreferences(props) {
     }
 
     //for selecting categories in the my prefernce modal
-    const selectCategories = (i, cat) => {       
+    const selectCategories = (i, cat) => {
         attributes.categories[activeCategory] = attributes.categories[activeCategory].map(el => (
             el.id === cat.id ? { ...el, isChecked: true } : el
         ))
-   
+
         setAttributes(prevState => ({
             ...prevState,
             categories: attributes.categories
         }));
+        let sataa = attributes.categories[activeCategory];
+        setFavCat(prevState => ({
+            ...prevState,
+            sataa
+        }));
     }
-    const removeSelectedCategories = (cat) => {       
+    const removeSelectedCategories = (cat) => {
         attributes.categories[activeCategory] = attributes.categories[activeCategory].map(el => (
             el.id === cat.id ? { ...el, isChecked: false } : el
         ))
-   
+
         setAttributes(prevState => ({
             ...prevState,
             categories: attributes.categories
         }));
     }
-    
+
 
     //remove all selected categores in my preference modal
     const removeAllCat = () => {
