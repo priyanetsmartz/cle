@@ -71,8 +71,8 @@ function MySalesOrders(props) {
         }
         //console.log(fromDate)
         setOrderDate(fromDate);
-        const dateFrom = moment(fromDate).format("YYYY-MM-DD");
-        const dateTo = moment(currentDate.toJSON()).format("YYYY-MM-DD")
+        const dateFrom = moment(fromDate).format("DD/MM/YYYY");
+        const dateTo = moment(currentDate.toJSON()).format("DD/MM/YYYY");
 
         setFromDate(dateFrom);
         setToDates(dateTo);
