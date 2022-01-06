@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
+import { sessionService } from 'redux-react-session';
 import {
     getCustomerDetails, saveCustomerDetails, getCountriesList, changePassword,
     updateCustEmail, deleteAddress, getPreference, getRegionsByCountryID, savePreference
@@ -19,9 +20,12 @@ import callIcon from '../../../image/call-icon.png';
 import deleteIcon from '../../../image/delete-icon.png';
 import timerIcon from '../../../image/timer_icon.png';
 import cartAction from "../../../redux/cart/productAction";
+import authAction from "../../../redux/auth/actions";
 import ForgottenPassword from '../../Page/forgotPassword';
 const { closePrefPopup } = cartAction;
+const { logout } = authAction;
 function MyProfile(props) {
+
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
     const intl = useIntl();
@@ -265,14 +269,23 @@ function MyProfile(props) {
         }));
 
 
-        if (result) {
+        if (result.data && !result.data.message) {
             setCustForm(result.data);
             setCustomAttribute(prevState => ({
                 ...prevState,
                 mp_sms_telephone: phone,
                 country: country
             }))
-            //  getAttributes(result.data);
+
+        } else {
+            await sessionService.deleteSession();
+            await sessionService.deleteUser();
+
+            localStorage.removeItem('cartQuoteId');
+            localStorage.removeItem('cartQuoteToken');
+            props.logout();
+            props.addToCartTask(true);
+            window.location.href = '/';
         }
     }
     const getAttributes = async () => {
@@ -997,7 +1010,7 @@ function MyProfile(props) {
                             </div>
                         </div>
 
-                        {custForm && custForm.addresses.map((address, i) => {
+                        {custForm && custForm.addresses && custForm.addresses.length > 0 && custForm.addresses.map((address, i) => {
                             let countryList: any = COUNTRIES.filter(obj => obj.id === address.country_id);
                             // console.log(address)
                             return (<div className="addressnew_addressbodr" key={i}>
@@ -1657,5 +1670,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { closePrefPopup }
+    { closePrefPopup, logout }
 )(MyProfile);

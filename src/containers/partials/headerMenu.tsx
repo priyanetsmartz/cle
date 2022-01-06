@@ -4,7 +4,7 @@ import CLELogo from '../../image/CLIlogo.png';
 import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import avatar from '../../image/avtar.svg';
 import favorit from '../../image/favrot.svg';
-import bell from '../../image/bell-solid.svg';
+// import bell from '../../image/bell-solid.svg';
 import { isBrowser, isMobile } from 'react-device-detect';
 import { Link, useParams } from "react-router-dom";
 import { menu } from '../../redux/pages/allPages';
@@ -23,7 +23,8 @@ const { logout } = authAction;
 const { showSignin, openSignUp, menuSetup, showLoader, userType } = appAction;
 const { accountPopup, miniCartPopup, addToCartTask, setCatSearch, setCurrentCat } = cartAction;
 function HeaderMenu(props) {
-
+    let localData = localStorage.getItem('redux-react-session/USER_DATA');
+    let localToken = JSON.parse((localData));
     const baseUrl = process.env.REACT_APP_API_URL;
     let history = useHistory();
     const node = useRef(null);
@@ -70,11 +71,11 @@ function HeaderMenu(props) {
     }, [props.languages, category])
 
     useEffect(() => {
-
-        if (signup === 'true' && member === 'prive' && props.token.token === undefined) {
+        let tokken = localToken ? localToken.token : undefined;
+        if (signup === 'true' && member === 'prive' && tokken === undefined) {
             props.openSignUp(true);
             props.userType(4);
-        } else if (signup === 'true' && member === 'signup' && props.token.token === undefined) {
+        } else if (signup === 'true' && member === 'signup' && tokken === undefined) {
             props.openSignUp(true);
             props.userType(1);
         }
