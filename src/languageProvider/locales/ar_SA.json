@@ -261,7 +261,7 @@
   "gift.for": "ل",
   "gift.from": "من عند",
   "gift.wish-note": "أضف ملاحظة أو رغبات",
-  "gift.wish": "أتمنى..",
+  "gift.wish": "اتمنى لك..",
   "gift.confirm": "يتأكد",
   "gift.title": "أضف فاتورة استرجاع للهديّة",
   "gift.subTitle": "أضف رسالة من القلب لتضيف لمسة لطيفة في مناسبة أحبّائك السّعيدة.",
@@ -563,5 +563,7 @@
   "Colour":"لون",
   "order.adddeliveryaddress": "أضف عنوان التسليم",
   "rest-password": "أدخل كلمة المرور",
-  "reset-confirm-password": "أدخل تأكيد كلمة المرور"
+  "reset-confirm-password": "أدخل تأكيد كلمة المرور",
+  "paymentmethoderror":"يرجى تحديد طريقة الدفع",  
+  "shippingmodeerror":"يرجى اختيار طريقة الشحن"
 }
