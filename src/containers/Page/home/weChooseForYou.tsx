@@ -172,7 +172,7 @@ function WeChooseForYou(props) {
 
     return (
         <div>
-            <section className="width-100 my-5 choose-foryou-sec">
+            <section className="width-100 mb-5 choose-foryou-sec">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
