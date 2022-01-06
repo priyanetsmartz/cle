@@ -13,6 +13,7 @@ function FaqHeader(props) {
     const intl = useIntl();
     const [autoSuggestions, SetAutoSuggestions] = useState([]);
     const [nothingFound, SetNothingFound] = useState("");
+    const [searchText, SetSearchText] = useState("");
     useEffect(() => {
         return () => {
             SetAutoSuggestions([])
@@ -21,22 +22,29 @@ function FaqHeader(props) {
 
 
     const updateInput = async (e) => {
-        let lang = props.languages ? props.languages : language;
-        console.log(e.target.value)
+        SetSearchText(e.target.value)
         if (e.target.value && e.target.value.length >= 3) {
-            let results: any = await faqSearch(lang, e.target.value, siteConfig.pageSize);
-            if (results.data.items && results.data.items.length > 0) {
-           //     console.log('data')
-                SetNothingFound("")
-                SetAutoSuggestions(results.data.items)
-            } else {
-              //  console.log('no data')
-                SetNothingFound("yes")
-                SetAutoSuggestions([])
-            }
+            setTimeout(() => {
+                faqSearchFunction(e.target.value);
+            }, 3000)
+
         } else {
-         //   console.log('no no data')
+            
             SetNothingFound("")
+            SetAutoSuggestions([])
+        }
+    }
+
+    const faqSearchFunction = async (value) => {
+        let lang = props.languages ? props.languages : language;
+        let results: any = await faqSearch(lang, value, siteConfig.pageSize);
+        if (results.data.items && results.data.items.length > 0) {
+            SetNothingFound("")
+            SetSearchText("")
+            SetAutoSuggestions(results.data.items)
+        } else {
+            SetSearchText("")
+            SetNothingFound("yes")
             SetAutoSuggestions([])
         }
     }
@@ -53,12 +61,11 @@ function FaqHeader(props) {
                         <p><IntlMessages id="faq.subtitle" /></p>
                         <div className="form-group has-search">
                             <span className="fa fa-search form-control-feedback"></span>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} onChange={updateInput} />
+                            <input type="text" value={searchText} className="form-control" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} onChange={updateInput} />
                             {(autoSuggestions && autoSuggestions.length > 0) ? (
                                 <div className="serach-results-inner">
                                     <ul>
                                         {autoSuggestions.map((item, i) => {
-                                            // console.log(`/help-center/` + item.category_data[0].category_url_key + '/?#' + item['title'])
                                             return (
                                                 <li key={i} onClick={clearSuggestions}>
                                                     <Link to={`/help-center/` + item.category_data[0].category_url_key + '#' + item['title']} > {item.title}</Link>

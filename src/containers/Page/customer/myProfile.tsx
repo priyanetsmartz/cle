@@ -64,7 +64,6 @@ function MyProfile(props) {
     const [forgotPopup, setForgotPopup] = useState(false);
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [regions, setRegions] = useState([]); // for regions dropdown
-    const [telephone, setTelephone] = useState("");
     const [dob, setDob] = useState({
         day: '',
         month: '',
@@ -77,7 +76,7 @@ function MyProfile(props) {
         lastname: "",
         gender: 0,
         dob: "",
-        country: '',
+        country: 'Andorra',
         phone: '',
         website_id: 1,
         addresses: [],
@@ -85,7 +84,7 @@ function MyProfile(props) {
     });
 
     const [customAttribute, setCustomAttribute] = useState({
-        country: '',
+        country: 'Andorra',
         mp_sms_telephone: ''
     });
     const [custAddForm, setCustAddForm] = useState({
@@ -96,7 +95,7 @@ function MyProfile(props) {
         telephone: "",
         postcode: "",
         city: "",
-        country_id: "",
+        country_id: "AD",
         region_id: "",
         street: ""
     });
@@ -133,6 +132,10 @@ function MyProfile(props) {
     });
 
     const [errors, setError] = useState({
+        errors: {}
+    });
+
+    const [personalError, setPersonalError] = useState({
         errors: {}
     });
 
@@ -328,42 +331,65 @@ function MyProfile(props) {
     }
 
     const saveCustDetails = async (e) => {
-        setSaveCustDetailsLoader(true)
-        e.preventDefault();
-        // console.log(custForm)
-        custForm.email = props.token.token_email;
-        if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
-            custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
-        }
-
-        custForm.custom_attributes = [
-            {
-                "attribute_code": "mp_sms_telephone",
-                "value": customAttribute.mp_sms_telephone
-            },
-            {
-                "attribute_code": "country",
-                "value": customAttribute.country
+        if (validateDetails()) {
+            setSaveCustDetailsLoader(true)
+            e.preventDefault();
+            custForm.email = props.token.token_email;
+            if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
+                custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
             }
-        ]
-        let result: any = await saveCustomerDetails({ customer: custForm });
+            // console.log(customAttribute.country);
+            custForm.custom_attributes = [
+                {
+                    "attribute_code": "mp_sms_telephone",
+                    "value": customAttribute.mp_sms_telephone
+                },
+                {
+                    "attribute_code": "country",
+                    "value": customAttribute.country ? customAttribute.country : "Andorra"
+                }
+            ]
+            let result: any = await saveCustomerDetails({ customer: custForm });
 
-        if (result && result.data && !result.data.message) {
-            let newObj = { ...localToken };
-            newObj.token_name = custForm.firstname + ' ' + custForm.lastname;
-            localStorage.setItem('redux-react-session/USER_DATA', JSON.stringify(newObj));
-            setMyDetailsModel(false);
-            setSaveCustDetailsLoader(false)
-            getData()
-            notification("success", "", intl.formatMessage({ id: "customerUpdate" }));
-        } else {
-            getData()
-            setMyDetailsModel(false);
-            setSaveCustDetailsLoader(false)
-            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            if (result && result.data && !result.data.message) {
+                let newObj = { ...localToken };
+                newObj.token_name = custForm.firstname + ' ' + custForm.lastname;
+                localStorage.setItem('redux-react-session/USER_DATA', JSON.stringify(newObj));
+                setMyDetailsModel(false);
+                setSaveCustDetailsLoader(false)
+                getData()
+                notification("success", "", intl.formatMessage({ id: "customerUpdate" }));
+            } else {
+                getData()
+                setMyDetailsModel(false);
+                setSaveCustDetailsLoader(false)
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
         }
     }
+    const validateDetails = () => {
+        let error = {};
+        let formIsValid = true;
 
+        if (!custForm.firstname) {
+            formIsValid = false;
+            error["firstname"] = intl.formatMessage({ id: "firstnamerequired" })
+        }
+        if (!custForm.lastname) {
+            formIsValid = false;
+            error["lastname"] = intl.formatMessage({ id: "lastnamerequired" })
+        }
+        // if (!custForm.gender) {
+        //     formIsValid = false;
+        //     error["gender"] = intl.formatMessage({ id: "gifting.gender" });
+        // }
+        if (!customAttribute.mp_sms_telephone) {
+            formIsValid = false;
+            error['mp_sms_telephone'] = intl.formatMessage({ id: "phonereq" })
+        }
+        setPersonalError({ errors: error });
+        return formIsValid;
+    }
     // for customer address popup window starts here
     const saveCustAddress = async (e) => {
         if (validateAddress()) {
@@ -380,6 +406,11 @@ function MyProfile(props) {
             let result: any = await saveCustomerDetails({ customer: custForm });
             if (result) {
                 openAddressModal();
+                if (obj.id === 0) {
+                    notification("success", "", intl.formatMessage({ id: "customerAddressSave" }));
+                } else {
+                    notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
+                }
                 setCustAddForm({
                     id: 0,
                     customer_id: props.token.cust_id,
@@ -388,11 +419,11 @@ function MyProfile(props) {
                     telephone: "",
                     postcode: "",
                     city: "",
-                    country_id: "",
+                    country_id: "AD",
                     region_id: "",
                     street: ""
                 });
-                notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
+               
                 setIsShow(false);
             }
         }
@@ -747,14 +778,6 @@ function MyProfile(props) {
     const openGigitingModal = () => {
         setGiftErrors({ errors: {} })
         setGiftingModal(!giftingModal);
-    }
-
-    const openPaymentMethodModal = () => {
-        setPaymentMethod(!paymentMethod);
-    }
-
-    const OpenCardModal = () => {
-        setAddCard(!addCard);
     }
 
     const dobHandler = (e) => {
@@ -1250,14 +1273,14 @@ function MyProfile(props) {
                                 id="firstname"
                                 value={custForm.firstname}
                                 onChange={handleChange} />
-                            <span className="error">{errors.errors["firstname"]}</span>
+                            <span className="error">{personalError.errors["firstname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder="Smith" id="lastname"
                                 value={custForm.lastname}
                                 onChange={handleChange} />
-                            <span className="error">{errors.errors["lastname"]}</span>
+                            <span className="error">{personalError.errors["lastname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
@@ -1267,7 +1290,7 @@ function MyProfile(props) {
                                     return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                 })}
                             </select>
-                            <span className="error">{errors.errors["gender"]}</span>
+                            <span className="error">{personalError.errors["gender"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Phone number</label>
@@ -1275,7 +1298,7 @@ function MyProfile(props) {
                                 value={customAttribute.mp_sms_telephone}
                                 onChange={handleChange}
                             />
-                            <span className="error">{errors.errors["phone"]}</span>
+                            <span className="error">{personalError.errors["mp_sms_telephone"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
@@ -1308,7 +1331,7 @@ function MyProfile(props) {
                                     return (<option key={i} value={opt.name}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
-                            <span className="error">{errors.errors["country"]}</span>
+                            <span className="error">{personalError.errors["country"]}</span>
                         </div>
                     </Modal.Body>
                     <Modal.Footer className="width-100 mb-3 form-field">
@@ -1354,7 +1377,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="lastname"
-                                placeholder="Surname"
+                                placeholder="Smith"
                                 value={custAddForm.lastname}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["lastname"]}</span>
@@ -1363,7 +1386,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="telephone"
-                                placeholder="Phone"
+                                placeholder={intl.formatMessage({ id: 'myaccount.phoneNo' })}
                                 value={custAddForm.telephone}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["telephone"]}</span>
@@ -1372,7 +1395,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="street"
-                                placeholder="Address"
+                                placeholder={intl.formatMessage({ id: 'myaccount.address' })}
                                 value={custAddForm.street}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["street"]}</span>
@@ -1381,7 +1404,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="city"
-                                placeholder="City"
+                                placeholder={intl.formatMessage({ id: 'myaccount.city' })}
                                 value={custAddForm.city}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["city"]}</span>
@@ -1390,7 +1413,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="postcode"
-                                placeholder="Post Code"
+                                placeholder={intl.formatMessage({ id: 'myaccount.postCode' })}
                                 value={custAddForm.postcode}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["postcode"]}</span>

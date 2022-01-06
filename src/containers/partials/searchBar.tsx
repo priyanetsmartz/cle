@@ -14,6 +14,7 @@ function SearchBar(props) {
     const [autoSuggestions, SetAutoSuggestions] = useState([]);
     const [isShow, SetIsShow] = useState(false);
     const [selectedCat, SetSelectedCat] = useState('All');
+    const [searchText, SetSearchText] = useState("");
     const [nothingFound, SetNothingFound] = useState("");
     const [categories, setCategories] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -54,6 +55,7 @@ function SearchBar(props) {
         if (results.data.items) {
             SetIsShow(true);
             SetNothingFound("")
+            SetSearchText("")
             SetAutoSuggestions(results.data.items);
 
         } else {
@@ -61,7 +63,9 @@ function SearchBar(props) {
             SetNothingFound("Nothing Found!")
         }
     }
+
     const updateInput = async (e) => {
+        SetSearchText(e.target.value)
         if (e.target.value.length >= 3) {
             setTimeout(() => {
                 searchResultsApiCall(e.target.value)
@@ -70,23 +74,6 @@ function SearchBar(props) {
             SetIsShow(false);
             SetNothingFound("")
         }
-
-        // if (e.target.value.length >= 3) {
-        //     setSearchKeyword(e.target.value)
-        //     let results: any = await searchFields(e.target.value, 0, 3, lang, "created_at", "DESC");
-        //     if (results.data.items) {
-        //         SetIsShow(true);
-        //         SetNothingFound("")
-        //         SetAutoSuggestions(results.data.items);
-
-        //     } else {
-        //         SetIsShow(false);
-        //         SetNothingFound("Nothing Found!")
-        //     }
-        // } else {
-        //     SetIsShow(false);
-        //     SetNothingFound("")
-        // }
     }
 
     const searchwithCategory = async (e) => {
@@ -107,7 +94,6 @@ function SearchBar(props) {
             let serachVal = e.target.value;
             setSearchKeyword(serachVal)
             window.location.href = `/search/${serachVal}/all`;
-            //   history.push(`/search/${serachVal}/all`);
             SetIsShow(false);
         }
     }
@@ -118,7 +104,7 @@ function SearchBar(props) {
             <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
                 <div className="search_input">
                     <div className="search_top"><img src={IconZoomIn} alt="searchIcon" className="me-1" />
-                        <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} onChange={updateInput} onKeyDown={handleKeyDown} className="form-control me-1" />
+                        <input type="search" value={searchText} placeholder={intl.formatMessage({ id: "searchPlaceholder" })} onChange={updateInput} onKeyDown={handleKeyDown} className="form-control me-1" />
                         {
                             categories.length > 0 && (
                                 <select className="form-select" onChange={searchwithCategory} aria-label="Default select example">

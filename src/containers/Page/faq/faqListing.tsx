@@ -4,6 +4,7 @@ import { getFaqListinglabels } from '../../../redux/pages/allPages';
 import { useParams, useLocation } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { capitalize } from '../../../components/utility/allutils';
+import FaqFooter from './faq-footer';
 function FaqListing(props) {
   const location = useLocation();
   const [categoryData, setCategoryData] = useState([])
@@ -72,7 +73,7 @@ function FaqListing(props) {
                                 {question['title']}
                               </button>
                             </h2>
-                            <div id={`collapseSecTwo${question['question_id']}`} className={question['question_id'] === question_id || i === 0 ? `accordion-collapse collapse show` : `accordion-collapse collapse`} aria-labelledby={`headingSecTwo${i}`} data-bs-parent="#accordionExample">
+                            <div id={`collapseSecTwo${question['question_id']}`} className="accordion-collapse collapse" aria-labelledby={`headingSecTwo${i}`} data-bs-parent="#accordionExample">
                               <div className="accordion-body">
                                 <p dangerouslySetInnerHTML={{ __html: question['answer'] }} />
                               </div>
@@ -89,15 +90,7 @@ function FaqListing(props) {
           </div>
         </div>
       </section>
-      <section className="faq-form">
-        <div className="container">
-          <div className="row">
-            <div className="col-xs-12 col-md-6 offset-md-3 col-lg-6 offset-lg-3">
-              <iframe title="contact form" style={{ "height": "800px", "width": "99%", "border": "none" }} src='https://forms.zohopublic.com/cleportal692/form/ContactusTeaser/formperma/ChqWeIlStcsFpEqH1XolNHheBwaVh9Huwq8bZ6pXOIQ'></iframe>
-            </div>
-          </div>
-        </div>
-      </section>
+      <FaqFooter />
     </section>
   );
 }

@@ -77,10 +77,7 @@ function MyWishList(props) {
         setSearchName(e.target.value);
         setTimeout(() => {
             getSearchData(e.target.value);
-        }, 3000);
-        // if (e.target.value && e.target.value.length >= 3) {
-        //     getData(e.target.value);
-        // }
+        }, 3000);      
     }
 
 
@@ -157,7 +154,7 @@ function MyWishList(props) {
                         </div>
                         <div className="col-md-6">
                             <select className="form-select" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
-                                <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                <option value="">{intl.formatMessage({ id: "sorting" })}</option>
                                 <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
                                 <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
 
@@ -182,9 +179,7 @@ function MyWishList(props) {
                                             <span onClick={() => handleDelWhishlist(item.wishlist_item_id)} className="bg-remove">{delWishlist === item.wishlist_item_id ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-times" aria-hidden="true"></i>}</span>
                                             <div className="product p-4">
                                                 <div className="text-center">
-                                                    <Link to={'/product-details/' + item.sku}><img src={item.img_src} alt={item.name} width="200" /></Link>
-                                                    {/* need sku from api  */}
-                                                    {/* <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.product_id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button></div> */}
+                                                    <Link to={'/product-details/' + item.sku}><img src={item.img_src} alt={item.name} width="200" /></Link>                                                   
 
 
                                                 </div>
