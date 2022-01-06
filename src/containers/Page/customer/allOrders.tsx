@@ -367,7 +367,7 @@ function OrdersAndReturns(props) {
                                                             className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
                                                             <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
                                                         </li>
-                                                        <li className='pageofpage'>Page {page} of {pagination}</li>
+                                                        <li className='pageofpage'><IntlMessages id="page" /> <span className='active'>{page}</span> <IntlMessages id="of" /> {pagination}</li>
                                                         <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
                                                             <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
                                                                 to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>

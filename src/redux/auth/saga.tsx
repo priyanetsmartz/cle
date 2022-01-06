@@ -155,12 +155,18 @@ export function* registerRequest() {
 
           sessionService.saveSession({ id_token })
           sessionService.saveUser(data);
+          localStorage.removeItem('cartQuoteToken');
+          localStorage.removeItem('cartQuoteId');
+          if (token.data[0].group_id === "4") {
+            //yield put(push("/prive-user"));
+            setTimeout(() => {
+              window.location.href = '/prive-user';
+            }, 1000);
 
-          yield setCookie("username", token.data[0].email);
-          if (token.data[0].group_id === 4) {
-            yield put(push("/prive-user"));
           } else {
-            yield put(push("/"));
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 1000);
           }
 
         } else {

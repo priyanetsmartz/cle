@@ -565,5 +565,7 @@
   "rest-password": "أدخل كلمة المرور",
   "reset-confirm-password": "أدخل تأكيد كلمة المرور",
   "paymentmethoderror":"يرجى تحديد طريقة الدفع",  
-  "shippingmodeerror":"يرجى اختيار طريقة الشحن"
+  "shippingmodeerror":"يرجى اختيار طريقة الشحن",
+  "page":"صفحة",
+  "of":"من"
 }
