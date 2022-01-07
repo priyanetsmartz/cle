@@ -383,7 +383,7 @@ function HeaderMenu(props) {
                         </>
                     )}
                     <div className="col-4">
-                        <div className="cli_logo">
+                        <div className="cli_logo logo-m">
                             <Link className=" me-2" onClick={() => window.location.href = '/'} to="/">
                                 <img src={CLELogo} className="img-fluid" alt="logo" />
                             </Link>
