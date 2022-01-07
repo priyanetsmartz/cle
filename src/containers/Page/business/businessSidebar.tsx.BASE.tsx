@@ -74,7 +74,7 @@ function BusinessSidebar(props) {
                                         <option value="sales-orders">{intl.formatMessage({ id: 'vendor.salesOrders' })}</option>
                                         <option value="product-listing">{intl.formatMessage({ id: 'vendor.productListing' })}</option>
                                         {/*  <option value="returns-complaints">{intl.formatMessage({ id: 'vendor.returnComplaints' })}</option>
-                                        // <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
+                                        <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
                                         <option value="analysis">{intl.formatMessage({ id: 'vendor.myAnalysis' })}</option>
                                         <option value="profile">{intl.formatMessage({ id: 'vendor.businessProfile' })}</option>
                                         <option value="notifications">{intl.formatMessage({ id: 'vendor.notification' })}</option> */}
@@ -83,45 +83,38 @@ function BusinessSidebar(props) {
                                 </div>
                                 <div className="myorder_sidebar">
                                     <ul>
-                                        {/* <li className={activeTab === 'dashboard' ? 'active' : ''} >
+                                        <li className={activeTab === 'dashboard' ? 'active' : ''} >
                                             <Link to="#" onClick={() => changeTab('dashboard')}>
                                                 <img src={dashboardIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2">
                                                     <IntlMessages id="customer.dashboard" />
                                                 </span>
                                             </Link>
-                                        </li> */}
-                                        {/* <li className={activeTab === 'sales-orders' ? 'active' : ''}>
+                                        </li>
+                                        <li className={activeTab === 'sales-orders' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('sales-orders')}>
                                                 <img src={ordersIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.salesOrders" /></span>
                                             </Link>
-                                        </li> */}
-                                        {/* <li className={activeTab === 'product-listing' ? 'active' : ''}>
+                                        </li>
+                                        <li className={activeTab === 'product-listing' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('product-listing')}>
                                                 <img src={wishlistIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.productListing" /></span>
                                             </Link>
                                         </li>
-                                        </li> */}
                                         {/*  <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('returns-complaints')}>
                                                 <img src={profileIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
                                             </Link>
+                                        </li>
                                         <li className={activeTab === 'payouts' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('payouts')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.payouts" /></span>
                                             </Link>
                                         </li>
-                                        {/*  <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
-                                            <Link to="#" onClick={() => changeTab('returns-complaints')}>
-                                                <img src={profileIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
-                                            </Link>
-                                        </li>
-                                        
                                         <li className={activeTab === 'analysis' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('analysis')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
@@ -140,12 +133,12 @@ function BusinessSidebar(props) {
                                                 <span className="pl-2"><IntlMessages id="vendor.notification" /></span>
                                             </Link>
                                         </li> */}
-                                        {/* <li className={activeTab === 'support' ? 'active' : ''}>
+                                        <li className={activeTab === 'support' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('support')}>
                                                 <i className="fas fa-phone-alt"></i>
                                                 <span className="pl-2"><IntlMessages id="customer.mySupport" /></span>
                                             </Link>
-                                        </li> */}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

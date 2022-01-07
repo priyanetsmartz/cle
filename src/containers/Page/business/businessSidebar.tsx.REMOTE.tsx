@@ -83,32 +83,26 @@ function BusinessSidebar(props) {
                                 </div>
                                 <div className="myorder_sidebar">
                                     <ul>
-                                        {/* <li className={activeTab === 'dashboard' ? 'active' : ''} >
+                                        <li className={activeTab === 'dashboard' ? 'active' : ''} >
                                             <Link to="#" onClick={() => changeTab('dashboard')}>
                                                 <img src={dashboardIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2">
                                                     <IntlMessages id="customer.dashboard" />
                                                 </span>
                                             </Link>
-                                        </li> */}
-                                        {/* <li className={activeTab === 'sales-orders' ? 'active' : ''}>
+                                        </li>
+                                        <li className={activeTab === 'sales-orders' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('sales-orders')}>
                                                 <img src={ordersIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.salesOrders" /></span>
                                             </Link>
-                                        </li> */}
-                                        {/* <li className={activeTab === 'product-listing' ? 'active' : ''}>
+                                        </li>
+                                        <li className={activeTab === 'product-listing' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('product-listing')}>
                                                 <img src={wishlistIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.productListing" /></span>
                                             </Link>
                                         </li>
-                                        </li> */}
-                                        {/*  <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
-                                            <Link to="#" onClick={() => changeTab('returns-complaints')}>
-                                                <img src={profileIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
-                                            </Link>
                                         <li className={activeTab === 'payouts' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('payouts')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
@@ -140,12 +134,12 @@ function BusinessSidebar(props) {
                                                 <span className="pl-2"><IntlMessages id="vendor.notification" /></span>
                                             </Link>
                                         </li> */}
-                                        {/* <li className={activeTab === 'support' ? 'active' : ''}>
+                                        <li className={activeTab === 'support' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('support')}>
                                                 <i className="fas fa-phone-alt"></i>
                                                 <span className="pl-2"><IntlMessages id="customer.mySupport" /></span>
                                             </Link>
-                                        </li> */}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

@@ -578,5 +578,6 @@
   "delivered":"تم التوصيل",
   "canceled":"ألغيت",
   "returned":"عاد",
-  "onhold":"في الانتظار"
+  "onhold":"في الانتظار",
+  "payout.paid":"دفع"
 }
