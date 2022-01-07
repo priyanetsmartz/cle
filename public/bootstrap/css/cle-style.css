@@ -7591,7 +7591,7 @@ p.sliderupper {
         top: 75px;
         left: 50%;
         transform: translateX(-50%);
-        width: 205px;
+        width: 250px;
     }
 
     .best-from-designers {
@@ -8092,9 +8092,15 @@ p.sliderupper {
     .user_cart ul li a {
         color: #000;
     }
+	
+	.user_cart ul li a svg{
+		fill: #000;
+	}
+	
 
-    .lang-sec svg {
-        fill: #fff;
+    .lang-sec a svg,
+	.lang-sec svg {
+        fill: #000;
     }
 
     .user-header-info .col-xs-12 {
