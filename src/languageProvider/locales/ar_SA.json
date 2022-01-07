@@ -568,5 +568,15 @@
   "paymentmethoderror":"يرجى تحديد طريقة الدفع",  
   "shippingmodeerror":"يرجى اختيار طريقة الشحن",
   "page":"صفحة",
-  "of":"من"
+  "of":"من",  
+  "productIntegration":"تكامل المنتج",  
+  "facebookinvalid": "عنوان url الخاص بـ Facebook غير صالح",
+  "instagraminvalid": "رابط Instagram غير صالح",
+  "readytoship":"على استعداد للسفينة",
+  "acknowledged":"أقر",
+  "shipped":"أقر",
+  "delivered":"تم التوصيل",
+  "canceled":"ألغيت",
+  "returned":"عاد",
+  "onhold":"في الانتظار"
 }

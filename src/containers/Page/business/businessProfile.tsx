@@ -395,8 +395,22 @@ function BusinessProfile(props) {
             formIsValid = false;
             error['businessTax'] = intl.formatMessage({ id: "businessTaxreq" });
         }
+        if (businessDetailsForm.businessFacebook !== "") {
+            if (!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(businessDetailsForm.businessFacebook))) {
+                formIsValid = false;
+                error["businessFacebook"] = intl.formatMessage({ id: "facebookinvalid" });
+            }
+        }
+
+        if (businessDetailsForm.businessInstagram !== "") {
+            if (!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(businessDetailsForm.businessInstagram))) {
+                formIsValid = false;
+                error["businessInstagram"] = intl.formatMessage({ id: "instagraminvalid" });
+            }
+        }
+
         if (typeof (businessDetailsForm.businessWebsite) !== "undefined") {
-            if (!(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/.test(businessDetailsForm.businessWebsite))) {
+            if (!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(businessDetailsForm.businessWebsite))) {
                 formIsValid = false;
                 error["businessWebsite"] = intl.formatMessage({ id: "websiteinvalid" });
             }
@@ -462,13 +476,13 @@ function BusinessProfile(props) {
                     newPassword: "",
                     password: ""
                 });
-            } else  {
+            } else {
                 if (result.data.message) {
                     notification("error", "", result.data.message);
                 } else {
                     notification("error", "", intl.formatMessage({ id: "passwordInvalid" }));
                 }
-              
+
             }
         }
     }
@@ -681,7 +695,7 @@ function BusinessProfile(props) {
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="business.Website" /></label>
-                                        <div className="field-name"><Link to={businessDetailsForm['businessWebsite']} target="_black">{businessDetailsForm['businessWebsite']}</Link></div>
+                                        <div className="field-name"><Link to={{ pathname: `${businessDetailsForm['businessWebsite']}` }} target="_blank" >{businessDetailsForm['businessWebsite']}</Link></div>
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
@@ -691,7 +705,7 @@ function BusinessProfile(props) {
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="business.Facebook" /></label>
-                                        <div className="field-name"><Link to={businessDetailsForm['businessFacebook']} target="_black">{businessDetailsForm['businessFacebook']}</Link></div>
+                                        <div className="field-name"><Link to={{ pathname: `${businessDetailsForm['businessFacebook']}` }} target="_blank" >{businessDetailsForm['businessFacebook']}</Link></div>
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
@@ -701,7 +715,7 @@ function BusinessProfile(props) {
                                     </div>
                                     <div className="field_details">
                                         <label className="form-label"><IntlMessages id="businessInstagram" /></label>
-                                        <div className="field-name"><Link to={businessDetailsForm['businessInstagram']} target="_black">{businessDetailsForm['businessInstagram']}</Link></div>
+                                        <div className="field-name"><Link to={{ pathname: `${businessDetailsForm['businessInstagram']}` }} target="_blank" >{businessDetailsForm['businessInstagram']}</Link></div>
                                     </div>
                                 </div>
                             </div>
@@ -1100,7 +1114,7 @@ function BusinessProfile(props) {
                             <span className="error">{errorsPersonal.errors["location"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Gender</label>
+                            <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                             <select className="form-select" defaultValue={vendorForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">Select</option>
                                 {DROPDOWN.genderVendor.map(opt => {
@@ -1110,7 +1124,7 @@ function BusinessProfile(props) {
                             <span className="error">{errorsPersonal.errors["gender"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Phone number</label>
+                            <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
                             <input type="number" className="form-control" placeholder="+48 123 456 789" id="vendorTelephone"
                                 value={vendorForm.vendorTelephone}
                                 onChange={handleChange}
@@ -1121,20 +1135,20 @@ function BusinessProfile(props) {
                             <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
-                                    <option value="">Select</option>
+                                    <option value=""><IntlMessages id="select" /></option>
                                     {DROPDOWN.dates.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
                                     })}
 
                                 </select>
                                 <select className="form-select me-3" value={dob.month} aria-label="Default select example" onChange={dobHandler} id="month">
-                                    <option value="">Select</option>
+                                    <option value=""><IntlMessages id="select" /></option>
                                     {DROPDOWN.months.map(opt => {
                                         return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                     })}
                                 </select>
                                 <select className="form-select" value={dob.year} aria-label="Default select example" onChange={dobHandler} id="year">
-                                    <option value="">Select</option>
+                                    <option value=""><IntlMessages id="select" /></option>
                                     {DROPDOWN.years.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
                                     })}
@@ -1142,7 +1156,7 @@ function BusinessProfile(props) {
                             </div>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Preferred contact method<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="vendor.contactMethod" /><span className="maindatory">*</span></label>
                             <select value={vendorForm.contactMethod} onChange={handleChange} id="contactMethod" className="form-select" aria-label="Default select example">
                                 <option value="email">Email</option>
                                 <option value="phone">Phone</option>
@@ -1172,7 +1186,7 @@ function BusinessProfile(props) {
                     </Modal.Header>
                     <Modal.Body className="arabic-rtl-direction">
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="business.companyname" /></label>
+                            <label className="form-label"><IntlMessages id="business.companyname" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.companyname" })}
                                 id="businessCompanyName"
                                 value={businessDetailsForm.businessCompanyName}
@@ -1180,7 +1194,7 @@ function BusinessProfile(props) {
                             <span className="error">{errorsBussiness.errors["businessCompanyName"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="business.IbamNo" /></label>
+                            <label className="form-label"><IntlMessages id="business.IbamNo" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.IbamNo" })}
                                 id="businessIbamNo"
                                 value={businessDetailsForm.businessIbamNo}
@@ -1188,14 +1202,14 @@ function BusinessProfile(props) {
                             <span className="error">{errorsBussiness.errors["businessIbamNo"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="tax" /></label>
+                            <label className="form-label"><IntlMessages id="tax" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "tax" })} id="businessTax"
                                 value={businessDetailsForm.businessTax}
                                 onChange={handlebussinessChange} />
                             <span className="error">{errorsBussiness.errors["businessTax"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="business.Website" /></label>
+                            <label className="form-label"><IntlMessages id="business.Website" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.Website" })} id="businessWebsite"
                                 value={businessDetailsForm.businessWebsite}
                                 onChange={handlebussinessChange} />
@@ -1206,14 +1220,14 @@ function BusinessProfile(props) {
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.Facebook" })} id="businessFacebook"
                                 value={businessDetailsForm.businessFacebook}
                                 onChange={handlebussinessChange} />
-                            {/* <span className="error">{errors.errors["facebook"]}</span> */}
+                            <span className="error">{errorsBussiness.errors["businessFacebook"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="businessInstagram" /></label>
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "businessInstagram" })} id="businessInstagram"
                                 value={businessDetailsForm.businessInstagram}
                                 onChange={handlebussinessChange} />
-                            {/* <span className="error">{errors.errors["instagram"]}</span> */}
+                            <span className="error">{errorsBussiness.errors["businessInstagram"]}</span>
                         </div>
                     </Modal.Body>
                     <Modal.Footer className="width-100 mb-3 form-field">

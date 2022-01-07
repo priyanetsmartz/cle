@@ -565,8 +565,18 @@
   "order.adddeliveryaddress": "Add delivery address",
   "rest-password": "Enter password",
   "reset-confirm-password": "Enter Confirm Password",
-  "paymentmethoderror":"Kindly select Payment mode",
-  "shippingmodeerror":"Kindly choose shipping method",
-  "page":"Page",
-  "of":"of"
+  "paymentmethoderror": "Kindly select Payment mode",
+  "shippingmodeerror": "Kindly choose shipping method",
+  "page": "Page",
+  "of": "of",
+  "productIntegration": "Product integration",
+  "facebookinvalid": "Facebook url is invalid",
+  "instagraminvalid": "Instagram url is invalid",
+  "readytoship":"Ready to Ship",
+  "acknowledged":"Acknowledged",
+  "shipped":"Shipped",
+  "delivered":"Delivered",
+  "canceled":"Canceled",
+  "returned":"Returned",
+  "onhold":"On Hold"
 }

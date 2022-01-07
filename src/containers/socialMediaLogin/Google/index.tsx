@@ -30,6 +30,7 @@ function GoogleLoginButton(props) {
                 "email": response.profileObj.email,
                 "accessToken": response.accessToken,
                 "type": props.userSetype,
+                "storeId": props.languages
             }
             fetchMyAPI(userInfo)
 
@@ -51,9 +52,9 @@ function GoogleLoginButton(props) {
 
     async function fetchMyAPI(userInfo) {
         let result: any = await loginApi.getAuthRegister(userInfo.email);
-      //  console.log(result)
+        //  console.log(result)
         var jsonData = result && result.data && result.data.length > 0 ? result.data[0] : [];
-        if (jsonData) {
+        if (result && result.data && result.data.length > 0) {
             let id_token = jsonData.new_token;
             let firstname = jsonData.firstname ? jsonData.firstname : '';
             let lastname = jsonData.lastname ? jsonData.lastname : '';
@@ -64,7 +65,8 @@ function GoogleLoginButton(props) {
                 'token_name': firstname + ' ' + lastname,
                 'token': jsonData.group_id,
                 'id_token': jsonData.new_token,
-                'type': "user"
+                'type': "user",
+                "storeId": props.languages
             }
             sessionService.saveSession({ id_token })
             sessionService.saveUser(data)
@@ -115,13 +117,17 @@ function GoogleLoginButton(props) {
     )
 }
 function mapStateToProps(state) {
-    let loginState = '';
+    let loginState = '', languages = '';
     if (state && state.App && state.App.showLogin) {
         loginState = state.App.showLogin
+    }
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
     }
     return {
         loginState: loginState,
         userSetype: state.App.userType,
+        languages: languages
     }
 }
 export default connect(

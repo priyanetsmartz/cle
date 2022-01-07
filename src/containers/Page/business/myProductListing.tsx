@@ -35,11 +35,10 @@ function MyProductListing(props) {
         getData()
     }, [props.languages, sortValue])
 
+
+    
     async function getData(status = '', from = '', to = '', type = '') {
-        console.log('gere')
-        let userData = JSON.parse((localStorage.getItem('redux-react-session/USER_DATA')))
-        console.log(localStorage.getItem('redux-react-session/USER_DATA'))
-        console.log(userData,typeof(userData), userData['vendor_id'])
+        let userData = JSON.parse((localStorage.getItem('redux-react-session/USER_DATA')))       
         setVendorId(userData['vendor_id'])
         let result: any = await getVendorProducts(props.languages, status, from, to, type, sortValue);
         let dataObj = result && result.data && result.data.items && result.data.items.length > 0 ? result.data.items : [];
@@ -64,6 +63,7 @@ function MyProductListing(props) {
         setAllData(renObjData)
 
     }
+    
     const handleDelete = (prodId) => {
         setDeleteID(prodId)
         setDeletePop(true);
@@ -88,7 +88,7 @@ function MyProductListing(props) {
                     <p className='prodbrand'>{brand}</p>
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span>ID:</span>{row.product.id}</p>
-                    <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" >View</Link></li><li><Link onClick={() => { handleDelete(row.product.sku) }} >Delete</Link></li></ul></div>
+                    <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" >View</Link></li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} >Delete</Link></li></ul></div>
                 </div>
             ),
         },
@@ -338,22 +338,10 @@ function MyProductListing(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col-sm-5 mb-4">
-                                    <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="changeStatus" />:</span>
-                                        <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "product.activateproduct" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "product.archieveproduct" })}</option>
-                                            <option value="2">{intl.formatMessage({ id: "product.removeproduct" })}</option>
-                                            <option value="6">{intl.formatMessage({ id: "product.soldproduct" })}</option>
-                                        </select>
-                                    </div>
-                                </div>
+                            <div className="row">                              
                                 <div className="d-grid col-sm-4 mb-4">
                                     <button type="button" className="btn btn-secondary" >
-                                        <IntlMessages id="myaccount.confirm" />
+                                        <IntlMessages id="productIntegration" />
                                     </button>
                                 </div>
                                 <div className="d-grid col-sm-3 mb-4">

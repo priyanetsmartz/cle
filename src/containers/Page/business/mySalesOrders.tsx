@@ -9,8 +9,9 @@ import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getVendorOrders, salesOrder } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { getCookie } from '../../../helpers/session';
-
-
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-daterangepicker/daterangepicker.css';
 
 
 function MySalesOrders(props) {
@@ -23,7 +24,7 @@ function MySalesOrders(props) {
     const [searchTerm, setSearchTerm] = useState('');
     const [fromDate, setFromDate] = useState('');
     const [toDates, setToDates] = useState('');
-    const [defData, setDefData] = useState([]); 
+    const [defData, setDefData] = useState([]);
     const language = getCookie('currentLanguage');
     useEffect(() => {
         getDataOfOrders()
@@ -33,33 +34,33 @@ function MySalesOrders(props) {
 
     }, [])
 
-    const getOrdersByStatus = async(e) =>{
+    const getOrdersByStatus = async (e) => {
         const { value } = e.target;
         await setStatus(e.target.value)
-        
-        let term = searchTerm?searchTerm:null;
-        let frDate = fromDate?fromDate:null;
-        let toDate = toDates?toDates:null;
-        let fromPrice = range[0]?range[0]:null;
-        let toPrice = range[1]?range[1]:null;
-        let stat = status?status:null;
-        let result:any = await salesOrder(language, term, frDate, toDate, fromPrice, toPrice, e.target.value,pageSize);
+
+        let term = searchTerm ? searchTerm : null;
+        let frDate = fromDate ? fromDate : null;
+        let toDate = toDates ? toDates : null;
+        let fromPrice = range[0] ? range[0] : null;
+        let toPrice = range[1] ? range[1] : null;
+        let stat = status ? status : null;
+        let result: any = await salesOrder(language, term, frDate, toDate, fromPrice, toPrice, e.target.value, pageSize);
         console.log(result);
-        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []    
+        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []
         const renObjData = dataObj.map(function (data, idx) {
-            
+
             let orderLoop: any = {};
-                orderLoop.increment_id = data.order_increment_id;
-                orderLoop.status = data.udropship_status;
-                orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');;
-                orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
-                
-                return orderLoop;
+            orderLoop.increment_id = data.order_increment_id;
+            orderLoop.status = data.udropship_status;
+            orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');;
+            orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
+
+            return orderLoop;
         });
         setMyOrders(renObjData);
     }
 
-    const getOrdersByDate = async(e) =>{
+    const getOrdersByDate = async (e) => {
         const { value } = e.target;
         let filter = parseInt(value);
         let fromDate;
@@ -77,78 +78,78 @@ function MySalesOrders(props) {
         setFromDate(dateFrom);
         setToDates(dateTo);
 
-        let term = searchTerm?searchTerm:null;
-        let frDate = fromDate?fromDate:null;
-        let toDate = toDates?toDates:null;
-        let fromPrice = range[0]?range[0]:null;
-        let toPrice = range[1]?range[1]:null;
-        let stat = status?status:null;
-        let result:any = await salesOrder(language, term, dateFrom, dateTo, fromPrice, toPrice, stat,pageSize);
+        let term = searchTerm ? searchTerm : null;
+        let frDate = fromDate ? fromDate : null;
+        let toDate = toDates ? toDates : null;
+        let fromPrice = range[0] ? range[0] : null;
+        let toPrice = range[1] ? range[1] : null;
+        let stat = status ? status : null;
+        let result: any = await salesOrder(language, term, dateFrom, dateTo, fromPrice, toPrice, stat, pageSize);
         console.log(result);
-        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []    
+        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []
         const renObjData = dataObj.map(function (data, idx) {
 
             let orderLoop: any = {};
-                orderLoop.increment_id = data.order_increment_id;
-                orderLoop.status = data.udropship_status;
-                orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
-                return orderLoop;
+            orderLoop.increment_id = data.order_increment_id;
+            orderLoop.status = data.udropship_status;
+            orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+            orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
+            return orderLoop;
         });
         setMyOrders(renObjData);
     }
 
-    const getOrdersByPrice = async(e) =>{
+    const getOrdersByPrice = async (e) => {
         let from = range[0];
         let to = range[1];
         setRange([from, to])
-        let term = searchTerm?searchTerm:null;
-        let frDate = fromDate?fromDate:null;
-        let toDate = toDates?toDates:null;
-        let fromPrice = range[0]?range[0]:null;
-        let toPrice = range[1]?range[1]:null;
-        let stat = status?status:null;
-        let result:any = await salesOrder(language, term, frDate, toDate, from, to, stat,pageSize);
-        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []    
+        let term = searchTerm ? searchTerm : null;
+        let frDate = fromDate ? fromDate : null;
+        let toDate = toDates ? toDates : null;
+        let fromPrice = range[0] ? range[0] : null;
+        let toPrice = range[1] ? range[1] : null;
+        let stat = status ? status : null;
+        let result: any = await salesOrder(language, term, frDate, toDate, from, to, stat, pageSize);
+        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []
         const renObjData = dataObj.map(function (data, idx) {
 
             let orderLoop: any = {};
-                orderLoop.increment_id = data.order_increment_id;
-                orderLoop.status = data.udropship_status;
-                orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
-                return orderLoop;
+            orderLoop.increment_id = data.order_increment_id;
+            orderLoop.status = data.udropship_status;
+            orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+            orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
+            return orderLoop;
         });
         setMyOrders(renObjData);
     }
 
-    const getOrdersBySearchTerm = async(e) =>{
+    const getOrdersBySearchTerm = async (e) => {
         if (e.target.value.length >= 3) {
             setSearchTerm(e.target.value)
-        let term = searchTerm?searchTerm:null;
-        let frDate = fromDate?fromDate:null;
-        let toDate = toDates?toDates:null;
-        let fromPrice = range[0]?range[0]:null;
-        let toPrice = range[1]?range[1]:null;
-        let stat = status?status:null;
-        let result:any = await salesOrder(language, term, frDate, toDate, fromPrice, toPrice, e.target.value,pageSize);
-        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []    
-        const renObjData = dataObj.map(function (data, idx) {
+            let term = searchTerm ? searchTerm : null;
+            let frDate = fromDate ? fromDate : null;
+            let toDate = toDates ? toDates : null;
+            let fromPrice = range[0] ? range[0] : null;
+            let toPrice = range[1] ? range[1] : null;
+            let stat = status ? status : null;
+            let result: any = await salesOrder(language, term, frDate, toDate, fromPrice, toPrice, e.target.value, pageSize);
+            let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []
+            const renObjData = dataObj.map(function (data, idx) {
 
-            let orderLoop: any = {};
+                let orderLoop: any = {};
                 orderLoop.increment_id = data.order_increment_id;
                 orderLoop.status = data.udropship_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
                 orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
                 return orderLoop;
-        });
-        setMyOrders(renObjData);
+            });
+            setMyOrders(renObjData);
+        }
+        else {
+            setMyOrders(defData);
+        }
     }
-    else{
-        setMyOrders(defData);
-    }
-    }
-    
+
     const columns = [
         {
             name: 'Order number',
@@ -161,17 +162,13 @@ function MySalesOrders(props) {
             sortable: true,
         },
         {
-            name: 'Status',
+            name: 'Date',
             selector: row => row.status,
+            sortable: true,
             cell: row => (
-                <select defaultValue={row.status}>
-                    <option value="1">{intl.formatMessage({ id: "product.active" })}</option>
-                    <option value="2">{intl.formatMessage({ id: "product.pending" })}</option>
-                    <option value="3">{intl.formatMessage({ id: "product.sold" })}</option>
-                    <option value="4">{intl.formatMessage({ id: "product.rejected" })}</option>
-                </select>
+                <span className='green'>{row.status}</span>
 
-            ),
+            )
         },
         {
             name: 'Total',
@@ -180,9 +177,7 @@ function MySalesOrders(props) {
     ];
     async function getDataOfOrders() {
         let result: any = await getVendorOrders(props.languages, siteConfig.pageSize)
-
-        console.log("check result", result)
-        let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
+        let dataObj = result && result.data && result.data.length > 0 && result.data[0] && result.data[0].OrderArray ? result.data[0].OrderArray : [];
         if (dataObj.length > 0) {
             const dataLListing = dataObj.map((data, index) => {
                 let orderLoop: any = {};
@@ -219,17 +214,35 @@ function MySalesOrders(props) {
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
-                                        <select className="form-select" aria-label="Default select example" value={status}  onChange = {getOrdersByStatus}>
-                                            <option value="0">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "product.active" })}</option>
-                                            <option value="2">{intl.formatMessage({ id: "product.pending" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "product.sold" })}</option>
-                                            <option value="4">{intl.formatMessage({ id: "product.rejected" })}</option>
+                                        <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="0">{intl.formatMessage({ id: "product.pending" })}</option>
+                                            <option value="1">{intl.formatMessage({ id: "Shipped" })}</option>
+                                            <option value="3">{intl.formatMessage({ id: "readytoship" })}</option>
+                                            <option value="4">{intl.formatMessage({ id: "onhold" })}</option>
+                                            <option value="6">{intl.formatMessage({ id: "canceled" })}</option>
+                                            <option value="7">{intl.formatMessage({ id: "delivered" })}</option>
+                                            <option value="9">{intl.formatMessage({ id: "acknowledged" })}</option>
+                                            <option value="11">{intl.formatMessage({ id: "returned" })}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
+                                        <DateRangePicker
+                                            initialSettings={{
+                                                startDate: moment().subtract(29, 'days'),
+                                                endDate: moment(),
+                                                ranges: {
+                                                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                                                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                                                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                                                }
+                                            }}
+                                        >
+                                            <input type="text" className="form-control" />
+                                        </DateRangePicker>
                                         <span className="form-label"><IntlMessages id="order.date" /></span>
                                         <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -243,7 +256,7 @@ function MySalesOrders(props) {
                                 <div className="col-sm-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
-                                        <Slider range max={20000} defaultValue={[0, 0]} onAfterChange={getOrdersByPrice}/>
+                                        <Slider range max={20000} defaultValue={[0, 0]} onAfterChange={getOrdersByPrice} />
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
@@ -251,30 +264,11 @@ function MySalesOrders(props) {
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
                                             <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1"  onChange={getOrdersBySearchTerm}/>
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="row">
-                                <div className="col-sm-6 mb-4">
-                                    <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="changeStatus" />:</span>
-                                        <select className="form-select" aria-label="Default select example" >
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
-                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
-                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="d-grid col-sm-4 mb-4">
-                                    <button type="button" className="btn btn-secondary" >
-                                        <IntlMessages id="myaccount.edit" />
-                                    </button>
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -282,9 +276,9 @@ function MySalesOrders(props) {
                 <DataTable
                     columns={columns}
                     data={myOrder}
-                    selectableRows
+                    // selectableRows
                     pagination={true}
-                    onSelectedRowsChange={handleChange}
+                // onSelectedRowsChange={handleChange}
                 />
             </section>
         </div>
@@ -293,8 +287,14 @@ function MySalesOrders(props) {
 }
 
 const mapStateToProps = (state) => {
+    let languages = '';
+
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
+    }
     return {
-        items: state.Cart.items
+        items: state.Cart.items,
+        languages: languages
     }
 }
 

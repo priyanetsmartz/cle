@@ -30,6 +30,7 @@ function FacebookLoginButton(props) {
                 "email": response.email,
                 "accessToken": response.accessToken,
                 "type": props.userSetype,
+                "storeId":props.languages
             }
             // console.log(userInfo)
             fetchMyAPI(userInfo)
@@ -37,8 +38,10 @@ function FacebookLoginButton(props) {
     }
     async function fetchMyAPI(userInfo) {
         let result: any = await loginApi.getAuthRegister(userInfo.email);
+
         var jsonData = result && result.data && result.data.length > 0 ? result.data[0] : [];
-        if (jsonData) {
+        //   console.log(result, jsonData)
+        if (result && result.data && result.data.length > 0) {
             let id_token = jsonData.new_token;
             let firstname = jsonData.firstname ? jsonData.firstname : '';
             let lastname = jsonData.lastname ? jsonData.lastname : '';
@@ -85,7 +88,7 @@ function FacebookLoginButton(props) {
         <FacebookLogin
             appId={apiConfig.facebookKey}
             autoLoad={false}
-            fields="email"
+            fields="email,name"
             scope="email"
             data-scope="email"
             callback={responseFacebook}
@@ -105,13 +108,18 @@ function FacebookLoginButton(props) {
 
 function mapStateToProps(state) {
     //console.log(state)
-    let loginState = '';
+    let loginState = '', languages = '';
     if (state && state.App && state.App.showLogin) {
         loginState = state.App.showLogin
+    }
+
+    if (state && state.LanguageSwitcher) {
+        languages = state.LanguageSwitcher.language
     }
     return {
         loginState: loginState,
         userSetype: state.App.userType,
+        languages: languages
     }
 }
 export default connect(
