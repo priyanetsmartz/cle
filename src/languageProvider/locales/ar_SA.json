@@ -383,6 +383,7 @@
   "addedToWhishlist": "تمت إضافة المنتج بنجاح إلى قائمة الرغبات الخاصة بك",
   "somethingwrong": "هناك خطأ ما!!",
   "customerUpdate": "تم تحديث تفاصيل العميل",
+  "customerAddressSave": "تم حفظ عنوانك بنجاح",
   "customerAddressUpdate": "تم تحديث عنوان العميل",
   "customerAddressDelete": "تم حذف عنوان العميل",
   "passwordUpdate": "تم تحديث كلمة السر",
@@ -567,5 +568,15 @@
   "paymentmethoderror":"يرجى تحديد طريقة الدفع",  
   "shippingmodeerror":"يرجى اختيار طريقة الشحن",
   "page":"صفحة",
-  "of":"من"
+  "of":"من",  
+  "productIntegration":"تكامل المنتج",  
+  "facebookinvalid": "عنوان url الخاص بـ Facebook غير صالح",
+  "instagraminvalid": "رابط Instagram غير صالح",
+  "readytoship":"على استعداد للسفينة",
+  "acknowledged":"أقر",
+  "shipped":"أقر",
+  "delivered":"تم التوصيل",
+  "canceled":"ألغيت",
+  "returned":"عاد",
+  "onhold":"في الانتظار"
 }

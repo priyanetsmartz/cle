@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { getFaqlabels } from '../../../redux/pages/allPages';
 import { siteConfig } from '../../../settings';
 import { Link } from "react-router-dom";
+import FaqFooter from './faq-footer';
 import IntlMessages from "../../../components/utility/intlMessages";
 function Faq(props) {
 
@@ -54,15 +55,7 @@ function Faq(props) {
 					</div>
 				</div>
 			</section>
-			<section className="faq-form">
-				<div className="container">
-					<div className="row">
-						<div className="col-xs-12 col-md-6 offset-md-3 col-lg-6 offset-lg-3">
-							<iframe title="contact form" style={{ "height": "800px", "width": "99%", "border": "none" }} src='https://forms.zohopublic.com/cleportal692/form/ContactusTeaser/formperma/ChqWeIlStcsFpEqH1XolNHheBwaVh9Huwq8bZ6pXOIQ'></iframe>
-						</div>
-					</div>
-				</div>
-			</section>
+			<FaqFooter />
 
 		</section>
 	);

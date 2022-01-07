@@ -72,6 +72,7 @@ function BestSeller(props) {
         let result: any = await getHomePageProductsFxn(props.languages, catId);
         //console.log(result['bestSeller']) 
         setBestseller(result['bestSeller']);
+        setOpacity(1);
     }
 
     //get categories for the filter dropdown

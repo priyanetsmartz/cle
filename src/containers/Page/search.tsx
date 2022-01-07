@@ -348,9 +348,9 @@ function SearchResults(props) {
                                                                                     let priceHigh = parseInt(priceh[1]);
                                                                                     return (
                                                                                         <div className="sliderInner">
-                                                                                            {/* <p className="sliderlower">{priceLow}</p> */}
+                                                                                            
                                                                                             <Slider min={priceLow} max={priceHigh} range onAfterChange={handlePriceRange} />
-                                                                                            {/* <p className="sliderupper" >{priceHigh}</p> */}
+                                                                                           
                                                                                         </div>)
                                                                                 })()}</div>
                                                                                 :
@@ -412,7 +412,7 @@ function SearchResults(props) {
                                     <option value={0} key="0" >{intl.formatMessage({ id: "filterNewestFirst" })}</option>
                                     <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
                                     <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>Our picks
-                                    <option value={3} key="3" >{intl.formatMessage({ id: "filterourpicks" })}</option>
+                                    {/* <option value={3} key="3" >{intl.formatMessage({ id: "filterourpicks" })}</option> */}
                                 </select>
                             </div>
                         </div>
