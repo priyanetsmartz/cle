@@ -73,7 +73,8 @@ function Customer(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-3" id="customersidebar">
-                            <div className="pro_categry_sidebar">
+                           <div className="sticky-fliter">
+						   <div className="pro_categry_sidebar">
                                 <div className="my-userdetails">
                                     <div className="user_show" style={priveColor}><IntlMessages id="customer.hi" /></div>
                                     <div className="user_name">{name ? capitalize(name) : ""}</div>
@@ -142,6 +143,7 @@ function Customer(props) {
                                     </ul>
                                 </div>
                             </div>
+							</div>
                         </div>
                         {activeTab === 'dashboard' ? <MyProfile /> :
                             activeTab === 'orders-and-returns' ? <OrdersAndReturns /> :
