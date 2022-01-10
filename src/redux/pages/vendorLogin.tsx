@@ -147,3 +147,26 @@ export async function salesOrder(language, term, fromDate, toDate, fromPrice, to
 
 
 }
+
+export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice , page_size, sort_order, search){
+    
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    let queryString = "vendorId="+vendorId;
+    if (po_date_from!=null)
+        queryString+="&po_date_from="+po_date_from
+    if (po_date_to!=null)
+        queryString+="&po_date_to="+po_date_to
+    if (po_status!=null)
+        queryString+="&po_status="+po_status
+    if (po_fromPrice!=null)
+        queryString+="&po_fromPrice="+po_fromPrice
+    if (po_toPrice!=null)
+        queryString+="&po_toPrice="+po_toPrice
+    if (page_size!=null)
+        queryString+="&page_size="+page_size
+    if (search!=null)
+        queryString+="&search="+search
+    return adminToken.request(`default/rest/all/V1/vendor/vendorPayoutCollection?${queryString}`,"" , "GET", "")
+
+}
