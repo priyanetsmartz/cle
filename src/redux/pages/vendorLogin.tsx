@@ -96,35 +96,34 @@ export function editVendorAddress(address) {
 export function vendorRestpassword(payload) {
     return adminToken.request(`rest/all/V1/vendor/resetPassword`, payload, "PUT", "");
 }
-export async function searchProductListing(language, term) {
-    var storeId = language === 'english' ? '3' : '2';
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const vendorId = vendor.vendor_id;
-    return adminToken.request(`rest/all/V1/product/searchProducts?vendorId=${vendorId}&storeId=${storeId}&searchterm=${term}`, "", "GET", "")
-}
+
 
 export function removeProduct(deleteInfo) {
     return adminToken.request(`rest/all/V1/products`, deleteInfo, "POST", "");
 }
 
-export async function searchProducts(language, term, fromDate, toDate, fromPrice, toPrice, status) {
+export async function searchProducts(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
     var storeId = language === 'english' ? '3' : '2';
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
-    if (term !== null)
-        queryString += "&searchterm=" + term;
-    if (fromDate !== null)
-        queryString += "&fromDate=" + fromDate;
-    if (toDate !== null)
-        queryString += "&toDate=" + toDate;
-    if (fromPrice !== null)
-        queryString += "&fromPrice=" + fromPrice;
-    if (toPrice !== null)
-        queryString += "&toPrice=" + toPrice;
-    if (status !== null)
+
+    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId + "&pageSize=" + pageSize;
+    if (status !== null && status !== '') {
         queryString += "&status=" + status;
-    console.log("check here", vendorId, storeId, term, fromDate, toDate, fromPrice, toPrice, status)
+    }
+    if ((from !== null && from !== '') && (to !== null && to !== '' && to !== 0)) {
+        queryString += "&from_price=" + from + "&to_price=" + to;
+    }
+    if (term !== null && term !== '') {
+        queryString += "&searchterm=" + term;
+    }
+    if ((dateFrom !== null && dateFrom !== '') && (dateTo !== null && dateTo !== '')) {
+        queryString += "&from_date=" + dateFrom + "&to_date=" + dateTo;
+    }
+    if (sortOrders !== '') {
+        queryString += "&sortOrder=" + sortOrders;
+    }
+
     return adminToken.request(`rest/all/V1/product/searchProducts?${queryString}`, "", "GET", "")
 
 }
