@@ -93,16 +93,17 @@ function MyPayouts(props) {
             name: 'Status',
             selector: row => row.status,
             cell: row => (
-                <select defaultValue={row.status}>                    
-                    <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
-                    <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
-                    <option value="processing">{intl.formatMessage({ id: "payout.processing" })}</option>
-                    <option value="hold">{intl.formatMessage({ id: "payout.hold" })}</option>
-                    <option value="paypal_ipn">{intl.formatMessage({ id: "payout.paypal_ipn" })}</option>
-                    <option value="paid">{intl.formatMessage({ id: "payout.paid" })}</option>
-                    <option value="error">{intl.formatMessage({ id: "payout.error" })}</option>
-                    <option value="canceled">{intl.formatMessage({ id: "payout.cancelled" })}</option>
-                </select>
+                <span className='green'>{row.status}</span>
+                // <select defaultValue={row.status}>                    
+                //     <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
+                //     <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
+                //     <option value="processing">{intl.formatMessage({ id: "payout.processing" })}</option>
+                //     <option value="hold">{intl.formatMessage({ id: "payout.hold" })}</option>
+                //     <option value="paypal_ipn">{intl.formatMessage({ id: "payout.paypal_ipn" })}</option>
+                //     <option value="paid">{intl.formatMessage({ id: "payout.paid" })}</option>
+                //     <option value="error">{intl.formatMessage({ id: "payout.error" })}</option>
+                //     <option value="canceled">{intl.formatMessage({ id: "payout.cancelled" })}</option>
+                // </select>
 
             ),
         },
