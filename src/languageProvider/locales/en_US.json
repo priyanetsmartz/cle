@@ -579,5 +579,11 @@
   "delivered":"Delivered",
   "canceled":"Canceled",
   "returned":"Returned",
-  "onhold":"On Hold"
+  "onhold":"On Hold",
+  "payout.processing":"Processing",
+  "payout.scheduled":"Scheduled",
+  "payout.hold":"Hold",
+  "payout.paypal_ipn":"Waiting for Paypal IPN",
+  "payout.error":"Error",
+  "payout.cancelled":"Cancelled"
 }
