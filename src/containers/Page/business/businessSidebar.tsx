@@ -107,7 +107,7 @@ function BusinessSidebar(props) {
                                             <Link to="#" onClick={() => changeTab('returns-complaints')}>
                                                 <img src={profileIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
-                                            </Link>
+                                            </Link> */}
                                         <li className={activeTab === 'payouts' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('payouts')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />

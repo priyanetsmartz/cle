@@ -94,17 +94,6 @@ function MyPayouts(props) {
             selector: row => row.status,
             cell: row => (
                 <span className='green'>{row.status}</span>
-                // <select defaultValue={row.status}>                    
-                //     <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
-                //     <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
-                //     <option value="processing">{intl.formatMessage({ id: "payout.processing" })}</option>
-                //     <option value="hold">{intl.formatMessage({ id: "payout.hold" })}</option>
-                //     <option value="paypal_ipn">{intl.formatMessage({ id: "payout.paypal_ipn" })}</option>
-                //     <option value="paid">{intl.formatMessage({ id: "payout.paid" })}</option>
-                //     <option value="error">{intl.formatMessage({ id: "payout.error" })}</option>
-                //     <option value="canceled">{intl.formatMessage({ id: "payout.cancelled" })}</option>
-                // </select>
-
             ),
         },
         { // To change column
@@ -145,7 +134,7 @@ function MyPayouts(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h1><IntlMessages id="vendor.mypayouts" /></h1>
-                            <p><IntlMessages id="salesOrder.description.1" /><br /><IntlMessages id="salesOrder.description.2" /></p>
+                            <p><IntlMessages id="payout.description" /></p>
                         </div>
                     </div>
                     <div className="range_slider">

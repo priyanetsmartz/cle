@@ -108,17 +108,17 @@ export async function searchProducts(language, term, fromDate, toDate, fromPrice
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
-    if (term !== null)
+    if (term !== null && term != '')
         queryString += "&searchterm=" + term;
-    if (fromDate !== null)
+    if (fromDate !== null && fromDate != '')
         queryString += "&fromDate=" + fromDate;
-    if (toDate !== null)
+    if (toDate !== null && toDate!='')
         queryString += "&toDate=" + toDate;
-    if (fromPrice !== null)
+    if (fromPrice !== null && fromPrice!=''&& fromPrice != 0)
         queryString += "&fromPrice=" + fromPrice;
-    if (toPrice !== null)
+    if (toPrice !== null && toPrice!= '' && toPrice != 0)
         queryString += "&toPrice=" + toPrice;
-    if (status !== null)
+    if (status !== null && status != '')
         queryString += "&status=" + status;
     console.log("check here", vendorId, storeId, term, fromDate, toDate, fromPrice, toPrice, status)
     return adminToken.request(`rest/all/V1/product/searchProducts?${queryString}`, "", "GET", "")
