@@ -4,7 +4,7 @@ import { orderDetailbyId } from '../../../redux/cart/productApi';
 import IntlMessages from "../../../components/utility/intlMessages";
 import moment from 'moment';
 import { Link } from "react-router-dom";
-import { capitalize } from '../../../components/utility/allutils';
+import { capitalize, getCountryName } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import Form from './order-form';
 
@@ -102,7 +102,7 @@ function OrderThankyou(props) {
                                     {orderDetails['delivery_address'] ? orderDetails['delivery_address'].postcode : ""}<br />
                                     {orderDetails['delivery_address'] ? orderDetails['delivery_address'].city : ""}<br />
                                     {orderDetails['delivery_address'] ? orderDetails['delivery_address'].region : ""}<br />
-                                    {orderDetails['delivery_address'] ? orderDetails['delivery_address'].country_id : ""}
+                                    {orderDetails['delivery_address'] ? getCountryName(orderDetails['delivery_address'].country_id) : ""}
                                 </p>
                             </div>
                         </div>

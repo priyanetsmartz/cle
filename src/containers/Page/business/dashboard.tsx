@@ -68,7 +68,7 @@ function Dashboard(props) {
 
     }
     async function getDataOfOrders() {
-        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, "", 0, 0, "", "", "");
+        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, "", 0, 0, "", "", "","");
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
         // console.log(dataObj)
         let dataLListing = [];
