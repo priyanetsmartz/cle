@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import DataTable from 'react-data-table-component';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
-import { Slider } from 'antd';
+import { InputNumber, Slider } from 'antd';
 import moment from 'moment';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getPayoutOrders } from '../../../redux/pages/vendorLogin';
@@ -16,16 +16,15 @@ function MyPayouts(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
     const [orderDate, setOrderDate] = useState('');
-    const [range, setRange] = useState([0, 20000])
+    const [range, setRange] = useState({ low: 0, high: 0 })
     const [status, setStatus] = useState('');
     const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     const [searchTerm, setSearchTerm] = useState('');
     const [fromDate, setFromDate] = useState('');
     const [toDates, setToDates] = useState('');
     const [defData, setDefData] = useState([]); 
-    const language = getCookie('currentLanguage');
     useEffect(() => {
-        getDataOfPayouts(null, null, null , null, null, null)
+        getDataOfPayouts()
         return (
             setMyOrders([])
         )
@@ -34,10 +33,8 @@ function MyPayouts(props) {
     }, [])
     const getOrdersByStatus = (e) =>{
         const { value } = e.target;
-        setStatus(e.target.value)
-        console.log("stat", status, e.target.value)
-        getDataOfPayouts(null,null, e.target.value, null, null, null)
-               
+        setStatus(value)
+        getDataOfPayouts(fromDate,toDates, e.target.value, range.low, range.high, searchTerm)
     }
 
     const getOrdersByDate = (e) =>{
@@ -57,24 +54,28 @@ function MyPayouts(props) {
 
         setFromDate(dateFrom);
         setToDates(dateTo);
-        getDataOfPayouts(dateFrom,dateTo, null, null, null, null)
+        getDataOfPayouts(dateFrom,dateTo, status, range.low, range.high, searchTerm)
     }
 
-    const getOrdersByPrice = async(e) =>{
+    const getOrdersByPrice = async(range) =>{
         let from = range[0];
         let to = range[1];
-        setRange([from, to]);
-        getDataOfPayouts(null,null, null, from, to, null)
+        setRange(prevState => ({
+            ...prevState,
+            low: from,
+            high: to
+        }))
+        getDataOfPayouts(fromDate,toDates, status, from, to, searchTerm)
     }
 
     const getOrdersBySearchTerm = async(e) =>{
         if (e.target.value.length >= 3) {
             setSearchTerm(e.target.value);
-            getDataOfPayouts(null,null, null, null, null, e.target.value)
         }
     else{
-        setMyOrders(defData);
+        setSearchTerm("");
     }
+    getDataOfPayouts(fromDate,toDates, status, range.low, range.high, e.target.value)
     }
     
     const columns = [
@@ -110,47 +111,19 @@ function MyPayouts(props) {
             selector: row => row.total,
         },
     ];
-    async function getDataOfPayouts(date_from,date_to, stat, frPrice, toPrice, term) {
-        let po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice , search
+    async function getDataOfPayouts(date_from:any = '',date_to: any = '', stat:any = '', frPrice :any = '', toPrice:any = '', term:any = '') {
         let page_size = siteConfig.pageSize;
-        let sort_order = "asc";      // To change
+        let sort_order ='asc';
 
-        if (date_from!=null)po_date_from = date_from;
-        else if(fromDate)po_date_from = fromDate;
-        else po_date_from = null;
-
-        if (date_to!=null)po_date_to = date_to;
-        else if(toDates)po_date_to = toDates;
-        else po_date_to = null;
-
-        if (stat!=null)po_status = stat;
-        else if(status)po_status = status;
-        else po_status = null;
-
-        if (frPrice!=null)po_fromPrice = frPrice;
-        else if(range[0])po_fromPrice = range[0];
-        else po_fromPrice = null;
-
-        if (toPrice!=null)po_toPrice = toPrice;
-        else if(range[1])po_toPrice = range[1];
-        else po_toPrice = null;
-
-        if (term!=null)search = term;
-        else if(searchTerm)search = searchTerm;
-        else search = null;
-
-        let result: any = await getPayoutOrders(po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice , page_size, sort_order, search)
-
-        //console.log("check result", result, result.data[0])
+        let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice , page_size, sort_order,term)
         let dataObj = result && result.data[0] && result.data[0].OrderData.length > 0 ? result.data[0].OrderData : [];
-        //console.log(dataObj)
+
         if (dataObj.length > 0) {
-            const dataLListing = dataObj.map((data, index) => {
+            const dataLListing = dataObj.map((data) => {
                 let orderLoop: any = {};
                 orderLoop.price = siteConfig.currency + data.total_payout;
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                //orderLoop.total = ;
                 return orderLoop;
             });
 
@@ -207,9 +180,26 @@ function MyPayouts(props) {
                                     </div>
                                 </div>
                                 <div className="col-sm-3 mb-2">
-                                    <div className="form-group">
+                                <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
-                                        <Slider range max={20000} defaultValue={[0, 20000]} onAfterChange={getOrdersByPrice}/>
+                                        <div className='pricerangeouter' >
+                                            <InputNumber
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={range.low}
+                                                onChange={getOrdersByPrice}
+                                            />
+                                            <span>-</span>
+                                            <InputNumber
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={range.high}
+                                                onChange={getOrdersByPrice}
+                                            />
+                                        </div>
+                                        <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
