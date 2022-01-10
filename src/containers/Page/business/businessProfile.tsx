@@ -670,7 +670,7 @@ function BusinessProfile(props) {
 
     return (
         <div className="col-sm-9">
-{/* 
+
 
             <section className="my_profile_sect mb-4">
                 <div className="container">
@@ -729,7 +729,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section> */}
+            </section>
 
             <section className="my_profile_sect mb-4">
                 <div className="container">
@@ -776,18 +776,18 @@ function BusinessProfile(props) {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="col-sm-3">
+                        <div className="col-sm-3">
                             <div className="d-grid ">
                                 <button type="button" className="btn btn-secondary" onClick={openMyDetails}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* <section className="my_profile_sect mb-4">
+            <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -871,9 +871,9 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section> */}
+            </section>
 
-            {/* <section className="my_profile_sect change_passwordsec mb-4">
+            <section className="my_profile_sect change_passwordsec mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -1088,7 +1088,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                 </div>
-            </section> */}
+            </section>
 
             {/* customer details modal */}
             <Modal show={myDetailsModel} >

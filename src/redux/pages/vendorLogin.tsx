@@ -42,11 +42,25 @@ export async function getVendorProducts(language: string, status = '', from = ''
     return adminToken.request(`/rest/${storeId}/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=udropship_vendor&searchCriteria[filter_groups][1][filters][0][value]=${vendorId}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq${statusCriteria}&searchCriteria[sortOrders][0][field]=${sortValue.sortBy}&searchCriteria[sortOrders][0][direction]=${sortValue.sortByValue}&fields=items[sku,name,id,price,status,custom_attributes,created_at]`, "", "GET", "");
 }
 
-export async function getVendorOrders(language: string, pageSize: number) {
+export async function getVendorOrders(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any) {
     var storeId = language === 'english' ? '3' : '2';
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    return adminToken.request(`rest/all/V1/vendor/vendorOrderCollection?vendorId=${vendorId}&storeId=${storeId}&pageSize=${pageSize}`, "", "GET", "");
+    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId + "&pageSize=" + pageSize;
+
+    if (status !== null && status !== '') {
+        queryString += "&status=" + status;
+    }
+    if ((from !== null && from !== '') && (to !== null && to !== '' && to !== 0)) {
+        queryString += "&fromPrice=" + from + "&toPrice=" + to;
+    }
+    if (term !== null && term !== '') {
+        queryString += "&searchterm=" + term;
+    }
+    if ((dateFrom !== null && dateFrom !== '') && (dateTo !== null && dateTo !== ''))
+        queryString += "&fromDate=" + dateFrom + "&toDate=" + dateTo;
+
+    return adminToken.request(`rest/all/V1/vendor/vendorOrderCollection?${queryString}`, "", "GET", "");
 }
 
 export async function closePopup(flag: number) {
@@ -94,17 +108,17 @@ export async function searchProducts(language, term, fromDate, toDate, fromPrice
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
-    if (term != null)
+    if (term !== null)
         queryString += "&searchterm=" + term;
-    if (fromDate != null)
+    if (fromDate !== null)
         queryString += "&fromDate=" + fromDate;
-    if (toDate != null)
+    if (toDate !== null)
         queryString += "&toDate=" + toDate;
-    if (fromPrice != null)
+    if (fromPrice !== null)
         queryString += "&fromPrice=" + fromPrice;
-    if (toPrice != null)
+    if (toPrice !== null)
         queryString += "&toPrice=" + toPrice;
-    if (status != null)
+    if (status !== null)
         queryString += "&status=" + status;
     console.log("check here", vendorId, storeId, term, fromDate, toDate, fromPrice, toPrice, status)
     return adminToken.request(`rest/all/V1/product/searchProducts?${queryString}`, "", "GET", "")
@@ -116,17 +130,17 @@ export async function salesOrder(language, term, fromDate, toDate, fromPrice, to
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId + "&pageSize=" + pageSize;
-    if (term != null)
+    if (term !== null)
         queryString += "&searchterm=" + term;
-    if (fromDate != null)
+    if (fromDate !== null)
         queryString += "&fromDate=" + fromDate;
-    if (toDate != null)
+    if (toDate !== null)
         queryString += "&toDate=" + toDate;
-    if (fromPrice != null)
+    if (fromPrice !== null)
         queryString += "&fromPrice=" + fromPrice;
-    if (toPrice != null)
+    if (toPrice !== null)
         queryString += "&toPrice=" + toPrice;
-    if (status != null)
+    if (status !== null || status !== "")
         queryString += "&status=" + status;
 
     return adminToken.request(`rest/all/V1/vendor/vendorOrderCollection?${queryString}`, "", "GET", "")

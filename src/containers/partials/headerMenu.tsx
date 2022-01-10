@@ -352,10 +352,10 @@ function HeaderMenu(props) {
                                                         {(Object.keys(props.token).length > 0 && props.token.type === 'vendor') && (
                                                             <ul>
                                                                 {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
-                                                                {/* <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li> */}
+                                                                <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li>
                                                                 {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
                                                                 <li><Link to="/vendor/profile"><IntlMessages id="myprofile" /></Link></li>
-                                                                {/* <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li> */}
+                                                                <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
                                                             </ul>
                                                         )}
                                                         <div className="d-grid">
@@ -488,10 +488,10 @@ function HeaderMenu(props) {
                                                     {(Object.keys(props.token).length > 0 && props.token.type === 'vendor') && (
                                                         <ul>
                                                             {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
-                                                            {/* <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li> */}
+                                                            <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li>
                                                             {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
                                                             <li><Link to="/vendor/profile"><IntlMessages id="myprofile" /></Link></li>
-                                                            {/* <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li> */}
+                                                            <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
                                                         </ul>
                                                     )}
                                                     <div className="d-grid">

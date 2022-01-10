@@ -3,12 +3,11 @@ import { connect } from 'react-redux'
 import DataTable from 'react-data-table-component';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
-import { Slider } from 'antd';
+import { InputNumber, Slider } from 'antd';
 import moment from 'moment';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
-import { getVendorOrders, salesOrder } from '../../../redux/pages/vendorLogin';
+import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
-import { getCookie } from '../../../helpers/session';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
@@ -17,15 +16,10 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 function MySalesOrders(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
-    const [orderDate, setOrderDate] = useState('');
-    const [range, setRange] = useState([0, 200])
-    const [status, setStatus] = useState(0);
-    const [pageSize, setPageSize] = useState(siteConfig.pageSize);
+    const [range, setRange] = useState({ low: 0, high: 0 })
+    const [status, setStatus] = useState();
     const [searchTerm, setSearchTerm] = useState('');
-    const [fromDate, setFromDate] = useState('');
-    const [toDates, setToDates] = useState('');
-    const [defData, setDefData] = useState([]);
-    const language = getCookie('currentLanguage');
+    const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
     useEffect(() => {
         getDataOfOrders()
         return (
@@ -34,135 +28,79 @@ function MySalesOrders(props) {
 
     }, [])
 
+    async function getDataOfOrders(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '') {
+        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo)
+        let dataObj = result && result.data && result.data.length > 0 && result.data[0] && result.data[0].OrderArray ? result.data[0].OrderArray : [];
+        let dataLListing = []
+        if (dataObj.length > 0) {
+            dataLListing = dataObj.map((data, index) => {
+                let orderLoop: any = {};
+                orderLoop.increment_id = data.increment_id;
+                orderLoop.status = data.status;
+                orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+                orderLoop.total = siteConfig.currency + ' ' + data.total;
+                return orderLoop;
+            });
+        }
+        setMyOrders(dataLListing)
+
+    }
+
     const getOrdersByStatus = async (e) => {
         const { value } = e.target;
-        await setStatus(e.target.value)
-
-        let term = searchTerm ? searchTerm : null;
-        let frDate = fromDate ? fromDate : null;
-        let toDate = toDates ? toDates : null;
-        let fromPrice = range[0] ? range[0] : null;
-        let toPrice = range[1] ? range[1] : null;
-        let stat = status ? status : null;
-        let result: any = await salesOrder(language, term, frDate, toDate, fromPrice, toPrice, e.target.value, pageSize);
-        console.log(result);
-        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []
-        const renObjData = dataObj.map(function (data, idx) {
-
-            let orderLoop: any = {};
-            orderLoop.increment_id = data.order_increment_id;
-            orderLoop.status = data.udropship_status;
-            orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');;
-            orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
-
-            return orderLoop;
-        });
-        setMyOrders(renObjData);
+        setStatus(value)
+        getDataOfOrders(value, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to)
     }
 
-    const getOrdersByDate = async (e) => {
-        const { value } = e.target;
-        let filter = parseInt(value);
-        let fromDate;
-        let currentDate = moment(new Date());
-        if (filter === 1 || filter === 3 || filter === 6) {
-            fromDate = moment(currentDate).subtract(filter, 'M').toJSON();
-        } else {
-            fromDate = moment(`${filter}-01-01`).toJSON();
-        }
-        //console.log(fromDate)
-        setOrderDate(fromDate);
-        const dateFrom = moment(fromDate).format("DD/MM/YYYY");
-        const dateTo = moment(currentDate.toJSON()).format("DD/MM/YYYY");
+    const datePickerCallback = async (start, end, label) => {
+        console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
+        let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
 
-        setFromDate(dateFrom);
-        setToDates(dateTo);
+        setDateFilter(prevState => ({
+            ...prevState,
+            from: from,
+            to: to
+        }))
 
-        let term = searchTerm ? searchTerm : null;
-        let frDate = fromDate ? fromDate : null;
-        let toDate = toDates ? toDates : null;
-        let fromPrice = range[0] ? range[0] : null;
-        let toPrice = range[1] ? range[1] : null;
-        let stat = status ? status : null;
-        let result: any = await salesOrder(language, term, dateFrom, dateTo, fromPrice, toPrice, stat, pageSize);
-        console.log(result);
-        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []
-        const renObjData = dataObj.map(function (data, idx) {
-
-            let orderLoop: any = {};
-            orderLoop.increment_id = data.order_increment_id;
-            orderLoop.status = data.udropship_status;
-            orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-            orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
-            return orderLoop;
-        });
-        setMyOrders(renObjData);
+        getDataOfOrders(status, range.low, range.high, searchTerm, from, to)
+        // setToDates(dateTo);
     }
 
-    const getOrdersByPrice = async (e) => {
+    const getOrdersByPrice = async (range) => {
         let from = range[0];
         let to = range[1];
-        setRange([from, to])
-        let term = searchTerm ? searchTerm : null;
-        let frDate = fromDate ? fromDate : null;
-        let toDate = toDates ? toDates : null;
-        let fromPrice = range[0] ? range[0] : null;
-        let toPrice = range[1] ? range[1] : null;
-        let stat = status ? status : null;
-        let result: any = await salesOrder(language, term, frDate, toDate, from, to, stat, pageSize);
-        let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []
-        const renObjData = dataObj.map(function (data, idx) {
-
-            let orderLoop: any = {};
-            orderLoop.increment_id = data.order_increment_id;
-            orderLoop.status = data.udropship_status;
-            orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-            orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
-            return orderLoop;
-        });
-        setMyOrders(renObjData);
+        setRange(prevState => ({
+            ...prevState,
+            low: from,
+            high: to
+        }))
+        getDataOfOrders(status, from, to, searchTerm, dateFilter.from, dateFilter.to)
     }
 
     const getOrdersBySearchTerm = async (e) => {
         if (e.target.value.length >= 3) {
-            setSearchTerm(e.target.value)
-            let term = searchTerm ? searchTerm : null;
-            let frDate = fromDate ? fromDate : null;
-            let toDate = toDates ? toDates : null;
-            let fromPrice = range[0] ? range[0] : null;
-            let toPrice = range[1] ? range[1] : null;
-            let stat = status ? status : null;
-            let result: any = await salesOrder(language, term, frDate, toDate, fromPrice, toPrice, e.target.value, pageSize);
-            let dataObj = result && result.data[0].OrderArray && result.data[0].OrderArray.length > 0 ? result.data[0].OrderArray : []
-            const renObjData = dataObj.map(function (data, idx) {
-
-                let orderLoop: any = {};
-                orderLoop.increment_id = data.order_increment_id;
-                orderLoop.status = data.udropship_status;
-                orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = data.global_currency_code + ' ' + data.total_cost;
-                return orderLoop;
-            });
-            setMyOrders(renObjData);
+            setTimeout(() => {
+                setSearchTerm(e.target.value)
+            }, 3000)
+        } else {
+            setSearchTerm("")
         }
-        else {
-            setMyOrders(defData);
-        }
+        getDataOfOrders(status, range.low, range.high, e.target.value, dateFilter.from, dateFilter.to)
     }
 
     const columns = [
         {
-            name: 'Order number',
+            name: 'Order',
             selector: row => row.increment_id,
             sortable: true,
         },
         {
             name: 'Date',
             selector: row => row.date,
-            sortable: true,
+            sortable: true
         },
         {
-            name: 'Date',
+            name: 'Status',
             selector: row => row.status,
             sortable: true,
             cell: row => (
@@ -175,28 +113,7 @@ function MySalesOrders(props) {
             selector: row => row.total,
         },
     ];
-    async function getDataOfOrders() {
-        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize)
-        let dataObj = result && result.data && result.data.length > 0 && result.data[0] && result.data[0].OrderArray ? result.data[0].OrderArray : [];
-        if (dataObj.length > 0) {
-            const dataLListing = dataObj.map((data, index) => {
-                let orderLoop: any = {};
-                orderLoop.increment_id = data.increment_id;
-                orderLoop.status = data.status;
-                orderLoop.date = parseInt(data.products);
-                orderLoop.total = siteConfig.currency + ' ' + data.total;
-                return orderLoop;
-            });
 
-            setMyOrders(dataLListing)
-            setDefData(defData);
-        }
-
-    }
-
-    const handleChange = ({ selectedRows }) => {
-        console.log('Selected Rows: ', selectedRows);
-    };
 
     return (
         <div className="col-sm-9">
@@ -230,10 +147,12 @@ function MySalesOrders(props) {
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
                                         <DateRangePicker
+                                            onCallback={datePickerCallback}
                                             initialSettings={{
-                                                startDate: moment().subtract(29, 'days'),
+                                                startDate: moment(),
                                                 endDate: moment(),
                                                 ranges: {
+                                                    'All': "",
                                                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                                                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                                                     'This Month': [moment().startOf('month'), moment().endOf('month')],
@@ -243,20 +162,29 @@ function MySalesOrders(props) {
                                         >
                                             <input type="text" className="form-control" />
                                         </DateRangePicker>
-                                        <span className="form-label"><IntlMessages id="order.date" /></span>
-                                        <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
-                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
-                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
-                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-sm-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
-                                        <Slider range max={20000} defaultValue={[0, 0]} onAfterChange={getOrdersByPrice} />
+                                        <div className='pricerangeouter' >
+                                            <InputNumber
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={range.low}
+                                                onChange={getOrdersByPrice}
+                                            />
+                                            <span>-</span>
+                                            <InputNumber
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={range.high}
+                                                onChange={getOrdersByPrice}
+                                            />
+                                        </div>
+                                        <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
                                 </div>
                                 <div className="col-sm-3">

@@ -8090,17 +8090,17 @@ p.sliderupper {
     }
 
     .user_cart ul li a {
-        color: #000;
+        color: #fff;
     }
 	
 	.user_cart ul li a svg{
-		fill: #000;
+		fill: #fff;
 	}
 	
 
     .lang-sec a svg,
 	.lang-sec svg {
-        fill: #000;
+        fill: #fff;
     }
 
     .user-header-info .col-xs-12 {
