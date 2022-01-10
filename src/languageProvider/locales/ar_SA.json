@@ -579,5 +579,11 @@
   "canceled":"ألغيت",
   "returned":"عاد",
   "onhold":"في الانتظار",
-  "payout.paid":"دفع"
+  "payout.paid":"دفع",
+  "payout.processing":"يعالج",
+"payout.scheduled":"المقرر",
+"payout.hold":"معلق",
+"payout.paypal_ipn":"في انتظار Paypal IPN",
+"payout.error":"خطأ",
+"payout.cancelled":"ألغيت"
 }

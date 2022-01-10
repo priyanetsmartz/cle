@@ -25,7 +25,7 @@ function MyPayouts(props) {
     const [defData, setDefData] = useState([]); 
     const language = getCookie('currentLanguage');
     useEffect(() => {
-        getDataOfPayouts()
+        getDataOfPayouts(null, null, null , null, null, null)
         return (
             setMyOrders([])
         )
@@ -36,7 +36,7 @@ function MyPayouts(props) {
         const { value } = e.target;
         setStatus(e.target.value)
         console.log("stat", status, e.target.value)
-        getDataOfPayouts()
+        getDataOfPayouts(null,null, e.target.value, null, null, null)
                
     }
 
@@ -57,20 +57,20 @@ function MyPayouts(props) {
 
         setFromDate(dateFrom);
         setToDates(dateTo);
-        getDataOfPayouts();
+        getDataOfPayouts(dateFrom,dateTo, null, null, null, null)
     }
 
     const getOrdersByPrice = async(e) =>{
         let from = range[0];
         let to = range[1];
         setRange([from, to]);
-        getDataOfPayouts();
+        getDataOfPayouts(null,null, null, from, to, null)
     }
 
     const getOrdersBySearchTerm = async(e) =>{
         if (e.target.value.length >= 3) {
             setSearchTerm(e.target.value);
-            getDataOfPayouts();
+            getDataOfPayouts(null,null, null, null, null, e.target.value)
         }
     else{
         setMyOrders(defData);
@@ -92,35 +92,58 @@ function MyPayouts(props) {
             name: 'Status',
             selector: row => row.status,
             cell: row => (
-                <select defaultValue={row.status}>
+                <select defaultValue={row.status}>                    
+                    <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
+                    <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
+                    <option value="processing">{intl.formatMessage({ id: "payout.processing" })}</option>
+                    <option value="hold">{intl.formatMessage({ id: "payout.hold" })}</option>
+                    <option value="paypal_ipn">{intl.formatMessage({ id: "payout.paypal_ipn" })}</option>
                     <option value="paid">{intl.formatMessage({ id: "payout.paid" })}</option>
-                    <option value="2">{intl.formatMessage({ id: "product.pending" })}</option>
-                    <option value="3">{intl.formatMessage({ id: "product.sold" })}</option>
-                    <option value="4">{intl.formatMessage({ id: "product.rejected" })}</option>
+                    <option value="error">{intl.formatMessage({ id: "payout.error" })}</option>
+                    <option value="canceled">{intl.formatMessage({ id: "payout.cancelled" })}</option>
                 </select>
 
             ),
         },
-        {
+        { // To change column
             name: 'Total',
             selector: row => row.total,
         },
     ];
-    async function getDataOfPayouts() {
-        //po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice , page_size, sort_order, search
-        let po_date_from = fromDate?fromDate:null;
-        let po_date_to = toDates?toDates:null;
-        let po_status = status?status:null;
-        let po_fromPrice = range[0]?range[0]:null;
-        let po_toPrice = range[1]?range[1]:null;
+    async function getDataOfPayouts(date_from,date_to, stat, frPrice, toPrice, term) {
+        let po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice , search
         let page_size = siteConfig.pageSize;
-        let sort_order = "asc";
-        let search = searchTerm?searchTerm:null;
+        let sort_order = "asc";      // To change
+
+        if (date_from!=null)po_date_from = date_from;
+        else if(fromDate)po_date_from = fromDate;
+        else po_date_from = null;
+
+        if (date_to!=null)po_date_to = date_to;
+        else if(toDates)po_date_to = toDates;
+        else po_date_to = null;
+
+        if (stat!=null)po_status = stat;
+        else if(status)po_status = status;
+        else po_status = null;
+
+        if (frPrice!=null)po_fromPrice = frPrice;
+        else if(range[0])po_fromPrice = range[0];
+        else po_fromPrice = null;
+
+        if (toPrice!=null)po_toPrice = toPrice;
+        else if(range[1])po_toPrice = range[1];
+        else po_toPrice = null;
+
+        if (term!=null)search = term;
+        else if(searchTerm)search = searchTerm;
+        else search = null;
+
         let result: any = await getPayoutOrders(po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice , page_size, sort_order, search)
 
-        console.log("check result", result, result.data[0])
+        //console.log("check result", result, result.data[0])
         let dataObj = result && result.data[0] && result.data[0].OrderData.length > 0 ? result.data[0].OrderData : [];
-        console.log(dataObj)
+        //console.log(dataObj)
         if (dataObj.length > 0) {
             const dataLListing = dataObj.map((data, index) => {
                 let orderLoop: any = {};
@@ -158,11 +181,16 @@ function MyPayouts(props) {
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
                                         <select className="form-select" aria-label="Default select example" value={status}  onChange = {getOrdersByStatus}>
-                                            <option value="0">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
+                                            <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
+                                            <option value="processing">{intl.formatMessage({ id: "payout.processing" })}</option>
+                                            <option value="hold">{intl.formatMessage({ id: "payout.hold" })}</option>
+                                            <option value="paypal_ipn">{intl.formatMessage({ id: "payout.paypal_ipn" })}</option>
                                             <option value="paid">{intl.formatMessage({ id: "payout.paid" })}</option>
-                                            <option value="2">{intl.formatMessage({ id: "product.pending" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "product.sold" })}</option>
-                                            <option value="4">{intl.formatMessage({ id: "product.rejected" })}</option>
+                                            <option value="error">{intl.formatMessage({ id: "payout.error" })}</option>
+                                            <option value="canceled">{intl.formatMessage({ id: "payout.cancelled" })}</option>
+
                                         </select>
                                     </div>
                                 </div>
