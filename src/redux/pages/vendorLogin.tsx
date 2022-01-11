@@ -166,7 +166,7 @@ export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fr
     if (page_size!=null)
         queryString+="&page_size="+page_size
     if(sort_order!=null)
-        queryString+="sort_order ="+sort_order
+        queryString+="&sort_order="+sort_order
     if (search!=null && search!='')
         queryString+="&search="+search
     return adminToken.request(`default/rest/all/V1/vendor/vendorPayoutCollection?${queryString}`,"" , "GET", "")
