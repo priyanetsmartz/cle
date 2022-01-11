@@ -101,7 +101,7 @@ function MySalesOrders(props) {
             selector: row => row.increment_id,
             sortable: true,
             cell: row => (
-                <Link to=''>{row.increment_id}</Link>
+                <Link to={`/vendor/sales-orders/${row.increment_id}`}>{row.increment_id}</Link>
 
             )
         },

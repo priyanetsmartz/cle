@@ -37,6 +37,7 @@ import Cart from './containers/Page/product/cart/cart';
 import Loader from '../src/image/CLE_LogoMotionGraphics.gif';
 import BussinessResetpassword from './containers/Page/business/bussinessResetpassword';
 import RetunOrder from './containers/Page/business/retunOrder';
+import VendorOrderDetails from './containers/Page/business/orderDetail';
 
 const PublicRoutes = ({ history }) => {
   return (
@@ -65,6 +66,7 @@ const PublicRoutes = ({ history }) => {
           <LoggedInRoute exact path="/customer/:tab" component={Customer} />
           <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
           <VendorRoute exact path="/vendor/returns-complaints/:returnId" component={RetunOrder} />
+          <VendorRoute exact path="/vendor/sales-orders/:orderId" component={VendorOrderDetails} />
           <ProductHome exact path="/category/:categoryname" component={HomePage} />
           <ProductHome exact path="/" component={HomePage} />
           <ProductHome exact path="/:signup/:member" component={HomePage} />

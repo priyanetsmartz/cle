@@ -10,6 +10,7 @@ import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getPayoutOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { getCookie } from '../../../helpers/session';
+import { capitalize } from '../../../components/utility/allutils';
 
 
 function MyPayouts(props) {
@@ -22,22 +23,22 @@ function MyPayouts(props) {
     const [searchTerm, setSearchTerm] = useState('');
     const [fromDate, setFromDate] = useState('');
     const [toDates, setToDates] = useState('');
-    const [defData, setDefData] = useState([]); 
+    const [defData, setDefData] = useState([]);
     useEffect(() => {
         getDataOfPayouts()
         return (
             setMyOrders([])
         )
 
-    
+
     }, [])
-    const getOrdersByStatus = (e) =>{
+    const getOrdersByStatus = (e) => {
         const { value } = e.target;
         setStatus(value)
-        getDataOfPayouts(fromDate,toDates, e.target.value, range.low, range.high, searchTerm)
+        getDataOfPayouts(fromDate, toDates, e.target.value, range.low, range.high, searchTerm)
     }
 
-    const getOrdersByDate = (e) =>{
+    const getOrdersByDate = (e) => {
         const { value } = e.target;
         let filter = parseInt(value);
         let fromDate;
@@ -54,10 +55,10 @@ function MyPayouts(props) {
 
         setFromDate(dateFrom);
         setToDates(dateTo);
-        getDataOfPayouts(dateFrom,dateTo, status, range.low, range.high, searchTerm)
+        getDataOfPayouts(dateFrom, dateTo, status, range.low, range.high, searchTerm)
     }
 
-    const getOrdersByPrice = async(range) =>{
+    const getOrdersByPrice = async (range) => {
         let from = range[0];
         let to = range[1];
         setRange(prevState => ({
@@ -65,19 +66,19 @@ function MyPayouts(props) {
             low: from,
             high: to
         }))
-        getDataOfPayouts(fromDate,toDates, status, from, to, searchTerm)
+        getDataOfPayouts(fromDate, toDates, status, from, to, searchTerm)
     }
 
-    const getOrdersBySearchTerm = async(e) =>{
+    const getOrdersBySearchTerm = async (e) => {
         if (e.target.value.length >= 3) {
             setSearchTerm(e.target.value);
         }
-    else{
-        setSearchTerm("");
+        else {
+            setSearchTerm("");
+        }
+        getDataOfPayouts(fromDate, toDates, status, range.low, range.high, e.target.value)
     }
-    getDataOfPayouts(fromDate,toDates, status, range.low, range.high, e.target.value)
-    }
-    
+
     const columns = [
         {
             name: 'Price',
@@ -93,30 +94,19 @@ function MyPayouts(props) {
             name: 'Status',
             selector: row => row.status,
             cell: row => (
-                <span className='green'>{row.status}</span>
-                // <select defaultValue={row.status}>                    
-                //     <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
-                //     <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
-                //     <option value="processing">{intl.formatMessage({ id: "payout.processing" })}</option>
-                //     <option value="hold">{intl.formatMessage({ id: "payout.hold" })}</option>
-                //     <option value="paypal_ipn">{intl.formatMessage({ id: "payout.paypal_ipn" })}</option>
-                //     <option value="paid">{intl.formatMessage({ id: "payout.paid" })}</option>
-                //     <option value="error">{intl.formatMessage({ id: "payout.error" })}</option>
-                //     <option value="canceled">{intl.formatMessage({ id: "payout.cancelled" })}</option>
-                // </select>
-
+                <span className='green'>{capitalize(row.status)}</span>
             ),
         },
         { // To change column
-            name: 'Total',
+            name: <i className="fa fa-file-alt" aria-hidden="true"></i>,
             selector: row => row.total,
         },
     ];
-    async function getDataOfPayouts(date_from:any = '',date_to: any = '', stat:any = '', frPrice :any = '', toPrice:any = '', term:any = '') {
+    async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '') {
         let page_size = siteConfig.pageSize;
-        let sort_order ='asc';
+        let sort_order = 'asc';
 
-        let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice , page_size, sort_order,term)
+        let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice, page_size, sort_order, term)
         let dataObj = result && result.data[0] && result.data[0].OrderData.length > 0 ? result.data[0].OrderData : [];
 
         if (dataObj.length > 0) {
@@ -145,7 +135,7 @@ function MyPayouts(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h1><IntlMessages id="vendor.mypayouts" /></h1>
-                            <p><IntlMessages id="salesOrder.description.1" /><br /><IntlMessages id="salesOrder.description.2" /></p>
+                            <p><IntlMessages id="payout.description" /></p>
                         </div>
                     </div>
                     <div className="range_slider">
@@ -154,7 +144,7 @@ function MyPayouts(props) {
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
-                                        <select className="form-select" aria-label="Default select example" value={status}  onChange = {getOrdersByStatus}>
+                                        <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
                                             <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
@@ -181,7 +171,7 @@ function MyPayouts(props) {
                                     </div>
                                 </div>
                                 <div className="col-sm-3 mb-2">
-                                <div className="form-group">
+                                    <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
                                         <div className='pricerangeouter' >
                                             <InputNumber
@@ -208,7 +198,7 @@ function MyPayouts(props) {
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
                                             <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1"  onChange={getOrdersBySearchTerm}/>
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
                                         </div>
                                     </div>
                                 </div>

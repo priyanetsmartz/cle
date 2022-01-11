@@ -585,5 +585,6 @@
   "payout.hold":"Hold",
   "payout.paypal_ipn":"Waiting for Paypal IPN",
   "payout.error":"Error",
-  "payout.cancelled":"Cancelled"
+  "payout.cancelled":"Cancelled",
+  "payout.description":"You can see your payouts here."
 }

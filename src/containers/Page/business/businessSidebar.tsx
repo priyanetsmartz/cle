@@ -1,4 +1,4 @@
-import { useState ,useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
@@ -84,7 +84,7 @@ function BusinessSidebar(props) {
                                     <ul>
                                         <li className={activeTab === 'dashboard' ? 'active' : ''} >
                                             <Link to="#" onClick={() => changeTab('dashboard')}>
-                                                <img src={dashboardIcon} alt="" className="img-fluid" />
+                                                <i className="fa fa-columns" aria-hidden="true"></i>
                                                 <span className="pl-2">
                                                     <IntlMessages id="customer.dashboard" />
                                                 </span>
@@ -92,7 +92,7 @@ function BusinessSidebar(props) {
                                         </li>
                                         <li className={activeTab === 'sales-orders' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('sales-orders')}>
-                                                <img src={ordersIcon} alt="" className="img-fluid" />
+                                                <i className="fa fa-tag" aria-hidden="true"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.salesOrders" /></span>
                                             </Link>
                                         </li>
@@ -102,23 +102,19 @@ function BusinessSidebar(props) {
                                                 <span className="pl-2"><IntlMessages id="vendor.productListing" /></span>
                                             </Link>
                                         </li>
-                                        {/*  <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
-                                            <Link to="#" onClick={() => changeTab('returns-complaints')}>
-                                                <img src={profileIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
-                                            </Link>
-                                        <li className={activeTab === 'payouts' ? 'active' : ''}>
-                                            <Link to="#" onClick={() => changeTab('payouts')}>
-                                                <img src={supportIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2"><IntlMessages id="vendor.payouts" /></span>
-                                            </Link>
-                                        </li>*/}
                                         <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('returns-complaints')}>
-                                                <img src={profileIcon} alt="" className="img-fluid" />
+                                                <i className='fa fa-undo-alt' aria-hidden="true"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
                                             </Link>
                                         </li>
+                                        <li className={activeTab === 'payouts' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('payouts')}>
+                                                <i className="fa fa-credit-card" aria-hidden="true"></i>
+                                                <span className="pl-2"><IntlMessages id="vendor.payouts" /></span>
+                                            </Link>
+                                        </li>
+
                                         {/*   
                                         <li className={activeTab === 'analysis' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('analysis')}>

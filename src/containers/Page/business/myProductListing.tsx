@@ -238,39 +238,39 @@ function MyProductListing(props) {
                                         </div>
                                         <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
-                                </div>
-                                <div className="col-sm-3">
-                                    <div className="form-group">
-                                        <span className="form-label">&nbsp;</span>
-                                        <div className="search_results">
-                                            <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                    <div className="col-sm-3">
+                                        <div className="form-group">
+                                            <span className="form-label">&nbsp;</span>
+                                            <div className="search_results">
+                                                <img src={searchIcon} alt="" className="me-1 search_icn" />
+                                                <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="float-right">
-                            <div className="sort_by">
-                                <div className="sortbyfilter">
-                                    <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
-                                        <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                        <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                        <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                    </select>
+                        <div className="row">
+                            <div className="float-right">
+                                <div className="sort_by">
+                                    <div className="sortbyfilter">
+                                        <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
+                                            <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                            <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                            <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div>
 
-                <DataTable
-                    columns={columns}
-                    data={listingData}
-                    pagination={true}
-                />
+                    <DataTable
+                        columns={columns}
+                        data={listingData}
+                        pagination={true}
+                    />
             </section>
             <Modal show={deletePop}>
                 <Modal.Body className="CLE_pf_details modal-confirm">
