@@ -23,6 +23,10 @@ function MyPayouts(props) {
     const [searchTerm, setSearchTerm] = useState('');
     const [fromDate, setFromDate] = useState('');
     const [toDates, setToDates] = useState('');
+    const [subtotal,setSubtotal] = useState(0);
+    const [commission,setCommission] = useState(0)
+    const [totalP,setTotalP] = useState(0)
+
     useEffect(() => {
         getDataOfPayouts()
         return (
@@ -125,6 +129,10 @@ function MyPayouts(props) {
              commission:dataObj2.commission,
          }]
         setAccBalance(dataLListing2)
+         if(dataLListing2['subtotal']) setSubtotal(dataLListing2['subtotal'])
+         if(dataLListing2['commision']) setCommission(dataLListing2['commision'])
+         if(dataLListing2['subtotal'] && dataLListing2['commision']) setTotalP(dataLListing['subtotal']-dataLListing2['commision'])
+         
 
     }
 
@@ -246,33 +254,24 @@ function MyPayouts(props) {
                         </div>
                     </div>
                 </div>
-                {/* <DataTable
-                    title = "Account Balance"
-                    columns={columns2}
-                    data={accBalance}
-                    pagination={true}
-                /> */}
-
                 <table>
                     <thead> Account Balance</thead>
                     <tbody>
                     <tr>
                         <th>Subtotal</th>
-                        <td>{siteConfig.currency}{accBalance[0].subtotal}</td>
+                        <td>{siteConfig.currency}{subtotal}</td>
                     </tr>
-
                     <tr>
                         <th>Commission</th>
-                        <td>{siteConfig.currency}{accBalance[0].commission}</td>
+                        <td>{siteConfig.currency}{commission}</td>
                     </tr>
 
                     <tr>
                         <th>Total</th>
-                        <td>{siteConfig.currency}{accBalance[0].subtotal - accBalance[0].commission}</td>
+                        <td>{siteConfig.currency}{totalP}</td>
                     </tr>
                     </tbody>
                 </table>
-
                 <br></br>
                 <label >Sort by </label>
                 <select onChange={setSort}>
