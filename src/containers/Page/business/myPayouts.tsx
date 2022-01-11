@@ -254,6 +254,12 @@ function MyPayouts(props) {
                         </div>
                     </div>
                 </div>
+                {/* <DataTable
+                    title = "Account Balance"
+                    columns={columns2}
+                    data={accBalance}
+                    pagination={true}
+                /> */}
                 <table>
                     <thead> Account Balance</thead>
                     <tbody>
