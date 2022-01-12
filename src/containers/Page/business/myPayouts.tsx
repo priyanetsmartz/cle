@@ -12,6 +12,7 @@ import { siteConfig } from '../../../settings';
 import { getCookie } from '../../../helpers/session';
 import { capitalize } from '../../../components/utility/allutils';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
+import { Link } from "react-router-dom";
 
 
 function MyPayouts(props) {
@@ -81,7 +82,7 @@ function MyPayouts(props) {
             selector: row => row.price,
             button:true,
             cell: row => (
-                <a href="/payoutdetails">{row.price}</a>
+                <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{row.price}</Link>
             )
             
         },
@@ -124,6 +125,7 @@ function MyPayouts(props) {
                 orderLoop.price = siteConfig.currency + data.total_payout;
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+                orderLoop.payout_id = data.payout_id;
                 return orderLoop;
             });
         }

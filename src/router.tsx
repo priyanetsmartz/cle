@@ -81,7 +81,7 @@ const PublicRoutes = ({ history }) => {
           <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
           <ProductRoutes exact path="/contact-us" component={contact} />
           <ProductRoutes exact path="/help-center" component={Faq} page='faq'  />
-          <ProductRoutes exact path="/payoutdetails" component={MyPayoutDetails} />
+          <ProductRoutes exact path="/vendor/payoutdetails/:payoutId" component={MyPayoutDetails} />
 
 
           <ProductRoutes exact path="/vendor-login" component={VendorLogin} />
