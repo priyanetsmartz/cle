@@ -324,7 +324,7 @@ function CartItemPage(props) {
             <section className="cart-main">
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-8">
+                        <div className="col-md-7 col-lg-8">
                             <div className="back-block">
                                 <i className="fas fa-chevron-left back-icon"></i>
                                 <Link className="back-to-shop" to="/products" ><IntlMessages id="cart-back-link" /></Link>
@@ -417,7 +417,7 @@ function CartItemPage(props) {
                                 {token && (<RelevantProducts cartItem={cartRelevants} />)}
                             </div>
                         </div>
-                        <div className="col-md-4" id="cartsidebar">
+                        <div className="col-md-5 col-lg-4" id="cartsidebar">
                             <div className="sticky-cart">
 							<div className="order-detail-sec">
                                 <h5><IntlMessages id="orderDetail" /> </h5>

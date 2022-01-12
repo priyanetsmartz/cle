@@ -27,7 +27,7 @@ const ProductImages = (props) => {
 
     return (
         <div className="row">
-            <div className="col-md-4 col-lg-2">
+            <div className="col-sm-2">
             <button onClick={scrolldown} className="pdp-thumbnail-pre"><i className="fas fa-chevron-up"></i></button>
                 <div className="product-img-slider" id="inner">
                     {productImage.map((img, i) => {
@@ -38,7 +38,7 @@ const ProductImages = (props) => {
                 </div>
                 <button onClick={scrollup} className="pdp-thumbnail-next"><i className="fas fa-chevron-down"></i></button>
             </div>
-            <div className="col-md-8 col-lg-10 img-container">
+            <div className="col-sm-10 img-container">
                 {
                     fullSizedImg && fullSizedImg.media_type === 'external-video' ? (
                         <iframe className="product-full-img" title="product video" src={fullSizedImg.extension_attributes.video_content.video_url}>

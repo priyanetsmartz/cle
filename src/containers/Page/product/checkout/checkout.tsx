@@ -1086,7 +1086,7 @@ function Checkout(props) {
                         )
                     })} */}
                     <div className="row">
-                        <div className="col-md-8">
+                        <div className="col-md-7 col-lg-8">
 
                             <div className="accordion" id="accordionExample">
                                 <div className="accordion-item">
@@ -1690,7 +1690,7 @@ function Checkout(props) {
                             </div>
                         </div>
                         {/* <CheckoutSidebar sidebarData={itemsVal} /> */}
-                        <div className="col-md-4" id="checkoutsidebar">
+                        <div className="col-md-5 col-lg-4" id="checkoutsidebar">
                             <div className="sticky-cart">
                                 <div className="order-detail-checkout">
                                     <h5>{itemsVal.checkData['total_items'] ? itemsVal.checkData['total_items'] : 0} <IntlMessages id="item" /></h5>
