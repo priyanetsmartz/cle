@@ -9,20 +9,19 @@ import Modal from "react-bootstrap/Modal";
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
-import { Slider } from 'antd';
+import { InputNumber, Slider } from 'antd';
 import './deletepop.css';
 import { getCookie } from '../../../helpers/session';
 import { useLocation } from 'react-router-dom'; 
 
 function MyProductListing(props) {
     let brand = '';
-    const language = getCookie('currentLanguage');
     const [searchTerm, setSearchTerm] = useState('');
     const [listingData, setListingData] = useState([])
     const [deleteId, setDeleteID] = useState(0)
     const [sortOrder, setSortOrder] = useState('');
     const [orderDate, setOrderDate] = useState('');
-    const [range, setRange] = useState([0, 200])
+    const [range, setRange] = useState({ low: 0, high: 0 })
     const [status, setStatus] = useState(0)
     const [deletePop, setDeletePop] = useState(false);
     const [sortValue, setSortValue] = useState({ sortBy: "created_at", sortByValue: "DESC" });
@@ -32,37 +31,28 @@ function MyProductListing(props) {
     const [fromDate, setFromDate] = useState('');
     const [toDates, setToDates] = useState('');
     useEffect(() => {
-        getData()
+        getProducts()
     }, [props.languages, sortValue])
 
-
-    
-    async function getData(status = '', from = '', to = '', type = '') {
-        let userData = JSON.parse((localStorage.getItem('redux-react-session/USER_DATA')))       
-        setVendorId(userData['vendor_id'])
-        let result: any = await getVendorProducts(props.languages, status, from, to, type, sortValue);
-        let dataObj = result && result.data && result.data.items && result.data.items.length > 0 ? result.data.items : [];
-        let imageD = '';
-        const renObjData = dataObj.map(function (data, idx) {
-            data.custom_attributes && data.custom_attributes.length > 0 && data.custom_attributes.map((attributes) => {
-                if (attributes.attribute_code === 'image') {
-                    imageD = attributes.value;
-                }
-            })
+    async function getProducts(term:any='', frDate:any='', toDate:any='', fromPrice:any='', toPrice:any='', stat:any=''){
+        let language = props.languages
+        let result:any = await searchProducts(language, term, frDate, toDate, fromPrice, toPrice, stat);
+        console.log(result);
+        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
+            const renObjData = dataObj.map(function (data) {
             let productLoop: any = {};
 
             productLoop.id = data.id;
-            productLoop.image = imageD;
+            productLoop.image = data.img;
             productLoop.product = data;
             productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
             productLoop.status = data.status;
             productLoop.price = siteConfig.currency + data.price;
             return productLoop;
         });
-        setListingData(renObjData)
-        setAllData(renObjData)
-
+        setListingData(renObjData);
     }
+
     
     const handleDelete = (prodId) => {
         setDeleteID(prodId)
@@ -100,12 +90,7 @@ function MyProductListing(props) {
             name: 'Status',
             selector: row => row.status,
             cell: row => (
-                <select defaultValue={row.status}>
-                    <option value="1">{intl.formatMessage({ id: "product.active" })}</option>
-                    <option value="2">{intl.formatMessage({ id: "product.sold" })}</option>
-                    <option value="3">{intl.formatMessage({ id: "product.pending" })}</option>
-                    <option value="4">{intl.formatMessage({ id: "product.rejected" })}</option>
-                </select>
+                <span className='green'>{row.status}</span>
 
             ),
         },
@@ -141,28 +126,9 @@ function MyProductListing(props) {
     }
     const getProductbyStatus = async (e) => {
         const { value } = e.target;
-        await setStatus(e.target.value)
-        let term = searchTerm?searchTerm:null;
-        let frDate = fromDate?fromDate:null;
-        let toDate = toDates?toDates:null;
-        let fromPrice = range[0]?range[0]:null;
-        let toPrice = range[1]?range[1]:null;
-        let stat = status?status:null;
-        let result:any = await searchProducts(language, term, frDate, toDate, fromPrice, toPrice, e.target.value);
-        console.log(result);
-        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
-            const renObjData = dataObj.map(function (data, idx) {
-            let productLoop: any = {};
-
-            productLoop.id = data.id;
-            productLoop.image = data.img;
-            productLoop.product = data;
-            productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-            productLoop.status = data.status;
-            productLoop.price = siteConfig.currency + data.price;
-            return productLoop;
-        });
-        setListingData(renObjData);
+        setStatus(value)
+        getProducts(searchTerm, fromDate, toDates, range.low, range.high, value )
+        
     }
 
 
@@ -184,57 +150,18 @@ function MyProductListing(props) {
         setFromDate(dateFrom);
         setToDates(dateTo);
 
-        let term = searchTerm?searchTerm:null;
-        let frDate = fromDate?fromDate:null;
-        let toDate = toDates?toDates:null;
-        let fromPrice = range[0]?range[0]:null;
-        let toPrice = range[1]?range[1]:null;
-        let stat = status?status:null;
-        let result:any = await searchProducts(language, term, dateFrom, dateTo, fromPrice, toPrice, stat);
-        console.log(result);
-        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
-            const renObjData = dataObj.map(function (data, idx) {
-            let productLoop: any = {};
-
-            productLoop.id = data.id;
-            productLoop.image = data.img;
-            productLoop.product = data;
-            productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-            productLoop.status = data.status;
-            productLoop.price = siteConfig.currency + data.price;
-            return productLoop;
-        });
-        setListingData(renObjData);
-        //getData('', dateFrom, dateTo, 'created_at');
-    }
+        getProducts(searchTerm, dateFrom, dateTo, range.low, range.high, status )
+        }
 
     const handlePriceRange = async (range) => {
         let from = range[0];
         let to = range[1];
-        setRange([from, to])
-
-        let term = searchTerm?searchTerm:null;
-        let frDate = fromDate?fromDate:null;
-        let toDate = toDates?toDates:null;
-        let fromPrice = range[0]?range[0]:null;
-        let toPrice = range[1]?range[1]:null;
-        let stat = status?status:null;
-        let result:any = await searchProducts(language, term, frDate, toDate, from, to, stat);
-        console.log(result);
-        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
-            const renObjData = dataObj.map(function (data, idx) {
-            let productLoop: any = {};
-
-            productLoop.id = data.id;
-            productLoop.image = data.img;
-            productLoop.product = data;
-            productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-            productLoop.status = data.status;
-            productLoop.price = siteConfig.currency + data.price;
-            return productLoop;
-        });
-        setListingData(renObjData);
-        //getData('', from, to, 'price');
+        setRange(prevState => ({
+            ...prevState,
+            low: from,
+            high: to
+        }))
+        getProducts(searchTerm, fromDate, toDates, from, to, status )
     }
 
     const sortOrdersHandler = async (e) => {
@@ -253,36 +180,14 @@ function MyProductListing(props) {
     }
 
     const updateInput = async (e) => {
-        let lang = props.languages ? props.languages : language;
+        let lang = props.languages ;
         if (e.target.value.length >= 3) {
             setSearchTerm(e.target.value)
-            let term = searchTerm?searchTerm:null;
-        let frDate = fromDate?fromDate:null;
-        let toDate = toDates?toDates:null;
-        let fromPrice = range[0]?range[0]:null;
-        let toPrice = range[1]?range[1]:null;
-        let stat = status?status:null;
-        let result:any = await searchProducts(language, e.target.value, frDate, toDate, fromPrice, toPrice, stat);
-        console.log(result);
-        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
-            const renObjData = dataObj.map(function (data, idx) {
-            let productLoop: any = {};
-
-            productLoop.id = data.id;
-            productLoop.image = data.img;
-            productLoop.product = data;
-            productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-            productLoop.status = data.status;
-            productLoop.price = siteConfig.currency + data.price;
-            return productLoop;
-        });
-        setListingData(renObjData);
-            //let result: any = await searchProductListing(lang, e.target.value);
-            
         }
         else{
-            setListingData(allData);
+            setSearchTerm("")
         }
+        getProducts(searchTerm, fromDate, toDates, range.low, range.high, e.target.value )
     }
 
     return (
@@ -323,11 +228,28 @@ function MyProductListing(props) {
                                     </div>
                                 </div>
                                 <div className="col-sm-3 mb-2">
-                                    <div className="form-group">
+                                <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
-                                        <Slider range max={20000} defaultValue={[0, 200]} onAfterChange={handlePriceRange} />
+                                        <div className='pricerangeouter' >
+                                            <InputNumber
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={range.low}
+                                                onChange={handlePriceRange}
+                                            />
+                                            <span>-</span>
+                                            <InputNumber
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={range.high}
+                                                onChange={handlePriceRange}
+                                            />
+                                        </div>
+                                        <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={handlePriceRange} />
                                     </div>
-                                </div>
+                                    </div>
                                 <div className="col-sm-3">
                                     <div className="form-group">
                                         <span className="form-label">&nbsp;</span>

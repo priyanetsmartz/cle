@@ -74,7 +74,7 @@ function BusinessSidebar(props) {
                                         <option value="sales-orders">{intl.formatMessage({ id: 'vendor.salesOrders' })}</option>
                                         <option value="product-listing">{intl.formatMessage({ id: 'vendor.productListing' })}</option>
                                         {/*  <option value="returns-complaints">{intl.formatMessage({ id: 'vendor.returnComplaints' })}</option>
-                                        <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
+                                        // <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
                                         <option value="analysis">{intl.formatMessage({ id: 'vendor.myAnalysis' })}</option>
                                         <option value="profile">{intl.formatMessage({ id: 'vendor.businessProfile' })}</option>
                                         <option value="notifications">{intl.formatMessage({ id: 'vendor.notification' })}</option> */}
@@ -107,14 +107,20 @@ function BusinessSidebar(props) {
                                             <Link to="#" onClick={() => changeTab('returns-complaints')}>
                                                 <img src={profileIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
-                                            </Link>
-                                        </li>
+                                            </Link> */}
                                         <li className={activeTab === 'payouts' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('payouts')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.payouts" /></span>
                                             </Link>
                                         </li>
+                                        {/*  <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('returns-complaints')}>
+                                                <img src={profileIcon} alt="" className="img-fluid" />
+                                                <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
+                                            </Link>
+                                        </li>
+                                        
                                         <li className={activeTab === 'analysis' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('analysis')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />

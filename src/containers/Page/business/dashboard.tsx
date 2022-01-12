@@ -68,17 +68,20 @@ function Dashboard(props) {
 
     }
     async function getDataOfOrders() {
-        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize);
+        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, "", 0, 0, "", "", "");
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
         // console.log(dataObj)
-        const dataLListing = dataObj.slice(0, 5).map((data, index) => {
-            let orderLoop: any = {};
-            orderLoop.orderNumber = data.increment_id;
-            orderLoop.status = data.status;
-            orderLoop.products = parseInt(data.products);
-            orderLoop.total = siteConfig.currency + ' ' + data.total;
-            return orderLoop;
-        });
+        let dataLListing = [];
+        if (dataObj && dataObj.length > 0) {
+            dataLListing = dataObj.slice(0, 5).map((data, index) => {
+                let orderLoop: any = {};
+                orderLoop.orderNumber = data.increment_id;
+                orderLoop.status = data.status;
+                orderLoop.products = parseInt(data.products);
+                orderLoop.total = siteConfig.currency + ' ' + data.total;
+                return orderLoop;
+            });
+        }
 
         setMyOrders(dataLListing)
 
@@ -175,20 +178,20 @@ function Dashboard(props) {
                         <div className="page_by">
                             <div className="col-md-12 pagination">
                                 {/* //   {console.log(pagination)} */}
-                                {pagination > 1 && (<nav aria-label="Page navigation example">
-                                    {console.log(page, typeof (page), pagination, typeof (pagination))}
-                                    <ul className="pagination justify-content-center">
-                                        <li
-                                            className={`previousAnno ${page === 1 ? 'disabled' : ''}`}>
-                                            <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
-                                        </li>
-                                        <li className='pageofpage'>Page {page} of {pagination}</li>
-                                        <li className={`nextAnno ${page === pagination ? 'disabled' : ''}`} >
-                                            <Link className={`page-link pagenextAnno ${page === pagination ? 'disabled' : ''}`} onClick={(e) => { goToNextPage(e); }}
-                                                to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                {pagination > 1 && (
+                                    <nav aria-label="Page navigation example">
+                                        <ul className="pagination justify-content-center">
+                                            <li
+                                                className={`previousAnno ${page === 1 ? 'disabled' : ''}`}>
+                                                <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
+                                            </li>
+                                            <li className='pageofpage'>Page {page} of {pagination}</li>
+                                            <li className={`nextAnno ${page === pagination ? 'disabled' : ''}`} >
+                                                <Link className={`page-link pagenextAnno ${page === pagination ? 'disabled' : ''}`} onClick={(e) => { goToNextPage(e); }}
+                                                    to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
+                                            </li>
+                                        </ul>
+                                    </nav>
                                 )}
                             </div>
                         </div>

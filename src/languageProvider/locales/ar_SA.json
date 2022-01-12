@@ -574,9 +574,17 @@
   "instagraminvalid": "رابط Instagram غير صالح",
   "readytoship":"على استعداد للسفينة",
   "acknowledged":"أقر",
-  "shipped":"أقر",
+  "Shipped":"أقر",
   "delivered":"تم التوصيل",
   "canceled":"ألغيت",
   "returned":"عاد",
-  "onhold":"في الانتظار"
+  "onhold":"في الانتظار",
+  "payout.paid":"دفع",
+  "payout.processing":"يعالج",
+"payout.scheduled":"المقرر",
+"payout.hold":"معلق",
+"payout.paypal_ipn":"في انتظار Paypal IPN",
+"payout.error":"خطأ",
+"payout.cancelled":"ألغيت",
+"payout.description":"يمكنك أن ترى دفعاتك هنا."
 }
