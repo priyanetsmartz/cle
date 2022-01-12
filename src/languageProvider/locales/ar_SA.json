@@ -586,5 +586,7 @@
 "payout.paypal_ipn":"في انتظار Paypal IPN",
 "payout.error":"خطأ",
 "payout.cancelled":"ألغيت",
-"payout.description":"يمكنك أن ترى دفعاتك هنا."
+"payout.description":"يمكنك أن ترى دفعاتك هنا.",
+"payout.detail":"تفاصيل الدفع الخاصة بي",
+"payoutdetail.description":"يمكنك مشاهدة تفاصيل الدفع الخاصة بك هنا"
 }

@@ -172,3 +172,10 @@ export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fr
     return adminToken.request(`default/rest/all/V1/vendor/vendorPayoutCollection?${queryString}`,"" , "GET", "")
 
 }
+
+export async function getPayoutDetails() {
+    //var storeId = language === 'english' ? 3 : 2;
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`rest/all/V1/vendor/vendorPayoutDetailPage?vendorId=${vendorId}&pId=2`, "", "GET", "")
+}
