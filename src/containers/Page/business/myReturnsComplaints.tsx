@@ -20,6 +20,7 @@ function MyReturnsComplaints(props) {
     const [myOrder, setMyOrders] = useState([])
     const [range, setRange] = useState({ low: 0, high: 0 })
     const [status, setStatus] = useState();
+    const [statusOptions, setStatusOptions] = useState([]);
     const [sortOrder, setSortOrder] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
@@ -32,10 +33,13 @@ function MyReturnsComplaints(props) {
 
     async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
         let result: any = await getVendorReturns(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder);
-        let dataObj = result && result.data && result.data.length > 0 ? result.data : [];
+
+        let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
         let dataLListing = []
-        if (dataObj.length > 0) {
-            dataLListing = dataObj.map((data, index) => {
+        if (dataObj && dataObj.data && dataObj.data.length > 0) {
+            let dataD = dataObj.data;
+
+            dataLListing = dataD.map((data, index) => {
                 let orderLoop: any = {};
                 orderLoop.increment_id = [{ 'increment_id': data.increment_id, 'entity_id': data.entity_id }];
                 orderLoop.status = data.rma_status;
@@ -44,6 +48,12 @@ function MyReturnsComplaints(props) {
                 return orderLoop;
             });
         }
+
+        if (dataObj && dataObj.status_list && Object.keys(dataObj.status_list).length > 0) {
+            console.log(dataObj.status_list)
+            setStatusOptions(dataObj.status_list)
+        }
+
         setMyOrders(dataLListing)
 
     }
@@ -143,14 +153,13 @@ function MyReturnsComplaints(props) {
                                         <span className="form-label"><IntlMessages id="status" /></span>
                                         <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="0">{intl.formatMessage({ id: "product.pending" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "Shipped" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "readytoship" })}</option>
-                                            <option value="4">{intl.formatMessage({ id: "onhold" })}</option>
-                                            <option value="6">{intl.formatMessage({ id: "canceled" })}</option>
-                                            <option value="7">{intl.formatMessage({ id: "delivered" })}</option>
-                                            <option value="9">{intl.formatMessage({ id: "acknowledged" })}</option>
-                                            <option value="11">{intl.formatMessage({ id: "returned" })}</option>
+
+                                            {Object.keys(statusOptions).map((item, i) => {
+                                                return (
+                                                    <option value={item} key={i}>{statusOptions[item]}</option>
+                                                )
+                                            })}
+
                                         </select>
                                     </div>
                                 </div>

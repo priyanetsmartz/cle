@@ -60,6 +60,30 @@ export async function getCustomerOrders(pageSize, page) {
     return adminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[sortOrders][0][field]=created_at&searchCriteria[sortOrders][0][direction]=DESC&searchCriteria[page_size]=${pageSize}&searchCriteria[currentPage]=${page}`, "", "GET", "");
 }
 
+export async function getCustomerReturn(from_date: any, to_date: any, from_price: any, to_price: any, sortBy: any, sortOrders: any, search: any) {
+
+    let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const custId = user.cust_id;
+
+    let queryString = "customerId=" + custId;
+    if (from_date != null && from_date !== '')
+        queryString += "&from_date=" + from_date
+    if (to_date != null && to_date !== '')
+        queryString += "&to_date=" + to_date
+    if (from_price != null && from_price !== '')
+        queryString += "&from_price=" + from_price
+    if (to_price != null && to_price !== '' && to_price !== 0)
+        queryString += "&to_price=" + to_price
+    if (sortBy != null && sortBy !== '' && sortBy !== 0)
+        queryString += "&sortBy=" + sortBy
+    if (sortOrders != null && sortOrders !== '')
+        queryString += "&sortOrders=" + sortOrders
+    if (search != null && search !== '')
+        queryString += "&search=" + search
+
+    return adminApi.request(`default/rest/all/V1/customer/returnOrderCollection/?${queryString}`, "", "GET", "");
+}
+
 export async function getCustomerOrdersByDate(fromDate, toDate, pageSize) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const custId = user.cust_id;

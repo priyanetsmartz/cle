@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
-import { getOrderDetail, getReturnDetail } from '../../../redux/pages/vendorLogin';
+import { getOrderDetail } from '../../../redux/pages/vendorLogin';
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import { getCountryName } from '../../../components/utility/allutils';
@@ -10,21 +10,22 @@ import IntlMessages from "../../../components/utility/intlMessages";
 
 function VendorOrderDetail(props) {
     const { orderId }: any = useParams();
-    const [returnDetails, setReturnDetails] = useState([])
+    const [orderDetails, setOrderDetails] = useState([])
 
     useEffect(() => {
         getOrderDetailFxn(orderId)
     }, [props.languages])
 
     async function getOrderDetailFxn(orderId) {
-        let results: any = await getOrderDetail(orderId);
+        let results: any = await getOrderDetail(props.languages, orderId);
+        console.log(results.data);
         let data = [];
-        if (results && results.data && results.data.length > 0) {
-            data['info'] = results.data[0].info;
-            data['address'] = results.data[0].address;
-            data['items'] = results.data[0].items;
-        }
-        setReturnDetails(data);
+        // if (results && results.data && results.data.length > 0) {
+        //     data['info'] = results.data[0].info;
+        //     data['address'] = results.data[0].address;
+        //     data['items'] = results.data[0].items;
+        // }
+        setOrderDetails(data);
     }
     return (
         <main>
@@ -44,11 +45,11 @@ function VendorOrderDetail(props) {
                                     <div className="col-sm-12">
                                         <h5>Order number: #0055 (Payment status: Paid)</h5>
                                     </div>
-                                    
+
                                     <div className="col-sm-3">
                                         <h6>Purchase date</h6>
                                         <p>Mon, 10 May 2021</p>
-                                    </div>                                    
+                                    </div>
                                     <div className="col-sm-3">
                                         <h6>Payment method</h6>
                                         <p>Mastercard</p>

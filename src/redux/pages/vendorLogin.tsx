@@ -179,7 +179,7 @@ export async function getReturnDetail(id: number) {
     return adminToken.request(`default/rest/all/V1/vendor/returnDetailInformation?rmaId=${id}`, "", "GET", "");
 }
 
-export async function getOrderDetail(id: number) {
+export async function getOrderDetail(lang: string, id: number) {
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
     return adminToken.request(`default/rest/all/V1/vendor/vendorOrderDetail?vendorId=${vendorId}&orderId=${id}`, "", "GET", "");

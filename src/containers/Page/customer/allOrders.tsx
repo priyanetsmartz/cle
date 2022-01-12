@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders, getCustomerOrdersByPrice } from '../../../redux/pages/customers';
+import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders, getCustomerOrdersByPrice, getCustomerReturn } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import ReturnSection from './allReturns';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
@@ -19,16 +19,20 @@ function OrdersAndReturns(props) {
     const [pageSize, setPageSize] = useState(12);
     const [orderId, setOrderId] = useState('');
     const [pagination, setPagination] = useState(1);
+    const [returnPagination, setReturnPagination] = useState(1);
     const [orderDate, setOrderDate] = useState('');
     const [sortOrder, setSortOrder] = useState('');
     const [orders, setOrders] = useState([]);
+    const [returs, setReturn] = useState([]);
     const [page, setCurrent] = useState(1);
     const [price, setPrice] = useState({ low: 1000, high: 2500 })
     const [loaderOrders, setLoaderOrders] = useState(false);
+    const [loaderReturns, setLoaderReturns] = useState(false);
     const language = getCookie('currentLanguage');
     const intl = useIntl();
     useEffect(() => {
         getData(pageSize);
+        getReturnData();
     }, [pageSize, props.languages, page]);
 
     const getData = async (pageSize) => {
@@ -41,6 +45,18 @@ function OrdersAndReturns(props) {
         }
 
     }
+
+    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = '', sortOrders: any = '', search: any = '') => {
+        let returns: any = await getCustomerReturn(from_date, to_date, from_price, to_price, sortBy, sortOrders, search);
+
+        if (returns && returns.data && returns.data.length > 0 && returns.data[0]) {
+            console.log(returns.data[0])
+            setLoaderReturns(false);
+            setReturn(returns.data[0]);
+            setReturnPagination(Math.ceil(returns.data.total_count / pageSize));
+        }
+    }
+
     const groupBy = async (array, key) => {
         // Return the end result
         return array.reduce((result, currentValue) => {
@@ -214,10 +230,10 @@ function OrdersAndReturns(props) {
                                 <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
                                     type="button" role="tab" aria-controls="home" aria-selected="true"><IntlMessages id="order.orders" /></button>
                             </li>
-                            {/* <li className="nav-item" role="presentation">
+                            <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
                                     type="button" role="tab" aria-controls="profile" aria-selected="false"><IntlMessages id="order.returns" /></button>
-                            </li> */}
+                            </li>
 
                         </ul>
                         <div className="tab-content" id="myTabContent">
@@ -253,22 +269,11 @@ function OrdersAndReturns(props) {
                                     </div>
                                 )}
                                 {orders && orders.length > 0 ?
-
                                     <div>
-
                                         {orders && (orders.map((item, i) => {
-                                            // console.log(i)
                                             return (
 
                                                 <div key={i}>
-                                                    {/* <div className="row">
-                                                <div className="col-sm-12">
-                                                    <div className="sortbyeyearly_show">
-                                                        <h3>May 2021</h3>
-                                                    </div>
-                                                </div>
-                                            </div> */}
-
                                                     <div className="row my-3">
                                                         <div className="col-sm-12">
                                                             <div className="row mb-3">
@@ -382,8 +387,92 @@ function OrdersAndReturns(props) {
 
                             </div>
                             <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <IntlMessages id="order.returns" />
+                                {returs && returs.length > 0 ?
+                                    <div>
+                                        {returs && (returs.map((item, i) => {
+                                            console.log(item.items[0])
+                                            return (
 
+                                                <div key={i}>
+                                                    <div className="row my-3">
+                                                        <div className="col-sm-12">
+                                                            <div className="row mb-3">
+                                                                <div className="col-sm-6">
+                                                                    <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item.order_id}</h3>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <div className="viewall_btn">
+                                                                        <Link to={`/order-details/${item.rma_increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="d-md-flex">
+                                                            <div className="col-sm-6">
+                                                                <div className="order-viewsec">
+                                                                    <div className="order-details">
+                                                                        <div className="order-date">
+                                                                            <label className="form-label"><IntlMessages id="shipped.date" /></label>
+                                                                            <div className="labl_text">{item.shipped_date ? moment(item.shipped_date).format('ddd, D MMMM YYYY') : ''}</div>
+                                                                        </div>
+
+                                                                        <div className="products">
+                                                                            <label className="form-label"> <IntlMessages id="order.products" /></label>
+                                                                            <div className="labl_text"> {item && item.total_qty ? item.total_qty : 0}</div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="order-details">
+                                                                        <div className="order-date">
+                                                                            <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
+                                                                            <div className="labl_text">{item.return_date ? moment(item.return_date).format('ddd, D MMMM YYYY') : ''}</div>
+                                                                        </div>
+
+                                                                        <div className="products">
+                                                                            <label className="form-label"> <IntlMessages id="order.price" /></label>
+                                                                            <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="order-shipped">
+                                                                        <label className="form-label">
+
+
+                                                                        </label>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="prodcut_catg">
+                                                                    <div className="product_photo">
+                                                                        <img src={item && item.items && item.items.length > 0 && item.items[0]?item.items[0]:""} className="img-fluid" alt="" />
+                                                                    </div>
+                                                                    <div className="product_photo">
+                                                                        <img src={item && item.items && item.items.length > 1 && item.items[1]?.item.items[1]} className="img-fluid" alt="" />
+                                                                    </div>
+                                                                    <div className="more_product">
+                                                                        <Link to="#">
+                                                                            <img src={item.items[2]?.item.items[2]} className="img-fluid" alt="" />
+                                                                            <div className="overlay_img"></div>
+                                                                            <span className="more_pro">{item.items.length}</span>
+                                                                        </Link>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-sm-12">
+                                                            <div className="blank_bdr"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }))}
+                                    </div>
+                                    : !loaderOrders ? <IntlMessages id="no_data" /> : ""}
                             </div>
 
                         </div>
