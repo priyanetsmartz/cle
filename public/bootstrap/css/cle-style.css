@@ -7723,7 +7723,7 @@ p.sliderupper {
     }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 767px) {
     .order_tab_sec .nav-tabs .nav-link {
         font-size: 14px;
         font-family: 'Monument Extended';
@@ -8262,6 +8262,134 @@ p.sliderupper {
         z-index: 3;
     }
 
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+	.personal_bg {
+		width: 100%;
+		margin-top: -20px;
+	}
+	.marketing_secs{
+		padding: 30px 30px;
+	}
+	.product-listing .product img{
+		height:200px;
+	}
+	
+	.product-listing .slick-prev,
+	.product-listing .slick-next{
+		top: 18%;
+	}
+	
+	.product-listing .slick-prev{
+		left:-15px;
+	}
+	
+	.product-listing .slick-next{
+		right:-15px;
+	}
+	.banner-content-2{
+		padding: 60px 20px;
+	}
+	.resltspage_sec.bestseller-sec .sort_by .sortbyfilter{
+		top:unset;
+	}
+	.dis-catgry h1,
+	.new-in-title h1,
+	.choose-foryou-sec .new-in-title h1,
+	.new-in-title h1,
+	.discoverleft h2,
+	.become-part-inner h1,
+	.banner-content-2 h4{
+		font-size: 32px;
+	}
+	.discoverleft {
+		width: 80%;
+		padding: 60px 20px;
+	}
+	.slick-dots{
+		display:none!important;
+	}
+	.plp-listing [class*="col-"],
+    .product-listing .slick-slide	{
+		padding: 0 7px;
+	}
+	.plp-viewall{
+		padding: 10px;
+	}
+	.exclusive-tab ul.nav .nav-item .nav-link,
+	.exclusive-tab ul.nav .nav-item .nav-link.active	{
+		font-size: 18px;	
+	}
+	.DC-top-banner .DC-top-ban-inner{
+		width: 500px;
+	}
+	#topheaderrr .section.banner {
+		padding: 140px 0 0;
+	}
+	.product-slider .row>.col-sm-2{
+		order:1;
+	}
+	.product-full-img{
+		height:70%;
+	}
+	.product_description, .accodian_descrpt {
+		margin-left: 10px;
+	}
+	.sticky-cart{
+		margin-left: 0;
+	}
+	.order-detail-sec{
+		padding:15px;
+	}
+	.cart-total-price a{
+		padding:10px;
+	}
+	.inner-pages .page-head svg text {
+		font-size: 50px !important;
+	}
+	.sticky-fliter{
+		width:auto;
+	}
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1200px) {
+	.product-listing .slick-prev,
+	.product-listing .slick-next{
+		top: 20%;
+	}
+	
+	.product-listing .slick-prev{
+		left:-7px;
+	}
+	.product-listing .slick-next{
+		right:-7px;
+	}
+	.personal_bg{
+		width:100%;
+	}
+	.product-listing .product img{
+		height:200px;
+	}
+	.slick-slide img{
+		width:100%;
+	}
+	.discoverleft {
+		width: 80%;
+		padding: 60px 20px;
+	}
+	.dis-catgry h1,
+	.new-in-title h1,
+	.choose-foryou-sec .new-in-title h1,
+	.new-in-title h1,
+	.discoverleft h2,
+	.become-part-inner h1,
+	.banner-content-2 h4{
+		font-size: 32px;
+	}
+	.become-part-inner{
+		width:80%;
+	}
 }
 
 @media only screen and (max-width: 600px) {}

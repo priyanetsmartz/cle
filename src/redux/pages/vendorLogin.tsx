@@ -184,3 +184,10 @@ export async function getOrderDetail(lang: string, id: number) {
     const vendorId = vendor.vendor_id;
     return adminToken.request(`default/rest/all/V1/vendor/vendorOrderDetail?vendorId=${vendorId}&orderId=${id}`, "", "GET", "");
 }
+
+export async function getPayoutDetails() {
+    //var storeId = language === 'english' ? 3 : 2;
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`rest/all/V1/vendor/vendorPayoutDetailPage?vendorId=${vendorId}&pId=2`, "", "GET", "")
+}

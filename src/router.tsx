@@ -38,7 +38,7 @@ import Loader from '../src/image/CLE_LogoMotionGraphics.gif';
 import BussinessResetpassword from './containers/Page/business/bussinessResetpassword';
 import RetunOrder from './containers/Page/business/retunOrder';
 import VendorOrderDetails from './containers/Page/business/orderDetail';
-
+import MyPayoutDetails from './containers/Page/business/payoutDetails';
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -81,6 +81,7 @@ const PublicRoutes = ({ history }) => {
           <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
           <ProductRoutes exact path="/contact-us" component={contact} />
           <ProductRoutes exact path="/help-center" component={Faq} page='faq'  />
+          <ProductRoutes exact path="/payoutdetails" component={MyPayoutDetails} />
 
 
           <ProductRoutes exact path="/vendor-login" component={VendorLogin} />

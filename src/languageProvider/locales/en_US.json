@@ -587,5 +587,7 @@
   "payout.error":"Error",
   "payout.cancelled":"Cancelled",
   "payout.description":"You can see your payouts here.",
-  "shipped.date":"Shipped Date"
+  "shipped.date":"Shipped Date",
+  "payout.detail":"My Payout Details",
+  "payoutdetail.description":"You can see your payout details here"
 }

@@ -79,6 +79,11 @@ function MyPayouts(props) {
         {
             name: 'Price',
             selector: row => row.price,
+            button:true,
+            cell: row => (
+                <a href="/payoutdetails">{row.price}</a>
+            )
+            
         },
         {
             name: 'Date',
@@ -130,9 +135,9 @@ function MyPayouts(props) {
              commission:dataObj2.commission,
          }]
         setAccBalance(dataLListing2)
-         if(dataLListing2['subtotal']) setSubtotal(dataLListing2['subtotal'])
-         if(dataLListing2['commision']) setCommission(dataLListing2['commision'])
-         if(dataLListing2['subtotal'] && dataLListing2['commision']) setTotalP(dataLListing['subtotal']-dataLListing2['commision'])
+         if(dataLListing2[0].subtotal) setSubtotal(dataLListing2[0].subtotal)
+         if(dataLListing2[0].commission) setCommission(dataLListing2[0].commission)
+         if(dataLListing2[0].subtotal && dataLListing2[0].commission) setTotalP(dataLListing2[0].subtotal-dataLListing2[0].commission)
          
 
     }
