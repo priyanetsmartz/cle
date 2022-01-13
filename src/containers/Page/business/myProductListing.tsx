@@ -1,45 +1,47 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import DataTable from 'react-data-table-component';
-import { getVendorProducts, searchProductListing, removeProduct, vendorLogout, searchProducts } from '../../../redux/pages/vendorLogin';
-import moment from 'moment';
-import { siteConfig } from '../../../settings/index'
-import { Link } from "react-router-dom";
-import Modal from "react-bootstrap/Modal";
-import searchIcon from '../../../image/Icon_zoom_in.svg';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import { InputNumber, Slider } from 'antd';
-import './deletepop.css';
-import { getCookie } from '../../../helpers/session';
-import { useLocation } from 'react-router-dom'; 
+import moment from 'moment';
+import { Link } from "react-router-dom";
+import searchIcon from '../../../image/Icon_zoom_in.svg';
+import { removeProduct, searchProducts } from '../../../redux/pages/vendorLogin';
+import { siteConfig } from '../../../settings';
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-daterangepicker/daterangepicker.css';
+import Modal from "react-bootstrap/Modal";
+import { capitalize } from '../../../components/utility/allutils';
+
 
 function MyProductListing(props) {
-    let brand = '';
-    const [searchTerm, setSearchTerm] = useState('');
-    const [listingData, setListingData] = useState([])
-    const [deleteId, setDeleteID] = useState(0)
-    const [sortOrder, setSortOrder] = useState('');
-    const [orderDate, setOrderDate] = useState('');
-    const [range, setRange] = useState({ low: 0, high: 0 })
-    const [status, setStatus] = useState(0)
-    const [deletePop, setDeletePop] = useState(false);
-    const [sortValue, setSortValue] = useState({ sortBy: "created_at", sortByValue: "DESC" });
     const intl = useIntl();
-    const [allData, setAllData] = useState([]);
+    let brand = '';
+    const [listingData, setListingData] = useState([])
+    const [range, setRange] = useState({ low: 0, high: 0 })
+    const [status, setStatus] = useState();
+    const [sortOrder, setSortOrder] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
     const [vendorId, setVendorId] = useState(1);
-    const [fromDate, setFromDate] = useState('');
-    const [toDates, setToDates] = useState('');
+    const [deletePop, setDeletePop] = useState(false);
+    const [deleteId, setDeleteID] = useState(0)
     useEffect(() => {
-        getProducts()
-    }, [props.languages, sortValue])
+        getVendorProductListing()
+        return (
+            setListingData([])
+        )
+    }, [])
 
-    async function getProducts(term:any='', frDate:any='', toDate:any='', fromPrice:any='', toPrice:any='', stat:any=''){
-        let language = props.languages
-        let result:any = await searchProducts(language, term, frDate, toDate, fromPrice, toPrice, stat);
-        console.log(result);
-        let dataObj = result && result.data && result.data.length > 0 ? result.data : []
-            const renObjData = dataObj.map(function (data) {
+    async function getVendorProductListing(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
+        let result: any = await searchProducts(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder);
+
+        let dataObj = result && result.data && result.data.length > 0 ? result.data : [];
+
+        const renObjData = dataObj.map(function (data, idx) {
+
             let productLoop: any = {};
 
             productLoop.id = data.id;
@@ -50,19 +52,86 @@ function MyProductListing(props) {
             productLoop.price = siteConfig.currency + data.price;
             return productLoop;
         });
-        setListingData(renObjData);
+        setListingData(renObjData)
+
     }
 
-    
+    const getOrdersByStatus = async (e) => {
+        const { value } = e.target;
+        setStatus(value)
+        getVendorProductListing(value, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
+    }
+
+    const datePickerCallback = async (start, end, label) => {
+        // console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
+        let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
+
+        setDateFilter(prevState => ({
+            ...prevState,
+            from: from,
+            to: to
+        }))
+
+        getVendorProductListing(status, range.low, range.high, searchTerm, from, to, sortOrder);
+    }
+
+    const getOrdersByPrice = async (range) => {
+        let from = range[0];
+        let to = range[1];
+        setRange(prevState => ({
+            ...prevState,
+            low: from,
+            high: to
+        }))
+        getVendorProductListing(status, from, to, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
+    }
+
+    const getOrdersBySearchTerm = async (e) => {
+        console.log(e.target.value)
+        if (e.target.value.length >= 3) {
+            setTimeout(() => {
+                setSearchTerm(e.target.value)
+            }, 3000)
+        } else {
+            setSearchTerm("")
+        }
+        getVendorProductListing(status, range.low, range.high, e.target.value, dateFilter.from, dateFilter.to, sortOrder)
+    }
+
+    const sortOrdersHandler = async (e) => {
+        setSortOrder(e.target.value);
+        getVendorProductListing(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, e.target.value)
+    }
+
     const handleDelete = (prodId) => {
         setDeleteID(prodId)
         setDeletePop(true);
     }
 
+    async function deleteProduct() {
+        let payload = {
+            "product": {
+                "sku": deleteId,
+                "status": 2,
+                "custom_attributes": [{
+                    "attribute_code": "udropship_vendor",
+                    "value": vendorId
+                }]
+            },
+            "saveOptions": true
+        }
+        //console.log(payload)
+        let result: any = await removeProduct(payload)
+        //console.log(deleteId);
+        closePop();
+    }
+    const closePop = () => {
+        setDeletePop(false);
+    }
     const columns = [
         {
             name: <i className="fa fa-camera" aria-hidden="true"></i>,
-            selector: row => row.image,
+            selector: row => row.img,
             cell: row => <img height="84px" width="56px" alt={row.image} src={row.image} />,
         },
         {
@@ -70,12 +139,7 @@ function MyProductListing(props) {
             sortable: true,
             cell: row => (
                 <div>
-                    {row.product.custom_attributes && row.product.custom_attributes.length > 0 && row.product.custom_attributes.map((attributes) => {
-                        if (attributes.attribute_code === 'brand') {
-                            brand = attributes.value;
-                        }
-                    })}
-                    <p className='prodbrand'>{brand}</p>
+                    <p className='prodbrand'>{row.product.brand}</p>
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span>ID:</span>{row.product.id}</p>
                     <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" >View</Link></li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} >Delete</Link></li></ul></div>
@@ -90,7 +154,13 @@ function MyProductListing(props) {
             name: 'Status',
             selector: row => row.status,
             cell: row => (
-                <span className='green'>{row.status}</span>
+                <div>
+                    {row.status === "1" ? intl.formatMessage({ id: "product.active" }) : ""}
+                    {row.status === "2" ? intl.formatMessage({ id: "product.sold" }) : ""}
+                    {row.status === "3" ? intl.formatMessage({ id: "product.pending" }) : ""}
+                    {row.status === "4" ? intl.formatMessage({ id: "product.rejected" }) : ""}
+                </div>
+
 
             ),
         },
@@ -99,96 +169,6 @@ function MyProductListing(props) {
             selector: row => row.price,
         }
     ];
-
-    const handleChange = ({ selectedRows }) => {
-        console.log('Selected Rows: ', selectedRows);
-    };
-
-    async function deleteProduct() {
-      let  payload = {
-            "product": {
-                "sku": deleteId,
-                "status": 2,
-                "custom_attributes": [{
-                    "attribute_code": "udropship_vendor",
-                    "value": vendorId
-                }]
-            },
-            "saveOptions": true
-        }
-        //console.log(payload)
-        let result : any = await removeProduct(payload)
-        //console.log(deleteId);
-        closePop();
-    }
-    const closePop = () => {
-        setDeletePop(false);
-    }
-    const getProductbyStatus = async (e) => {
-        const { value } = e.target;
-        setStatus(value)
-        getProducts(searchTerm, fromDate, toDates, range.low, range.high, value )
-        
-    }
-
-
-    const getOrdersByDate = async (e) => {
-        const { value } = e.target;
-        let filter = parseInt(value);
-        let fromDate;
-        let currentDate = moment(new Date());
-        if (filter === 1 || filter === 3 || filter === 6) {
-            fromDate = moment(currentDate).subtract(filter, 'M').toJSON();
-        } else {
-            fromDate = moment(`${filter}-01-01`).toJSON();
-        }
-        //console.log(fromDate)
-        setOrderDate(fromDate);
-        const dateFrom = moment(fromDate).format("YYYY-MM-DD");
-        const dateTo = moment(currentDate.toJSON()).format("YYYY-MM-DD")
-
-        setFromDate(dateFrom);
-        setToDates(dateTo);
-
-        getProducts(searchTerm, dateFrom, dateTo, range.low, range.high, status )
-        }
-
-    const handlePriceRange = async (range) => {
-        let from = range[0];
-        let to = range[1];
-        setRange(prevState => ({
-            ...prevState,
-            low: from,
-            high: to
-        }))
-        getProducts(searchTerm, fromDate, toDates, from, to, status )
-    }
-
-    const sortOrdersHandler = async (e) => {
-        setSortOrder(e.target.value);
-        let sortBy = "created_at";
-        let sortByValue = "DESC";
-        if (e.target.value === "desc") {
-            sortBy = "price";
-            sortByValue = "DESC";
-        } else if (e.target.value === "asc") {
-            sortBy = "price";
-            sortByValue = "ASC";
-        }
-        console.log(sortBy, sortByValue);
-        setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
-    }
-
-    const updateInput = async (e) => {
-        let lang = props.languages ;
-        if (e.target.value.length >= 3) {
-            setSearchTerm(e.target.value)
-        }
-        else{
-            setSearchTerm("")
-        }
-        getProducts(searchTerm, fromDate, toDates, range.low, range.high, e.target.value )
-    }
 
     return (
         <div className="col-sm-9">
@@ -206,7 +186,7 @@ function MyProductListing(props) {
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
-                                        <select className="form-select" aria-label="Default select example" defaultValue={status} onChange={getProductbyStatus}>
+                                        <select className="form-select" aria-label="Default select example" defaultValue={status} onChange={getOrdersByStatus}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "product.active" })}</option>
                                             <option value="2">{intl.formatMessage({ id: "product.pending" })}</option>
@@ -218,17 +198,26 @@ function MyProductListing(props) {
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.date" /></span>
-                                        <select className="form-select" aria-label="Default select example" onChange={getOrdersByDate}>
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
-                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
-                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
-                                        </select>
+                                        <DateRangePicker
+                                            onCallback={datePickerCallback}
+                                            initialSettings={{
+                                                startDate: moment(),
+                                                endDate: moment(),
+                                                ranges: {
+                                                    'All': "",
+                                                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                                                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                                                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                                                }
+                                            }}
+                                        >
+                                            <input type="text" className="form-control" />
+                                        </DateRangePicker>
                                     </div>
                                 </div>
                                 <div className="col-sm-3 mb-2">
-                                <div className="form-group">
+                                    <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
                                         <div className='pricerangeouter' >
                                             <InputNumber
@@ -236,7 +225,7 @@ function MyProductListing(props) {
                                                 max={20000}
                                                 readOnly={true}
                                                 value={range.low}
-                                                onChange={handlePriceRange}
+                                                onChange={getOrdersByPrice}
                                             />
                                             <span>-</span>
                                             <InputNumber
@@ -244,59 +233,50 @@ function MyProductListing(props) {
                                                 max={20000}
                                                 readOnly={true}
                                                 value={range.high}
-                                                onChange={handlePriceRange}
+                                                onChange={getOrdersByPrice}
                                             />
                                         </div>
-                                        <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={handlePriceRange} />
+                                        <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
-                                    </div>
-                                <div className="col-sm-3">
-                                    <div className="form-group">
-                                        <span className="form-label">&nbsp;</span>
-                                        <div className="search_results">
-                                            <img src={searchIcon}  alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} onChange={updateInput} onKeyDown={useLocation.hash} className="form-control me-1" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">                              
-                                <div className="d-grid col-sm-4 mb-4">
-                                    <button type="button" className="btn btn-secondary" >
-                                        <IntlMessages id="productIntegration" />
-                                    </button>
-                                </div>
-                                <div className="d-grid col-sm-3 mb-4">
-                                    <div className="sort_by">
-                                        <div className="sortbyfilter">
-                                            <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
-                                                <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                                <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                                <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                            </select>
+                                    <div className="col-sm-3">
+                                        <div className="form-group">
+                                            <span className="form-label">&nbsp;</span>
+                                            <div className="search_results">
+                                                <img src={searchIcon} alt="" className="me-1 search_icn" />
+                                                <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div className="row">
+                            <div className="float-right">
+                                <div className="sort_by">
+                                    <div className="sortbyfilter">
+                                        <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
+                                            <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                            <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                            <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    </div>
 
-                <DataTable
-                    columns={columns}
-                    data={listingData}                    
-                    pagination={true}
-                    onSelectedRowsChange={handleChange}
-                />
+                    <DataTable
+                        columns={columns}
+                        data={listingData}
+                        pagination={true}
+                    />
             </section>
             <Modal show={deletePop}>
                 <Modal.Body className="CLE_pf_details modal-confirm">
 
                     <div className="deletePopup">
                         <div className="modal-header flex-column">
-                            <div className="icon-box">
-                                <i className="fa fa-times" aria-hidden="true"></i>
-                            </div>
                             <h4 className="modal-title w-100"><IntlMessages id="deletetheproduct" /></h4>
                             <Link to="#" onClick={closePop} className="close"> <i className="fas fa-times"></i></Link>
                         </div>
@@ -311,17 +291,20 @@ function MyProductListing(props) {
                 </Modal.Body>
             </Modal>
         </div>
+
     )
 }
+
 const mapStateToProps = (state) => {
     let languages = '';
+
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
     return {
+        items: state.Cart.items,
         languages: languages
-
-    };
+    }
 }
 
 export default connect(

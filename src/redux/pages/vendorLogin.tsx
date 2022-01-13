@@ -42,7 +42,7 @@ export async function getVendorProducts(language: string, status = '', from = ''
     return adminToken.request(`/rest/${storeId}/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=udropship_vendor&searchCriteria[filter_groups][1][filters][0][value]=${vendorId}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq${statusCriteria}&searchCriteria[sortOrders][0][field]=${sortValue.sortBy}&searchCriteria[sortOrders][0][direction]=${sortValue.sortByValue}&fields=items[sku,name,id,price,status,custom_attributes,created_at]`, "", "GET", "");
 }
 
-export async function getVendorOrders(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any) {
+export async function getVendorOrders(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
     var storeId = language === 'english' ? '3' : '2';
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
@@ -57,8 +57,12 @@ export async function getVendorOrders(language: string, pageSize: number, status
     if (term !== null && term !== '') {
         queryString += "&searchterm=" + term;
     }
-    if ((dateFrom !== null && dateFrom !== '') && (dateTo !== null && dateTo !== ''))
+    if ((dateFrom !== null && dateFrom !== '') && (dateTo !== null && dateTo !== '')) {
         queryString += "&fromDate=" + dateFrom + "&toDate=" + dateTo;
+    }
+    if (sortOrders !== '') {
+        queryString += "&sortOrder=" + sortOrders;
+    }
 
     return adminToken.request(`rest/all/V1/vendor/vendorOrderCollection?${queryString}`, "", "GET", "");
 }
@@ -92,83 +96,98 @@ export function editVendorAddress(address) {
 export function vendorRestpassword(payload) {
     return adminToken.request(`rest/all/V1/vendor/resetPassword`, payload, "PUT", "");
 }
-export async function searchProductListing(language, term) {
-    var storeId = language === 'english' ? '3' : '2';
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const vendorId = vendor.vendor_id;
-    return adminToken.request(`rest/all/V1/product/searchProducts?vendorId=${vendorId}&storeId=${storeId}&searchterm=${term}`, "", "GET", "")
-}
+
 
 export function removeProduct(deleteInfo) {
     return adminToken.request(`rest/all/V1/products`, deleteInfo, "POST", "");
 }
 
-export async function searchProducts(language, term, fromDate, toDate, fromPrice, toPrice, status) {
+export async function searchProducts(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
     var storeId = language === 'english' ? '3' : '2';
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
-    if (term !== null && term != '')
-        queryString += "&searchterm=" + term;
-    if (fromDate !== null && fromDate != '')
-        queryString += "&fromDate=" + fromDate;
-    if (toDate !== null && toDate!='')
-        queryString += "&toDate=" + toDate;
-    if (fromPrice !== null && fromPrice!=''&& fromPrice != 0)
-        queryString += "&fromPrice=" + fromPrice;
-    if (toPrice !== null && toPrice!= '' && toPrice != 0)
-        queryString += "&toPrice=" + toPrice;
-    if (status !== null && status != '')
+
+    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId + "&pageSize=" + pageSize;
+    if (status !== null && status !== '') {
         queryString += "&status=" + status;
-    console.log("check here", vendorId, storeId, term, fromDate, toDate, fromPrice, toPrice, status)
+    }
+    if ((from !== null && from !== '') && (to !== null && to !== '' && to !== 0)) {
+        queryString += "&from_price=" + from + "&to_price=" + to;
+    }
+    if (term !== null && term !== '') {
+        queryString += "&searchterm=" + term;
+    }
+    if ((dateFrom !== null && dateFrom !== '') && (dateTo !== null && dateTo !== '')) {
+        queryString += "&from_date=" + dateFrom + "&to_date=" + dateTo;
+    }
+    if (sortOrders !== '') {
+        queryString += "&sortOrder=" + sortOrders;
+    }
+
     return adminToken.request(`rest/all/V1/product/searchProducts?${queryString}`, "", "GET", "")
 
 }
 
-export async function salesOrder(language, term, fromDate, toDate, fromPrice, toPrice, status, pageSize) {
+export async function getVendorReturns(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
     var storeId = language === 'english' ? '3' : '2';
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId + "&pageSize=" + pageSize;
-    if (term !== null)
-        queryString += "&searchterm=" + term;
-    if (fromDate !== null)
-        queryString += "&fromDate=" + fromDate;
-    if (toDate !== null)
-        queryString += "&toDate=" + toDate;
-    if (fromPrice !== null)
-        queryString += "&fromPrice=" + fromPrice;
-    if (toPrice !== null)
-        queryString += "&toPrice=" + toPrice;
-    if (status !== null || status !== "")
+
+    if (status !== null && status !== '') {
         queryString += "&status=" + status;
+    }
+    if ((from !== null && from !== '') && (to !== null && to !== '' && to !== 0)) {
+        queryString += "&from_price=" + from + "&to_price=" + to;
+    }
+    if (term !== null && term !== '') {
+        queryString += "&searchterm=" + term;
+    }
+    if ((dateFrom !== null && dateFrom !== '') && (dateTo !== null && dateTo !== '')) {
+        queryString += "&from_date=" + dateFrom + "&to_date=" + dateTo;
+    }
+    if (sortOrders !== '') {
+        queryString += "&sortBy=grand_total&sortOrders=" + sortOrders;
+    }
+    return adminToken.request(`rest/all/V1/vendor/returnCollection?${queryString}`, "", "GET", "");
+}
 
-    return adminToken.request(`rest/all/V1/vendor/vendorOrderCollection?${queryString}`, "", "GET", "")
+export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice, page_size, sort_order, search) {
 
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    let queryString = "vendorId=" + vendorId;
+    if (po_date_from != null && po_date_from !== '')
+        queryString += "&po_date_from=" + po_date_from
+    if (po_date_to != null && po_date_to !== '')
+        queryString += "&po_date_to=" + po_date_to
+    if (po_status != null && po_status !== '')
+        queryString += "&po_status=" + po_status
+    if (po_fromPrice != null && po_fromPrice !== '' && po_fromPrice !== 0)
+        queryString += "&po_fromPrice=" + po_fromPrice
+    if (po_toPrice != null && po_toPrice !== '' && po_toPrice !== 0)
+        queryString += "&po_toPrice=" + po_toPrice
+    if (page_size != null)
+        queryString += "&page_size=" + page_size
+    if (search != null && search !== '')
+        queryString += "&search=" + search
+    return adminToken.request(`default/rest/all/V1/vendor/vendorPayoutCollection?${queryString}`, "", "GET", "")
 
 }
 
-export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice , page_size, sort_order, search){
-    
+export async function getReturnDetail(id: number) {
+    return adminToken.request(`default/rest/all/V1/vendor/returnDetailInformation?rmaId=${id}`, "", "GET", "");
+}
+
+export async function getOrderDetail(lang: string, id: number) {
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    let queryString = "vendorId="+vendorId;
-    if (po_date_from!=null && po_date_from!='')
-        queryString+="&po_date_from="+po_date_from
-    if (po_date_to!=null && po_date_to!='')
-        queryString+="&po_date_to="+po_date_to
-    if (po_status!=null&& po_status!='')
-        queryString+="&po_status="+po_status
-    if (po_fromPrice!=null&& po_fromPrice!=''&& po_fromPrice!=0)
-        queryString+="&po_fromPrice="+po_fromPrice
-    if (po_toPrice!=null && po_toPrice!='' && po_toPrice!=0)
-        queryString+="&po_toPrice="+po_toPrice
-    if (page_size!=null)
-        queryString+="&page_size="+page_size
-    if(sort_order!=null)
-        queryString+="&sort_order="+sort_order
-    if (search!=null && search!='')
-        queryString+="&search="+search
-    return adminToken.request(`default/rest/all/V1/vendor/vendorPayoutCollection?${queryString}`,"" , "GET", "")
+    return adminToken.request(`default/rest/all/V1/vendor/vendorOrderDetail?vendorId=${vendorId}&orderId=${id}`, "", "GET", "");
+}
 
+export async function getPayoutDetails(payoutId) {
+    //var storeId = language === 'english' ? 3 : 2;
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`rest/all/V1/vendor/vendorPayoutDetailPage?vendorId=${vendorId}&pId=`+payoutId, "", "GET", "")
 }

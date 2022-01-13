@@ -5,6 +5,7 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import { InputNumber, Slider } from 'antd';
 import moment from 'moment';
+import { Link } from "react-router-dom";
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
@@ -16,6 +17,7 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 function MySalesOrders(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
+    const [sortOrder, setSortOrder] = useState('');
     const [range, setRange] = useState({ low: 0, high: 0 })
     const [status, setStatus] = useState();
     const [searchTerm, setSearchTerm] = useState('');
@@ -26,10 +28,10 @@ function MySalesOrders(props) {
             setMyOrders([])
         )
 
-    }, [])
+    }, [props.languages])
 
-    async function getDataOfOrders(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '') {
-        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo)
+    async function getDataOfOrders(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
+        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder)
         let dataObj = result && result.data && result.data.length > 0 && result.data[0] && result.data[0].OrderArray ? result.data[0].OrderArray : [];
         let dataLListing = []
         if (dataObj.length > 0) {
@@ -49,11 +51,11 @@ function MySalesOrders(props) {
     const getOrdersByStatus = async (e) => {
         const { value } = e.target;
         setStatus(value)
-        getDataOfOrders(value, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to)
+        getDataOfOrders(value, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
     const datePickerCallback = async (start, end, label) => {
-        console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
+        //   console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
 
         setDateFilter(prevState => ({
@@ -62,8 +64,8 @@ function MySalesOrders(props) {
             to: to
         }))
 
-        getDataOfOrders(status, range.low, range.high, searchTerm, from, to)
-        // setToDates(dateTo);
+        getDataOfOrders(status, range.low, range.high, searchTerm, from, to, sortOrder)
+
     }
 
     const getOrdersByPrice = async (range) => {
@@ -74,7 +76,7 @@ function MySalesOrders(props) {
             low: from,
             high: to
         }))
-        getDataOfOrders(status, from, to, searchTerm, dateFilter.from, dateFilter.to)
+        getDataOfOrders(status, from, to, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
     const getOrdersBySearchTerm = async (e) => {
@@ -85,7 +87,12 @@ function MySalesOrders(props) {
         } else {
             setSearchTerm("")
         }
-        getDataOfOrders(status, range.low, range.high, e.target.value, dateFilter.from, dateFilter.to)
+        getDataOfOrders(status, range.low, range.high, e.target.value, dateFilter.from, dateFilter.to, sortOrder)
+    }
+
+    const sortOrdersHandler = async (e) => {
+        setSortOrder(e.target.value);
+        getDataOfOrders(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, e.target.value)
     }
 
     const columns = [
@@ -93,6 +100,10 @@ function MySalesOrders(props) {
             name: 'Order',
             selector: row => row.increment_id,
             sortable: true,
+            cell: row => (
+                <Link to={`/vendor/sales-orders/${row.increment_id}`}>{row.increment_id}</Link>
+
+            )
         },
         {
             name: 'Date',
@@ -146,6 +157,7 @@ function MySalesOrders(props) {
                                 </div>
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
+                                        <span className="form-label"><IntlMessages id="order.date" /></span>
                                         <DateRangePicker
                                             onCallback={datePickerCallback}
                                             initialSettings={{
@@ -199,6 +211,19 @@ function MySalesOrders(props) {
                             </div>
                         </div>
                     </div>
+                    <div className="row">
+                        <div className="float-right">
+                            <div className="sort_by">
+                                <div className="sortbyfilter">
+                                    <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
+                                        <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                        <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                        <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <DataTable
@@ -216,12 +241,10 @@ function MySalesOrders(props) {
 
 const mapStateToProps = (state) => {
     let languages = '';
-
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
     return {
-        items: state.Cart.items,
         languages: languages
     }
 }

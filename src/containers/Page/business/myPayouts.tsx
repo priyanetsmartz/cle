@@ -10,7 +10,9 @@ import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getPayoutOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { getCookie } from '../../../helpers/session';
+import { capitalize } from '../../../components/utility/allutils';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
+import { Link } from "react-router-dom";
 
 
 function MyPayouts(props) {
@@ -33,9 +35,9 @@ function MyPayouts(props) {
             setMyOrders([])
         )
 
-    
+
     }, [])
-    const getOrdersByStatus = (e) =>{
+    const getOrdersByStatus = (e) => {
         const { value } = e.target;
         setStatus(value)
         getDataOfPayouts(fromDate,toDates, e.target.value, range.low, range.high, searchTerm,sortOrder)
@@ -49,7 +51,7 @@ function MyPayouts(props) {
         getDataOfPayouts(dateFrom,dateTo, status, range.low, range.high, searchTerm,sortOrder)
     }
 
-    const getOrdersByPrice = async(range) =>{
+    const getOrdersByPrice = async (range) => {
         let from = range[0];
         let to = range[1];
         setRange(prevState => ({
@@ -73,11 +75,16 @@ function MyPayouts(props) {
     }
     getDataOfPayouts(fromDate,toDates, status, range.low, range.high, e.target.value,sortOrder)
     }
-    
+
     const columns = [
         {
             name: 'Price',
             selector: row => row.price,
+            button:true,
+            cell: row => (
+                <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{row.price}</Link>
+            )
+            
         },
         {
             name: 'Date',
@@ -87,11 +94,11 @@ function MyPayouts(props) {
             name: 'Status',
             selector: row => row.status,
             cell: row => (
-                <span className='green'>{row.status}</span>
-            )
+                <span className='green'>{capitalize(row.status)}</span>
+            ),
         },
         { // To change column
-            name: 'Total',
+            name: <i className="fa fa-file-alt" aria-hidden="true"></i>,
             selector: row => row.total,
         },
     ];
@@ -109,7 +116,7 @@ function MyPayouts(props) {
     async function getDataOfPayouts(date_from:any = '',date_to: any = '', stat:any = '', frPrice :any = '', toPrice:any = '', term:any = '', sort_order ='asc') {
         let page_size = siteConfig.pageSize;
 
-        let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice , page_size, sort_order,term)
+        let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice, page_size, sort_order, term)
         let dataObj = result && result.data[0] && result.data[0].OrderData.length > 0 ? result.data[0].OrderData : [];
         let dataLListing = [];
         if (dataObj.length > 0) {
@@ -118,6 +125,7 @@ function MyPayouts(props) {
                 orderLoop.price = siteConfig.currency + data.total_payout;
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+                orderLoop.payout_id = data.payout_id;
                 return orderLoop;
             });
         }
@@ -129,9 +137,9 @@ function MyPayouts(props) {
              commission:dataObj2.commission,
          }]
         setAccBalance(dataLListing2)
-         if(dataLListing2['subtotal']) setSubtotal(dataLListing2['subtotal'])
-         if(dataLListing2['commision']) setCommission(dataLListing2['commision'])
-         if(dataLListing2['subtotal'] && dataLListing2['commision']) setTotalP(dataLListing['subtotal']-dataLListing2['commision'])
+         if(dataLListing2[0].subtotal) setSubtotal(dataLListing2[0].subtotal)
+         if(dataLListing2[0].commission) setCommission(dataLListing2[0].commission)
+         if(dataLListing2[0].subtotal && dataLListing2[0].commission) setTotalP(dataLListing2[0].subtotal-dataLListing2[0].commission)
          
 
     }
@@ -156,7 +164,7 @@ function MyPayouts(props) {
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
-                                        <select className="form-select" aria-label="Default select example" value={status}  onChange = {getOrdersByStatus}>
+                                        <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
                                             <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
@@ -200,7 +208,7 @@ function MyPayouts(props) {
                                     </div>
                                 </div>
                                 <div className="col-sm-3 mb-2">
-                                <div className="form-group">
+                                    <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
                                         <div className='pricerangeouter' >
                                             <InputNumber
@@ -227,7 +235,7 @@ function MyPayouts(props) {
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
                                             <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1"  onChange={getOrdersBySearchTerm}/>
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
                                         </div>
                                     </div>
                                 </div>

@@ -36,6 +36,9 @@ import Product from './containers/Page/product/product';
 import Cart from './containers/Page/product/cart/cart';
 import Loader from '../src/image/CLE_LogoMotionGraphics.gif';
 import BussinessResetpassword from './containers/Page/business/bussinessResetpassword';
+import RetunOrder from './containers/Page/business/retunOrder';
+import VendorOrderDetails from './containers/Page/business/orderDetail';
+import MyPayoutDetails from './containers/Page/business/payoutDetails';
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -62,6 +65,8 @@ const PublicRoutes = ({ history }) => {
           <LoggedInRoute exact path="/notifications" component={Notifications} />
           <LoggedInRoute exact path="/customer/:tab" component={Customer} />
           <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
+          <VendorRoute exact path="/vendor/returns-complaints/:returnId" component={RetunOrder} />
+          <VendorRoute exact path="/vendor/sales-orders/:orderId" component={VendorOrderDetails} />
           <ProductHome exact path="/category/:categoryname" component={HomePage} />
           <ProductHome exact path="/" component={HomePage} />
           <ProductHome exact path="/:signup/:member" component={HomePage} />
@@ -76,6 +81,7 @@ const PublicRoutes = ({ history }) => {
           <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
           <ProductRoutes exact path="/contact-us" component={contact} />
           <ProductRoutes exact path="/help-center" component={Faq} page='faq'  />
+          <ProductRoutes exact path="/vendor/payoutdetails/:payoutId" component={MyPayoutDetails} />
 
 
           <ProductRoutes exact path="/vendor-login" component={VendorLogin} />
