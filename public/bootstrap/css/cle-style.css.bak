@@ -8118,6 +8118,27 @@ p.sliderupper {
 	.banner-content-2 h4{
 		font-size: 32px;
 	}
+	.become-part-inner{
+		width:80%;
+	}
+	.sticky-fliter{
+		width:auto;
+	}
+	.sticky-cart{
+		margin-left: 0;
+	}
+	.order-detail-sec{
+		padding:15px;
+	}
+	.cart-total-price a{
+		padding:10px;
+	}
+	.inner-pages .page-head svg text {
+		font-size: 50px !important;
+	}
+	.sticky-fliter{
+		width:auto;
+	}
 }
 
 @media only screen and (max-width: 600px) {}
