@@ -572,7 +572,7 @@
   "productIntegration": "تكامل المنتج",
   "facebookinvalid": "عنوان url الخاص بـ Facebook غير صالح",
   "instagraminvalid": "رابط Instagram غير صالح",
-  "readytoship": "على استعداد للسفينة",
+  "readytoship":"على استعداد للسفينة",
   "acknowledged": "أقر",
   "Shipped": "أقر",
   "delivered": "تم التوصيل",
@@ -595,5 +595,11 @@
   "shipment.date": "تاريخ الشحن",
   "return.total": "إجمالي العائد",
   "orderdetail.title": "تفاصيل الطلب",
-  "orderdetail.description": "يمكنك إدارة طلب العميل الخاص بك هنا"
+  "orderdetail.description": "يمكنك إدارة طلب العميل الخاص بك هنا",
+  "price":"السعر",
+"quantity":"كمية",
+"norecords":"لا توجد سجلات لعرضها",
+  "paymentstatus":"حالة السداد",
+  "returntotal":"إجمالي العائد",
+  "subtotal":"المجموع الفرعي"
 }

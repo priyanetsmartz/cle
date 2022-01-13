@@ -600,5 +600,11 @@
   "return.policy.details":"We want to make sure returns are as easy as possible to do, but if you need more information on our  Return Policy.",
   "check.out":"Check out",
   "orderdetail.title":"Order details",
-  "orderdetail.description":"You can manage your client's order here"
+  "orderdetail.description":"You can manage your client's order here",
+  "price":"Price",
+  "quantity":"Quantity",
+  "norecords":"There are no records to display",
+  "paymentstatus":"Payment status",
+  "returntotal":"Return Total",
+  "subtotal":"Subtotal"
 }
