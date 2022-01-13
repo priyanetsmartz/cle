@@ -1,9 +1,8 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders, getCustomerOrdersByPrice, getCustomerReturn } from '../../../redux/pages/customers';
+import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders, getCustomerOrdersByPrice } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
-import ReturnSection from './allReturns';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { InputNumber, Slider } from 'antd';
@@ -11,28 +10,26 @@ import { getCookie } from '../../../helpers/session';
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings/index'
 import { capitalize, formatprice } from '../../../components/utility/allutils';
+import AllReturns from './allReturns';
 
 
 function OrdersAndReturns(props) {
     const userGroup = localStorage.getItem('token');
-    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
+    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
     const [pageSize, setPageSize] = useState(12);
     const [orderId, setOrderId] = useState('');
     const [pagination, setPagination] = useState(1);
-    const [returnPagination, setReturnPagination] = useState(1);
     const [orderDate, setOrderDate] = useState('');
     const [sortOrder, setSortOrder] = useState('');
     const [orders, setOrders] = useState([]);
-    const [returs, setReturn] = useState([]);
     const [page, setCurrent] = useState(1);
     const [price, setPrice] = useState({ low: 1000, high: 2500 })
     const [loaderOrders, setLoaderOrders] = useState(false);
-    const [loaderReturns, setLoaderReturns] = useState(false);
+
     const language = getCookie('currentLanguage');
     const intl = useIntl();
     useEffect(() => {
         getData(pageSize);
-        getReturnData();
     }, [pageSize, props.languages, page]);
 
     const getData = async (pageSize) => {
@@ -45,30 +42,18 @@ function OrdersAndReturns(props) {
         }
 
     }
-
-    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = '', sortOrders: any = '', search: any = '') => {
-        let returns: any = await getCustomerReturn(from_date, to_date, from_price, to_price, sortBy, sortOrders, search);
-
-        if (returns && returns.data && returns.data.length > 0 && returns.data[0]) {
-            console.log(returns.data[0])
-            setLoaderReturns(false);
-            setReturn(returns.data[0]);
-            setReturnPagination(Math.ceil(returns.data.total_count / pageSize));
-        }
-    }
-
-    const groupBy = async (array, key) => {
-        // Return the end result
-        return array.reduce((result, currentValue) => {
-            let dateee = moment(currentValue[key]).format('MM/DD/YYYY');
-            // If an array already present for key, push it to the array. Else create an array and push the object
-            (result[dateee] = result[dateee] || []).push(
-                currentValue
-            );
-            // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
-            return result;
-        }); // empty object is the initial value for result object
-    };
+    // const groupBy = async (array, key) => {
+    //     // Return the end result
+    //     return array.reduce((result, currentValue) => {
+    //         let dateee = moment(currentValue[key]).format('MM/DD/YYYY');
+    //         // If an array already present for key, push it to the array. Else create an array and push the object
+    //         (result[dateee] = result[dateee] || []).push(
+    //             currentValue
+    //         );
+    //         // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+    //         return result;
+    //     }); // empty object is the initial value for result object
+    // };
 
     const handleSearch = async (e) => {
         setLoaderOrders(true);
@@ -137,32 +122,18 @@ function OrdersAndReturns(props) {
     const handlePageSize = (page) => {
         setPageSize(page)
     }
-    const getPaginationGroup = () => {
-        let start = Math.floor((page - 1) / 4) * 4;
-        let fill = pagination > 5 ? 4 : pagination;
-        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
-    };
+ 
 
     const goToNextPage = (e) => {
-        let lang = props.languages ? props.languages : language;
         e.preventDefault();
         setCurrent((page) => page + 1);
-
     }
-    function changePage(event) {
-        let lang = props.languages ? props.languages : language;
 
-        event.preventDefault()
-        const pageNumber = Number(event.target.textContent);
-        setCurrent(pageNumber);
-    }
     const goToPreviousPage = (e) => {
-        let lang = props.languages ? props.languages : language;
-
         e.preventDefault();
         setCurrent((page) => page - 1);
-
     }
+
     return (
         <>
             <div className={isPriveUser ? 'prive-txt col-sm-9' : 'col-sm-9'}>
@@ -387,92 +358,7 @@ function OrdersAndReturns(props) {
 
                             </div>
                             <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                {returs && returs.length > 0 ?
-                                    <div>
-                                        {returs && (returs.map((item, i) => {
-                                            console.log(item.items[0])
-                                            return (
-
-                                                <div key={i}>
-                                                    <div className="row my-3">
-                                                        <div className="col-sm-12">
-                                                            <div className="row mb-3">
-                                                                <div className="col-sm-6">
-                                                                    <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item.order_id}</h3>
-                                                                </div>
-                                                                <div className="col-sm-6">
-                                                                    <div className="viewall_btn">
-                                                                        <Link to={`/order-details/${item.rma_increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="d-md-flex">
-                                                            <div className="col-sm-6">
-                                                                <div className="order-viewsec">
-                                                                    <div className="order-details">
-                                                                        <div className="order-date">
-                                                                            <label className="form-label"><IntlMessages id="shipped.date" /></label>
-                                                                            <div className="labl_text">{item.shipped_date ? moment(item.shipped_date).format('ddd, D MMMM YYYY') : ''}</div>
-                                                                        </div>
-
-                                                                        <div className="products">
-                                                                            <label className="form-label"> <IntlMessages id="order.products" /></label>
-                                                                            <div className="labl_text"> {item && item.total_qty ? item.total_qty : 0}</div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="order-details">
-                                                                        <div className="order-date">
-                                                                            <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
-                                                                            <div className="labl_text">{item.return_date ? moment(item.return_date).format('ddd, D MMMM YYYY') : ''}</div>
-                                                                        </div>
-
-                                                                        <div className="products">
-                                                                            <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                                                            <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="order-shipped">
-                                                                        <label className="form-label">
-
-
-                                                                        </label>
-                                                                    </div>
-
-
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-sm-6">
-                                                                <div className="prodcut_catg">
-                                                                    <div className="product_photo">
-                                                                        <img src={item && item.items && item.items.length > 0 && item.items[0]?item.items[0]:""} className="img-fluid" alt="" />
-                                                                    </div>
-                                                                    <div className="product_photo">
-                                                                        <img src={item && item.items && item.items.length > 1 && item.items[1]?.item.items[1]} className="img-fluid" alt="" />
-                                                                    </div>
-                                                                    <div className="more_product">
-                                                                        <Link to="#">
-                                                                            <img src={item.items[2]?.item.items[2]} className="img-fluid" alt="" />
-                                                                            <div className="overlay_img"></div>
-                                                                            <span className="more_pro">{item.items.length}</span>
-                                                                        </Link>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-12">
-                                                            <div className="blank_bdr"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            );
-                                        }))}
-                                    </div>
-                                    : !loaderOrders ? <IntlMessages id="no_data" /> : ""}
+                              <AllReturns/>
                             </div>
 
                         </div>
