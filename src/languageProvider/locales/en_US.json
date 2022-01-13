@@ -589,5 +589,7 @@
   "payout.description":"You can see your payouts here.",
   "shipped.date":"Shipped Date",
   "payout.detail":"My Payout Details",
-  "payoutdetail.description":"You can see your payout details here"
+  "payoutdetail.description":"You can see your payout details here",
+  "orderdetail.title":"Order details",
+  "orderdetail.description":"You can manage your client's order here"
 }
