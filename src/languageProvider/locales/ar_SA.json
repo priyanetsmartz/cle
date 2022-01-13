@@ -589,5 +589,7 @@
 "payout.description":"يمكنك أن ترى دفعاتك هنا.",
 "shipped.date":"تاريخ الشحن",
 "payout.detail":"تفاصيل الدفع الخاصة بي",
-"payoutdetail.description":"يمكنك مشاهدة تفاصيل الدفع الخاصة بك هنا"
+"payoutdetail.description":"يمكنك مشاهدة تفاصيل الدفع الخاصة بك هنا",
+"orderdetail.title":"تفاصيل الطلب",
+"orderdetail.description":"يمكنك إدارة طلب العميل الخاص بك هنا"
 }
