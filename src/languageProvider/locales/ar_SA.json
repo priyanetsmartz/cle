@@ -592,6 +592,8 @@
   "payoutdetail.description": "يمكنك مشاهدة تفاصيل الدفع الخاصة بك هنا",
   "customer.return.description": "لقد حصلنا عليها ، في بعض الأحيان لا يعمل شيء ما من أجلك وتريد استرداد المال. يمكنك إرجاع المنتج الخاص بك هنا.",
   "return_number": "رقم الإرجاع",
-  "shipment.date": "تاريخ الشحن",  
-  "return.total":"إجمالي العائد"
+  "shipment.date": "تاريخ الشحن",
+  "return.total": "إجمالي العائد",
+  "orderdetail.title": "تفاصيل الطلب",
+  "orderdetail.description": "يمكنك إدارة طلب العميل الخاص بك هنا"
 }

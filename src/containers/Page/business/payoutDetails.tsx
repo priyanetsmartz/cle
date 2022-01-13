@@ -6,12 +6,15 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { getPayoutDetails} from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import moment from 'moment';
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function MyPayoutDetails(props) {
     
     useEffect(() => {
         getDetails()
     }, [props.languages]);
+    const { payoutId }: any = useParams();
     const [payoutData, setPayoutData] = useState({});
     const [payoutOrders , setPayoutOrders] = useState ([]);
     const [invoiceData, setInvoiceData] = useState ({});
@@ -27,7 +30,7 @@ function MyPayoutDetails(props) {
     const [billType, setBillType] = useState('')
 
     async function getDetails(){
-        let result:any = await getPayoutDetails()
+        let result:any = await getPayoutDetails(payoutId)
         //console.log("reult3",result);
         if (result && result.data[0]){
             setAlldata(result.data[0])
@@ -70,76 +73,100 @@ function MyPayoutDetails(props) {
     },
     {
         name: 'Link to order details',
-        selector: row => row.link,
+        cell: row => (
+            <Link to="#">View Order Detail</Link>
+
+        )
     },
     {
         name: 'Total',
         selector: row => row.total,
     },]
     return (
-        <div className="col-sm-9">
-        <section className="my_profile_sect mb-4">
+        <main>
             <div className="container">
                 <div className="row">
                     <div className="col-sm-12">
-                    <h1><IntlMessages id="payout.detail" /></h1>
-                    <p><IntlMessages id="payoutdetail.description" /></p> 
-                    </div>
-                </div>
 
-                <div style = {{width:"100%", display:"inline-block"}}> 
-                <div style = {{width:"40%", float:"left"}}>
-                <div style = {{display:"inline-block", width:"100%"}}>
-                <span style = {{float:"left"}}> 
-                    <div>Date of request</div>
-                    <div>{dateOfRequest}</div></span>
-                <span style = {{float:"right"}}>
-                    <div>Date of payment</div>
-                    <div>{dateOfPayment}</div>
-                </span>
-                </div>
+                        <div className="main-head">
+                            <h1><IntlMessages id="payout.detail" /></h1>
+                            <h2><IntlMessages id="payoutdetail.description" /></h2> 
+                        </div>
+                        <section>
+                            
+                            <div className="info-tot">
+                                <div className="row">
+                                    <div className="col-sm-6">
+                                        <div>
+                                            
+                                            <div className="row">
+                                    
+                                                <div className="col-sm-6">
+                                                    <h6>Date of request</h6>
+                                                    <p>{dateOfRequest}</p>
+                                                </div>
 
-                <div style = {{display:"inline-block", width:"100%"}}>
-                <span style = {{float:"left"}}> 
-                    <div>Invoice/Receipt</div>
-                    <div>{billType}</div></span>
-                <span style = {{float:"right"}}> 
-                    <div>Number of orders</div>
-                    <div>{numberOfOrders}</div>
-                </span>
-                </div>
-                </div>
-                <div style = {{width:"40%", float:"right"}}>
-                <table>
-                    <thead> Withdrawal Amount</thead>
-                    <tbody>
-                    <tr>
-                        <th>Subtotal</th>
-                        <td>{siteConfig.currency}{subtotal}</td>
-                    </tr>
-                    <tr>
-                        <th>Commission</th>
-                        <td>{siteConfig.currency}{commission}</td>
-                    </tr>
+                                                <div className="col-sm-6">
+                                                    <h6>Date of payment</h6>
+                                                    <p>{dateOfPayment}</p>
+                                                </div>
+                                                
+                                    
+                                            </div>
+                                            <div className="row">
+                                    
+                                                <div className="col-sm-6">
+                                                    <h6>Invoice/Receipt</h6>
+                                                    <p>{billType}</p>
+                                                </div>
 
-                    <tr>
-                        <th>Total</th>
-                        <td>{siteConfig.currency}{withdrawal}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                </div>
-                </div>
-                
-            </div>
-            
-                <br></br>
-             <DataTable
+                                                <div className="col-sm-6">
+                                                    <h6>Number of orders</h6>
+                                                    <p>{numberOfOrders}</p>
+                                                </div>
+                                                
+                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <div className="">
+                                            <table>
+                                                <thead> Withdrawal Amount</thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>Subtotal</td>
+                                                    <th className="text-end">{siteConfig.currency}{subtotal}</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>Commission</td>
+                                                    <th className="text-end">{siteConfig.currency}{commission}</th>
+                                                </tr>
+                            
+                                                <tr>
+                                                    <td>Total</td>
+                                                    <th className="text-end">{siteConfig.currency}{withdrawal}</th>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <div className="container mb-5">
+                            
+                            <DataTable
              columns = {columns}
              data = {myPayoutDetails}
              />
-        </section>
-    </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+            </div>
+        </main >
     )
 }
 const mapStateToProps = (state) => {

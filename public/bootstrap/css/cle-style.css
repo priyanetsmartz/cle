@@ -8300,7 +8300,8 @@ p.sliderupper {
 	.new-in-title h1,
 	.discoverleft h2,
 	.become-part-inner h1,
-	.banner-content-2 h4{
+	.banner-content-2 h4,
+	.head_two_txt{
 		font-size: 32px;
 	}
 	.discoverleft {
@@ -8384,11 +8385,34 @@ p.sliderupper {
 	.new-in-title h1,
 	.discoverleft h2,
 	.become-part-inner h1,
-	.banner-content-2 h4{
+	.banner-content-2 h4,
+	.head_two_txt{
 		font-size: 32px;
 	}
 	.become-part-inner{
 		width:80%;
+	}
+	.sticky-fliter{
+		width:auto;
+	}
+	.sticky-cart{
+		margin-left: 0;
+	}
+	.order-detail-sec{
+		padding:15px;
+	}
+	.cart-total-price a{
+		padding:10px;
+	}
+	.inner-pages .page-head svg text {
+		font-size: 50px !important;
+	}
+	.sticky-fliter{
+		width:auto;
+	}
+	.category-card-img{
+		width: 250px;
+    height: 250px;
 	}
 }
 

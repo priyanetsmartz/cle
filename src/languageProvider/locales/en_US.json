@@ -598,5 +598,7 @@
   "return.footer.contact.details":"We are here to help and answer any questions you might have. We look forward to hearing from you!",
   "return.policy":"Return Policy",
   "return.policy.details":"We want to make sure returns are as easy as possible to do, but if you need more information on our  Return Policy.",
-  "check.out":"Check out"
+  "check.out":"Check out",
+  "orderdetail.title":"Order details",
+  "orderdetail.description":"You can manage your client's order here"
 }
