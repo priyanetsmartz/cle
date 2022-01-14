@@ -594,7 +594,17 @@
   "return_number": "رقم الإرجاع",
   "shipment.date": "تاريخ الشحن",
   "return.total": "إجمالي العائد",
+  "return.footer.contact.details":"نحن هنا للمساعدة والإجابة على أي أسئلة قد تكون لديكم. نحن نتطلع الى الاستماع منك!",
+  "return.policy":"سياسة العائدات",
+  "return.policy.details":"نريد التأكد من أن عمليات الإرجاع سهلة بقدر الإمكان ، ولكن إذا كنت بحاجة إلى مزيد من المعلومات حول سياسة الإرجاع الخاصة بنا.",
+  "check.out":"الدفع",
   "orderdetail.title": "تفاصيل الطلب",
-  "orderdetail.description": "يمكنك إدارة طلب العميل الخاص بك هنا",  
-  "returnreason":"اختر سبب العودة"
+  "orderdetail.description": "يمكنك إدارة طلب العميل الخاص بك هنا",
+  "returnreason": "اختر سبب العودة",
+  "price": "السعر",
+  "quantity": "كمية",
+  "norecords": "لا توجد سجلات لعرضها",
+  "paymentstatus": "حالة السداد",
+  "returntotal": "إجمالي العائد",
+  "subtotal": "المجموع الفرعي"
 }

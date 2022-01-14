@@ -601,5 +601,11 @@
   "check.out":"Check out",
   "orderdetail.title":"Order details",
   "orderdetail.description":"You can manage your client's order here",
-  "returnreason":"Choose the reason for return"
+  "returnreason":"Choose the reason for return",
+  "price":"Price",
+  "quantity":"Quantity",
+  "norecords":"There are no records to display",
+  "paymentstatus":"Payment status",
+  "returntotal":"Return Total",
+  "subtotal":"Subtotal"
 }
