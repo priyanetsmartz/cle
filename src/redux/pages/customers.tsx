@@ -60,12 +60,12 @@ export async function getCustomerOrders(pageSize, page) {
     return adminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[sortOrders][0][field]=created_at&searchCriteria[sortOrders][0][direction]=DESC&searchCriteria[page_size]=${pageSize}&searchCriteria[currentPage]=${page}`, "", "GET", "");
 }
 
-export async function getCustomerReturn(from_date: any, to_date: any, from_price: any, to_price: any, sortBy: any, sortOrders: any, search: any) {
+export async function getCustomerReturn(pageSize, from_date: any, to_date: any, from_price: any, to_price: any, sortBy: any, sortOrders: any, search: any) {
 
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const custId = user.cust_id;
 
-    let queryString = "customerId=" + custId;
+    let queryString = "customerId=" + custId + "&pageSize=" + pageSize;
     if (from_date != null && from_date !== '')
         queryString += "&from_date=" + from_date
     if (to_date != null && to_date !== '')
@@ -117,10 +117,10 @@ export function addItemToWishList(productId) {
     return Api.request(`rest/V1/wishlist/add/${productId}`, "", "GET", "");
 }
 
-export function removeItemFromWishList(custId, wishlist_item_id) {
-    custId = 114; //remove that
-    return Api.request(`rest/V1/wishlist/delete/${wishlist_item_id}?customerId=${custId}`, "", "DELETE", "");
-}
+// export function removeItemFromWishList(custId, wishlist_item_id) {
+//     custId = 114; //remove that
+//     return Api.request(`rest/V1/wishlist/delete/${wishlist_item_id}?customerId=${custId}`, "", "DELETE", "");
+// }
 
 export async function wishListSearchSort(language, pageSize, sortOrder, sortBy, searchName) {
     const storeId = language === 'english' ? '3' : '2';
@@ -192,3 +192,12 @@ export function getDesginers(language, catId) {
     const storeId = language === 'english' ? 3 : 2;
     return adminApi.request(`rest/all/V1/designerCategories/collection?storeId=${storeId}&catId=${catId}`, "", "GET", "");
 }
+
+export async function retrunDetails(returnId: number) {
+    return adminApi.request(`rest/all/V1/customer/returnOrderDetails/?returnId=${returnId}`, "", "GET", "");
+}
+
+export async function getReturnReasonList() {
+    return adminApi.request(`rest/all/V1/return/itemCondition/`, "", "GET", "");
+}
+

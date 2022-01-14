@@ -19,7 +19,7 @@ import PasswordLinkExpired from "./containers/Page/PasswordLinkExpired";
 import PriveUser from './containers/Page/PriveUser';
 import Customer from './containers/Page/customer/customerSidebar';
 import BusinessSidebar from './containers/Page/business/businessSidebar';
-import ReturnPage from './containers/Page/customer/allReturns';
+import ReturnPage from './containers/Page/customer/returnsDetails';
 import Notifications from './containers/Page/customer/notifications';
 import HomePage from './containers/Page/home/home';
 import OrderDetails from './containers/Page/customer/orderDetails';
@@ -39,6 +39,10 @@ import BussinessResetpassword from './containers/Page/business/bussinessResetpas
 import RetunOrder from './containers/Page/business/retunOrder';
 import VendorOrderDetails from './containers/Page/business/orderDetail';
 import MyPayoutDetails from './containers/Page/business/payoutDetails';
+import returnsDetails from './containers/Page/customer/returnsDetails';
+import CreateReturn from './containers/Page/customer/createReturn';
+import RetrunSummary from './containers/Page/customer/retrunSummary';
+
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -64,6 +68,9 @@ const PublicRoutes = ({ history }) => {
           <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
           <LoggedInRoute exact path="/notifications" component={Notifications} />
           <LoggedInRoute exact path="/customer/:tab" component={Customer} />
+          <LoggedInRoute exact path="/customer/return-details/:returnId" component={returnsDetails} />
+          <LoggedInRoute exact path="/customer/create-return/:orderId" component={CreateReturn} />
+          <LoggedInRoute exact path="/customer/return-summary/:returnId" component={RetrunSummary} />
           <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
           <VendorRoute exact path="/vendor/returns-complaints/:returnId" component={RetunOrder} />
           <VendorRoute exact path="/vendor/sales-orders/:orderId" component={VendorOrderDetails} />

@@ -5,7 +5,7 @@ import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-import { capitalize, formatprice } from '../../../components/utility/allutils';
+import { capitalize, formatprice, getCountryName } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 
 function OrderDetails(props) {
@@ -41,6 +41,8 @@ function OrderDetails(props) {
     const getData = async () => {
         let orderDetails = [];
         let result: any = await searchOrders(orderId);
+        console.log(result.data)
+
         orderDetails['increment_id'] = result.data.items[0] ? result.data.items[0].increment_id : 0;
         orderDetails['created_at'] = result.data.items[0] ? result.data.items[0].created_at : 0;
         orderDetails['shipment_date'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipment_date ? result.data.items[0].extension_attributes.shipment_date : 0;
@@ -59,7 +61,7 @@ function OrderDetails(props) {
         setOrder(orderDetails);
         // console.log(result.data.items[0].extension_attributes.shipping_assignments[0].shipping.address)
         //change this after clarification
-        const p = result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'processing' ? 10 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'complete' ? 100 : result.data && result.data.items && result.data.items > 0 && result.data.items.status == 'pending' ? 25 : 10;
+        const p = result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'processing' ? 10 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'complete' ? 100 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'pending' ? 25 : 10;
         setOrderProgress(p)
     }
 
@@ -149,7 +151,7 @@ function OrderDetails(props) {
                 comparison = -1;
             }
             return (
-                (order == 0) ? (comparison * -1) : comparison
+                (order === 0) ? (comparison * -1) : comparison
             );
         };
     }
@@ -173,11 +175,11 @@ function OrderDetails(props) {
                             <div className="order-detail-head">
                                 {/* change this after clarification */}
                                 <p><strong>
-                                    {order.status == 'complete' ? <IntlMessages id="order.itsDelivered" /> : order.status == 'pending' ?
-                                        <IntlMessages id="order.itsPending" /> : order.status == 'processing' ? <IntlMessages id="order.itsProcessing" />
+                                    {order.status === 'complete' ? <IntlMessages id="order.itsDelivered" /> : order.status === 'pending' ?
+                                        <IntlMessages id="order.itsPending" /> : order.status === 'processing' ? <IntlMessages id="order.itsProcessing" />
                                             : order.status}
                                 </strong></p>
-                                {order.status == 'complete' && <p><IntlMessages id="order.delivered" /> {order.shipping_amount}</p>}
+                                {order.status === 'complete' && <p><IntlMessages id="order.delivered" /> {order.shipping_amount}</p>}
                                 <div className="progress-bar-area">
                                     <div className="progress">
                                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
@@ -185,8 +187,8 @@ function OrderDetails(props) {
                                     </div>
                                 </div>
                                 <p>
-                                    {order.status == 'complete' ? <IntlMessages id="order.yourParcelDelivered" /> : order.status == 'pending' ?
-                                        <IntlMessages id="order.yourParcelPending" /> : order.status == 'processing' ? <IntlMessages id="order.yourParcelProcessing" />
+                                    {order.status === 'complete' ? <IntlMessages id="order.yourParcelDelivered" /> : order.status === 'pending' ?
+                                        <IntlMessages id="order.yourParcelPending" /> : order.status === 'processing' ? <IntlMessages id="order.yourParcelProcessing" />
                                             : order.status}</p>
                             </div>
                         </div>
@@ -197,14 +199,14 @@ function OrderDetails(props) {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="order-number">
-                            <h4><IntlMessages id="order.orderNo" />: {order.sku}</h4>
+                            <h4><IntlMessages id="order.orderNo" />: {order.increment_id}</h4>
                             <div className="row">
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.purchaseDate" /></strong></p>
                                     <p>{moment(order['created_at']).format('ddd, D MMMM YYYY')}</p>
                                 </div>
                                 <div className="col-md-3">
-                                    <p><strong><IntlMessages id="order.shippingDate" /></strong></p>
+                                    <p><strong><IntlMessages id="shipment.date" /></strong></p>
                                     {/* <p>{order['shipment_date'] ? moment(order['shipment_date']).format('ddd, D MMMM YYYY'): ''}</p> */}
                                 </div>
                                 <div className="col-md-3">
@@ -235,7 +237,7 @@ function OrderDetails(props) {
                                 {order['delivery_address']?.street}<br />
                                 {order['delivery_address']?.postcode}<br />
                                 {order['delivery_address']?.city}<br />
-                                {order['delivery_address']?.country_id}
+                                {order['delivery_address'] ? getCountryName(order['delivery_address'].country_id):""}
                             </p>
                         </div>
                     </div>
@@ -259,10 +261,10 @@ function OrderDetails(props) {
             <div className="container mb-5">
                 <div className="row">
                     <div className="col-md-12 return-complaint-btns">
-                        {/* <div className="float-start">
-                            <Link to=""><IntlMessages id="order.returnProducts" /></Link>
-                            <Link to=""><IntlMessages id="order.makeAComplaint" /></Link>
-                        </div> */}
+                        <div className="float-start">
+                            <Link to={`/customer/create-return/${order.increment_id}`}><IntlMessages id="order.returnProducts" /></Link>
+                            {/* <Link to=""><IntlMessages id="order.makeAComplaint" /></Link> */}
+                        </div>
                         <div className="float-end">
                             <div className="btn-group">
                                 <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
@@ -290,8 +292,8 @@ function OrderDetails(props) {
                                     </div>
                                     <div className="col-md-9">
                                         <div className="pro-name-tag mb-5">
-                                        <div className="float-start">
-                                                {item.extension_attributes.barnd && ( <div className="product_name"><Link to={'/search/' + item.extension_attributes.barnd}>{item.extension_attributes.barnd}</Link></div>)}
+                                            <div className="float-start">
+                                                {item.extension_attributes.barnd && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.barnd}>{item.extension_attributes.barnd}</Link></div>)}
                                                 <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                 <p>{capitalize(item.product_type)}</p>
                                             </div>
