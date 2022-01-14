@@ -595,5 +595,6 @@
   "shipment.date": "تاريخ الشحن",
   "return.total": "إجمالي العائد",
   "orderdetail.title": "تفاصيل الطلب",
-  "orderdetail.description": "يمكنك إدارة طلب العميل الخاص بك هنا"
+  "orderdetail.description": "يمكنك إدارة طلب العميل الخاص بك هنا",  
+  "returnreason":"اختر سبب العودة"
 }

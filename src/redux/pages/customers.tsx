@@ -198,6 +198,6 @@ export async function retrunDetails(returnId: number) {
 }
 
 export async function getReturnReasonList() {
-    return adminApi.request(`rest/all/V1/return/itemCondition/`, "", "GET", "");
+    return adminApi.request(`rest/all/V1/return/itemCondition`, "", "GET", "");
 }
 

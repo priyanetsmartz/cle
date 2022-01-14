@@ -42,6 +42,7 @@ import MyPayoutDetails from './containers/Page/business/payoutDetails';
 import returnsDetails from './containers/Page/customer/returnsDetails';
 import CreateReturn from './containers/Page/customer/createReturn';
 import RetrunSummary from './containers/Page/customer/retrunSummary';
+import ProductIntegration from './containers/Page/business/productIntegration';
 
 const PublicRoutes = ({ history }) => {
   return (
@@ -74,6 +75,7 @@ const PublicRoutes = ({ history }) => {
           <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
           <VendorRoute exact path="/vendor/returns-complaints/:returnId" component={RetunOrder} />
           <VendorRoute exact path="/vendor/sales-orders/:orderId" component={VendorOrderDetails} />
+          <VendorRoute exact path="/product-integration" component={ProductIntegration} />
           <ProductHome exact path="/category/:categoryname" component={HomePage} />
           <ProductHome exact path="/" component={HomePage} />
           <ProductHome exact path="/:signup/:member" component={HomePage} />
@@ -87,12 +89,12 @@ const PublicRoutes = ({ history }) => {
 
           <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />
           <ProductRoutes exact path="/contact-us" component={contact} />
-          <ProductRoutes exact path="/help-center" component={Faq} page='faq'  />
+          <ProductRoutes exact path="/help-center" component={Faq} page='faq' />
           <ProductRoutes exact path="/vendor/payoutdetails/:payoutId" component={MyPayoutDetails} />
 
 
           <ProductRoutes exact path="/vendor-login" component={VendorLogin} />
-          
+
           <ProductRoutes exact path="/forgot-password" component={ForgottenPassword} />
           <ProductRoutes exact path="/reset-password" component={ResetPassword} />
           <PriveRoute exact path="/prive-user" component={PriveUser} />

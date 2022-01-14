@@ -1285,7 +1285,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                             <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
-                                <option value="">Select</option>
+                                <option value="">{intl.formatMessage({ id: "select" })}</option>
                                 {DROPDOWN.gender.map(opt => {
                                     return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                 })}
@@ -1293,7 +1293,7 @@ function MyProfile(props) {
                             <span className="error">{personalError.errors["gender"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Phone number</label>
+                            <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
                             <input type="number" className="form-control" placeholder="+48 123 456 789" id="mp_sms_telephone"
                                 value={customAttribute.mp_sms_telephone}
                                 onChange={handleChange}
@@ -1304,20 +1304,20 @@ function MyProfile(props) {
                             <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
-                                    <option value="">Select</option>
+                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {DROPDOWN.dates.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
                                     })}
 
                                 </select>
                                 <select className="form-select me-3" value={dob.month} aria-label="Default select example" onChange={dobHandler} id="month">
-                                    <option value="">Select</option>
+                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {DROPDOWN.months.map(opt => {
                                         return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                     })}
                                 </select>
                                 <select className="form-select" value={dob.year} aria-label="Default select example" onChange={dobHandler} id="year">
-                                    <option value="">Select</option>
+                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {DROPDOWN.years.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
                                     })}
@@ -1433,7 +1433,7 @@ function MyProfile(props) {
                                 <label className="form-label">
                                     <IntlMessages id="myaccount.region" /></label>
                                 <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-                                    <option value="">Select</option>
+                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {regions && regions.map(opt => {
                                         return (<option key={opt.id} value={opt.id} >
                                             {opt.name}</option>);

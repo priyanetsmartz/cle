@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { connect } from "react-redux";
 import { getReturnReasonList, searchOrders } from '../../../redux/pages/customers';
 import moment from 'moment';
@@ -8,15 +8,19 @@ import { Link, useParams } from "react-router-dom";
 import { capitalize, formatprice, getCountryName } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import ReturnFooter from './returnFooter';
+import { useIntl } from 'react-intl';
 import { COUNTRIES } from '../../../config/counties';
 
 function CreateReturn(props) {
+    const intl = useIntl();
+    const selectRef = useRef();
     const { orderId }: any = useParams();
     const [custId, setCustid] = useState(props.token.cust_id);
     const [maxItems, setMaxitems] = useState(10);
     const [order, setOrder]: any = useState([]);
     const [issueList, setIssueList]: any = useState([]);
     const [changeAddressModal, setChangeAddressModal] = useState(false);
+    const [reasonObject, setReasonObject] = useState([]);
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: custId,
@@ -132,7 +136,6 @@ function CreateReturn(props) {
         setOrder(order);
     }
 
-
     const compareValues = (order) => {
         return function innerSort(a, b) {
 
@@ -149,6 +152,21 @@ function CreateReturn(props) {
                 (order === 0) ? (comparison * -1) : comparison
             );
         };
+    }
+
+    const handleProductSelect = (prodID) => {
+        console.log(prodID);
+    }
+    const selectReason = (event) => {
+        let attribute_code = event.target.getAttribute("data-attribute");
+        setReasonObject(prevState => ({
+            ...prevState,
+            [attribute_code]: event.target.value
+        }))
+       
+    }
+    const handleSubmitClick = async (e) => {
+        console.log(reasonObject);
     }
 
     return (
@@ -215,33 +233,43 @@ function CreateReturn(props) {
                 <ul className="order-pro-list">
                     {order && order.items && order.items.slice(0, maxItems).map((item, i) => {
                         return (
-                            <li key={i}>
-                                <div className="row">
-                                    <div className="col-md-3">
-                                        <div className="product-image">
-                                            <img alt="{item.name}" src={item.extension_attributes.item_image} />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-9">
-                                        <div className="pro-name-tag mb-5">
-                                            <div className="float-start">
-                                                {item.extension_attributes.barnd && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.barnd}>{item.extension_attributes.barnd}</Link></div>)}
-                                                <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                <p>{capitalize(item.product_type)}</p>
+                            <div key={i}>
+                                <li onClick={() => handleProductSelect(item.item_id)}>
+                                    <div className="row">
+                                        <div className="col-md-3">
+                                            <div className="product-image">
+                                                <img alt="{item.name}" src={item.extension_attributes.item_image} />
                                             </div>
-                                            <Link to="#" className="float-end text-end order-pro-price">{siteConfig.currency}{formatprice(item.price)}</Link>
-                                            <div className="clearfix"></div>
                                         </div>
-                                        <div className="pro-name-tag">
-                                            {/* <p>One Size</p> */}
-                                            {/* will add this in alpha */}
-                                            <p><strong><IntlMessages id="order.productNo" /></strong> {item.product_id}</p>
-                                            <div className="clearfix"></div>
+                                        <div className="col-md-9">
+                                            <div className="pro-name-tag mb-5">
+                                                <div className="float-start">
+                                                    {item.extension_attributes.barnd && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.barnd}>{item.extension_attributes.barnd}</Link></div>)}
+                                                    <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                                    <p>{capitalize(item.product_type)}</p>
+                                                </div>
+                                                <Link to="#" className="float-end text-end order-pro-price">{siteConfig.currency}{formatprice(item.price)}</Link>
+                                                <div className="clearfix"></div>
+                                            </div>
+                                            <div className="pro-name-tag">
+                                                {/* <p>One Size</p> */}
+                                                {/* will add this in alpha */}
+                                                <p><strong><IntlMessages id="order.productNo" /></strong> {item.product_id}</p>
+                                                <div className="clearfix"></div>
+
+                                            </div>
+
                                         </div>
-                                        {console.log(issueList)}
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+
+                                <select className="form-select customfliter" aria-label="Default select example" data-attribute={item.item_id} onChange={selectReason} >
+                                    <option value="">{intl.formatMessage({ id: "returnreason" })}</option>
+                                    {issueList && issueList[0] && Object.keys(issueList[0]).map((item, i) => (
+                                        <option key={i} value={item}>{issueList[0][item]}</option>
+                                    ))}
+                                </select>
+                            </div>
                         );
                     })}
                 </ul>
@@ -282,7 +310,7 @@ function CreateReturn(props) {
 
                 <div className="row mt-5">
                     <div className="col-md-12">
-                        <div className="return-pro-btn float-end"><Link to={`/customer/return-summary/1`} className="btn btn-primary">Return Products</Link></div>
+                        <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} >Return Products</Link></div>
                         <div className="clearfix"></div>
                     </div>
                 </div>
@@ -356,8 +384,8 @@ function CreateReturn(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Country<span className="maindatory">*</span></label>
                             <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
-                                {COUNTRIES && COUNTRIES.map(opt => {
-                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
+                                {COUNTRIES && COUNTRIES.map((opt, i) => {
+                                    return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
                             <span className="error">{errors.errors["country"]}</span>

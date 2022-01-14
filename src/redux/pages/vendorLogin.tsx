@@ -191,3 +191,8 @@ export async function getPayoutDetails(payoutId) {
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/vendor/vendorPayoutDetailPage?vendorId=${vendorId}&pId=`+payoutId, "", "GET", "")
 }
+
+export async function getProductIntegration(language: string) {
+    var storeId = language === 'english' ? 3 : 2;
+    return adminToken.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=product_integration`, "", "GET", "");
+}
