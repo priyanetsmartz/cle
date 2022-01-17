@@ -8260,7 +8260,6 @@ p.sliderupper {
 
     .banner-wrap .slider-text-inner {
         z-index: 3;
-		margin:20px auto;
     }
 
 }
@@ -8351,6 +8350,9 @@ p.sliderupper {
 	.sticky-fliter{
 		width:auto;
 	}
+	.banner-wrap .slider-text-inner{
+		margin:20px auto;
+	}
 	
 }
 
@@ -8417,8 +8419,12 @@ p.sliderupper {
 	.banner-wrap .item{
 		position:relative;
 	}
-	
-	
+	.select-wearing ul li ul li {
+		padding: 0 10px;
+	}
+	.select-wearing ul li{
+		padding: 0px 30px 0 0px;
+	}
 }
 
 @media only screen and (max-width: 600px) {}
