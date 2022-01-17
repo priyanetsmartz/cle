@@ -189,10 +189,34 @@ export async function getPayoutDetails(payoutId) {
     //var storeId = language === 'english' ? 3 : 2;
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    return adminToken.request(`rest/all/V1/vendor/vendorPayoutDetailPage?vendorId=${vendorId}&pId=`+payoutId, "", "GET", "")
+    return adminToken.request(`rest/all/V1/vendor/vendorPayoutDetailPage?vendorId=${vendorId}&pId=` + payoutId, "", "GET", "")
 }
 
 export async function getProductIntegration(language: string) {
     var storeId = language === 'english' ? 3 : 2;
     return adminToken.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=product_integration`, "", "GET", "");
+}
+
+export async function returnProcessVendor(rmaId: number, status: string, comment: string = "") {
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`rest/all/V1/vendor/returnConfirmationStatus?rmaId=${rmaId}&status=${status}&vendorId=${vendorId}&comment=${comment}`, "", "GET", "");
+}
+
+export async function getInvoice(payoutId: number) {
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    return adminToken.request(`rest/all/V1/vendor/vendorPayoutPdf?vendorId=${vendorId}&payoutId=${payoutId}`, "", "GET", "");
+}
+
+export async function changeOrderSatus(orderId: number, statusOrder: string, statusOrderComment: string) {
+    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    const vendorId = vendor.vendor_id;
+    let data = {
+        vendorId: vendorId,
+        orderId: orderId,
+        statusCode: statusOrder,
+        statusreason: statusOrderComment
+    }
+    return adminToken.request(`rest/all/V1/vendor/vendorOrderDetail`, data, "PUT", "");
 }

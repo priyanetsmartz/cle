@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { searchOrders, getCountriesList } from '../../../redux/pages/customers';
+import { searchOrders, getCountriesList, getorderReturnstatusapi } from '../../../redux/pages/customers';
 import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
@@ -36,12 +36,13 @@ function OrderDetails(props) {
         setOrderId(props.match.params.orderId)
         getData();
         getCountries();
+
     }, []);
 
     const getData = async () => {
         let orderDetails = [];
         let result: any = await searchOrders(orderId);
-        console.log(result.data)
+
 
         orderDetails['increment_id'] = result.data.items[0] ? result.data.items[0].increment_id : 0;
         orderDetails['created_at'] = result.data.items[0] ? result.data.items[0].created_at : 0;
@@ -56,8 +57,8 @@ function OrderDetails(props) {
         orderDetails['base_tax_amount'] = result.data.items[0] ? result.data.items[0].base_tax_amount : 0;
         orderDetails['grand_total'] = result.data.items[0] ? result.data.items[0].grand_total : 0;
         orderDetails['items'] = result.data.items[0] ? result.data.items[0].items : {};
-
-
+        orderDetails['entity_id'] = result.data.items[0] ? result.data.items[0].entity_id : 0;
+        orderDetails['returnStatus'] = getorderReturnstatus(orderDetails['entity_id'])
         setOrder(orderDetails);
         // console.log(result.data.items[0].extension_attributes.shipping_assignments[0].shipping.address)
         //change this after clarification
@@ -65,6 +66,11 @@ function OrderDetails(props) {
         setOrderProgress(p)
     }
 
+    const getorderReturnstatus = async (id) => {
+        let result: any = await getorderReturnstatusapi(id);
+        return result.data;
+
+    }
     const getCountries = async () => {
         let result: any = await getCountriesList();
         setCountries(result.data);
@@ -237,7 +243,7 @@ function OrderDetails(props) {
                                 {order['delivery_address']?.street}<br />
                                 {order['delivery_address']?.postcode}<br />
                                 {order['delivery_address']?.city}<br />
-                                {order['delivery_address'] ? getCountryName(order['delivery_address'].country_id):""}
+                                {order['delivery_address'] ? getCountryName(order['delivery_address'].country_id) : ""}
                             </p>
                         </div>
                     </div>
@@ -261,10 +267,12 @@ function OrderDetails(props) {
             <div className="container mb-5">
                 <div className="row">
                     <div className="col-md-12 return-complaint-btns">
-                        <div className="float-start">
-                            <Link to={`/customer/create-return/${order.increment_id}`}><IntlMessages id="order.returnProducts" /></Link>
-                            {/* <Link to=""><IntlMessages id="order.makeAComplaint" /></Link> */}
-                        </div>
+                        {order.returnStatus && (
+                            <div className="float-start">
+                                <Link to={`/customer/create-return/${order.increment_id}`}><IntlMessages id="order.returnProducts" /></Link>
+                                {/* <Link to=""><IntlMessages id="order.makeAComplaint" /></Link> */}
+                            </div>
+                        )}
                         <div className="float-end">
                             <div className="btn-group">
                                 <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"

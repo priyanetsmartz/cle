@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { connect } from "react-redux";
-import { getReturnReasonList, searchOrders } from '../../../redux/pages/customers';
+import { createReturnRequest, getReturnReasonList, searchOrders } from '../../../redux/pages/customers';
 import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
@@ -10,6 +10,7 @@ import { siteConfig } from '../../../settings';
 import ReturnFooter from './returnFooter';
 import { useIntl } from 'react-intl';
 import { COUNTRIES } from '../../../config/counties';
+import notification from '../../../components/notification';
 
 function CreateReturn(props) {
     const intl = useIntl();
@@ -20,6 +21,8 @@ function CreateReturn(props) {
     const [order, setOrder]: any = useState([]);
     const [issueList, setIssueList]: any = useState([]);
     const [changeAddressModal, setChangeAddressModal] = useState(false);
+    const [returnOrExchange, setReturnOrExchange] = useState('');
+    const [returnOrExchangeComment, setReturnOrExchangeComment] = useState('');
     const [reasonObject, setReasonObject] = useState([]);
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
@@ -51,7 +54,7 @@ function CreateReturn(props) {
         let orderDetails = [];
         let result: any = await searchOrders(orderId);
         //  console.log(result.data)
-
+        orderDetails['entity_id'] = result.data.items[0] ? result.data.items[0].entity_id : 0;
         orderDetails['increment_id'] = result.data.items[0] ? result.data.items[0].increment_id : 0;
         orderDetails['created_at'] = result.data.items[0] ? result.data.items[0].created_at : 0;
         orderDetails['shipment_date'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipment_date ? result.data.items[0].extension_attributes.shipment_date : 0;
@@ -64,13 +67,13 @@ function CreateReturn(props) {
         orderDetails['base_shipping_tax_amount'] = result.data.items[0] ? result.data.items[0].base_shipping_tax_amount : 0;
         orderDetails['base_tax_amount'] = result.data.items[0] ? result.data.items[0].base_tax_amount : 0;
         orderDetails['grand_total'] = result.data.items[0] ? result.data.items[0].grand_total : 0;
-        orderDetails['items'] = result.data.items[0] ? result.data.items[0].items : {};
+        let orderItems = result.data.items[0] ? result.data.items[0].items : {};
+        let orderData = orderItems.filter(function (e) {
+            return (e.qty_shipped >= 1 && e.qty_refunded === 0);
+        });
 
-
+        orderDetails['items'] = orderData;
         setOrder(orderDetails);
-        // console.log(result.data.items[0].extension_attributes.shipping_assignments[0].shipping.address)
-        //change this after clarification
-        const p = result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'processing' ? 10 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'complete' ? 100 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'pending' ? 25 : 10;
     }
 
     const toggleAddressModal = () => {
@@ -163,11 +166,43 @@ function CreateReturn(props) {
             ...prevState,
             [attribute_code]: event.target.value
         }))
-       
+    }
+    const handleChange = (e) => {
+        setReturnOrExchangeComment(e.target.value);
+    }
+
+    const selectReturnOrExchange = (event) => {
+        setReturnOrExchange(event.target.value)
     }
     const handleSubmitClick = async (e) => {
-        console.log(reasonObject);
+
+        console.log(reasonObject.length)
+        if (reasonObject.length === 0) {
+            notification("error", "", intl.formatMessage({ id: "selectreturnOrExchangeProducts" }));
+            return false;
+        }
+        if (returnOrExchange === "" || returnOrExchange === null) {
+            notification("error", "", intl.formatMessage({ id: "selectreturnOrExchange" }));
+            return false;
+        }
+        let returnInfoData = {
+            returnInfo: {
+                orderId: order['entity_id'],
+                rma_reason: returnOrExchange,
+                comment_text: returnOrExchangeComment,
+                items: reasonObject
+            }
+        }
+        //    console.log(returnInfoData)
+        let result: any = await createReturnRequest(returnInfoData);
+        if (result.data) {
+            notification("success", "", result.data);
+        } else {
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        }
+
     }
+
 
     return (
         <section className="order-detail-main">
@@ -212,8 +247,7 @@ function CreateReturn(props) {
                 <div className="row">
                     <div className="col-md-12 return-complaint-btns">
                         <div className="float-start">
-                            <p>Select items for return by clicking on the product. Please choose the reason for<br />
-                                return if you want to return the product. Product without chosen reason won't be returned.</p>
+                            <p><IntlMessages id="create.return.details1" /><br /><IntlMessages id="create.return.details2" /></p>
                         </div>
                         <div className="float-end">
                             <div className="btn-group">
@@ -234,6 +268,7 @@ function CreateReturn(props) {
                     {order && order.items && order.items.slice(0, maxItems).map((item, i) => {
                         return (
                             <div key={i}>
+                                {console.log(item)}
                                 <li onClick={() => handleProductSelect(item.item_id)}>
                                     <div className="row">
                                         <div className="col-md-3">
@@ -309,12 +344,24 @@ function CreateReturn(props) {
                 </div>
 
                 <div className="row mt-5">
-                    <div className="col-md-12">
-                        <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} >Return Products</Link></div>
+                    <div className="container">
+                        <div className='return-reason' >
+                            <select className="form-select customfliter" aria-label="Default select example" onChange={selectReturnOrExchange} >
+                                <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                <option value="refund">{intl.formatMessage({ id: "return" })}</option>
+                                <option value="exchange">{intl.formatMessage({ id: "exchange" })}</option>
+                            </select>
+                        </div>
+                        <div className='return-comment' >
+                            <label><IntlMessages id="comments" /></label>
+                            <textarea className="form-select customfliter" onChange={handleChange} value={returnOrExchangeComment}>
+                            </textarea>
+                        </div>
+                        <div className="clearfix"></div>
+                        <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="order.returnProducts" /></Link></div>
                         <div className="clearfix"></div>
                     </div>
                 </div>
-                <div className="clearfix"></div>
                 <ReturnFooter />
             </div>
 

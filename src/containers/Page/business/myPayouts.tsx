@@ -7,7 +7,7 @@ import { useIntl } from 'react-intl';
 import { InputNumber, Slider } from 'antd';
 import moment from 'moment';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
-import { getPayoutOrders } from '../../../redux/pages/vendorLogin';
+import { getInvoice, getPayoutOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { getCookie } from '../../../helpers/session';
 import { capitalize } from '../../../components/utility/allutils';
@@ -25,9 +25,10 @@ function MyPayouts(props) {
     const [searchTerm, setSearchTerm] = useState('');
     const [fromDate, setFromDate] = useState('');
     const [toDates, setToDates] = useState('');
-    const [subtotal,setSubtotal] = useState(0);
-    const [commission,setCommission] = useState(0)
-    const [totalP,setTotalP] = useState(0)
+    const [subtotal, setSubtotal] = useState(0);
+    const [commission, setCommission] = useState(0)
+    const [totalP, setTotalP] = useState(0)
+    const [payoutData, setPayoutData] = useState([])
 
     useEffect(() => {
         getDataOfPayouts()
@@ -40,15 +41,15 @@ function MyPayouts(props) {
     const getOrdersByStatus = (e) => {
         const { value } = e.target;
         setStatus(value)
-        getDataOfPayouts(fromDate,toDates, e.target.value, range.low, range.high, searchTerm,sortOrder)
+        getDataOfPayouts(fromDate, toDates, e.target.value, range.low, range.high, searchTerm, sortOrder)
     }
 
-    const getOrdersByDate = (start, end, label) =>{
+    const getOrdersByDate = (start, end, label) => {
         let dateFrom = moment(start).format("MM/DD/YYYY")
         let dateTo = moment(end).format("MM/DD/YYYY");
-         setFromDate(dateFrom);
-         setToDates(dateTo);
-        getDataOfPayouts(dateFrom,dateTo, status, range.low, range.high, searchTerm,sortOrder)
+        setFromDate(dateFrom);
+        setToDates(dateTo);
+        getDataOfPayouts(dateFrom, dateTo, status, range.low, range.high, searchTerm, sortOrder)
     }
 
     const getOrdersByPrice = async (range) => {
@@ -59,32 +60,32 @@ function MyPayouts(props) {
             low: from,
             high: to
         }))
-        getDataOfPayouts(fromDate,toDates, status, from, to, searchTerm,sortOrder)
+        getDataOfPayouts(fromDate, toDates, status, from, to, searchTerm, sortOrder)
     }
 
-    const setSort = async(e) =>{
+    const setSort = async (e) => {
         setSortOrder(e.target.value)
-        getDataOfPayouts(fromDate,toDates, status, range.low, range.high, searchTerm,e.target.value)
+        getDataOfPayouts(fromDate, toDates, status, range.low, range.high, searchTerm, e.target.value)
     }
-    const getOrdersBySearchTerm = async(e) =>{
+    const getOrdersBySearchTerm = async (e) => {
         if (e.target.value.length >= 3) {
             setSearchTerm(e.target.value);
         }
-    else{
-        setSearchTerm("");
-    }
-    getDataOfPayouts(fromDate,toDates, status, range.low, range.high, e.target.value,sortOrder)
+        else {
+            setSearchTerm("");
+        }
+        getDataOfPayouts(fromDate, toDates, status, range.low, range.high, e.target.value, sortOrder)
     }
 
     const columns = [
         {
             name: 'Price',
             selector: row => row.price,
-            button:true,
+            button: true,
             cell: row => (
                 <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{row.price}</Link>
             )
-            
+
         },
         {
             name: 'Date',
@@ -99,7 +100,17 @@ function MyPayouts(props) {
         },
         { // To change column
             name: <i className="fa fa-file-alt" aria-hidden="true"></i>,
-            selector: row => row.total,
+            selector: row => row.data,
+            cell: row => {
+
+                if (row.data.payout_status === 'paid') {
+                    return (
+                        <p onClick={() => sortHandler(row.data.payout_id)}>
+                            <i className="fa fa-file-alt" aria-hidden="true"></i> Invoice</p>
+                    )
+                }
+            }
+
         },
     ];
 
@@ -113,7 +124,19 @@ function MyPayouts(props) {
             selector: row => row.commission,
         },
     ];
-    async function getDataOfPayouts(date_from:any = '',date_to: any = '', stat:any = '', frPrice :any = '', toPrice:any = '', term:any = '', sort_order ='asc') {
+    const sortHandler = async (payoutId) => {
+        let data: any = await getInvoice(payoutId);
+      
+        let response = []
+        if(data && data.data.length > 0 && data.data[0]){
+            response['Payout_info'] = data.data[0].Payout_info;
+            response['Payout_orders'] = data.data[0].Payout_orders
+            response['po_total'] = data.data[0].po_total
+            response['selleraddress'] = data.data[0].selleraddress
+        }
+        setPayoutData(response)
+    };
+    async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order = 'asc') {
         let page_size = siteConfig.pageSize;
 
         let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice, page_size, sort_order, term)
@@ -126,21 +149,22 @@ function MyPayouts(props) {
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
                 orderLoop.payout_id = data.payout_id;
+                orderLoop.data = data;
                 return orderLoop;
             });
         }
         setMyOrders(dataLListing)
         let dataObj2 = result && result.data[0] ? result.data[0] : {};
         let dataLListing2 = [];
-        dataLListing2= [{
-             subtotal:dataObj2.subtotal,
-             commission:dataObj2.commission,
-         }]
+        dataLListing2 = [{
+            subtotal: dataObj2.subtotal,
+            commission: dataObj2.commission,
+        }]
         setAccBalance(dataLListing2)
-         if(dataLListing2[0].subtotal) setSubtotal(dataLListing2[0].subtotal)
-         if(dataLListing2[0].commission) setCommission(dataLListing2[0].commission)
-         if(dataLListing2[0].subtotal && dataLListing2[0].commission) setTotalP(dataLListing2[0].subtotal-dataLListing2[0].commission)
-         
+        if (dataLListing2[0].subtotal) setSubtotal(dataLListing2[0].subtotal)
+        if (dataLListing2[0].commission) setCommission(dataLListing2[0].commission)
+        if (dataLListing2[0].subtotal && dataLListing2[0].commission) setTotalP(dataLListing2[0].subtotal - dataLListing2[0].commission)
+
 
     }
 
@@ -180,8 +204,8 @@ function MyPayouts(props) {
                                 </div>
                                 <div className="col-sm-3 mb-4">
                                     <div className="form-group">
-                                    <span className="form-label"><IntlMessages id="order.date" /></span>
-                                    <DateRangePicker
+                                        <span className="form-label"><IntlMessages id="order.date" /></span>
+                                        <DateRangePicker
                                             onCallback={getOrdersByDate}
                                             initialSettings={{
                                                 startDate: moment(),
@@ -240,58 +264,42 @@ function MyPayouts(props) {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="row">
-                                <div className="col-sm-6 mb-4">
-                                    <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="changeStatus" />:</span>
-                                        <select className="form-select" aria-label="Default select example" >
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
-                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
-                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="d-grid col-sm-4 mb-4">
-                                    <button type="button" className="btn btn-secondary" >
-                                        <IntlMessages id="myaccount.edit" />
-                                    </button>
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>
-                {/* <DataTable
-                    title = "Account Balance"
-                    columns={columns2}
-                    data={accBalance}
-                    pagination={true}
-                /> */}
-                <table>
-                    <thead> Account Balance</thead>
-                    <tbody>
-                    <tr>
-                        <th>Subtotal</th>
-                        <td>{siteConfig.currency}{subtotal}</td>
-                    </tr>
-                    <tr>
-                        <th>Commission</th>
-                        <td>{siteConfig.currency}{commission}</td>
-                    </tr>
 
-                    <tr>
-                        <th>Total</th>
-                        <td>{siteConfig.currency}{totalP}</td>
-                    </tr>
+                <table>
+                    <thead><IntlMessages id="account.balance" /></thead>
+                    <tbody>
+                        <tr>
+                            <th><IntlMessages id="order.subTotal" /></th>
+                            <td>{siteConfig.currency}{subtotal}</td>
+                        </tr>
+                        <tr>
+                            <th><IntlMessages id="commission" /></th>
+                            <td>{siteConfig.currency}{commission}</td>
+                        </tr>
+
+                        <tr>
+                            <th><IntlMessages id="order.total" /></th>
+                            <td>{siteConfig.currency}{totalP}</td>
+                        </tr>
                     </tbody>
                 </table>
                 <br></br>
-                <label >Sort by </label>
-                <select onChange={setSort}>
-                    <option value="asc">Price:Low to High</option>
-                    <option value="desc">Price:High to Low</option>
-                </select>
+                <div className="row">
+                    <div className="float-right">
+                        <div className="sort_by">
+                            <div className="sortbyfilter">
+                                <select value={sortOrder} onChange={setSort} className="form-select customfliter" aria-label="Default select example">
+                                    <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                    <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                    <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <DataTable
                     columns={columns}
                     data={myOrder}

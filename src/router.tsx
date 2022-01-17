@@ -36,7 +36,7 @@ import Product from './containers/Page/product/product';
 import Cart from './containers/Page/product/cart/cart';
 import Loader from '../src/image/CLE_LogoMotionGraphics.gif';
 import BussinessResetpassword from './containers/Page/business/bussinessResetpassword';
-import RetunOrder from './containers/Page/business/retunOrder';
+import RetunOrder from './containers/Page/business/returnOrder';
 import VendorOrderDetails from './containers/Page/business/orderDetail';
 import MyPayoutDetails from './containers/Page/business/payoutDetails';
 import returnsDetails from './containers/Page/customer/returnsDetails';
