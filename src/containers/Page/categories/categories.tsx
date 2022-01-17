@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { connect } from 'react-redux';
 import { getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
 import CategoryBanner from './banner';
@@ -30,7 +31,10 @@ function Categories(props) {
         custom_attributes: [],
         custom: {
             image: '',
-            desc: ''
+            desc: '',
+            meta_description: '',
+            meta_keywords: "",
+            meta_title: ""
         }
     })
     //let catID = getCookie("_TESTCOOKIE");
@@ -72,15 +76,22 @@ function Categories(props) {
             let obj: any = {};
             catname = result.data.items[0].name;
             result.data.items[0].custom_attributes.forEach(el => {
+                //  console.log(el.attribute_code)
                 if (el.attribute_code === "image") {
                     obj.image = baseUrl + el.value;
                 } else if (el.attribute_code === "description") {
                     obj.desc = el.value;
+                } else if (el.attribute_code === "meta_description") {
+                    obj.meta_description = el.value;
+                } else if (el.attribute_code === "meta_keywords") {
+                    obj.meta_keywords = el.value;
+                } else if (el.attribute_code === "meta_title") {
+                    obj.meta_title = el.value;
                 }
                 result.data.custom = obj;
             });
 
-            //  console.log(result.data.items[0].id)
+            //  console.log(result.data)
             setCategoryId(result.data.items[0].id)
             setCatname(catname)
             setCategory(result.data);
@@ -91,7 +102,10 @@ function Categories(props) {
                 custom_attributes: [],
                 custom: {
                     image: '',
-                    desc: ''
+                    desc: '',
+                    meta_description: '',
+                    meta_keywords: "",
+                    meta_title: ""
                 }
             })
         }
@@ -102,9 +116,20 @@ function Categories(props) {
         <div className="sectiosn" id='topheaderrr'>
             <div className="section headerrr" id="headerrr" key='uniqueKey'>
                 <Header />
+                {/* {console.log(catname)} */}
+                <HelmetProvider>
+                    <Helmet >
+                        <title>{catname}</title>
+                        <meta name="description" content={categories?.custom.meta_description} />
+                        <meta name="keywords" content={categories?.custom.meta_keywords} />
+                        <meta property="og:title" content={categories?.custom.meta_title} />
+                        <meta property="og:description" content={categories?.custom.meta_description} />
+                    </Helmet>
+                </HelmetProvider>
             </div>
             <div className="section banner">
                 <CategoryBanner cateData={categories} ctId={categoryId} urls={urlPathLink} />
+
                 <section>
                     <div className="container">
                         <div className="row">

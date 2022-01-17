@@ -8,15 +8,14 @@ import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Recomendations from './product-details/recomendations';
-
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Slider } from 'antd';
-
 import { useIntl } from 'react-intl';
 import { capitalize, formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
-
 import { siteConfig } from '../../../settings/index'
 import { getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
+
 const commonFunctions = new CommonFunctions();
 
 const baseUrl = commonFunctions.getBaseUrl();
@@ -51,6 +50,12 @@ function Products(props) {
     const [clearFilter, setclearFilter] = useState(false)
     const language = getCookie('currentLanguage');
     const [nameHeader, setNameHeader] = useState('')
+
+    const [metaData, setMetaData] = useState({
+        meta_description: '',
+        meta_keywords: "",
+        meta_title: ""
+    })
 
     useEffect(() => {
         //console.log(filters)
@@ -93,15 +98,6 @@ function Products(props) {
         }
     }, [sortValue, page, pageSize, sort, catState])
 
-    // useEffect(() => {
-    //     if (props.prodloader === true) {
-    //         setOpacity(0.3);
-    //     } else {
-    //         setOpacity(1);
-    //     }
-
-    // }, [props.prodloader])
-
     async function getProducts(urlPath) {
         //console.log(urlPath)
         let lang = props.languages ? props.languages : language;
@@ -109,9 +105,23 @@ function Products(props) {
         let result1: any = await getCategoryDetailsbyUrlPath(lang, urlPath, siteConfig.pageSize);
         let catID = result1 && result1.data && result1.data.items && result1.data.items.length > 0 ? result1.data.items[0].id : '';
         let catName = result1 && result1.data && result1.data.items && result1.data.items.length > 0 ? result1.data.items[0].name : '';
+        if (result1 && result1.data && result1.data.items && result1.data.items.length > 0 && result1.data.items[0].custom_attributes && result1.data.items[0].custom_attributes.length > 0) {
+            let obj: any = {};
+            result1.data.items[0].custom_attributes.forEach(el => {
+                if (el.attribute_code === "meta_description") {
+                    obj.meta_description = el.value;
+                } else if (el.attribute_code === "meta_keywords") {
+                    obj.meta_keywords = el.value;
+                } else if (el.attribute_code === "meta_title") {
+                    obj.meta_title = el.value;
+                }
+            });
+            setMetaData(obj);
+        }
         setNameHeader(catName);
         setCatState(catID)
         getProductById(catID)
+
     }
 
     async function getProductById(catID) {
@@ -374,6 +384,15 @@ function Products(props) {
     return (
         <main>
             {/* <Promotion /> */}
+            <HelmetProvider>
+                <Helmet >
+                    <title>{nameHeader ? nameHeader : 'header'}</title>
+                    <meta name="description" content={metaData?.meta_description} />
+                    <meta name="keywords" content={metaData?.meta_keywords} />
+                    <meta property="og:title" content={metaData?.meta_title} />
+                    <meta property="og:description" content={metaData?.meta_description} />
+                </Helmet>
+            </HelmetProvider>
             <section>
                 <div className="container">
                     <div className="row">

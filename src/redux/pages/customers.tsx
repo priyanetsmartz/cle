@@ -198,6 +198,13 @@ export async function retrunDetails(returnId: number) {
 }
 
 export async function getReturnReasonList() {
-    return adminApi.request(`rest/all/V1/return/itemCondition/`, "", "GET", "");
+    return adminApi.request(`rest/all/V1/return/itemCondition`, "", "GET", "");
+}
+export async function createReturnRequest(data: any) {
+    return adminApi.request(`rest/all/V1/return/submitRequest`, data, "POST", "")
+}
+
+export function getorderReturnstatusapi(orderId) {
+    return adminApi.request(`rest/all/V1/return/canRma/?orderId=${orderId}`, "", "GET", "")
 }
 

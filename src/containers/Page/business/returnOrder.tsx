@@ -1,17 +1,24 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
-import { getReturnDetail } from '../../../redux/pages/vendorLogin';
+import { getReturnDetail, returnProcessVendor } from '../../../redux/pages/vendorLogin';
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import { capitalize, getCountryName } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
-import cross from '../../image/cross.svg';
+import { useIntl } from 'react-intl';
+import notification from '../../../components/notification';
+
 function RetunOrder(props) {
     const { returnId }: any = useParams();
     const [returnDetails, setReturnDetails] = useState([])
+    const [statusReturn, selectStatusReturn] = useState('')
+    const [statusReturnComment, setstatusReturnComment] = useState('')
+    const [returnShow, setReturnShow] = useState(true)
+    const [show, setShow] = useState(false)
 
+    const intl = useIntl();
     useEffect(() => {
         getReturnDetailFxn(returnId)
     }, [props.languages])
@@ -21,10 +28,45 @@ function RetunOrder(props) {
         let data = [];
         if (results && results.data && results.data.length > 0) {
             data['info'] = results.data[0].info;
+            data['rma_status'] = results.data[0].info && results.data[0].info.rma_status ? results.data[0].info.rma_status : '';
             data['address'] = results.data[0].address;
             data['items'] = results.data[0].items;
+            data['return_total'] = results.data[0].return_total;
+
+            if (data['rma_status'] === 'pending') {
+                setReturnShow(true)
+            } else {
+                setReturnShow(false)
+            }
         }
         setReturnDetails(data);
+    }
+    const selectStatus = (event) => {
+        selectStatusReturn(event.target.value)
+        if (event.target.value === 'decline') {
+            setShow(true)
+        } else {
+            setShow(false)
+        }
+    }
+    const handleChange = (e) => {
+        setstatusReturnComment(e.target.value);
+    }
+    const handleSubmitClick = async (e) => {
+
+        if (statusReturn === "" || statusReturn === null) {
+            notification("error", "", intl.formatMessage({ id: "selectreturnOrExchange" }));
+            return false;
+        }
+        let result: any = await returnProcessVendor(returnId, statusReturn, statusReturnComment);
+        if (result.data) {
+            selectStatusReturn('')
+            setstatusReturnComment('')
+            notification("success", "", result.data);
+        } else {
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        }
+
     }
     return (
         <main>
@@ -33,39 +75,44 @@ function RetunOrder(props) {
                     <div className="col-sm-12">
 
                         <div className="main-head">
-                            <h1>Return Details</h1>
-                            <h2>We get it, sometimes something just doesn't work for you and you want your
-                                money back.  You can return your products here.</h2>
+                            <h1><IntlMessages id="myaccount.returnDetails" /></h1>
+                            <h2><IntlMessages id="customer.return.description" /></h2>
                         </div>
                         <section>
                             <div className="return-det">
                                 <div className="row">
+
                                     <div className="col-sm-12">
-                                        <h5>Order number: {returnDetails['info'] ? returnDetails['info'].rma_id : ""}</h5>
+                                        <h5><IntlMessages id="order.orderNo" />: {returnDetails['info'] ? returnDetails['info'].rma_id : ""}</h5>
                                     </div>
                                     <div className="col-sm-3">
-                                        <h6>Purchase Date</h6>
+                                        <h6><IntlMessages id="status" /></h6>
+                                        {returnDetails['info'] && returnDetails['info'].rma_status ?
+                                            <p className={returnDetails['info'].rma_status === 'decline' ? 'red' : 'green'}> {capitalize(returnDetails['info'].rma_status)}</p> : ""}
+                                    </div>
+                                    <div className="col-sm-3">
+                                        <h6><IntlMessages id="order.purchaseDate" /></h6>
                                         <p>{returnDetails['info'] && returnDetails['info'].purchase_date ? moment(returnDetails['info'].purchase_date).format('ddd DD MMMM YYYY') : ""}</p>
                                     </div>
 
                                     <div className="col-sm-3">
-                                        <h6>Shipment Date</h6>
+                                        <h6><IntlMessages id="shipment.date" /></h6>
                                         <p>{returnDetails['info'] && returnDetails['info'].shipment_date ? moment(returnDetails['info'].shipment_date).format('ddd DD MMMM YYYY') : ""}</p>
                                     </div>
                                     <div className="col-sm-3">
-                                        <h6>Return Date</h6>
+                                        <h6><IntlMessages id="return.date" /></h6>
                                         <p>{returnDetails['info'] && returnDetails['info'].return_date ? moment(returnDetails['info'].return_date).format('ddd DD MMMM YYYY') : ""}</p>
                                     </div>
                                     <div className="col-sm-3">
-                                        <h6>Payment Method</h6>
+                                        <h6><IntlMessages id="order.paymentMethod" /></h6>
                                         <p>{returnDetails['info'] ? returnDetails['info'].payment_method : ""}</p>
                                     </div>
                                     <div className="col-sm-3">
-                                        <h6>Returned Product</h6>
+                                        <h6><IntlMessages id="returned.products" /></h6>
                                         <p>{returnDetails['info'] ? returnDetails['info'].return_qty : ""}</p>
                                     </div>
                                     <div className="col-sm-3">
-                                        <h6>Exchanged Product</h6>
+                                        <h6><IntlMessages id="exchanged.products" /></h6>
                                         <p>{returnDetails['info'] ? returnDetails['info'].return_qty : ""}</p>
                                     </div>
                                 </div>
@@ -75,7 +122,7 @@ function RetunOrder(props) {
                                 <div className="row">
                                     <div className="col-sm-6">
                                         <div className="return-user-info">
-                                            <h5>User Information</h5>
+                                            <h5><IntlMessages id="userinformation" /></h5>
                                             {returnDetails['address'] ?
                                                 <address>
 
@@ -85,7 +132,7 @@ function RetunOrder(props) {
                                                     {returnDetails['address'].postcode}<br />
                                                     {returnDetails['address'].city}<br />
                                                     {returnDetails['address'].region}<br />
-                                                    {returnDetails['address'].country_id ? getCountryName(returnDetails['address'].country_id) :""}
+                                                    {returnDetails['address'].country_id ? getCountryName(returnDetails['address'].country_id) : ""}
 
                                                 </address>
                                                 : ""}
@@ -93,23 +140,23 @@ function RetunOrder(props) {
                                     </div>
                                     <div className="col-sm-6">
                                         <div className="return-user-total">
-                                            <h5>Return Total</h5>
+                                            <h5><IntlMessages id="returntotal" /></h5>
                                             <table className="table table-borderless mb-0">
                                                 <tr>
-                                                    <td>Subtotal</td>
-                                                    <th className="text-end">$8,533</th>
+                                                    <td><IntlMessages id="subtotal" /></td>
+                                                    <th className="text-end">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].subtotal : 0}</th>
                                                 </tr>
                                                 <tr>
-                                                    <td>Shipping</td>
-                                                    <th className="text-end">$0</th>
+                                                    <td><IntlMessages id="order.shipping" /></td>
+                                                    <th className="text-end">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].shipping : 0}</th>
                                                 </tr>
                                                 <tr className="r-tax">
-                                                    <td>Tax</td>
-                                                    <th className="text-end">$741</th>
+                                                    <td><IntlMessages id="tax" /></td>
+                                                    <th className="text-end">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].tax : 0}</th>
                                                 </tr>
                                                 <tr className="tot-bor">
-                                                    <th>Tax</th>
-                                                    <th className="text-end fin-p">$9,274</th>
+                                                    <th><IntlMessages id="total" /></th>
+                                                    <th className="text-end fin-p">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].grand_total : 0}</th>
                                                 </tr>
                                             </table>
                                         </div>
@@ -155,9 +202,27 @@ function RetunOrder(props) {
                                 <div className="show-more-btn"><Link to="#" className="btn btn-secondary"><IntlMessages id="order.showMore" /></Link></div>
                             )}
                         </div>
-                        <section className="return-foo">
-                            <button>Confirm Return</button>
-                        </section>
+                        {returnShow && (
+                            <div className="row mt-5">
+                                <div className="col-md-12">
+                                    <div className='return-reason' >
+                                        <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="accept">{intl.formatMessage({ id: "accept" })}</option>
+                                            <option value="decline">{intl.formatMessage({ id: "decline" })}</option>
+                                        </select>
+                                    </div>
+                                    {show && (<div className='return-comment' >
+                                        <label><IntlMessages id="comments" /></label>
+                                        <textarea className="form-select customfliter" onChange={handleChange} value={statusReturnComment}>
+                                        </textarea>
+                                    </div>)}
+                                    <div className="clearfix"></div>
+                                    <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link></div>
+                                    <div className="clearfix"></div>
+                                </div>
+                            </div>
+                        )}
 
                     </div>
                 </div>
