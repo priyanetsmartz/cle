@@ -238,9 +238,7 @@ function MyProductListing(props) {
                                         </div>
                                         <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
-                                    
-                                </div>
-								<div className="col-sm-3">
+                                    <div className="col-sm-3">
                                         <div className="form-group">
                                             <span className="form-label">&nbsp;</span>
                                             <div className="search_results">
@@ -249,6 +247,7 @@ function MyProductListing(props) {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                             </div>
                         </div>
                         <div className="row">
