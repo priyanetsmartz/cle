@@ -7863,6 +7863,7 @@ p.sliderupper {
 }
 .fvAeSn p{
 	margin-bottom:5px;
+	font-size: 14px;
 }
 
 .kUKiTL {
@@ -7892,8 +7893,8 @@ p.sliderupper {
     height: 15px;
 }
 
-.prodbrand,.prodId span{
-	font-weight:500;
+.prodbrand, .prodId span {
+    font-weight: 600;
 }
 
 .companylogo {
@@ -7938,6 +7939,59 @@ p.sliderupper {
 .check-als .btn-secondary:hover i{
 	 
 }
+
+ul.filter-tiles {
+    margin: 20px 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.filter-tiles li {
+    display: inline;
+    margin-right: 20px;
+	font-size: 16px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+	line-height:24px;
+    font-weight: 500;
+}
+
+.importance {
+	display: flex;
+	justify-content: space-between;
+	clear: left;
+	flex-wrap: nowrap;
+	margin-bottom:30px;
+}
+.importance-card {
+	border: 1px solid #F7F7FC;
+	min-height: 150px;
+	flex: 0 0 auto;
+	width: 47%;
+	background-color: #F7F7FC;
+	padding: 30px;
+	display: flex;
+}
+.importance-icon {
+	flex: 0 0 auto;
+	width: 60px;
+}
+.importance-icon i {
+	background-color: #2E2BAA;
+	padding: 0;
+	border-radius: 50%;
+	color: #fff;
+	font-size: 22px;
+	width: 45px;
+	height: 45px;
+	line-height: 45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.important-cont p{
+	margin-bottom:5px;
+}	
 
 /* All media screen below */
 
