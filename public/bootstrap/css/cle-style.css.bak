@@ -6308,6 +6308,10 @@ h4.arrow-change:after {
     padding: 0 55px;
 }
 
+.login-sec .form-check{
+	padding:0;
+}
+
 .or-bg {
     width: 100%;
     height: 2px;
@@ -7852,8 +7856,8 @@ p.sliderupper {
 }
 
 .fvAeSn img {
-    width: 100px;
-    height: 100px;
+    width: 74px;
+    height: 74px;
     object-fit: cover;
     object-position: center;
 }
@@ -7861,8 +7865,9 @@ p.sliderupper {
 	margin-bottom:5px;
 }
 
-.kUKiTL{
-	padding:16px;
+.kUKiTL {
+    padding: 16px;
+    align-items: flex-start!important;
 }
 
 .data_value ul {
@@ -7887,6 +7892,10 @@ p.sliderupper {
     height: 15px;
 }
 
+.prodbrand,.prodId span{
+	font-weight:500;
+}
+
 .companylogo {
     position: relative;
 }
@@ -7899,7 +7908,7 @@ p.sliderupper {
     border: 3px solid #2E2BAA;
 }
 
-.companylogo .onhoveredit{
+.companylogo .onhoveredit input[type="file"]{
 	cursor: pointer;
     display: block;
     height: 100%;
@@ -7908,6 +7917,26 @@ p.sliderupper {
     position: absolute;
     top: 0;
     width: 100%;
+}
+
+.check-als .btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.check-als .btn-secondary:hover{
+	
+}
+
+.check-als .btn-secondary i {
+    font-size: 11px;
+	transition: all .5s ease;
+	margin-left: 15px;
+}
+
+.check-als .btn-secondary:hover i{
+	 
 }
 
 /* All media screen below */
