@@ -233,7 +233,7 @@ function MySalesOrders(props) {
                             </div>
                         </div>
                     </div>
-                </div>
+                
 
                 <DataTable
                     columns={columns}
@@ -242,6 +242,7 @@ function MySalesOrders(props) {
                     pagination={true}
                 // onSelectedRowsChange={handleChange}
                 />
+				</div>
             </section>
         </div>
 

@@ -280,7 +280,7 @@ function Dashboard(props) {
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
                 <div className="container">
-                    <div className="row">
+                    <div className="row mb-3">
                         <div className="col-sm-12">
                             <h1><IntlMessages id="seller.announcements" /></h1>
                         </div>
@@ -344,30 +344,38 @@ function Dashboard(props) {
                             </ul>
                         </div>
                     </div>
-                    <div className="row mb-4">
-                        <div className="container">
-                            <div className="card-columns" style={{ columnCount: 3 }}>
-                                <div className="card bg-light">
-                                    <div className="card-body text-center">
-                                        <h3><IntlMessages id="users" /></h3>
-                                        <p className="card-text"><IntlMessages id="sometextinsidethefilthcard" /></p>
-                                    </div>
-                                </div>
-                                <div className="card bg-light ">
-                                    <div className="card-body text-center">
-                                        <h3><IntlMessages id="order.orders" /></h3>
-                                        <p className="card-text">{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</p>
-                                    </div>
-                                </div>
-                                <div className="card bg-light">
-                                    <div className="card-body text-center">
-                                        <h3><IntlMessages id="payments" /></h3>
-                                        <p className="card-text">{dataTilesData['payoutAmount'] ? dataTilesData['payoutAmount'] : 0}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+					
+					
+					<div className="row mb-4" style={{ columnCount: 3 }}>
+						<div className="col-sm-12 col-md-4">
+							<div className="card-info">
+								<h5><IntlMessages id="users" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+								<div className="stats">
+									<h3>30K</h3>
+									<h4>9%</h4>
+								</div>
+							</div>
+						</div>
+						<div className="col-sm-12 col-md-4">
+							<div className="card-info">
+								<h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+								<div className="stats">
+									<h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
+									<h4>10%</h4>
+								</div>
+							</div>
+						</div>
+						<div className="col-sm-12 col-md-4">
+							<div className="card-info">
+								<h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+								<div className="stats">
+									<h3>{dataTilesData['payoutAmount'] ? dataTilesData['payoutAmount'] : 0}</h3>
+									<h4>5%</h4>
+								</div>
+							</div>
+						</div>
+				  </div>
+					
                 </div >
             </section>
             <section className="my_profile_sect mb-4">

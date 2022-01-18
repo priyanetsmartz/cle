@@ -256,10 +256,10 @@ function MyProductListing(props) {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="float-left">
-                                <Link to="/product-integration" ><IntlMessages id="product_integration" /></Link>
+                            <div className="col-sm-6">
+                                <Link className="btn btn-secondary" to="/product-integration" ><IntlMessages id="product_integration" /></Link>
                             </div>
-                            <div className="float-right">
+                            <div className="col-sm-6">
                                 <div className="sort_by">
                                     <div className="sortbyfilter">
                                         <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
@@ -272,17 +272,21 @@ function MyProductListing(props) {
                             </div>
                         </div>
                     </div>
-                </div>
-
+                
+					
                 <DataTable
                     columns={columns}
                     data={listingData}
                     pagination={true}
                     className='product-Listing'
                 />
-                <div className="float-left">
-                    <Link to="/product-integration" ><IntlMessages id="product_integration" /></Link>
-                </div>
+				
+				<div className="row">
+					<div className="col-sm-12">
+						<Link className="btn btn-secondary" to="/product-integration" ><IntlMessages id="product_integration" /></Link>
+					</div>
+				</div>	
+				</div>
             </section>
             <Modal show={deletePop}>
                 <Modal.Body className="CLE_pf_details modal-confirm">
