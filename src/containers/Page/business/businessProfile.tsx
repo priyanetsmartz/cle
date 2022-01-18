@@ -672,60 +672,7 @@ function BusinessProfile(props) {
         <div className="col-sm-9">
 			
 			
-			<section className="my_profile_sect mb-4">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1><IntlMessages id="vendor.myDetails" /></h1>
-                            <p><IntlMessages id="vendor.feelFreeToEdit" /></p>
-                        </div>
-                    </div>
-                    
-                            <div className="row">
-                                <div className="col-sm-4">
-                                    <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="vendor.fullname" /></label>
-                                        <div className="field-name">{vendorForm.vendorName}</div>
-                                    </div>
-                                    <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="vendor.location" /></label>
-                                        <div className="field-name">{vendorForm.location}</div>
-                                    </div>
-                                </div>
-                                <div className="col-sm-4">
-
-                                    <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
-                                        <div className="field-name">{capitalize(vendorForm.gender)} </div>
-                                    </div>
-                                    <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
-                                        <div className="field-name">{vendorForm.vendorTelephone}</div>
-                                    </div>
-
-                                </div>
-                                <div className="col-sm-4">
-                                    <div className="field_details mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
-                                        <div className="field-name">{vendorForm.vendorDateofBirth} </div>
-                                    </div>
-                                    <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="vendor.contactMethod" /></label>
-                                        <div className="field-name">{capitalize(vendorForm.contactMethod)}</div>
-                                    </div>
-                                </div>
-                            
-                        
-								<div className="col-sm-3 mt-3">
-									<div className="d-grid ">
-										<button type="button" className="btn btn-secondary" onClick={openMyDetails}>
-											<IntlMessages id="myaccount.edit" />
-										</button>
-									</div>
-								</div>
-						   </div>
-						</div>
-					</section>
+			
 
             <section className="my_profile_sect mb-4">
                 <div className="container">
@@ -786,7 +733,60 @@ function BusinessProfile(props) {
                 </div>
             </section>
 
-            
+            <section className="my_profile_sect mb-4">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h1><IntlMessages id="vendor.myDetails" /></h1>
+                            <p><IntlMessages id="vendor.feelFreeToEdit" /></p>
+                        </div>
+                    </div>
+                    
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <div className="field_details mb-3">
+                                        <label className="form-label"><IntlMessages id="vendor.fullname" /></label>
+                                        <div className="field-name">{vendorForm.vendorName}</div>
+                                    </div>
+                                    <div className="field_details">
+                                        <label className="form-label"><IntlMessages id="vendor.location" /></label>
+                                        <div className="field-name">{vendorForm.location}</div>
+                                    </div>
+                                </div>
+                                <div className="col-sm-4">
+
+                                    <div className="field_details mb-3">
+                                        <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
+                                        <div className="field-name">{capitalize(vendorForm.gender)} </div>
+                                    </div>
+                                    <div className="field_details">
+                                        <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
+                                        <div className="field-name">{vendorForm.vendorTelephone}</div>
+                                    </div>
+
+                                </div>
+                                <div className="col-sm-4">
+                                    <div className="field_details mb-3">
+                                        <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
+                                        <div className="field-name">{vendorForm.vendorDateofBirth} </div>
+                                    </div>
+                                    <div className="field_details">
+                                        <label className="form-label"><IntlMessages id="vendor.contactMethod" /></label>
+                                        <div className="field-name">{capitalize(vendorForm.contactMethod)}</div>
+                                    </div>
+                                </div>
+                            
+                        
+								<div className="col-sm-3 mt-3">
+									<div className="d-grid ">
+										<button type="button" className="btn btn-secondary" onClick={openMyDetails}>
+											<IntlMessages id="myaccount.edit" />
+										</button>
+									</div>
+								</div>
+						   </div>
+						</div>
+					</section>
 
             <section className="my_profile_sect mb-4">
                 <div className="container">
@@ -1073,18 +1073,24 @@ function BusinessProfile(props) {
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
                                 <Link to="customer-orders" className="btn btn-secondary">
-                                    <IntlMessages id="myaccount.myOrdersReturns" /></Link>
+                                    <IntlMessages id="myaccount.myOrdersReturns" />
+									<i className="fas fa-chevron-right"></i>
+								</Link>	
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
                                 <Link to="customer-orders" className="btn btn-secondary">
-                                    <IntlMessages id="myaccount.orderDetails" /></Link>
+                                    <IntlMessages id="myaccount.orderDetails" />
+									<i className="fas fa-chevron-right"></i>
+								</Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.returnDetails" /></button>
+                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.returnDetails" />
+									<i className="fas fa-chevron-right"></i>
+								</button>
                             </div>
                         </div>
                     </div>
