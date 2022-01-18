@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux'
 import DataTable from 'react-data-table-component';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import { InputNumber, Slider } from 'antd';
+import CLELogo from '../../../image/CLIlogo.png';
 import moment from 'moment';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getInvoice, getPayoutOrders } from '../../../redux/pages/vendorLogin';
@@ -13,11 +13,14 @@ import { getCookie } from '../../../helpers/session';
 import { capitalize } from '../../../components/utility/allutils';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Link } from "react-router-dom";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 
 function MyPayouts(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
+    const ref = useRef();
     const [accBalance, setAccBalance] = useState([])
     const [range, setRange] = useState({ low: 0, high: 0 })
     const [status, setStatus] = useState('');
@@ -28,6 +31,7 @@ function MyPayouts(props) {
     const [subtotal, setSubtotal] = useState(0);
     const [commission, setCommission] = useState(0)
     const [totalP, setTotalP] = useState(0)
+    const [showRawPDF, setShowRawPDF] = useState(false)
     const [payoutData, setPayoutData] = useState([])
 
     useEffect(() => {
@@ -126,15 +130,18 @@ function MyPayouts(props) {
     ];
     const sortHandler = async (payoutId) => {
         let data: any = await getInvoice(payoutId);
-      
+
         let response = []
-        if(data && data.data.length > 0 && data.data[0]){
+        if (data && data.data.length > 0 && data.data[0]) {
             response['Payout_info'] = data.data[0].Payout_info;
             response['Payout_orders'] = data.data[0].Payout_orders
             response['po_total'] = data.data[0].po_total
             response['selleraddress'] = data.data[0].selleraddress
         }
+        console.log(response)
         setPayoutData(response)
+        setShowRawPDF(true)
+         printDocument();
     };
     async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order = 'asc') {
         let page_size = siteConfig.pageSize;
@@ -171,6 +178,25 @@ function MyPayouts(props) {
     const handleChange = ({ selectedRows }) => {
         console.log('Selected Rows: ', selectedRows);
     };
+
+    const printDocument = () => {
+        const input = document.getElementById('pdfdiv');
+        html2canvas(input)
+            .then((canvas: any) => {
+                var imgData = canvas.toDataURL("image/jpeg", 1);
+                var pdf = new jsPDF("p", "px", "a4");
+                var pageWidth = pdf.internal.pageSize.getWidth();
+                var pageHeight = pdf.internal.pageSize.getHeight();
+                var imageWidth = canvas.width;
+                var imageHeight = canvas.height;
+
+                var ratio = imageWidth / imageHeight >= pageWidth / pageHeight ? pageWidth / imageWidth : pageHeight / imageHeight;
+                //pdf = new jsPDF(this.state.orientation, undefined, format);
+                pdf.addImage(imgData, 'JPEG', 10, 10, imageWidth * ratio, imageHeight * ratio);
+                pdf.save("invoice.pdf");
+            });
+        setShowRawPDF(false);
+    }
 
     return (
         <div className="col-sm-9">
@@ -286,7 +312,7 @@ function MyPayouts(props) {
                         </tr>
                     </tbody>
                 </table>
-                <br></br>
+                <br />
                 <div className="row">
                     <div className="float-right">
                         <div className="sort_by">
@@ -308,6 +334,193 @@ function MyPayouts(props) {
                     onSelectedRowsChange={handleChange}
                 />
             </section>
+            {showRawPDF && (
+                <div className="main-wrapper" id="pdfdiv" style={{ "width": "80%", "margin": " 0 auto" }}>
+                    <div className="header">
+                        <img src={CLELogo} alt="cle-logo" style={{ "display": "block", "margin": "0 auto", "width": "120px" }} />
+                        <p style={{ "textAlign": "center" }}>Tax Invoice</p>
+                    </div>
+                    <br />
+                    <br />
+
+                    <div className="head-main" style={{ "overflow": "auto" }}>
+                        <div style={{ "float": "left", "width": "50%" }}>
+                            <table style={{ "width": "100%", "textAlign": "left", "borderWidth": "1px" }} cellPadding="5" cellSpacing="5">
+                                <table>
+                                    <tr>
+                                        <td>Invoice#</td>
+                                        <td>-</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? '#' + payoutData['Payout_info'][0].payout_id : ""}</td>
+                                    </tr>
+                                </table>
+                            </table>
+                            <br />
+                            <br />
+                            <br />
+                            <table style={{ "width": "100%", "textAlign": "left", "borderWidth": "1px" }} cellPadding="5" cellSpacing="5">
+                                <table>
+                                    <tr>
+                                        <td>Invoice Issue Date</td>
+                                        <td>-</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? moment(payoutData['Payout_info'][0].created_at).format('DD MMMM YYYY') : ""}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Due Date</td>
+                                        <td>-</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? moment(payoutData['Payout_info'][0].date_to).format('DD MMMM YYYY') : ""}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status</td>
+                                        <td>-</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payout_status : ""}</td>
+                                    </tr>
+                                    {/* <tr>
+                                        <td>P.O.#</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr> */}
+                                </table>
+                            </table>
+                        </div>
+                        <div style={{ "float": "left", "width": "50%" }}></div>
+                    </div>
+                    <br />
+                    <br />
+
+                    <section>
+                        <table style={{ "width": "100%", "borderWidth": "1px" }} cellPadding="5" cellSpacing="5">
+                            <tbody>
+                                <tr>
+                                    <th style={{ "textAlign": "left", "backgroundColor": "#ddd" }} colSpan={5}>Seller</th>
+                                    <th style={{ "textAlign": "right", "backgroundColor": "#ddd" }}>Seller</th>
+                                </tr>
+                                <tr>
+                                    <th style={{ "textAlign": "left" }}>Name</th>
+                                    <td style={{ "textAlign": "center" }}></td>
+                                    <td style={{ "textAlign": "right" }}>-</td>
+                                    <th style={{ "textAlign": "left" }}>اسم</th>
+                                    <td style={{ "textAlign": "center" }}>-</td>
+                                    <td style={{ "textAlign": "right" }}>-</td>
+                                </tr>
+                                <tr>
+                                    <th style={{ "textAlign": "left" }}>Address Line 1</th>
+                                    <td style={{ "textAlign": "center" }}></td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td>
+                                    <th style={{ "textAlign": "left" }}>العنوان السطر 1</th>
+                                    <td style={{ "textAlign": "center" }}></td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td>
+                                </tr>
+                                <tr>
+                                    <th style={{ "textAlign": "left" }}>Region</th>
+                                    <td style={{ "textAlign": "center" }}>-</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td>
+                                    <th style={{ "textAlign": "left" }}>منطقة</th>
+                                    <td style={{ "textAlign": "center" }}>-</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td>
+                                </tr>
+                                <tr>
+                                    <th style={{ "textAlign": "left" }}>City</th>
+                                    <td style={{ "textAlign": "center" }}></td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td>
+                                    <th style={{ "textAlign": "left" }}>مدينة</th>
+                                    <td style={{ "textAlign": "center" }}></td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td>
+                                </tr>
+                                <tr>
+                                    <th style={{ "textAlign": "left" }}>Country</th>
+                                    <td style={{ "textAlign": "center" }}></td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td>
+                                    <th style={{ "textAlign": "left" }}>دولة</th>
+                                    <td style={{ "textAlign": "center" }}></td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td>
+                                </tr>
+                                <tr>
+                                    <th style={{ "textAlign": "left" }}>Zip</th>
+                                    <td style={{ "textAlign": "center" }}>-</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td>
+                                    <th style={{ "textAlign": "left" }}>أزيز</th>
+                                    <td style={{ "textAlign": "center" }}>-</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </section>
+                    <br />
+                    <br />
+
+                    <section>
+                        <table style={{ "width": "100%", "textAlign": "center", "borderWidth": "1px" }} cellPadding="5" cellSpacing="5">
+                            <tbody>
+                                <tr>
+                                    <th style={{
+                                        "backgroundColor": "#ddd", "textAlign": "left"
+                                    }} colSpan={3}>Line Items</th>
+                                    <th style={{ "backgroundColor": "#ddd", "textAlign": "right" }} colSpan={3}>Items</th>
+                                </tr>
+                                <tr>
+                                    <th style={{ "backgroundColor": "#ddd" }}>#</th>
+                                    <th style={{ "backgroundColor": "#ddd" }}>Order Id </th>
+                                    <th style={{ "backgroundColor": "#ddd" }}>Invoice Id</th>
+                                    <th style={{ "backgroundColor": "#ddd" }}>Invoice Created</th>
+                                    <th style={{ "backgroundColor": "#ddd" }}>Invoice Status</th>
+                                    <th style={{ "backgroundColor": "#ddd" }}>Order Amount</th>
+                                </tr>
+                                {payoutData && payoutData['Payout_orders'] && payoutData['Payout_orders'].length > 0 && payoutData['Payout_orders'].map((data, index) => {
+                                    // console.log(data)
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index}</td>
+                                            <td>{data.order_increment_id}</td>
+                                            <td>{data.invoice_id}</td>
+                                            <td>{moment(data.invoice_created_at).format('DD MMMM YYYY')}</td>
+                                            <td>{data.invoice_status}</td>
+                                            <td>{data.order_amount.subtotal}</td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+
+                    </section>
+                    <br />
+                    <br />
+
+
+                    <section>
+
+                        <table style={{ "width": "100%", "textAlign": "center", "borderWidth": "1px" }} cellPadding="5" cellSpacing="5">
+                            <tbody>
+                                <tr>
+                                    <th style={{
+                                        "backgroundColor": "#ddd", "textAlign": "left"
+                                    }} colSpan={3}>Total Amount</th>
+                                    <th style={{ "backgroundColor": "#ddd", "textAlign": "right" }} colSpan={3}></th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Total Orders</th>
+                                    <th>Total Paid</th>
+                                    <th>Total Payment</th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_orders : ""}</td>
+                                    <td>{siteConfig.currency} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payment_paid : ""}</td>
+                                    <td>{siteConfig.currency} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_payment : ""}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>Notes:</p>
+                        <p>Thanks you for the payment . You just made our day.</p>
+                    </section>
+                    <br />
+                    <br />
+
+                </div>
+
+            )}
         </div>
 
     )

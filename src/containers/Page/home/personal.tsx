@@ -53,7 +53,7 @@ function Personal(props) {
         async function getData() {
             let lang = props.languages ? props.languages : language;
             let result: any = await GetHelpUsForm(lang, props.currentCAT);
-          //  console.log(result.data[0].form_json.length)
+            //  console.log(result.data[0].form_json.length)
             if (result && result.data && result.data.length > 0) {
                 setForm(result.data[0]);
             } else {
@@ -96,6 +96,7 @@ function Personal(props) {
     })
 
     const optionHandler = async (optionIndex) => {
+
         if (!onLogin) return handleClick();
 
         const tempObj = {
@@ -103,7 +104,7 @@ function Personal(props) {
             label: form.form_json[activeIndex][0].label,
             type: form.form_json[activeIndex][0].type
         }
-
+       
         let formCode = '';
         if (props.categoryName === 'women' || props.categoryName === '' || props.categoryName === undefined) {
             formCode = props.languages === 'english' ? 'home_page_survey' : 'Home_page_survey_arabic';
@@ -112,6 +113,7 @@ function Personal(props) {
         }
 
         answers[form.form_json[activeIndex][0].name] = tempObj
+        //console.log(answers)
         setAnswers(answers);
         payload.answer.response_json = JSON.stringify(answers);
         payload.answer.form_id = form.form_id;
@@ -120,6 +122,7 @@ function Personal(props) {
         payload.answer.form_name = form.title;
         payload.answer.form_code = formCode;
         setPayload(payload);
+       // console.log(payload)
         if (form.form_json[activeIndex + 1]) {
             setActiveIndex(activeIndex + 1);
             setActiveTab(activeTab + 1);
@@ -150,7 +153,7 @@ function Personal(props) {
 
     return (
         <>{form.form_json.length > 0 && (
-            <section className="width-100 mb-5" style={{ 'display': hidePersonal ? 'block' : 'none' }}>              
+            <section className="width-100 mb-5" style={{ 'display': hidePersonal ? 'block' : 'none' }}>
                 <div className="container">
                     <div className="row justify-content-md-center">
                         <div className="col-sm-12 col-md-10 col-lg-9 col-xl-12">

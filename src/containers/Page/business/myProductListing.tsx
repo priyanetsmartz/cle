@@ -13,12 +13,10 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import Modal from "react-bootstrap/Modal";
-import { capitalize } from '../../../components/utility/allutils';
 
 
 function MyProductListing(props) {
     const intl = useIntl();
-    let brand = '';
     const [listingData, setListingData] = useState([])
     const [range, setRange] = useState({ low: 0, high: 0 })
     const [status, setStatus] = useState();
@@ -141,8 +139,8 @@ function MyProductListing(props) {
                 <div>
                     <p className='prodbrand'>{row.product.brand}</p>
                     <p className='prodname'>{row.product.name}</p>
-                    <p className='prodId'><span>ID:</span>{row.product.id}</p>
-                    <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" >View</Link></li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} >Delete</Link></li></ul></div>
+                    <p className='prodId'><span><IntlMessages id="id" />:</span>{row.product.id}</p>
+                    <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link></li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
                 </div>
             ),
         },
@@ -156,9 +154,10 @@ function MyProductListing(props) {
             cell: row => (
                 <div>
                     {row.status === "1" ? intl.formatMessage({ id: "product.active" }) : ""}
-                    {row.status === "2" ? intl.formatMessage({ id: "product.sold" }) : ""}
+                    {row.status === "8" ? intl.formatMessage({ id: "product.sold" }) : ""}
                     {row.status === "3" ? intl.formatMessage({ id: "product.pending" }) : ""}
-                    {row.status === "4" ? intl.formatMessage({ id: "product.rejected" }) : ""}
+                    {row.status === "10" ? intl.formatMessage({ id: "product.rejected" }) : ""}
+                    {row.status === "2" ? intl.formatMessage({ id: "product.disabled" }) : ""}
                 </div>
 
 
@@ -189,9 +188,10 @@ function MyProductListing(props) {
                                         <select className="form-select" aria-label="Default select example" defaultValue={status} onChange={getOrdersByStatus}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             <option value="1">{intl.formatMessage({ id: "product.active" })}</option>
-                                            <option value="2">{intl.formatMessage({ id: "product.pending" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "product.sold" })}</option>
-                                            <option value="4">{intl.formatMessage({ id: "product.rejected" })}</option>
+                                            <option value="2">{intl.formatMessage({ id: "product.disabled" })}</option>
+                                            <option value="3">{intl.formatMessage({ id: "product.pending" })}</option>
+                                            <option value="8">{intl.formatMessage({ id: "product.sold" })}</option>
+                                            <option value="10">{intl.formatMessage({ id: "product.rejected" })}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -238,19 +238,23 @@ function MyProductListing(props) {
                                         </div>
                                         <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
-                                    <div className="col-sm-3">
-                                        <div className="form-group">
-                                            <span className="form-label">&nbsp;</span>
-                                            <div className="search_results">
-                                                <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                                <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
-                                            </div>
+
+                                </div>
+                                <div className="col-sm-3">
+                                    <div className="form-group">
+                                        <span className="form-label">&nbsp;</span>
+                                        <div className="search_results">
+                                            <img src={searchIcon} alt="" className="me-1 search_icn" />
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
+                            <div className="float-left">
+                                <Link to="/product-integration" ><IntlMessages id="product_integration" /></Link>
+                            </div>
                             <div className="float-right">
                                 <div className="sort_by">
                                     <div className="sortbyfilter">
@@ -264,13 +268,16 @@ function MyProductListing(props) {
                             </div>
                         </div>
                     </div>
-                    </div>
+                </div>
 
-                    <DataTable
-                        columns={columns}
-                        data={listingData}
-                        pagination={true}
-                    />
+                <DataTable
+                    columns={columns}
+                    data={listingData}
+                    pagination={true}
+                />
+                <div className="float-left">
+                    <Link to="/product-integration" ><IntlMessages id="product_integration" /></Link>
+                </div>
             </section>
             <Modal show={deletePop}>
                 <Modal.Body className="CLE_pf_details modal-confirm">
