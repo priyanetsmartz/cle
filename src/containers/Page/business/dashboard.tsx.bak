@@ -8,10 +8,11 @@ import DataTable from 'react-data-table-component';
 import { Link } from "react-router-dom";
 import HtmlContent from '../../partials/htmlContent';
 import Magazine from '../home/magazine';
-import { closePopup, dataTiles } from '../../../redux/pages/vendorLogin';
+import { closePopup, dataTiles, getInvoice, getPayoutOrders, getVendorReturns } from '../../../redux/pages/vendorLogin';
 import moment from 'moment';
 import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
+import { capitalize } from '../../../components/utility/allutils';
 
 function Dashboard(props) {
     const language = getCookie('currentLanguage');
@@ -28,6 +29,10 @@ function Dashboard(props) {
     const [vendorName, SetVendorName] = useState(localToken.vendor_name);
     const [myDashboardModal, setMyDashboardModal] = useState(true);
     const [myOrders, setMyOrders] = useState([]);
+    const [myReturn, setMyReturn] = useState([]);
+    const [myPayouts, setMyPayouts] = useState([]);
+    const [showRawPDF, setShowRawPDF] = useState(false)
+    const [payoutData, setPayoutData] = useState([])
 
     useEffect(() => {
         let pop = getCookie('popUp');
@@ -35,10 +40,12 @@ function Dashboard(props) {
             setMyDashboardModal(false)
         else
             setMyDashboardModal(true)
-        let currentDate = moment().format('DD/MM/YYYY');
-        let oldDate = moment().subtract(1, 'months').format('DD/MM/YYYY');
+        let currentDate = moment().format('MM/DD/YYYY');
+        let oldDate = moment().subtract(1, 'months').format('MM/DD/YYYY');
         getDataTiles(oldDate, currentDate);
         getDataOfOrders()
+        getVendorReturnsData()
+        getDataOfPayouts();
         return () => {
             setItems([]);
             setMyDashboardModal(false)
@@ -68,12 +75,15 @@ function Dashboard(props) {
 
     }
     async function getDataOfOrders() {
-        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, "", 0, 0, "", "", "","");
+        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, "", 0, 0, "", "", "", "");
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
-        // console.log(dataObj)
+        //  console.log(dataObj)
         let dataLListing = [];
-        if (dataObj && dataObj.length > 0) {
-            dataLListing = dataObj.slice(0, 5).map((data, index) => {
+
+        if (dataObj && dataObj.OrderArray && dataObj.OrderArray.length > 0) {
+            let detail = dataObj.OrderArray;
+            // console.log(detail)
+            dataLListing = detail.slice(0, 5).map((data, index) => {
                 let orderLoop: any = {};
                 orderLoop.orderNumber = data.increment_id;
                 orderLoop.status = data.status;
@@ -82,7 +92,7 @@ function Dashboard(props) {
                 return orderLoop;
             });
         }
-
+        // console.log(dataLListing)
         setMyOrders(dataLListing)
 
     }
@@ -104,6 +114,131 @@ function Dashboard(props) {
             selector: row => row.total,
         }
     ];
+
+    const returnColumns = [
+        {
+            name: 'Number',
+            sortable: true,
+            cell: row => (
+                <Link to={`/vendor/returns-complaints/${row.increment_id[0].entity_id}`}>{row.increment_id[0].increment_id}</Link>
+
+            )
+        },
+        {
+            name: 'Date',
+            selector: row => row.date,
+            sortable: true
+        },
+        {
+            name: 'Status',
+            selector: row => row.status,
+            sortable: true,
+            cell: row => (
+                <span className='green'>{capitalize(row.status)}</span>
+
+            )
+        },
+        {
+            name: 'Total',
+            selector: row => row.total,
+        },
+    ];
+
+    const columnsPayouts = [
+        {
+            name: 'Price',
+            selector: row => row.price,
+            button: true,
+            cell: row => (
+                <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{row.price}</Link>
+            )
+
+        },
+        {
+            name: 'Date',
+            selector: row => row.date,
+        },
+        {
+            name: 'Status',
+            selector: row => row.status,
+            cell: row => (
+                <span className='green'>{capitalize(row.status)}</span>
+            ),
+        },
+        { // To change column
+            name: <i className="fa fa-file-alt" aria-hidden="true"></i>,
+            selector: row => row.data,
+            cell: row => {
+
+                if (row.data.payout_status === 'paid') {
+                    return (
+                        <p onClick={() => sortHandler(row.data.payout_id)}>
+                            <i className="fa fa-file-alt" aria-hidden="true"></i> Invoice</p>
+                    )
+                }
+            }
+
+        },
+    ];
+    const sortHandler = async (payoutId) => {
+        let data: any = await getInvoice(payoutId);
+
+        let response = []
+        if (data && data.data.length > 0 && data.data[0]) {
+            response['Payout_info'] = data.data[0].Payout_info;
+            response['Payout_orders'] = data.data[0].Payout_orders
+            response['po_total'] = data.data[0].po_total
+            response['selleraddress'] = data.data[0].selleraddress
+        }
+        // console.log(response)
+        setPayoutData(response)
+        setShowRawPDF(true)
+        // printDocument();
+    };
+    // vendor return 
+
+    async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
+        let result: any = await getVendorReturns(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder);
+
+        let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
+        let dataLListing = []
+        if (dataObj && dataObj.data && dataObj.data.length > 0) {
+            let dataD = dataObj.data;
+
+            dataLListing = dataD.slice(0, 5).map((data, index) => {
+                let orderLoop: any = {};
+                orderLoop.increment_id = [{ 'increment_id': data.increment_id, 'entity_id': data.entity_id }];
+                orderLoop.status = data.rma_status;
+                orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+                orderLoop.total = siteConfig.currency + ' ' + data.grand_total;
+                return orderLoop;
+            });
+        }
+
+        setMyReturn(dataLListing)
+
+    }
+
+    async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order = 'asc') {
+        let page_size = siteConfig.pageSize;
+
+        let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice, page_size, sort_order, term)
+        let dataObj = result && result.data[0] && result.data[0].OrderData.length > 0 ? result.data[0].OrderData : [];
+        let dataLListing = [];
+        if (dataObj.length > 0) {
+            dataLListing = dataObj.slice(0, 5).map((data) => {
+                let orderLoop: any = {};
+                orderLoop.price = siteConfig.currency + data.total_payout;
+                orderLoop.status = data.payout_status;
+                orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+                orderLoop.payout_id = data.payout_id;
+                orderLoop.data = data;
+                return orderLoop;
+            });
+        }
+        setMyPayouts(dataLListing)
+
+    }
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, 2);
         // console.log(Math.ceil(result.data.length / 2))
@@ -145,7 +280,7 @@ function Dashboard(props) {
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
                 <div className="container">
-                    <div className="row">
+                    <div className="row mb-4">
                         <div className="col-sm-12">
                             <h1><IntlMessages id="seller.announcements" /></h1>
                         </div>
@@ -168,7 +303,7 @@ function Dashboard(props) {
                                         </div>
                                         )
                                     })}
-                                
+                                </div>
                             )}
                         </div>
 						
@@ -209,30 +344,38 @@ function Dashboard(props) {
                             </ul>
                         </div>
                     </div>
-                    <div className="row mb-4">
-                        <div className="container">
-                            <div className="card-columns" style={{ columnCount: 3 }}>
-                                <div className="card bg-light">
-                                    <div className="card-body text-center">
-                                        <h3><IntlMessages id="users" /></h3>
-                                        <p className="card-text"><IntlMessages id="sometextinsidethefilthcard" /></p>
-                                    </div>
-                                </div>
-                                <div className="card bg-light ">
-                                    <div className="card-body text-center">
-                                        <h3><IntlMessages id="order.orders" /></h3>
-                                        <p className="card-text">{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</p>
-                                    </div>
-                                </div>
-                                <div className="card bg-light">
-                                    <div className="card-body text-center">
-                                        <h3><IntlMessages id="payments" /></h3>
-                                        <p className="card-text">{dataTilesData['payoutAmount'] ? dataTilesData['payoutAmount'] : 0}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+					
+					
+					<div className="row mb-4" style={{ columnCount: 3 }}>
+						<div className="col-sm-12 col-md-4">
+							<div className="card-info">
+								<h5><IntlMessages id="users" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+								<div className="stats">
+									<h3>30K</h3>
+									<h4>9%</h4>
+								</div>
+							</div>
+						</div>
+						<div className="col-sm-12 col-md-4">
+							<div className="card-info">
+								<h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+								<div className="stats">
+									<h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
+									<h4>10%</h4>
+								</div>
+							</div>
+						</div>
+						<div className="col-sm-12 col-md-4">
+							<div className="card-info">
+								<h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+								<div className="stats">
+									<h3>{dataTilesData['payoutAmount'] ? dataTilesData['payoutAmount'] : 0}</h3>
+									<h4>5%</h4>
+								</div>
+							</div>
+						</div>
+				  </div>
+					
                 </div >
             </section>
             <section className="my_profile_sect mb-4">
@@ -269,8 +412,8 @@ function Dashboard(props) {
                         <div id="page-wrapper" className="container">
                             <div className="row">
                                 <DataTable
-                                    columns={columns}
-                                    data={myOrders}
+                                    columns={returnColumns}
+                                    data={myReturn}
                                     highlightOnHover
                                     pointerOnHover
                                     striped={true}
@@ -292,8 +435,8 @@ function Dashboard(props) {
                         <div id="page-wrapper" className="container">
                             <div className="row">
                                 <DataTable
-                                    columns={columns}
-                                    data={myOrders}
+                                    columns={columnsPayouts}
+                                    data={myPayouts}
                                     highlightOnHover
                                     pointerOnHover
                                     striped={true}
