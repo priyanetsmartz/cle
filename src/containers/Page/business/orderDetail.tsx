@@ -18,6 +18,8 @@ function VendorOrderDetail(props) {
     const [deliveryCost, setDeliveryCost] = useState('')
     const [paymentStatus, setPaymentStatus] = useState('')
     const [statusOrder, selectStatusOrder] = useState('')
+    const [orderStatus, setOrderStatus] = useState(0);
+    const [statusCode, setStatusCode] = useState("0");
     const [show, setShow] = useState(false)
     const [billingAddr, setBillingAddr] = useState({
         'name': '',
@@ -62,7 +64,6 @@ function VendorOrderDetail(props) {
             setOrderNumber(data[0][0].po_increment_id)
             setOrderPurchaseDate(moment(data[0][0].purchase_date).format('ddd DD MMMM YYYY'))
             setOrderPayment(data[0][0].payment_method)
-            setOrderPayment(data[0][0].payment_method)
             setDeliveryCost(data[0][0].delivery_cost)
             setDeliveryMethod(data[0][0].delivery_method)
             setSubtotal(data[0][0].order_total.subtotal)
@@ -70,7 +71,9 @@ function VendorOrderDetail(props) {
             setTax(data[0][0].order_total.tax)
             setTotal(data[0][0].order_total.grand_total)
             setCurrency(siteConfig.currency)
+            setOrderStatus(data[0][0].udropship_statuslabel)
             setPaymentStatus(data[0][0].invoice_data.invoice_status)
+            setStatusCode(data[0][0].udropship_status)
 
             if (data[0][0].billing_address.length > 0) {
                 let addr: any = data[0][0].billing_address[0]
@@ -136,7 +139,8 @@ function VendorOrderDetail(props) {
         if (result.data) {
             selectStatusOrder('')
             setstatusOrderComment('')
-            notification("success", "", result.data);
+            getOrderDetailFxn(orderId)
+            notification("success", "", intl.formatMessage({ id: "orderstatusupdate" }));
         } else {
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
@@ -160,28 +164,34 @@ function VendorOrderDetail(props) {
                                     <div className="col-sm-12">
                                         <h5><IntlMessages id="order.orderNo" />: {orderNumber} (<IntlMessages id="paymentstatus" />: {paymentStatus})</h5>
                                     </div>
-                                    <div className="col-sm-12">
-                                        <div className="row mt-5">
-                                            <div className="col-md-12">
-                                                <div className='return-reason' >
-                                                    <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
-                                                        <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                                        <option value="accept">{intl.formatMessage({ id: "accept" })}</option>
-                                                        <option value="reject">{intl.formatMessage({ id: "decline" })}</option>
-                                                    </select>
+                                    {statusCode === "0" && (
+                                        <div className="col-sm-12">
+                                            <div className="row mt-5">
+                                                <div className="col-md-12">
+                                                    <div className='return-reason' >
+                                                        <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
+                                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                                            <option value="accept">{intl.formatMessage({ id: "accept" })}</option>
+                                                            <option value="reject">{intl.formatMessage({ id: "decline" })}</option>
+                                                        </select>
+                                                    </div>
+                                                    {show && (<div className='return-comment' >
+                                                        <label><IntlMessages id="comments" /></label>
+                                                        <textarea className="form-select customfliter" onChange={handleChange} value={statusOrderComment}>
+                                                        </textarea>
+                                                    </div>)}
+                                                    <div className="clearfix"></div>
+                                                    <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link></div>
+                                                    <div className="clearfix"></div>
                                                 </div>
-                                                {show && (<div className='return-comment' >
-                                                    <label><IntlMessages id="comments" /></label>
-                                                    <textarea className="form-select customfliter" onChange={handleChange} value={statusOrderComment}>
-                                                    </textarea>
-                                                </div>)}
-                                                <div className="clearfix"></div>
-                                                <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link></div>
-                                                <div className="clearfix"></div>
                                             </div>
                                         </div>
-                                    </div>
+                                    )}
 
+                                    <div className="col-sm-3">
+                                        <h6><IntlMessages id="status" /></h6>
+                                        <p>{orderStatus}</p>
+                                    </div>
                                     <div className="col-sm-3">
                                         <h6><IntlMessages id="order.purchaseDate" /></h6>
                                         <p>{orderPurchaseDate}</p>

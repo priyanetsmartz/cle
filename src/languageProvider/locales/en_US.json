@@ -507,6 +507,7 @@
   "productEdit.delete": "Delete",
   "product.active": "Active",
   "product.pending": "Pending",
+  "product.disabled": "Disabled",
   "product.sold": "Sold",
   "product.rejected": "Rejected",
   "product.activateproduct": "Activate the Product",
@@ -624,8 +625,15 @@
   "dateofrequest": "Date of request",
   "dateofpayment": "Date of payment",
   "i/r": "Invoice/Receipt",
-  "nooforders":"Number of orders",
-  "withdrawalamount":"Withdrawal Amount",
-  "accept":"Accept",
-  "decline":"Decline"
+  "nooforders": "Number of orders",
+  "withdrawalamount": "Withdrawal Amount",
+  "accept": "Accept",
+  "decline": "Decline",
+  "product_integration": "Product integration",
+  "view":"View",
+  "delete":"Delete",
+  "id":"ID",
+  "orderstatusupdate":"Order status updated successfully!",
+  "productintegration":"Product integration request sent successfully!",
+  "selectproductintegration":"Please select desired integration methods"
 }
