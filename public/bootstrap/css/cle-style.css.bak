@@ -7729,9 +7729,9 @@ p.sliderupper {
 }
 
 .opt-tabs .radio-toolbar input[type="radio"] {
-  opacity: 0;
-  position: fixed;
-  width: 0;
+  opacity: 1;
+  /* position: fixed;
+  width: 0; */
 }
 
 .opt-tabs .radio-toolbar label {
@@ -7989,6 +7989,13 @@ ul.filter-tiles {
 	align-items: center;
 	justify-content: center;
 }
+
+.important-cont {
+    overflow-y: scroll;
+    height: auto;
+    max-height: 100px;
+}
+
 .important-cont p{
 	margin-bottom:5px;
 }	

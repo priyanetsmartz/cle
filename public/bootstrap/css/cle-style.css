@@ -7940,7 +7940,7 @@ p.sliderupper {
 	 
 }
 
-ul.filter-tiles {
+.filter-tiles {
     margin: 20px 0;
     padding: 0;
     list-style-type: none;
@@ -7951,9 +7951,13 @@ ul.filter-tiles {
     margin-right: 20px;
 	font-size: 16px;
     font-family: 'Monument Extended';
-    font-style: normal;
-	line-height:24px;
+	line-height:20px;
     font-weight: 500;
+	color:#2E2BAA;
+}
+
+.filter-tiles li:last-child{
+	color:#D9242C;
 }
 
 .importance {
