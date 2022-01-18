@@ -232,13 +232,14 @@ function MyReturnsComplaints(props) {
                             </div>
                         </div>
                     </div>
-                </div>
+               
 
                 <DataTable
                     columns={columns}
                     data={myOrder}
                     pagination={true}
                 />
+				 </div>
             </section>
         </div>
 

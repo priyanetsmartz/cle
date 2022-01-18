@@ -272,18 +272,20 @@ function MyProductListing(props) {
                             </div>
                         </div>
                     </div>
-                </div>
-
+                
+					
                 <DataTable
                     columns={columns}
                     data={listingData}
                     pagination={true}
                 />
+				
 				<div className="row">
 					<div className="col-sm-12">
 						<Link className="btn btn-secondary" to="/product-integration" ><IntlMessages id="product_integration" /></Link>
 					</div>
 				</div>	
+				</div>
             </section>
             <Modal show={deletePop}>
                 <Modal.Body className="CLE_pf_details modal-confirm">
