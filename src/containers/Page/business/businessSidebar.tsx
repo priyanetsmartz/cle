@@ -115,13 +115,13 @@ function BusinessSidebar(props) {
                                             </Link>
                                         </li>
 
-                                        {/*   
+                                          
                                         <li className={activeTab === 'analysis' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('analysis')}>
                                                 <img src={supportIcon} alt="" className="img-fluid" />
                                                 <span className="pl-2"><IntlMessages id="vendor.myAnalysis" /></span>
                                             </Link>
-                                        </li> */}
+                                        </li>
                                         <li className={activeTab === 'profile' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('profile')}>
                                                 <i className="fas fa-user"></i>

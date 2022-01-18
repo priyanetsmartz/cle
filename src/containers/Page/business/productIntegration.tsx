@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import notification from '../../../components/notification';
 import { useIntl } from 'react-intl';
+import ContactBannerFooter from '../customer/contact-banner';
 
 function ProductIntegration(props) {
     const intl = useIntl();
@@ -97,10 +98,10 @@ function ProductIntegration(props) {
     }
 
     const optionHandler = async (e) => {
-        console.log(formData)
-        if (Object.keys(formData).length <= 0) 
-        return notification("error", "", intl.formatMessage({ id: "selectproductintegration" }));
-        
+        // console.log(formData)
+        if (Object.keys(formData).length <= 0)
+            return notification("error", "", intl.formatMessage({ id: "selectproductintegration" }));
+
         payload.answer.response_json = JSON.stringify(formData);
         payload.answer.form_id = form.form_id;
         payload.answer.store_id = form.store_id;
@@ -108,14 +109,45 @@ function ProductIntegration(props) {
         payload.answer.form_name = form.title;
         payload.answer.form_code = 'product_integration';
 
-        // let result: any = await SaveAnswers(payload);
-        // console.log(result);
-        // if (result.data && result.data.answer_id) {
-        //     notification("success", "", intl.formatMessage({ id: "productintegration" }));
-        // } else {
-        //     notification("error", "", intl.formatMessage({ id: "genralerror" }));
-        // }
+        let result: any = await SaveAnswers(payload);
+        console.log(result);
+        if (result.data && result.data.answer_id) {
+            notification("success", "", intl.formatMessage({ id: "productintegration" }));
+        } else {
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        }
     }
+
+    async function onFileChange(e) {
+        let attribute_code = e.target.getAttribute("data-attribute");
+        const file = e.target.files[0];
+        const base64 = await convertToBase64(file);
+
+        const tempObj = {
+            value: base64,
+            label: attribute_code,
+            type: 'file'
+        }
+
+        setFormData(prevState => ({
+            ...prevState,
+            [e.target.name]: tempObj
+        }));
+    }
+
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            };
+            fileReader.onerror = (error) => {
+                reject(error);
+            };
+        });
+    };
+
     return (
         <div className="container">
             <div className="row">
@@ -169,15 +201,14 @@ function ProductIntegration(props) {
                                         <Link to="#">
                                             <div className="download">
                                                 <i className="fas fa-file-download"></i>
-                                                <span>{formdd && formdd.length > 5 ? formdd[5].label : ""}</span>
+                                                <span>Download Sample</span>
                                             </div>
                                         </Link>
-                                        <Link to="#">
-                                            <div className="upload">
-                                                <i className="fas fa-file-upload"></i>
-                                                <span>Upload CSV file</span>
-                                            </div>
-                                        </Link>
+                                        <div className="upload">
+                                            <i className="fas fa-file-upload"></i>
+                                            <input type={formdd && formdd.length > 5 ? formdd[5].type : ""} name={formdd && formdd.length > 5 ? formdd[5].name : ""} onChange={onFileChange} data-attribute={formdd && formdd.length > 5 ? formdd[5].label : ""} />
+                                            <span>{formdd && formdd.length > 5 ? formdd[5].label : ""}</span>
+                                        </div>
                                     </div>
                                 </div>
                             )}
@@ -189,50 +220,13 @@ function ProductIntegration(props) {
                     <section className="faq-form">
                         <div className="row">
                             <div className="col-xs-12 col-md-6 offset-md-3 col-lg-6 offset-lg-3">
-                                <h3>IT Request</h3>
-                                <p>Do you have any questions? You can get in touch through this form.</p>
-
-                                <form className="pt-3">
-                                    <div className="mb-2">
-                                        <select className="form-select" aria-label="Default select example">
-                                            <option selected>Choose the topic</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label className="form-label">Company name</label>
-                                        <input type="text" className="form-control" placeholder="Ann" />
-                                    </div>
-                                    <div className="mb-2">
-                                        <label className="form-label">Email address</label>
-                                        <input type="email" className="form-control" placeholder="ann.smith@gmail.com" />
-                                    </div>
-                                    <div className="mb-2">
-                                        <label className="form-label">Message</label>
-                                        <textarea className="form-control" placeholder="Type a message..."></textarea>
-                                    </div>
-                                    <div className="pt-3 text-end">
-                                        <button type="submit" className="btn btn-secondary">Send</button>
-                                    </div>
-                                </form>
+                                <iframe title="contact form" src="https://forms.zohopublic.com/cleportal692/form/ContactusTeaser/formperma/ChqWeIlStcsFpEqH1XolNHheBwaVh9Huwq8bZ6pXOIQ" width="99%" height="800px"></iframe>
 
                             </div>
                         </div>
                     </section>
 
-                    <section className="Check-help-center">
-                        <div className="row">
-                            <div className="col-sm-12">
-                                <div className="help-content">
-                                    <h3>Check Help Center</h3>
-                                    <p>Find the answer you need in our FAQs section.</p>
-                                    <Link to="#">Check out</Link>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                    <ContactBannerFooter />
 
                 </div>
             </div>
