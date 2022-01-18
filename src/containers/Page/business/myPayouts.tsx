@@ -141,7 +141,7 @@ function MyPayouts(props) {
         console.log(response)
         setPayoutData(response)
         setShowRawPDF(true)
-         printDocument();
+        printDocument();
     };
     async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order = 'asc') {
         let page_size = siteConfig.pageSize;
@@ -192,148 +192,17 @@ function MyPayouts(props) {
 
                 var ratio = imageWidth / imageHeight >= pageWidth / pageHeight ? pageWidth / imageWidth : pageHeight / imageHeight;
                 //pdf = new jsPDF(this.state.orientation, undefined, format);
-                pdf.addImage(imgData, 'JPEG', 10, 10, imageWidth * ratio, imageHeight * ratio);
+                //     console.log(imageWidth * ratio, imageHeight * ratio)
+                pdf.addImage(imgData, 'JPEG', 20, 20, 400, 600);
                 pdf.save("invoice.pdf");
+
+
             });
         setShowRawPDF(false);
     }
 
     return (
         <div className="col-sm-9">
-            <section className="my_profile_sect mb-4">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1><IntlMessages id="vendor.mypayouts" /></h1>
-                            <p><IntlMessages id="payout.description" /></p>
-                        </div>
-                    </div>
-                    <div className="range_slider">
-                        <div className="range_inner">
-                            <div className="row">
-                                <div className="col-sm-3 mb-4">
-                                    <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="status" /></span>
-                                        <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
-                                            <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
-                                            <option value="processing">{intl.formatMessage({ id: "payout.processing" })}</option>
-                                            <option value="hold">{intl.formatMessage({ id: "payout.hold" })}</option>
-                                            <option value="paypal_ipn">{intl.formatMessage({ id: "payout.paypal_ipn" })}</option>
-                                            <option value="paid">{intl.formatMessage({ id: "payout.paid" })}</option>
-                                            <option value="error">{intl.formatMessage({ id: "payout.error" })}</option>
-                                            <option value="canceled">{intl.formatMessage({ id: "payout.cancelled" })}</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="col-sm-3 mb-4">
-                                    <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="order.date" /></span>
-                                        <DateRangePicker
-                                            onCallback={getOrdersByDate}
-                                            initialSettings={{
-                                                startDate: moment(),
-                                                endDate: moment(),
-                                                ranges: {
-                                                    'All': "",
-                                                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                                                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                                                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                                                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                                                }
-                                            }}
-                                        >
-                                            <input type="text" className="form-control" />
-                                        </DateRangePicker>
-                                        {/* <span className="form-label"><IntlMessages id="order.date" /></span>
-                                        <select className="form-select" aria-label="Default select example" onChange={}>
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
-                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
-                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
-                                        </select> */}
-                                    </div>
-                                </div>
-                                <div className="col-sm-3 mb-2">
-                                    <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="order.price" /></span>
-                                        <div className='pricerangeouter' >
-                                            <InputNumber
-                                                min={1}
-                                                max={20000}
-                                                readOnly={true}
-                                                value={range.low}
-                                                onChange={getOrdersByPrice}
-                                            />
-                                            <span>-</span>
-                                            <InputNumber
-                                                min={1}
-                                                max={20000}
-                                                readOnly={true}
-                                                value={range.high}
-                                                onChange={getOrdersByPrice}
-                                            />
-                                        </div>
-                                        <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
-                                    </div>
-                                </div>
-                                <div className="col-sm-3">
-                                    <div className="form-group">
-                                        <span className="form-label">&nbsp;</span>
-                                        <div className="search_results">
-                                            <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <table>
-                    <thead><IntlMessages id="account.balance" /></thead>
-                    <tbody>
-                        <tr>
-                            <th><IntlMessages id="order.subTotal" /></th>
-                            <td>{siteConfig.currency}{subtotal}</td>
-                        </tr>
-                        <tr>
-                            <th><IntlMessages id="commission" /></th>
-                            <td>{siteConfig.currency}{commission}</td>
-                        </tr>
-
-                        <tr>
-                            <th><IntlMessages id="order.total" /></th>
-                            <td>{siteConfig.currency}{totalP}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br />
-                <div className="row">
-                    <div className="float-right">
-                        <div className="sort_by">
-                            <div className="sortbyfilter">
-                                <select value={sortOrder} onChange={setSort} className="form-select customfliter" aria-label="Default select example">
-                                    <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                    <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                    <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <DataTable
-                    columns={columns}
-                    data={myOrder}
-                    selectableRows
-                    pagination={true}
-                    onSelectedRowsChange={handleChange}
-                />
-            </section>
             {showRawPDF && (
                 <div className="main-wrapper" id="pdfdiv" style={{ "width": "80%", "margin": " 0 auto" }}>
                     <div className="header">
@@ -470,7 +339,7 @@ function MyPayouts(props) {
                                     // console.log(data)
                                     return (
                                         <tr key={index}>
-                                            <td>{index}</td>
+                                            <td>{index+1}</td>
                                             <td>{data.order_increment_id}</td>
                                             <td>{data.invoice_id}</td>
                                             <td>{moment(data.invoice_created_at).format('DD MMMM YYYY')}</td>
@@ -521,6 +390,141 @@ function MyPayouts(props) {
                 </div>
 
             )}
+            <section className="my_profile_sect mb-4">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h1><IntlMessages id="vendor.mypayouts" /></h1>
+                            <p><IntlMessages id="payout.description" /></p>
+                        </div>
+                    </div>
+                    <div className="range_slider">
+                        <div className="range_inner">
+                            <div className="row">
+                                <div className="col-sm-3 mb-4">
+                                    <div className="form-group">
+                                        <span className="form-label"><IntlMessages id="status" /></span>
+                                        <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="pending">{intl.formatMessage({ id: "product.pending" })}</option>
+                                            <option value="scheduled">{intl.formatMessage({ id: "payout.scheduled" })}</option>
+                                            <option value="processing">{intl.formatMessage({ id: "payout.processing" })}</option>
+                                            <option value="hold">{intl.formatMessage({ id: "payout.hold" })}</option>
+                                            <option value="paypal_ipn">{intl.formatMessage({ id: "payout.paypal_ipn" })}</option>
+                                            <option value="paid">{intl.formatMessage({ id: "payout.paid" })}</option>
+                                            <option value="error">{intl.formatMessage({ id: "payout.error" })}</option>
+                                            <option value="canceled">{intl.formatMessage({ id: "payout.cancelled" })}</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="col-sm-3 mb-4">
+                                    <div className="form-group">
+                                        <span className="form-label"><IntlMessages id="order.date" /></span>
+                                        <DateRangePicker
+                                            onCallback={getOrdersByDate}
+                                            initialSettings={{
+                                                startDate: moment(),
+                                                endDate: moment(),
+                                                ranges: {
+                                                    'All': "",
+                                                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                                                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                                                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                                                }
+                                            }}
+                                        >
+                                            <input type="text" className="form-control" />
+                                        </DateRangePicker>
+                                        {/* <span className="form-label"><IntlMessages id="order.date" /></span>
+                                        <select className="form-select" aria-label="Default select example" onChange={}>
+                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
+                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
+                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
+                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
+                                        </select> */}
+                                    </div>
+                                </div>
+                                <div className="col-sm-3 mb-2">
+                                    <div className="form-group">
+                                        <span className="form-label"><IntlMessages id="order.price" /></span>
+                                        <div className='pricerangeouter' >
+                                            <InputNumber
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={range.low}
+                                                onChange={getOrdersByPrice}
+                                            />
+                                            <span>-</span>
+                                            <InputNumber
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={range.high}
+                                                onChange={getOrdersByPrice}
+                                            />
+                                        </div>
+                                        <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
+                                    </div>
+                                </div>
+                                <div className="col-sm-3">
+                                    <div className="form-group">
+                                        <span className="form-label">&nbsp;</span>
+                                        <div className="search_results">
+                                            <img src={searchIcon} alt="" className="me-1 search_icn" />
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table>
+                    <thead><IntlMessages id="account.balance" /></thead>
+                    <tbody>
+                        <tr>
+                            <th><IntlMessages id="order.subTotal" /></th>
+                            <td>{siteConfig.currency}{subtotal}</td>
+                        </tr>
+                        <tr>
+                            <th><IntlMessages id="commission" /></th>
+                            <td>{siteConfig.currency}{commission}</td>
+                        </tr>
+
+                        <tr>
+                            <th><IntlMessages id="order.total" /></th>
+                            <td>{siteConfig.currency}{totalP}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <div className="row">
+                    <div className="float-right">
+                        <div className="sort_by">
+                            <div className="sortbyfilter">
+                                <select value={sortOrder} onChange={setSort} className="form-select customfliter" aria-label="Default select example">
+                                    <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                    <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                    <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <DataTable
+                    columns={columns}
+                    data={myOrder}
+                    // selectableRows
+                    pagination={true}
+                // onSelectedRowsChange={handleChange}
+                />
+            </section>
+
         </div>
 
     )

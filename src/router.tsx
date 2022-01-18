@@ -43,7 +43,7 @@ import returnsDetails from './containers/Page/customer/returnsDetails';
 import CreateReturn from './containers/Page/customer/createReturn';
 import RetrunSummary from './containers/Page/customer/retrunSummary';
 import ProductIntegration from './containers/Page/business/productIntegration';
-
+import ProductDetailsPrivate from './containers/Page/product/product-details/ProductDetailsPrivate';
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -66,6 +66,7 @@ const PublicRoutes = ({ history }) => {
           <ProductHome exact path="/products/:category/:subcat" component={Categories} />
           <ProductHome exact path="/products/:category" component={Categories} />
 
+          <VendorRoute exact path="/product-details-preview/:vendorId/:sku" component={ProductDetailsPrivate} />
           <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
           <LoggedInRoute exact path="/notifications" component={Notifications} />
           <LoggedInRoute exact path="/customer/:tab" component={Customer} />

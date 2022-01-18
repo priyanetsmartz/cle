@@ -17,6 +17,10 @@ import Modal from "react-bootstrap/Modal";
 
 function MyProductListing(props) {
     const intl = useIntl();
+    let localData = localStorage.getItem('redux-react-session/USER_DATA');
+    let localToken = JSON.parse((localData));
+    let venID = localToken && localToken.vendor_id ? localToken.vendor_id : 0;
+
     const [listingData, setListingData] = useState([])
     const [range, setRange] = useState({ low: 0, high: 0 })
     const [status, setStatus] = useState();
@@ -140,7 +144,7 @@ function MyProductListing(props) {
                     <p className='prodbrand'>{row.product.brand}</p>
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span><IntlMessages id="id" />:</span>{row.product.id}</p>
-                    <div className='data_value'><ul><li><Link to={'/product-details/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link></li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
+                    <div className='data_value'><ul><li>{row.product.status === "2" ? <Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link> : <Link to={'/product-details/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
                 </div>
             ),
         },
@@ -238,17 +242,17 @@ function MyProductListing(props) {
                                         </div>
                                         <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
-                                    
+
                                 </div>
-								<div className="col-sm-3">
-                                        <div className="form-group">
-                                            <span className="form-label">&nbsp;</span>
-                                            <div className="search_results">
-                                                <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                                <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
-                                            </div>
+                                <div className="col-sm-3">
+                                    <div className="form-group">
+                                        <span className="form-label">&nbsp;</span>
+                                        <div className="search_results">
+                                            <img src={searchIcon} alt="" className="me-1 search_icn" />
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
                                         </div>
                                     </div>
+                                </div>
                             </div>
                         </div>
                         <div className="row">
