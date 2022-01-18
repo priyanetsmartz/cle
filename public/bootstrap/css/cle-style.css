@@ -1532,6 +1532,18 @@ p.promotion_alert {
 .field_details .field-name {
     font-size: 16px;
     font-weight: 400;
+	word-break: break-all;
+}
+
+.field_details .field-name a{
+	font-size: 16px;
+    font-weight: 400;
+	color:#2E2BAA;
+	text-decoration:none;
+}
+
+.field_details .field-name a:hover{
+	color:#2E2BAA ;
 }
 
 .add_changeaddress {
@@ -6846,7 +6858,6 @@ button:focus {
 .range_inner .form-group .form-select {
     border-radius: 0;
     /* background: #f7f7f7; */
-    border: 0;
 }
 
 .product-slider {
@@ -7806,6 +7817,99 @@ p.sliderupper {
 	line-height:20px;
 }
 
+.hkMDrI{
+	margin: 20px 0;
+}
+
+.hCBnvI {
+    border: 1px solid rgba(0,0,0,.12);
+    min-height: 40px!important;
+}
+
+.fuBVgf {
+    margin-top: 10px;
+    border-top: 2px solid #ddd;
+}
+
+.fhCFWO {
+    border: none !important;
+}
+
+.fhCFWO:nth-child(odd) {background: #F7F7F7}
+.fhCFWO:nth-child(even) {background: #FFF}
+
+.fvAeSn, .fvAeSn a,
+.ddDjnO , .ddDjnO a {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: "Lato",sans-serif;
+}
+
+.fvAeSn a:hover,
+.ddDjnO a:hover{
+	color: #000;
+}
+
+.fvAeSn img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: center;
+}
+.fvAeSn p{
+	margin-bottom:5px;
+}
+
+.kUKiTL{
+	padding:16px;
+}
+
+.data_value ul {
+    display: block;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.data_value li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.data_value li a{
+	font-size:18px;
+}
+
+.ksOnjL input[type='checkbox'],
+.kIfSjT input[type='checkbox']{
+	width: 15px;
+    height: 15px;
+}
+
+.companylogo {
+    position: relative;
+}
+
+.companylogo img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    object-position: center;
+    border: 3px solid #2E2BAA;
+}
+
+.companylogo .onhoveredit input[type="file"]{
+	cursor: pointer;
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0 !important;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */
@@ -8447,7 +8551,6 @@ p.sliderupper {
 
     .banner-wrap .slider-text-inner {
         z-index: 3;
-		margin:20px auto;
     }
 
 }
@@ -8538,6 +8641,9 @@ p.sliderupper {
 	.sticky-fliter{
 		width:auto;
 	}
+	.banner-wrap .slider-text-inner{
+		margin:20px auto;
+	}
 	
 }
 
@@ -8604,8 +8710,12 @@ p.sliderupper {
 	.banner-wrap .item{
 		position:relative;
 	}
-	
-	
+	.select-wearing ul li ul li {
+		padding: 0 10px;
+	}
+	.select-wearing ul li{
+		padding: 0px 30px 0 0px;
+	}
 }
 
 @media only screen and (max-width: 600px) {}
