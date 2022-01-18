@@ -124,8 +124,15 @@ function MyReturnsComplaints(props) {
             selector: row => row.status,
             sortable: true,
             cell: row => (
-                <span className='green'>{capitalize(row.status)}</span>
+                // <span className='green'>{capitalize(row.status)}</span>
+                <div>
+                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(row.status)}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{capitalize(row.status)}</span> : ""}
+                    {row.status === "approved" ? <span className="approved">{capitalize(row.status)}</span> : ""}
+                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(row.status)}</span> : ""}
+                    {row.status === "received" ? <span className="received">{capitalize(row.status)}</span> : ""}
 
+                </div>
             )
         },
         {

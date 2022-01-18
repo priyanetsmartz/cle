@@ -115,8 +115,17 @@ function MySalesOrders(props) {
             selector: row => row.status,
             sortable: true,
             cell: row => (
-                <span className='green'>{row.status}</span>
+                // <span className='green'>{row.status}</span>
 
+                <div>
+                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{row.status}</span> : ""}
+                    {row.status === "Canceled" ? <span className="canceled">{row.status}</span> : ""}
+                    {row.status === "Shipped" ? <span className="shipped">{row.status}</span> : ""}
+                    {row.status === "Pending" ? <span className="pending">{row.status}</span> : ""}
+                    {row.status === "Delivered" ? <span className="delivered">{row.status}</span> : ""}
+                    {row.status === "Returned" ? <span className="returned">{row.status}</span> : ""}
+                    
+                </div>
             )
         },
         {

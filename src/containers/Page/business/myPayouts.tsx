@@ -99,8 +99,20 @@ function MyPayouts(props) {
             name: 'Status',
             selector: row => row.status,
             cell: row => (
-                <span className='green'>{capitalize(row.status)}</span>
-            ),
+                // <span className='green'>{capitalize(row.status)}</span>
+                <div>
+                    {row.status === "scheduled" ? <span className="scheduled">{capitalize(row.status)}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{capitalize(row.status)}</span> : ""}
+                    {row.status === "processing" ? <span className="processing">{capitalize(row.status)}</span> : ""}
+                    {row.status === "hold" ? <span className="hold">{capitalize(row.status)}</span> : ""}
+                    {row.status === "paypal_ipn" ? <span className="paypal_ipn">{capitalize(row.status)}</span> : ""}
+                    {row.status === "paid" ? <span className="paid">{capitalize(row.status)}</span> : ""}
+
+                    {row.status === "error" ? <span className="error">{capitalize(row.status)}</span> : ""}
+
+                    {row.status === "canceled" ? <span className="canceled">{capitalize(row.status)}</span> : ""}
+                </div>
+            )
         },
         { // To change column
             name: <i className="fa fa-file-alt" aria-hidden="true"></i>,
@@ -339,7 +351,7 @@ function MyPayouts(props) {
                                     // console.log(data)
                                     return (
                                         <tr key={index}>
-                                            <td>{index+1}</td>
+                                            <td>{index + 1}</td>
                                             <td>{data.order_increment_id}</td>
                                             <td>{data.invoice_id}</td>
                                             <td>{moment(data.invoice_created_at).format('DD MMMM YYYY')}</td>

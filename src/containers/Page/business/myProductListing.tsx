@@ -157,11 +157,11 @@ function MyProductListing(props) {
             selector: row => row.status,
             cell: row => (
                 <div>
-                    {row.status === "1" ? intl.formatMessage({ id: "product.active" }) : ""}
-                    {row.status === "8" ? intl.formatMessage({ id: "product.sold" }) : ""}
-                    {row.status === "3" ? intl.formatMessage({ id: "product.pending" }) : ""}
-                    {row.status === "10" ? intl.formatMessage({ id: "product.rejected" }) : ""}
-                    {row.status === "2" ? intl.formatMessage({ id: "product.disabled" }) : ""}
+                    {row.status === "1" ? <span className="active">{intl.formatMessage({ id: "product.active" })}</span> : ""}
+                    {row.status === "8" ? <span className="sold">{intl.formatMessage({ id: "product.sold" })}</span> : ""}
+                    {row.status === "3" ? <span className="pending">{intl.formatMessage({ id: "product.pending" })}</span> : ""}
+                    {row.status === "10" ? <span className="rejected">{intl.formatMessage({ id: "product.rejected" })}</span> : ""}
+                    {row.status === "2" ? <span className="disabled">{intl.formatMessage({ id: "product.disabled" })}</span> : ""}
                 </div>
 
 
@@ -278,6 +278,7 @@ function MyProductListing(props) {
                     columns={columns}
                     data={listingData}
                     pagination={true}
+                    className='product-Listing'
                 />
                 <div className="float-left">
                     <Link to="/product-integration" ><IntlMessages id="product_integration" /></Link>

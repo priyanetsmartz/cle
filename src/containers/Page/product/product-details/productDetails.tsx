@@ -95,7 +95,7 @@ function ProductDetails(props) {
         props.openGiftBoxes(0);
         setIsGiftMessage(false)
     }
- 
+
     const handleChange = (e) => {
         //  console.log(e.target[e.target.selectedIndex].getAttribute('data-order'));
         const index = e.target.selectedIndex;
@@ -289,8 +289,13 @@ function ProductDetails(props) {
         //     props.recomendedProducts(recomendationsData)
         // }
         // console.log(result.data)
-        setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
-        setMeasuringDetails(result.data.extension_attributes.mp_sizechart.rule_description);
+        if (result.data && result.data.extension_attributes && result.data.extension_attributes.mp_sizechart && result.data.extension_attributes.mp_sizechart.rule_content) {
+            setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
+        }
+        if (result.data && result.data.extension_attributes && result.data.extension_attributes.mp_sizechart && result.data.extension_attributes.mp_sizechart.rule_description) {
+            setMeasuringDetails(result.data.extension_attributes.mp_sizechart.rule_description);
+        }
+
         // console.log(productDetails)
     }
 
