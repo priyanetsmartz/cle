@@ -7843,6 +7843,83 @@ p.sliderupper {
 .fhCFWO:nth-child(odd) {background: #F7F7F7}
 .fhCFWO:nth-child(even) {background: #FFF}
 
+.fhCFWO .disabled{
+	border:1px solid #aca2a2;
+	color:#aca2a2;
+	font-family: 'Monument Extended';
+    font-size: 9px;
+	font-weight:500;
+	line-height:16px;
+	padding:2px 6px;
+	background-color: #fff;
+}
+
+.fhCFWO .active{
+	border:1px solid #00CEA7;
+	color:#00CEA7;
+	font-family: 'Monument Extended';
+    font-size: 9px;
+	font-weight:500;
+	line-height:16px;
+	padding:2px 6px;
+	background-color: #fff;
+}
+
+.fhCFWO .pending{
+	border:1px solid #FF7756;
+	color:#FF7756;
+	font-family: 'Monument Extended';
+    font-size: 9px;
+	font-weight:500;
+	line-height:16px;
+	padding:2px 6px;
+	background-color: #fff;
+}
+
+.fhCFWO .canceled{
+	border:1px solid #D9242C;
+	color:#D9242C;
+	font-family: 'Monument Extended';
+    font-size: 9px;
+	font-weight:500;
+	line-height:16px;
+	padding:2px 6px;
+	background-color: #fff;
+}
+
+.fhCFWO .approved{
+	border:1px solid #2E2BAA;
+	color:#2E2BAA;
+	font-family: 'Monument Extended';
+    font-size: 9px;
+	font-weight:500;
+	line-height:16px;
+	padding:2px 6px;
+	background-color: #fff;
+}
+
+.fhCFWO .decline{
+	border:1px solid #D9242C;
+	color:#D9242C;
+	font-family: 'Monument Extended';
+    font-size: 9px;
+	font-weight:500;
+	line-height:16px;
+	padding:2px 6px;
+	background-color: #fff;
+}
+
+.fhCFWO .ready-to-ship{
+	border:1px solid #00CEA7;
+	color:#00CEA7;
+	font-family: 'Monument Extended';
+    font-size: 9px;
+	font-weight:500;
+	line-height:16px;
+	padding:2px 6px;
+	background-color: #fff;
+}
+
 .fvAeSn, .fvAeSn a,
 .ddDjnO , .ddDjnO a {
     color: #000;
