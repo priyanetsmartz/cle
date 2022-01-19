@@ -282,7 +282,7 @@ function VendorOrderDetail(props) {
                                             <p>{product['name']}</p>
                                             <br />
                                             <p>{product['configOptionValue']}</p>
-                                            <p><strong>{product['productId']}</strong></p>
+                                            <p><strong><IntlMessages id="order.productNo"/> {product['productId']}</strong></p>
                                         </div>
 
                                         <div className="col-md-1">
