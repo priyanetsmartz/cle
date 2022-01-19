@@ -255,7 +255,10 @@ function Dashboard(props) {
     }
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
-        setDataTilesData(results.data)
+        if (results && results.data) {
+            setDataTilesData(results.data)
+        }
+
     }
 
 
@@ -291,24 +294,24 @@ function Dashboard(props) {
                                 <div className="importance">
                                     {items.map((item, i) => {
                                         return (<div className="importance-card" key={i}>
-                                            
-													<div className="importance-icon">
-								<i className="fa fa-percent"></i>
-							</div>
-							<div className="important-cont">
-								<p className="announcement-heading">{item.title}</p>
-                                                            <p className="announcement-text"><div dangerouslySetInnerHTML={{ __html: item.full_content }} /></p>
-							</div>
-                                                
+
+                                            <div className="importance-icon">
+                                                <i className="fa fa-percent"></i>
+                                            </div>
+                                            <div className="important-cont">
+                                                <p className="announcement-heading">{item.title}</p>
+                                                <p className="announcement-text"><div dangerouslySetInnerHTML={{ __html: item.full_content }} /></p>
+                                            </div>
+
                                         </div>
                                         )
                                     })}
                                 </div>
                             )}
                         </div>
-						
-					
-						
+
+
+
                         <div className="page_by">
                             <div className="col-md-12 pagination justify-content-center">
                                 {/* //   {console.log(pagination)} */}
@@ -344,38 +347,38 @@ function Dashboard(props) {
                             </ul>
                         </div>
                     </div>
-					
-					
-					<div className="row mb-4" style={{ columnCount: 3 }}>
-						<div className="col-sm-12 col-md-4">
-							<div className="card-info">
-								<h5><IntlMessages id="users" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
-								<div className="stats">
-									<h3>30K</h3>
-									<h4>9%</h4>
-								</div>
-							</div>
-						</div>
-						<div className="col-sm-12 col-md-4">
-							<div className="card-info">
-								<h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
-								<div className="stats">
-									<h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
-									<h4>10%</h4>
-								</div>
-							</div>
-						</div>
-						<div className="col-sm-12 col-md-4">
-							<div className="card-info">
-								<h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
-								<div className="stats">
-									<h3>{dataTilesData['payoutAmount'] ? dataTilesData['payoutAmount'] : 0}</h3>
-									<h4>5%</h4>
-								</div>
-							</div>
-						</div>
-				  </div>
-					
+
+
+                    <div className="row mb-4" style={{ columnCount: 3 }}>
+                        <div className="col-sm-12 col-md-4">
+                            <div className="card-info">
+                                <h5><IntlMessages id="users" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <div className="stats">
+                                    <h3>30K</h3>
+                                    <h4>9%</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-sm-12 col-md-4">
+                            <div className="card-info">
+                                <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <div className="stats">
+                                    <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
+                                    <h4>10%</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-sm-12 col-md-4">
+                            <div className="card-info">
+                                <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <div className="stats">
+                                    <h3>{dataTilesData['payoutAmount'] ? dataTilesData['payoutAmount'] : 0}</h3>
+                                    <h4>5%</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div >
             </section>
             <section className="my_profile_sect mb-4">
