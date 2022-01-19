@@ -55,17 +55,18 @@ function MySalesOrders(props) {
     }
 
     const datePickerCallback = async (start, end, label) => {
-        //   console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
+        console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
-
-        setDateFilter(prevState => ({
-            ...prevState,
-            from: from,
-            to: to
-        }))
-
-        getDataOfOrders(status, range.low, range.high, searchTerm, from, to, sortOrder)
-
+        if (label === 'All') {
+            getDataOfOrders(status, range.low, range.high, searchTerm, '', '', sortOrder)
+        } else {
+            setDateFilter(prevState => ({
+                ...prevState,
+                from: from,
+                to: to
+            }))
+            getDataOfOrders(status, range.low, range.high, searchTerm, from, to, sortOrder)
+        }
     }
 
     const getOrdersByPrice = async (range) => {
@@ -124,7 +125,7 @@ function MySalesOrders(props) {
                     {row.status === "Pending" ? <span className="pending">{row.status}</span> : ""}
                     {row.status === "Delivered" ? <span className="delivered">{row.status}</span> : ""}
                     {row.status === "Returned" ? <span className="returned">{row.status}</span> : ""}
-                    
+
                 </div>
             )
         },
@@ -213,7 +214,7 @@ function MySalesOrders(props) {
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
                                             <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
                                         </div>
                                     </div>
                                 </div>
@@ -233,16 +234,16 @@ function MySalesOrders(props) {
                             </div>
                         </div>
                     </div>
-                
 
-                <DataTable
-                    columns={columns}
-                    data={myOrder}
-                    // selectableRows
-                    pagination={true}
-                // onSelectedRowsChange={handleChange}
-                />
-				</div>
+
+                    <DataTable
+                        columns={columns}
+                        data={myOrder}
+                        // selectableRows
+                        pagination={true}
+                    // onSelectedRowsChange={handleChange}
+                    />
+                </div>
             </section>
         </div>
 

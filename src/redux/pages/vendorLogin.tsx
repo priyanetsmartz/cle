@@ -46,7 +46,7 @@ export async function getVendorOrders(language: string, pageSize: number, status
     var storeId = language === 'english' ? '3' : '2';
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId + "&pageSize=" + pageSize;
+    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
 
     if (status !== null && status !== '') {
         queryString += "&status=" + status;
