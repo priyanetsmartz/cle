@@ -7947,6 +7947,19 @@ p.sliderupper {
     padding: 16px;
 }
 
+.row .ddDjnO{
+	-webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+	padding-left: 16px;
+    padding-right: 16px;
+	-webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: inherit;
+    justify-content: flex-start;
+}
+
 .data_value ul {
     display: none;
     margin: 0;
@@ -7965,6 +7978,7 @@ p.sliderupper {
 	font-weight:500;
 	line-height:20px;
 	color:#2E2BAA;
+	text-decoration: none;
 }
 
 .data_value li:last-child a{
@@ -8127,6 +8141,14 @@ p.sliderupper {
 	font-weight:400;
 	line-height:24px;
 	color:#000;
+}
+
+.product-listing .fhCFWO{
+	min-height:150px;
+}
+
+.product-listing .kUKiTL{
+	align-items: flex-start!important;
 }	
 
 /* All media screen below */

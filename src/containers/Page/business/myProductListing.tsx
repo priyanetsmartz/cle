@@ -273,14 +273,13 @@ function MyProductListing(props) {
                         </div>
                     </div>
                 
-					
-                <DataTable
-                    columns={columns}
-                    data={listingData}
-                    pagination={true}
-                    className='product-Listing'
-                />
-				
+				<div className="product-listing">	
+					<DataTable
+						columns={columns}
+						data={listingData}
+						pagination={true}
+					/>
+				</div>
 				<div className="row">
 					<div className="col-sm-12">
 						<Link className="btn btn-secondary" to="/product-integration" ><IntlMessages id="product_integration" /></Link>
