@@ -218,7 +218,7 @@ function RetunOrder(props) {
                                         </textarea>
                                     </div>)}
                                     <div className="clearfix"></div>
-                                    <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link></div>
+                                    <div className="return-pro-btn float-end mt-2"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link></div>
                                     <div className="clearfix"></div>
                                 </div>
                             </div>

@@ -226,7 +226,7 @@ function VendorLogin(props) {
                       <button className="btn btn-secondary float-end" onClick={loginHadler} style={{ "display": !isShow ? "inline-block" : "none" }}>
                         <IntlMessages id="login.button" />
                       </button>
-                      <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}>
+                      <div className="spinner float-end" style={{ "display": isShow ? "inline-block" : "none" }}>
                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
                         <IntlMessages id="loading" />
                       </div>
