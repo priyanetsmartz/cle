@@ -275,11 +275,12 @@ function MyAnalysis(props) {
 
     return (
         <div className="col-sm-9">
-            <h3>My Analysis</h3>
+            
             <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
+						<h3>My Analysis</h3>
                             <ResponsiveContainer width="100%" aspect={3}>
                                 <LineChart data={pdata} margin={{ right: 300 }}>
                                     <CartesianGrid />

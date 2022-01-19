@@ -1205,6 +1205,7 @@ p.promotion_alert {
     width: 100%;
     float: left;
     margin: 20px 0 5px 0px;
+	height:auto;
 }
 
 .magzine_blog {
@@ -8150,6 +8151,10 @@ p.sliderupper {
 .product-listing .kUKiTL{
 	align-items: flex-start!important;
 }	
+
+.pricerangeouter .ant-input-number-out-of-range input{
+	color:#000;
+}
 
 /* All media screen below */
 

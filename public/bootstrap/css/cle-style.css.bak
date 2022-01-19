@@ -8144,12 +8144,16 @@ p.sliderupper {
 }
 
 .product-listing .fhCFWO{
-	min-height:160px;
+	min-height:150px;
 }
 
 .product-listing .kUKiTL{
 	align-items: flex-start!important;
 }	
+
+.pricerangeouter .ant-input-number-out-of-range input{
+	color:#000;
+}
 
 /* All media screen below */
 

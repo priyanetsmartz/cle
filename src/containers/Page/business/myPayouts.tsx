@@ -494,7 +494,7 @@ function MyPayouts(props) {
                             </div>
                         </div>
                     </div>
-                </div>
+               
 
                 <table>
                     <thead><IntlMessages id="account.balance" /></thead>
@@ -535,6 +535,7 @@ function MyPayouts(props) {
                     pagination={true}
                 // onSelectedRowsChange={handleChange}
                 />
+				 </div>
             </section>
 
         </div>
