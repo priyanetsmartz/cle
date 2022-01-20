@@ -179,10 +179,13 @@ export async function getReturnDetail(id: number) {
     return adminToken.request(`default/rest/all/V1/vendor/returnDetailInformation?rmaId=${id}`, "", "GET", "");
 }
 
-export async function getOrderDetail(lang: string, id: number) {
+export async function getOrderDetail(lang: string, id: number, sort_order:string) {
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    return adminToken.request(`default/rest/all/V1/vendor/vendorOrderDetail?vendorId=${vendorId}&orderId=${id}`, "", "GET", "");
+    let queryString = "vendorId="+vendorId+"&orderId="+id
+    if(sort_order!=null && sort_order!='')
+    queryString+="&sortOrder="+sort_order
+    return adminToken.request(`default/rest/all/V1/vendor/vendorOrderDetail?${queryString}`, "", "GET", "");
 }
 
 export async function getPayoutDetails(payoutId) {
