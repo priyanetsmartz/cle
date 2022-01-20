@@ -494,26 +494,28 @@ function MyPayouts(props) {
                             </div>
                         </div>
                     </div>
-               
+               <div className="clearfix"></div>
+				<div className="border p-3">
+					<table className="table table-borderless">
+						<thead><IntlMessages id="account.balance" /></thead>
+						<tbody>
+							<tr>
+								<th><IntlMessages id="order.subTotal" /></th>
+								<td className="text-end">{siteConfig.currency}{subtotal}</td>
+							</tr>
+							<tr>
+								<th><IntlMessages id="commission" /></th>
+								<td className="text-end">{siteConfig.currency}{commission}</td>
+							</tr>
 
-                <table>
-                    <thead><IntlMessages id="account.balance" /></thead>
-                    <tbody>
-                        <tr>
-                            <th><IntlMessages id="order.subTotal" /></th>
-                            <td>{siteConfig.currency}{subtotal}</td>
-                        </tr>
-                        <tr>
-                            <th><IntlMessages id="commission" /></th>
-                            <td>{siteConfig.currency}{commission}</td>
-                        </tr>
-
-                        <tr>
-                            <th><IntlMessages id="order.total" /></th>
-                            <td>{siteConfig.currency}{totalP}</td>
-                        </tr>
-                    </tbody>
-                </table>
+							<tr>
+								<th className="border border-top-2"><IntlMessages id="order.total" /></th>
+								<td className="border border-top-2 text-end">{siteConfig.currency}{totalP}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
                 <br />
                 <div className="row">
                     <div className="float-right">
