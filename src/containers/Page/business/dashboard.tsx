@@ -12,7 +12,7 @@ import { closePopup, dataTiles, getInvoice, getPayoutOrders, getVendorReturns } 
 import moment from 'moment';
 import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
-import { capitalize } from '../../../components/utility/allutils';
+import { capitalize, formatprice } from '../../../components/utility/allutils';
 
 function Dashboard(props) {
     const language = getCookie('currentLanguage');
@@ -85,10 +85,11 @@ function Dashboard(props) {
             // console.log(detail)
             dataLListing = detail.slice(0, 5).map((data, index) => {
                 let orderLoop: any = {};
-                orderLoop.orderNumber = data.increment_id;
+                let price = data.total ? formatprice(data.total) : 0;
+                orderLoop.increment_id = data.increment_id;
                 orderLoop.status = data.status;
-                orderLoop.products = parseInt(data.products);
-                orderLoop.total = siteConfig.currency + ' ' + data.total;
+                orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
+                orderLoop.total = price;
                 return orderLoop;
             });
         }
@@ -98,21 +99,41 @@ function Dashboard(props) {
     }
     const columns = [
         {
-            name: 'Order number',
-            selector: row => row.orderNumber,
+            name: 'Order',
+            selector: row => row.increment_id,
+            sortable: true,
+            cell: row => (
+                <Link to={`/vendor/sales-orders/${row.increment_id}`}>{row.increment_id}</Link>
+
+            )
+        },
+        {
+            name: 'Date',
+            selector: row => row.date,
+            sortable: true
         },
         {
             name: 'Status',
             selector: row => row.status,
-        },
-        {
-            name: 'Products',
-            selector: row => row.products,
+            sortable: true,
+            cell: row => (
+                // <span className='green'>{row.status}</span>
+
+                <div>
+                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{row.status}</span> : ""}
+                    {row.status === "Canceled" ? <span className="canceled">{row.status}</span> : ""}
+                    {row.status === "Shipped" ? <span className="shipped">{row.status}</span> : ""}
+                    {row.status === "Pending" ? <span className="pending">{row.status}</span> : ""}
+                    {row.status === "Delivered" ? <span className="delivered">{row.status}</span> : ""}
+                    {row.status === "Returned" ? <span className="returned">{row.status}</span> : ""}
+
+                </div>
+            )
         },
         {
             name: 'Total',
-            selector: row => row.total,
-        }
+            selector: row => row.total ? siteConfig.currency + ' ' + row.total : 0,
+        },
     ];
 
     const returnColumns = [
@@ -134,8 +155,15 @@ function Dashboard(props) {
             selector: row => row.status,
             sortable: true,
             cell: row => (
-                <span className='green'>{capitalize(row.status)}</span>
-
+                // <span className='green'>{capitalize(row.status)}</span>
+                <div>
+                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(row.status)}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{capitalize(row.status)}</span> : ""}
+                    {row.status === "approved" ? <span className="approved">{capitalize(row.status)}</span> : ""}
+                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(row.status)}</span> : ""}
+                    {row.status === "received" ? <span className="received">{capitalize(row.status)}</span> : ""}
+                    {row.status === "accept" ? <span className="accept">{capitalize(row.status)}</span> : ""}
+                </div>
             )
         },
         {
@@ -401,7 +429,7 @@ function Dashboard(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myOrders" /></h1>
+                            <h1><IntlMessages id="salesOrder.title" /></h1>
                         </div>
                     </div>
                     <div className="row">

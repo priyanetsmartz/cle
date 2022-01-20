@@ -49,6 +49,10 @@ const PublicRoutes = ({ history }) => {
     <ConnectedRouter history={history}>
       <Suspense fallback={<Loader />}>
         <Switch>
+          <ProductRoutes exact path="/magazines/:category" component={AllPosts} />
+          <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />
+          <ProductRoutes exact path="/magazines" component={AllPosts} />
+
           <ProductRoutes exact path="/help-center/:url_key" component={FaqListing} page='faq' />
           <ProductRoutes exact path="/vendor/forgot-password" component={BussinessResetpassword} />
           <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
@@ -83,9 +87,6 @@ const PublicRoutes = ({ history }) => {
           <ProductRoutes exact path="/return-order" component={ReturnPage} />
 
           <LoggedInRoute exact path="/explore-desginer" component={ExploreDesigner} />
-          <ProductRoutes exact path="/magazines/:category" component={AllPosts} />
-          <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />
-          <ProductRoutes exact path="/magazines" component={AllPosts} />
 
 
           <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />

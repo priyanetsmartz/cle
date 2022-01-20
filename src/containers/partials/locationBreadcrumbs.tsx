@@ -45,7 +45,7 @@ function Breadcrumbs(props) {
                         }
                         if (j === breadcrumsState.length - 1) {
                             let data = local.split('-')
-                            if (local === 'orders-and-returns' || local === 'wishlist' || local === 'profile' || local === 'support') {
+                            if (local === 'orders-and-returns' || local === 'wishlist' || local === 'profile' || local === 'support' || local === 'product-listing' || local === 'sales-orders' || local === 'payouts' || local === 'returns-complaints') {
                                 return (
                                     <li key={j} className="breadcrumb-item active">My
                                         {
@@ -127,9 +127,27 @@ function Breadcrumbs(props) {
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={"/"}>Search Results</Link></li>
                                     )
-                                }else if (local === 'returns-complaints') {
+                                } else if (local === 'returns-complaints') {
+                                    let data = local.split('-')
                                     return (
-                                        <li key={j} className="breadcrumb-item"><Link to={'/vendor/returns-complaints'}>{local === 'order-details' ? 'Orders' : local}</Link></li>
+                                        <li key={j} className="breadcrumb-item"><Link to={'/vendor/returns-complaints'}>My {
+
+                                            data.map((answer, i) => {
+                                                return (<span key={i}> {capitalize(answer)} </span>)
+                                            })
+                                        }</Link></li>
+
+                                    )
+                                } else if (local === 'sales-orders') {
+                                    let data = local.split('-')
+                                    return (
+
+                                        <li key={j} className="breadcrumb-item"><Link to={'/vendor/sales-orders'}>My {
+
+                                            data.map((answer, i) => {
+                                                return (<span key={i}> {capitalize(answer)} </span>)
+                                            })
+                                        }</Link></li>
                                     )
                                 } else {
                                     let str = local.replace(/-/g, ' ');

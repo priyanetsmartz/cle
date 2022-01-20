@@ -57,7 +57,7 @@ function BusinessProfile(props) {
 
     const [bankDetails, setBankDetails] = useState({
         vendorId: vendorId,
-        companyName: businessDetailsForm.businessCompanyName,
+        companyName: "",
         bankName: "",
         accountNumber: ""
     });
@@ -107,7 +107,7 @@ function BusinessProfile(props) {
     const [changeEmail, setChangeEmail] = useState({
         newEmail: "",
         confirmNewEmail: "",
-        password: "",
+        password2: "",
     });
 
     const [errors, setError] = useState({
@@ -185,6 +185,7 @@ function BusinessProfile(props) {
 
     const handleBankChange = (e) => {
         const { id, value } = e.target;
+
         setBankDetails(prevState => ({
             ...prevState,
             [id]: value
@@ -263,8 +264,10 @@ function BusinessProfile(props) {
 
     const saveBankDetails = async (e) => {
         e.preventDefault()
+        bankDetails.companyName = businessDetailsForm.businessCompanyName;
+        console.log(bankDetails)
         if (validateBankDetails()) {
-            setIsShow(true)
+            setIsShow(true)           
             bankDetails.vendorId = props.token.vendor_id;
             let result: any = await editBankDetails(bankDetails);
             if (result && result.data && !result.data.message) {
@@ -359,7 +362,7 @@ function BusinessProfile(props) {
     const validateBankDetails = () => {
         let error = {};
         let formIsValid = true;
-
+        console.log(bankDetails.companyName)
         if (!bankDetails.companyName) {
             formIsValid = false;
             error['companyName'] = intl.formatMessage({ id: "companyreq" });
@@ -368,7 +371,11 @@ function BusinessProfile(props) {
             formIsValid = false;
             error["bankName"] = intl.formatMessage({ id: "bankname" });
         }
-
+        console.log(bankDetails.accountNumber.length)
+        if (bankDetails.accountNumber && (bankDetails.accountNumber.length < 12 || bankDetails.accountNumber.length > 16)) {
+            formIsValid = false;
+            error['accountNumber'] = intl.formatMessage({ id: "accountnumberlength" });
+        }
         if (!bankDetails.accountNumber) {
             formIsValid = false;
             error['accountNumber'] = intl.formatMessage({ id: "accountnumber" });
@@ -527,7 +534,7 @@ function BusinessProfile(props) {
             const req = {
                 customerId: vendorId,
                 newEmail: changeEmail.newEmail,
-                password: changeEmail.password
+                password2: changeEmail.password2
             }
 
             let result: any = await updateCustEmail(req);
@@ -536,7 +543,7 @@ function BusinessProfile(props) {
                 setChangeEmail({
                     confirmNewEmail: "",
                     newEmail: "",
-                    password: ""
+                    password2: ""
                 })
             } else {
                 notification("error", "", intl.formatMessage({ id: "errorNewEmailUpdate" }));
@@ -569,9 +576,9 @@ function BusinessProfile(props) {
             error["confirmNewEmail"] = intl.formatMessage({ id: "confirmneemailreq" })
         }
 
-        if (!changeEmail["password"]) {
+        if (!changeEmail["password2"]) {
             formIsValid = false;
-            error["password"] = intl.formatMessage({ id: "passwordreq" })
+            error["password2"] = intl.formatMessage({ id: "passwordreq" })
         }
 
         if (changeEmail["confirmNewEmail"] !== changeEmail["newEmail"]) {
@@ -944,7 +951,7 @@ function BusinessProfile(props) {
 
                             <div className="col-sm-6">
                                 <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                                <div className="password_edit">{vendorForm.email}</div>
+                                <div className="password_edit">{props.token.email}</div>
                             </div>
                         </div>
                         <div className="col-sm-12">
@@ -969,13 +976,13 @@ function BusinessProfile(props) {
                                     <label className="form-label"><IntlMessages id="login.password" />*<span
                                         className="maindatory"></span></label>
                                     <input type={passMask.emailPass ? 'password' : 'text'} className="form-control" placeholder=""
-                                        id="password"
-                                        value={changeEmail.password}
+                                        id="password2"
+                                        value={changeEmail.password2}
                                         onChange={handleEmail} />
                                     <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
                                         {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
                                     </span>
-                                    <span className="error">{errors.errors["password"]}</span>
+                                    <span className="error">{errors.errors["password2"]}</span>
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
@@ -1348,7 +1355,7 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="business.companyname" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.companyname" })}
                                 id="companyName"
-                                readOnly
+                                readOnly={businessDetailsForm['businessCompanyName'] ? true : false}
                                 value={businessDetailsForm['businessCompanyName']}
                                 onChange={handleBankChange} />
                             <span className="error">{errorsBank.errors["companyName"]}</span>

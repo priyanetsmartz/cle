@@ -12,7 +12,7 @@ import { siteConfig } from '../../../settings';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
-import { capitalize } from '../../../components/utility/allutils';
+import { capitalize, formatprice } from '../../../components/utility/allutils';
 
 
 function MyReturnsComplaints(props) {
@@ -41,10 +41,12 @@ function MyReturnsComplaints(props) {
 
             dataLListing = dataD.map((data, index) => {
                 let orderLoop: any = {};
+                let priceT = data.grand_total ? parseFloat(data.grand_total).toFixed(2) : 0
+                let formatPrice = formatprice(priceT);
                 orderLoop.increment_id = [{ 'increment_id': data.increment_id, 'entity_id': data.entity_id }];
                 orderLoop.status = data.rma_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = siteConfig.currency + ' ' + data.grand_total;
+                orderLoop.total = siteConfig.currency + ' ' + formatPrice;
                 return orderLoop;
             });
         }
@@ -67,14 +69,17 @@ function MyReturnsComplaints(props) {
     const datePickerCallback = async (start, end, label) => {
         console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
+        if (label === 'All') {
+            getVendorReturnsData(status, range.low, range.high, searchTerm, '', '', sortOrder);
+        } else {
+            setDateFilter(prevState => ({
+                ...prevState,
+                from: from,
+                to: to
+            }))
 
-        setDateFilter(prevState => ({
-            ...prevState,
-            from: from,
-            to: to
-        }))
-
-        getVendorReturnsData(status, range.low, range.high, searchTerm, from, to, sortOrder);
+            getVendorReturnsData(status, range.low, range.high, searchTerm, from, to, sortOrder);
+        }
     }
 
     const getOrdersByPrice = async (range) => {
@@ -131,6 +136,7 @@ function MyReturnsComplaints(props) {
                     {row.status === "approved" ? <span className="approved">{capitalize(row.status)}</span> : ""}
                     {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(row.status)}</span> : ""}
                     {row.status === "received" ? <span className="received">{capitalize(row.status)}</span> : ""}
+                    {row.status === "accept" ? <span className="accept">{capitalize(row.status)}</span> : ""}
 
                 </div>
             )
@@ -219,7 +225,7 @@ function MyReturnsComplaints(props) {
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
                                             <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
                                         </div>
                                     </div>
                                 </div>
@@ -239,14 +245,14 @@ function MyReturnsComplaints(props) {
                             </div>
                         </div>
                     </div>
-               
 
-                <DataTable
-                    columns={columns}
-                    data={myOrder}
-                    pagination={true}
-                />
-				 </div>
+
+                    <DataTable
+                        columns={columns}
+                        data={myOrder}
+                        pagination={true}
+                    />
+                </div>
             </section>
         </div>
 
