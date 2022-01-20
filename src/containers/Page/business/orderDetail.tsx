@@ -207,7 +207,7 @@ function VendorOrderDetail(props) {
                                     </div>
                                     <div className="col-sm-3">
                                         <h6><IntlMessages id="order.paymentMethod" /></h6>
-                                        <p>{orderPayment}</p>
+                                        <p><i className="fas fa-money-check"></i> {orderPayment}</p>
                                     </div>
                                     <div className="col-sm-3">
                                         <h6><IntlMessages id="deliveryOption" /></h6>
@@ -244,7 +244,7 @@ function VendorOrderDetail(props) {
                                     </div>
                                     <div className="col-sm-4">
                                         <div className="return-user-total">
-                                            <h5><IntlMessages id="returntotal" /></h5>
+                                            <h5><IntlMessages id="order.orderTotal" /></h5>
                                             <table className="table table-borderless mb-0">
                                                 <tbody>
                                                     <tr>

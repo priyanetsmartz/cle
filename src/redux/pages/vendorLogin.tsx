@@ -171,6 +171,8 @@ export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fr
         queryString += "&page_size=" + page_size
     if (search != null && search !== '')
         queryString += "&search=" + search
+    if(sort_order!=null && sort_order!='')
+        queryString += '&sort_order=' +sort_order
     return adminToken.request(`default/rest/all/V1/vendor/vendorPayoutCollection?${queryString}`, "", "GET", "")
 
 }
@@ -222,4 +224,8 @@ export async function changeOrderSatus(orderId: number, statusOrder: string, sta
         statusreason: statusOrderComment
     }
     return adminToken.request(`rest/all/V1/vendor/vendorOrderDetail`, data, "PUT", "");
+}
+
+export function vendorResetEmail(emailInfo) {
+    return adminToken.request(`default/rest/all/V1/vendor/resetEmail`, emailInfo, "PUT", "");
 }
