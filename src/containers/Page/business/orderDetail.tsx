@@ -7,6 +7,8 @@ import { siteConfig } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import notification from '../../../components/notification';
+import { formatprice } from '../../../components/utility/allutils';
+
 
 function VendorOrderDetail(props) {
     const intl = useIntl();
@@ -46,13 +48,15 @@ function VendorOrderDetail(props) {
     const [tax, setTax] = useState(0)
     const [total, setTotal] = useState(0)
     const [statusOrderComment, setstatusOrderComment] = useState('')
-
+    const [sortOrder, setSortOrder] = useState('')
     useEffect(() => {
         getOrderDetailFxn(orderId)
     }, [props.languages])
 
-    async function getOrderDetailFxn(orderId) {
-        let results: any = await getOrderDetail(props.languages, orderId);
+    async function getOrderDetailFxn(orderId,sort_order:any ='') {
+        sort_order = sort_order?sort_order:sortOrder;
+        console.log("sort order", sort_order)
+        let results: any = await getOrderDetail(props.languages, orderId, sort_order);
         console.log("results", results.data[0]);
         let data = [];
         let productsData = [];
@@ -62,7 +66,7 @@ function VendorOrderDetail(props) {
             // data['items'] = results.data[0].items;
             data = results.data
             setOrderNumber(data[0][0].po_increment_id)
-            setOrderPurchaseDate(moment(data[0][0].purchase_date).format('ddd DD MMMM YYYY'))
+            setOrderPurchaseDate(moment(data[0][0].purchase_date).format('ddd DD MMMM YYYY; hh:mm a'))
             setOrderPayment(data[0][0].payment_method)
             setDeliveryCost(data[0][0].delivery_cost)
             setDeliveryMethod(data[0][0].delivery_method)
@@ -74,6 +78,7 @@ function VendorOrderDetail(props) {
             setOrderStatus(data[0][0].udropship_statuslabel)
             setPaymentStatus(data[0][0].invoice_data.invoice_status)
             setStatusCode(data[0][0].udropship_status)
+            console.log("data[0][0].udropship_status)",data[0][0].udropship_status)
 
             if (data[0][0].billing_address.length > 0) {
                 let addr: any = data[0][0].billing_address[0]
@@ -115,7 +120,10 @@ function VendorOrderDetail(props) {
         setOrderDetails(productsData);
 
     }
-
+    const sortOrdersHandler = async (e) => {
+        setSortOrder(e.target.value);
+        getOrderDetailFxn(orderId,e.target.value)
+    }
     const selectStatus = (event) => {
         selectStatusOrder(event.target.value)
         if (event.target.value === 'reject') {
@@ -146,6 +154,7 @@ function VendorOrderDetail(props) {
         }
 
     }
+
     return (
         <main>
             <div className="container">
@@ -202,7 +211,7 @@ function VendorOrderDetail(props) {
                                     </div>
                                     <div className="col-sm-3">
                                         <h6><IntlMessages id="deliveryOption" /></h6>
-                                        <p>{deliveryMethod}/{deliveryCost}</p>
+                                        <p>{deliveryMethod}/{formatprice(deliveryCost)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -240,19 +249,19 @@ function VendorOrderDetail(props) {
                                                 <tbody>
                                                     <tr>
                                                         <td><IntlMessages id="subtotal" /></td>
-                                                        <th className="text-end">{currency}{subtotal}</th>
+                                                        <th className="text-end">{currency}{formatprice(subtotal)}</th>
                                                     </tr>
                                                     <tr>
                                                         <td><IntlMessages id="order.shipping" /></td>
-                                                        <th className="text-end">{currency}{shipping}</th>
+                                                        <th className="text-end">{currency}{formatprice(shipping)}</th>
                                                     </tr>
                                                     <tr className="r-tax">
                                                         <td><IntlMessages id="tax" /></td>
-                                                        <th className="text-end">{currency}{tax}</th>
+                                                        <th className="text-end">{currency}{formatprice(tax)}</th>
                                                     </tr>
                                                     <tr className="tot-bor">
                                                         <th><IntlMessages id="total" /></th>
-                                                        <th className="text-end fin-p">{currency}{total}</th>
+                                                        <th className="text-end fin-p">{currency}{formatprice(total)}</th>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -263,6 +272,17 @@ function VendorOrderDetail(props) {
 
                         </section>
                     </div>
+                    <div className="col-sm-12">
+                            <div className="sort_by">
+                                <div className="sortbyfilter">
+                                    <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
+                                        <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                        <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                        <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
             <br></br>
@@ -289,19 +309,19 @@ function VendorOrderDetail(props) {
                                         </div>
                                         <div className="col-md-1">
                                             <p><strong><IntlMessages id="price" /></strong></p>
-                                            <p>{currency}{product['price']}</p>
+                                            <p>{currency}{formatprice(product['price'])}</p>
                                         </div>
                                         <div className="col-md-1">
                                             <p><strong><IntlMessages id="quantity" /></strong></p>
-                                            <p>{product['qty_ordered']}</p>
+                                            <p>{formatprice (product['qty_ordered'])}</p>
                                         </div>
                                         <div className="col-md-1">
                                             <p><strong><IntlMessages id="tax" /></strong></p>
-                                            <p>{currency}{product['tax_amount']}</p>
+                                            <p>{currency}{formatprice(product['tax_amount'])}</p>
                                         </div>
                                         <div className="col-md-1">
                                             <p><strong><IntlMessages id="total" /></strong></p>
-                                            <p>{currency}{product['rowTotal']}</p>
+                                            <p>{currency}{formatprice(product['rowTotal'])}</p>
                                         </div>
                                     </div>
                                 </div>

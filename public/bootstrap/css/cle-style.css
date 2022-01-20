@@ -1205,6 +1205,7 @@ p.promotion_alert {
     width: 100%;
     float: left;
     margin: 20px 0 5px 0px;
+	height:auto;
 }
 
 .magzine_blog {
@@ -8150,6 +8151,80 @@ p.sliderupper {
 .product-listing .kUKiTL{
 	align-items: flex-start!important;
 }	
+
+.pricerangeouter .ant-input-number-out-of-range input{
+	color:#000;
+}
+
+.deletePopup .modal-header > i {
+    font-size: 50px;
+    color: #D9242C;
+}
+
+.deletePopup .close > i{
+	color:#2E2BAA;
+}
+
+.deletePopup .modal-title {
+    font-size: 24px;
+    font-family: 'Monument Extended';
+    line-height: 30px;
+    font-weight: 500;
+    color: #000;
+    margin-top: 20px;
+}
+
+.deletePopup .modal-body p{
+	font-family: "Lato",sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 27px;
+    color: #000;
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.deletePopup .modal-footer .btn-secondary{
+	color: #fff;
+    background-color: #2E2BAA;
+    border: 1px solid #2E2BAA;
+    border-radius: 0;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    font-style: normal;
+    font-size: 11px;
+    padding: 12px 40px;
+    margin-bottom: 10px;
+}
+
+.deletePopup .modal-footer .btn-secondary:hover,
+.deletePopup .modal-footer .btn-secondary:focus{
+	background-color: transparent;
+    border: 1px solid #2E2BAA;
+	color: #2E2BAA;
+}
+
+.deletePopup .modal-footer .btn-primary{
+	color: #2E2BAA!important;
+    background-color: transparent!important;
+    border: 1px solid #2E2BAA!important;
+    border-radius: 0;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    font-style: normal;
+    font-size: 11px;
+    padding: 12px 40px;
+    margin-bottom: 10px;
+}
+
+.deletePopup .modal-footer .btn-primary:hover,
+.deletePopup .modal-footer .btn-primary:focus{
+	background-color: #2E2BAA!important;
+    border: 1px solid #2E2BAA!important;
+	color: #fff!important;
+}
+
 
 /* All media screen below */
 

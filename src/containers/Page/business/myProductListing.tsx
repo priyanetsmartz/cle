@@ -292,6 +292,7 @@ function MyProductListing(props) {
 
                     <div className="deletePopup">
                         <div className="modal-header flex-column">
+							<i className="far fa-times-circle"></i>
                             <h4 className="modal-title w-100"><IntlMessages id="deletetheproduct" /></h4>
                             <Link to="#" onClick={closePop} className="close"> <i className="fas fa-times"></i></Link>
                         </div>
@@ -299,8 +300,8 @@ function MyProductListing(props) {
                             <p><IntlMessages id="deleteProduct.confirmation" /></p>
                         </div>
                         <div className="modal-footer justify-content-center">
-                            <button type="button" className="btn btn-secondary" onClick={closePop} data-dismiss="modal"><IntlMessages id="productEdit.cancel" /></button>
-                            <button type="button" className="btn btn-danger" onClick={deleteProduct} ><IntlMessages id="productEdit.delete" /></button>
+                            <button type="button" className="btn btn-primary" onClick={closePop} data-dismiss="modal"><IntlMessages id="productEdit.cancel" /></button>
+                            <button type="button" className="btn btn-secondary" onClick={deleteProduct} ><IntlMessages id="productEdit.delete" /></button>
                         </div>
                     </div>
                 </Modal.Body>

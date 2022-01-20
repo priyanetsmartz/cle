@@ -485,50 +485,53 @@ function MyPayouts(props) {
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div className="clearfix"></div>
+                    <div className="border p-3">
+                        <table>
+                            <thead><IntlMessages id="account.balance" /></thead>
+                            <tbody>
+                                <tr>
+                                    <th><IntlMessages id="order.subTotal" /></th>
+                                    <td>{siteConfig.currency}{subtotal ? formatprice(subtotal) : 0}</td>
+                                </tr>
+                                <tr>
+                                    <th><IntlMessages id="commission" /></th>
+                                    <td>-{siteConfig.currency}{commission ? formatprice(commission) : 0}</td>
+                                </tr>
 
-                <table>
-                    <thead><IntlMessages id="account.balance" /></thead>
-                    <tbody>
-                        <tr>
-                            <th><IntlMessages id="order.subTotal" /></th>
-                            <td>{siteConfig.currency}{subtotal ? formatprice(subtotal) : 0}</td>
-                        </tr>
-                        <tr>
-                            <th><IntlMessages id="commission" /></th>
-                            <td>-{siteConfig.currency}{commission ? formatprice(commission) : 0}</td>
-                        </tr>
+                                <tr>
+                                    <th><IntlMessages id="order.total" /></th>
+                                    <td>{siteConfig.currency}{totalP ? formatprice(totalP) : 0}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                        <tr>
-                            <th><IntlMessages id="order.total" /></th>
-                            <td>{siteConfig.currency}{totalP ? formatprice(totalP) : 0}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br />
-                <div className="row">
-                    <div className="float-right">
-                        <div className="sort_by">
-                            <div className="sortbyfilter">
-                                <select value={sortOrder} onChange={setSort} className="form-select customfliter" aria-label="Default select example">
-                                    <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                    <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                    <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                </select>
+                    <br />
+                    <div className="row">
+                        <div className="float-right">
+                            <div className="sort_by">
+                                <div className="sortbyfilter">
+                                    <select value={sortOrder} onChange={setSort} className="form-select customfliter" aria-label="Default select example">
+                                        <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                        <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                        <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <DataTable
+                        columns={columns}
+                        data={myOrder}
+                        // selectableRows
+                        pagination={true}
+                    // onSelectedRowsChange={handleChange}
+                    />
                 </div>
-                <DataTable
-                    columns={columns}
-                    data={myOrder}
-                    // selectableRows
-                    pagination={true}
-                // onSelectedRowsChange={handleChange}
-                />
-            </section>
+            </section >
 
-        </div>
+        </div >
 
     )
 }
