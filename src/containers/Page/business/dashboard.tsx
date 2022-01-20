@@ -362,6 +362,22 @@ function Dashboard(props) {
                             </div>
                         </div>
                     </div>
+					
+					<section className="start-selling">
+						<div className="row">
+							<div className="col-sm-8">
+								<div className="sell-cont">
+									<h3>Start selling</h3>
+									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+									<a href="#" className="btn btn-secondary">Start selling</a>
+								</div>
+							</div>
+							<div className="col-sm-4">
+								<img src="../images/best-priofile.svg" className="img-fluid" />
+							</div>
+						</div>
+					</section>
+					
                 </div >
             </section>
             <section className="my_profile_sect mb-4">
