@@ -24,7 +24,7 @@ function MyPayouts(props) {
     const [accBalance, setAccBalance] = useState([])
     const [range, setRange] = useState({ low: 0, high: 0 })
     const [status, setStatus] = useState('');
-    const [sortOrder, setSortOrder] = useState('asc');
+    const [sortOrder, setSortOrder] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [fromDate, setFromDate] = useState('');
     const [toDates, setToDates] = useState('');
@@ -146,7 +146,7 @@ function MyPayouts(props) {
         setShowRawPDF(true)
         printDocument();
     };
-    async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order = 'asc') {
+    async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order:any = '') {
         let page_size = siteConfig.pageSize;
 
         let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice, page_size, sort_order, term)

@@ -583,7 +583,7 @@ function BusinessProfile(props) {
 
         if (changeEmail["confirmNewEmail"] !== changeEmail["newEmail"]) {
             formIsValid = false;
-            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmpasswordnotmatched" })
+            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmnewemailtmatched" })
         }
 
         setError({ errors: error });
