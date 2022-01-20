@@ -530,9 +530,12 @@ function MyPayouts(props) {
                     // onSelectedRowsChange={handleChange}
                     />
                 </div>
-            </section >
+				 </div>
+            </section>
 
-        </div >
+        
+		
+		</div>
 
     )
 }
