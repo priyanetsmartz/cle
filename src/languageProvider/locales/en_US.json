@@ -639,5 +639,6 @@
   "selectproductintegration":"Please select desired integration methods",
   "returnaccept":"Change status to accepted",
   "returndecline":"Change status to rejected",
-  "statusreturn":"Change the status of return"
+  "statusreturn":"Change the status of return",
+  "ordertotal":"Total Orders"
 }

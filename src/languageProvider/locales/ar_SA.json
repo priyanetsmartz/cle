@@ -637,5 +637,6 @@
   "selectproductintegration":"الرجاء تحديد طرق التكامل المطلوبة",
   "returnaccept":"تغيير الحالة إلى مقبول",
   "returndecline":"تغيير الحالة إلى مرفوض",  
-  "statusreturn":"تغيير حالة العودة"
+  "statusreturn":"تغيير حالة العودة",  
+  "ordertotal":"إجمالي الطلبات"
 }

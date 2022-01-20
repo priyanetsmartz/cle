@@ -267,7 +267,7 @@ function BusinessProfile(props) {
         bankDetails.companyName = businessDetailsForm.businessCompanyName;
         console.log(bankDetails)
         if (validateBankDetails()) {
-            setIsShow(true)           
+            setIsShow(true)
             bankDetails.vendorId = props.token.vendor_id;
             let result: any = await editBankDetails(bankDetails);
             if (result && result.data && !result.data.message) {
@@ -600,6 +600,7 @@ function BusinessProfile(props) {
     }
 
     const openBankDetailsModal = () => {
+        getData();
         setOpenBankModal(!openBankModal)
     }
     // const openMyPreferences = () => {
@@ -608,6 +609,7 @@ function BusinessProfile(props) {
     // }
 
     const openAddressModal = () => {
+        getData();
         setMyAddressModal(!myAddressModal);
     }
 
