@@ -496,21 +496,21 @@ function MyPayouts(props) {
                     </div>
                <div className="clearfix"></div>
 				<div className="border p-3">
-					<table className="table table-borderless">
+					<table className="table table-borderless payout">
 						<thead><IntlMessages id="account.balance" /></thead>
 						<tbody>
 							<tr>
-								<th><IntlMessages id="order.subTotal" /></th>
-								<td className="text-end">{siteConfig.currency}{subtotal}</td>
+								<td><IntlMessages id="order.subTotal" /></td>
+								<th className="text-end">{siteConfig.currency}{subtotal}</th>
 							</tr>
 							<tr>
-								<th><IntlMessages id="commission" /></th>
-								<td className="text-end">{siteConfig.currency}{commission}</td>
+								<td><IntlMessages id="commission" /></td>
+								<th className="text-end">{siteConfig.currency}{commission}</th>
 							</tr>
 
 							<tr>
-								<th className="border border-top-2"><IntlMessages id="order.total" /></th>
-								<td className="border border-top-2 text-end">{siteConfig.currency}{totalP}</td>
+								<th className="bor-top-2"><IntlMessages id="order.total" /></th>
+								<td className="bor-top-2 text-end dark-col">{siteConfig.currency}{totalP}</td>
 							</tr>
 						</tbody>
 					</table>
