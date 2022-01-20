@@ -10,7 +10,7 @@ import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getInvoice, getPayoutOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { getCookie } from '../../../helpers/session';
-import { capitalize } from '../../../components/utility/allutils';
+import { capitalize, formatprice } from '../../../components/utility/allutils';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Link } from "react-router-dom";
 import jsPDF from 'jspdf';
@@ -87,7 +87,7 @@ function MyPayouts(props) {
             selector: row => row.price,
             button: true,
             cell: row => (
-                <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{row.price}</Link>
+                <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{row.price ? formatprice(row.price) : 0}</Link>
             )
 
         },
@@ -130,16 +130,7 @@ function MyPayouts(props) {
         },
     ];
 
-    const columns2 = [
-        {
-            name: 'Subtotal',
-            selector: row => row.subtotal,
-        },
-        {
-            name: 'Commission',
-            selector: row => row.commission,
-        },
-    ];
+
     const sortHandler = async (payoutId) => {
         let data: any = await getInvoice(payoutId);
 
@@ -487,7 +478,7 @@ function MyPayouts(props) {
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
                                             <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
                                         </div>
                                     </div>
                                 </div>
@@ -501,16 +492,16 @@ function MyPayouts(props) {
                     <tbody>
                         <tr>
                             <th><IntlMessages id="order.subTotal" /></th>
-                            <td>{siteConfig.currency}{subtotal}</td>
+                            <td>{siteConfig.currency}{subtotal ? formatprice(subtotal) : 0}</td>
                         </tr>
                         <tr>
                             <th><IntlMessages id="commission" /></th>
-                            <td>{siteConfig.currency}{commission}</td>
+                            <td>-{siteConfig.currency}{commission ? formatprice(commission) : 0}</td>
                         </tr>
 
                         <tr>
                             <th><IntlMessages id="order.total" /></th>
-                            <td>{siteConfig.currency}{totalP}</td>
+                            <td>{siteConfig.currency}{totalP ? formatprice(totalP) : 0}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -519,7 +519,8 @@
   "surname": "اللقب مطلوب",
   "companyreq": "اسم الشركة مطلوب",
   "bankname": "اسم البنك مطلوب",
-  "accountnumber": "رقم الحساب مطلوب",
+  "accountnumber": "رقم الحساب مطلوب",  
+  "accountnumberlength":"يجب أن يكون رقم الحساب بين 12 إلى 16 رقمًا",
   "phoneinvalid": "رقم الهاتف غير صالح",
   "websitereq": "الموقع مطلوب",
   "IBAMreq": "رقم IBAM مطلوب",
@@ -619,7 +620,7 @@
   "exchange": "تبادل",
   "selectreturnOrExchange": "الرجاء تحديد إما العودة أو الصرف",
   "selectreturnOrExchangeProducts": "يرجى تحديد المنتجات وشروطها التي تريد إرجاعها أو استبدالها",
-  "comments": "تعليقات",
+  "comments": "سبب العودة",
   "account.balance": "رصيد الحساب",
   "commission": "لجنة",
   "dateofrequest": "تاريخ الطلب",
@@ -633,5 +634,8 @@
   "id": "بطاقة تعريف",
   "orderstatusupdate": "تم تحديث حالة الطلب بنجاح!",
   "productintegration": "تم إرسال طلب تكامل المنتج بنجاح!",  
-  "selectproductintegration":"الرجاء تحديد طرق التكامل المطلوبة"
+  "selectproductintegration":"الرجاء تحديد طرق التكامل المطلوبة",
+  "returnaccept":"تغيير الحالة إلى مقبول",
+  "returndecline":"تغيير الحالة إلى مرفوض",  
+  "statusreturn":"تغيير حالة العودة"
 }

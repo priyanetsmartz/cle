@@ -60,6 +60,7 @@ function RetunOrder(props) {
         }
         let result: any = await returnProcessVendor(returnId, statusReturn, statusReturnComment);
         if (result.data) {
+            getReturnDetailFxn(returnId)
             selectStatusReturn('')
             setstatusReturnComment('')
             notification("success", "", result.data);
@@ -96,7 +97,7 @@ function RetunOrder(props) {
                                     </div>
 
                                     <div className="col-sm-3">
-                                        <h6><IntlMessages id="shipment.date" /></h6>
+                                        <h6><IntlMessages id="shipped.date" /></h6>
                                         <p>{returnDetails['info'] && returnDetails['info'].shipment_date ? moment(returnDetails['info'].shipment_date).format('ddd DD MMMM YYYY') : ""}</p>
                                     </div>
                                     <div className="col-sm-3">
@@ -105,7 +106,7 @@ function RetunOrder(props) {
                                     </div>
                                     <div className="col-sm-3">
                                         <h6><IntlMessages id="order.paymentMethod" /></h6>
-                                        <p>{returnDetails['info'] ? returnDetails['info'].payment_method : ""}</p>
+                                        <p><i className="fas fa-money-check"></i> {returnDetails['info'] ? returnDetails['info'].payment_method : ""}</p>
                                     </div>
                                     <div className="col-sm-3">
                                         <h6><IntlMessages id="returned.products" /></h6>
@@ -207,9 +208,9 @@ function RetunOrder(props) {
                                 <div className="col-md-12">
                                     <div className='return-reason' >
                                         <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="accept">{intl.formatMessage({ id: "accept" })}</option>
-                                            <option value="decline">{intl.formatMessage({ id: "decline" })}</option>
+                                            <option value="">{intl.formatMessage({ id: "statusreturn" })}</option>
+                                            <option value="accept">{intl.formatMessage({ id: "returnaccept" })}</option>
+                                            <option value="decline">{intl.formatMessage({ id: "returndecline" })}</option>
                                         </select>
                                     </div>
                                     {show && (<div className='return-comment' >

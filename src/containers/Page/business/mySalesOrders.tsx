@@ -12,6 +12,7 @@ import { siteConfig } from '../../../settings';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
+import { formatprice } from '../../../components/utility/allutils';
 
 
 function MySalesOrders(props) {
@@ -37,10 +38,11 @@ function MySalesOrders(props) {
         if (dataObj.length > 0) {
             dataLListing = dataObj.map((data, index) => {
                 let orderLoop: any = {};
+                let price = data.total ? formatprice(data.total) : 0;
                 orderLoop.increment_id = data.increment_id;
                 orderLoop.status = data.status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = siteConfig.currency + ' ' + data.total;
+                orderLoop.total = price;
                 return orderLoop;
             });
         }
@@ -131,7 +133,7 @@ function MySalesOrders(props) {
         },
         {
             name: 'Total',
-            selector: row => row.total,
+            selector: row => row.total ? siteConfig.currency + ' ' + row.total : 0,
         },
     ];
 
