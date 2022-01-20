@@ -638,5 +638,6 @@
   "returnaccept":"تغيير الحالة إلى مقبول",
   "returndecline":"تغيير الحالة إلى مرفوض",  
   "statusreturn":"تغيير حالة العودة",  
-  "ordertotal":"إجمالي الطلبات"
+  "ordertotal":"إجمالي الطلبات",
+  "locationreq":"الموقع مطلوب"
 }

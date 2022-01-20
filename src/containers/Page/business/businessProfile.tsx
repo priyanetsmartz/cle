@@ -19,7 +19,7 @@ import { useIntl } from 'react-intl';
 import { getVendorDetails, editBusinessDetails, editVendor, editBankDetails, editVendorAddress } from '../../../redux/pages/vendorLogin';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import user from '../../../image/user.png';
-import { capitalize } from '../../../components/utility/allutils';
+import { capitalize, getCountryName } from '../../../components/utility/allutils';
 import ForgottenPassword from './bussinessForgotpassword';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
@@ -318,7 +318,7 @@ function BusinessProfile(props) {
         }
         if (!vendorForm.location) {
             formIsValid = false;
-            error["location"] = intl.formatMessage({ id: "location" });
+            error["location"] = intl.formatMessage({ id: "locationreq" });
         }
 
         if (typeof (vendorForm.vendorTelephone) !== "undefined") {
@@ -592,6 +592,7 @@ function BusinessProfile(props) {
     //change email ends here----------------------------------------->
 
     const openMyDetails = () => {
+        getData();
         setMyDetailsModel(!myDetailsModel);
     }
 
@@ -806,11 +807,13 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        <div className="addnew_address" onClick={openAddressModal}>
-                            <div className="addressnew_addressblue">
-                                <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
+                        {(vendorAddForm && vendorAddForm.zip === '') && (
+                            <div className="addnew_address" onClick={openAddressModal}>
+                                <div className="addressnew_addressblue">
+                                    <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
+                                </div>
                             </div>
-                        </div>
+                        )}
                         {(vendorAddForm) && (<>
                             <div className="addressnew_addressbodr" >
                                 <h3><IntlMessages id="myaccount.address" /></h3>
@@ -819,7 +822,7 @@ function BusinessProfile(props) {
                                     <li>{vendorAddForm.street}</li>
                                     <li>{vendorAddForm.zip}</li>
                                     <li>{vendorAddForm.city}</li>
-                                    <li>{vendorAddForm.countryId}</li>
+                                    <li>{vendorAddForm.countryId ? getCountryName(vendorAddForm.countryId) : ""}</li>
                                 </ul>
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
@@ -1305,7 +1308,8 @@ function BusinessProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-                            <select value={vendorAddForm.country} onChange={handleCountryChangeAdd} id="countryId" className="form-select">
+
+                            <select value={vendorAddForm.countryId} onChange={handleCountryChangeAdd} id="countryId" className="form-select">
                                 {countries && countries.map(opt => {
                                     return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}

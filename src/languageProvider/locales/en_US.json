@@ -166,7 +166,7 @@
   "myaccount.myAddress": "My Address",
   "myaccount.myBillingAddress": "Add Billing Address",
   "myaccount.city": "City",
-  "myaccount.postCode": "Post Code",
+  "myaccount.postCode": "Postal code",
   "myaccount.deleteAccount": "Delete Account",
   "myaccount.ifYouStillLike": "If you'd still like to deactivate your CLÉ account, follow the below steps",
   "myaccount.weAreSorryToSee": "We're sorry to see you go - remember, your CLÉ account is free and enables you to shop easily without having to enter your details each time. With it, you're able to take advantage of the exclusive discountsand promos on site.",
@@ -640,5 +640,6 @@
   "returnaccept":"Change status to accepted",
   "returndecline":"Change status to rejected",
   "statusreturn":"Change the status of return",
-  "ordertotal":"Total Orders"
+  "ordertotal":"Total Orders",
+  "locationreq":"Location is required"
 }
