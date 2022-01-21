@@ -827,6 +827,7 @@ function BusinessProfile(props) {
                             <div className="addnew_address" onClick={openAddressModal}>
                                 <div className="addressnew_addressblue">
                                     <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
+									<i className="fas fa-plus"></i>
                                 </div>
                             </div>
                         )}

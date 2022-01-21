@@ -1716,12 +1716,12 @@ p.promotion_alert {
 .address-action a.delete_btn:hover,
 .address-action a.edit_btn:hover {
     padding-top: 5px;
-    color: #000000;
+    color: #2E2BAA;
 }
 
 .address-action a.delete_btn:hover:after,
 .address-action a.edit_btn:hover:after {
-    border-color: #222;
+    border-color: #2E2BAA;
     bottom: 2px;
 }
 
@@ -2488,6 +2488,7 @@ span.maindatory {
     top: 20%;
     width: 250px;
     background-color: #fff;
+	overflow: auto;
 }
 
 /* .pro_categry_sidebar {
@@ -5722,11 +5723,28 @@ color: #017abb;
 /* return details */
 
 .black-bg-footer {
-    background: #000;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    padding: 60px 0;
+	display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-height: 350px;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 60px;
+    background-color: #000;
+    color: #fff;
+	
+}
+
+.blue-bg-footer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-height: 350px;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 60px;
+    background-color: #2e2baa;
+    color: #fff;
 }
 
 .black-bg-inner {
@@ -5756,13 +5774,26 @@ color: #017abb;
     color: #fff;
 }
 
-.blue-bg-footer {
-    background: #2e2baa;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    padding: 60px 0;
+.black-bg-footer a, .blue-bg-footer a {
+    font-size: 12px;
+    line-height: 16px;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    padding: 10px 20px;
+    border: 1px solid #fff;
+    background-color: #fff;
+    color: #2E2BAA;
+    text-decoration: none;
+    transition: all .3s ease;
 }
+
+.black-bg-footer a:hover, .blue-bg-footer a:hover {
+    background-color: transparent;
+    color: #fff;
+	border-color: #fff;
+}
+
+
 
 /************Notification page ************/
 
@@ -7823,6 +7854,12 @@ p.sliderupper {
 	line-height:20px;
 }
 
+.chooose-methods .btn-secondary {
+    display: inline-block;
+    width: auto;
+    margin: 40px auto;
+}
+
 
 .rdt_Table{
 	margin: 20px 0;
@@ -7933,6 +7970,7 @@ p.sliderupper {
     color: #000;
     font-size: 14px;
     font-family: "Lato",sans-serif;
+	word-spacing: 2px;
 }
 
 .rdt_TableCell a:hover,
@@ -8042,24 +8080,30 @@ p.sliderupper {
     width: 100%;
 }
 
-.check-als .btn-secondary {
+.my_profile_sect.check-als .btn-secondary {
     display: flex;
     align-items: center;
     justify-content: center;
+	padding: 20px 6px !important;
+	transition: all .5s ease-in-out;
 }
 
-.check-als .btn-secondary:hover{
-	
+.my_profile_sect.check-als .btn-secondary:hover{
+	color: #fff!important;
+    background-color: #2E2BAA!important;
+    border-color: #2E2BAA!important;
 }
 
-.check-als .btn-secondary i {
+.my_profile_sect.check-als .btn-secondary i {
     font-size: 11px;
-	transition: all .5s ease;
-	margin-left: 15px;
+	transition: all .3s ease-in-out;
+	margin-left: 0;
+	visibility: hidden;
 }
 
-.check-als .btn-secondary:hover i{
-	 
+.my_profile_sect.check-als .btn-secondary:hover i{
+	 margin-left: 15px;
+	 visibility: visible;
 }
 
 .filter-tiles {
@@ -8284,9 +8328,9 @@ p.sliderupper {
 }
 
 .start-selling h3{
-	font-size: 36px;
+	font-size: 32px;
     font-family: 'Monument Extended';
-    line-height: 46px;
+    line-height: 42px;
     font-weight: 500;
     color: #000;
     margin-top: 20px;
@@ -8304,6 +8348,19 @@ p.sliderupper {
     padding: 10px 0;
 }
 
+.start-selling img{
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	object-position:center;
+}
+
+.pro_categry_sidebar {
+    position: sticky;
+    left: 0;
+    top: 20%;
+	overflow: auto;
+}
 
 /* All media screen below */
 
@@ -8399,6 +8456,10 @@ p.sliderupper {
     .releveant-slider .slick-next {
         right: 0;
     }
+	.faq-list .accordion-button{
+		font-size: 12px;
+		line-height: 19px;
+	}
 }
 
 /* Portrait and Landscape */
