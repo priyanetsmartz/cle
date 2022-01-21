@@ -209,8 +209,8 @@ function RetunOrder(props) {
                                     <div className='return-reason' >
                                         <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
                                             <option value="">{intl.formatMessage({ id: "statusreturn" })}</option>
-                                            <option value="accept">{intl.formatMessage({ id: "returnaccept" })}</option>
-                                            <option value="decline">{intl.formatMessage({ id: "returndecline" })}</option>
+                                            <option value="approved">{intl.formatMessage({ id: "returnaccept" })}</option>
+                                            <option value="declined">{intl.formatMessage({ id: "returndecline" })}</option>
                                         </select>
                                     </div>
                                     {show && (<div className='return-comment' >

@@ -67,14 +67,21 @@ function MyProductListing(props) {
     const datePickerCallback = async (start, end, label) => {
         // console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
-
-        setDateFilter(prevState => ({
-            ...prevState,
-            from: from,
-            to: to
-        }))
-
-        getVendorProductListing(status, range.low, range.high, searchTerm, from, to, sortOrder);
+        if (label === 'All') {
+            setDateFilter(prevState => ({
+                ...prevState,
+                from: '',
+                to: ''
+            }))
+            getVendorProductListing(status, range.low, range.high, searchTerm, '', '', sortOrder);
+        } else {
+            setDateFilter(prevState => ({
+                ...prevState,
+                from: from,
+                to: to
+            }))
+            getVendorProductListing(status, range.low, range.high, searchTerm, from, to, sortOrder);
+        }
     }
 
     const getOrdersByPrice = async (range) => {
@@ -249,7 +256,7 @@ function MyProductListing(props) {
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
                                             <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchorderid" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                            <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
                                         </div>
                                     </div>
                                 </div>
@@ -272,27 +279,27 @@ function MyProductListing(props) {
                             </div>
                         </div>
                     </div>
-                
-				<div className="product-listing">	
-					<DataTable
-						columns={columns}
-						data={listingData}
-						pagination={true}
-					/>
-				</div>
-				<div className="row">
-					<div className="col-sm-12">
-						<Link className="btn btn-secondary" to="/product-integration" ><IntlMessages id="product_integration" /></Link>
-					</div>
-				</div>	
-				</div>
+
+                    <div className="product-listing">
+                        <DataTable
+                            columns={columns}
+                            data={listingData}
+                            pagination={true}
+                        />
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <Link className="btn btn-secondary" to="/product-integration" ><IntlMessages id="product_integration" /></Link>
+                        </div>
+                    </div>
+                </div>
             </section>
             <Modal show={deletePop}>
                 <Modal.Body className="CLE_pf_details modal-confirm">
 
                     <div className="deletePopup">
                         <div className="modal-header flex-column">
-							<i className="far fa-times-circle"></i>
+                            <i className="far fa-times-circle"></i>
                             <h4 className="modal-title w-100"><IntlMessages id="deletetheproduct" /></h4>
                             <Link to="#" onClick={closePop} className="close"> <i className="fas fa-times"></i></Link>
                         </div>

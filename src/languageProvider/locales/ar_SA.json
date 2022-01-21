@@ -639,5 +639,7 @@
   "returndecline":"تغيير الحالة إلى مرفوض",  
   "statusreturn":"تغيير حالة العودة",  
   "ordertotal":"إجمالي الطلبات",
-  "locationreq":"الموقع مطلوب"
+  "locationreq":"الموقع مطلوب",
+  "withdrawal": "انسحاب",
+  "newEmailUpdatenotification":"تم إرسال الرمز المميز إلى عنوان بريدك الإلكتروني ، اتبع التعليمات لتحديث بريدك الإلكتروني"
 }

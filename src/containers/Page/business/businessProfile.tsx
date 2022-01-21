@@ -16,7 +16,7 @@ import deleteIcon from '../../../image/delete-icon.png';
 import timerIcon from '../../../image/timer_icon.png';
 import { sessionService } from 'redux-react-session';
 import { useIntl } from 'react-intl';
-import { getVendorDetails, editBusinessDetails, editVendor, editBankDetails, editVendorAddress } from '../../../redux/pages/vendorLogin';
+import { getVendorDetails, editBusinessDetails, editVendor, editBankDetails, editVendorAddress, changePasswordVendor, vendorResetEmail } from '../../../redux/pages/vendorLogin';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import user from '../../../image/user.png';
 import { capitalize, getCountryName } from '../../../components/utility/allutils';
@@ -475,7 +475,12 @@ function BusinessProfile(props) {
 
     const handleChangePass = async () => {
         if (handleValidation()) {
-            let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
+            let data = {
+                email: props.token.email,
+                password: changePass.password,
+                confirmPass: changePass.newPassword
+            }
+            let result: any = await changePasswordVendor(data);
             if (result && result.data && !result.data.message) {
                 notification("success", "", intl.formatMessage({ id: "passwordUpdate" }));
                 setChangePass({
@@ -532,14 +537,15 @@ function BusinessProfile(props) {
     const handleChangeEmail = async () => {
         if (handleValidationEmail()) {
             const req = {
-                customerId: vendorId,
-                newEmail: changeEmail.newEmail,
-                password2: changeEmail.password2
+                email: props.token.email,
+                password: changeEmail.password2,
+                new_email: changeEmail.newEmail,
             }
 
-            let result: any = await updateCustEmail(req);
+            let result: any = await vendorResetEmail(req);
             if (result && result.data && !result.data.message) {
-                notification("success", "", intl.formatMessage({ id: "newEmailUpdate" }));
+                console.log(result.data);
+                notification("success", "", intl.formatMessage({ id: "newEmailUpdatenotification" }));
                 setChangeEmail({
                     confirmNewEmail: "",
                     newEmail: "",
@@ -767,7 +773,7 @@ function BusinessProfile(props) {
 
                             <div className="field_details mb-3">
                                 <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
-                                <div className="field-name">{capitalize(vendorForm.gender)} </div>
+                                <div className="field-name">{vendorForm.gender ? capitalize(vendorForm.gender) : ""} </div>
                             </div>
                             <div className="field_details">
                                 <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
@@ -782,7 +788,7 @@ function BusinessProfile(props) {
                             </div>
                             <div className="field_details">
                                 <label className="form-label"><IntlMessages id="vendor.contactMethod" /></label>
-                                <div className="field-name">{capitalize(vendorForm.contactMethod)}</div>
+                                <div className="field-name">{vendorForm.contactMethod ? capitalize(vendorForm.contactMethod) : ""}</div>
                             </div>
                         </div>
 
@@ -1084,25 +1090,26 @@ function BusinessProfile(props) {
                     <div className="row">
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className="btn btn-secondary">
-                                    <IntlMessages id="myaccount.myOrdersReturns" />
+                                <Link to="/vendor/returns-complaints" className="btn btn-secondary">
+                                    <IntlMessages id="vendor.returnComplaints" />
                                     <i className="fas fa-chevron-right"></i>
                                 </Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <Link to="customer-orders" className="btn btn-secondary">
-                                    <IntlMessages id="myaccount.orderDetails" />
+                                <Link to="/vendor/sales-orders" className="btn btn-secondary">
+                                    <IntlMessages id="vendor.salesOrders" />
                                     <i className="fas fa-chevron-right"></i>
                                 </Link>
                             </div>
                         </div>
                         <div className="col-sm-4 mb-1">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.returnDetails" />
+                                <Link to="/vendor/product-listing" className="btn btn-secondary">
+                                    <IntlMessages id="vendor.productListing" />
                                     <i className="fas fa-chevron-right"></i>
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </div>

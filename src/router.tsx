@@ -44,6 +44,8 @@ import CreateReturn from './containers/Page/customer/createReturn';
 import RetrunSummary from './containers/Page/customer/retrunSummary';
 import ProductIntegration from './containers/Page/business/productIntegration';
 import ProductDetailsPrivate from './containers/Page/product/product-details/ProductDetailsPrivate';
+import BussinessResetEmail from './containers/Page/business/BussinessResetEmail';
+
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -55,6 +57,7 @@ const PublicRoutes = ({ history }) => {
 
           <ProductRoutes exact path="/help-center/:url_key" component={FaqListing} page='faq' />
           <ProductRoutes exact path="/vendor/forgot-password" component={BussinessResetpassword} />
+          <ProductRoutes exact path="/vendor/settings/email" component={BussinessResetEmail} />
           <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
           <ProductRoutes exact path="/search/:brandname" component={Search} />
           <ProductRoutes exact path="/thankyou" component={orderThankyou} />

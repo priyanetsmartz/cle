@@ -26,8 +26,7 @@ function MyPayouts(props) {
     const [status, setStatus] = useState('');
     const [sortOrder, setSortOrder] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [fromDate, setFromDate] = useState('');
-    const [toDates, setToDates] = useState('');
+    const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
     const [subtotal, setSubtotal] = useState(0);
     const [commission, setCommission] = useState(0)
     const [totalP, setTotalP] = useState(0)
@@ -45,15 +44,28 @@ function MyPayouts(props) {
     const getOrdersByStatus = (e) => {
         const { value } = e.target;
         setStatus(value)
-        getDataOfPayouts(fromDate, toDates, e.target.value, range.low, range.high, searchTerm, sortOrder)
+        getDataOfPayouts(dateFilter.from, dateFilter.to, e.target.value, range.low, range.high, searchTerm, sortOrder)
     }
 
     const getOrdersByDate = (start, end, label) => {
-        let dateFrom = moment(start).format("MM/DD/YYYY")
-        let dateTo = moment(end).format("MM/DD/YYYY");
-        setFromDate(dateFrom);
-        setToDates(dateTo);
-        getDataOfPayouts(dateFrom, dateTo, status, range.low, range.high, searchTerm, sortOrder)
+        let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
+        if (label === 'All') {
+            setDateFilter(prevState => ({
+                ...prevState,
+                from: '',
+                to: ''
+            }))
+            getDataOfPayouts('', '', status, range.low, range.high, searchTerm, sortOrder)
+        } else {
+            setDateFilter(prevState => ({
+                ...prevState,
+                from: from,
+                to: to
+            }))
+            getDataOfPayouts(from, to, status, range.low, range.high, searchTerm, sortOrder)
+        }
+
+
     }
 
     const getOrdersByPrice = async (range) => {
@@ -64,12 +76,12 @@ function MyPayouts(props) {
             low: from,
             high: to
         }))
-        getDataOfPayouts(fromDate, toDates, status, from, to, searchTerm, sortOrder)
+        getDataOfPayouts(dateFilter.from, dateFilter.to, status, from, to, searchTerm, sortOrder)
     }
 
     const setSort = async (e) => {
         setSortOrder(e.target.value)
-        getDataOfPayouts(fromDate, toDates, status, range.low, range.high, searchTerm, e.target.value)
+        getDataOfPayouts(dateFilter.from, dateFilter.to, status, range.low, range.high, searchTerm, e.target.value)
     }
     const getOrdersBySearchTerm = async (e) => {
         if (e.target.value.length >= 3) {
@@ -78,7 +90,7 @@ function MyPayouts(props) {
         else {
             setSearchTerm("");
         }
-        getDataOfPayouts(fromDate, toDates, status, range.low, range.high, e.target.value, sortOrder)
+        getDataOfPayouts(dateFilter.from, dateFilter.to, status, range.low, range.high, e.target.value, sortOrder)
     }
 
     const columns = [
@@ -86,9 +98,12 @@ function MyPayouts(props) {
             name: 'Price',
             selector: row => row.price,
             button: true,
-            cell: row => (
-                <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{row.price ? formatprice(row.price) : 0}</Link>
-            )
+            cell: row => {
+                //let priceT = row.price ? parseFloat(row.price).toFixed(2) : 0
+                let formatPrice = formatprice(row.price);
+                return (<Link to={`/vendor/payoutdetails/${row.payout_id}`}>{formatPrice}</Link>
+                )
+            }
 
         },
         {
@@ -141,12 +156,12 @@ function MyPayouts(props) {
             response['po_total'] = data.data[0].po_total
             response['selleraddress'] = data.data[0].selleraddress
         }
-        console.log(response)
+        // console.log(response)
         setPayoutData(response)
         setShowRawPDF(true)
         printDocument();
     };
-    async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order:any = '') {
+    async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order: any = '') {
         let page_size = siteConfig.pageSize;
 
         let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice, page_size, sort_order, term)
@@ -178,9 +193,9 @@ function MyPayouts(props) {
 
     }
 
-    const handleChange = ({ selectedRows }) => {
-        console.log('Selected Rows: ', selectedRows);
-    };
+    // const handleChange = ({ selectedRows }) => {
+    //     console.log('Selected Rows: ', selectedRows);
+    // };
 
     const printDocument = () => {
         const input = document.getElementById('pdfdiv');
@@ -193,7 +208,7 @@ function MyPayouts(props) {
                 var imageWidth = canvas.width;
                 var imageHeight = canvas.height;
 
-                var ratio = imageWidth / imageHeight >= pageWidth / pageHeight ? pageWidth / imageWidth : pageHeight / imageHeight;
+                // var ratio = imageWidth / imageHeight >= pageWidth / pageHeight ? pageWidth / imageWidth : pageHeight / imageHeight;
                 //pdf = new jsPDF(this.state.orientation, undefined, format);
                 //     console.log(imageWidth * ratio, imageHeight * ratio)
                 pdf.addImage(imgData, 'JPEG', 20, 20, 400, 600);
@@ -486,56 +501,56 @@ function MyPayouts(props) {
                         </div>
                     </div>
 
-               <div className="clearfix"></div>
-				<div className="border p-3">
-					<table className="table table-borderless payout">
-						<thead><IntlMessages id="account.balance" /></thead>
-						<tbody>
-							<tr>
-								<td><IntlMessages id="order.subTotal" /></td>
-								<th className="text-end">{siteConfig.currency}{subtotal}</th>
-							</tr>
-							<tr>
-								<td><IntlMessages id="commission" /></td>
-								<th className="text-end">{siteConfig.currency}{commission}</th>
-							</tr>
+                    <div className="clearfix"></div>
+                    <div className="border p-3">
+                        <table className="table table-borderless payout">
+                            <thead><IntlMessages id="account.balance" /></thead>
+                            <tbody>
+                                <tr>
+                                    <td><IntlMessages id="order.subTotal" /></td>
+                                    <th className="text-end">{siteConfig.currency}{formatprice(subtotal)}</th>
+                                </tr>
+                                <tr>
+                                    <td><IntlMessages id="commission" /></td>
+                                    <th className="text-end">-{siteConfig.currency}{formatprice(commission)}</th>
+                                </tr>
 
-							<tr>
-								<th className="bor-top-2"><IntlMessages id="order.total" /></th>
-								<td className="bor-top-2 text-end dark-col">{siteConfig.currency}{totalP}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				
-                <br />
-                <div className="row">
-                    <div className="float-right">
-                        <div className="sort_by">
-                            <div className="sortbyfilter">
-                                <select value={sortOrder} onChange={setSort} className="form-select customfliter" aria-label="Default select example">
-                                    <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                    <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                    <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                </select>
+                                <tr>
+                                    <th className="bor-top-2"><IntlMessages id="order.total" /></th>
+                                    <td className="bor-top-2 text-end dark-col">{siteConfig.currency}{formatprice(totalP)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
+                    <br />
+                    <div className="row">
+                        <div className="float-right">
+                            <div className="sort_by">
+                                <div className="sortbyfilter">
+                                    <select value={sortOrder} onChange={setSort} className="form-select customfliter" aria-label="Default select example">
+                                        <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                        <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                        <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                    </select>
+
+                                </div>
                             </div>
                         </div>
+                        <DataTable
+                            columns={columns}
+                            data={myOrder}
+                            // selectableRows
+                            pagination={true}
+                        // onSelectedRowsChange={handleChange}
+                        />
                     </div>
-                    <DataTable
-                        columns={columns}
-                        data={myOrder}
-                        // selectableRows
-                        pagination={true}
-                    // onSelectedRowsChange={handleChange}
-                    />
                 </div>
-				 </div>
             </section>
 
-        
-		
-		</div>
+
+
+        </div>
 
     )
 }
