@@ -3084,6 +3084,10 @@ left: auto; */
     font-weight: 600;
 }
 
+.range_slider .range_inner .form-control{
+	font-size:14px;
+}
+
 .range_slider .range_inner .search_results .form-control {
     padding: 0.6rem 2.6rem;
     background-color: #F7F7F7;
@@ -7595,6 +7599,16 @@ p.sliderupper {
     margin: 0;
 }
 
+.return-det .status_class {
+    color: #707070;
+    font-family: 'Lato', sans-serif;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    display: inline;
+    margin: 0 15px;
+}
+
 .return-status {
     background-color: #F7F7F7;
     margin: 20px 0;
@@ -7753,16 +7767,18 @@ p.sliderupper {
 
 .opt-tabs{
 	padding:20px 0;
+	position: relative;
 }
 
 .opt-tabs .radio-toolbar {
   margin: 20px 0;
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 
 .opt-tabs .radio-toolbar input[type="radio"] {
-  opacity: 0;
+  opacity: 1;
   position: fixed;
   width: 0;
 }
@@ -7783,6 +7799,21 @@ p.sliderupper {
 	cursor:pointer;
 	transition: all .3s ease;
 }
+
+/* .opt-tabs .radio-toolbar label,
+.opt-tabs .radio-toolbar input[type="radio"] {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.opt-tabs .radio-toolbar input[type="radio"] {
+  opacity: 0.01;
+  z-index: 100;
+} */
 
 .opt-tabs .radio-toolbar label:hover {
    background-color: #000;
@@ -8362,6 +8393,16 @@ p.sliderupper {
 	overflow: auto;
 }
 
+.daterangepicker .ranges li {
+    font-size: 14px!important;
+    color: #707070;
+    font-weight: 400;
+    font-family: "Lato",sans-serif;
+}
+.daterangepicker .ranges li.active {
+    background-color: transparent!important;
+    color: #2E2BAA!important;
+}
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */
