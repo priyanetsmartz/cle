@@ -47,7 +47,7 @@ function GoogleLoginButton(props) {
             type: "vendor",
         }
         localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
-        history.push(`/vendor/profile`);
+        history.push(`/vendor/business-profile`);
     }
 
     async function fetchMyAPI(userInfo) {

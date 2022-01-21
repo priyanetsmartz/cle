@@ -80,7 +80,7 @@ function FacebookLoginButton(props) {
             country_id: '',
         }
         localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
-        history.push(`/vendor/profile`);
+        history.push(`/vendor/business-profile`);
     }
 
 

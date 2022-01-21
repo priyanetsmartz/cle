@@ -40,7 +40,7 @@ function BusinessProfile(props) {
         countryId: '',
         vendorDateofBirth: '',
         location: '',
-        gender: "male",
+        gender: "",
         contactMethod: ""
     });
 
@@ -291,7 +291,8 @@ function BusinessProfile(props) {
             "businessTax": businessDetailsForm.businessTax,
             "businessWebsite": businessDetailsForm.businessWebsite,
             "businessFacebook": businessDetailsForm.businessFacebook,
-            "businessInstagram": businessDetailsForm.businessInstagram
+            "businessInstagram": businessDetailsForm.businessInstagram,
+            "logo_image": ""
         }
         if (validateBussinessDetails()) {
             setSaveBusinessDetailsLoader(true)
@@ -319,6 +320,10 @@ function BusinessProfile(props) {
         if (!vendorForm.location) {
             formIsValid = false;
             error["location"] = intl.formatMessage({ id: "locationreq" });
+        }
+        if (!vendorForm.gender) {
+            formIsValid = false;
+            error["gender"] = intl.formatMessage({ id: "gifting.gender" });
         }
 
         if (typeof (vendorForm.vendorTelephone) !== "undefined") {
@@ -489,6 +494,11 @@ function BusinessProfile(props) {
                     password: ""
                 });
             } else {
+                setChangePass({
+                    confirmNewPassword: "",
+                    newPassword: "",
+                    password: ""
+                });
                 if (result.data.message) {
                     notification("error", "", result.data.message);
                 } else {
@@ -1162,20 +1172,20 @@ function BusinessProfile(props) {
                             <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
-                                    <option value=""><IntlMessages id="select" /></option>
+                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {DROPDOWN.dates.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
                                     })}
 
                                 </select>
                                 <select className="form-select me-3" value={dob.month} aria-label="Default select example" onChange={dobHandler} id="month">
-                                    <option value=""><IntlMessages id="select" /></option>
+                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {DROPDOWN.months.map(opt => {
                                         return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                     })}
                                 </select>
                                 <select className="form-select" value={dob.year} aria-label="Default select example" onChange={dobHandler} id="year">
-                                    <option value=""><IntlMessages id="select" /></option>
+                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {DROPDOWN.years.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
                                     })}

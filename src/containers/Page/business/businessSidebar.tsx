@@ -73,10 +73,10 @@ function BusinessSidebar(props) {
                                         <option value="sales-orders">{intl.formatMessage({ id: 'vendor.salesOrders' })}</option>
                                         <option value="product-listing">{intl.formatMessage({ id: 'vendor.productListing' })}</option>
                                         <option value="returns-complaints">{intl.formatMessage({ id: 'vendor.returnComplaints' })}</option>
-                                        {/*  <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
+                                         <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
                                         <option value="analysis">{intl.formatMessage({ id: 'vendor.myAnalysis' })}</option>
                                         <option value="profile">{intl.formatMessage({ id: 'vendor.businessProfile' })}</option>
-                                        <option value="notifications">{intl.formatMessage({ id: 'vendor.notification' })}</option> */}
+                                        {/* <option value="notifications">{intl.formatMessage({ id: 'vendor.notification' })}</option> */}
                                         <option value="support">{intl.formatMessage({ id: 'vendor.mySupport' })}</option>
                                     </select>
                                 </div>
@@ -122,8 +122,8 @@ function BusinessSidebar(props) {
                                                 <span className="pl-2"><IntlMessages id="vendor.myAnalysis" /></span>
                                             </Link>
                                         </li>
-                                        <li className={activeTab === 'profile' ? 'active' : ''}>
-                                            <Link to="#" onClick={() => changeTab('profile')}>
+                                        <li className={activeTab === 'business-profile' ? 'active' : ''}>
+                                            <Link to="#" onClick={() => changeTab('business-profile')}>
                                                 <i className="fas fa-user"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.businessProfile" /></span>
                                             </Link>
@@ -150,7 +150,7 @@ function BusinessSidebar(props) {
                                     activeTab === 'returns-complaints' ? <MyReturnsComplaints /> :
                                         activeTab === 'payouts' ? <MyPayouts /> :
                                             activeTab === 'analysis' ? <MyAnalysis /> :
-                                                activeTab === 'profile' ? <BusinessProfile /> :
+                                                activeTab === 'business-profile' ? <BusinessProfile /> :
                                                     activeTab === 'notifications' ? <MyNotifications /> : <MySupport />}
 
                     </div>
