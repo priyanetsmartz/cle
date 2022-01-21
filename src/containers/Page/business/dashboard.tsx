@@ -481,13 +481,15 @@ function Dashboard(props) {
                     <div className="row">
                         <div id="page-wrapper" className="container">
                             <div className="row">
-                                <DataTable
-                                    columns={columnsPayouts}
-                                    data={myPayouts}
-                                    highlightOnHover
-                                    pointerOnHover
-                                    striped={true}
-                                />
+                                <div className="tbl-payout">
+									<DataTable
+										columns={columnsPayouts}
+										data={myPayouts}
+										highlightOnHover
+										pointerOnHover
+										striped={true}
+									/>
+								</div>
                             </div>
                         </div>
                     </div>
