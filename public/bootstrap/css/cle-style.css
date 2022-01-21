@@ -1716,12 +1716,12 @@ p.promotion_alert {
 .address-action a.delete_btn:hover,
 .address-action a.edit_btn:hover {
     padding-top: 5px;
-    color: #000000;
+    color: #2E2BAA;
 }
 
 .address-action a.delete_btn:hover:after,
 .address-action a.edit_btn:hover:after {
-    border-color: #222;
+    border-color: #2E2BAA;
     bottom: 2px;
 }
 
@@ -7933,6 +7933,7 @@ p.sliderupper {
     color: #000;
     font-size: 14px;
     font-family: "Lato",sans-serif;
+	word-spacing: 2px;
 }
 
 .rdt_TableCell a:hover,
@@ -8042,24 +8043,30 @@ p.sliderupper {
     width: 100%;
 }
 
-.check-als .btn-secondary {
+.my_profile_sect.check-als .btn-secondary {
     display: flex;
     align-items: center;
     justify-content: center;
+	padding: 20px 6px !important;
+	transition: all .5s ease-in-out;
 }
 
-.check-als .btn-secondary:hover{
-	
+.my_profile_sect.check-als .btn-secondary:hover{
+	color: #fff!important;
+    background-color: #2E2BAA!important;
+    border-color: #2E2BAA!important;
 }
 
-.check-als .btn-secondary i {
+.my_profile_sect.check-als .btn-secondary i {
     font-size: 11px;
-	transition: all .5s ease;
-	margin-left: 15px;
+	transition: all .3s ease-in-out;
+	margin-left: 0;
+	visibility: hidden;
 }
 
-.check-als .btn-secondary:hover i{
-	 
+.my_profile_sect.check-als .btn-secondary:hover i{
+	 margin-left: 15px;
+	 visibility: visible;
 }
 
 .filter-tiles {
@@ -8284,9 +8291,9 @@ p.sliderupper {
 }
 
 .start-selling h3{
-	font-size: 36px;
+	font-size: 32px;
     font-family: 'Monument Extended';
-    line-height: 46px;
+    line-height: 42px;
     font-weight: 500;
     color: #000;
     margin-top: 20px;
@@ -8304,6 +8311,12 @@ p.sliderupper {
     padding: 10px 0;
 }
 
+.pro_categry_sidebar {
+    position: sticky;
+    left: 0;
+    top: 20%;
+	overflow: auto;
+}
 
 /* All media screen below */
 
