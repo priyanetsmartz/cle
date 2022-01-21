@@ -37,6 +37,7 @@ function BusinessForgottenPassword(props) {
       }
 
       let result: any = await vendorRestpassword(payload);
+      console.log(result)
       if (result.data) {
         notification("success", "", intl.formatMessage({ id: "forgotpassmail" }));
         setState(prevState => ({
@@ -52,7 +53,7 @@ function BusinessForgottenPassword(props) {
         if (result.message === 'Request failed with status code 404') {
           notification("error", "", intl.formatMessage({ id: "emailnotfound" }));
         } else {
-          notification("error", "", intl.formatMessage({ id: "genralerror" }));
+          notification("error", "", intl.formatMessage({ id: "emailnotfound" }));
         }
 
         setIsShow(false);

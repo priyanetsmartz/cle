@@ -29,7 +29,7 @@ function FaqHeader(props) {
             }, 3000)
 
         } else {
-            
+
             SetNothingFound("")
             SetAutoSuggestions([])
         }
@@ -40,7 +40,7 @@ function FaqHeader(props) {
         let results: any = await faqSearch(lang, value, siteConfig.pageSize);
         if (results.data.items && results.data.items.length > 0) {
             SetNothingFound("")
-            SetSearchText("")
+            SetSearchText(value)
             SetAutoSuggestions(results.data.items)
         } else {
             SetSearchText("")
@@ -68,7 +68,7 @@ function FaqHeader(props) {
                                         {autoSuggestions.map((item, i) => {
                                             return (
                                                 <li key={i} onClick={clearSuggestions}>
-                                                    <Link to={`/help-center/` + item.category_data[0].category_url_key + '#' + item['title']} > {item.title}</Link>
+                                                    <Link to={item && item.category_data.length > 0 && item.category_data[0].category_url_key ? `/help-center/` + item.category_data[0].category_url_key + '#' + item['title'] : ""} > {item.title}</Link>
 
                                                 </li>
                                             )
