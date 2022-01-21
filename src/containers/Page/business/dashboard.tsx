@@ -13,6 +13,7 @@ import moment from 'moment';
 import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { capitalize, formatprice } from '../../../components/utility/allutils';
+import { getContent } from '../../../redux/pages/customers';
 
 function Dashboard(props) {
     const language = getCookie('currentLanguage');
@@ -33,7 +34,7 @@ function Dashboard(props) {
     const [myPayouts, setMyPayouts] = useState([]);
     const [showRawPDF, setShowRawPDF] = useState(false)
     const [payoutData, setPayoutData] = useState([])
-
+    const [cmsData, setCmsData] = useState([])
     useEffect(() => {
         let pop = getCookie('popUp');
         if (localToken.showpop === 1 || pop === localToken.vendor_id)
@@ -283,7 +284,8 @@ function Dashboard(props) {
     }
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
-        //  console.log(results.data)
+
+
         if (results && results.data && results.data.length > 0) {
             setDataTilesData(results.data[0])
         }
@@ -363,20 +365,7 @@ function Dashboard(props) {
                         </div>
                     </div>
 
-                    <section className="start-selling">
-                        <div className="row">
-                            <div className="col-sm-8">
-                                <div className="sell-cont">
-                                    <h3>Start selling</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                                    <a href="#" className="btn btn-secondary">Start selling</a>
-                                </div>
-                            </div>
-                            <div className="col-sm-4">
-                                <img src="../images/best-priofile.svg" className="img-fluid" />
-                            </div>
-                        </div>
-                    </section>
+                    <HtmlContent identifier="startselling" />
 
                 </div >
             </section>

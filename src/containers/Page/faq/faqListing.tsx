@@ -64,16 +64,16 @@ function FaqListing(props) {
                 <h2><IntlMessages id="related.faq" /></h2>
                 {
                   categoryData.map((category, index) => (
-                    <div className="accordion" key={index} id="accordionExample">
+                    <div className="accordion" key={index} id="accordionExample1">
                       {
                         category['relatedquestions_array'].map((question, i) => (
                           <div key={i} className="accordion-item">
                             <h2 className="accordion-header" id={`headingSecTwo${i}`}>
-                              <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapseSecTwo${question['question_id']}`} aria-expanded="false" aria-controls="collapseFive">
+                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#collapseSecTwo${question['question_id']}`} aria-expanded="false" aria-controls="collapseFive">
                                 {question['title']}
                               </button>
                             </h2>
-                            <div id={`collapseSecTwo${question['question_id']}`} className="accordion-collapse collapse" aria-labelledby={`headingSecTwo${i}`} data-bs-parent="#accordionExample">
+                            <div id={`collapseSecTwo${question['question_id']}`} className="accordion-collapse collapse" aria-labelledby={`headingSecTwo${i}`} data-bs-parent="#accordionExample1">
                               <div className="accordion-body">
                                 <p dangerouslySetInnerHTML={{ __html: question['answer'] }} />
                               </div>

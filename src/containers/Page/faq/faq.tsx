@@ -18,7 +18,8 @@ function Faq(props) {
 
 	async function getData() {
 		let results: any = await getFaqlabels(props.languages, siteConfig.pageSize, siteConfig.questionLimitFaq);
-		if (results && results.data && results.data.length > 0 && results.data.items) {
+		//console.log(results.data, Object.keys(results.data).length);
+		if (results && results.data && Object.keys(results.data).length > 0 && results.data.items) {
 			setFaqData(results.data.items)
 		}
 
