@@ -107,7 +107,7 @@ export async function searchProducts(language: string, pageSize: number, status:
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
 
-    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId + "&pageSize=" + pageSize;
+    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
     if (status !== null && status !== '') {
         queryString += "&status=" + status;
     }
@@ -171,6 +171,8 @@ export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fr
         queryString += "&page_size=" + page_size
     if (search != null && search !== '')
         queryString += "&search=" + search
+    if (sort_order != null && sort_order != '')
+        queryString += '&sort_order=' + sort_order
     return adminToken.request(`default/rest/all/V1/vendor/vendorPayoutCollection?${queryString}`, "", "GET", "")
 
 }
@@ -179,12 +181,12 @@ export async function getReturnDetail(id: number) {
     return adminToken.request(`default/rest/all/V1/vendor/returnDetailInformation?rmaId=${id}`, "", "GET", "");
 }
 
-export async function getOrderDetail(lang: string, id: number, sort_order:string) {
+export async function getOrderDetail(lang: string, id: number, sort_order: string) {
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    let queryString = "vendorId="+vendorId+"&orderId="+id
-    if(sort_order!=null && sort_order!='')
-    queryString+="&sortOrder="+sort_order
+    let queryString = "vendorId=" + vendorId + "&orderId=" + id
+    if (sort_order != null && sort_order != '')
+        queryString += "&sortOrder=" + sort_order
     return adminToken.request(`default/rest/all/V1/vendor/vendorOrderDetail?${queryString}`, "", "GET", "");
 }
 
@@ -222,4 +224,12 @@ export async function changeOrderSatus(orderId: number, statusOrder: string, sta
         statusreason: statusOrderComment
     }
     return adminToken.request(`rest/all/V1/vendor/vendorOrderDetail`, data, "PUT", "");
+}
+
+export function vendorResetEmail(emailInfo) {
+    return adminToken.request(`rest/all/V1/vendor/resetEmail`, emailInfo, "PUT", "");
+}
+
+export function changePasswordVendor(data) {
+    return adminToken.request(`rest/all/V1/vendor/resetPassword`, data, "PUT", "");
 }

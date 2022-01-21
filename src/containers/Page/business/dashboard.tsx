@@ -36,7 +36,7 @@ function Dashboard(props) {
 
     useEffect(() => {
         let pop = getCookie('popUp');
-        if (localToken.showpop === 0 || pop === 'true')
+        if (localToken.showpop === 1 || pop === localToken.vendor_id)
             setMyDashboardModal(false)
         else
             setMyDashboardModal(true)
@@ -277,14 +277,15 @@ function Dashboard(props) {
 
     }
     async function openDashboardModal(oldDate, currentDate) {
-        let results: any = await closePopup(0);
-        setCookie("popUp", true)
+        let results: any = await closePopup(1);
+        setCookie("popUp", localToken.vendor_id)
         setMyDashboardModal(!myDashboardModal);
     }
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
-        if (results && results.data) {
-            setDataTilesData(results.data)
+        //  console.log(results.data)
+        if (results && results.data && results.data.length > 0) {
+            setDataTilesData(results.data[0])
         }
 
     }
@@ -361,22 +362,22 @@ function Dashboard(props) {
                             </div>
                         </div>
                     </div>
-					
-					<section className="start-selling">
-						<div className="row">
-							<div className="col-sm-8">
-								<div className="sell-cont">
-									<h3>Start selling</h3>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-									<a href="#" className="btn btn-secondary">Start selling</a>
-								</div>
-							</div>
-							<div className="col-sm-4">
-								<img src="../images/best-priofile.svg" className="img-fluid" />
-							</div>
-						</div>
-					</section>
-					
+
+                    <section className="start-selling">
+                        <div className="row">
+                            <div className="col-sm-8">
+                                <div className="sell-cont">
+                                    <h3>Start selling</h3>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                                    <a href="#" className="btn btn-secondary">Start selling</a>
+                                </div>
+                            </div>
+                            <div className="col-sm-4">
+                                <img src="../images/best-priofile.svg" className="img-fluid" />
+                            </div>
+                        </div>
+                    </section>
+
                 </div >
             </section>
             <section className="my_profile_sect mb-4">
@@ -396,10 +397,10 @@ function Dashboard(props) {
                     <div className="row mb-4" style={{ columnCount: 3 }}>
                         <div className="col-sm-12 col-md-4">
                             <div className="card-info">
-                                <h5><IntlMessages id="users" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <h5><IntlMessages id="ordertotal" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>30K</h3>
-                                    <h4>9%</h4>
+                                    <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
+                                    {/* <h4>9%</h4> */}
                                 </div>
                             </div>
                         </div>
@@ -407,8 +408,8 @@ function Dashboard(props) {
                             <div className="card-info">
                                 <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
-                                    <h4>10%</h4>
+                                    <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
+                                    {/* <h4>10%</h4> */}
                                 </div>
                             </div>
                         </div>
@@ -416,8 +417,8 @@ function Dashboard(props) {
                             <div className="card-info">
                                 <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['payoutAmount'] ? dataTilesData['payoutAmount'] : 0}</h3>
-                                    <h4>5%</h4>
+                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    {/* <h4>5%</h4> */}
                                 </div>
                             </div>
                         </div>
@@ -429,7 +430,7 @@ function Dashboard(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="salesOrder.title" /></h1>
+                            <h1><IntlMessages id="vendor.salesOrders" /></h1>
                         </div>
                     </div>
                     <div className="row">

@@ -553,7 +553,7 @@ function Checkout(props) {
             delete shippingAddress['default_billing'];
             if (customer_id) {
                 custForm.addresses.push(obj);
-
+                console.log(obj)
                 let newAddress: any = await saveCustomerDetails({ customer: custForm });
                 // console.log(newAddress.data)
                 delete shippingAddress['default_shipping'];
@@ -563,6 +563,7 @@ function Checkout(props) {
                 // delete shippingAddress['save_in_address_book'];
                 addressInformation.shippingAddress = shippingAddress;
                 address.addressInformation = addressInformation;
+                console.log(address)
                 result = await setUserDeliveryAddress(address);
                 // console.log(result)
                 if (newAddress.data) {

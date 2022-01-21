@@ -98,24 +98,24 @@ function ProductIntegration(props) {
     }
 
     const optionHandler = async (e) => {
-        // console.log(formData)
+        console.log(Object.keys(formData).length, formData)
         if (Object.keys(formData).length <= 0)
             return notification("error", "", intl.formatMessage({ id: "selectproductintegration" }));
 
-        payload.answer.response_json = JSON.stringify(formData);
-        payload.answer.form_id = form.form_id;
-        payload.answer.store_id = form.store_id;
-        // payload.answer.customer_id = localToken.vendor_id;
-        payload.answer.form_name = form.title;
-        payload.answer.form_code = 'product_integration';
+        // payload.answer.response_json = JSON.stringify(formData);
+        // payload.answer.form_id = form.form_id;
+        // payload.answer.store_id = form.store_id;
+        // // payload.answer.customer_id = localToken.vendor_id;
+        // payload.answer.form_name = form.title;
+        // payload.answer.form_code = 'product_integration';
 
-        let result: any = await SaveAnswers(payload);
-        console.log(result);
-        if (result.data && result.data.answer_id) {
-            notification("success", "", intl.formatMessage({ id: "productintegration" }));
-        } else {
-            notification("error", "", intl.formatMessage({ id: "genralerror" }));
-        }
+        // let result: any = await SaveAnswers(payload);
+        // //console.log(result);
+        // if (result.data && result.data.answer_id) {
+        //     notification("success", "", intl.formatMessage({ id: "productintegration" }));
+        // } else {
+        //     notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        // }
     }
 
     async function onFileChange(e) {
