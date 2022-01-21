@@ -334,7 +334,7 @@ function HeaderMenu(props) {
                                             <ul>
                                                 <LanguageSwitcher />
                                                 {customerName ? <li><Link to="/customer/profile">{capitalize(customerName)}</Link></li> : ""}
-                                                {props.token && props.token.vendor_name ? <li><Link to="/vendor/profile">{capitalize(props.token.vendor_name)}</Link></li> : ""}
+                                                {props.token && props.token.vendor_name ? <li><Link to="/vendor/business-profile">{capitalize(props.token.vendor_name)}</Link></li> : ""}
                                                 {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
                                                 <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
 
@@ -354,7 +354,7 @@ function HeaderMenu(props) {
                                                                 {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
                                                                 <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li>
                                                                 {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
-                                                                <li><Link to="/vendor/profile"><IntlMessages id="myprofile" /></Link></li>
+                                                                <li><Link to="/vendor/business-profile"><IntlMessages id="myprofile" /></Link></li>
                                                                 <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
                                                             </ul>
                                                         )}
@@ -490,7 +490,7 @@ function HeaderMenu(props) {
                                                             {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
                                                             <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li>
                                                             {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
-                                                            <li><Link to="/vendor/profile"><IntlMessages id="myprofile" /></Link></li>
+                                                            <li><Link to="/vendor/business-profile"><IntlMessages id="myprofile" /></Link></li>
                                                             <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
                                                         </ul>
                                                     )}

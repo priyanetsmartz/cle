@@ -106,8 +106,8 @@ function VendorLogin(props) {
         localStorage.removeItem('cartQuoteId');
         localStorage.removeItem('cartQuoteToken');
         // localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
-        // history.push(`/vendor/profile`);
-        // window.location.href = '/vendor/profile';
+        // history.push(`/vendor/business-profile`);
+        // window.location.href = '/vendor/business-profile';
         setTimeout(() => {
           setIsShow(false);
           history.push(`/vendor/dashboard`);

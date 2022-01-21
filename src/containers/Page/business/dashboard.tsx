@@ -201,8 +201,7 @@ function Dashboard(props) {
 
                 if (row.data.payout_status === 'paid') {
                     return (
-                        <p onClick={() => sortHandler(row.data.payout_id)}>
-                            <i className="fa fa-file-alt" aria-hidden="true"></i> Invoice</p>
+                        <Link to={`/vendor/payoutdetails/${row.payout_id}`}>View</Link>
                     )
                 }
             }

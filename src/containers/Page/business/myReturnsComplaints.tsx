@@ -70,6 +70,11 @@ function MyReturnsComplaints(props) {
         console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
         if (label === 'All') {
+            setDateFilter(prevState => ({
+                ...prevState,
+                from: '',
+                to: ''
+            }))
             getVendorReturnsData(status, range.low, range.high, searchTerm, '', '', sortOrder);
         } else {
             setDateFilter(prevState => ({

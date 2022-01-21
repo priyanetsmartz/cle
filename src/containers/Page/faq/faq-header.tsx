@@ -25,7 +25,9 @@ function FaqHeader(props) {
         SetSearchText(e.target.value)
         if (e.target.value && e.target.value.length >= 3) {
             setTimeout(() => {
-                faqSearchFunction(e.target.value);
+                if (e.target.value && e.target.value.length >= 3) {
+                    faqSearchFunction(e.target.value);
+                }
             }, 3000)
 
         } else {
@@ -43,7 +45,7 @@ function FaqHeader(props) {
             SetSearchText(value)
             SetAutoSuggestions(results.data.items)
         } else {
-            SetSearchText("")
+            SetSearchText(value)
             SetNothingFound("yes")
             SetAutoSuggestions([])
         }
