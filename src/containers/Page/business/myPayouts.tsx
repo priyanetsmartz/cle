@@ -537,14 +537,18 @@ function MyPayouts(props) {
                                 </div>
                             </div>
                         </div>
-                        <DataTable
-                            columns={columns}
-                            data={myOrder}
-                            // selectableRows
-                            pagination={true}
-                        // onSelectedRowsChange={handleChange}
-                        />
+                        
                     </div>
+
+					<div className="tbl-payout">
+						<DataTable
+							columns={columns}
+							data={myOrder}
+							// selectableRows
+							pagination={true}
+						// onSelectedRowsChange={handleChange}
+						/>
+					</div>
                 </div>
             </section>
 
