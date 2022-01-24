@@ -7245,6 +7245,10 @@ p.sliderupper {
     margin: -1px;
 }
 
+.faq-list .accordion-body{
+	padding:5px;
+}
+
 .login-popup {
     margin: 40px 0 0;
 }
@@ -7588,7 +7592,7 @@ p.sliderupper {
     font-size: 14px;
     font-weight: 600;
     line-height: 19px;
-    margin: 0;
+    margin-bottom: 7px;
 }
 
 .return-det p {
@@ -8031,6 +8035,18 @@ p.sliderupper {
 .rdt_TableRow .accept{
 	border:1px solid #00CEA7;
 	color:#00CEA7;
+}
+
+.rdt_TableRow .green,
+.rdt_TableRow .paid{
+	font-family: 'Monument Extended';
+    font-size: 9px;
+	font-weight:500;
+	line-height:16px;
+	padding:2px 6px;
+	background-color: #fff;
+	border: 1px solid #00CEA7;
+    color: #00CEA7;
 }
 
 .rdt_TableCell, .rdt_TableCell a,
