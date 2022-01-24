@@ -67,8 +67,8 @@ function MyReturnsComplaints(props) {
     }
 
     const datePickerCallback = async (start, end, label) => {
-        console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
-        let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
+        //console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
+        let from = moment(start).format("DD-MM-YYYY"), to = moment(end).format("DD-MM-YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({
                 ...prevState,

@@ -164,36 +164,36 @@ function ProductIntegration(props) {
                                 <h3>{formdd && formdd.length > 0 ? formdd[0].label : ""}</h3>
                                 <p>{formdd && formdd.length > 1 ? formdd[1].label : ""}</p>
                                 <div className="opt-tabs">
-                                    <div className="radio-toolbar">
+                                    <ul className="radio-toolbar">
                                         {formdd && formdd.length > 1 && formdd[1].values.map((quest, i) => {
                                             return (
-                                                <> <input type="radio" id={`radioApple` + i} name={formdd && formdd.length > 1 ? formdd[1].name : ""} value={quest.value} onChange={handleOnChange} data-attribute={quest.label} />
-                                                    <label htmlFor="radioApple">{quest.label}</label>
+                                                <> <li><input type="radio" id={`radioApple` + i} name={formdd && formdd.length > 1 ? formdd[1].name : ""} value={quest.value} onChange={handleOnChange} data-attribute={quest.label} />
+                                                    <label htmlFor="radioApple">{quest.label}</label></li>
                                                 </>
                                             )
                                         })}
-                                    </div>
+                                    </ul>
                                 </div>
                             </div>
                             {/* })} */}
                             {showEcom && (
-                                <div className="col-xs-12 col-md-12 col-lg-12">
+                                <div className="col-xs-12 col-md-12 col-lg-12 mt-4">
                                     <h3>{formdd && formdd.length > 2 ? formdd[2].label : ""}</h3>
                                     <div className="opt-tabs">
-                                        <div className="radio-toolbar">
+                                        <ul className="radio-toolbar">
                                             {formdd && formdd.length > 2 && formdd[2].values.map((quest, i) => {
                                                 return (
-                                                    <> <input type="radio" id={`step2` + i} name={formdd && formdd.length > 2 ? formdd[2].name : ""} value={quest.value} onChange={handleOnChangeEcom} data-attribute={quest.label} />
-                                                        <label htmlFor="radioApple">{quest.label}</label>
+                                                    <> <li><input type="radio" id={`step2` + i} name={formdd && formdd.length > 2 ? formdd[2].name : ""} value={quest.value} onChange={handleOnChangeEcom} data-attribute={quest.label} />
+                                                        <label htmlFor="radioApple">{quest.label}</label></li>
                                                     </>
                                                 )
                                             })}
-                                        </div>
+                                        </ul>
                                     </div>
                                 </div>
                             )}
                             {showBulkUpload && (
-                                <div className="col-xs-12 col-md-12 col-lg-12">
+                                <div className="col-xs-12 col-md-12 col-lg-12 mt-4">
                                     <h3>{formdd && formdd.length > 3 ? formdd[3].label : ""}</h3>
                                     <p>{formdd && formdd.length > 4 ? formdd[4].label : ""}</p>
 

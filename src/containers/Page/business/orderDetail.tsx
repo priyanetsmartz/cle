@@ -178,18 +178,21 @@ function VendorOrderDetail(props) {
                                             <div className="row mt-5">
                                                 <div className="col-md-12">
                                                     <div className='return-reason' >
+                                                        <p><strong><IntlMessages id = "status"></IntlMessages></strong></p>
                                                         <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
                                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                                             <option value="accept">{intl.formatMessage({ id: "accept" })}</option>
                                                             <option value="reject">{intl.formatMessage({ id: "decline" })}</option>
                                                         </select>
                                                     </div>
+                                                    <br></br>
                                                     {show && (<div className='return-comment' >
-                                                        <label><IntlMessages id="comments" /></label>
+                                                        <label><strong><IntlMessages id="reasonofrejection" /></strong></label>
                                                         <textarea className="form-select customfliter" onChange={handleChange} value={statusOrderComment}>
                                                         </textarea>
                                                     </div>)}
                                                     <div className="clearfix"></div>
+                                                    <br></br>
                                                     <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link></div>
                                                     <div className="clearfix"></div>
                                                 </div>
@@ -294,32 +297,29 @@ function VendorOrderDetail(props) {
                                 <div className="order-number">
                                     <hr></hr>
                                     <div className="row">
-                                        <div className="col-md-2">
+                                        <div className="col-md-1">
                                             <img height="84px" width="56px" src={product['img']} alt={product['name']} />
                                         </div>
-                                        <div className="col-md-4">
+                                        <div className="col-md-3">
                                             <p><strong>{product['brand']}</strong></p>
                                             <p>{product['name']}</p>
                                             <br />
                                             <p>{product['configOptionValue']}</p>
                                             <p><strong><IntlMessages id="order.productNo"/> {product['productId']}</strong></p>
                                         </div>
-
-                                        <div className="col-md-1">
-                                        </div>
-                                        <div className="col-md-1">
+                                        <div className="col-md-2">
                                             <p><strong><IntlMessages id="price" /></strong></p>
                                             <p>{currency}{formatprice(product['price'])}</p>
                                         </div>
-                                        <div className="col-md-1">
+                                        <div className="col-md-2">
                                             <p><strong><IntlMessages id="quantity" /></strong></p>
                                             <p>{formatprice (product['qty_ordered'])}</p>
                                         </div>
-                                        <div className="col-md-1">
+                                        <div className="col-md-2">
                                             <p><strong><IntlMessages id="tax" /></strong></p>
                                             <p>{currency}{formatprice(product['tax_amount'])}</p>
                                         </div>
-                                        <div className="col-md-1">
+                                        <div className="col-md-2">
                                             <p><strong><IntlMessages id="total" /></strong></p>
                                             <p>{currency}{formatprice(product['rowTotal'])}</p>
                                         </div>
