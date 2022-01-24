@@ -5574,12 +5574,23 @@ color: #017abb;
     margin-bottom: 0;
 }
 
+.order-number .high-col p{
+	color:#2E2BAA;
+	font-weight:600;
+}
+
+.order-number img{
+	width:74px;
+	height:74px;
+	object-fit:cover;
+}
+
 .order-number h4 {
     margin-bottom: 30px;
 }
 
 .order-delivery-address {
-    border: 1px solid #000;
+    border: 1px solid #ddd;
     padding: 20px;
     height: 100%;
 }
@@ -5594,18 +5605,21 @@ color: #017abb;
     margin: 0 0 20px;
 }
 
+.order-pro-list img{
+	width:100px;
+	height:100px;
+	object-fit:cover;
+}
+
 .order-pro-list li {
     padding: 20px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #ddd;
 }
 
 .order-pro-list li:first-child {
-    border-top: 1px solid #000;
+    border-top: 1px solid #ddd;
 }
 
-.order-pro-list .product-image img {
-    width: 50%;
-}
 
 .order-pro-list .pro-name-tag {}
 
@@ -7245,6 +7259,10 @@ p.sliderupper {
     margin: -1px;
 }
 
+.faq-list .accordion-body{
+	padding:5px;
+}
+
 .login-popup {
     margin: 40px 0 0;
 }
@@ -7506,6 +7524,60 @@ p.sliderupper {
 .info-tot .btn-return:hover {
     background-color: #fff;
     color: #000;
+}
+
+.info-tot h6{
+	font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 19px;
+    margin-bottom: 7px;
+}
+
+.info-tot p{
+	font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19px;
+    margin-bottom: 10px;
+}
+
+.download-invoice{
+	position: relative;
+	margin-top: 40px;
+}
+
+.download-invoice a{
+	font-size: 16px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    font-weight: 500;
+    color: #000000;
+    text-decoration: none;
+    transition: all .5s ease-in-out;
+    display: block;
+    position: absolute;
+    margin-right: 20px;
+}
+
+.download-invoice a:after{
+	content: "";
+    border-bottom: 2px solid transparent;
+    display: block;
+    transition: all .5s ease-in-out;
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
+}
+
+.download-invoice a:hover{
+	padding-top: 5px;
+    color: #2e2baa;
+}
+
+.download-invoice a:hover:after{
+	border-color: #2e2baa;
+    bottom: 2px;
 }
 
 .return-user-info,
@@ -8462,7 +8534,7 @@ p.sliderupper {
 }
 
 .bor-top-2 {
-    border-top: 2px solid #000;
+    border-top: 2px solid #ddd;
 }
 
 .payout td, .payout th {
@@ -8471,13 +8543,13 @@ p.sliderupper {
 }
 
 .payout th.bor-top-2, .payout td.bor-top-2 {
-    border-top: 2px solid #000;
+    border-top: 2px solid #ddd;
     padding: 15px 0 0!important;
 }
 
 .payout .dark-col {
     color: #2E2BAA;
-    font-size: 18px;
+    font-size: 18px;info-tot
     font-weight: 600;
 }
 

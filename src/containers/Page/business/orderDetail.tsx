@@ -319,7 +319,7 @@ function VendorOrderDetail(props) {
                                             <p><strong><IntlMessages id="tax" /></strong></p>
                                             <p>{currency}{formatprice(product['tax_amount'])}</p>
                                         </div>
-                                        <div className="col-md-2">
+                                        <div className="col-md-2 high-col">
                                             <p><strong><IntlMessages id="total" /></strong></p>
                                             <p>{currency}{formatprice(product['rowTotal'])}</p>
                                         </div>
