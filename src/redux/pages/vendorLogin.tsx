@@ -135,7 +135,7 @@ export async function getVendorReturns(language: string, pageSize: number, statu
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
 
     if (status !== null && status !== '') {
-        queryString += "&returnReason=" + status;
+        queryString += "&status=" + status;
     }
     if ((from !== null && from !== '') && (to !== null && to !== '' && to !== 0)) {
         queryString += "&from_price=" + from + "&to_price=" + to;
