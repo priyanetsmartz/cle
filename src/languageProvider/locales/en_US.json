@@ -643,5 +643,6 @@
   "ordertotal":"Total Orders",
   "locationreq":"Location is required",
   "withdrawal": "Withdrawal",
-  "newEmailUpdatenotification":"Token has been sent to your email address, follow instruction to update your email"
+  "newEmailUpdatenotification":"Token has been sent to your email address, follow instruction to update your email",
+  "reasonofrejection" : "Reason of rejection"
 }
