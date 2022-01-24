@@ -335,7 +335,7 @@ function MyPayoutDetails(props) {
                             <div className="info-tot">
                                 <div className="row">
                                     <div className="col-sm-6">
-                                        <div>
+                                        
                                             <div className="row">
                                                 <div className="col-sm-6">
                                                     <h6><IntlMessages id="dateofrequest" /></h6>
@@ -347,10 +347,6 @@ function MyPayoutDetails(props) {
                                                     <p>{dateOfPayment}</p>
                                                 </div>
 
-
-                                            </div>
-                                            <div className="row">
-
                                                 <div className="col-sm-6">
                                                     <h6><IntlMessages id="i/r" /></h6>
                                                     <p>{billType}</p>
@@ -360,20 +356,20 @@ function MyPayoutDetails(props) {
                                                     <h6><IntlMessages id="nooforders" /></h6>
                                                     <p>{numberOfOrders}</p>
                                                 </div>
-
-
                                             </div>
+											
                                             <div className="row">
-
                                                 <div className="col-sm-12">
-                                                    <Link to="#" onClick={() => sortHandler(payoutId)}>
-                                                        Download invoice/receipt</Link>
+                                                    <div className="download-invoice">
+													<Link to="#" onClick={() => sortHandler(payoutId)}>
+                                                        Download invoice / receipt</Link>
+													</div>	
                                                 </div>
                                             </div>
-                                        </div>
+                                        
                                     </div>
                                     <div className="col-sm-6">
-                                        <div className="">
+                                        <div className="border p-3">
                                             <table className="table table-borderless payout">
                                                 <thead><IntlMessages id="withdrawalamount" /></thead>
                                                 <tbody>
@@ -388,7 +384,7 @@ function MyPayoutDetails(props) {
 
                                                     <tr>
                                                         <th className="bor-top-2"><IntlMessages id="withdrawal" /></th>
-                                                        <th className="bor-top-2 text-end dark-co">{siteConfig.currency}{formatprice(withdrawal)}</th>
+                                                        <th className="bor-top-2 text-end dark-col">{siteConfig.currency}{formatprice(withdrawal)}</th>
                                                     </tr>
                                                 </tbody>
                                             </table>

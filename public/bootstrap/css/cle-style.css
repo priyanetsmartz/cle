@@ -288,9 +288,7 @@ a:hover {
 }
 
 .cli_logo {
-    display: block;
     width: 100%;
-    float: left;
     text-align: center;
     padding: 10px 0;
 }
@@ -1502,11 +1500,12 @@ p.promotion_alert {
 }
 
 .my_profile_sect h1 {
-    font-size: 24px;
+    font-size: 36px;
     font-family: 'Monument Extended';
     font-style: normal;
     margin-top: 30px;
-    font-weight: 500;
+    font-weight: 400;
+	line-height:46px;
 }
 
 .my_profile_sect.check-als h1 {
@@ -1516,7 +1515,8 @@ p.promotion_alert {
 }
 
 .my_profile_sect p {
-    font-size: 16px;
+    font-size: 18px;
+	font-weight: 500;
 }
 
 .field_details {
@@ -3013,6 +3013,10 @@ left: auto; */
 
 .myorder_sidebar ul li a span {
     font-weight: 600;
+}
+
+.myorder_sidebar ul li a:hover {
+    color: #2E2BAA;
 }
 
 .myorder_sidebar ul li.active a {
@@ -5574,12 +5578,23 @@ color: #017abb;
     margin-bottom: 0;
 }
 
+.order-number .high-col p{
+	color:#2E2BAA;
+	font-weight:600;
+}
+
+.order-number img{
+	width:74px;
+	height:74px;
+	object-fit:cover;
+}
+
 .order-number h4 {
     margin-bottom: 30px;
 }
 
 .order-delivery-address {
-    border: 1px solid #000;
+    border: 1px solid #ddd;
     padding: 20px;
     height: 100%;
 }
@@ -5594,18 +5609,21 @@ color: #017abb;
     margin: 0 0 20px;
 }
 
+.order-pro-list img{
+	width:100px;
+	height:100px;
+	object-fit:cover;
+}
+
 .order-pro-list li {
     padding: 20px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #ddd;
 }
 
 .order-pro-list li:first-child {
-    border-top: 1px solid #000;
+    border-top: 1px solid #ddd;
 }
 
-.order-pro-list .product-image img {
-    width: 50%;
-}
 
 .order-pro-list .pro-name-tag {}
 
@@ -7519,6 +7537,60 @@ p.sliderupper {
     color: #000;
 }
 
+.info-tot h6{
+	font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 19px;
+    margin-bottom: 7px;
+}
+
+.info-tot p{
+	font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19px;
+    margin-bottom: 10px;
+}
+
+.download-invoice{
+	position: relative;
+	margin-top: 40px;
+}
+
+.download-invoice a{
+	font-size: 16px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    font-weight: 500;
+    color: #000000;
+    text-decoration: none;
+    transition: all .5s ease-in-out;
+    display: block;
+    position: absolute;
+    margin-right: 20px;
+}
+
+.download-invoice a:after{
+	content: "";
+    border-bottom: 2px solid transparent;
+    display: block;
+    transition: all .5s ease-in-out;
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
+}
+
+.download-invoice a:hover{
+	padding-top: 5px;
+    color: #2e2baa;
+}
+
+.download-invoice a:hover:after{
+	border-color: #2e2baa;
+    bottom: 2px;
+}
+
 .return-user-info,
 .return-user-total {
     border: 1px solid #ddd;
@@ -7846,6 +7918,12 @@ p.sliderupper {
 	color:#fff;
 }
 
+.opt-tabs .radio-toolbar li:hover label{
+	 background-color: #000;
+    border-color: #000;
+	color:#fff;
+}
+
 .opt-tabs .radio-toolbar input[type="radio"]:focus + label {
     border: 1px solid #000;
 }
@@ -7881,6 +7959,11 @@ p.sliderupper {
     padding: 20px;
 	width: 290px;
 	max-width:100%;
+}
+
+.bulk-upload .download:hover{
+	background-color: transparent;
+	color:#2E2BAA;
 }
 
 .bulk-upload .upload{
@@ -8473,7 +8556,7 @@ p.sliderupper {
 }
 
 .bor-top-2 {
-    border-top: 2px solid #000;
+    border-top: 2px solid #ddd;
 }
 
 .payout td, .payout th {
@@ -8482,7 +8565,7 @@ p.sliderupper {
 }
 
 .payout th.bor-top-2, .payout td.bor-top-2 {
-    border-top: 2px solid #000;
+    border-top: 2px solid #ddd;
     padding: 15px 0 0!important;
 }
 
@@ -9198,6 +9281,9 @@ p.sliderupper {
     .banner-wrap .slider-text-inner {
         z-index: 3;
     }
+	.cli_logo{
+		display:none;
+	}
 
 }
 
