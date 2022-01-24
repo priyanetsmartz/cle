@@ -294,32 +294,29 @@ function VendorOrderDetail(props) {
                                 <div className="order-number">
                                     <hr></hr>
                                     <div className="row">
-                                        <div className="col-md-2">
+                                        <div className="col-md-1">
                                             <img height="84px" width="56px" src={product['img']} alt={product['name']} />
                                         </div>
-                                        <div className="col-md-4">
+                                        <div className="col-md-3">
                                             <p><strong>{product['brand']}</strong></p>
                                             <p>{product['name']}</p>
                                             <br />
                                             <p>{product['configOptionValue']}</p>
                                             <p><strong><IntlMessages id="order.productNo"/> {product['productId']}</strong></p>
                                         </div>
-
-                                        <div className="col-md-1">
-                                        </div>
-                                        <div className="col-md-1">
+                                        <div className="col-md-2">
                                             <p><strong><IntlMessages id="price" /></strong></p>
                                             <p>{currency}{formatprice(product['price'])}</p>
                                         </div>
-                                        <div className="col-md-1">
+                                        <div className="col-md-2">
                                             <p><strong><IntlMessages id="quantity" /></strong></p>
                                             <p>{formatprice (product['qty_ordered'])}</p>
                                         </div>
-                                        <div className="col-md-1">
+                                        <div className="col-md-2">
                                             <p><strong><IntlMessages id="tax" /></strong></p>
                                             <p>{currency}{formatprice(product['tax_amount'])}</p>
                                         </div>
-                                        <div className="col-md-1">
+                                        <div className="col-md-2">
                                             <p><strong><IntlMessages id="total" /></strong></p>
                                             <p>{currency}{formatprice(product['rowTotal'])}</p>
                                         </div>

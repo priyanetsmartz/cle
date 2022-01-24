@@ -86,33 +86,33 @@ function RetunOrder(props) {
                                     <div className="col-sm-12">
                                         <h5><IntlMessages id="order.orderNo" />: {returnDetails['info'] ? returnDetails['info'].rma_id : ""}</h5>
                                     </div>
-                                    <div className="col-sm-3">
+                                    <div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="status" /></h6>
                                         {returnDetails['info'] && returnDetails['info'].rma_status ?
                                             <p className={returnDetails['info'].rma_status === 'decline' ? 'red' : 'green'}> {capitalize(returnDetails['info'].rma_status)}</p> : ""}
                                     </div>
-                                    <div className="col-sm-3">
+                                    <div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="order.purchaseDate" /></h6>
                                         <p>{returnDetails['info'] && returnDetails['info'].purchase_date ? moment(returnDetails['info'].purchase_date).format('ddd DD MMMM YYYY') : ""}</p>
                                     </div>
 
-                                    <div className="col-sm-3">
+                                    <div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="shipped.date" /></h6>
                                         <p>{returnDetails['info'] && returnDetails['info'].shipment_date ? moment(returnDetails['info'].shipment_date).format('ddd DD MMMM YYYY') : ""}</p>
                                     </div>
-                                    <div className="col-sm-3">
+                                    <div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="return.date" /></h6>
                                         <p>{returnDetails['info'] && returnDetails['info'].return_date ? moment(returnDetails['info'].return_date).format('ddd DD MMMM YYYY') : ""}</p>
                                     </div>
-                                    <div className="col-sm-3">
+                                    <div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="order.paymentMethod" /></h6>
                                         <p><i className="fas fa-money-check"></i> {returnDetails['info'] ? returnDetails['info'].payment_method : ""}</p>
                                     </div>
-                                    <div className="col-sm-3">
+                                    <div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="returned.products" /></h6>
                                         <p>{returnDetails['info'] ? returnDetails['info'].return_qty : ""}</p>
                                     </div>
-                                    <div className="col-sm-3">
+                                    <div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="exchanged.products" /></h6>
                                         <p>{returnDetails['info'] ? returnDetails['info'].return_qty : ""}</p>
                                     </div>
@@ -165,7 +165,7 @@ function RetunOrder(props) {
                                 </div>
                             </div>
                         </section>
-                        <div className="container mb-5">
+                        <div className="mb-5">
                             {returnDetails['items'] && returnDetails['items'].length > 0 && (
                                 <ul className="order-pro-list">
                                     {returnDetails['items'].map((item, i) => {
@@ -183,7 +183,7 @@ function RetunOrder(props) {
                                                             <p><strong>{item.brand}</strong></p>
                                                             <p>{item.name}</p>
                                                         </div>
-                                                        <Link to="#" className="float-end text-end order-pro-price">{siteConfig.currency}{item.price}</Link>
+                                                        <Link to="#" className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{item.price}</Link>
                                                         <div className="clearfix"></div>
                                                     </div>
                                                     <div className="pro-name-tag">

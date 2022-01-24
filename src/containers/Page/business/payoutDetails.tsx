@@ -374,7 +374,7 @@ function MyPayoutDetails(props) {
                                     </div>
                                     <div className="col-sm-6">
                                         <div className="">
-                                            <table>
+                                            <table className="table table-borderless payout">
                                                 <thead><IntlMessages id="withdrawalamount" /></thead>
                                                 <tbody>
                                                     <tr>
@@ -387,8 +387,8 @@ function MyPayoutDetails(props) {
                                                     </tr>
 
                                                     <tr>
-                                                        <td><IntlMessages id="withdrawal" /></td>
-                                                        <th className="text-end">{siteConfig.currency}{formatprice(withdrawal)}</th>
+                                                        <th className="bor-top-2"><IntlMessages id="withdrawal" /></th>
+                                                        <th className="bor-top-2 text-end dark-co">{siteConfig.currency}{formatprice(withdrawal)}</th>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -397,7 +397,7 @@ function MyPayoutDetails(props) {
                                 </div>
                             </div>
                         </section>
-                        <div className="container mb-5">
+                        <div className="mb-5">
 
                             <DataTable
                                 columns={columns}
