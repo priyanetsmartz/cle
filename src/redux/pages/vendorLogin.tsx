@@ -132,7 +132,7 @@ export async function getVendorReturns(language: string, pageSize: number, statu
     var storeId = language === 'english' ? '3' : '2';
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const vendorId = vendor.vendor_id;
-    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId + "&pageSize=" + pageSize;
+    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
 
     if (status !== null && status !== '') {
         queryString += "&status=" + status;
@@ -141,7 +141,7 @@ export async function getVendorReturns(language: string, pageSize: number, statu
         queryString += "&from_price=" + from + "&to_price=" + to;
     }
     if (term !== null && term !== '') {
-        queryString += "&searchterm=" + term;
+        queryString += "&searchTerms=" + term;
     }
     if ((dateFrom !== null && dateFrom !== '') && (dateTo !== null && dateTo !== '')) {
         queryString += "&from_date=" + dateFrom + "&to_date=" + dateTo;

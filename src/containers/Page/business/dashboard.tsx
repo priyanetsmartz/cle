@@ -374,9 +374,9 @@ function Dashboard(props) {
                         <div className="col-sm-12">
                             <h1><IntlMessages id="datatiles" /></h1>
                             <ul className='filter-tiles'>
-                                <li className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></li>
-                                <li className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></li>
-                                <li className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></li>
+                                <Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link>
+                                <Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link>
+                                <Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link>
                             </ul>
                         </div>
                     </div>
@@ -471,14 +471,14 @@ function Dashboard(props) {
                         <div id="page-wrapper" className="container">
                             <div className="row">
                                 <div className="tbl-payout">
-									<DataTable
-										columns={columnsPayouts}
-										data={myPayouts}
-										highlightOnHover
-										pointerOnHover
-										striped={true}
-									/>
-								</div>
+                                    <DataTable
+                                        columns={columnsPayouts}
+                                        data={myPayouts}
+                                        highlightOnHover
+                                        pointerOnHover
+                                        striped={true}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

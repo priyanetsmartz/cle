@@ -23,7 +23,7 @@ import cartAction from "../../../redux/cart/productAction";
 import authAction from "../../../redux/auth/actions";
 import ForgottenPassword from '../../Page/forgotPassword';
 const { closePrefPopup } = cartAction;
-const { logout } = authAction;
+const { logout, customer } = authAction;
 function MyProfile(props) {
 
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
@@ -353,9 +353,12 @@ function MyProfile(props) {
 
             if (result && result.data && !result.data.message) {
                 let newObj = { ...localToken };
-                newObj.token_name = custForm.firstname + ' ' + custForm.lastname;
-                localStorage.setItem('redux-react-session/USER_DATA', JSON.stringify(newObj));
+                let name = custForm.firstname + ' ' + custForm.lastname;
+                newObj.token_name = name;
+                props.customer(name);
                 setMyDetailsModel(false);
+                localStorage.setItem('redux-react-session/USER_DATA', JSON.stringify(newObj));
+
                 setSaveCustDetailsLoader(false)
                 getData()
                 notification("success", "", intl.formatMessage({ id: "customerUpdate" }));
@@ -423,7 +426,7 @@ function MyProfile(props) {
                     region_id: "",
                     street: ""
                 });
-               
+
                 setIsShow(false);
             }
         }
@@ -1693,5 +1696,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { closePrefPopup, logout }
+    { closePrefPopup, logout, customer }
 )(MyProfile);
