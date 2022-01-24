@@ -19,7 +19,7 @@ function MyReturns(props) {
     const [sortOrder, setSortOrder] = useState('');
     const [loaderReturns, setLoaderReturns] = useState(false);
 
-    const [range, setRange] = useState({ low: 0, high: 0 })
+    const [range, setRange] = useState({ low: 0, high: 20000 })
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
     const intl = useIntl();
