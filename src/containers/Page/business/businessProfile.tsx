@@ -714,7 +714,7 @@ function BusinessProfile(props) {
                                 <div className="col-sm-3">
                                     <div className='companylogo'> <img className="rounded-circle" src={businessDetailsForm['logoImagePath'] ? companylogo + '' + businessDetailsForm['logoImagePath'] + `?${Math.random()}` : user} alt={businessDetailsForm['businessCompanyName']} width="100%" height="100%" />
                                         <div className='onhoveredit'> <input type="file" onChange={onFileChange} /></div>
-										<div className='onhoveredit-2'>Edit</div>
+                                        <div className='onhoveredit-2'>Edit</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
@@ -828,7 +828,7 @@ function BusinessProfile(props) {
                             <div className="addnew_address" onClick={openAddressModal}>
                                 <div className="addressnew_addressblue">
                                     <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
-									<i className="fas fa-plus"></i>
+                                    <i className="fas fa-plus"></i>
                                 </div>
                             </div>
                         )}
@@ -845,7 +845,7 @@ function BusinessProfile(props) {
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
                                 <div className="address-action">
-                                    <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
+                                    {/* <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link> */}
                                     <Link to="#" className="edit_btn" onClick={() => openAddressModal()}>
                                         <IntlMessages id="myaccount.edit" />
                                     </Link>
@@ -1026,9 +1026,9 @@ function BusinessProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.deleteAccount" /></h1>
-                            <p><IntlMessages id="myaccount.weAreSorryToSee" /> </p>
-                            <p><IntlMessages id="myaccount.ifYouStillLike" /> </p>
+                            <h1>Delete Account</h1>
+                            <p>We're sorry to see you go - remember, your CLÉ account is free and enables you to shop easily without having to enter your details each time. With it, you're able to take advantage of the exclusive discountsand promos on site.</p>
+                            <p>If you'd still like to deactivate your CLÉ account, follow the below steps</p>
                         </div>
                     </div>
                     <div className="row">
