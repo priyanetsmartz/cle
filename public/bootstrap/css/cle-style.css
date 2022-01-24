@@ -1502,11 +1502,12 @@ p.promotion_alert {
 }
 
 .my_profile_sect h1 {
-    font-size: 24px;
+    font-size: 36px;
     font-family: 'Monument Extended';
     font-style: normal;
     margin-top: 30px;
-    font-weight: 500;
+    font-weight: 400;
+	line-height:46px;
 }
 
 .my_profile_sect.check-als h1 {
@@ -1516,7 +1517,8 @@ p.promotion_alert {
 }
 
 .my_profile_sect p {
-    font-size: 16px;
+    font-size: 18px;
+	font-weight: 500;
 }
 
 .field_details {
@@ -3013,6 +3015,10 @@ left: auto; */
 
 .myorder_sidebar ul li a span {
     font-weight: 600;
+}
+
+.myorder_sidebar ul li a:hover {
+    color: #2E2BAA;
 }
 
 .myorder_sidebar ul li.active a {
@@ -7907,6 +7913,12 @@ p.sliderupper {
 	color:#fff;
 }
 
+.opt-tabs .radio-toolbar li:hover label{
+	 background-color: #000;
+    border-color: #000;
+	color:#fff;
+}
+
 .opt-tabs .radio-toolbar input[type="radio"]:focus + label {
     border: 1px solid #000;
 }
@@ -7942,6 +7954,11 @@ p.sliderupper {
     padding: 20px;
 	width: 290px;
 	max-width:100%;
+}
+
+.bulk-upload .download:hover{
+	background-color: transparent;
+	color:#2E2BAA;
 }
 
 .bulk-upload .upload{

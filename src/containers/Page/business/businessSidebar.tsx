@@ -92,19 +92,20 @@ function BusinessSidebar(props) {
                                         </li>
                                         <li className={activeTab === 'sales-orders' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('sales-orders')}>
-                                                <i className="fa fa-tag" aria-hidden="true"></i>
+                                                <i className="fas fa-box" aria-hidden="true"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.salesOrders" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'product-listing' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('product-listing')}>
-                                                <img src={wishlistIcon} alt="" className="img-fluid" />
+                                                
+												<i className="fas fa-tag" aria-hidden="true"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.productListing" /></span>
                                             </Link>
                                         </li>
                                         <li className={activeTab === 'returns-complaints' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('returns-complaints')}>
-                                                <i className='fa fa-undo-alt' aria-hidden="true"></i>
+												<i className="fas fa-undo-alt" aria-hidden="true"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.returnComplaints" /></span>
                                             </Link>
                                         </li>
@@ -118,7 +119,7 @@ function BusinessSidebar(props) {
                                           
                                         <li className={activeTab === 'analysis' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('analysis')}>
-                                                <img src={supportIcon} alt="" className="img-fluid" />
+                                                <i className="fas fa-chart-line"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.myAnalysis" /></span>
                                             </Link>
                                         </li>

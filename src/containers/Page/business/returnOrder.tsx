@@ -165,7 +165,7 @@ function RetunOrder(props) {
                                 </div>
                             </div>
                         </section>
-                        <div className="mb-5">
+                        <div className="mb-2">
                             {returnDetails['items'] && returnDetails['items'].length > 0 && (
                                 <ul className="order-pro-list">
                                     {returnDetails['items'].map((item, i) => {
@@ -204,7 +204,7 @@ function RetunOrder(props) {
                             )}
                         </div>
                         {returnShow && (
-                            <div className="row mt-5">
+                            <div className="row">
                                 <div className="col-md-12">
                                     <div className='return-reason' >
                                         <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
@@ -219,7 +219,7 @@ function RetunOrder(props) {
                                         </textarea>
                                     </div>)}
                                     <div className="clearfix"></div>
-                                    <div className="return-pro-btn float-end mt-2"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link></div>
+                                    <div className="return-pro-btn float-end mt-2"><Link to="#" className="btn btn-secondary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link></div>
                                     <div className="clearfix"></div>
                                 </div>
                             </div>
