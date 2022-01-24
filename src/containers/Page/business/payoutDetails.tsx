@@ -66,7 +66,7 @@ function MyPayoutDetails(props) {
                 detailLoop.orderNumber = data.order_increment_id;
                 detailLoop.link_to_orderdetails = data.link_to_orderdetails;
                 detailLoop.date = moment(data.order_created_at).format('DD MMMM YYYY');
-                detailLoop.total = data.amount.total_payout ? siteConfig.currency + ' ' + formatprice(data.amount.total_payout) : 0
+                detailLoop.total = data.amount ? siteConfig.currency + ' ' + formatprice(data.amount) : 0
                 return detailLoop;
             })
         }
