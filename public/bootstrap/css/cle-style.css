@@ -288,9 +288,7 @@ a:hover {
 }
 
 .cli_logo {
-    display: block;
     width: 100%;
-    float: left;
     text-align: center;
     padding: 10px 0;
 }
@@ -9276,6 +9274,9 @@ p.sliderupper {
     .banner-wrap .slider-text-inner {
         z-index: 3;
     }
+	.cli_logo{
+		display:none;
+	}
 
 }
 
