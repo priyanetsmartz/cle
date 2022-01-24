@@ -275,7 +275,7 @@ function VendorOrderDetail(props) {
 
                         </section>
                     </div>
-                    <div className="col-sm-12">
+                    {/* <div className="col-sm-12">
                             <div className="sort_by">
                                 <div className="sortbyfilter">
                                     <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
@@ -285,7 +285,7 @@ function VendorOrderDetail(props) {
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                 </div>
             </div>
             <br></br>

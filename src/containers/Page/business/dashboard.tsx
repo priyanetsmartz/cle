@@ -12,7 +12,7 @@ import { closePopup, dataTiles, getInvoice, getPayoutOrders, getVendorReturns } 
 import moment from 'moment';
 import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
-import { capitalize, formatprice } from '../../../components/utility/allutils';
+import { capitalize, formatprice, getCurrentMonth } from '../../../components/utility/allutils';
 import { getContent } from '../../../redux/pages/customers';
 
 function Dashboard(props) {
@@ -35,14 +35,16 @@ function Dashboard(props) {
     const [showRawPDF, setShowRawPDF] = useState(false)
     const [payoutData, setPayoutData] = useState([])
     const [cmsData, setCmsData] = useState([])
+    const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
+    const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     useEffect(() => {
         let pop = getCookie('popUp');
         if (localToken.showpop === 1 || pop === localToken.vendor_id)
             setMyDashboardModal(false)
         else
             setMyDashboardModal(true)
-        let currentDate = moment().format('MM/DD/YYYY');
-        let oldDate = moment().subtract(1, 'months').format('MM/DD/YYYY');
+        let currentDate = moment().endOf('month').format('MM/DD/YYYY');
+        let oldDate = moment().startOf('month').format('MM/DD/YYYY');
         getDataTiles(oldDate, currentDate);
         getDataOfOrders()
         getVendorReturnsData()
@@ -59,6 +61,7 @@ function Dashboard(props) {
         }
     }, [])
     useEffect(() => {
+
         getDataOfCategory(lang, 9, page, 'published_at', 'desc')
     }, [page])
 
@@ -309,6 +312,41 @@ function Dashboard(props) {
         //  setflagDates(dates)
         getDataTiles(dates['start'], dates['end'])
     }
+
+    function handleChangeLeft(i) {
+
+        let monthKey = currentMonthkey - 1;
+        let month = moment.monthsShort().filter((name, i) => {
+            return i === monthKey
+        })
+        console.log(monthKey)
+        if (monthKey === -1) return false;
+        setCurrentMonthKey(monthKey);
+        setCurrentMonth(month[0])
+        let input = monthKey + 1;
+        const output = moment(input, "MM");
+      //  console.log(output)
+        let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
+        let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
+      
+        getDataTiles(startOfMonth, endOfMonth);
+    }
+
+    function handleChangeRight(i) {
+
+        let monthKey = currentMonthkey + 1;
+        if (monthKey === 12) return false;
+        let month = moment.monthsShort().filter((name, i) => {
+            return i === monthKey
+        })
+        setCurrentMonthKey(monthKey);
+        setCurrentMonth(month[0])
+        let input = monthKey + 1;
+        const output = moment(input, "MM");
+        let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
+        let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
+        getDataTiles(startOfMonth, endOfMonth);
+    }
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
@@ -377,6 +415,19 @@ function Dashboard(props) {
                                 <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
                                 <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
                                 <li><Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
+                            </ul>
+
+                            <ul className='monthsname pagination justify-content-center align-items-center'>
+                                {/* {
+                                    moment.monthsShort().filter((name, i) => {
+                                        return i === 0
+                                    })
+                                } */}
+                                <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
+                                {
+                                    <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
+                                }
+                                <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
                             </ul>
                         </div>
                     </div>

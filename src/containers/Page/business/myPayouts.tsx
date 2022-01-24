@@ -22,7 +22,7 @@ function MyPayouts(props) {
     const [myOrder, setMyOrders] = useState([])
     const ref = useRef();
     const [accBalance, setAccBalance] = useState([])
-    const [range, setRange] = useState({ low: 0, high: 0 })
+    const [range, setRange] = useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState('');
     const [sortOrder, setSortOrder] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
@@ -236,7 +236,6 @@ function MyPayouts(props) {
                                 <table>
                                     <tr>
                                         <td>Invoice#</td>
-                                        <td>-</td>
                                         <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? '#' + payoutData['Payout_info'][0].payout_id : ""}</td>
                                     </tr>
                                 </table>
@@ -279,55 +278,55 @@ function MyPayouts(props) {
                             <tbody>
                                 <tr>
                                     <th style={{ "textAlign": "left", "backgroundColor": "#ddd" }} colSpan={5}>Seller</th>
-                                    <th style={{ "textAlign": "right", "backgroundColor": "#ddd" }}>Seller</th>
+                                    <th style={{ "textAlign": "right", "backgroundColor": "#ddd" }}></th>
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Name</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>-</td>
+                                    {/* <td style={{ "textAlign": "right" }}>-</td>
                                     <th style={{ "textAlign": "left" }}>اسم</th>
-                                    <td style={{ "textAlign": "center" }}>-</td>
+                                    <td style={{ "textAlign": "center" }}>-</td> */}
                                     <td style={{ "textAlign": "right" }}>-</td>
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Address Line 1</th>
                                     <td style={{ "textAlign": "center" }}></td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>العنوان السطر 1</th>
+                                    {/* <th style={{ "textAlign": "left" }}>العنوان السطر 1</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Region</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>منطقة</th>
+                                    {/* <th style={{ "textAlign": "left" }}>منطقة</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>City</th>
                                     <td style={{ "textAlign": "center" }}></td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>مدينة</th>
+                                    {/* <th style={{ "textAlign": "left" }}>مدينة</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Country</th>
                                     <td style={{ "textAlign": "center" }}></td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>دولة</th>
+                                    {/* <th style={{ "textAlign": "left" }}>دولة</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Zip</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>أزيز</th>
+                                    {/* <th style={{ "textAlign": "left" }}>أزيز</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td> */}
                                 </tr>
 
                             </tbody>
@@ -360,9 +359,9 @@ function MyPayouts(props) {
                                             <td>{index + 1}</td>
                                             <td>{data.order_increment_id}</td>
                                             <td>{data.invoice_id}</td>
-                                            <td>{moment(data.invoice_created_at).format('DD MMMM YYYY')}</td>
+                                            <td>{moment(data.invoice_created_at).format('DD MMM YYYY')}</td>
                                             <td>{data.invoice_status}</td>
-                                            <td>{data.order_amount.subtotal}</td>
+                                            <td>{siteConfig.currency} {data.order_amount}</td>
                                         </tr>
                                     )
                                 })}

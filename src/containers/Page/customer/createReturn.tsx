@@ -15,7 +15,7 @@ import notification from '../../../components/notification';
 function CreateReturn(props) {
     const intl = useIntl();
     const selectRef = useRef();
-    const { orderId }: any = useParams();
+    const { returnId }: any = useParams();
     const [custId, setCustid] = useState(props.token.cust_id);
     const [maxItems, setMaxitems] = useState(10);
     const [order, setOrder]: any = useState([]);
@@ -41,7 +41,7 @@ function CreateReturn(props) {
     });
 
     useEffect(() => {
-        getData(orderId);
+        getData(returnId);
         getReturnReasonListFxn();
     }, []);
 
@@ -50,9 +50,9 @@ function CreateReturn(props) {
         setIssueList(result.data);
     }
 
-    const getData = async (orderId) => {
+    const getData = async (returnId) => {
         let orderDetails = [];
-        let result: any = await searchOrders(orderId);
+        let result: any = await searchOrders(returnId);
         // console.log(result.data.items[0].payment.additional_information[0])
         orderDetails['entity_id'] = result.data.items[0] ? result.data.items[0].entity_id : 0;
         orderDetails['increment_id'] = result.data.items[0] ? result.data.items[0].increment_id : 0;
@@ -187,7 +187,7 @@ function CreateReturn(props) {
         }
         let returnInfoData = {
             returnInfo: {
-                orderId: order['entity_id'],
+                returnId: order['entity_id'],
                 rma_reason: returnOrExchange,
                 comment_text: returnOrExchangeComment,
                 items: reasonObject

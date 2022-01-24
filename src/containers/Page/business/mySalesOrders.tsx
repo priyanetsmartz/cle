@@ -19,7 +19,7 @@ function MySalesOrders(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
     const [sortOrder, setSortOrder] = useState('');
-    const [range, setRange] = useState({ low: 0, high: 0 })
+    const [range, setRange] =  useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState();
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFilter, setDateFilter] = useState({ from: '', to: '' });

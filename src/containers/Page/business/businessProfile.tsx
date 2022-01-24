@@ -247,7 +247,8 @@ function BusinessProfile(props) {
 
         if (validateAddress()) {
             vendorAddForm.vendorId = props.token.vendor_id;
-            vendorAddForm.countryId = vendorAddForm['country']
+            // vendorAddForm.countryId = vendorAddForm['country']
+            delete vendorAddForm['countryName']
             setIsAddShow(true);
             let result: any = await editVendorAddress(vendorAddForm);
             if (result && result.data && !result.data.message) {

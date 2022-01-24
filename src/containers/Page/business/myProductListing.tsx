@@ -22,7 +22,7 @@ function MyProductListing(props) {
     let venID = localToken && localToken.vendor_id ? localToken.vendor_id : 0;
 
     const [listingData, setListingData] = useState([])
-    const [range, setRange] = useState({ low: 0, high: 0 })
+    const [range, setRange] = useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState();
     const [sortOrder, setSortOrder] = useState('');
     const [searchTerm, setSearchTerm] = useState('');

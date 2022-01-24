@@ -4,7 +4,7 @@ import { capitalize } from "../../components/utility/allutils";
 
 function Breadcrumbs(props) {
     const location = useLocation()
-    const { category, subcat, childcat, greatchildcat, cat, orderId }: any = useParams();
+    const { category, subcat, childcat, greatchildcat, cat, orderId,returnId }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [keyUl, setKey] = useState('');
@@ -21,7 +21,7 @@ function Breadcrumbs(props) {
         }
 
         // let test = urlPath.split("/");
-      //  console.log(location)
+        //  console.log(location)
         setKey(urlPath)
         let breads = location.pathname.split('\/');
         setBreadcrumsState(breads)
@@ -97,11 +97,13 @@ function Breadcrumbs(props) {
                                 )
                             } else if (local === 'all' || local === cat) {
                                 return ('')
-                            } else if (local === orderId) {
+                            }
+                            else if (local === returnId) {
                                 return (
                                     <li key={j} className="breadcrumb-item">Return details</li>
                                 )
-                            } else {
+                            }
+                            else {
                                 return (
 
                                     <li key={j} className="breadcrumb-item active">
@@ -184,7 +186,7 @@ function Breadcrumbs(props) {
                                         }</Link></li>
 
                                     )
-                                } else if (local === 'create-return') {
+                                } else if (local === 'create-return' || local === 'return-details') {
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={"/customer/orders-and-returns"}>My Orders and Returns</Link></li>
                                     )
