@@ -131,7 +131,7 @@ function MyProductListing(props) {
         }
         //console.log(payload)
         let result: any = await removeProduct(payload)
-        //console.log(deleteId);
+        getVendorProductListing();
         closePop();
     }
     const closePop = () => {

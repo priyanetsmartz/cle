@@ -400,6 +400,7 @@ function MyProfile(props) {
             let obj: any = { ...custAddForm };
             if (obj.region_id === '') delete obj.region_id;
             obj.street = [obj.street];
+            console.log(obj.id)
             if (obj.id === 0) {
                 custForm.addresses.push(obj);
             } else {
@@ -408,6 +409,7 @@ function MyProfile(props) {
             //console.log(custAddForm);
             let result: any = await saveCustomerDetails({ customer: custForm });
             if (result) {
+                getData();
                 openAddressModal();
                 if (obj.id === 0) {
                     notification("success", "", intl.formatMessage({ id: "customerAddressSave" }));
@@ -428,6 +430,7 @@ function MyProfile(props) {
                 });
 
                 setIsShow(false);
+
             }
         }
     }
@@ -473,13 +476,21 @@ function MyProfile(props) {
 
     //edit existing address starts here------------->
     const editAddress = (index) => {
-        delete custForm.addresses[index].region;
-        getRegions(custForm.addresses[index].country_id, index);
-        setAddIndex(index);
-        getData();
-        custForm.addresses[index].street = custForm.addresses[index].street[0];
-        setCustAddForm(custForm.addresses[index]);
-        openAddressModal();
+        // getData();
+        // let obj: any = { ...custForm.addresses };
+        // console.log(obj[index])
+        setTimeout(() => {
+
+            // console.log(obj[index])
+            //  console.log(custForm.addresses[index], obj[index])
+            delete custForm.addresses[index].region;
+            getRegions(custForm.addresses[index].country_id, index);
+            setAddIndex(index);
+            custForm.addresses[index].street = custForm.addresses[index].street[0];
+            setCustAddForm(custForm.addresses[index]);
+            openAddressModal();
+        }, 2000)
+
     }
 
     const deleteAdd = async (index) => {
@@ -778,6 +789,21 @@ function MyProfile(props) {
         setMyAddressModal(!myAddressModal);
     }
 
+    const closePopAddress = () => {
+        setCustAddForm({
+            id: 0,
+            customer_id: props.token.cust_id,
+            firstname: "",
+            lastname: "",
+            telephone: "",
+            postcode: "",
+            city: "",
+            country_id: "AD",
+            region_id: "",
+            street: ""
+        });
+        setMyAddressModal(false);
+    }
     const openGigitingModal = () => {
         setGiftErrors({ errors: {} })
         setGiftingModal(!giftingModal);
@@ -1365,7 +1391,7 @@ function MyProfile(props) {
             <Modal show={myAddressModal}>
                 <Modal.Body className="CLE_pf_details">
                     <Modal.Header><h1><IntlMessages id="myaccount.myAddress" /></h1>
-                        <Link to="#" className="cross_icn" onClick={openAddressModal}> <i className="fas fa-times"></i></Link>
+                        <Link to="#" className="cross_icn" onClick={closePopAddress}> <i className="fas fa-times"></i></Link>
                     </Modal.Header>
                     <div className="">
                         <div className="width-100 mb-3 form-field">
