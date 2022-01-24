@@ -443,6 +443,12 @@ function MyProfile(props) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" })
         }
+        else if (typeof (custAddForm.telephone) !== "undefined") {
+            if (!(/^(?:\+971|00971|0)(?:2|3|4|6|7|9|50|51|52|55|56)[0-9]{7}$/.test(custAddForm.telephone))) {
+                formIsValid = false;
+                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+            }
+        }
         if (!custAddForm.postcode) {
             formIsValid = false;
             error["postcode"] = intl.formatMessage({ id: "pinreq" })
