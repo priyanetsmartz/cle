@@ -232,7 +232,7 @@ function CreateReturn(props) {
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.paymentMethod" /></strong></p>
-                                    <p>{order['payment-method'] ? capitalize(order['payment-method'].split('_')[0]) : "-"}</p>
+                                    <p>{order['payment-method'] ? capitalize(order['payment-method']) : "-"}</p>
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.products" /></strong></p>

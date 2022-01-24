@@ -3084,6 +3084,10 @@ left: auto; */
     font-weight: 600;
 }
 
+.range_slider .range_inner .form-control{
+	font-size:14px;
+}
+
 .range_slider .range_inner .search_results .form-control {
     padding: 0.6rem 2.6rem;
     background-color: #F7F7F7;
@@ -7595,6 +7599,16 @@ p.sliderupper {
     margin: 0;
 }
 
+.return-det .status_class {
+    color: #707070;
+    font-family: 'Lato', sans-serif;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    display: inline;
+    margin: 0 15px;
+}
+
 .return-status {
     background-color: #F7F7F7;
     margin: 20px 0;
@@ -7753,18 +7767,20 @@ p.sliderupper {
 
 .opt-tabs{
 	padding:20px 0;
+	position: relative;
 }
 
 .opt-tabs .radio-toolbar {
   margin: 20px 0;
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 
 .opt-tabs .radio-toolbar input[type="radio"] {
   opacity: 1;
-  /* position: fixed;
-  width: 0; */
+  position: fixed;
+  width: 0;
 }
 
 .opt-tabs .radio-toolbar label {
@@ -7783,6 +7799,21 @@ p.sliderupper {
 	cursor:pointer;
 	transition: all .3s ease;
 }
+
+/* .opt-tabs .radio-toolbar label,
+.opt-tabs .radio-toolbar input[type="radio"] {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.opt-tabs .radio-toolbar input[type="radio"] {
+  opacity: 0.01;
+  z-index: 100;
+} */
 
 .opt-tabs .radio-toolbar label:hover {
    background-color: #000;
@@ -7887,20 +7918,12 @@ p.sliderupper {
 	background: #FFF;
 }
 
-.rdt_TableRow .disabled{
-	border:1px solid #aca2a2;
-	color:#aca2a2;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
-}
-
-.rdt_TableRow .active{
-	border:1px solid #00CEA7;
-	color:#00CEA7;
+.rdt_TableRow .pending,
+.rdt_TableRow .canceled,
+.rdt_TableRow .ready-to-ship,
+.rdt_TableRow .shipped,
+.rdt_TableRow .delivered,
+.rdt_TableRow .retured{
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
@@ -7912,17 +7935,39 @@ p.sliderupper {
 .rdt_TableRow .pending{
 	border:1px solid #FF7756;
 	color:#FF7756;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
 }
 
 .rdt_TableRow .canceled{
 	border:1px solid #D9242C;
 	color:#D9242C;
+}
+
+.rdt_TableRow .ready-to-ship{
+	border:1px solid #00CEA7;
+	color:#00CEA7;
+}
+
+.rdt_TableRow .shipped{
+	border:1px solid #007DE2;
+	color:#007DE2;
+}
+
+.rdt_TableRow .delivered{
+	border:1px solid #2E2BAA;
+	color:#2E2BAA;
+}
+
+.rdt_TableRow .retured{
+	border:1px solid #777777;
+	color:#777777;
+}
+
+.rdt_TableRow .approved,
+.rdt_TableRow .decline,
+.rdt_TableRow .disabled,
+.rdt_TableRow .active,
+.rdt_TableRow .accept,
+.rdt_TableRow .acknowledged{
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
@@ -7934,34 +7979,31 @@ p.sliderupper {
 .rdt_TableRow .approved{
 	border:1px solid #2E2BAA;
 	color:#2E2BAA;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
 }
 
 .rdt_TableRow .decline{
 	border:1px solid #D9242C;
 	color:#D9242C;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
 }
 
-.rdt_TableRow .ready-to-ship{
+.rdt_TableRow .disabled{
+	border:1px solid #aca2a2;
+	color:#aca2a2;
+}
+
+.rdt_TableRow .active{
 	border:1px solid #00CEA7;
 	color:#00CEA7;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
+}
+
+.rdt_TableRow .acknowledged{
+	border:1px solid #007DE2;
+	color:#007DE2;
+}
+
+.rdt_TableRow .accept{
+	border:1px solid #00CEA7;
+	color:#00CEA7;
 }
 
 .rdt_TableCell, .rdt_TableCell a,
@@ -8062,7 +8104,7 @@ p.sliderupper {
 }
 
 .companylogo img {
-    width: 180px;
+    width: 100%;
     height: 180px;
     object-fit: cover;
     object-position: center;
@@ -8077,7 +8119,34 @@ p.sliderupper {
     opacity: 0 !important;
     position: absolute;
     top: 0;
+	z-index: 2;
     width: 100%;
+}
+
+.onhoveredit-2 {
+	display:none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #2E2BAA;
+    border-radius: 50%;
+    border: 3px solid #2E2BAA;
+    color: #fff;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+	justify-content: center;
+    align-items: center;
+	font-family: 'Monument Extended',sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+	transition: all .3s ease;
+}
+
+.companylogo:hover .onhoveredit-2{
+	display:flex;
 }
 
 .my_profile_sect.check-als .btn-secondary {
@@ -8113,13 +8182,42 @@ p.sliderupper {
 }
 
 .filter-tiles li {
-    display: inline;
+    display: inline-block;
     margin-right: 20px;
+	position: relative;
+	width: 90px;
+}
+
+.filter-tiles li a{
 	font-size: 16px;
     font-family: 'Monument Extended';
 	line-height:20px;
     font-weight: 500;
 	color:#000;
+	transition: all .5s ease-in-out;
+    position: absolute;
+	text-decoration: none;
+}
+
+.filter-tiles li a:after{
+	content: "";
+    border-bottom: 2px solid transparent;
+    display: block;
+    transition: all .5s ease-in-out;
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
+}
+
+.filter-tiles li a:hover{
+	padding-top: 5px;
+	color:#2E2BAA;
+}
+
+
+.filter-tiles li a:hover:after {
+    border-color: #2E2BAA;
+    bottom: 2px;
 }
 
 .filter-tiles li.active{
@@ -8362,6 +8460,17 @@ p.sliderupper {
 	overflow: auto;
 }
 
+.daterangepicker .ranges li {
+    font-size: 14px!important;
+    color: #707070;
+    font-weight: 400;
+    font-family: "Lato",sans-serif;
+}
+.daterangepicker .ranges li.active,
+.daterangepicker .ranges li:hover {
+    background-color: transparent!important;
+    color: #2E2BAA!important;
+}
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */

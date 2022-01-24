@@ -714,6 +714,7 @@ function BusinessProfile(props) {
                                 <div className="col-sm-3">
                                     <div className='companylogo'> <img className="rounded-circle" src={businessDetailsForm['logoImagePath'] ? companylogo + '' + businessDetailsForm['logoImagePath'] + `?${Math.random()}` : user} alt={businessDetailsForm['businessCompanyName']} width="100%" height="100%" />
                                         <div className='onhoveredit'> <input type="file" onChange={onFileChange} /></div>
+										<div className='onhoveredit-2'>Edit</div>
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
