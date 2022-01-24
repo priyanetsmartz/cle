@@ -7918,20 +7918,12 @@ p.sliderupper {
 	background: #FFF;
 }
 
-.rdt_TableRow .disabled{
-	border:1px solid #aca2a2;
-	color:#aca2a2;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
-}
-
-.rdt_TableRow .active{
-	border:1px solid #00CEA7;
-	color:#00CEA7;
+.rdt_TableRow .pending,
+.rdt_TableRow .canceled,
+.rdt_TableRow .ready-to-ship,
+.rdt_TableRow .shipped,
+.rdt_TableRow .delivered,
+.rdt_TableRow .retured{
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
@@ -7943,17 +7935,39 @@ p.sliderupper {
 .rdt_TableRow .pending{
 	border:1px solid #FF7756;
 	color:#FF7756;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
 }
 
 .rdt_TableRow .canceled{
 	border:1px solid #D9242C;
 	color:#D9242C;
+}
+
+.rdt_TableRow .ready-to-ship{
+	border:1px solid #00CEA7;
+	color:#00CEA7;
+}
+
+.rdt_TableRow .shipped{
+	border:1px solid #007DE2;
+	color:#007DE2;
+}
+
+.rdt_TableRow .delivered{
+	border:1px solid #2E2BAA;
+	color:#2E2BAA;
+}
+
+.rdt_TableRow .retured{
+	border:1px solid #777777;
+	color:#777777;
+}
+
+.rdt_TableRow .approved,
+.rdt_TableRow .decline,
+.rdt_TableRow .disabled,
+.rdt_TableRow .active,
+.rdt_TableRow .accept,
+.rdt_TableRow .acknowledged{
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
@@ -7965,34 +7979,31 @@ p.sliderupper {
 .rdt_TableRow .approved{
 	border:1px solid #2E2BAA;
 	color:#2E2BAA;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
 }
 
 .rdt_TableRow .decline{
 	border:1px solid #D9242C;
 	color:#D9242C;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
 }
 
-.rdt_TableRow .ready-to-ship{
+.rdt_TableRow .disabled{
+	border:1px solid #aca2a2;
+	color:#aca2a2;
+}
+
+.rdt_TableRow .active{
 	border:1px solid #00CEA7;
 	color:#00CEA7;
-	font-family: 'Monument Extended';
-    font-size: 9px;
-	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
-	background-color: #fff;
+}
+
+.rdt_TableRow .acknowledged{
+	border:1px solid #007DE2;
+	color:#007DE2;
+}
+
+.rdt_TableRow .accept{
+	border:1px solid #00CEA7;
+	color:#00CEA7;
 }
 
 .rdt_TableCell, .rdt_TableCell a,
@@ -8171,13 +8182,42 @@ p.sliderupper {
 }
 
 .filter-tiles li {
-    display: inline;
+    display: inline-block;
     margin-right: 20px;
+	position: relative;
+	width: 90px;
+}
+
+.filter-tiles li a{
 	font-size: 16px;
     font-family: 'Monument Extended';
 	line-height:20px;
     font-weight: 500;
 	color:#000;
+	transition: all .5s ease-in-out;
+    position: absolute;
+	text-decoration: none;
+}
+
+.filter-tiles li a:after{
+	content: "";
+    border-bottom: 2px solid transparent;
+    display: block;
+    transition: all .5s ease-in-out;
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
+}
+
+.filter-tiles li a:hover{
+	padding-top: 5px;
+	color:#2E2BAA;
+}
+
+
+.filter-tiles li a:hover:after {
+    border-color: #2E2BAA;
+    bottom: 2px;
 }
 
 .filter-tiles li.active{
