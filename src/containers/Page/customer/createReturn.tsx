@@ -53,12 +53,12 @@ function CreateReturn(props) {
     const getData = async (orderId) => {
         let orderDetails = [];
         let result: any = await searchOrders(orderId);
-        //  console.log(result.data)
+        // console.log(result.data.items[0].payment.additional_information[0])
         orderDetails['entity_id'] = result.data.items[0] ? result.data.items[0].entity_id : 0;
         orderDetails['increment_id'] = result.data.items[0] ? result.data.items[0].increment_id : 0;
         orderDetails['created_at'] = result.data.items[0] ? result.data.items[0].created_at : 0;
         orderDetails['shipment_date'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipment_date ? result.data.items[0].extension_attributes.shipment_date : 0;
-        orderDetails['payment-method'] = result.data.items[0] && result.data.items[0].payment.method ? capitalize(result.data.items[0].payment.method.split('_')[0]) : "-";
+        orderDetails['payment-method'] = result.data.items[0]?.payment?.additional_information?.[0];
         orderDetails['total_item_count'] = result.data.items[0] ? result.data.items[0].total_item_count : 0;
         orderDetails['delivery_address'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipping_assignments && result.data.items[0].extension_attributes.shipping_assignments[0].shipping ? result.data.items[0].extension_attributes.shipping_assignments[0].shipping.address : 0;
         orderDetails['base_subtotal'] = result.data.items[0] ? result.data.items[0].base_subtotal : 0;

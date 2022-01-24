@@ -59,7 +59,7 @@ function VendorLogin(props) {
 
   const loginHadler = async () => {
     if (handleValidation()) {
-      
+
       const { login } = props;
       const userInfo = {
         "type": "user",
@@ -69,7 +69,8 @@ function VendorLogin(props) {
       }
       // login({ userInfo });
       const result: any = await vendorLogin(userInfo);
-      if (result && result.data && result.data && !result.data.message) {
+    //  console.log(result.data.length, result.data[0])
+      if (result && result.data && result.data && result.data.length > 0  && result.data[0].success ) {
         setIsShow(true);
         // console.log(result.data)
         const vendorObj = {
@@ -115,7 +116,12 @@ function VendorLogin(props) {
 
       } else {
         setIsShow(false);
-        notification("warning", "", "Password not matched");
+        if(result && result.data && result.data && result.data.length > 0  && result.data[0].success === false){
+          notification("warning", "", result.data[0].message);
+        }else{
+          notification("warning", "", intl.formatMessage({ id: "genralerror" }));
+        }
+       
       }
     } else {
       notification("warning", "", intl.formatMessage({ id: "valiemailpass" }));

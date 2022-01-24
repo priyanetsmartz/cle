@@ -292,7 +292,7 @@ function BusinessProfile(props) {
             "businessWebsite": businessDetailsForm.businessWebsite,
             "businessFacebook": businessDetailsForm.businessFacebook,
             "businessInstagram": businessDetailsForm.businessInstagram,
-            "logo_image": ""
+            "logoImagePath": ""
         }
         if (validateBussinessDetails()) {
             setSaveBusinessDetailsLoader(true)

@@ -4,7 +4,7 @@ import { capitalize } from "../../components/utility/allutils";
 
 function Breadcrumbs(props) {
     const location = useLocation()
-    const { category, subcat, childcat, greatchildcat, cat }: any = useParams();
+    const { category, subcat, childcat, greatchildcat, cat, orderId }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [keyUl, setKey] = useState('');
@@ -21,7 +21,7 @@ function Breadcrumbs(props) {
         }
 
         // let test = urlPath.split("/");
-        console.log(location)
+      //  console.log(location)
         setKey(urlPath)
         let breads = location.pathname.split('\/');
         setBreadcrumsState(breads)
@@ -33,7 +33,7 @@ function Breadcrumbs(props) {
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
                     {breadcrumsState.map((local, j) => {
-                        // console.log(local)
+
                         let result = local.includes("new-in");
                         if (result) {
                             local = 'New in';
@@ -97,6 +97,10 @@ function Breadcrumbs(props) {
                                 )
                             } else if (local === 'all' || local === cat) {
                                 return ('')
+                            } else if (local === orderId) {
+                                return (
+                                    <li key={j} className="breadcrumb-item">Return details</li>
+                                )
                             } else {
                                 return (
 
@@ -179,6 +183,10 @@ function Breadcrumbs(props) {
                                             })
                                         }</Link></li>
 
+                                    )
+                                } else if (local === 'create-return') {
+                                    return (
+                                        <li key={j} className="breadcrumb-item"><Link to={"/customer/orders-and-returns"}>My Orders and Returns</Link></li>
                                     )
                                 } else {
                                     let str = local.replace(/-/g, ' ');
