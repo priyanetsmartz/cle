@@ -51,7 +51,7 @@ function BusinessResetPassword(props) {
 
     const handleSubmitClick = async (e) => {
         e.preventDefault();
-        // if (handleValidation()) {
+         if (handleValidation()) {
             setIsShow(true);
             let payload = {
                 confirm: token,
@@ -77,10 +77,10 @@ function BusinessResetPassword(props) {
                 notification("error", "", intl.formatMessage({ id: "tokenExpired" }));
                 history.push("/vendor-login");
             }
-        // } else {
-        //     setIsShow(false);
-        //     // notification("error", "", intl.formatMessage({ id: "validPass" }));
-        // }
+        } else {
+            setIsShow(false);
+            // notification("error", "", intl.formatMessage({ id: "validPass" }));
+        }
     }
 
 
