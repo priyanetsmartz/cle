@@ -15,7 +15,7 @@ const ProductRoutes = ({ component: Component, auth, ...rest }) => (
         </div>
         {/* {console.log(props.location.pathname)} */}
         <div className='customwrapper' >
-          {(!props.location.pathname.includes('help-center')) && (
+          {(!props.location.pathname.includes('help-center') && !props.location.pathname.includes('magazine')) && (
             <AppBreadcrumbs />
           )}
           {/* <AppBreadcrumbs /> */}
