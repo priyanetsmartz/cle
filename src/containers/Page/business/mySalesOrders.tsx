@@ -23,6 +23,7 @@ function MySalesOrders(props) {
     const [status, setStatus] = useState();
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         getDataOfOrders()
         return (
@@ -32,6 +33,7 @@ function MySalesOrders(props) {
     }, [props.languages])
 
     async function getDataOfOrders(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
+        setIsLoading(true);
         let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder)
         let dataObj = result && result.data && result.data.length > 0 && result.data[0] && result.data[0].OrderArray ? result.data[0].OrderArray : [];
         let dataLListing = []
@@ -47,6 +49,7 @@ function MySalesOrders(props) {
             });
         }
         setMyOrders(dataLListing)
+        setIsLoading(false);
 
     }
 
@@ -244,6 +247,7 @@ function MySalesOrders(props) {
 
 
                     <DataTable
+                        progressPending= {isLoading}
                         columns={columns}
                         data={myOrder}
                         // selectableRows

@@ -21,6 +21,7 @@ function MyPayouts(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
     const ref = useRef();
+    const [isLoading, setIsLoading] = useState(true);
     const [accBalance, setAccBalance] = useState([])
     const [range, setRange] = useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState('');
@@ -163,7 +164,7 @@ function MyPayouts(props) {
     };
     async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order: any = '') {
         let page_size = siteConfig.pageSize;
-
+        setIsLoading(true)
         let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice, page_size, sort_order, term)
         let dataObj = result && result.data[0] && result.data[0].OrderData.length > 0 ? result.data[0].OrderData : [];
         let dataLListing = [];
@@ -179,6 +180,7 @@ function MyPayouts(props) {
             });
         }
         setMyOrders(dataLListing)
+        setIsLoading(false);
         let dataObj2 = result && result.data[0] ? result.data[0] : {};
         let dataLListing2 = [];
         dataLListing2 = [{
@@ -541,6 +543,7 @@ function MyPayouts(props) {
 
 					<div className="tbl-payout">
 						<DataTable
+                            progressPending= {isLoading}
 							columns={columns}
 							data={myOrder}
 							// selectableRows

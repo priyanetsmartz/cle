@@ -30,6 +30,7 @@ function MyProductListing(props) {
     const [vendorId, setVendorId] = useState(1);
     const [deletePop, setDeletePop] = useState(false);
     const [deleteId, setDeleteID] = useState(0)
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         getVendorProductListing()
         return (
@@ -38,6 +39,7 @@ function MyProductListing(props) {
     }, [])
 
     async function getVendorProductListing(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
+        setIsLoading(true);
         let result: any = await searchProducts(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder);
 
         let dataObj = result && result.data && result.data.length > 0 ? result.data : [];
@@ -55,6 +57,7 @@ function MyProductListing(props) {
             return productLoop;
         });
         setListingData(renObjData)
+        setIsLoading(false);
         setPending(false)
 
     }
@@ -283,10 +286,10 @@ function MyProductListing(props) {
 
                     <div className="product-listing">
                         <DataTable
+                        progressPending= {isLoading}
                             columns={columns}
                             data={listingData}
                             pagination={true}
-                            progressPending={pending}
                             // progressComponent={<i className="fa fa-circle-o-notch"></i>}
                         />
                     </div>

@@ -18,6 +18,7 @@ function MyPayoutDetails(props) {
     useEffect(() => {
         getDetails()
     }, [props.languages]);
+    const [isLoading, setIsLoading] = useState(true);
     const { payoutId }: any = useParams();
     const [payoutData, setPayoutData] = useState({});
     const [payoutOrders, setPayoutOrders] = useState([]);
@@ -36,6 +37,7 @@ function MyPayoutDetails(props) {
     const [payoutDataInvoice, setPayoutDataInvoice] = useState([])
 
     async function getDetails() {
+        setIsLoading(true)
         let result: any = await getPayoutDetails(payoutId)
         //console.log("reult3",result);
         if (result && result.data[0]) {
@@ -71,6 +73,7 @@ function MyPayoutDetails(props) {
             })
         }
         setMyPayoutDetails(dataListing)
+        setIsLoading(false);
 
     }
 
@@ -396,6 +399,7 @@ function MyPayoutDetails(props) {
                         <div className="mb-5">
 
                             <DataTable
+                                progressPending= {isLoading}
                                 columns={columns}
                                 data={myPayoutDetails}
                             />

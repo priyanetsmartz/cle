@@ -35,6 +35,9 @@ function Dashboard(props) {
     const [showRawPDF, setShowRawPDF] = useState(false)
     const [payoutData, setPayoutData] = useState([])
     const [cmsData, setCmsData] = useState([])
+    const [isLoadingOrders,setIsLoadingOrders] = useState(true)
+    const [isLoadingReturns,setIsLoadingReturns] = useState(true)
+    const [isLoadingPayouts,setIsLoadingPayouts] = useState(true)
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     useEffect(() => {
@@ -79,6 +82,7 @@ function Dashboard(props) {
 
     }
     async function getDataOfOrders() {
+        setIsLoadingOrders(true)
         let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, "", 0, 0, "", "", "", "");
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
         //  console.log(dataObj)
@@ -99,6 +103,7 @@ function Dashboard(props) {
         }
         // console.log(dataLListing)
         setMyOrders(dataLListing)
+        setIsLoadingOrders(false)
 
     }
     const columns = [
@@ -229,6 +234,7 @@ function Dashboard(props) {
     // vendor return 
 
     async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
+        setIsLoadingReturns(true)
         let result: any = await getVendorReturns(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder);
 
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
@@ -247,12 +253,13 @@ function Dashboard(props) {
         }
 
         setMyReturn(dataLListing)
+        setIsLoadingReturns(false)
 
     }
 
     async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order = 'asc') {
         let page_size = siteConfig.pageSize;
-
+        setIsLoadingPayouts(true)
         let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice, page_size, sort_order, term)
         let dataObj = result && result.data[0] && result.data[0].OrderData.length > 0 ? result.data[0].OrderData : [];
         let dataLListing = [];
@@ -268,6 +275,7 @@ function Dashboard(props) {
             });
         }
         setMyPayouts(dataLListing)
+        setIsLoadingPayouts(false)
 
     }
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
@@ -476,6 +484,7 @@ function Dashboard(props) {
                         <div id="page-wrapper" className="container">
                             <div className="row">
                                 <DataTable
+                                    progressPending = {isLoadingOrders}
                                     columns={columns}
                                     data={myOrders}
                                     highlightOnHover
@@ -499,6 +508,7 @@ function Dashboard(props) {
                         <div id="page-wrapper" className="container">
                             <div className="row">
                                 <DataTable
+                                    progressPending = {isLoadingReturns}
                                     columns={returnColumns}
                                     data={myReturn}
                                     highlightOnHover
@@ -523,6 +533,7 @@ function Dashboard(props) {
                             <div className="row">
                                 <div className="tbl-payout">
                                     <DataTable
+                                        progressPending = {isLoadingPayouts}
                                         columns={columnsPayouts}
                                         data={myPayouts}
                                         highlightOnHover
