@@ -8169,6 +8169,20 @@ p.sliderupper {
     padding: 16px;
 }
 
+.my_profile_sect .rdt_Pagination{
+	color:#000;
+}
+
+.my_profile_sect #pagination-first-page svg,
+.my_profile_sect #pagination-previous-page svg{
+	fill:#706666;
+}
+
+.my_profile_sect #pagination-next-page,
+.my_profile_sect #pagination-last-page{
+	fill:#2e2baa;
+}
+
 .tbl-payout .rdt_TableCol,
 .tbl-payout .rdt_TableCell{
 	-webkit-box-flex: 1;
@@ -8635,6 +8649,23 @@ p.sliderupper {
     background-color: transparent!important;
     color: #2E2BAA!important;
 }
+
+.select-wearing ul li ul li {
+    padding: 0 20px;
+}
+
+.form-group .ant-slider:hover .ant-slider-track {
+    background-color: #2E2BAA!important;
+}
+
+.form-group .ant-slider-track{
+	background-color: #2E2BAA!important;
+}
+
+.form-group .ant-slider-handle{
+	border: 2px solid #2E2BAA!important;
+}
+
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */
@@ -9284,6 +9315,12 @@ p.sliderupper {
 	.cli_logo{
 		display:none;
 	}
+	
+	#headerrr .top-menuselect .h-mob-l,
+	#headerrr .top-menuselect .h-mob-l + div,
+	#headerrr .top-menuselect .h-mob-r{
+		display:none;
+	}
 
 }
 
@@ -9379,7 +9416,7 @@ p.sliderupper {
 	
 }
 
-@media only screen and (min-width: 1024px) and (max-width: 1200px) {
+@media only screen and (min-width: 1024px) and (max-width: 1366px) {
 	.product-listing .slick-prev,
 	.product-listing .slick-next{
 		top: 20%;
@@ -9448,7 +9485,20 @@ p.sliderupper {
 	.select-wearing ul li{
 		padding: 0px 30px 0 0px;
 	}
+	
+	.select-wearing ul li ul li {
+		padding: 0 10px;
+	}
 }
+
+@media only screen and (min-width: 1366px) and (max-width: 1400px) {
+	.banner-wrap .item{
+		position:relative;
+	}
+	.banner-wrap .slick-slide img{
+		width:100%;
+	}
+}	
 
 @media only screen and (max-width: 600px) {}
 
@@ -9480,9 +9530,7 @@ p.sliderupper {
     padding-right: 0 !important;
 }
 
-.select-wearing ul li ul li {
-    padding: 0 20px;
-}
+
 
 .header-mvp .myaccount_details .btn {
     margin-bottom: 0;
@@ -9529,7 +9577,6 @@ p.sliderupper {
 
     .cli_logo {
         text-align: left;
-        margin-left: -15px;
     }
 
     .logo-m {
@@ -9593,7 +9640,7 @@ p.sliderupper {
     .header-mvp .cle-mobile-menu {
         -ms-flex-negative: initial;
         flex-shrink: initial;
-        padding: 0;
+        padding: 10px;
         margin: 0;
     }
 

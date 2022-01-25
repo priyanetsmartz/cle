@@ -256,7 +256,7 @@ function HeaderMenu(props) {
             )}
             <div className="container header-mvp" id="header-mvp">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
-                    {isBrowser && (
+                    
                         <>
                             <div className="col-4 pt-1 h-mob-l">
                                 <div className="select-wearing">
@@ -328,7 +328,7 @@ function HeaderMenu(props) {
                                         <Link to="#" className="btn btn-green">Sell an Item</Link>
                                     </div>
                                 </div>
-                                {isBrowser && (
+                               
                                     <div className="user_cart mob-hide">
                                         <div className="cartuser-info">
                                             <ul>
@@ -378,10 +378,10 @@ function HeaderMenu(props) {
                                             </ul>
                                         </div>
                                     </div>
-                                )}
+                                
                             </div>
                         </>
-                    )}
+                    
                     <div className="col-4">
                         <div className="cli_logo logo-m">
                             <Link className=" me-2" onClick={() => window.location.href = '/'} to="/">
