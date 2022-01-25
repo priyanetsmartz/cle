@@ -8978,7 +8978,9 @@ p.sliderupper {
 }
 
 @media only screen and (min-width: 320px) and (max-width: 991px) {
-    
+    .h-mob-l, .h-mob-r {
+        display: none;
+    }
 
     .log-ban {
         width: 100%;
