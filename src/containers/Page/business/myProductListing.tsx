@@ -13,14 +13,14 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import Modal from "react-bootstrap/Modal";
-
+import loading from "../../../image/CLE_LogoMotionGraphics.gif";
 
 function MyProductListing(props) {
     const intl = useIntl();
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
     let venID = localToken && localToken.vendor_id ? localToken.vendor_id : 0;
-
+    const [pending, setPending] = useState(true)
     const [listingData, setListingData] = useState([])
     const [range, setRange] = useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState();
@@ -55,6 +55,7 @@ function MyProductListing(props) {
             return productLoop;
         });
         setListingData(renObjData)
+        setPending(false)
 
     }
 
@@ -285,6 +286,8 @@ function MyProductListing(props) {
                             columns={columns}
                             data={listingData}
                             pagination={true}
+                            progressPending={pending}
+                            // progressComponent={<i className="fa fa-circle-o-notch"></i>}
                         />
                     </div>
                     <div className="row">

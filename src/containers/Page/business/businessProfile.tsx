@@ -246,9 +246,11 @@ function BusinessProfile(props) {
     const saveCustAddress = async (e) => {
 
         if (validateAddress()) {
+
             vendorAddForm.vendorId = props.token.vendor_id;
             // vendorAddForm.countryId = vendorAddForm['country']
             delete vendorAddForm['countryName']
+            delete vendorAddForm['region_id']
             setIsAddShow(true);
             let result: any = await editVendorAddress(vendorAddForm);
             if (result && result.data && !result.data.message) {
@@ -327,12 +329,12 @@ function BusinessProfile(props) {
             error["gender"] = intl.formatMessage({ id: "gifting.gender" });
         }
 
-        if (typeof (vendorForm.vendorTelephone) !== "undefined") {
-            if (!(/^(?:\+971|00971|0)(?:2|3|4|6|7|9|50|51|52|55|56)[0-9]{7}$/.test(vendorForm.vendorTelephone))) {
-                formIsValid = false;
-                error["vendorTelephone"] = intl.formatMessage({ id: "phoneinvalid" });
-            }
-        }
+        // if (typeof (vendorForm.vendorTelephone) !== "undefined") {
+        //     if (!(/^(?:\+971|00971|0)(?:2|3|4|6|7|9|50|51|52|55|56)[0-9]{7}$/.test(vendorForm.vendorTelephone))) {
+        //         formIsValid = false;
+        //         error["vendorTelephone"] = intl.formatMessage({ id: "phoneinvalid" });
+        //     }
+        // }
         if (!vendorForm.vendorTelephone) {
             formIsValid = false;
             error['vendorTelephone'] = intl.formatMessage({ id: "phonereq" });
