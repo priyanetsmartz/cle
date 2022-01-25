@@ -552,7 +552,7 @@ function Dashboard(props) {
                 <div className="CLE_pf_details">
                     <Modal.Body className="arabic-rtl-direction">
                         <Link to="#" onClick={openDashboardModal} className="cross_icn"> <i className="fas fa-times"></i></Link>
-                        <div className="section" >
+                        <div className="cont-wrapper" >
                             <h2 className="head-ble"><IntlMessages id="customer.hi" />,</h2>
                             <h2>{vendorName}</h2>
                             <HtmlContent identifier="login_popup" />
