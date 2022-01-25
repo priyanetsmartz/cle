@@ -360,7 +360,7 @@
   "vendor.salesOrders": "My Sales Orders",
   "vendor.productListing": "My Product Listing",
   "vendor.returnComplaints": "My Returns and Complaints",
-  "vendor.payouts": "Payout Methods",
+  "vendor.payouts": "My Payouts",
   "vendor.myAnalysis": "My Analysis",
   "vendor.businessProfile": "My Business Profile",
   "vendor.notification": "My Notifications",
@@ -644,5 +644,6 @@
   "locationreq":"Location is required",
   "withdrawal": "Withdrawal",
   "newEmailUpdatenotification":"Token has been sent to your email address, follow instruction to update your email",
-  "reasonofrejection" : "Reason of rejection"
+  "reasonofrejection" : "Reason of rejection",
+  "selectproductEcom":"Select prefered ecom platform"
 }

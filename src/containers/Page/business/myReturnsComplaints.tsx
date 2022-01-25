@@ -18,7 +18,7 @@ import { capitalize, formatprice } from '../../../components/utility/allutils';
 function MyReturnsComplaints(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
-    const [range, setRange] = useState({ low: 0, high: 0 })
+    const [range, setRange] = useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState();
     const [statusOptions, setStatusOptions] = useState([]);
     const [sortOrder, setSortOrder] = useState('');

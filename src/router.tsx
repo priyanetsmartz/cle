@@ -78,7 +78,7 @@ const PublicRoutes = ({ history }) => {
           <LoggedInRoute exact path="/notifications" component={Notifications} />
           <LoggedInRoute exact path="/customer/:tab" component={Customer} />
           <LoggedInRoute exact path="/customer/return-details/:returnId" component={returnsDetails} />
-          <LoggedInRoute exact path="/customer/create-return/:orderId" component={CreateReturn} />
+          <LoggedInRoute exact path="/customer/create-return/:returnId" component={CreateReturn} />
           <LoggedInRoute exact path="/customer/return-summary/:returnId" component={RetrunSummary} />
           <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
           <VendorRoute exact path="/vendor/returns-complaints/:returnId" component={RetunOrder} />

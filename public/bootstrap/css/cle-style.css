@@ -7304,7 +7304,14 @@ p.sliderupper {
     right: 0;
     position: absolute;
 }
-
+.leftarrow {
+    margin-right: 10px;
+    cursor: pointer;
+}
+.rightarrow {
+    margin-left: 10px;    
+    cursor: pointer;
+}
 .log-ban img {
     height: 400px;
     object-fit: cover;

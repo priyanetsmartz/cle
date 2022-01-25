@@ -5,6 +5,7 @@ import Login from '../../redux/auth/Login';
 import { sessionService } from 'redux-react-session';
 import { getCookie } from "../../helpers/session";
 import { COUNTRIES } from "../../config/counties";
+import moment from "moment";
 const loginApi = new Login();
 
 
@@ -138,5 +139,15 @@ export function getRegionName(countryId = "AL", regionId) {
     return parseInt(obj2.id) === parseInt(regionId)
   });
 
- return regionList[0].name
+  return regionList[0].name
+}
+
+export function getCurrentMonth() {
+ //console.log(moment().format('MMM'))
+  let data = {
+    name: moment().format('MMM'),
+    num : moment().month()
+  }
+ 
+  return data;
 }

@@ -53,8 +53,9 @@ function ProductIntegration(props) {
                     formData.push(ques);
                 })
             }
+            // console.log(result?.data?.[0]?.form_title.replace(/[`~!@#$%^&*()_|+\-=;:'",<>\{\}\[\]\\\/]/gi, ''));
             setFormDd(formData)
-            setForm(result.data[0]);
+            setForm(result?.data?.[0]);
         }
         getData()
         return () => {
@@ -98,24 +99,25 @@ function ProductIntegration(props) {
     }
 
     const optionHandler = async (e) => {
-        console.log(Object.keys(formData).length, formData)
+      //  console.log(Object.keys(formData))
         if (Object.keys(formData).length <= 0)
             return notification("error", "", intl.formatMessage({ id: "selectproductintegration" }));
+        if (Object.values(formData)[0]['value'] === 'option-2' && Object.keys(formData).length < 2)
+            return notification("error", "", intl.formatMessage({ id: "selectproductEcom" }));
+        payload.answer.response_json = JSON.stringify(formData);
+        payload.answer.form_id = form.form_id;
+        payload.answer.store_id = form.store_id;
+        // payload.answer.customer_id = localToken.vendor_id;
+        payload.answer.form_name = form.title;
+        payload.answer.form_code = 'product_integration';
 
-        // payload.answer.response_json = JSON.stringify(formData);
-        // payload.answer.form_id = form.form_id;
-        // payload.answer.store_id = form.store_id;
-        // // payload.answer.customer_id = localToken.vendor_id;
-        // payload.answer.form_name = form.title;
-        // payload.answer.form_code = 'product_integration';
-
-        // let result: any = await SaveAnswers(payload);
-        // //console.log(result);
-        // if (result.data && result.data.answer_id) {
-        //     notification("success", "", intl.formatMessage({ id: "productintegration" }));
-        // } else {
-        //     notification("error", "", intl.formatMessage({ id: "genralerror" }));
-        // }
+        let result: any = await SaveAnswers(payload);
+        //console.log(result);
+        if (result.data && result.data.answer_id) {
+            notification("success", "", intl.formatMessage({ id: "productintegration" }));
+        } else {
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+        }
     }
 
     async function onFileChange(e) {
@@ -155,7 +157,7 @@ function ProductIntegration(props) {
 
                     <div className="integration-head">
                         <h1>{form.title}</h1>
-                        <p>{form.form_title}</p>
+                        <p>{form?.form_title?.replace(/[`~!@#$%^&*()_|+\-=;:'",<>\{\}\[\]\\\/]/gi, '')}</p>
                     </div>
 
                     <section className="chooose-methods">

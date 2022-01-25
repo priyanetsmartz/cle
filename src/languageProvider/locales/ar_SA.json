@@ -642,5 +642,6 @@
   "locationreq":"الموقع مطلوب",
   "withdrawal": "انسحاب",
   "newEmailUpdatenotification":"تم إرسال الرمز المميز إلى عنوان بريدك الإلكتروني ، اتبع التعليمات لتحديث بريدك الإلكتروني",
-  "reasonofrejection":"سبب الرفض"
+  "reasonofrejection":"سبب الرفض",
+  "selectproductEcom":"حدد منصة ecom المفضلة"
 }

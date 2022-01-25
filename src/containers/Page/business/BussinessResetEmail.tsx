@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useLocation, useHistory } from "react-router";
-import { ValidateToken, SaveNewPass } from "../../../redux/pages/allPages";
 import notification from '../../../components/notification';
 import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
-import { vendorResetEmail, vendorRestpassword } from '../../../redux/pages/vendorLogin';
+import { vendorResetEmail } from '../../../redux/pages/vendorLogin';
+import { sessionService } from 'redux-react-session';
 
 function BusinessResetPassword(props) {
     let history = useHistory();
@@ -51,7 +51,7 @@ function BusinessResetPassword(props) {
 
     const handleSubmitClick = async (e) => {
         e.preventDefault();
-        if (handleValidation()) {
+        // if (handleValidation()) {
             setIsShow(true);
             let payload = {
                 confirm: token,
@@ -66,15 +66,21 @@ function BusinessResetPassword(props) {
                     new_email: ""
                 }))
                 setIsShow(false);
-                history.push("/vendor-login");
+              //vendor logout
+                    localStorage.removeItem('redux-react-session/USER-SESSION');
+                    localStorage.removeItem('redux-react-session/USER_DATA');
+                    history.replace('/vendor-login');
+                
+                await sessionService.deleteSession();
+                await sessionService.deleteUser();
             } else {
                 notification("error", "", intl.formatMessage({ id: "tokenExpired" }));
                 history.push("/vendor-login");
             }
-        } else {
-            setIsShow(false);
-            notification("error", "", intl.formatMessage({ id: "validPass" }));
-        }
+        // } else {
+        //     setIsShow(false);
+        //     // notification("error", "", intl.formatMessage({ id: "validPass" }));
+        // }
     }
 
 
@@ -82,26 +88,17 @@ function BusinessResetPassword(props) {
         let error = {};
         let formIsValid = true;
 
-        if (!state["password"]) {
-            formIsValid = false;
-            error["password"] = intl.formatMessage({ id: "passwordreq" });
-        }
 
-        if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#^])([A-Za-z\d$@$!%*?&#^]{8,})$/.test(state["password"]))) {
-            formIsValid = false;
-            error["password"] = intl.formatMessage({ id: "passwordvalidation" });
+        if (typeof state["newEmail"] !== "undefined") {
+            if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
+                formIsValid = false;
+                error["newEmail"] = intl.formatMessage({ id: "emailvalidation" });
+            }
         }
-
-        if (!state["confirmPassword"]) {
+        if (!state["newEmail"]) {
             formIsValid = false;
-            error["confirmPassword"] = intl.formatMessage({ id: "confirmpasswordreq" });
+            error["newEmail"] = intl.formatMessage({ id: "emailrequired" });
         }
-
-        if (state["confirmPassword"] !== state["password"]) {
-            formIsValid = false;
-            error["confirmPassword"] = intl.formatMessage({ id: "confirmpasswordnotmatched" });
-        }
-
         setError({ errors: error });
         return formIsValid;
     }
@@ -117,7 +114,7 @@ function BusinessResetPassword(props) {
                     <form>
                         <div className="form-group text-left">
                             <label><IntlMessages id="myaccount.confirmNewEmailAddress" /></label>
-                            <input type="password"
+                            <input type="email"
                                 className="form-control"
                                 id="newEmail"
                                 placeholder="Confirm new Email"

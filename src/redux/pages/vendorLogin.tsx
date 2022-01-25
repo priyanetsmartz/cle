@@ -167,8 +167,6 @@ export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fr
         queryString += "&po_fromPrice=" + po_fromPrice
     if (po_toPrice != null && po_toPrice !== '' && po_toPrice !== 0)
         queryString += "&po_toPrice=" + po_toPrice
-    if (page_size != null)
-        queryString += "&page_size=" + page_size
     if (search != null && search !== '')
         queryString += "&search=" + search
     if (sort_order != null && sort_order != '')
