@@ -145,7 +145,9 @@ function MyPayouts(props) {
         },
     ];
 
-
+    const paginationComponentOptions = {
+        noRowsPerPage: true,
+    };
     const sortHandler = async (payoutId) => {
         let data: any = await getInvoice(payoutId);
 
@@ -536,18 +538,17 @@ function MyPayouts(props) {
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
 
-					<div className="tbl-payout">
-						<DataTable
-							columns={columns}
-							data={myOrder}
-							// selectableRows
-							pagination={true}
-						// onSelectedRowsChange={handleChange}
-						/>
-					</div>
+                    <div className="tbl-payout">
+                        <DataTable
+                            columns={columns}
+                            data={myOrder}
+                            pagination={true}
+                            paginationComponentOptions={paginationComponentOptions}
+                        />
+                    </div>
                 </div>
             </section>
 

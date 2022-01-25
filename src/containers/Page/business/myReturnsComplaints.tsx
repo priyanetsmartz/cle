@@ -152,6 +152,9 @@ function MyReturnsComplaints(props) {
         },
     ];
 
+    const paginationComponentOptions = {
+        noRowsPerPage: true,
+    };
 
     return (
         <div className="col-sm-9">
@@ -256,6 +259,7 @@ function MyReturnsComplaints(props) {
                         columns={columns}
                         data={myOrder}
                         pagination={true}
+                        paginationComponentOptions={paginationComponentOptions}
                     />
                 </div>
             </section>

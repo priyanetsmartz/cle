@@ -13,7 +13,7 @@ import moment from 'moment';
 import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { capitalize, formatprice, getCurrentMonth } from '../../../components/utility/allutils';
-import { getContent } from '../../../redux/pages/customers';
+
 
 function Dashboard(props) {
     const language = getCookie('currentLanguage');
@@ -287,11 +287,9 @@ function Dashboard(props) {
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
 
-
         if (results && results.data && results.data.length > 0) {
             setDataTilesData(results.data[0])
         }
-
     }
 
 

@@ -181,6 +181,10 @@ function MyProductListing(props) {
         }
     ];
 
+    const paginationComponentOptions = {
+        noRowsPerPage: true,
+    };
+
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
@@ -287,7 +291,7 @@ function MyProductListing(props) {
                             data={listingData}
                             pagination={true}
                             progressPending={pending}
-                            // progressComponent={<i className="fa fa-circle-o-notch"></i>}
+                            paginationComponentOptions={paginationComponentOptions}
                         />
                     </div>
                     <div className="row">

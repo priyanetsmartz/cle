@@ -19,7 +19,7 @@ function MySalesOrders(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
     const [sortOrder, setSortOrder] = useState('');
-    const [range, setRange] =  useState({ low: 0, high: 20000 })
+    const [range, setRange] = useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState();
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
@@ -31,6 +31,9 @@ function MySalesOrders(props) {
 
     }, [props.languages])
 
+    const paginationComponentOptions = {
+        noRowsPerPage: true,
+    };
     async function getDataOfOrders(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
         let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder)
         let dataObj = result && result.data && result.data.length > 0 && result.data[0] && result.data[0].OrderArray ? result.data[0].OrderArray : [];
@@ -246,9 +249,8 @@ function MySalesOrders(props) {
                     <DataTable
                         columns={columns}
                         data={myOrder}
-                        // selectableRows
                         pagination={true}
-                    // onSelectedRowsChange={handleChange}
+                        paginationComponentOptions={paginationComponentOptions}
                     />
                 </div>
             </section>

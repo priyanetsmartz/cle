@@ -11,9 +11,7 @@ import { language } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { DROPDOWN } from '../../../config/constants';
-import callIcon from '../../../image/call-icon.png';
-import deleteIcon from '../../../image/delete-icon.png';
-import timerIcon from '../../../image/timer_icon.png';
+import HtmlContent from '../../partials/htmlContent';
 import { sessionService } from 'redux-react-session';
 import { useIntl } from 'react-intl';
 import { getVendorDetails, editBusinessDetails, editVendor, editBankDetails, editVendorAddress, changePasswordVendor, vendorResetEmail } from '../../../redux/pages/vendorLogin';
@@ -1025,75 +1023,7 @@ function BusinessProfile(props) {
                 </div>
             </section>
 
-            <section className="my_profile_sect mb-4">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1>Delete Account</h1>
-                            <p>We're sorry to see you go - remember, your CLÉ account is free and enables you to shop easily without having to enter your details each time. With it, you're able to take advantage of the exclusive discountsand promos on site.</p>
-                            <p>If you'd still like to deactivate your CLÉ account, follow the below steps</p>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="delet_account_accordin">
-                                <div className="accordion accordion-flush" id="accordionFlushExample">
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header" id="flush-headingOne">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                                <img src={callIcon} className="img-fluid" alt="" /> Step 1: Contact Customer Care
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                                            data-bs-parent="#accordionFlushExample">
-                                            <div className="accordion-body">Placeholder content for this accordion, which is intended to demonstrate
-                                                the <code>.accordion-flush</code> className. This is the first item's accordion body.</div>
-                                        </div>
-                                    </div>
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header" id="flush-headingTwo">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                                <img src={deleteIcon} className="img-fluid" alt="" /> Step II: We'll deactivate your
-                                                account
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseTwo" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
-                                            data-bs-parent="#accordionFlushExample">
-                                            <div className="accordion-body">Placeholder content for this accordion, which is intended to demonstrate
-                                                the <code>.accordion-flush</code> className. This is the second item's accordion body. Let's imagine
-                                                this being filled with some actual content.</div>
-                                        </div>
-                                    </div>
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header" id="flush-headingThree">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                <img src={timerIcon} className="img-fluid" alt="" /> Don't want to close your account but
-                                                fancy a break?
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseThree" className="accordion-collapse collapse" aria-labelledby="flush-headingThree"
-                                            data-bs-parent="#accordionFlushExample">
-                                            <div className="accordion-body">Placeholder content for this accordion, which is intended to demonstrate
-                                                the <code>.accordion-flush</code> className. This is the third item's accordion body. Nothing more
-                                                exciting happening here in terms of content, but just filling up the space to make it look, at
-                                                least at first glance, a bit more representative of how this would look in a real-world
-                                                application.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="width-100 mt-3">
-                                <Link to="contact-us" className="btn btn-secondary">
-                                    <IntlMessages id="contact.title" />
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <HtmlContent identifier="vendor_block" />
 
             <section className="my_profile_sect check-als mb-4">
                 <div className="container">
