@@ -24,6 +24,7 @@ function MyReturnsComplaints(props) {
     const [sortOrder, setSortOrder] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         getVendorReturnsData()
         return (
@@ -32,6 +33,7 @@ function MyReturnsComplaints(props) {
     }, [])
 
     async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
+        setIsLoading(true);
         let result: any = await getVendorReturns(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder);
 
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
@@ -57,6 +59,7 @@ function MyReturnsComplaints(props) {
         }
 
         setMyOrders(dataLListing)
+        setIsLoading(false);
 
     }
 
@@ -256,6 +259,7 @@ function MyReturnsComplaints(props) {
 
 
                     <DataTable
+                    progressPending= {isLoading}
                         columns={columns}
                         data={myOrder}
                         pagination={true}
