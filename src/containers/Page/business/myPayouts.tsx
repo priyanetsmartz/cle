@@ -96,6 +96,16 @@ function MyPayouts(props) {
 
     const columns = [
         {
+            name: 'ID',
+            selector: row => row.payout_id,
+            button: true,
+            cell: row => {
+                return (<Link to={`/vendor/payoutdetails/${row.payout_id}`}>{row.payout_id}</Link>
+                )
+            }
+
+        },
+        {
             name: 'Price',
             selector: row => row.price,
             button: true,
