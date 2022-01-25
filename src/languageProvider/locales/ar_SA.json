@@ -500,7 +500,7 @@
   "status": "حالة",
   "changeStatus": "تغيير الوضع",
   "products.description.1": "يمكنك إدارة منتجاتك هنا.",
-  "products.description.2": "أدناه قائمة المنتجات المباعة.",
+  "products.description.2": "أدناه قائمة منتجاتك.",
   "deletetheproduct": "حذف المنتج",
   "deleteProduct.confirmation": "هل أنت متأكد أنك تريد حذف المنتج من القائمة؟",
   "productEdit.cancel": "يلغي",
