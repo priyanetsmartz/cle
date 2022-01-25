@@ -1240,7 +1240,7 @@ function MyProfile(props) {
                     <Modal.Body className="arabic-rtl-direction">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Ann"
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.first_name" })}
                                 id="firstname"
                                 value={custForm.firstname}
                                 onChange={handleChange} />
@@ -1248,7 +1248,7 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Smith" id="lastname"
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.last_name"})} id="lastname"
                                 value={custForm.lastname}
                                 onChange={handleChange} />
                             <span className="error">{personalError.errors["lastname"]}</span>
@@ -1265,7 +1265,7 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
-                            <input type="number" className="form-control" placeholder="+48 123 456 789" id="mp_sms_telephone"
+                            <input type="number" className="form-control" placeholder={intl.formatMessage({ id: "myaccount.phoneNo"})} id="mp_sms_telephone"
                                 value={customAttribute.mp_sms_telephone}
                                 onChange={handleChange}
                             />
@@ -1338,7 +1338,7 @@ function MyProfile(props) {
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder="Ann"
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.first_name" })}
                                 id="firstname"
                                 value={custAddForm.firstname}
                                 onChange={handleAddChange} />
@@ -1348,7 +1348,7 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="lastname"
-                                placeholder="Smith"
+                                placeholder={intl.formatMessage({ id: "register.last_name" })}
                                 value={custAddForm.lastname}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["lastname"]}</span>
@@ -1452,13 +1452,13 @@ function MyProfile(props) {
                                 <h2><IntlMessages id="myaccount.addAFriend" /></h2>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.name" /><span className="maindatory">*</span></label>
-                                    <input type="text" className="form-control" placeholder="John" value={giftingPrefer.name} id="name"
+                                    <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "profile.name" })} value={giftingPrefer.name} id="name"
                                         onChange={handleGiftingChange} />
                                     <span className="error">{giftErrors.errors["name"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.surName" /></label><span className="maindatory">*</span>
-                                    <input type="text" className="form-control" placeholder="Doe" value={giftingPrefer.surName} id="surName"
+                                    <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.last_name" })} value={giftingPrefer.surName} id="surName"
                                         onChange={handleGiftingChange} />
                                     <span className="error">{giftErrors.errors["surName"]}</span>
                                 </div>
