@@ -294,7 +294,7 @@ function MyProductListing(props) {
                             columns={columns}
                             data={listingData}
                             pagination={true}
-                            progressPending={pending}
+                            // progressPending={pending}
                             paginationComponentOptions={paginationComponentOptions}
                         />
                     </div>
