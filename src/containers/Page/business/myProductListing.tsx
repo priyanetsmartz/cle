@@ -288,7 +288,8 @@ function MyProductListing(props) {
                         </div>
                     </div>
 
-					<div className="product-listing">
+
+                    <div className="product-listing">
 						<DataTable
 						progressPending= {isLoading}
 						columns={columns}

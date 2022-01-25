@@ -20,8 +20,8 @@ function FaqListing(props) {
   }, [props.languages, location]);
 
   async function getData() {
-    let results: any = await getFaqListinglabels(props.languages, url_key);
-    setCategoryData(results.data)
+    let results: any = await getFaqListinglabels(props.languages, url_key);    
+    setCategoryData(results?.data)
   }
 
   return (

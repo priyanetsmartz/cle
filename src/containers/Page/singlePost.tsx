@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PostData, GetDataOfCategory, postViews, GetCategoryList } from '../../redux/pages/magazineList';
+import { PostData, postViews, GetCategoryList, RelatedList } from '../../redux/pages/magazineList';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
@@ -28,7 +28,7 @@ function SinglePost(props) {
     const [related, setRelated] = useState([]);
     const [catMenu, setCatMenu] = useState([]);
     const [opacityVal, setOpacity] = useState(1);
-
+    const [bread, setBread] = useState("");
     useEffect(() => {
         getData()
         return () => {
@@ -59,9 +59,10 @@ function SinglePost(props) {
         setOpacity(0.3);
         let result: any = await PostData(lang, slug);
         let catId = result.data[0].categories[0];
-        let featuredResult: any = await GetDataOfCategory(lang, catId, 1, 'published_at', 'desc', 12);
+        let featuredResult: any = await RelatedList(lang, slug);
         const filteredItems = featuredResult.data.filter(item => item.post_id !== slug)
         setRelated(filteredItems);
+        setBread(result?.data?.[0]?.title)
         setPost(result.data[0]);
         window.scrollTo(0, 0)
         setOpacity(1);
@@ -84,7 +85,21 @@ function SinglePost(props) {
             <div>
                 <img style={imgStyle} src={post.post_thumbnail} alt="post-thumbnail" />
             </div>
-
+            <section>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <nav aria-label="breadcrumb">
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                                    <li className="breadcrumb-item">Magazine</li>
+                                    {slug && (<li className="breadcrumb-item">{bread}</li>)}
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <div className="detail-page mt-5" >
                 <div className="container">
                     <div className="row">
