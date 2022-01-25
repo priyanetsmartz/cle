@@ -500,7 +500,7 @@
   "status": "Status",
   "changeStatus": "Change Status",
   "products.description.1": "You can manage your products here.",
-  "products.description.2": "Below is the list of sold products.",
+  "products.description.2": "Below is the list of your products.",
   "deletetheproduct": "Delete the Product",
   "deleteProduct.confirmation": "Are you sure you want to delete the product from the listing?",
   "productEdit.cancel": "Cancel",

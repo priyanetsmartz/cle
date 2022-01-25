@@ -5,6 +5,7 @@ import { useParams, useLocation } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { capitalize } from '../../../components/utility/allutils';
 import FaqFooter from './faq-footer';
+import FaqHeader from './faq-header';
 function FaqListing(props) {
   const location = useLocation();
   const [categoryData, setCategoryData] = useState([])
@@ -25,6 +26,7 @@ function FaqListing(props) {
 
   return (
     <section>
+       <FaqHeader />
       <section className="faq-list">
         <div className="container">
           <div className="row">

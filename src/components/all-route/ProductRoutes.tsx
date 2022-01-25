@@ -15,10 +15,10 @@ const ProductRoutes = ({ component: Component, auth, ...rest }) => (
         </div>
         {/* {console.log(props.location.pathname)} */}
         <div className='customwrapper' >
-          {(props.location.pathname.includes('help-center')) && (
-            <FaqHeader />
+          {(!props.location.pathname.includes('help-center')) && (
+            <AppBreadcrumbs />
           )}
-          <AppBreadcrumbs />
+          {/* <AppBreadcrumbs /> */}
           <Component {...props} />
         </div>
         <Footer />

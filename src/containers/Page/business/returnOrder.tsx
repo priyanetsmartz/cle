@@ -43,7 +43,7 @@ function RetunOrder(props) {
     }
     const selectStatus = (event) => {
         selectStatusReturn(event.target.value)
-        if (event.target.value === 'decline') {
+        if (event.target.value === 'declined') {
             setShow(true)
         } else {
             setShow(false)

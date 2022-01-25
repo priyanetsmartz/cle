@@ -5,6 +5,7 @@ import { siteConfig } from '../../../settings';
 import { Link } from "react-router-dom";
 import FaqFooter from './faq-footer';
 import IntlMessages from "../../../components/utility/intlMessages";
+import FaqHeader from './faq-header';
 function Faq(props) {
 
 	const [faqData, setFaqData] = useState([])
@@ -27,6 +28,7 @@ function Faq(props) {
 
 	return (
 		<section>
+			 <FaqHeader />
 			<section className="faq-topics">
 				<div className="container">
 					<div className="row">

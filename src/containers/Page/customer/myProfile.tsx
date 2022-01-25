@@ -16,9 +16,7 @@ import { COUNTRIES } from '../../../config/counties';
 import moment from 'moment';
 import { capitalize } from '../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
-import callIcon from '../../../image/call-icon.png';
-import deleteIcon from '../../../image/delete-icon.png';
-import timerIcon from '../../../image/timer_icon.png';
+import HtmlContent from '../../partials/htmlContent';
 import cartAction from "../../../redux/cart/productAction";
 import authAction from "../../../redux/auth/actions";
 import ForgottenPassword from '../../Page/forgotPassword';
@@ -1228,69 +1226,7 @@ function MyProfile(props) {
                 </div>
             </section>
 
-            <section className="my_profile_sect mb-4">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.deleteAccount" /></h1>
-                            <p><IntlMessages id="myaccount.weAreSorryToSee" /> </p>
-                            <p><IntlMessages id="myaccount.ifYouStillLike" /> </p>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="delet_account_accordin">
-                                <div className="accordion accordion-flush" id="accordionFlushExample">
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header" id="flush-headingOne">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                                <img src={callIcon} className="img-fluid" alt="" /><IntlMessages id="myaccount.contactCustomerCare" />
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                                            data-bs-parent="#accordionFlushExample">
-                                            <div className="accordion-body"><IntlMessages id="myaccount.getInTouchWith" /></div>
-                                        </div>
-                                    </div>
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header" id="flush-headingTwo">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                                <img src={deleteIcon} className="img-fluid" alt="callIcon" /> <IntlMessages id="myaccount.wellDeactvate" />
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseTwo" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
-                                            data-bs-parent="#accordionFlushExample">
-                                            <div className="accordion-body">
-                                                <IntlMessages id="myaccount.onceYouHaveConfirmd" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header" id="flush-headingThree">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                <img src={timerIcon} className="img-fluid" alt="" />
-                                                <IntlMessages id="myaccount.dontWantToclose" />
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseThree" className="accordion-collapse collapse" aria-labelledby="flush-headingThree"
-                                            data-bs-parent="#accordionFlushExample">
-                                            <div className="accordion-body"><IntlMessages id="myaccount.ifYouHaveChanges" /></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="width-100 mt-3">
-                                <Link to="contact-us" className="btn btn-secondary">
-                                    <IntlMessages id="contact.title" />
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <HtmlContent identifier="customer_block" />
 
 
 
