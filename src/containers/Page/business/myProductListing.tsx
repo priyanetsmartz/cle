@@ -288,16 +288,16 @@ function MyProductListing(props) {
                         </div>
                     </div>
 
-                    <div className="product-listing">
-                        <DataTable
-                        progressPending= {isLoading}
-                            columns={columns}
-                            data={listingData}
-                            pagination={true}
+					<div className="product-listing">
+						<DataTable
+						progressPending= {isLoading}
+						columns={columns}
+						data={listingData}
+						pagination={true}
                             // progressPending={pending}
-                            paginationComponentOptions={paginationComponentOptions}
-                        />
-                    </div>
+						paginationComponentOptions={paginationComponentOptions}
+						/>
+					</div>
                     <div className="row">
                         <div className="col-sm-12">
                             <Link className="btn btn-secondary" to="/product-integration" ><IntlMessages id="product_integration" /></Link>
