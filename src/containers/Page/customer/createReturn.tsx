@@ -176,7 +176,6 @@ function CreateReturn(props) {
     }
     const handleSubmitClick = async (e) => {
 
-        console.log(reasonObject.length)
         if (reasonObject.length === 0) {
             notification("error", "", intl.formatMessage({ id: "selectreturnOrExchangeProducts" }));
             return false;
@@ -195,10 +194,15 @@ function CreateReturn(props) {
         }
         //    console.log(returnInfoData)
         let result: any = await createReturnRequest(returnInfoData);
-        if (result.data) {
-            notification("success", "", result.data);
+        console.log(result.data.status)
+        if (result?.data?.[0]?.status === true) {
+            let key = Object.values(result?.data?.[0]?.rma);
+            let url = `/customer/return-details/${key[0]}`;
+            // console.log(key[0], url)
+            window.location.href = url;
+            notification("success", "", "Return created");
         } else {
-            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            notification("error", "", result?.data?.[0]?.message);
         }
 
     }
@@ -268,7 +272,7 @@ function CreateReturn(props) {
                     {order && order.items && order.items.slice(0, maxItems).map((item, i) => {
                         return (
                             <div key={i}>
-                                {console.log(item)}
+                                {/* {console.log(item)} */}
                                 <li onClick={() => handleProductSelect(item.item_id)}>
                                     <div className="row">
                                         <div className="col-md-3">

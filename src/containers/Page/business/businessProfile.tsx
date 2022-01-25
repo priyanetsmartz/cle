@@ -17,7 +17,7 @@ import { useIntl } from 'react-intl';
 import { getVendorDetails, editBusinessDetails, editVendor, editBankDetails, editVendorAddress, changePasswordVendor, vendorResetEmail } from '../../../redux/pages/vendorLogin';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import user from '../../../image/user.png';
-import { capitalize, getCountryName } from '../../../components/utility/allutils';
+import { capitalize, getCountryName, getRegionName } from '../../../components/utility/allutils';
 import ForgottenPassword from './bussinessForgotpassword';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
@@ -248,7 +248,8 @@ function BusinessProfile(props) {
             vendorAddForm.vendorId = props.token.vendor_id;
             // vendorAddForm.countryId = vendorAddForm['country']
             delete vendorAddForm['countryName']
-            delete vendorAddForm['region_id']
+            delete vendorAddForm['region']
+            vendorAddForm['region'] = vendorAddForm['region_id']
             setIsAddShow(true);
             let result: any = await editVendorAddress(vendorAddForm);
             if (result && result.data && !result.data.message) {
@@ -838,9 +839,10 @@ function BusinessProfile(props) {
                                 <h3><IntlMessages id="myaccount.address" /></h3>
                                 <ul>
                                     <li>{businessDetailsForm['businessCompanyName']}</li>
-                                    <li>{vendorAddForm.street}</li>
-                                    <li>{vendorAddForm.zip}</li>
-                                    <li>{vendorAddForm.city}</li>
+                                    <li>{vendorAddForm?.street}</li>
+                                    <li>{vendorAddForm?.zip}</li>
+                                    <li>{vendorAddForm?.city}</li>
+                                    <li>{vendorAddForm && vendorAddForm.region_id ? getRegionName(vendorAddForm.countryId, vendorAddForm.region_id) : ""}</li>
                                     <li>{vendorAddForm.countryId ? getCountryName(vendorAddForm.countryId) : ""}</li>
                                 </ul>
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
