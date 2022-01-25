@@ -187,7 +187,7 @@ function CreateReturn(props) {
         }
         let returnInfoData = {
             returnInfo: {
-                returnId: order['entity_id'],
+                orderId: order['entity_id'],
                 rma_reason: returnOrExchange,
                 comment_text: returnOrExchangeComment,
                 items: reasonObject

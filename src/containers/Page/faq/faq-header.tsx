@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, useLocation, useParams } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { getCookie } from '../../../helpers/session';
-import { faqSearch } from '../../../redux/pages/allPages';
+import { faqSearch, getFaqListinglabels } from '../../../redux/pages/allPages';
 import { siteConfig } from '../../../settings';
 import { useIntl } from 'react-intl';
 
@@ -14,13 +14,20 @@ function FaqHeader(props) {
     const intl = useIntl();
     const [autoSuggestions, SetAutoSuggestions] = useState([]);
     const [nothingFound, SetNothingFound] = useState("");
+    const [bread, setBread] = useState("");
     const [searchText, SetSearchText] = useState("");
     useEffect(() => {
+        if (url_key) {
+            getData();
+        }
         return () => {
             SetAutoSuggestions([])
         }
     }, [props.languages, location])
-
+    async function getData() {
+        let results: any = await getFaqListinglabels(props.languages, url_key);      
+        setBread(results?.data?.[0]?.title)
+    }
 
     const updateInput = async (e) => {
         SetSearchText(e.target.value)
@@ -72,7 +79,7 @@ function FaqHeader(props) {
                                             {autoSuggestions.map((item, i) => {
                                                 return (
                                                     <li key={i} onClick={clearSuggestions}>
-                                                        <Link to={item && item.category_data.length > 0 && item.category_data[0].category_url_key ? `/help-center/` + item.category_data[0].category_url_key + '#' + item['title'] : ""} > {item.title}</Link>
+                                                        <Link to={item && item.category_data?.length > 0 && item.category_data[0].category_url_key ? `/help-center/` + item.category_data[0].category_url_key + '#' + item['title'] : ""} > {item.title}</Link>
 
                                                     </li>
                                                 )
@@ -99,7 +106,7 @@ function FaqHeader(props) {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item"><Link to="/help-center">Help Center</Link></li>
-                                    {url_key && (<li className="breadcrumb-item"><Link to="/help-center">Help Center</Link></li>)}
+                                    {url_key && (<li className="breadcrumb-item">{bread}</li>)}
                                 </ol>
                             </nav>
                         </div>
