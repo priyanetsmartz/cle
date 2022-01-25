@@ -286,7 +286,7 @@ function MyProductListing(props) {
 
                     <div className="product-listing">
                         <DataTable
-                        progressPending= {isLoading}
+                        progressPending= {pending}
                             columns={columns}
                             data={listingData}
                             pagination={true}
