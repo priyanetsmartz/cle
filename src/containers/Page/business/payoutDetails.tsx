@@ -110,11 +110,10 @@ function MyPayoutDetails(props) {
             response['selleraddress'] = data.data[0].selleraddress
         }
         // console.log(response)
-        setPayoutDataInvoice(response)
+        setPayoutData(response)
         setShowRawPDF(true)
         printDocument();
     };
-
     const printDocument = () => {
         const input = document.getElementById('pdfdiv');
         html2canvas(input)
@@ -136,6 +135,29 @@ function MyPayoutDetails(props) {
             });
         setShowRawPDF(false);
     }
+    // const printDocument = async () => {
+    //     const input = document.getElementById('pdfdiv');
+    //     await html2canvas(input).then((canvas) => {
+    
+    //         const componentWidth = input.offsetWidth
+    //         const componentHeight = input.offsetHeight
+
+    //         const orientation = componentWidth >= componentHeight ? 'l' : 'p'
+
+    //         const imgData = canvas.toDataURL('image/png')
+    //         const pdf = new jsPDF({
+    //             orientation,
+    //             unit: 'px'
+    //         })
+
+    //         pdf.internal.pageSize.width = componentWidth
+    //         pdf.internal.pageSize.height = componentHeight
+
+    //         pdf.addImage(imgData, 'PNG', 50, 50, componentWidth, componentHeight)
+    //         pdf.save('download.pdf')
+    //     });
+    //     setShowRawPDF(false);
+    // }
     return (
         <main>
             {showRawPDF && (
@@ -153,8 +175,7 @@ function MyPayoutDetails(props) {
                                 <table>
                                     <tr>
                                         <td>Invoice#</td>
-                                        <td>-</td>
-                                        {/* <td>{payoutDataInvoice && payoutDataInvoice['Payout_info'] && payoutData['Payout_info'].length > 0 ? '#' + payoutDataInvoice['Payout_info'][0].payout_id : ""}</td> */}
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? '#' + payoutData['Payout_info'][0].payout_id : ""}</td>
                                     </tr>
                                 </table>
                             </table>
@@ -166,23 +187,23 @@ function MyPayoutDetails(props) {
                                     <tr>
                                         <td>Invoice Issue Date</td>
                                         <td>-</td>
-                                        <td>{payoutDataInvoice && payoutDataInvoice['Payout_info'] && payoutDataInvoice['Payout_info'].length > 0 ? moment(payoutDataInvoice['Payout_info'][0].created_at).format('DD MMMM YYYY') : ""}</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? moment(payoutData['Payout_info'][0].created_at).format('DD MMMM YYYY') : ""}</td>
                                     </tr>
                                     <tr>
                                         <td>Due Date</td>
                                         <td>-</td>
-                                        <td>{payoutDataInvoice && payoutDataInvoice['Payout_info'] && payoutDataInvoice['Payout_info'].length > 0 ? moment(payoutDataInvoice['Payout_info'][0].date_to).format('DD MMMM YYYY') : ""}</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? moment(payoutData['Payout_info'][0].date_to).format('DD MMMM YYYY') : ""}</td>
                                     </tr>
                                     <tr>
                                         <td>Status</td>
                                         <td>-</td>
-                                        <td>{payoutDataInvoice && payoutDataInvoice['Payout_info'] && payoutDataInvoice['Payout_info'].length > 0 ? payoutDataInvoice['Payout_info'][0].payout_status : ""}</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payout_status : ""}</td>
                                     </tr>
                                     {/* <tr>
-                                        <td>P.O.#</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr> */}
+                                      <td>P.O.#</td>
+                                      <td>-</td>
+                                      <td>-</td>
+                                  </tr> */}
                                 </table>
                             </table>
                         </div>
@@ -196,55 +217,55 @@ function MyPayoutDetails(props) {
                             <tbody>
                                 <tr>
                                     <th style={{ "textAlign": "left", "backgroundColor": "#ddd" }} colSpan={5}>Seller</th>
-                                    <th style={{ "textAlign": "right", "backgroundColor": "#ddd" }}>Seller</th>
+                                    <th style={{ "textAlign": "right", "backgroundColor": "#ddd" }}></th>
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Name</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>-</td>
-                                    <th style={{ "textAlign": "left" }}>اسم</th>
-                                    <td style={{ "textAlign": "center" }}>-</td>
+                                    {/* <td style={{ "textAlign": "right" }}>-</td>
+                                  <th style={{ "textAlign": "left" }}>اسم</th>
+                                  <td style={{ "textAlign": "center" }}>-</td> */}
                                     <td style={{ "textAlign": "right" }}>-</td>
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Address Line 1</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].street : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>العنوان السطر 1</th>
-                                    <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].street : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td>
+                                    {/* <th style={{ "textAlign": "left" }}>العنوان السطر 1</th>
+                                  <td style={{ "textAlign": "center" }}></td>
+                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Region</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].region : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>منطقة</th>
-                                    <td style={{ "textAlign": "center" }}>-</td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].region : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td>
+                                    {/* <th style={{ "textAlign": "left" }}>منطقة</th>
+                                  <td style={{ "textAlign": "center" }}>-</td>
+                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>City</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].city : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>مدينة</th>
-                                    <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].city : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td>
+                                    {/* <th style={{ "textAlign": "left" }}>مدينة</th>
+                                  <td style={{ "textAlign": "center" }}></td>
+                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Country</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].countryName : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>دولة</th>
-                                    <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].countryName : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td>
+                                    {/* <th style={{ "textAlign": "left" }}>دولة</th>
+                                  <td style={{ "textAlign": "center" }}></td>
+                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Zip</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].zip : ""}</td>
-                                    <th style={{ "textAlign": "left" }}>أزيز</th>
-                                    <td style={{ "textAlign": "center" }}>-</td>
-                                    <td style={{ "textAlign": "right" }}>{payoutDataInvoice && payoutDataInvoice['selleraddress'] ? payoutDataInvoice['selleraddress'].zip : ""}</td>
+                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td>
+                                    {/* <th style={{ "textAlign": "left" }}>أزيز</th>
+                                  <td style={{ "textAlign": "center" }}>-</td>
+                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td> */}
                                 </tr>
 
                             </tbody>
@@ -270,16 +291,16 @@ function MyPayoutDetails(props) {
                                     <th style={{ "backgroundColor": "#ddd" }}>Invoice Status</th>
                                     <th style={{ "backgroundColor": "#ddd" }}>Order Amount</th>
                                 </tr>
-                                {payoutDataInvoice && payoutDataInvoice['Payout_orders'] && payoutDataInvoice['Payout_orders'].length > 0 && payoutDataInvoice['Payout_orders'].map((data, index) => {
+                                {payoutData && payoutData['Payout_orders'] && payoutData['Payout_orders'].length > 0 && payoutData['Payout_orders'].map((data, index) => {
                                     // console.log(data)
                                     return (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{data.order_increment_id}</td>
                                             <td>{data.invoice_id}</td>
-                                            <td>{data.invoice_created_at ? moment(data.invoice_created_at).format('DD MMMM YYYY') : ''}</td>
+                                            <td>{moment(data.invoice_created_at).format('DD MMM YYYY')}</td>
                                             <td>{data.invoice_status}</td>
-                                            <td>{data.order_amount.subtotal}</td>
+                                            <td>{siteConfig.currency} {data.order_amount}</td>
                                         </tr>
                                     )
                                 })}
@@ -309,9 +330,9 @@ function MyPayoutDetails(props) {
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td>{payoutDataInvoice && payoutDataInvoice['Payout_info'] && payoutDataInvoice['Payout_info'].length > 0 ? payoutDataInvoice['Payout_info'][0].total_orders : ""}</td>
-                                    <td>{siteConfig.currency} {payoutDataInvoice && payoutDataInvoice['Payout_info'] && payoutDataInvoice['Payout_info'].length > 0 ? payoutDataInvoice['Payout_info'][0].payment_paid : ""}</td>
-                                    <td>{siteConfig.currency} {payoutDataInvoice && payoutDataInvoice['Payout_info'] && payoutDataInvoice['Payout_info'].length > 0 ? payoutDataInvoice['Payout_info'][0].total_payment : ""}</td>
+                                    <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_orders : ""}</td>
+                                    <td>{siteConfig.currency} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payment_paid : ""}</td>
+                                    <td>{siteConfig.currency} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_payment : ""}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -338,38 +359,38 @@ function MyPayoutDetails(props) {
                             <div className="info-tot">
                                 <div className="row">
                                     <div className="col-sm-6">
-                                        
-                                            <div className="row">
-                                                <div className="col-sm-6">
-                                                    <h6><IntlMessages id="dateofrequest" /></h6>
-                                                    <p>{dateOfRequest}</p>
-                                                </div>
 
-                                                <div className="col-sm-6">
-                                                    <h6><IntlMessages id="dateofpayment" /></h6>
-                                                    <p>{dateOfPayment}</p>
-                                                </div>
-
-                                                <div className="col-sm-6">
-                                                    <h6><IntlMessages id="i/r" /></h6>
-                                                    <p>{billType}</p>
-                                                </div>
-
-                                                <div className="col-sm-6">
-                                                    <h6><IntlMessages id="nooforders" /></h6>
-                                                    <p>{numberOfOrders}</p>
-                                                </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <h6><IntlMessages id="dateofrequest" /></h6>
+                                                <p>{dateOfRequest}</p>
                                             </div>
-											
-                                            <div className="row">
-                                                <div className="col-sm-12">
-                                                    <div className="download-invoice">
-													<Link to="#" onClick={() => sortHandler(payoutId)}>
+
+                                            <div className="col-sm-6">
+                                                <h6><IntlMessages id="dateofpayment" /></h6>
+                                                <p>{dateOfPayment}</p>
+                                            </div>
+
+                                            <div className="col-sm-6">
+                                                <h6><IntlMessages id="i/r" /></h6>
+                                                <p>{billType}</p>
+                                            </div>
+
+                                            <div className="col-sm-6">
+                                                <h6><IntlMessages id="nooforders" /></h6>
+                                                <p>{numberOfOrders}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="row">
+                                            <div className="col-sm-12">
+                                                <div className="download-invoice">
+                                                    <Link to="#" onClick={() => sortHandler(payoutId)}>
                                                         Download invoice / receipt</Link>
-													</div>	
                                                 </div>
                                             </div>
-                                        
+                                        </div>
+
                                     </div>
                                     <div className="col-sm-6">
                                         <div className="border p-3">
@@ -399,7 +420,7 @@ function MyPayoutDetails(props) {
                         <div className="mb-5">
 
                             <DataTable
-                                progressPending= {isLoading}
+                                progressPending={isLoading}
                                 columns={columns}
                                 data={myPayoutDetails}
                             />

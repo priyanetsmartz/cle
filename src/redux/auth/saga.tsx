@@ -129,7 +129,8 @@ export function* registerRequest() {
       // var rememberMe = payload.payload.userInfo.rememberMe;
       //API call to login request
       const response = yield call(loginApi.register, firstname, lastname, email, password, type, storeId);
-      if (response.data.id !== "") {
+      console.log(response?.data?.id)
+      if (response?.data?.id !== "" && response?.data?.id !== undefined ) {
         const token = yield call(loginApi.getAuthRegister, email);
         //  console.log(token)
         if (token.data[0].new_token) {
@@ -175,7 +176,7 @@ export function* registerRequest() {
         }
 
       } else {
-        notification("error", "", "Invalid email or password.");
+        notification("error", "", response?.data?.message);
         yield put({ type: actions.REGISTER_ERROR });
         yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: true });
       }
