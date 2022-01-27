@@ -9867,7 +9867,7 @@ p.sliderupper {
 		width: 1000px;
 	}
 	.megamenu_bar ul.megamenugrid{
-		width: 165px;
+		width: 160px;
 	}
 	.my_orders_returns_sec{
 		padding: 0 15px;
@@ -9881,6 +9881,18 @@ p.sliderupper {
 	.slick-dots{
 		display:none;
 	}
+	
+	.stepwizard-row:before{
+		left: 10px;
+	}
+	
+	.releveant-slider .slick-prev{
+		left: 0;
+	}
+	.releveant-slider .slick-next{
+		right: 0;
+	}
+	
 }
 
 @media only screen and (min-width: 1366px) and (max-width: 1400px) {
@@ -9982,6 +9994,9 @@ p.sliderupper {
     .your_cart .cart-number {
         color: #fff;
     }
+	.miniaccount_details ul li a, .myaccount_details ul li a{
+		color: #000!important;
+	}
 
     .user_cart ul li a {
         color: #fff;
