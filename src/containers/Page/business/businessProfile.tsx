@@ -349,6 +349,10 @@ function BusinessProfile(props) {
     const validateAddress = () => {
         let error = {};
         let formIsValid = true;
+        if (!businessDetailsForm.businessCompanyName) {
+            formIsValid = false;
+            error["businessCompanyName"] = intl.formatMessage({ id: "companynamefirst" });
+        }
         if (!vendorAddForm.zip) {
             formIsValid = false;
             error["zip"] = intl.formatMessage({ id: "pinreq" });
@@ -372,7 +376,7 @@ function BusinessProfile(props) {
         console.log(bankDetails.companyName)
         if (!bankDetails.companyName) {
             formIsValid = false;
-            error['companyName'] = intl.formatMessage({ id: "companyreq" });
+            error['companyName'] = intl.formatMessage({ id: "companynamefirst" });
         }
         if (!bankDetails.bankName) {
             formIsValid = false;
@@ -439,9 +443,9 @@ function BusinessProfile(props) {
         return formIsValid;
     }
     // for customer address popup window ends here
-    const deleteAdd = async () => {
+    // const deleteAdd = async () => {
 
-    }
+    // }
     //edit existing address ends here--------------->
 
 
@@ -452,6 +456,7 @@ function BusinessProfile(props) {
             ...prevState,
             [id]: value
         }))
+
     }
 
 
@@ -871,7 +876,7 @@ function BusinessProfile(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h5><IntlMessages id="myaccount.Bank" /></h5>
-                            <p><IntlMessages id="myaccount.addOrChangePayments" /> </p>
+                            {/* <p><IntlMessages id="myaccount.addOrChangePayments" /> </p> */}
                         </div>
                         <div className="col-sm-12">
                             <div className="row">
@@ -1225,13 +1230,13 @@ function BusinessProfile(props) {
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="business.companyname" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.first_name" })}
-                                id="firstname"
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.companyname" })}
+                                id="businessCompanyName"
                                 readOnly
                                 value={businessDetailsForm.businessCompanyName}
                                 onChange={handleAddChange} />
 
-                            <span className="error">{errors.errors["firstname"]}</span>
+                            <span className="error">{errors.errors["businessCompanyName"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
@@ -1315,7 +1320,7 @@ function BusinessProfile(props) {
                             <label className="form-label"><IntlMessages id="business.companyname" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.companyname" })}
                                 id="companyName"
-                                readOnly={businessDetailsForm['businessCompanyName'] ? true : false}
+                                readOnly
                                 value={businessDetailsForm['businessCompanyName']}
                                 onChange={handleBankChange} />
                             <span className="error">{errorsBank.errors["companyName"]}</span>

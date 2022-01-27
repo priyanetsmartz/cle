@@ -34,10 +34,10 @@ function Dashboard(props) {
     const [myPayouts, setMyPayouts] = useState([]);
     const [showRawPDF, setShowRawPDF] = useState(false)
     const [payoutData, setPayoutData] = useState([])
-    const [cmsData, setCmsData] = useState([])
-    const [isLoadingOrders,setIsLoadingOrders] = useState(true)
-    const [isLoadingReturns,setIsLoadingReturns] = useState(true)
-    const [isLoadingPayouts,setIsLoadingPayouts] = useState(true)
+    const [showMonth, setShowMonth] = useState(true);
+    const [isLoadingOrders, setIsLoadingOrders] = useState(true)
+    const [isLoadingReturns, setIsLoadingReturns] = useState(true)
+    const [isLoadingPayouts, setIsLoadingPayouts] = useState(true)
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     useEffect(() => {
@@ -304,13 +304,16 @@ function Dashboard(props) {
     const handleChange = (flag) => {
         let dates = [];
         if (flag === 0) {
-            dates['start'] = moment().format('DD/MM/YYYY');
-            dates['end'] = moment().subtract(1, 'months').format('DD/MM/YYYY');
+            setShowMonth(true)
+            dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
+            dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
         } else if (1) {
+            setShowMonth(false)
             let quater = moment().quarter();
             dates['start'] = moment().quarter(quater).startOf('quarter').format('DD/MM/YYYY');
             dates['end'] = moment().quarter(quater).endOf('quarter').format('DD/MM/YYYY');
         } else {
+            setShowMonth(false)
             dates['start'] = moment().startOf('year').format('DD/MM/YYYY');
             dates['end'] = moment().endOf('year').format('DD/MM/YYYY');
         }
@@ -331,10 +334,10 @@ function Dashboard(props) {
         setCurrentMonth(month[0])
         let input = monthKey + 1;
         const output = moment(input, "MM");
-      //  console.log(output)
+        //  console.log(output)
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
-      
+
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -422,19 +425,15 @@ function Dashboard(props) {
                                 <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
                                 <li><Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
                             </ul>
-
-                            <ul className='monthsname pagination justify-content-center align-items-center'>
-                                {/* {
-                                    moment.monthsShort().filter((name, i) => {
-                                        return i === 0
-                                    })
-                                } */}
-                                <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
-                                {
-                                    <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
-                                }
-                                <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
-                            </ul>
+                            {showMonth && (
+                                <ul className='monthsname pagination justify-content-center align-items-center'>
+                                    <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
+                                    {
+                                        <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
+                                    }
+                                    <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
+                                </ul>
+                            )}
                         </div>
                     </div>
 
@@ -482,7 +481,7 @@ function Dashboard(props) {
                         <div id="page-wrapper" className="container">
                             <div className="row">
                                 <DataTable
-                                    progressPending = {isLoadingOrders}
+                                    progressPending={isLoadingOrders}
                                     columns={columns}
                                     data={myOrders}
                                     highlightOnHover
@@ -506,7 +505,7 @@ function Dashboard(props) {
                         <div id="page-wrapper" className="container">
                             <div className="row">
                                 <DataTable
-                                    progressPending = {isLoadingReturns}
+                                    progressPending={isLoadingReturns}
                                     columns={returnColumns}
                                     data={myReturn}
                                     highlightOnHover
@@ -531,7 +530,7 @@ function Dashboard(props) {
                             <div className="row">
                                 <div className="tbl-payout">
                                     <DataTable
-                                        progressPending = {isLoadingPayouts}
+                                        progressPending={isLoadingPayouts}
                                         columns={columnsPayouts}
                                         data={myPayouts}
                                         highlightOnHover

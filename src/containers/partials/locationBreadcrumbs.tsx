@@ -4,7 +4,7 @@ import { capitalize } from "../../components/utility/allutils";
 
 function Breadcrumbs(props) {
     const location = useLocation()
-    const { category, subcat, childcat, greatchildcat, cat, orderId,returnId }: any = useParams();
+    const { category, subcat, childcat, greatchildcat, cat, orderId, returnId }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [keyUl, setKey] = useState('');
@@ -95,7 +95,7 @@ function Breadcrumbs(props) {
                                         </li>
                                     </p>
                                 )
-                            } else if (local === 'all' || local === cat) {
+                            } else if (local === 'all' || local === cat || local === 'email') {
                                 return ('')
                             }
                             else if (local === returnId) {
@@ -119,7 +119,7 @@ function Breadcrumbs(props) {
                             }
 
                         } else {
-                            if (local === "") {
+                            if (local === "" || local === "settings" ) {
                                 return "";
                             } else {
                                 //  console.log(local)

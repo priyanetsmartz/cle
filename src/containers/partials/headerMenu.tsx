@@ -12,13 +12,12 @@ import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import cartAction from "../../redux/cart/productAction";
-import IntlMessages from "../../components/utility/intlMessages";
 import { sessionService } from 'redux-react-session';
 import MiniCart from './mini-cart';
 import SearchBar from './searchBar';
 import { capitalize } from '../../components/utility/allutils';
 import LanguageSwitcher from '../LanguageSwitcher';
-
+import AccountPopup from './accountPopup';
 const { logout } = authAction;
 const { showSignin, openSignUp, menuSetup, showLoader, userType } = appAction;
 const { accountPopup, miniCartPopup, addToCartTask, setCatSearch, setCurrentCat } = cartAction;
@@ -27,7 +26,6 @@ function HeaderMenu(props) {
     let localToken = JSON.parse((localData));
     const baseUrl = process.env.REACT_APP_API_URL;
     let history = useHistory();
-    const node = useRef(null);
     const [isPriveUser, setIsPriveUser] = useState((props.token.token && props.token.token === '4') ? true : false);
     let cle_vendor = localStorage.getItem('cle_vendor');
     let customerName = props.token.token_name;
@@ -135,13 +133,13 @@ function HeaderMenu(props) {
 
 
     const handleClick = e => {
-        if (node.current.contains(e.target)) {
-            // inside click
-            //console.log('here inside')
-            return;
-        }
-        // outside click
-        props.accountPopup(false)
+        // if (node.current.contains(e.target)) {
+        //     // inside click
+        //     //console.log('here inside')
+        //     return;
+        // }
+        // // outside click
+        // props.accountPopup(false)
 
     };
     const showAccountFxn = () => {
@@ -163,35 +161,35 @@ function HeaderMenu(props) {
         }, 200)
     }
 
-    const hideAccountFxn = () => {
-        props.accountPopup(false)
-    }
-    const hideAccountFxnMobile = () => {
-        props.accountPopup(false)
-    }
+    // const hideAccountFxn = () => {
+    //     props.accountPopup(false)
+    // }
+    // const hideAccountFxnMobile = () => {
+    //     props.accountPopup(false)
+    // }
     const menuMObileclicK = () => {
         setMobileMenu(!mobileMenu);
     }
-    const logout = async () => {
-        if (cle_vendor) { //vendor logout
-            localStorage.removeItem('cle_vendor');
-            history.replace('/vendor-login');
-            return;
-        }
-        await sessionService.deleteSession();
-        await sessionService.deleteUser();
+    // const logout = async () => {
+    //     if (cle_vendor) { //vendor logout
+    //         localStorage.removeItem('cle_vendor');
+    //         history.replace('/vendor-login');
+    //         return;
+    //     }
+    //     await sessionService.deleteSession();
+    //     await sessionService.deleteUser();
 
-        localStorage.removeItem('cartQuoteId');
-        localStorage.removeItem('cartQuoteToken');
-        props.logout();
-        props.addToCartTask(true);
-        window.location.href = '/';
-    }
-    // handle sigin click
-    const handlesigninClick = (e) => {
-        e.preventDefault();
-        props.showSignin(true);
-    }
+    //     localStorage.removeItem('cartQuoteId');
+    //     localStorage.removeItem('cartQuoteToken');
+    //     props.logout();
+    //     props.addToCartTask(true);
+    //     window.location.href = '/';
+    // }
+    // // handle sigin click
+    // const handlesigninClick = (e) => {
+    //     e.preventDefault();
+    //     props.showSignin(true);
+    // }
     const handlesigninClickMobile = (e) => {
         e.preventDefault();
         props.showSignin(true);
@@ -256,93 +254,92 @@ function HeaderMenu(props) {
             )}
             <div className="container header-mvp" id="header-mvp">
                 <div className="row flex-nowrap justify-content-between align-items-center top-menuselect">
-                    
-                        <>
-                            <div className="col-4 pt-1 h-mob-l">
-                                <div className="select-wearing">
-                                    {menuData.length > 0 && (
-                                        <ul>
-                                            {
-                                                menuData.map((val, i) => {
-                                                    let routering = val.url_key === 'women' ? '' : '/category/' + val.url_key;
-                                                    return (
-                                                        <li key={i}>
-                                                            <Link to={routering} onClick={(e) => { handleTopMenuClick(val.url_key, val.id); }} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
-                                                            {val && val.child && val.child.length > 0 && (
-                                                                <ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0 lolo" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
-                                                                    {val.child.map((childMenu: any, j) => {
-                                                                        return (
-                                                                            <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
 
-                                                                                <Link className={subcat === childMenu.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"} onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
-                                                                                {childMenu.child && childMenu.child.length > 0 && (
-                                                                                    <span className="megamenu_bar">
+                    <>
+                        <div className="col-4 pt-1 h-mob-l">
+                            <div className="select-wearing">
+                                {menuData.length > 0 && (
+                                    <ul>
+                                        {
+                                            menuData.map((val, i) => {
+                                                let routering = val.url_key === 'women' ? '' : '/category/' + val.url_key;
+                                                return (
+                                                    <li key={i}>
+                                                        <Link to={routering} onClick={(e) => { handleTopMenuClick(val.url_key, val.id); }} className={activeCat === val.url_key ? "line-through-active up-arrow" : ""}>{val.name}</Link >
+                                                        {val && val.child && val.child.length > 0 && (
+                                                            <ul className={activeCat === val.url_key ? "menuactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0 lolo" : "menudeactive navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0"} >
+                                                                {val.child.map((childMenu: any, j) => {
+                                                                    return (
+                                                                        <li className="nav-item col-6 col-md-auto active_megamenu" key={j}>
 
-                                                                                        {childMenu.child && childMenu.child.map((grandChild, l) => {
-                                                                                            return (
-                                                                                                <ul className="megamenugrid" key={l}>
-                                                                                                    {((l === childMenu.child.length - 1) || (l === (childMenu.child.length - 2))) ? (
-                                                                                                        <h3> {grandChild.name}</h3>
-                                                                                                    ) :
-                                                                                                        <h3> <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}`}
-                                                                                                            onClick={(e) => { handleMenuClick(e, grandChild.id); }} className={childcat === grandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"}>{grandChild.name}</Link></h3>}
-                                                                                                    {grandChild.child && grandChild.child.map((greatGrandChild, k) => {
-                                                                                                        return (<li key={k}>
-                                                                                                            <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}/${greatGrandChild.url_key}`}
-                                                                                                                onClick={(e) => { handleMenuClick(e, greatGrandChild.id); }} className={greatchildcat === greatGrandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"} >{greatGrandChild.name}</Link>
-                                                                                                        </li>)
-                                                                                                    })}
-                                                                                                </ul>)
-                                                                                        })}
-                                                                                        {childMenu.image && (
-                                                                                            <ul className="megamenugrid last-images-menu"><li className="nav-link p-2"><Link className="btn details px-auto" onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}><img src={baseUrl + childMenu.image} width="100%" alt="megamenu" /></Link></li>
-                                                                                            </ul>
-                                                                                        )}
-                                                                                    </span>
-                                                                                )}
-                                                                            </li>
+                                                                            <Link className={subcat === childMenu.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"} onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}>{childMenu.name}</Link>
+                                                                            {childMenu.child && childMenu.child.length > 0 && (
+                                                                                <span className="megamenu_bar">
 
-                                                                        );
-                                                                    })}
+                                                                                    {childMenu.child && childMenu.child.map((grandChild, l) => {
+                                                                                        return (
+                                                                                            <ul className="megamenugrid" key={l}>
+                                                                                                {((l === childMenu.child.length - 1) || (l === (childMenu.child.length - 2))) ? (
+                                                                                                    <h3> {grandChild.name}</h3>
+                                                                                                ) :
+                                                                                                    <h3> <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}`}
+                                                                                                        onClick={(e) => { handleMenuClick(e, grandChild.id); }} className={childcat === grandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"}>{grandChild.name}</Link></h3>}
+                                                                                                {grandChild.child && grandChild.child.map((greatGrandChild, k) => {
+                                                                                                    return (<li key={k}>
+                                                                                                        <Link to={`/products/${val.url_key}/${childMenu.url_key}/${grandChild.url_key}/${greatGrandChild.url_key}`}
+                                                                                                            onClick={(e) => { handleMenuClick(e, greatGrandChild.id); }} className={greatchildcat === greatGrandChild.url_key ? "nav-link p-2 activemenu line-through-active" : "nav-link p-2"} >{greatGrandChild.name}</Link>
+                                                                                                    </li>)
+                                                                                                })}
+                                                                                            </ul>)
+                                                                                    })}
+                                                                                    {childMenu.image && (
+                                                                                        <ul className="megamenugrid last-images-menu"><li className="nav-link p-2"><Link className="btn details px-auto" onClick={(e) => { handleMenuClick(e, childMenu.id); }} to={'/products/' + val.url_key + '/' + childMenu.url_key}><img src={baseUrl + childMenu.image} width="100%" alt="megamenu" /></Link></li>
+                                                                                        </ul>
+                                                                                    )}
+                                                                                </span>
+                                                                            )}
+                                                                        </li>
 
-                                                                </ul>
-                                                            )}
-                                                        </li>)
-                                                })
-                                            }
-                                        </ul>
-                                    )}
+                                                                    );
+                                                                })}
+
+                                                            </ul>
+                                                        )}
+                                                    </li>)
+                                            })
+                                        }
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                        <div className="col-4">
+                            <div className="cli_logo">
+                                <Link className=" me-2" onClick={() => window.location.href = '/'} to="/">
+                                    <img src={CLELogo} className="img-fluid" alt="logo" />
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="col-4 h-mob-r">
+
+                            <div className="sell_item" style={{ display: 'none' }}>
+                                <div className="sell_itemnote mb-2">
+                                    <Link to="#" className="btn btn-green">Sell an Item</Link>
                                 </div>
                             </div>
-                            <div className="col-4">
-                                <div className="cli_logo">
-                                    <Link className=" me-2" onClick={() => window.location.href = '/'} to="/">
-                                        <img src={CLELogo} className="img-fluid" alt="logo" />
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="col-4 h-mob-r">
 
-                                <div className="sell_item" style={{ display: 'none' }}>
-                                    <div className="sell_itemnote mb-2">
-                                        <Link to="#" className="btn btn-green">Sell an Item</Link>
-                                    </div>
-                                </div>
-                               
-                                    <div className="user_cart mob-hide">
-                                        <div className="cartuser-info">
-                                            <ul>
-                                                <LanguageSwitcher />
-                                                {customerName ? <li><Link to="/customer/profile">{capitalize(customerName)}</Link></li> : ""}
-                                                {props.token && props.token.vendor_name ? <li><Link to="/vendor/business-profile">{capitalize(props.token.vendor_name)}</Link></li> : ""}
-                                                {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
-                                                <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
-
-                                                    <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
+                            <div className="user_cart mob-hide">
+                                <div className="cartuser-info">
+                                    <ul>
+                                        <LanguageSwitcher />
+                                        {customerName ? <li><Link to="/customer/profile">{capitalize(customerName)}</Link></li> : ""}
+                                        {props.token && props.token.vendor_name ? <li><Link to="/vendor/business-profile">{capitalize(props.token.vendor_name)}</Link></li> : ""}
+                                        {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}
+                                        <li className="my_account"> <Link to="#" onClick={() => { showAccountFxn() }} onBlur={() => { showAccountFxnBlur() }} ><img src={avatar} alt="user" /> </Link>
+                                            <AccountPopup />
+                                            {/* <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
                                                         <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
                                                         {(Object.keys(props.token).length > 0 && props.token.type === 'user') && (
-                                                            <ul>
-                                                                {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
+                                                            <ul>     
                                                                 <li><Link to="/customer/profile"><IntlMessages id="dashboard" /> </Link></li>
                                                                 <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
                                                                 <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
@@ -351,9 +348,8 @@ function HeaderMenu(props) {
                                                         )}
                                                         {(Object.keys(props.token).length > 0 && props.token.type === 'vendor') && (
                                                             <ul>
-                                                                {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
+                                                               
                                                                 <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li>
-                                                                {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
                                                                 <li><Link to="/vendor/business-profile"><IntlMessages id="myprofile" /></Link></li>
                                                                 <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
                                                             </ul>
@@ -365,23 +361,23 @@ function HeaderMenu(props) {
                                                             }
 
                                                         </div>
-                                                    </div>
+                                                    </div> */}
 
-                                                </li>
-                                                {(Object.keys(props.token).length > 0 && props.token.type === 'user') && (
-                                                    <li> <Link to="/customer/wishlist"><img src={favorit} alt="wishlist" /></Link> </li>
-                                                )}
-                                                {!Object.keys(props.token).length && (
-                                                    <li> <Link to="#" onClick={(e) => { handlesigninClickMobile(e); }}><img src={favorit} alt="wishlist" /></Link> </li>
-                                                )}
-                                                <MiniCart />
-                                            </ul>
-                                        </div>
-                                    </div>
-                                
+                                        </li>
+                                        {(Object.keys(props.token).length > 0 && props.token.type === 'user') && (
+                                            <li> <Link to="/customer/wishlist"><img src={favorit} alt="wishlist" /></Link> </li>
+                                        )}
+                                        {!Object.keys(props.token).length && (
+                                            <li> <Link to="#" onClick={(e) => { handlesigninClickMobile(e); }}><img src={favorit} alt="wishlist" /></Link> </li>
+                                        )}
+                                        <MiniCart />
+                                    </ul>
+                                </div>
                             </div>
-                        </>
-                    
+
+                        </div>
+                    </>
+
                     <div className="col-4">
                         <div className="cli_logo logo-m">
                             <Link className=" me-2" onClick={() => window.location.href = '/'} to="/">
@@ -473,12 +469,11 @@ function HeaderMenu(props) {
                                             <li className="my_account"> <Link to="#" onClick={() => { showAccountFxnMobile() }} onBlur={() => { showAccountFxnBlurMobile() }} ><svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="22" height="22" viewBox="0 0 22 22">
                                                 <path id="user_people_profile_avatar" data-name="user, people, profile, avatar" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9.641,9.641,0,0,1-5.209-1.674,7,7,0,0,1,10.418,0A9.167,9.167,0,0,1,12,21Zm6.694-3.006a8.98,8.98,0,0,0-13.388,0,9,9,0,1,1,13.388,0ZM12,6a4,4,0,1,0,4,4A4,4,0,0,0,12,6Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,12Z" transform="translate(-1 -1)" />
                                             </svg> </Link>
-
-                                                <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
+                                                <AccountPopup />
+                                                {/* <div ref={node} className="myaccount_details" style={{ "display": !props.openAccountPop ? "none" : "block" }}>
                                                     <Link to="#" className="cross_icn" onClick={() => { hideAccountFxnMobile() }} > <i className="fas fa-times"></i></Link>
                                                     {(Object.keys(props.token).length > 0 && props.token.type === 'user') && (
                                                         <ul>
-                                                            {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
                                                             <li><Link to="/customer/profile"><IntlMessages id="dashboard" /> </Link></li>
                                                             <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
                                                             <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
@@ -487,9 +482,7 @@ function HeaderMenu(props) {
                                                     )}
                                                     {(Object.keys(props.token).length > 0 && props.token.type === 'vendor') && (
                                                         <ul>
-                                                            {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
                                                             <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li>
-                                                            {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
                                                             <li><Link to="/vendor/business-profile"><IntlMessages id="myprofile" /></Link></li>
                                                             <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
                                                         </ul>
@@ -501,7 +494,7 @@ function HeaderMenu(props) {
                                                         }
 
                                                     </div>
-                                                </div>
+                                                </div> */}
 
                                             </li>
                                             {customerName && (
