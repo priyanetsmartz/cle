@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
@@ -20,8 +20,11 @@ import {
 import { Link } from "react-router-dom";
 import { formatprice, getCurrentMonth } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
+import { useIntl } from 'react-intl';
+
 
 function MyAnalysis(props) {
+    const intl= useIntl()
     const [active, setActive] = useState(0);
     const [dataTilesData, setDataTilesData] = useState([]);
     const [pdata, setPdata] = useState([]);
@@ -158,7 +161,7 @@ function MyAnalysis(props) {
                             <div className="card-info">
                                 <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['averageOrder'] ? intl.formatMessage( {id:siteConfig.currency} ) + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
                                     {/* <h4>10%</h4> */}
                                 </div>
                             </div>
@@ -167,7 +170,7 @@ function MyAnalysis(props) {
                             <div className="card-info">
                                 <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['payoutAmount'] ? intl.formatMessage( {id:siteConfig.currency} ) + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
                                     {/* <h4>5%</h4> */}
                                 </div>
                             </div>

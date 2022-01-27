@@ -183,7 +183,7 @@ function MyPayouts(props) {
         if (dataObj.length > 0) {
             dataLListing = dataObj.map((data) => {
                 let orderLoop: any = {};
-                orderLoop.price = siteConfig.currency + data.total_payout;
+                orderLoop.price = intl.formatMessage( {id:siteConfig.currency} ) + data.total_payout;
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
                 orderLoop.payout_id = data.payout_id;
@@ -375,7 +375,7 @@ function MyPayouts(props) {
                                             <td>{data.invoice_id}</td>
                                             <td>{moment(data.invoice_created_at).format('DD MMM YYYY')}</td>
                                             <td>{data.invoice_status}</td>
-                                            <td>{siteConfig.currency} {data.order_amount}</td>
+                                            <td>{intl.formatMessage( {id:siteConfig.currency} )} {data.order_amount}</td>
                                         </tr>
                                     )
                                 })}
@@ -406,8 +406,8 @@ function MyPayouts(props) {
                                 <tr>
                                     <td></td>
                                     <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_orders : ""}</td>
-                                    <td>{siteConfig.currency} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payment_paid : ""}</td>
-                                    <td>{siteConfig.currency} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_payment : ""}</td>
+                                    <td>{intl.formatMessage( {id:siteConfig.currency} )} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payment_paid : ""}</td>
+                                    <td>{intl.formatMessage( {id:siteConfig.currency} )} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_payment : ""}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -521,16 +521,16 @@ function MyPayouts(props) {
                             <tbody>
                                 <tr>
                                     <td><IntlMessages id="order.subTotal" /></td>
-                                    <th className="text-end">{siteConfig.currency}{formatprice(subtotal)}</th>
+                                    <th className="text-end">{intl.formatMessage( {id:siteConfig.currency} )}{formatprice(subtotal)}</th>
                                 </tr>
                                 <tr>
                                     <td><IntlMessages id="commission" /></td>
-                                    <th className="text-end">-{siteConfig.currency}{formatprice(commission)}</th>
+                                    <th className="text-end">-{intl.formatMessage( {id:siteConfig.currency} )}{formatprice(commission)}</th>
                                 </tr>
 
                                 <tr>
                                     <th className="bor-top-2"><IntlMessages id="order.total" /></th>
-                                    <td className="bor-top-2 text-end dark-col">{siteConfig.currency}{formatprice(totalP)}</td>
+                                    <td className="bor-top-2 text-end dark-col">{intl.formatMessage( {id:siteConfig.currency} )}{formatprice(totalP)}</td>
                                 </tr>
                             </tbody>
                         </table>

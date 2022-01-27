@@ -48,7 +48,7 @@ function MyReturnsComplaints(props) {
                 orderLoop.increment_id = [{ 'increment_id': data.increment_id, 'entity_id': data.entity_id }];
                 orderLoop.status = data.rma_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = siteConfig.currency + ' ' + formatPrice;
+                orderLoop.total = intl.formatMessage( {id:siteConfig.currency} ) + ' ' + formatPrice;
                 return orderLoop;
             });
         }

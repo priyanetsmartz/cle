@@ -644,5 +644,9 @@
   "newEmailUpdatenotification":"تم إرسال الرمز المميز إلى عنوان بريدك الإلكتروني ، اتبع التعليمات لتحديث بريدك الإلكتروني",
   "reasonofrejection":"سبب الرفض",
   "selectproductEcom":"حدد منصة ecom المفضلة",
-  "companynamefirst":"الرجاء حفظ تفاصيل الشركة أولا"
+  "companynamefirst":"الرجاء حفظ تفاصيل الشركة أولا",
+  "order":"طلب",
+  "orderNumber": "عدد",
+  "SAR ":"ريال سعودي"
 }
+
