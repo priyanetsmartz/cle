@@ -423,7 +423,7 @@ function MyPreferences(props) {
                     <div className="col-sm-6">
                         <div className="search_results">
                             <img src={searchIcon} alt="" className="me-1 search_icn" />
-                            <input type="search" placeholder="Search..." className="form-control me-1"
+                            <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} className="form-control me-1"
                                 defaultValue={catFilter} onChange={filterCategories} />
                         </div>
                     </div>

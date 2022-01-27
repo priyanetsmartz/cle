@@ -134,20 +134,24 @@ export function getCountryName(countryId) {
 
 export function getRegionName(countryId = "AL", regionId) {
   let countryList: any = COUNTRIES.filter(obj => obj.id === countryId);
-
-  let regionList: any = countryList[0].available_regions.filter(obj2 => {
-    return parseInt(obj2.id) === parseInt(regionId)
-  });
-
-  return regionList[0].name
+  if (countryList && countryList.length > 0 && countryList[0] && countryList[0].available_regions) {
+    let regionList: any = countryList[0]?.available_regions.filter(obj2 => {
+      return parseInt(obj2.id) === parseInt(regionId)
+    });
+   // console.log(regionList)
+   // console.log(regionList[0].name)
+    return regionList?.[0]?.name
+  } else {
+    return "";
+  }
 }
 
 export function getCurrentMonth() {
- //console.log(moment().format('MMM'))
+  //console.log(moment().format('MMM'))
   let data = {
     name: moment().format('MMM'),
-    num : moment().month()
+    num: moment().month()
   }
- 
+
   return data;
 }
