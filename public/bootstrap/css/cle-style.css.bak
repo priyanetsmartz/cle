@@ -7457,7 +7457,7 @@ p.sliderupper {
     cursor: pointer;
 }
 .log-ban img {
-    height: 400px;
+    height: 350px;
     -o-object-fit: cover;
        object-fit: cover;
     width: 100%;
@@ -9771,8 +9771,8 @@ p.sliderupper {
 		width:auto;
 	}
 	.category-card-img{
-		width: 250px;
-		height: 250px;
+		width: 225px;
+		height: 225px;
 	}
 	.banner-wrap .item{
 		position:relative;
@@ -9786,6 +9786,21 @@ p.sliderupper {
 	
 	.select-wearing ul li ul li {
 		padding: 0 10px;
+	}
+	.megamenu_bar{
+		width: 1000px;
+	}
+	.megamenu_bar ul.megamenugrid{
+		width: 165px;
+	}
+	.my_orders_returns_sec{
+		padding: 0 15px;
+	}
+	.container.about-inner {
+		padding: 0 15px;
+	}
+	.inner-pages .page-head svg text{
+		transform: translate(350px, 108px);
 	}
 }
 
