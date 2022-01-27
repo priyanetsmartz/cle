@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import appAction from "../../redux/app/actions";
 import cartAction from "../../redux/cart/productAction";
 const { showSignin, openSignUp, userType } = appAction;
-const { accountPopup, miniCartPopup, addToCartTask, setCatSearch, setCurrentCat } = cartAction;
+const { accountPopup, addToCartTask } = cartAction;
 const { logout } = authAction;
 function AccountPopup(props) {
     let history = useHistory();
@@ -82,5 +82,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { logout, showSignin, openSignUp, userType ,addToCartTask}
+    { logout, showSignin, openSignUp, userType, addToCartTask, accountPopup }
 )(AccountPopup);

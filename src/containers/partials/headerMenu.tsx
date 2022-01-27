@@ -12,7 +12,6 @@ import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
 import appAction from "../../redux/app/actions";
 import cartAction from "../../redux/cart/productAction";
-import IntlMessages from "../../components/utility/intlMessages";
 import { sessionService } from 'redux-react-session';
 import MiniCart from './mini-cart';
 import SearchBar from './searchBar';
@@ -27,7 +26,6 @@ function HeaderMenu(props) {
     let localToken = JSON.parse((localData));
     const baseUrl = process.env.REACT_APP_API_URL;
     let history = useHistory();
-    const node = useRef(null);
     const [isPriveUser, setIsPriveUser] = useState((props.token.token && props.token.token === '4') ? true : false);
     let cle_vendor = localStorage.getItem('cle_vendor');
     let customerName = props.token.token_name;
@@ -163,35 +161,35 @@ function HeaderMenu(props) {
         }, 200)
     }
 
-    const hideAccountFxn = () => {
-        props.accountPopup(false)
-    }
-    const hideAccountFxnMobile = () => {
-        props.accountPopup(false)
-    }
+    // const hideAccountFxn = () => {
+    //     props.accountPopup(false)
+    // }
+    // const hideAccountFxnMobile = () => {
+    //     props.accountPopup(false)
+    // }
     const menuMObileclicK = () => {
         setMobileMenu(!mobileMenu);
     }
-    const logout = async () => {
-        if (cle_vendor) { //vendor logout
-            localStorage.removeItem('cle_vendor');
-            history.replace('/vendor-login');
-            return;
-        }
-        await sessionService.deleteSession();
-        await sessionService.deleteUser();
+    // const logout = async () => {
+    //     if (cle_vendor) { //vendor logout
+    //         localStorage.removeItem('cle_vendor');
+    //         history.replace('/vendor-login');
+    //         return;
+    //     }
+    //     await sessionService.deleteSession();
+    //     await sessionService.deleteUser();
 
-        localStorage.removeItem('cartQuoteId');
-        localStorage.removeItem('cartQuoteToken');
-        props.logout();
-        props.addToCartTask(true);
-        window.location.href = '/';
-    }
-    // handle sigin click
-    const handlesigninClick = (e) => {
-        e.preventDefault();
-        props.showSignin(true);
-    }
+    //     localStorage.removeItem('cartQuoteId');
+    //     localStorage.removeItem('cartQuoteToken');
+    //     props.logout();
+    //     props.addToCartTask(true);
+    //     window.location.href = '/';
+    // }
+    // // handle sigin click
+    // const handlesigninClick = (e) => {
+    //     e.preventDefault();
+    //     props.showSignin(true);
+    // }
     const handlesigninClickMobile = (e) => {
         e.preventDefault();
         props.showSignin(true);
