@@ -27,6 +27,7 @@ function MyAnalysis(props) {
     const [pdata, setPdata] = useState([]);
     const [barChartData, setBarChartData] = useState([]);
     const [pieChart, setPieChart] = useState([]);
+    const [showMonth, setShowMonth] = useState(true);
     let currentDate = moment().endOf('month').format('MM/DD/YYYY');
     let oldDate = moment().startOf('month').format('MM/DD/YYYY');
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
@@ -50,13 +51,16 @@ function MyAnalysis(props) {
     const handleChange = (flag) => {
         let dates = [];
         if (flag === 0) {
-            dates['start'] = moment().format('DD/MM/YYYY');
-            dates['end'] = moment().subtract(1, 'months').format('DD/MM/YYYY');
+            setShowMonth(true)
+            dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
+            dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
         } else if (1) {
+            setShowMonth(false)
             let quater = moment().quarter();
             dates['start'] = moment().quarter(quater).startOf('quarter').format('DD/MM/YYYY');
             dates['end'] = moment().quarter(quater).endOf('quarter').format('DD/MM/YYYY');
         } else {
+            setShowMonth(false)
             dates['start'] = moment().startOf('year').format('DD/MM/YYYY');
             dates['end'] = moment().endOf('year').format('DD/MM/YYYY');
         }
@@ -127,18 +131,15 @@ function MyAnalysis(props) {
                                 <li><Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
                             </ul>
 
-                            <ul className='monthsname pagination justify-content-center align-items-center'>
-                                {/* {
-                                    moment.monthsShort().filter((name, i) => {
-                                        return i === 0
-                                    })
-                                } */}
-                                <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
-                                {
-                                    <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
-                                }
-                                <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
-                            </ul>
+                            {showMonth && (
+                                <ul className='monthsname pagination justify-content-center align-items-center'>
+                                    <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
+                                    {
+                                        <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
+                                    }
+                                    <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
+                                </ul>
+                            )}
                         </div>
                     </div>
 
@@ -229,7 +230,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                        <h3>Payout Information</h3>
+                            <h3>Payout Information</h3>
                             <BarChart
                                 width={500}
                                 height={300}
