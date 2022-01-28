@@ -925,11 +925,13 @@ function BusinessProfile(props) {
                             <label className="form-label heading_lbl"><IntlMessages id="login.password" />*</label>
                             <div className="password_edit">*******</div>
                         </div>
+						<div className="col-sm-6"></div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-12">
                             <div className="change-paswd-sec col-sm-6">
-                                <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
+                                <div className="width-100">
+								<label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
+								</div>
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" />*</label>
                                     <input type={passMask.password ? 'password' : 'text'} className="form-control" placeholder=""
@@ -965,7 +967,7 @@ function BusinessProfile(props) {
                                     </span>
                                     <span className="error">{errors.errors["confirmNewPassword"]}</span>
                                 </div>
-                                <div className="forgot_paswd">
+                                <div className="width-100 mb-3 form-field forgot_paswd">
                                     <div className="Frgt_paswd">
                                         <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" />?</Link>
                                     </div>
@@ -977,17 +979,23 @@ function BusinessProfile(props) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
+							<div className="col-sm-6"></div>
+                    </div>
+                        
+						<div className="row mb-3">
 
                             <div className="col-sm-6">
                                 <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
                                 <div className="password_edit">{props.token.email}</div>
                             </div>
+							<div className="col-sm-6"></div>
                         </div>
-                        <div className="col-sm-12">
+						
+                        <div className="row">
                             <div className="newemail-sec col-sm-6">
-                                <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+                                <div className="width-100">
+								<label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+								</div>
                                 <div className="width-100 mb-3">
                                     <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
                                     <input type="email" className="form-control" placeholder="" id="newEmail"
@@ -1025,9 +1033,11 @@ function BusinessProfile(props) {
                                     </div>
                                 </div>
                             </div>
+							<div className="col-sm-6"></div>
                         </div>
+						
                     </div>
-                </div>
+               
             </section>
 
             <HtmlContent identifier="vendor_block" />
