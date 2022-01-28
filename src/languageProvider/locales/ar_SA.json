@@ -653,6 +653,25 @@
   "decline":"انخفاض",
   "approved":"وافق",
   "received":"تم الاستلام",
-  "accept":"قبول" 
+  "accept":"قبول",
+  "Ready to Ship":"على استعداد للسفينة",
+  "Canceled":"ألغيت",
+  "Pending":"قيد الانتظار",
+  "Delivered":"تم التوصيل",
+  "Returned":"عاد",
+  "Paid":"دفع",
+  "Product":"منتج",
+  "Scheduled":"المقرر",
+  "Processing":"يعالج",
+  "Hold":"معلق",
+  "Paypal_ipn":"Paypal_ipn",
+  "Error":"خطأ",
+  "Invoice":"فاتورة",
+  "orderInformation":"معلومات الطلب",
+  "productInformation":"معلومات المنتج",
+  "payoutInformation":"معلومات الدفع",
+  "Notes":"ملحوظات",
+  "thanksforpayment":"شكرا لك على الدفع. لقد صنعت يومنا للتو.",
+  "Phone":"هاتف"
 }
 

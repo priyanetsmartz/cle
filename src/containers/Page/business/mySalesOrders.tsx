@@ -111,7 +111,7 @@ function MySalesOrders(props) {
 
     const columns = [
         {
-            name: 'Order',
+            name: intl.formatMessage({id:'order'}),
             selector: row => row.increment_id,
             sortable: true,
             cell: row => (
@@ -120,30 +120,30 @@ function MySalesOrders(props) {
             )
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
             sortable: true
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             sortable: true,
             cell: row => (
                 // <span className='green'>{row.status}</span>
 
                 <div>
-                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{row.status}</span> : ""}
-                    {row.status === "Canceled" ? <span className="canceled">{row.status}</span> : ""}
-                    {row.status === "Shipped" ? <span className="shipped">{row.status}</span> : ""}
-                    {row.status === "Pending" ? <span className="pending">{row.status}</span> : ""}
-                    {row.status === "Delivered" ? <span className="delivered">{row.status}</span> : ""}
-                    {row.status === "Returned" ? <span className="returned">{row.status}</span> : ""}
+                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Canceled" ? <span className="canceled">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Shipped" ? <span className="shipped">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Pending" ? <span className="pending">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Delivered" ? <span className="delivered">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Returned" ? <span className="returned">{intl.formatMessage({id:row.status})}</span> : ""}
 
                 </div>
             )
         },
         {
-            name: 'Total',
+            name: intl.formatMessage({id:'order.total'}),
             selector: row => row.total ? intl.formatMessage( {id:siteConfig.currency} ) + ' ' + row.total : 0,
         },
     ];

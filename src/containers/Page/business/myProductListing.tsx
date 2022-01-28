@@ -148,7 +148,7 @@ function MyProductListing(props) {
             cell: row => <img height="84px" width="56px" alt={row.image} src={row.image} />,
         },
         {
-            name: 'Product',
+            name: intl.formatMessage({id:'Product'}),
             sortable: true,
             cell: row => (
                 <div>
@@ -160,11 +160,11 @@ function MyProductListing(props) {
             ),
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             cell: row => (
                 <div>
@@ -179,7 +179,7 @@ function MyProductListing(props) {
             ),
         },
         {
-            name: 'Price',
+            name: intl.formatMessage({id:'price'}),
             selector: row => row.price,
         }
     ];

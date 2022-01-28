@@ -120,7 +120,7 @@ function MyReturnsComplaints(props) {
 
     const columns = [
         {
-            name: 'Number',
+            name: intl.formatMessage({id:'orderNumber'}),
             sortable: true,
             cell: row => (
                 <Link to={`/vendor/returns-complaints/${row.increment_id[0].entity_id}`}>{row.increment_id[0].increment_id}</Link>
@@ -128,12 +128,12 @@ function MyReturnsComplaints(props) {
             )
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
             sortable: true
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             sortable: true,
             cell: row => (
@@ -150,7 +150,7 @@ function MyReturnsComplaints(props) {
             )
         },
         {
-            name: 'Total',
+            name: intl.formatMessage({id:'order.total'}),
             selector: row => row.total,
         },
     ];

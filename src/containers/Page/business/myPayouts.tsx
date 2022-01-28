@@ -96,7 +96,7 @@ function MyPayouts(props) {
 
     const columns = [
         {
-            name: 'ID',
+            name: intl.formatMessage({id:'id'}),
             selector: row => row.payout_id,
             button: true,
             cell: row => {
@@ -106,7 +106,7 @@ function MyPayouts(props) {
 
         },
         {
-            name: 'Price',
+            name: intl.formatMessage({id:'price'}),
             selector: row => row.price,
             button: true,
             cell: row => {
@@ -118,25 +118,25 @@ function MyPayouts(props) {
 
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             cell: row => (
                 // <span className='green'>{capitalize(row.status)}</span>
                 <div>
-                    {row.status === "scheduled" ? <span className="scheduled">{capitalize(row.status)}</span> : ""}
-                    {row.status === "pending" ? <span className="pending">{capitalize(row.status)}</span> : ""}
-                    {row.status === "processing" ? <span className="processing">{capitalize(row.status)}</span> : ""}
-                    {row.status === "hold" ? <span className="hold">{capitalize(row.status)}</span> : ""}
-                    {row.status === "paypal_ipn" ? <span className="paypal_ipn">{capitalize(row.status)}</span> : ""}
-                    {row.status === "paid" ? <span className="paid">{capitalize(row.status)}</span> : ""}
+                    {row.status === "scheduled" ? <span className="scheduled">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "processing" ? <span className="processing">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "hold" ? <span className="hold">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "paypal_ipn" ? <span className="paypal_ipn">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "paid" ? <span className="paid">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
 
-                    {row.status === "error" ? <span className="error">{capitalize(row.status)}</span> : ""}
+                    {row.status === "error" ? <span className="error">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
 
-                    {row.status === "canceled" ? <span className="canceled">{capitalize(row.status)}</span> : ""}
+                    {row.status === "canceled" ? <span className="canceled">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
                 </div>
             )
         },
@@ -148,7 +148,7 @@ function MyPayouts(props) {
                 if (row.data.payout_status === 'paid') {
                     return (
                         <p onClick={() => sortHandler(row.data.payout_id)}>
-                            <i className="fa fa-file-alt" aria-hidden="true"></i> Invoice</p>
+                            <i className="fa fa-file-alt" aria-hidden="true"></i> {intl.formatMessage({id:'Invoice'})}</p>
                     )
                 }
             }
@@ -412,8 +412,8 @@ function MyPayouts(props) {
                             </tbody>
                         </table>
 
-                        <p>Notes:</p>
-                        <p>Thanks you for the payment . You just made our day.</p>
+                        <p>{intl.formatMessage({id:'Notes'})}:</p>
+                        <p>{intl.formatMessage({id:'thanksforpayment'})}</p>
                     </section>
                     <br />
                     <br />
