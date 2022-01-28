@@ -1146,8 +1146,8 @@ function BusinessProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="vendor.contactMethod" /><span className="maindatory">*</span></label>
                             <select value={vendorForm.contactMethod} onChange={handleChange} id="contactMethod" className="form-select" aria-label="Default select example">
-                                <option value="email">Email</option>
-                                <option value="phone">Phone</option>
+                                <option value="email">{intl.formatMessage({id:'profile.email'})}</option>
+                                <option value="phone">{intl.formatMessage({id:'Phone'})}</option>
                             </select>
                             <span className="error">{errors.errors["contactMethod"]}</span>
                         </div>

@@ -183,8 +183,8 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>My Analysis</h1>
-                            <p>Order Information</p>
+                            <h1>{intl.formatMessage({id:'vendor.myAnalysis'})}</h1>
+                            <p>{intl.formatMessage({id:'orderInformation'})}</p>
                             <ResponsiveContainer width="100%" aspect={3}>
                                 <LineChart data={pdata} margin={{ right: 300 }}>
                                     <CartesianGrid />
@@ -210,7 +210,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h3>Product Information</h3>
+                            <h3>{intl.formatMessage({id:'productInformation'})}</h3>
                             <PieChart width={400} height={400}>
                                 <Pie
                                     data={pieChart}
@@ -233,7 +233,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h3>Payout Information</h3>
+                            <h3>{intl.formatMessage({id:'payoutInformation'})}</h3>
                             <BarChart
                                 width={500}
                                 height={300}
