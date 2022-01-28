@@ -672,5 +672,8 @@
   "payoutInformation":"Payout Information",
   "Notes":"Notes",
   "thanksforpayment":"Thanks you for the payment . You just made our day.",
-  "Phone":"Phone"
+  "Phone":"Phone",
+  "Male":"Male",
+  "Female":"Female",
+  "Other":"Other"
 }
