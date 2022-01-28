@@ -9693,6 +9693,45 @@ p.sliderupper {
 	#headerrr .top-menuselect .h-mob-r{
 		display:none;
 	}
+	
+	.my_profile_sect > .container {
+		padding: 0!important;
+	}
+	
+	.importance{
+		flex-direction: column;
+	}
+	.importance-card{
+		margin-bottom: 10px;
+		width:100%;
+	}
+	.start-selling .sell-cont{
+		padding:20px;
+	}
+	
+	.opt-tabs .radio-toolbar{
+		flex-direction: column;
+	}
+	
+	.opt-tabs .radio-toolbar li{
+		margin:0 0 10px 0;
+	}
+	
+	.bulk-upload{
+		flex-direction: column;
+	}
+	
+	.bulk-upload .download,
+	.bulk-upload .upload{
+		margin-bottom:10px;
+		width: 100%;
+	}
+	.companylogo img{
+		height:300px;
+	}
+	.main-head h1{
+		font-size: 28px;
+	}
 
 }
 
@@ -9788,6 +9827,20 @@ p.sliderupper {
 		margin:20px auto;
 	}
 	
+	.myorder_sidebar ul li {
+		padding: 10px 0px;
+	}
+	.myorder_sidebar ul li a {
+		font-size: 14px;
+	}
+	.myorder_sidebar ul li a i {
+		font-size: 14px;
+		margin-right: 10px;
+		margin-top: 6px;
+	}
+	.companylogo img{
+		height:110px;
+	}
 }
 
 @media only screen and (min-width: 1024px) and (max-width: 1366px) {

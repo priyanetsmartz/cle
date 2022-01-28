@@ -1050,7 +1050,7 @@ function BusinessProfile(props) {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-4 mb-1">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-1">
                             <div className="d-grid ">
                                 <Link to="/vendor/returns-complaints" className="btn btn-secondary">
                                     <IntlMessages id="vendor.returnComplaints" />
@@ -1058,7 +1058,7 @@ function BusinessProfile(props) {
                                 </Link>
                             </div>
                         </div>
-                        <div className="col-sm-4 mb-1">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-1">
                             <div className="d-grid ">
                                 <Link to="/vendor/sales-orders" className="btn btn-secondary">
                                     <IntlMessages id="vendor.salesOrders" />
@@ -1066,7 +1066,7 @@ function BusinessProfile(props) {
                                 </Link>
                             </div>
                         </div>
-                        <div className="col-sm-4 mb-1">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-1">
                             <div className="d-grid ">
                                 <Link to="/vendor/product-listing" className="btn btn-secondary">
                                     <IntlMessages id="vendor.productListing" />

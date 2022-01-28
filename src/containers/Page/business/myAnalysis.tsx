@@ -148,7 +148,7 @@ function MyAnalysis(props) {
 
 
                     <div className="row mb-4" style={{ columnCount: 3 }}>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
                                 <h5><IntlMessages id="ordertotal" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
@@ -157,7 +157,7 @@ function MyAnalysis(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
                                 <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
@@ -166,7 +166,7 @@ function MyAnalysis(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
                                 <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
