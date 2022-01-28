@@ -206,21 +206,37 @@ function RetunOrder(props) {
                         {returnShow && (
                             <div className="row">
                                 <div className="col-md-12">
-                                    <div className='return-reason' >
-                                        <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
-                                            <option value="">{intl.formatMessage({ id: "statusreturn" })}</option>
-                                            <option value="approved">{intl.formatMessage({ id: "returnaccept" })}</option>
-                                            <option value="declined">{intl.formatMessage({ id: "returndecline" })}</option>
-                                        </select>
-                                    </div>
-                                    {show && (<div className='return-comment' >
+                                    
+								<div className="row my-3">
+									<div className="col-md-3 mb-2">
+										<div className='return-reason' >
+											<select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
+												<option value="">{intl.formatMessage({ id: "statusreturn" })}</option>
+												<option value="approved">{intl.formatMessage({ id: "returnaccept" })}</option>
+												<option value="declined">{intl.formatMessage({ id: "returndecline" })}</option>
+											</select>
+										</div>
+									</div>
+									
+									<div className="col-md-3 align-self-end mb-2">
+										<label className="form-label"></label>
+										<Link to="#" className="btn btn-secondary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link>
+									</div>
+									
+									<div className="col-md-12 mb-2">
+										{show && (<div className='return-comment' >
                                         <label><IntlMessages id="comments" /></label>
-                                        <textarea className="form-select customfliter" onChange={handleChange} value={statusReturnComment}>
+                                        <textarea className="form-control customfliter" onChange={handleChange} rows={3} value={statusReturnComment}>
                                         </textarea>
-                                    </div>)}
-                                    <div className="clearfix"></div>
-                                    <div className="return-pro-btn float-end mt-2"><Link to="#" className="btn btn-secondary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link></div>
-                                    <div className="clearfix"></div>
+										</div>)}
+									</div>
+									
+								</div>  
+											  
+									
+									
+									
+									
                                 </div>
                             </div>
                         )}

@@ -178,7 +178,7 @@ function VendorOrderDetail(props) {
                                             
 											<div className="row my-3">
 											  <div className="col-md-3 mb-2">
-												<label className="form-label"><IntlMessages id = "status"></IntlMessages></label>
+													<label className="form-label"><IntlMessages id = "status"></IntlMessages></label>
 													<select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
 														<option value="">{intl.formatMessage({ id: "select" })}</option>
 														<option value="accept">{intl.formatMessage({ id: "accept" })}</option>

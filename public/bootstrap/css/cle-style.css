@@ -9038,6 +9038,23 @@ p.sliderupper {
 	color:#fff;
 }
 
+.return-reason{
+	margin-bottom:15px;
+}
+
+.return-comment{
+	margin-bottom:15px;
+}
+
+.return-comment label{
+	margin-bottom: 0.5rem;
+    font-size: 16px;
+    font-family: 'LATO', sans-serif;
+    color: #000;
+    font-weight: 400;
+    line-height: 19px;
+}
+
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */
