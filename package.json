@@ -37,6 +37,7 @@
     "react-full-page": "^0.1.11",
     "react-google-invisible-recaptcha": "^0.2.12",
     "react-google-login": "^5.2.2",
+    "react-google-places-autocomplete": "^3.3.2",
     "react-helmet": "^6.1.0",
     "react-helmet-async": "^1.2.2",
     "react-https-redirect": "^1.1.0",

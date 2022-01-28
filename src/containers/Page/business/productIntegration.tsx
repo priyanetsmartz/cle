@@ -99,7 +99,7 @@ function ProductIntegration(props) {
     }
 
     const optionHandler = async (e) => {
-      //  console.log(Object.keys(formData))
+        //  console.log(Object.keys(formData))
         if (Object.keys(formData).length <= 0)
             return notification("error", "", intl.formatMessage({ id: "selectproductintegration" }));
         if (Object.values(formData)[0]['value'] === 'option-2' && Object.keys(formData).length < 2)
@@ -122,6 +122,7 @@ function ProductIntegration(props) {
 
     async function onFileChange(e) {
         let attribute_code = e.target.getAttribute("data-attribute");
+        console.log(e.target.files)
         const file = e.target.files[0];
         const base64 = await convertToBase64(file);
 
@@ -130,10 +131,19 @@ function ProductIntegration(props) {
             label: attribute_code,
             type: 'file'
         }
+        const nameObj = {
+            value: e?.target?.files[0]?.name,
+            label: attribute_code,
+            type: 'file'
+        }
 
+        setPayload(prevState => ({
+            ...prevState,
+            'filedata': tempObj
+        }));
         setFormData(prevState => ({
             ...prevState,
-            [e.target.name]: tempObj
+            [e.target.name]: nameObj
         }));
     }
 

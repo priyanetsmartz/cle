@@ -4,8 +4,8 @@ import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
 import { sessionService } from 'redux-react-session';
 import {
-    getCustomerDetails, saveCustomerDetails, getCountriesList, changePassword,
-    updateCustEmail, deleteAddress, getPreference, getRegionsByCountryID, savePreference
+    getCustomerDetails, saveCustomerDetails, changePassword,
+    updateCustEmail, getPreference,  savePreference
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
@@ -20,6 +20,9 @@ import HtmlContent from '../../partials/htmlContent';
 import cartAction from "../../../redux/cart/productAction";
 import authAction from "../../../redux/auth/actions";
 import ForgottenPassword from '../../Page/forgotPassword';
+import MyAddress from './myProfile/myAddress';
+
+
 const { closePrefPopup } = cartAction;
 const { logout, customer } = authAction;
 function MyProfile(props) {
@@ -34,7 +37,7 @@ function MyProfile(props) {
     const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
     const [isShown, setIsShown] = useState(-1);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
-    const [custId, setCustid] = useState(localToken && localToken.cust_id ? localToken.cust_id : '');
+   
     const [attributes, setAttributes]: any = useState({});
     const [customerPrefer, setCustomerPrefer]: any = useState({
         interestedIn: '',
@@ -49,8 +52,6 @@ function MyProfile(props) {
     const [myDetailsModel, setMyDetailsModel] = useState(false);
     const [myAddressModal, setMyAddressModal] = useState(false);
     const [giftingModal, setGiftingModal] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState(false);
-    const [addCard, setAddCard] = useState(false);
     const [passMask, setPassMask] = useState({
         password: true,
         newPassword: true,
@@ -60,8 +61,7 @@ function MyProfile(props) {
     const [ishowGifting, setIshowGifting] = useState(false);
 
     const [forgotPopup, setForgotPopup] = useState(false);
-    const [countries, setCountries] = useState([]); // for countries dropdown
-    const [regions, setRegions] = useState([]); // for regions dropdown
+   
     const [dob, setDob] = useState({
         day: '',
         month: '',
@@ -85,19 +85,8 @@ function MyProfile(props) {
         country: 'Andorra',
         mp_sms_telephone: ''
     });
-    const [custAddForm, setCustAddForm] = useState({
-        id: 0,
-        customer_id: props.token.cust_id,
-        firstname: "",
-        lastname: "",
-        telephone: "",
-        postcode: "",
-        city: "",
-        country_id: "AD",
-        region_id: "",
-        street: ""
-    });
-    const [addIndex, setAddIndex] = useState(null);
+    
+    
 
     const [changePass, setChangePass] = useState({
         password: "",
@@ -143,7 +132,7 @@ function MyProfile(props) {
 
     useEffect(() => {
         getData();
-        getCountries();
+        // getCountries();
         return () => {
             setIsShow(false)
         }
@@ -295,10 +284,10 @@ function MyProfile(props) {
         setAttributes(result);
     }
 
-    const getCountries = async () => {
-        let result: any = await getCountriesList();
-        setCountries(result.data);
-    }
+    // const getCountries = async () => {
+    //     let result: any = await getCountriesList();
+    //     setCountries(result.data);
+    // }
 
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -391,157 +380,12 @@ function MyProfile(props) {
         setPersonalError({ errors: error });
         return formIsValid;
     }
-    // for customer address popup window starts here
-    const saveCustAddress = async (e) => {
-        if (validateAddress()) {
-            setIsShow(true);
-            let obj: any = { ...custAddForm };
-            if (obj.region_id === '') delete obj.region_id;
-            obj.street = [obj.street];
-            console.log(obj.id)
-            if (obj.id === 0) {
-                custForm.addresses.push(obj);
-            } else {
-                custForm.addresses[addIndex] = obj;
-            }
-            //console.log(custAddForm);
-            let result: any = await saveCustomerDetails({ customer: custForm });
-            if (result) {
-                getData();
-                openAddressModal();
-                if (obj.id === 0) {
-                    notification("success", "", intl.formatMessage({ id: "customerAddressSave" }));
-                } else {
-                    notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
-                }
-                setCustAddForm({
-                    id: 0,
-                    customer_id: props.token.cust_id,
-                    firstname: "",
-                    lastname: "",
-                    telephone: "",
-                    postcode: "",
-                    city: "",
-                    country_id: "AD",
-                    region_id: "",
-                    street: ""
-                });
-
-                setIsShow(false);
-
-            }
-        }
-    }
-
-    const validateAddress = () => {
-        let error = {};
-        let formIsValid = true;
-
-        if (!custAddForm.telephone) {
-            formIsValid = false;
-            error['telephone'] = intl.formatMessage({ id: "phonereq" })
-        }
-        // else if (typeof (custAddForm.telephone) !== "undefined") {
-        //     if (!(/^(?:\+971|00971|0)(?:2|3|4|6|7|9|50|51|52|55|56)[0-9]{7}$/.test(custAddForm.telephone))) {
-        //         formIsValid = false;
-        //         error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
-        //     }
-        // }
-        if (!custAddForm.postcode) {
-            formIsValid = false;
-            error["postcode"] = intl.formatMessage({ id: "pinreq" })
-        }
-        if (!custAddForm.city) {
-            formIsValid = false;
-            error["city"] = intl.formatMessage({ id: "cityreq" })
-        }
-
-        if (!custAddForm.country_id) {
-            formIsValid = false;
-            error['country_id'] = intl.formatMessage({ id: "countryreq" })
-        }
-        if (!custAddForm.street) {
-            formIsValid = false;
-            error["street"] = intl.formatMessage({ id: "addressreq" })
-        }
-        if (!custAddForm.firstname) {
-            formIsValid = false;
-            error["firstname"] = intl.formatMessage({ id: "firstnamerequired" })
-        }
-        if (!custAddForm.lastname) {
-            formIsValid = false;
-            error["lastname"] = intl.formatMessage({ id: "lastnamerequired" })
-        }
-
-        setError({ errors: error });
-        return formIsValid;
-    }
-    // for customer address popup window ends here
-
-    //edit existing address starts here------------->
-    const editAddress = (index) => {
-        // getData();
-        // let obj: any = { ...custForm.addresses };
-        // console.log(obj[index])
-        setTimeout(() => {
-
-            // console.log(obj[index])
-            //  console.log(custForm.addresses[index], obj[index])
-            delete custForm.addresses[index].region;
-            getRegions(custForm.addresses[index].country_id, index);
-            setAddIndex(index);
-            custForm.addresses[index].street = custForm.addresses[index].street[0];
-            setCustAddForm(custForm.addresses[index]);
-            openAddressModal();
-        }, 2000)
-
-    }
-
-    const deleteAdd = async (index) => {
-        if (!custForm.addresses[index]) return;
-        let result: any = await deleteAddress(custForm.addresses[index].id);
-        if (result) {
-            custForm.addresses.splice(index, 1);
-            setCustForm(custForm);
-            getData();
-            notification("success", "", intl.formatMessage({ id: "customerAddressDelete" }));
-        }
-    }
-    //edit existing address ends here--------------->
+   
 
 
-    //for customer address
-    const handleAddChange = (e) => {
-        const { id, value } = e.target;
-        setCustAddForm(prevState => ({
-            ...prevState,
-            [id]: value
-        }))
-    }
 
-    const handleCountryChange = async (e) => {
-        const { id, value } = e.target;
-        setCustAddForm(prevState => ({
-            ...prevState,
-            [id]: value
-        }));
-        getRegions(value);
-    }
 
-    const getRegions = async (value, i?) => {
-        const res: any = await getRegionsByCountryID(value);
-        if (res.data.available_regions === undefined) {
-            setRegions([]);
-            if (i) {
-                setCustAddForm(prevState => ({
-                    ...prevState,
-                    region_id: ''
-                }));
-            }
-        } else {
-            setRegions(res.data.available_regions);
-        }
-    }
+   
 
     //change password starts here----------------------------------------->
     const handlePassword = (e) => {
@@ -793,21 +637,7 @@ function MyProfile(props) {
         setMyAddressModal(!myAddressModal);
     }
 
-    const closePopAddress = () => {
-        setCustAddForm({
-            id: 0,
-            customer_id: props.token.cust_id,
-            firstname: "",
-            lastname: "",
-            telephone: "",
-            postcode: "",
-            city: "",
-            country_id: "AD",
-            region_id: "",
-            street: ""
-        });
-        setMyAddressModal(false);
-    }
+    
     const openGigitingModal = () => {
         setGiftErrors({ errors: {} })
         setGiftingModal(!giftingModal);
@@ -1020,16 +850,12 @@ function MyProfile(props) {
                                         <div className="field-name">
 
                                             <ul className='giftingPreflist'>
-                                                {/* {customerPrefer.gifting_preferencees.map((opt, i) => {
-                                                    return (<li key={i}>{opt.name}</li>);
-                                                })} */}
+
                                                 {customerPrefer && customerPrefer.gifting_preferencees && customerPrefer.gifting_preferencees.length > 0 && (
                                                     customerPrefer.gifting_preferencees[0].name + ' ' + (customerPrefer.gifting_preferencees.length - 1 > 0 ? ' /+ ' + (customerPrefer.gifting_preferencees.length - 1) + ' ' + intl.formatMessage({ id: "more" }) : '')
                                                 )}
                                             </ul>
-                                            {/* {customerPrefer.gifting_preferencees
-                                            ['name']}/{customerPrefer.gifting_preferencees['dobDate']} {customerPrefer.gifting_preferencees['dobMonth']}  {customerPrefer.gifting_preferencees['dobYear']}
-                                             */}
+
                                         </div>
                                     </div>
                                     <div className="field_details">
@@ -1050,50 +876,7 @@ function MyProfile(props) {
                 </div>
             </section>
 
-            <section className="my_profile_sect mb-4">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.myAddresses" /></h1>
-                            <p><IntlMessages id="myaccount.addOrChange" /></p>
-                        </div>
-                    </div>
-                    <div className="add_changeaddress">
-                        <div className={`addnew_address ${isPriveUser ? 'prive-bg' : ''}`} onClick={openAddressModal}>
-                            <div className="addressnew_addressblue">
-                                <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
-                                <i className="fas fa-plus"></i>
-                            </div>
-                        </div>
-
-                        {custForm && custForm.addresses && custForm.addresses.length > 0 && custForm.addresses.map((address, i) => {
-                            let countryList: any = COUNTRIES.filter(obj => obj.id === address.country_id);
-                            // console.log(address)
-                            return (<div className="addressnew_addressbodr" key={i}>
-                                <h3><IntlMessages id="myaccount.address" /></h3>
-                                <ul>
-                                    <li>{address.firstname + ' ' + address.lastname}</li>
-                                    <li>{address.street}</li>
-                                    <li>{address.postcode}</li>
-                                    <li>{address.city}</li>
-                                    <li>{countryList[0].full_name_locale}</li>
-                                </ul>
-                                {i == 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
-                                    <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
-                                <div className="address-action">
-                                    <Link to="#" onClick={() => deleteAdd(i)} className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
-                                    <Link to="#" className={`edit_btn ${isPriveUser ? 'prive-txt' : ''}`} onClick={() => editAddress(i)}>
-                                        <IntlMessages id="myaccount.edit" />
-                                    </Link>
-                                </div>
-                            </div>);
-                        })}
-
-
-                    </div>
-                </div>
-            </section>
-
+            <MyAddress />
 
             <section className="my_profile_sect change_passwordsec mb-4">
                 <div className="container">
@@ -1248,7 +1031,7 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.last_name"})} id="lastname"
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.last_name" })} id="lastname"
                                 value={custForm.lastname}
                                 onChange={handleChange} />
                             <span className="error">{personalError.errors["lastname"]}</span>
@@ -1265,7 +1048,7 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
-                            <input type="number" className="form-control" placeholder={intl.formatMessage({ id: "myaccount.phoneNo"})} id="mp_sms_telephone"
+                            <input type="number" className="form-control" placeholder={intl.formatMessage({ id: "myaccount.phoneNo" })} id="mp_sms_telephone"
                                 value={customAttribute.mp_sms_telephone}
                                 onChange={handleChange}
                             />
@@ -1298,8 +1081,8 @@ function MyProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Country<span className="maindatory">*</span></label>
                             <select value={customAttribute.country} onChange={handleChange} id="country" className="form-select" aria-label="Default select example">
-                                {countries && countries.map((opt, i) => {
-                                    return (<option key={i} value={opt.name}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
+                                {COUNTRIES && COUNTRIES.map((opt, i) => {
+                                    return (<option key={i} value={opt.full_name_english}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
                             <span className="error">{personalError.errors["country"]}</span>
@@ -1329,107 +1112,7 @@ function MyProfile(props) {
                 </Modal.Header>
             </Modal>
 
-            {/* my details modal */}
-            <Modal show={myAddressModal}>
-                <Modal.Body className="CLE_pf_details">
-                    <Modal.Header><h1><IntlMessages id="myaccount.myAddress" /></h1>
-                        <Link to="#" className="cross_icn" onClick={closePopAddress}> <i className="fas fa-times"></i></Link>
-                    </Modal.Header>
-                    <div className="">
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.first_name" })}
-                                id="firstname"
-                                value={custAddForm.firstname}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["firstname"]}</span>
-
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="lastname"
-                                placeholder={intl.formatMessage({ id: "register.last_name" })}
-                                value={custAddForm.lastname}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["lastname"]}</span>
-
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="telephone"
-                                placeholder={intl.formatMessage({ id: 'myaccount.phoneNo' })}
-                                value={custAddForm.telephone}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["telephone"]}</span>
-
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="street"
-                                placeholder={intl.formatMessage({ id: 'myaccount.address' })}
-                                value={custAddForm.street}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["street"]}</span>
-
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="city"
-                                placeholder={intl.formatMessage({ id: 'myaccount.city' })}
-                                value={custAddForm.city}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["city"]}</span>
-
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="postcode"
-                                placeholder={intl.formatMessage({ id: 'myaccount.postCode' })}
-                                value={custAddForm.postcode}
-                                onChange={handleAddChange} />
-                            <span className="error">{errors.errors["postcode"]}</span>
-
-                        </div>
-                        <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-                            <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
-                                {countries && countries.map(opt => {
-                                    return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                })}
-                            </select>
-                            <span className="error">{errors.errors["country_id"]}</span>
-                        </div>
-                        {regions.length > 0 &&
-                            <div className="width-100 mb-3 form-field">
-                                <label className="form-label">
-                                    <IntlMessages id="myaccount.region" /></label>
-                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                    {regions && regions.map(opt => {
-                                        return (<option key={opt.id} value={opt.id} >
-                                            {opt.name}</option>);
-                                    })}
-                                </select>
-                                <span className="error">{errors.errors["region_id"]}</span>
-                            </div>}
-                        <Modal.Footer>
-                            <div className="width-100 mb-3 form-field">
-                                <div className="Frgt_paswd">
-                                    <div className="confirm-btn">
-                                        <button type="button" className="btn btn-secondary" onClick={saveCustAddress} style={{ "display": !isShow ? "inline-block" : "none" }}>
-                                            <IntlMessages id="myaccount.confirm" />
-                                        </button>
-                                        <div className="spinner" style={{ "display": isShow ? "inline-block" : "none" }}>
-                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                            <IntlMessages id="loading" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Modal.Footer>
-                    </div>
-                </Modal.Body>
-            </Modal>
+           
 
             {/* Gifting preference details modal */}
 
