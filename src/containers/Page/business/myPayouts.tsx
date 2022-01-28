@@ -432,7 +432,7 @@ function MyPayouts(props) {
                     <div className="range_slider">
                         <div className="range_inner">
                             <div className="row">
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
                                         <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
@@ -449,7 +449,7 @@ function MyPayouts(props) {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.date" /></span>
                                         <DateRangePicker
@@ -478,7 +478,7 @@ function MyPayouts(props) {
                                         </select> */}
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-2">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
                                         <div className='pricerangeouter' >
@@ -501,7 +501,7 @@ function MyPayouts(props) {
                                         <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
                                 </div>
-                                <div className="col-sm-3">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">

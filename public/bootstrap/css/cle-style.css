@@ -8276,6 +8276,8 @@ p.sliderupper {
 	line-height:16px;
 	padding:2px 6px;
 	background-color: #fff;
+	display: block;
+    word-break: keep-all;
 }
 
 .rdt_TableRow .pending{
@@ -8320,6 +8322,8 @@ p.sliderupper {
 	line-height:16px;
 	padding:2px 6px;
 	background-color: #fff;
+	display: block;
+    word-break: keep-all;
 }
 
 .rdt_TableRow .approved{
@@ -9732,7 +9736,20 @@ p.sliderupper {
 	.main-head h1{
 		font-size: 28px;
 	}
-
+	.DC-section-title{
+		font-size: 24px;
+		line-height: 36px;
+		margin-bottom: 20px;
+	}
+	.login-desc {
+		padding: 0 10px;
+	}
+	.login-sec {
+		padding: 0;
+	}
+	.login-register-inputs.m-5{
+		margin: 15px 0!important;
+	}
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
