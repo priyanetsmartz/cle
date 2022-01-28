@@ -647,6 +647,12 @@
   "companynamefirst":"الرجاء حفظ تفاصيل الشركة أولا",
   "order":"طلب",
   "orderNumber": "عدد",
-  "SAR ":"ريال سعودي"
+  "SAR ":"ريال سعودي",
+  "pending":"قيد الانتظار",
+  "declined":"رفض",
+  "decline":"انخفاض",
+  "approved":"وافق",
+  "received":"تم الاستلام",
+  "accept":"قبول" 
 }
 

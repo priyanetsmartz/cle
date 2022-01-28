@@ -12,7 +12,7 @@ import { siteConfig } from '../../../settings';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
-import { capitalize, formatprice } from '../../../components/utility/allutils';
+import { capitalize, formatprice, lowercase } from '../../../components/utility/allutils';
 
 
 function MyReturnsComplaints(props) {
@@ -139,12 +139,12 @@ function MyReturnsComplaints(props) {
             cell: row => (
                 // <span className='green'>{capitalize(row.status)}</span>
                 <div>
-                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(row.status)}</span> : ""}
-                    {row.status === "pending" ? <span className="pending">{capitalize(row.status)}</span> : ""}
-                    {row.status === "approved" ? <span className="approved">{capitalize(row.status)}</span> : ""}
-                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(row.status)}</span> : ""}
-                    {row.status === "received" ? <span className="received">{capitalize(row.status)}</span> : ""}
-                    {row.status === "accept" ? <span className="accept">{capitalize(row.status)}</span> : ""}
+                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "approved" ? <span className="approved">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "received" ? <span className="received">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "accept" ? <span className="accept">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
 
                 </div>
             )
@@ -180,7 +180,7 @@ function MyReturnsComplaints(props) {
 
                                             {Object.keys(statusOptions).map((item, i) => {
                                                 return (
-                                                    <option value={item} key={i}>{statusOptions[item]}</option>
+                                                    <option value={item} key={i}>{intl.formatMessage({id:lowercase(statusOptions[item])})}</option>
                                                 )
                                             })}
 

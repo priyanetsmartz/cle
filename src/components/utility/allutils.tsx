@@ -19,6 +19,12 @@ export function capitalize(str) {
 
 }
 
+export function lowercase(str) {
+  //console.log(str)
+  return str.toLowerCase() ;
+
+}
+
 export async function getSession() {
   return await sessionService.loadUser().then(user => { return user }).catch(err => {
     return err

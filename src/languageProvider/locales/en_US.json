@@ -649,5 +649,9 @@
   "companynamefirst":"Please save company details first",
   "order":"Order",
   "orderNumber":"Number",
-  "SAR ":"SAR "
+  "SAR ":"SAR ",
+  "declined":"declined",
+  "pending":"pending",
+  "approved":"approved",
+  "received":"received"
 }
