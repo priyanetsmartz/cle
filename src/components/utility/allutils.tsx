@@ -138,8 +138,6 @@ export function getRegionName(countryId = "AL", regionId) {
     let regionList: any = countryList[0]?.available_regions.filter(obj2 => {
       return parseInt(obj2.id) === parseInt(regionId)
     });
-   // console.log(regionList)
-   // console.log(regionList[0].name)
     return regionList?.[0]?.name
   } else {
     return "";

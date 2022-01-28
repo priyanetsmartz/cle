@@ -13,9 +13,11 @@ import moment from 'moment';
 import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { capitalize, formatprice, getCurrentMonth } from '../../../components/utility/allutils';
+import { useIntl } from 'react-intl';
 
 
 function Dashboard(props) {
+    const intl = useIntl();
     const language = getCookie('currentLanguage');
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
@@ -108,7 +110,7 @@ function Dashboard(props) {
     }
     const columns = [
         {
-            name: 'Order',
+            name: intl.formatMessage({id:'order'}),
             selector: row => row.increment_id,
             sortable: true,
             cell: row => (
@@ -117,12 +119,12 @@ function Dashboard(props) {
             )
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
             sortable: true
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             sortable: true,
             cell: row => (
@@ -140,14 +142,14 @@ function Dashboard(props) {
             )
         },
         {
-            name: 'Total',
-            selector: row => row.total ? siteConfig.currency + ' ' + row.total : 0,
+            name: intl.formatMessage({id:'order.total'}),
+            selector: row => row.total ? intl.formatMessage({ id: siteConfig.currency }) + ' ' + row.total : 0,
         },
     ];
 
     const returnColumns = [
         {
-            name: 'Number',
+            name: intl.formatMessage({id:'orderNumber'}),
             sortable: true,
             cell: row => (
                 <Link to={`/vendor/returns-complaints/${row.increment_id[0].entity_id}`}>{row.increment_id[0].increment_id}</Link>
@@ -155,12 +157,12 @@ function Dashboard(props) {
             )
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
             sortable: true
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             sortable: true,
             cell: row => (
@@ -176,14 +178,14 @@ function Dashboard(props) {
             )
         },
         {
-            name: 'Total',
+            name: intl.formatMessage({id:'order.total'}),
             selector: row => row.total,
         },
     ];
 
     const columnsPayouts = [
         {
-            name: 'Price',
+            name: intl.formatMessage({id:'order.price'}),
             selector: row => row.price,
             button: true,
             cell: row => (
@@ -192,11 +194,11 @@ function Dashboard(props) {
 
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             cell: row => (
                 <span className='green'>{capitalize(row.status)}</span>
@@ -247,7 +249,7 @@ function Dashboard(props) {
                 orderLoop.increment_id = [{ 'increment_id': data.increment_id, 'entity_id': data.entity_id }];
                 orderLoop.status = data.rma_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = siteConfig.currency + ' ' + data.grand_total;
+                orderLoop.total = intl.formatMessage({ id: siteConfig.currency }) + ' ' + data.grand_total;
                 return orderLoop;
             });
         }
@@ -266,7 +268,7 @@ function Dashboard(props) {
         if (dataObj.length > 0) {
             dataLListing = dataObj.slice(0, 5).map((data) => {
                 let orderLoop: any = {};
-                orderLoop.price = siteConfig.currency + data.total_payout;
+                orderLoop.price = intl.formatMessage({ id: siteConfig.currency }) + data.total_payout;
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
                 orderLoop.payout_id = data.payout_id;
@@ -452,7 +454,7 @@ function Dashboard(props) {
                             <div className="card-info">
                                 <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['averageOrder'] ? intl.formatMessage({ id: siteConfig.currency }) + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
                                     {/* <h4>10%</h4> */}
                                 </div>
                             </div>
@@ -461,7 +463,7 @@ function Dashboard(props) {
                             <div className="card-info">
                                 <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['payoutAmount'] ? intl.formatMessage({ id: siteConfig.currency }) + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
                                     {/* <h4>5%</h4> */}
                                 </div>
                             </div>
