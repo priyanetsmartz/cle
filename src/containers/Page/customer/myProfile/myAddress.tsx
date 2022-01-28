@@ -320,7 +320,7 @@ function MyAddress(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             {/* <GooglePlacesAutocomplete
-                                apiKey="AIzaSyBbxeYM0ACV-xfWnw6W_fFnLAo-V0xGTnE"
+                                apiKey=""
                             /> */}
                             <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="street"
