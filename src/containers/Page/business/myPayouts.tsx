@@ -7,7 +7,7 @@ import { InputNumber, Slider } from 'antd';
 import CLELogo from '../../../image/CLIlogo.png';
 import moment from 'moment';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
-import { getInvoice, getPayoutOrders } from '../../../redux/pages/vendorLogin';
+import { getInvoice, getPayoutOrders, getVendorDetails } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { getCookie } from '../../../helpers/session';
 import { capitalize, formatprice } from '../../../components/utility/allutils';
@@ -15,9 +15,11 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Link } from "react-router-dom";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { sessionService } from 'redux-react-session';
 
 
 function MyPayouts(props) {
+    const [vendorName, setVendorName] = useState('')
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
     const ref = useRef();
@@ -35,6 +37,7 @@ function MyPayouts(props) {
     const [payoutData, setPayoutData] = useState([])
 
     useEffect(() => {
+        getVendor()
         getDataOfPayouts()
         return (
             setMyOrders([])
@@ -42,6 +45,10 @@ function MyPayouts(props) {
 
 
     }, [])
+    async function getVendor(){
+        let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+        setVendorName(vendor.vendor_name);
+    }
     const getOrdersByStatus = (e) => {
         const { value } = e.target;
         setStatus(value)
@@ -296,8 +303,8 @@ function MyPayouts(props) {
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Name</th>
-                                    <td style={{ "textAlign": "center" }}></td>
-                                    {/* <td style={{ "textAlign": "right" }}>-</td>
+                                    <td style={{ "textAlign": "center" }}>{vendorName}</td>
+                                    {/* <td style={{ "textAlign": "center" }}>-</td>
                                     <th style={{ "textAlign": "left" }}>اسم</th>
                                     <td style={{ "textAlign": "center" }}>-</td> */}
                                     <td style={{ "textAlign": "right" }}>-</td>
