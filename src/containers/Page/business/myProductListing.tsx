@@ -13,7 +13,6 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import Modal from "react-bootstrap/Modal";
-import loading from "../../../image/CLE_LogoMotionGraphics.gif";
 
 function MyProductListing(props) {
     const intl = useIntl();
@@ -53,7 +52,7 @@ function MyProductListing(props) {
             productLoop.product = data;
             productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
             productLoop.status = data.status;
-            productLoop.price = intl.formatMessage({ id: siteConfig.currency }) + data.price;
+            productLoop.price = siteConfig.currency + data.price;
             return productLoop;
         });
         setListingData(renObjData)

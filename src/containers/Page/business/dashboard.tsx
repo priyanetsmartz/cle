@@ -143,7 +143,7 @@ function Dashboard(props) {
         },
         {
             name: intl.formatMessage({id:'order.total'}),
-            selector: row => row.total ? intl.formatMessage({ id: siteConfig.currency }) + ' ' + row.total : 0,
+            selector: row => row.total ? siteConfig.currency + ' ' + row.total : 0,
         },
     ];
 
@@ -249,7 +249,7 @@ function Dashboard(props) {
                 orderLoop.increment_id = [{ 'increment_id': data.increment_id, 'entity_id': data.entity_id }];
                 orderLoop.status = data.rma_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = intl.formatMessage({ id: siteConfig.currency }) + ' ' + data.grand_total;
+                orderLoop.total = siteConfig.currency + ' ' + data.grand_total;
                 return orderLoop;
             });
         }
@@ -268,7 +268,7 @@ function Dashboard(props) {
         if (dataObj.length > 0) {
             dataLListing = dataObj.slice(0, 5).map((data) => {
                 let orderLoop: any = {};
-                orderLoop.price = intl.formatMessage({ id: siteConfig.currency }) + data.total_payout;
+                orderLoop.price = siteConfig.currency + data.total_payout;
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
                 orderLoop.payout_id = data.payout_id;
@@ -401,7 +401,7 @@ function Dashboard(props) {
                                                 className={`previousAnno ${page === 1 ? 'disabled' : ''}`}>
                                                 <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
                                             </li>
-                                            <li className='pageofpage'>Page {page} of {pagination}</li>
+                                            <li className='pageofpage'><IntlMessages id="page" /> <span className='active'>{page}</span> <IntlMessages id="of" /> {pagination}</li>
                                             <li className={`nextAnno ${page === pagination ? 'disabled' : ''}`} >
                                                 <Link className={`page-link pagenextAnno ${page === pagination ? 'disabled' : ''}`} onClick={(e) => { goToNextPage(e); }}
                                                     to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
@@ -454,7 +454,7 @@ function Dashboard(props) {
                             <div className="card-info">
                                 <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['averageOrder'] ? intl.formatMessage({ id: siteConfig.currency }) + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
                                     {/* <h4>10%</h4> */}
                                 </div>
                             </div>
@@ -463,7 +463,7 @@ function Dashboard(props) {
                             <div className="card-info">
                                 <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['payoutAmount'] ? intl.formatMessage({ id: siteConfig.currency }) + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
                                     {/* <h4>5%</h4> */}
                                 </div>
                             </div>

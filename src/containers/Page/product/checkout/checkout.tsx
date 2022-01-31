@@ -566,7 +566,7 @@ function Checkout(props) {
         setAddBillingAddress(false);
     }
 
-    
+
     // for customer address popup window starts here
     const saveCustAddress = async () => {
         let result: any
@@ -765,7 +765,13 @@ function Checkout(props) {
     const validateAddress = () => {
         let error = {};
         let formIsValid = true;
-
+        if (custAddForm.telephone !== undefined) {
+            formIsValid = false;
+            if (!(/^\d{10}$/.test(custAddForm["telephone"]))) {
+                formIsValid = false;
+                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+            }
+        }
         if (!custAddForm.telephone) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" });
@@ -804,13 +810,14 @@ function Checkout(props) {
         let error = {};
         let formIsValid = true;
 
-        if (billingAddressData.telephone && billingAddressData.telephone !== undefined) {
-            if (billingAddressData.telephone.length < 0 || billingAddressData.telephone.length > 10) {
+        if (billingAddressData.telephone !== undefined) {
+            formIsValid = false;
+            if (!(/^\d{10}$/.test(billingAddressData["telephone"]))) {
                 formIsValid = false;
-                error['telephone'] = intl.formatMessage({ id: "phoneinvalid" });
+                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
             }
-
         }
+     
         if (!billingAddressData.telephone) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" });
@@ -1244,535 +1251,535 @@ function Checkout(props) {
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
                                             {(props?.guestShipp?.firstname !== undefined || itemsVal?.address['addresses']?.length > 0) ?
-                                               <b><IntlMessages id="order.deliveryAddress" /></b>
-                                                :""}
-                                                    {!props.guestShipp && (
-                                                      
-                                                            <div className="row" >
+                                                <b><IntlMessages id="order.deliveryAddress" /></b>
+                                                : ""}
+                                            {!props.guestShipp && (
+
+                                                <div className="row" >
+                                                    <div className="col-md-7">
+                                                        <div className="single-address">
+                                                            <div>
+                                                                <p> {props.guestShipp.firstname} {props.guestShipp.lastname}</p>
+                                                                {props.guestShipp.street ? props.guestShipp.street.map((street, j) => {
+                                                                    <p key={j}>{street}</p>
+                                                                }) : ""}
+                                                                <p>{props.guestShipp.postcode}</p>
+                                                                <p>{props.guestShipp.city}</p>
+                                                                <p>{props.guestShipp.country_id ? getCountryName(props.guestShipp.country_id) : ""}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
+                                                <>
+
+                                                    {itemsVal.address['addresses'].map((item, i) => {
+                                                        return (
+                                                            <div className="row" key={i}>
                                                                 <div className="col-md-7">
                                                                     <div className="single-address">
+
                                                                         <div>
-                                                                            <p> {props.guestShipp.firstname} {props.guestShipp.lastname}</p>
-                                                                            {props.guestShipp.street ? props.guestShipp.street.map((street, j) => {
+                                                                            <p> {item.firstname} {item.lastname}</p>
+                                                                            {item && item.street && item.street.length > 0 && item.street.map((street, j) => {
                                                                                 <p key={j}>{street}</p>
-                                                                            }) : ""}
-                                                                            <p>{props.guestShipp.postcode}</p>
-                                                                            <p>{props.guestShipp.city}</p>
-                                                                            <p>{props.guestShipp.country_id ? getCountryName(props.guestShipp.country_id) : ""}</p>
+                                                                            })}
+                                                                            <p>{item.postcode}</p>
+                                                                            <p>{item.city}</p>
+                                                                            {item.region_id ? <p>{getRegionName(item.country_id, item.region_id)}</p> : ""}
+                                                                            {item.country_id ? <p>{getCountryName(item.country_id)}</p> : ""}
+                                                                        </div>
+                                                                        {item.id === parseInt(custForm.default_shipping) ?
+                                                                            <p className="text-muted">
+                                                                                <IntlMessages id="myaccount.defaultDeliveryAddress" />
+                                                                            </p> : ""}
+                                                                        {itemsVal.address['addresses'].length > 0 && (
+                                                                            <div className="form-check">
+                                                                                <input
+                                                                                    type="radio"
+                                                                                    style={{ "display": isBillingAddress === parseInt(item.id) ? "none" : "inline-block" }}
+                                                                                    defaultValue={item.id}
+                                                                                    name={`billingaddress`}
+                                                                                    onChange={handleBillingChange}
+                                                                                    className="form-check-input"
+
+                                                                                    // checked={item.id === isBillingAddressConfirm ? true : false}
+                                                                                    checked={item.id === isBillingAddressConfirm ? true : false}
+                                                                                />
+
+                                                                                <Link to="#" style={{ "display": isBillingAddress === parseInt(item.id) ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                                </Link>
+                                                                                <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                                                    <IntlMessages id="usethisAddress" />
+                                                                                </label>
+
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-md-5">
+                                                                    <div className="select-address">
+                                                                        <div className="select-address-inner form-check">
+
+                                                                            {itemsVal.address['addresses'].length > 1 ? <div className='greateAddress form-check'> <input
+                                                                                style={{ "display": isSetAddress === item.id ? "none" : "inline-block" }}
+                                                                                type="radio"
+                                                                                name={`addressdelivery`}
+                                                                                defaultValue={item.id}
+                                                                                onChange={handleAddressChange}
+                                                                                className="form-check-input"
+                                                                                defaultChecked={item.id === isSetAddress ? true : false}
+                                                                            />
+                                                                                <Link to="#" style={{ "display": isSetAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                                </Link>
+                                                                                <label htmlFor="rad1"> <IntlMessages id="great" /></label>
+                                                                            </div>
+                                                                                : ""}
+
+
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                    )}
-                                                    {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
-                                                        <>
+                                                        )
+                                                    })}
+                                                </>
+                                            )}
+                                            <div className="add-address-btn">
+                                                <hr />
+                                                <button className="add-ad-btn btn btn-link" onClick={toggleAddressModal}><IntlMessages id="myaccount.addNewAddress" /></button>
+                                            </div>
+                                            {addNewAddressModal && (
+                                                <div className='addressInlineForm col-md-6'>
+                                                    <div className="CLE_pf_details">
+                                                        <h1><IntlMessages id="order.deliveryAddress" /></h1>
+                                                        <h5><IntlMessages id="order.adddeliveryaddress" /></h5>
+                                                        <div className="">
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" placeholder="Ann"
+                                                                    id="firstname"
+                                                                    value={custAddForm.firstname}
+                                                                    onChange={handleAddChange} />
+                                                                <span className="error">{errors.errors["firstname"]}</span>
 
-                                                            {itemsVal.address['addresses'].map((item, i) => {
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" id="lastname"
+                                                                    placeholder="Surname"
+                                                                    value={custAddForm.lastname}
+                                                                    onChange={handleAddChange} />
+                                                                <span className="error">{errors.errors["lastname"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" id="telephone"
+                                                                    placeholder="Phone"
+                                                                    value={custAddForm.telephone}
+                                                                    onChange={handleAddChange} />
+                                                                <span className="error">{errors.errors["telephone"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" id="street"
+                                                                    placeholder="Address"
+                                                                    value={custAddForm.street}
+                                                                    onChange={handleAddChange} />
+                                                                <span className="error">{errors.errors["street"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" id="city"
+                                                                    placeholder="City"
+                                                                    value={custAddForm.city}
+                                                                    onChange={handleAddChange} />
+                                                                <span className="error">{errors.errors["city"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" id="postcode"
+                                                                    placeholder="Post Code"
+                                                                    value={custAddForm.postcode}
+                                                                    onChange={handleAddChange} />
+                                                                <span className="error">{errors.errors["postcode"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
+                                                                <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
+                                                                    {countries && countries.map(opt => {
+                                                                        return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
+                                                                    })}
+                                                                </select>
+                                                                <span className="error">{errors.errors["country_id"]}</span>
+                                                            </div>
+                                                            {changeCountryLoader && (
+                                                                <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
+                                                            )}
+                                                            {regions.length > 0 && <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label">
+                                                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
+                                                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+                                                                    {regions && regions.map(opt => {
+                                                                        return (<option key={opt.id} value={opt.id} >
+                                                                            {opt.name}</option>);
+                                                                    })}
+                                                                </select>
+                                                                <span className="error">{errors.errors["region_id"]}</span>
+                                                            </div>}
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <div className="Frgt_paswd">
+                                                                    <div className="save-btn">
+                                                                        <button type="button" className="btn btnaddressave" style={{ "display": !addShippingAddressLoader ? "inline-block" : "none" }} onClick={saveCustAddress}><IntlMessages id="checkout.save" /></button>
+
+                                                                        <div className="spinner" style={{ "display": addShippingAddressLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
+                                                                    </div>
+                                                                    <div className="confirm-btn">
+                                                                        <button type="button" className="btn btnaddressave" onClick={cancelCustAddress}><IntlMessages id="checkout.cancel" /></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="accordion-item">
+                                    <h2 className="accordion-header" id="CheckoutHfour">
+                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#Checkoutfour" aria-expanded="false" aria-controls="Checkoutfour" onClick={getshippingMethods}>
+                                            <IntlMessages id="deliveryOption" />   {checkedData.shipping && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                        </button>
+                                    </h2>
+                                    <div id="Checkoutfour" className="accordion-collapse collapse" aria-labelledby="CheckoutHfour"
+                                        data-bs-parent="#accordionExample">
+                                        {
+                                            shippingMethods.length > 0 && (
+                                                <div className="accordion-body">
+                                                    {shippingMethods.map((item, i) => {
+                                                        return (
+                                                            <div className="row" key={i}>
+                                                                <div className="col-md-3">
+                                                                    <div className="delivery-charges">{siteConfig.currency}{item.amount}</div>
+                                                                </div>
+                                                                <div className="col-md-5">
+                                                                    <label>{item.carrier_title}</label>
+                                                                    {/* <p></p>Delivery on or before Mon, 31 May 2021 */}
+                                                                </div>
+                                                                <div className="col-md-4">
+                                                                    <div className="select-address-inner form-check">
+                                                                        <input
+                                                                            id={item.carrier_code}
+                                                                            type="radio"
+                                                                            name='shipingmethod'
+                                                                            defaultValue={item.carrier_code}
+                                                                            onChange={handleShippingMethodSelect}
+                                                                            className={selectedShippingMethod === item.carrier_code ? "checked  form-check-input" : "form-check-input"}
+                                                                        />
+                                                                        <label htmlFor="rad1"> <IntlMessages id="great" /></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            )}
+                                    </div>
+                                </div>
+                                <div className="accordion-item">
+                                    <h2 className="accordion-header" id="CheckoutHfive">
+                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#Checkoutfive" aria-expanded="false" aria-controls="Checkoutfive">
+                                            <IntlMessages id="payment" />{(checkedData.billingAddress && checkedData.paymentmethod) && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
+                                        </button>
+                                    </h2>
+                                    <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"
+                                        data-bs-parent="#accordionExample">
+                                        <div className="accordion-body">
+                                            {props.guestBilling && (
+
+                                                <div className="row" >
+                                                    <div className="col-md-7">
+                                                        <div className="single-address">
+                                                            <div>
+                                                                <p> {props.guestBilling.firstname} {props.guestBilling.lastname}</p>
+                                                                {props.guestBilling.street ? props.guestBilling.street.map((street, j) => {
+                                                                    <p key={j}>{street}</p>
+                                                                }) : ""}
+                                                                <p>{props.guestBilling.postcode}</p>
+                                                                <p>{props.guestBilling.city}</p>
+                                                                <p>{props.guestBilling.country_id}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            )}
+                                            {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
+                                                <div className="row">
+
+                                                    <b><IntlMessages id="checkout.billingAdd" /></b>
+                                                    {itemsVal.address['addresses'].map((item, i) => {
+
+                                                        return (
+                                                            <div className="row" key={i}>
+                                                                <div className="col-md-7">
+                                                                    <div className="single-address">
+
+                                                                        <div>
+                                                                            <p> {item.firstname} {item.lastname}</p>
+                                                                            {item.street.length > 0 && item.street.map((street, j) => {
+                                                                                <p key={j}>{street}</p>
+                                                                            })}
+                                                                            <p>{item.postcode}</p>
+                                                                            <p>{item.city}</p>
+                                                                            {item.country_id ? <p>{getCountryName(item.country_id)}</p> : ""}
+                                                                        </div>
+                                                                        {item.id === parseInt(custForm.default_billing) ?
+                                                                            <p className="text-muted">
+                                                                                <IntlMessages id="myaccount.defaultBillingAddress" />
+                                                                            </p> : ""}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-md-5">
+
+                                                                    {itemsVal.address['addresses'].length > 1 ? <div className="select-address-inner form-check">
+                                                                        <input
+                                                                            type="radio"
+                                                                            style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
+                                                                            name={`billingaddress2`}
+                                                                            defaultValue={item.id}
+                                                                            onChange={handleBillingChange}
+                                                                            className="form-check-input"
+                                                                            checked={item.id === isBillingAddressConfirm ? true : false}
+                                                                        />
+
+                                                                        <label htmlFor="rad1"> <IntlMessages id="great" /></label>
+                                                                        <Link to="#" style={{ "display": isBillingAddress === parseInt(item.id) ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                                        </Link>
+
+                                                                    </div>
+                                                                        : ""}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            )
+                                            }
+                                            <div className="add-address-btn">
+                                                <hr />
+                                                <button className="add-ad-btn btn btn-link" onClick={() => {
+                                                    toggleBillingAddressModal();
+                                                }} >
+                                                    <IntlMessages id="checkout.addNewBillingAdd" />
+                                                </button>
+                                            </div>
+                                            {addBillingAddress && (
+                                                <div className='addressInlineForm col-md-6'>
+                                                    <div className="CLE_pf_details">
+                                                        <h1><IntlMessages id="payment" /></h1>
+                                                        <h5><IntlMessages id="myaccount.myBillingAddress" /></h5>
+                                                        <div className="">
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" placeholder="Ann"
+                                                                    id="firstname"
+                                                                    value={billingAddressData.firstname}
+                                                                    onChange={handleBillingAddressChange} />
+                                                                <span className="error">{billingError.errors["firstname"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" id="lastname"
+                                                                    placeholder="Surname"
+                                                                    value={billingAddressData.lastname}
+                                                                    onChange={handleBillingAddressChange} />
+                                                                <span className="error">{billingError.errors["lastname"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
+                                                                <input type="number" className="form-control" id="telephone"
+                                                                    min="10"
+                                                                    max="11"
+                                                                    placeholder="Phone"
+                                                                    value={billingAddressData.telephone}
+                                                                    onChange={handleBillingAddressChange} />
+                                                                <span className="error">{billingError.errors["telephone"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" id="street"
+                                                                    placeholder="Address"
+                                                                    value={billingAddressData.street}
+                                                                    onChange={handleBillingAddressChange} />
+                                                                <span className="error">{billingError.errors["street"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" id="city"
+                                                                    placeholder="City"
+                                                                    value={billingAddressData.city}
+                                                                    onChange={handleBillingAddressChange} />
+                                                                <span className="error">{billingError.errors["city"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
+                                                                <input type="text" className="form-control" id="postcode"
+                                                                    placeholder="Post Code"
+                                                                    value={billingAddressData.postcode}
+                                                                    onChange={handleBillingAddressChange} />
+                                                                <span className="error">{billingError.errors["postcode"]}</span>
+
+                                                            </div>
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
+                                                                <select value={billingAddressData.country_id} onChange={handleCountryChangeBilling} id="country_id" className="form-select">
+                                                                    {countries && countries.map(opt => {
+                                                                        return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
+                                                                    })}
+                                                                </select>
+                                                                <span className="error">{billingError.errors["country_id"]}</span>
+                                                            </div>
+                                                            {changeCountryLoader && (
+                                                                <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
+                                                            )}
+                                                            {regions.length > 0 && <div className="width-100 mb-3 form-field">
+                                                                <label className="form-label">
+                                                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
+                                                                <select value={billingAddressData.region_id} onChange={handleBillingAddressChange} id="region_id" className="form-select">
+                                                                    {regions && regions.map(opt => {
+                                                                        return (<option key={opt.id} value={opt.id} >
+                                                                            {opt.name}</option>);
+                                                                    })}
+                                                                </select>
+                                                                <span className="error">{billingError.errors["region_id"]}</span>
+                                                            </div>}
+                                                            <div className="width-100 mb-3 form-field">
+                                                                <div className="Frgt_paswd">
+                                                                    <div className="save-btn">
+                                                                        <button type="button" className="btn btnaddressave" style={{ "display": !addBillingAddressLoader ? "inline-block" : "none" }} onClick={saveBillingAddress}><IntlMessages id="checkout.save" /></button>
+
+                                                                        <div className="spinner" style={{ "display": addBillingAddressLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
+                                                                    </div>
+                                                                    <div className="confirm-btn">
+                                                                        <button type="button" className="btn btnaddressave" onClick={cancelCustBillingAddress}><IntlMessages id="checkout.cancel" /></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <div className="row">
+
+                                                <div className="we-accept">
+                                                    <p><strong><IntlMessages id="we-accept" />:</strong></p>
+                                                    <img src={cardPlaceholder} alt="cards" />
+                                                </div>
+                                            </div>
+                                            <div className="choose-method">
+                                                <hr />
+
+                                                {
+                                                    props.payTrue.length > 0 && (
+                                                        // console.log(props.payTrue.length) 
+                                                        <div className="d-grid gap-2 col-6">
+                                                            {props.payTrue.map((item, i) => {
+                                                                //  console.log(i)
                                                                 return (
-                                                                    <div className="row" key={i}>
-                                                                        <div className="col-md-7">
-                                                                            <div className="single-address">
-
-                                                                                <div>
-                                                                                    <p> {item.firstname} {item.lastname}</p>
-                                                                                    {item && item.street && item.street.length > 0 && item.street.map((street, j) => {
-                                                                                        <p key={j}>{street}</p>
-                                                                                    })}
-                                                                                    <p>{item.postcode}</p>
-                                                                                    <p>{item.city}</p>
-                                                                                    {item.region_id ? <p>{getRegionName(item.country_id, item.region_id)}</p> : ""}
-                                                                                    {item.country_id ? <p>{getCountryName(item.country_id)}</p> : ""}
-                                                                                </div>
-                                                                                {item.id === parseInt(custForm.default_shipping) ?
-                                                                                    <p className="text-muted">
-                                                                                        <IntlMessages id="myaccount.defaultDeliveryAddress" />
-                                                                                    </p> : ""}
-                                                                                {itemsVal.address['addresses'].length > 0 && (
-                                                                                    <div className="form-check">
-                                                                                        <input
-                                                                                            type="radio"
-                                                                                            style={{ "display": isBillingAddress === parseInt(item.id) ? "none" : "inline-block" }}
-                                                                                            defaultValue={item.id}
-                                                                                            name={`billingaddress`}
-                                                                                            onChange={handleBillingChange}
-                                                                                            className="form-check-input"
-
-                                                                                            // checked={item.id === isBillingAddressConfirm ? true : false}
-                                                                                            checked={item.id === isBillingAddressConfirm ? true : false}
-                                                                                        />
-
-                                                                                        <Link to="#" style={{ "display": isBillingAddress === parseInt(item.id) ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                                                                        </Link>
-                                                                                        <label className="form-check-label" htmlFor="flexCheckDefault">
-                                                                                            <IntlMessages id="usethisAddress" />
-                                                                                        </label>
-
-                                                                                    </div>
-                                                                                )}
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="col-md-5">
-                                                                            <div className="select-address">
-                                                                                <div className="select-address-inner form-check">
-
-                                                                                    {itemsVal.address['addresses'].length > 1 ? <div className='greateAddress form-check'> <input
-                                                                                        style={{ "display": isSetAddress === item.id ? "none" : "inline-block" }}
-                                                                                        type="radio"
-                                                                                        name={`addressdelivery`}
-                                                                                        defaultValue={item.id}
-                                                                                        onChange={handleAddressChange}
-                                                                                        className="form-check-input"
-                                                                                        defaultChecked={item.id === isSetAddress ? true : false}
-                                                                                    />
-                                                                                        <Link to="#" style={{ "display": isSetAddress === item.id ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                                                                        </Link>
-                                                                                        <label htmlFor="rad1"> <IntlMessages id="great" /></label>
-                                                                                    </div>
-                                                                                        : ""}
-
-
-
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
+                                                                    <div key={i}>
+                                                                        <button type="button" onClick={() => {
+                                                                            selectPayment(item.code);
+                                                                        }} className={selectedPaymentMethod === item.code ? 'active btn btn-outline-dark' : "btn btn-outline-dark"}>{item.title}</button>
+                                                                        {i >= props.payTrue.length - 1 ? ""
+                                                                            : <p><IntlMessages id="signup.or" /></p>}
                                                                     </div>
                                                                 )
                                                             })}
-                                                        </>
-                                                    )}
-                                                    <div className="add-address-btn">
-                                                        <hr />
-                                                        <button className="add-ad-btn btn btn-link" onClick={toggleAddressModal}><IntlMessages id="myaccount.addNewAddress" /></button>
-                                                    </div>
-                                                    {addNewAddressModal && (
-                                                        <div className='addressInlineForm col-md-6'>
-                                                            <div className="CLE_pf_details">
-                                                                <h1><IntlMessages id="order.deliveryAddress" /></h1>
-                                                                <h5><IntlMessages id="order.adddeliveryaddress" /></h5>
-                                                                <div className="">
-                                                                    <div className="width-100 mb-3 form-field">
-                                                                        <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
-                                                                        <input type="text" className="form-control" placeholder="Ann"
-                                                                            id="firstname"
-                                                                            value={custAddForm.firstname}
-                                                                            onChange={handleAddChange} />
-                                                                        <span className="error">{errors.errors["firstname"]}</span>
-
-                                                                    </div>
-                                                                    <div className="width-100 mb-3 form-field">
-                                                                        <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
-                                                                        <input type="text" className="form-control" id="lastname"
-                                                                            placeholder="Surname"
-                                                                            value={custAddForm.lastname}
-                                                                            onChange={handleAddChange} />
-                                                                        <span className="error">{errors.errors["lastname"]}</span>
-
-                                                                    </div>
-                                                                    <div className="width-100 mb-3 form-field">
-                                                                        <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
-                                                                        <input type="text" className="form-control" id="telephone"
-                                                                            placeholder="Phone"
-                                                                            value={custAddForm.telephone}
-                                                                            onChange={handleAddChange} />
-                                                                        <span className="error">{errors.errors["telephone"]}</span>
-
-                                                                    </div>
-                                                                    <div className="width-100 mb-3 form-field">
-                                                                        <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
-                                                                        <input type="text" className="form-control" id="street"
-                                                                            placeholder="Address"
-                                                                            value={custAddForm.street}
-                                                                            onChange={handleAddChange} />
-                                                                        <span className="error">{errors.errors["street"]}</span>
-
-                                                                    </div>
-                                                                    <div className="width-100 mb-3 form-field">
-                                                                        <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
-                                                                        <input type="text" className="form-control" id="city"
-                                                                            placeholder="City"
-                                                                            value={custAddForm.city}
-                                                                            onChange={handleAddChange} />
-                                                                        <span className="error">{errors.errors["city"]}</span>
-
-                                                                    </div>
-                                                                    <div className="width-100 mb-3 form-field">
-                                                                        <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
-                                                                        <input type="text" className="form-control" id="postcode"
-                                                                            placeholder="Post Code"
-                                                                            value={custAddForm.postcode}
-                                                                            onChange={handleAddChange} />
-                                                                        <span className="error">{errors.errors["postcode"]}</span>
-
-                                                                    </div>
-                                                                    <div className="width-100 mb-3 form-field">
-                                                                        <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-                                                                        <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
-                                                                            {countries && countries.map(opt => {
-                                                                                return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                                                            })}
-                                                                        </select>
-                                                                        <span className="error">{errors.errors["country_id"]}</span>
-                                                                    </div>
-                                                                    {changeCountryLoader && (
-                                                                        <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
-                                                                    )}
-                                                                    {regions.length > 0 && <div className="width-100 mb-3 form-field">
-                                                                        <label className="form-label">
-                                                                            <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
-                                                                        <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-                                                                            {regions && regions.map(opt => {
-                                                                                return (<option key={opt.id} value={opt.id} >
-                                                                                    {opt.name}</option>);
-                                                                            })}
-                                                                        </select>
-                                                                        <span className="error">{errors.errors["region_id"]}</span>
-                                                                    </div>}
-                                                                    <div className="width-100 mb-3 form-field">
-                                                                        <div className="Frgt_paswd">
-                                                                            <div className="save-btn">
-                                                                                <button type="button" className="btn btnaddressave" style={{ "display": !addShippingAddressLoader ? "inline-block" : "none" }} onClick={saveCustAddress}><IntlMessages id="checkout.save" /></button>
-
-                                                                                <div className="spinner" style={{ "display": addShippingAddressLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
-                                                                            </div>
-                                                                            <div className="confirm-btn">
-                                                                                <button type="button" className="btn btnaddressave" onClick={cancelCustAddress}><IntlMessages id="checkout.cancel" /></button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                         </div>
-                                                    )}
-                                                </div>
-                                    </div>
-                                    </div>
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header" id="CheckoutHfour">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#Checkoutfour" aria-expanded="false" aria-controls="Checkoutfour" onClick={getshippingMethods}>
-                                                <IntlMessages id="deliveryOption" />   {checkedData.shipping && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
-                                            </button>
-                                        </h2>
-                                        <div id="Checkoutfour" className="accordion-collapse collapse" aria-labelledby="CheckoutHfour"
-                                            data-bs-parent="#accordionExample">
-                                            {
-                                                shippingMethods.length > 0 && (
-                                                    <div className="accordion-body">
-                                                        {shippingMethods.map((item, i) => {
-                                                            return (
-                                                                <div className="row" key={i}>
-                                                                    <div className="col-md-3">
-                                                                        <div className="delivery-charges">{siteConfig.currency}{item.amount}</div>
-                                                                    </div>
-                                                                    <div className="col-md-5">
-                                                                        <label>{item.carrier_title}</label>
-                                                                        {/* <p></p>Delivery on or before Mon, 31 May 2021 */}
-                                                                    </div>
-                                                                    <div className="col-md-4">
-                                                                        <div className="select-address-inner form-check">
-                                                                            <input
-                                                                                id={item.carrier_code}
-                                                                                type="radio"
-                                                                                name='shipingmethod'
-                                                                                defaultValue={item.carrier_code}
-                                                                                onChange={handleShippingMethodSelect}
-                                                                                className={selectedShippingMethod === item.carrier_code ? "checked  form-check-input" : "form-check-input"}
-                                                                            />
-                                                                            <label htmlFor="rad1"> <IntlMessages id="great" /></label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        })}
-                                                    </div>
-                                                )}
-                                        </div>
-                                    </div>
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header" id="CheckoutHfive">
-                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#Checkoutfive" aria-expanded="false" aria-controls="Checkoutfive">
-                                                <IntlMessages id="payment" />{(checkedData.billingAddress && checkedData.paymentmethod) && (<span className="check-confirm"><i className="fa fa-check" aria-hidden="true"></i></span>)}
-                                            </button>
-                                        </h2>
-                                        <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"
-                                            data-bs-parent="#accordionExample">
-                                            <div className="accordion-body">
-                                                {props.guestBilling && (
-
-                                                    <div className="row" >
-                                                        <div className="col-md-7">
-                                                            <div className="single-address">
-                                                                <div>
-                                                                    <p> {props.guestBilling.firstname} {props.guestBilling.lastname}</p>
-                                                                    {props.guestBilling.street ? props.guestBilling.street.map((street, j) => {
-                                                                        <p key={j}>{street}</p>
-                                                                    }) : ""}
-                                                                    <p>{props.guestBilling.postcode}</p>
-                                                                    <p>{props.guestBilling.city}</p>
-                                                                    <p>{props.guestBilling.country_id}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                )}
-                                                {itemsVal.address['addresses'] && itemsVal.address['addresses'].length > 0 && (
-                                                    <div className="row">
-
-                                                        <b><IntlMessages id="checkout.billingAdd" /></b>
-                                                        {itemsVal.address['addresses'].map((item, i) => {
-
-                                                            return (
-                                                                <div className="row" key={i}>
-                                                                    <div className="col-md-7">
-                                                                        <div className="single-address">
-
-                                                                            <div>
-                                                                                <p> {item.firstname} {item.lastname}</p>
-                                                                                {item.street.length > 0 && item.street.map((street, j) => {
-                                                                                    <p key={j}>{street}</p>
-                                                                                })}
-                                                                                <p>{item.postcode}</p>
-                                                                                <p>{item.city}</p>
-                                                                                {item.country_id ? <p>{getCountryName(item.country_id)}</p> : ""}
-                                                                            </div>
-                                                                            {item.id === parseInt(custForm.default_billing) ?
-                                                                                <p className="text-muted">
-                                                                                    <IntlMessages id="myaccount.defaultBillingAddress" />
-                                                                                </p> : ""}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="col-md-5">
-
-                                                                        {itemsVal.address['addresses'].length > 1 ? <div className="select-address-inner form-check">
-                                                                            <input
-                                                                                type="radio"
-                                                                                style={{ "display": isBillingAddress === item.id ? "none" : "inline-block" }}
-                                                                                name={`billingaddress2`}
-                                                                                defaultValue={item.id}
-                                                                                onChange={handleBillingChange}
-                                                                                className="form-check-input"
-                                                                                checked={item.id === isBillingAddressConfirm ? true : false}
-                                                                            />
-
-                                                                            <label htmlFor="rad1"> <IntlMessages id="great" /></label>
-                                                                            <Link to="#" style={{ "display": isBillingAddress === parseInt(item.id) ? "inline-block" : "none" }} ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                                                            </Link>
-
-                                                                        </div>
-                                                                            : ""}
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        })}
-                                                    </div>
-                                                )
+                                                    )
                                                 }
-                                                <div className="add-address-btn">
-                                                    <hr />
-                                                    <button className="add-ad-btn btn btn-link" onClick={() => {
-                                                        toggleBillingAddressModal();
-                                                    }} >
-                                                        <IntlMessages id="checkout.addNewBillingAdd" />
-                                                    </button>
-                                                </div>
-                                                {addBillingAddress && (
-                                                    <div className='addressInlineForm col-md-6'>
-                                                        <div className="CLE_pf_details">
-                                                            <h1><IntlMessages id="payment" /></h1>
-                                                            <h5><IntlMessages id="myaccount.myBillingAddress" /></h5>
-                                                            <div className="">
-                                                                <div className="width-100 mb-3 form-field">
-                                                                    <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
-                                                                    <input type="text" className="form-control" placeholder="Ann"
-                                                                        id="firstname"
-                                                                        value={billingAddressData.firstname}
-                                                                        onChange={handleBillingAddressChange} />
-                                                                    <span className="error">{billingError.errors["firstname"]}</span>
-
-                                                                </div>
-                                                                <div className="width-100 mb-3 form-field">
-                                                                    <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
-                                                                    <input type="text" className="form-control" id="lastname"
-                                                                        placeholder="Surname"
-                                                                        value={billingAddressData.lastname}
-                                                                        onChange={handleBillingAddressChange} />
-                                                                    <span className="error">{billingError.errors["lastname"]}</span>
-
-                                                                </div>
-                                                                <div className="width-100 mb-3 form-field">
-                                                                    <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
-                                                                    <input type="number" className="form-control" id="telephone"
-                                                                        min="10"
-                                                                        max="11"
-                                                                        placeholder="Phone"
-                                                                        value={billingAddressData.telephone}
-                                                                        onChange={handleBillingAddressChange} />
-                                                                    <span className="error">{billingError.errors["telephone"]}</span>
-
-                                                                </div>
-                                                                <div className="width-100 mb-3 form-field">
-                                                                    <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
-                                                                    <input type="text" className="form-control" id="street"
-                                                                        placeholder="Address"
-                                                                        value={billingAddressData.street}
-                                                                        onChange={handleBillingAddressChange} />
-                                                                    <span className="error">{billingError.errors["street"]}</span>
-
-                                                                </div>
-                                                                <div className="width-100 mb-3 form-field">
-                                                                    <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
-                                                                    <input type="text" className="form-control" id="city"
-                                                                        placeholder="City"
-                                                                        value={billingAddressData.city}
-                                                                        onChange={handleBillingAddressChange} />
-                                                                    <span className="error">{billingError.errors["city"]}</span>
-
-                                                                </div>
-                                                                <div className="width-100 mb-3 form-field">
-                                                                    <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
-                                                                    <input type="text" className="form-control" id="postcode"
-                                                                        placeholder="Post Code"
-                                                                        value={billingAddressData.postcode}
-                                                                        onChange={handleBillingAddressChange} />
-                                                                    <span className="error">{billingError.errors["postcode"]}</span>
-
-                                                                </div>
-                                                                <div className="width-100 mb-3 form-field">
-                                                                    <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-                                                                    <select value={billingAddressData.country_id} onChange={handleCountryChangeBilling} id="country_id" className="form-select">
-                                                                        {countries && countries.map(opt => {
-                                                                            return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                                                        })}
-                                                                    </select>
-                                                                    <span className="error">{billingError.errors["country_id"]}</span>
-                                                                </div>
-                                                                {changeCountryLoader && (
-                                                                    <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
-                                                                )}
-                                                                {regions.length > 0 && <div className="width-100 mb-3 form-field">
-                                                                    <label className="form-label">
-                                                                        <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
-                                                                    <select value={billingAddressData.region_id} onChange={handleBillingAddressChange} id="region_id" className="form-select">
-                                                                        {regions && regions.map(opt => {
-                                                                            return (<option key={opt.id} value={opt.id} >
-                                                                                {opt.name}</option>);
-                                                                        })}
-                                                                    </select>
-                                                                    <span className="error">{billingError.errors["region_id"]}</span>
-                                                                </div>}
-                                                                <div className="width-100 mb-3 form-field">
-                                                                    <div className="Frgt_paswd">
-                                                                        <div className="save-btn">
-                                                                            <button type="button" className="btn btnaddressave" style={{ "display": !addBillingAddressLoader ? "inline-block" : "none" }} onClick={saveBillingAddress}><IntlMessages id="checkout.save" /></button>
-
-                                                                            <div className="spinner" style={{ "display": addBillingAddressLoader ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
-                                                                        </div>
-                                                                        <div className="confirm-btn">
-                                                                            <button type="button" className="btn btnaddressave" onClick={cancelCustBillingAddress}><IntlMessages id="checkout.cancel" /></button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                                <div className="row">
-
-                                                    <div className="we-accept">
-                                                        <p><strong><IntlMessages id="we-accept" />:</strong></p>
-                                                        <img src={cardPlaceholder} alt="cards" />
-                                                    </div>
-                                                </div>
-                                                <div className="choose-method">
-                                                    <hr />
-
-                                                    {
-                                                        props.payTrue.length > 0 && (
-                                                            // console.log(props.payTrue.length) 
-                                                            <div className="d-grid gap-2 col-6">
-                                                                {props.payTrue.map((item, i) => {
-                                                                    //  console.log(i)
-                                                                    return (
-                                                                        <div key={i}>
-                                                                            <button type="button" onClick={() => {
-                                                                                selectPayment(item.code);
-                                                                            }} className={selectedPaymentMethod === item.code ? 'active btn btn-outline-dark' : "btn btn-outline-dark"}>{item.title}</button>
-                                                                            {i >= props.payTrue.length - 1 ? ""
-                                                                                : <p><IntlMessages id="signup.or" /></p>}
-                                                                        </div>
-                                                                    )
-                                                                })}
-                                                            </div>
-                                                        )
-                                                    }
 
 
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="d-grid gap-2 col-8 mx-auto">
-                                    {!isShow ?
-                                        <button className="btn btn-secondary" disabled={(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) ? true : false} onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> </button>
-                                        : <div className="spinner"> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>}
-
-
-                                </div>
                             </div>
-                            {/* <CheckoutSidebar sidebarData={itemsVal} /> */}
-                            <div className="col-md-5 col-lg-4" id="checkoutsidebar">
-                                <div className="sticky-cart">
-                                    <div className="order-detail-checkout">
-                                        <h5>{itemsVal.checkData['total_items'] ? itemsVal.checkData['total_items'] : 0} <IntlMessages id="item" /></h5>
-                                        {itemsVal.items['items'] && itemsVal.items['items'].length > 0 && (
-                                            <ul className="Ordered-pro-list">
-                                                {itemsVal.items['items'].map(item => {
-                                                    return (<li key={item.item_id} >
-                                                        <div className="row">
-                                                            <div className="col-md-3">
-                                                                <div className="product-image">
-                                                                    <Link to={'/product-details/' + item.sku}> <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} /></Link>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-md-9">
-                                                                <div className="pro-name-tag">
-                                                                    {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand}>{item.extension_attributes.brand}</Link></div>
-                                                                    )}
-                                                                    <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                                    <p className="check-tag"><IntlMessages id="cart.qty" /> {item.qty}</p>
-                                                                    {/* <br />One Size */}
-                                                                </div>
+
+                            <div className="d-grid gap-2 col-8 mx-auto">
+                                {!isShow ?
+                                    <button className="btn btn-secondary" disabled={(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) ? true : false} onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> </button>
+                                    : <div className="spinner"> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>}
+
+
+                            </div>
+                        </div>
+                        {/* <CheckoutSidebar sidebarData={itemsVal} /> */}
+                        <div className="col-md-5 col-lg-4" id="checkoutsidebar">
+                            <div className="sticky-cart">
+                                <div className="order-detail-checkout">
+                                    <h5>{itemsVal.checkData['total_items'] ? itemsVal.checkData['total_items'] : 0} <IntlMessages id="item" /></h5>
+                                    {itemsVal.items['items'] && itemsVal.items['items'].length > 0 && (
+                                        <ul className="Ordered-pro-list">
+                                            {itemsVal.items['items'].map(item => {
+                                                return (<li key={item.item_id} >
+                                                    <div className="row">
+                                                        <div className="col-md-3">
+                                                            <div className="product-image">
+                                                                <Link to={'/product-details/' + item.sku}> <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} /></Link>
                                                             </div>
                                                         </div>
-                                                    </li>)
-                                                })}
+                                                        <div className="col-md-9">
+                                                            <div className="pro-name-tag">
+                                                                {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand}>{item.extension_attributes.brand}</Link></div>
+                                                                )}
+                                                                <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                                                <p className="check-tag"><IntlMessages id="cart.qty" /> {item.qty}</p>
+                                                                {/* <br />One Size */}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>)
+                                            })}
 
-                                            </ul>
-                                        )}
+                                        </ul>
+                                    )}
 
-                                        <div className="product-total-price">
-                                            {/* {loaderOnCheckout && (
+                                    <div className="product-total-price">
+                                        {/* {loaderOnCheckout && (
                                             <div className="checkout-loading" >
                                                 <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
                                             </div>
                                         )} */}
-                                            <p> <IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['sub_total'] ? formatprice(itemsVal.checkData['sub_total']) : 0} </span></p>
-                                            <p> <IntlMessages id="order.discount" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['discount'] ? formatprice(itemsVal.checkData['discount']) : 0} </span></p>
-                                            <p> <IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency}{itemsVal.checkData['shipping_charges'] ? formatprice(itemsVal.checkData['shipping_charges']) : 0}</span></p>
-                                            <p> <IntlMessages id="tax" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['tax'] ? formatprice(itemsVal.checkData['tax']) : 0} </span></p>
-                                            <hr />
-                                            <div className="final-price"><IntlMessages id="total" /> <span>{siteConfig.currency}{formatprice(itemsVal.checkData['total'])} </span></div>
-                                        </div>
-
+                                        <p> <IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['sub_total'] ? formatprice(itemsVal.checkData['sub_total']) : 0} </span></p>
+                                        <p> <IntlMessages id="order.discount" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['discount'] ? formatprice(itemsVal.checkData['discount']) : 0} </span></p>
+                                        <p> <IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency}{itemsVal.checkData['shipping_charges'] ? formatprice(itemsVal.checkData['shipping_charges']) : 0}</span></p>
+                                        <p> <IntlMessages id="tax" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['tax'] ? formatprice(itemsVal.checkData['tax']) : 0} </span></p>
+                                        <hr />
+                                        <div className="final-price"><IntlMessages id="total" /> <span>{siteConfig.currency}{formatprice(itemsVal.checkData['total'])} </span></div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </section >
 
 

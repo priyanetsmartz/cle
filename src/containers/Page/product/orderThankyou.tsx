@@ -31,7 +31,7 @@ function OrderThankyou(props) {
         orderDetails['increment_id'] = results.data ? results.data.increment_id : 0;
         orderDetails['created_at'] = results.data ? results.data.created_at : 0;
         orderDetails['shipment_date'] = results.data && results.data.extension_attributes && results.data.extension_attributes.shipment_date ? results.data.extension_attributes.shipment_date : 0;
-        orderDetails['payment-method'] = results.data && results.data.payment.method ? capitalize(results.data.payment.method.split('_')[0]) : "-";
+        orderDetails['payment-method'] = results?.data?.payment?.additional_information?.[0] ? results?.data?.payment?.additional_information?.[0] : "-";
         orderDetails['total_item_count'] = results.data ? results.data.total_item_count : 0;
         orderDetails['delivery_address'] = results.data && results.data.extension_attributes && results.data.extension_attributes.shipping_assignments && results.data.extension_attributes.shipping_assignments[0].shipping ? results.data.extension_attributes.shipping_assignments[0].shipping.address : 0;
         orderDetails['base_subtotal'] = results.data ? results.data.base_subtotal : 0;

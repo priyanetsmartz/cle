@@ -159,3 +159,18 @@ export function getCurrentMonth() {
 
   return data;
 }
+
+export function getAccordingDate(data) {
+  if(data?.length){
+    return Object.values(data.reduce((acc, cur) => {
+      let date = moment(cur.created_at).format("MMM YYYY")
+      if (!acc[date])
+          acc[date] = { date: date, Products: [] };
+      acc[date].Products.push(cur);
+      return acc;
+  }, {}));
+  }else{
+    return []
+  }
+
+}
