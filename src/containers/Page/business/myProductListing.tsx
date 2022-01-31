@@ -13,7 +13,6 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import Modal from "react-bootstrap/Modal";
-import loading from "../../../image/CLE_LogoMotionGraphics.gif";
 
 function MyProductListing(props) {
     const intl = useIntl();

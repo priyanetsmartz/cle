@@ -62,6 +62,13 @@ function Breadcrumbs(props) {
                                         <li key={-1} className="breadcrumb-item"><Link to='/vendor/returns-complaints'> / My returns & complains </Link></li>
                                     </p>
                                 )
+                            } else if (local === 'thankyou') {
+                                return (
+                                    <><li key={j} className="breadcrumb-item"><Link to="/customer/dashboard">My Account</Link></li>
+                                    <li key={j} className="breadcrumb-item"><Link to="/customer/orders-and-returns">My Orders and Return</Link></li>
+                                        <li className="breadcrumb-item active">Thank you</li>
+                                    </>
+                                )
                             } else if (local === 'business-profile') {
                                 return (
                                     <p style={{ 'display': 'inline-flex' }} key="-3">
@@ -119,7 +126,7 @@ function Breadcrumbs(props) {
                             }
 
                         } else {
-                            if (local === "" || local === "settings" ) {
+                            if (local === "" || local === "settings") {
                                 return "";
                             } else {
                                 //  console.log(local)

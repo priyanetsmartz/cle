@@ -1,13 +1,13 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import {  getCustomerReturn } from '../../../redux/pages/customers';
+import { getCustomerReturn } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { getCookie } from '../../../helpers/session';
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings/index'
-import { formatprice } from '../../../components/utility/allutils';
+import { formatprice, getAccordingDate } from '../../../components/utility/allutils';
 
 function MyReturns(props) {
     let pageSizeSetting = siteConfig.pageSize;
@@ -29,13 +29,14 @@ function MyReturns(props) {
     }, [pageSize, props.languages, page]);
 
 
+
     const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = '', sortOrders: any = '', search: any = '') => {
         let returns: any = await getCustomerReturn(pageSize, from_date, to_date, from_price, to_price, sortBy, sortOrders, search);
 
         if (returns && returns.data && returns.data.length > 0 && returns.data[0]) {
-            // console.log(returns.data[0])
+            let res = getAccordingDate(returns?.data?.[0])
             setLoaderReturns(false);
-            setReturn(returns.data[0]);
+            setReturn(res);
             setReturnPagination(Math.ceil(returns.data.total_count / pageSize));
         }
     }
@@ -47,7 +48,7 @@ function MyReturns(props) {
     const sortOrdersHandler = async (e) => {
         setLoaderReturns(true);
         setSortOrder(e.target.value);
-        getReturnData(dateFilter.from, dateFilter.to, range.low, range.high, 'price', e.target.value, searchTerm)
+        getReturnData(dateFilter.from, dateFilter.to, range.low, range.high, 'grand_total', e.target.value, searchTerm)
     }
 
     const goToNextPage = (e) => {
@@ -93,93 +94,101 @@ function MyReturns(props) {
             )}
             {returs && returs.length > 0 ?
                 <div>
-                    {returs && (returs.map((item, i) => {
+                    {returs && (returs.map((items, i) => {
                         return (
-
-                            <div key={i}>
+                            <>
                                 <div className="row my-3">
-                                    <div className="col-sm-12">
-                                        <div className="row mb-3">
-                                            <div className="col-sm-6">
-                                                <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item.order_id}</h3>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <div className="viewall_btn">
-                                                    <Link to={`/customer/return-details/${item.rma_increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
-                                                </div>
-                                            </div>
+                                    <h3>{items.date}</h3>
+                                </div>
+                                {items && items.Products && items.Products.map((item, i) => {
+                                    return (
+                                        <div key={i}>
+                                            <div className="row my-3">
+                                                <div className="col-sm-12">
+                                                    <div className="row mb-3">
+                                                        <div className="col-sm-6">
+                                                            <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item.order_id}</h3>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <div className="viewall_btn">
+                                                                <Link to={`/customer/return-details/${item.rma_increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
+                                                            </div>
+                                                        </div>
 
-                                        </div>
-                                    </div>
-
-                                    <div className="d-md-flex">
-                                        <div className="col-sm-6">
-                                            <div className="order-viewsec">
-                                                <div className="order-details">
-                                                    <div className="order-date">
-                                                        <label className="form-label"><IntlMessages id="shipped.date" /></label>
-                                                        <div className="labl_text">{item.shipped_date ? moment(item.shipped_date).format('ddd, D MMMM YYYY') : ''}</div>
-                                                    </div>
-
-                                                    <div className="products">
-                                                        <label className="form-label"> <IntlMessages id="order.products" /></label>
-                                                        <div className="labl_text"> {item && item.total_qty ? item.total_qty : 0}</div>
                                                     </div>
                                                 </div>
 
-                                                <div className="order-details">
-                                                    <div className="order-date">
-                                                        <label className="form-label"><IntlMessages id="return.date" /></label>
-                                                        <div className="labl_text">{item.return_date ? moment(item.return_date).format('ddd, D MMMM YYYY') : ''}</div>
+                                                <div className="d-md-flex">
+                                                    <div className="col-sm-6">
+                                                        <div className="order-viewsec">
+                                                            <div className="order-details">
+                                                                <div className="order-date">
+                                                                    <label className="form-label"><IntlMessages id="shipped.date" /></label>
+                                                                    <div className="labl_text">{item.shipped_date ? moment(item.shipped_date).format('ddd, D MMMM YYYY') : ''}</div>
+                                                                </div>
+
+                                                                <div className="products">
+                                                                    <label className="form-label"> <IntlMessages id="order.products" /></label>
+                                                                    <div className="labl_text"> {item && item.total_qty ? item.total_qty : 0}</div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="order-details">
+                                                                <div className="order-date">
+                                                                    <label className="form-label"><IntlMessages id="return.date" /></label>
+                                                                    <div className="labl_text">{item.return_date ? moment(item.return_date).format('ddd, D MMMM YYYY') : ''}</div>
+                                                                </div>
+
+                                                                <div className="products">
+                                                                    <label className="form-label"> <IntlMessages id="order.price" /></label>
+                                                                    <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="order-shipped">
+                                                                <label className="form-label">
+                                                                </label>
+                                                            </div>
+
+
+                                                        </div>
                                                     </div>
+                                                    <div className="col-sm-6">
+                                                        {
+                                                            item && item.items && item.items.length > 0 && (
+                                                                <div className="prodcut_catg">
+                                                                    {item.items && (item.items.slice(0, 2).map((img, i) => {
+                                                                        return (
+                                                                            <div className="product_photo" key={i}>
+                                                                                <img src={img} className="img-fluid" alt="" />
+                                                                            </div>
+                                                                        )
+                                                                    }))}
 
-                                                    <div className="products">
-                                                        <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                                        <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="order-shipped">
-                                                    <label className="form-label">
-                                                    </label>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            {
-                                                item && item.items && item.items.length > 0 && (
-                                                    <div className="prodcut_catg">
-                                                        {item.items && (item.items.slice(0, 2).map((img, i) => {
-                                                            return (
-                                                                <div className="product_photo" key={i}>
-                                                                    <img src={img} className="img-fluid" alt="" />
+                                                                    {item.items.length > 2 && (
+                                                                        <div className="more_product">
+                                                                            <Link to="#">
+                                                                                <img src={item.items[2]} className="img-fluid" alt="" />
+                                                                                <div className="overlay_img"></div>
+                                                                                <span className="more_pro">{item.items.length - 2}</span>
+                                                                            </Link>
+                                                                        </div>
+                                                                    )
+                                                                    }
                                                                 </div>
                                                             )
-                                                        }))}
-
-                                                        {item.items.length > 2 && (
-                                                            <div className="more_product">
-                                                                <Link to="#">
-                                                                    <img src={item.items[2]} className="img-fluid" alt="" />
-                                                                    <div className="overlay_img"></div>
-                                                                    <span className="more_pro">{item.items.length - 2}</span>
-                                                                </Link>
-                                                            </div>
-                                                        )
                                                         }
                                                     </div>
-                                                )
-                                            }
+                                                </div>
+                                                <div className="col-sm-12">
+                                                    <div className="blank_bdr"></div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-sm-12">
-                                        <div className="blank_bdr"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        );
+                                    );
+                                })}
+                            </>
+                        )
                     }))}
                 </div>
                 : !loaderReturns ? <IntlMessages id="no_data" /> : ""}

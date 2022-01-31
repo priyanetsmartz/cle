@@ -11,7 +11,7 @@ import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings/index'
 import { capitalize, formatprice } from '../../../components/utility/allutils';
 import AllReturns from './allReturns';
-
+import { getAccordingDate } from '../../../components/utility/allutils'
 
 function OrdersAndReturns(props) {
     const userGroup = localStorage.getItem('token');
@@ -23,37 +23,28 @@ function OrdersAndReturns(props) {
     const [sortOrder, setSortOrder] = useState('');
     const [orders, setOrders] = useState([]);
     const [page, setCurrent] = useState(1);
-    const [price, setPrice] = useState({ low: 1000, high: 2500 })
+    const [price, setPrice] = useState({ low: 0, high: 20000 })
     const [loaderOrders, setLoaderOrders] = useState(false);
 
-    const language = getCookie('currentLanguage');
+    // const language = getCookie('currentLanguage');
     const intl = useIntl();
     useEffect(() => {
         getData(pageSize);
     }, [pageSize, props.languages, page]);
 
+
     const getData = async (pageSize) => {
         setLoaderOrders(true);
         let result: any = await getCustomerOrders(pageSize, page);
-        if (result && result.data && result.data.items) {
+        if (result?.data?.items) {
+            let res = getAccordingDate(result?.data?.items)
             setLoaderOrders(false);
-            setOrders(result.data.items);
+            setOrders(res);
             setPagination(Math.ceil(result.data.total_count / pageSize));
         }
 
     }
-    // const groupBy = async (array, key) => {
-    //     // Return the end result
-    //     return array.reduce((result, currentValue) => {
-    //         let dateee = moment(currentValue[key]).format('MM/DD/YYYY');
-    //         // If an array already present for key, push it to the array. Else create an array and push the object
-    //         (result[dateee] = result[dateee] || []).push(
-    //             currentValue
-    //         );
-    //         // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
-    //         return result;
-    //     }); // empty object is the initial value for result object
-    // };
+
 
     const handleSearch = async (e) => {
         setLoaderOrders(true);
@@ -63,9 +54,9 @@ function OrdersAndReturns(props) {
         if (val.length >= 3) {
             let result: any = await searchOrders(val);
             if (result && result.data && !result.data.message) {
-                //console.log(result.data.items)
+                let res = getAccordingDate(result?.data?.items)
                 setLoaderOrders(false);
-                setOrders(result.data.items);
+                setOrders(res);
 
             }
         }
@@ -80,7 +71,8 @@ function OrdersAndReturns(props) {
         }))
         let result: any = await getCustomerOrdersByPrice((range[0]), (range[1]), pageSize);
         if (result.data) {
-            setOrders(result.data.items);
+            let res = getAccordingDate(result?.data?.items)
+            setOrders(res);
             setLoaderOrders(false);
         }
     }
@@ -105,7 +97,8 @@ function OrdersAndReturns(props) {
         let result: any = await getCustomerOrdersByDate(dateFrom, dateTo, pageSize);
         if (result) {
             setLoaderOrders(false);
-            setOrders(result.data.items);
+            let res = getAccordingDate(result?.data?.items)
+            setOrders(res);
         }
     }
 
@@ -115,14 +108,15 @@ function OrdersAndReturns(props) {
         let result: any = await sortCustomerOrders(e.target.value, pageSize);
         if (result) {
             setLoaderOrders(false);
-            setOrders(result.data.items);
+            let res = getAccordingDate(result?.data?.items)
+            setOrders(res);
         }
     }
 
     const handlePageSize = (page) => {
         setPageSize(page)
     }
- 
+
 
     const goToNextPage = (e) => {
         e.preventDefault();
@@ -160,7 +154,8 @@ function OrdersAndReturns(props) {
                                 <div className="col-sm-4 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
-                                        <div className='pricerangeouter' ><InputNumber
+                                        <div className='pricerangeouter' >
+                                            <InputNumber
                                             min={1}
                                             max={20000}
                                             readOnly={true}
@@ -175,8 +170,9 @@ function OrdersAndReturns(props) {
                                                 value={price.high}
                                                 onChange={handlePriceRange}
                                             />
+                                             <Slider range max={20000} defaultValue={[price.low, price.high]} onAfterChange={handlePriceRange} />
                                         </div>
-                                        <Slider range max={20000} defaultValue={[price.low, price.high]} onAfterChange={handlePriceRange} />
+                                       
 
 
                                     </div>
@@ -240,89 +236,180 @@ function OrdersAndReturns(props) {
                                     </div>
                                 )}
                                 {orders && orders.length > 0 ?
-                                    <div>
-                                        {orders && (orders.map((item, i) => {
+                                    <>
+                                        {orders.map((items, i) => {
                                             return (
-
-                                                <div key={i}>
+                                                <>
                                                     <div className="row my-3">
-                                                        <div className="col-sm-12">
-                                                            <div className="row mb-3">
-                                                                <div className="col-sm-6">
-                                                                    <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item.increment_id}</h3>
-                                                                </div>
-                                                                <div className="col-sm-6">
-                                                                    <div className="viewall_btn">
-                                                                        <Link to={`/order-details/${item.increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="d-md-flex">
-                                                            <div className="col-sm-6">
-                                                                <div className="order-viewsec">
-                                                                    <div className="order-details">
-                                                                        <div className="order-date">
-                                                                            <label className="form-label"><IntlMessages id="order.orderDate" /></label>
-                                                                            <div className="labl_text">{item.created_at ? moment(item.created_at).format('ddd, D MMMM YYYY') : ''}</div>
-                                                                        </div>
-
-                                                                        <div className="products">
-                                                                            <label className="form-label"> <IntlMessages id="order.products" /></label>
-                                                                            <div className="labl_text"> {item && item.items ? item.items.length : 0}</div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="order-details">
-                                                                        <div className="order-date">
-                                                                            <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
-                                                                            <div className="labl_text">{item.shipment_date}</div>
-                                                                        </div>
-
-                                                                        <div className="products">
-                                                                            <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                                                            <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="order-shipped">
-                                                                        <label className="form-label">
-                                                                            {/* <IntlMessages id="order.weHaveShipped" /> */}
-                                                                            {capitalize(item.status)}
-                                                                        </label>
-                                                                    </div>
-
-
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-sm-6">
-                                                                <div className="prodcut_catg">
-                                                                    <div className="product_photo">
-                                                                        <img src={item.items[0]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                                                    </div>
-                                                                    <div className="product_photo">
-                                                                        <img src={item.items[1]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                                                    </div>
-                                                                    <div className="more_product">
-                                                                        <Link to="#">
-                                                                            <img src={item.items[2]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                                                            <div className="overlay_img"></div>
-                                                                            <span className="more_pro">{item.items.length}</span>
-                                                                        </Link>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-12">
-                                                            <div className="blank_bdr"></div>
-                                                        </div>
+                                                        <h3>{items.date}</h3>
                                                     </div>
-                                                </div>
-                                            );
-                                        }))}
-                                    </div>
+                                                    {items && items.Products && items.Products.map((item, i) => {
+                                                        return (
+                                                            <div key={i}>
+                                                                <div className="row my-3">
+                                                                    <div className="col-sm-12">
+                                                                        <div className="row mb-3">
+                                                                            <div className="col-sm-6">
+                                                                                <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item['increment_id']}</h3>
+                                                                            </div>
+                                                                            <div className="col-sm-6">
+                                                                                <div className="viewall_btn">
+                                                                                    <Link to={`/order-details/${item.increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="d-md-flex">
+                                                                        <div className="col-sm-6">
+                                                                            <div className="order-viewsec">
+                                                                                <div className="order-details">
+                                                                                    <div className="order-date">
+                                                                                        <label className="form-label"><IntlMessages id="order.orderDate" /></label>
+                                                                                        <div className="labl_text">{item.created_at ? moment(item.created_at).format('ddd, D MMMM YYYY') : ''}</div>
+                                                                                    </div>
+
+                                                                                    <div className="products">
+                                                                                        <label className="form-label"> <IntlMessages id="order.products" /></label>
+                                                                                        <div className="labl_text"> {item && item.items ? item.items.length : 0}</div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="order-details">
+                                                                                    <div className="order-date">
+                                                                                        <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
+                                                                                        <div className="labl_text">{item.shipment_date}</div>
+                                                                                    </div>
+
+                                                                                    <div className="products">
+                                                                                        <label className="form-label"> <IntlMessages id="order.price" /></label>
+                                                                                        <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="order-shipped">
+                                                                                    <label className="form-label">
+                                                                                        {/* <IntlMessages id="order.weHaveShipped" /> */}
+                                                                                        {capitalize(item.status)}
+                                                                                    </label>
+                                                                                </div>
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="col-sm-6">
+                                                                            <div className="prodcut_catg">
+                                                                                <div className="product_photo">
+                                                                                    <img src={item.items[0]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                                </div>
+                                                                                <div className="product_photo">
+                                                                                    <img src={item.items[1]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                                </div>
+                                                                                <div className="more_product">
+                                                                                    <Link to="#">
+                                                                                        <img src={item.items[2]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                                        <div className="overlay_img"></div>
+                                                                                        <span className="more_pro">{item.items.length}</span>
+                                                                                    </Link>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-sm-12">
+                                                                        <div className="blank_bdr"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </>
+                                            )
+                                        })}
+                                    </>
+                                    // <div>
+                                    //     {orders && orders['Products'] && orders['Products'].map((item, i) => {
+                                    //         return (
+
+                                    //             <div key={i}>
+                                    //                 <div className="row my-3">
+                                    //                     <div className="col-sm-12">
+                                    //                         <div className="row mb-3">
+                                    //                             <div className="col-sm-6">
+                                    //                                 <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item['increment_id']}</h3>
+                                    //                             </div>
+                                    //                             <div className="col-sm-6">
+                                    //                                 <div className="viewall_btn">
+                                    //                                     <Link to={`/order-details/${item.increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
+                                    //                                 </div>
+                                    //                             </div>
+
+                                    //                         </div>
+                                    //                     </div>
+
+                                    //                     <div className="d-md-flex">
+                                    //                         <div className="col-sm-6">
+                                    //                             <div className="order-viewsec">
+                                    //                                 <div className="order-details">
+                                    //                                     <div className="order-date">
+                                    //                                         <label className="form-label"><IntlMessages id="order.orderDate" /></label>
+                                    //                                         <div className="labl_text">{item.created_at ? moment(item.created_at).format('ddd, D MMMM YYYY') : ''}</div>
+                                    //                                     </div>
+
+                                    //                                     <div className="products">
+                                    //                                         <label className="form-label"> <IntlMessages id="order.products" /></label>
+                                    //                                         <div className="labl_text"> {item && item.items ? item.items.length : 0}</div>
+                                    //                                     </div>
+                                    //                                 </div>
+
+                                    //                                 <div className="order-details">
+                                    //                                     <div className="order-date">
+                                    //                                         <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
+                                    //                                         <div className="labl_text">{item.shipment_date}</div>
+                                    //                                     </div>
+
+                                    //                                     <div className="products">
+                                    //                                         <label className="form-label"> <IntlMessages id="order.price" /></label>
+                                    //                                         <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
+                                    //                                     </div>
+                                    //                                 </div>
+
+                                    //                                 <div className="order-shipped">
+                                    //                                     <label className="form-label">
+                                    //                                         {/* <IntlMessages id="order.weHaveShipped" /> */}
+                                    //                                         {capitalize(item.status)}
+                                    //                                     </label>
+                                    //                                 </div>
+
+
+                                    //                             </div>
+                                    //                         </div>
+                                    //                         <div className="col-sm-6">
+                                    //                             <div className="prodcut_catg">
+                                    //                                 <div className="product_photo">
+                                    //                                     <img src={item.items[0]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                    //                                 </div>
+                                    //                                 <div className="product_photo">
+                                    //                                     <img src={item.items[1]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                    //                                 </div>
+                                    //                                 <div className="more_product">
+                                    //                                     <Link to="#">
+                                    //                                         <img src={item.items[2]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                    //                                         <div className="overlay_img"></div>
+                                    //                                         <span className="more_pro">{item.items.length}</span>
+                                    //                                     </Link>
+                                    //                                 </div>
+                                    //                             </div>
+                                    //                         </div>
+                                    //                     </div>
+                                    //                     <div className="col-sm-12">
+                                    //                         <div className="blank_bdr"></div>
+                                    //                     </div>
+                                    //                 </div>
+                                    //             </div>
+                                    //         );
+                                    //     })}
+                                    // </div>
                                     : !loaderOrders ? <IntlMessages id="no_data" /> : ""}
 
                                 <div className="resltspage_sec footer-pagints">
@@ -358,7 +445,7 @@ function OrdersAndReturns(props) {
 
                             </div>
                             <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                              <AllReturns/>
+                                <AllReturns />
                             </div>
 
                         </div>
