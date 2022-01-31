@@ -672,6 +672,9 @@
   "payoutInformation":"معلومات الدفع",
   "Notes":"ملحوظات",
   "thanksforpayment":"شكرا لك على الدفع. لقد صنعت يومنا للتو.",
-  "Phone":"هاتف"
+  "Phone":"هاتف",
+  "Male":"ذكر",
+  "Female":"أنثى",
+  "Other":"آخر"
 }
 
