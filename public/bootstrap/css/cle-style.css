@@ -3122,6 +3122,7 @@ left: auto; */
 
 .range_slider .range_inner .form-control{
 	font-size:14px;
+	min-height: 38px;
 }
 
 .range_slider .range_inner .search_results .form-control {
@@ -8772,8 +8773,11 @@ p.sliderupper {
 
 	
 
-.pricerangeouter .ant-input-number-out-of-range input{
+.pricerangeouter .ant-input-number-out-of-range input,
+.pricerangeouter .ant-input-number-input{
 	color:#000;
+	height: 36px;
+    border-radius: 0;
 }
 
 .deletePopup .modal-header > i {
@@ -9874,6 +9878,9 @@ p.sliderupper {
 	}
 	.companylogo img{
 		height:110px;
+	}
+	.new-breadcrumb .breadcrumb, .breadcrumb.breadcrumb{
+		display:flex!important;
 	}
 }
 
