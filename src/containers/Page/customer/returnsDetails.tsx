@@ -48,19 +48,19 @@ function OrdersAndReturns(props) {
                                 <h4><IntlMessages id="return_number" />: {returnDetails['info'] ? returnDetails['info'].rma_increment_id : ""}</h4>
                                 <div className="row">
                                     <div className="col-md-3">
-                                        <p><strong>Purchase Date</strong></p>
+                                        <p><strong><IntlMessages id = "order.purchaseDate"/></strong></p>
                                         <p>{returnDetails['info'] && returnDetails['info'].purchase_date ? moment(returnDetails['info'].purchase_date).format('ddd DD MMMM YYYY') : ""}</p>
                                     </div>
                                     <div className="col-md-3">
-                                        <p><strong>Shipping Date</strong></p>
+                                        <p><strong><IntlMessages id = "order.shippingDate"/></strong></p>
                                         <p>{returnDetails['info'] && returnDetails['info'].shipment_date ? moment(returnDetails['info'].shipment_date).format('ddd DD MMMM YYYY') : ""}</p>
                                     </div>
                                     <div className="col-md-3">
-                                        <p><strong>Payment Method</strong></p>
+                                        <p><strong><IntlMessages id = "order.paymentMethod"/></strong></p>
                                         <p>{returnDetails['info'] ? returnDetails['info'].payment_method : ""}</p>
                                     </div>
                                     <div className="col-md-3">
-                                        <p><strong>Products</strong></p>
+                                        <p><strong><IntlMessages id = "order.products"/></strong></p>
                                         <p>{returnDetails['info'] ? returnDetails['info'].return_qty : 0}</p>
                                     </div>
                                 </div>
@@ -73,19 +73,19 @@ function OrdersAndReturns(props) {
                         <div className="col-md-12 return-complaint-btns">
                             <div className="float-start w-75">
                                 <p>
-                                    Select items for return by clicking on the product. Please choose the reason if you want to return the
-                                    product. Product without chosen reason won't be returned.
+                                <IntlMessages id = "create.return.details1"/>
+                                <IntlMessages id = "create.return.details2"/>
                                 </p>
                             </div>
                             <div className="float-end">
                                 <div className="btn-group">
                                     <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        Sort By
+                                        <IntlMessages id = "sorting"/>
                                     </button>
                                     <ul className="dropdown-menu dropdown-menu-end">
-                                        <li><button className="dropdown-item" type="button">Price: high to low</button></li>
-                                        <li><button className="dropdown-item" type="button">Price: low to high</button></li>
+                                        <li><button className="dropdown-item" type="button"><IntlMessages id = "filterPriceDesc"/></button></li>
+                                        <li><button className="dropdown-item" type="button"><IntlMessages id = "filterPriceAsc"/></button></li>
                                     </ul>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@ function OrdersAndReturns(props) {
                         <div className="col-md-6">
                             <div className="order-delivery-address">
                                 <div className="Address-title">
-                                    <span className="float-start">Delivery address</span>
+                                    <span className="float-start"><IntlMessages id = "order.deliveryAddress"/></span>
                                     {/* <Link to="#" className="float-end">Change</Link> */}
                                     <div className="clearfix"></div>
                                 </div>
@@ -161,14 +161,14 @@ function OrdersAndReturns(props) {
                         <div className="col-md-6">
                             <div className="order-delivery-address">
                                 <div className="Address-title">
-                                    <span>Delivery address</span>
+                                    <span><IntlMessages id = "return.total"/></span>
                                 </div>
                                 <div className="product-total-price">
-                                    <p>Sub Total<span className="text-end">{returnDetails['return_total'] ? siteConfig.currency + ' ' + returnDetails['return_total'].subtotal : 0}</span></p>
-                                    <p>Shipping<span className="text-end">{returnDetails['return_total'] ? siteConfig.currency + ' ' + returnDetails['return_total'].shipping : 0}</span></p>
-                                    <p>Tax<span className="text-end">{returnDetails['return_total'] ? siteConfig.currency + ' ' + returnDetails['return_total'].tax : 0}</span></p>
+                                    <p><IntlMessages id = "order.subTotal"/><span className="text-end">{returnDetails['return_total'] ? siteConfig.currency + ' ' + returnDetails['return_total'].subtotal : 0}</span></p>
+                                    <p><IntlMessages id = "order.shipping"/><span className="text-end">{returnDetails['return_total'] ? siteConfig.currency + ' ' + returnDetails['return_total'].shipping : 0}</span></p>
+                                    <p><IntlMessages id = "order.tax"/><span className="text-end">{returnDetails['return_total'] ? siteConfig.currency + ' ' + returnDetails['return_total'].tax : 0}</span></p>
                                     <hr />
-                                    <div className="final-price">Total<span>{returnDetails['return_total'] ? siteConfig.currency + ' ' + returnDetails['return_total'].grand_total : 0}</span></div>
+                                    <div className="final-price"><IntlMessages id = "order.total"/><span>{returnDetails['return_total'] ? siteConfig.currency + ' ' + returnDetails['return_total'].grand_total : 0}</span></div>
                                 </div>
                             </div>
                         </div>
