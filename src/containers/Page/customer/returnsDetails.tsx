@@ -99,7 +99,7 @@ function OrdersAndReturns(props) {
                                     <li className="pb-0 ps-0 pe-0 border">
                                         <div className="row">
                                             <div className="col-md-3">
-                                                <div className="product-image">
+                                                <div className="product-image p-2">
                                                     <img src={item.image} alt={item.name} />
                                                 </div>
                                             </div>
@@ -109,7 +109,7 @@ function OrdersAndReturns(props) {
                                                         <p><strong>{item.brand}</strong></p>
                                                         <p>{item.name}</p>
                                                     </div>
-                                                    <Link to="#" className="float-end text-end order-pro-price">{siteConfig.currency}{item.price}</Link>
+                                                    <Link to="#" className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{item.price}</Link>
                                                     <div className="clearfix"></div>
                                                 </div>
                                                 <div className="pro-name-tag">

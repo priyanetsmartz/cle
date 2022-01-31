@@ -287,7 +287,7 @@ function CreateReturn(props) {
                                                     <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                     <p>{capitalize(item.product_type)}</p>
                                                 </div>
-                                                <Link to="#" className="float-end text-end order-pro-price">{siteConfig.currency}{formatprice(item.price)}</Link>
+                                                <Link to="#" className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{formatprice(item.price)}</Link>
                                                 <div className="clearfix"></div>
                                             </div>
                                             <div className="pro-name-tag">
@@ -319,7 +319,7 @@ function CreateReturn(props) {
                         <div className="order-delivery-address">
                             <div className="Address-title">
                                 <span className="float-start"><IntlMessages id="order.deliveryAddress" /></span>
-                                <Link to="#" onClick={toggleAddressModal} className="float-end"><IntlMessages id="order.change" /></Link>
+                                <Link to="#" onClick={toggleAddressModal} className="float-end change-ani"><IntlMessages id="order.change" /></Link>
                                 <div className="clearfix"></div>
                             </div>
                             <p>
@@ -348,22 +348,31 @@ function CreateReturn(props) {
                 </div>
 
                 <div className="row mt-5">
-                    <div className="container">
-                        <div className='return-reason' >
-                            <select className="form-select customfliter" aria-label="Default select example" onChange={selectReturnOrExchange} >
-                                <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                <option value="refund">{intl.formatMessage({ id: "return" })}</option>
-                                <option value="exchange">{intl.formatMessage({ id: "exchange" })}</option>
-                            </select>
-                        </div>
-                        <div className='return-comment' >
-                            <label><IntlMessages id="comments" /></label>
-                            <textarea className="form-select customfliter" onChange={handleChange} value={returnOrExchangeComment}>
-                            </textarea>
-                        </div>
-                        <div className="clearfix"></div>
-                        <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="order.returnProducts" /></Link></div>
-                        <div className="clearfix"></div>
+                    <div className="col-md-12">
+                        
+						<div className="row my-3">
+							<div className="col-md-3 mb-2">
+								<div className='return-reason' >
+									<select className="form-select customfliter" aria-label="Default select example" onChange={selectReturnOrExchange} >
+									<option value="">{intl.formatMessage({ id: "select" })}</option>
+									<option value="refund">{intl.formatMessage({ id: "return" })}</option>
+									<option value="exchange">{intl.formatMessage({ id: "exchange" })}</option>
+									</select>
+								</div>
+							</div>
+							<div className="col-md-3 align-self-end mb-2">
+								<label className="form-label"></label>
+								<Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="order.returnProducts" /></Link>
+							</div>
+							<div className="col-md-12 mb-2">
+								<label><IntlMessages id="comments" /></label>
+								<textarea className="form-select customfliter" onChange={handleChange}  rows={3} value={returnOrExchangeComment}>
+								</textarea>
+							</div>
+						</div>
+						
+					
+						
                     </div>
                 </div>
                 <ReturnFooter />
