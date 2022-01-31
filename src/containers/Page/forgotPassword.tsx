@@ -4,7 +4,9 @@ import { SendMailForgotPass } from "../../redux/pages/allPages";
 import notification from '../../components/notification';
 import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
-
+import { connect } from "react-redux";
+import appAction from "../../redux/app/actions";
+const { showSignin, showForgot } = appAction;
 function ForgottenPassword(props) {
   let localData = localStorage.getItem('redux-react-session/USER_DATA');
   let localToken = JSON.parse((localData));
@@ -25,7 +27,11 @@ function ForgottenPassword(props) {
       [id]: value
     }))
   }
-
+  const handlesigninClick = (e) => {
+    e.preventDefault();
+    props.showForgot(false);
+    props.showSignin(true);
+  }
   const handleSubmitClick = async (e) => {
     e.preventDefault();
     if (handleValidation()) {
@@ -109,6 +115,7 @@ function ForgottenPassword(props) {
             <br />
             <div className="row">
               <div className="col-md-12">
+                {state.email1 === '' && (<Link to="#" onClick={(e) => { handlesigninClick(e); }} className="sign-in"><IntlMessages id="menu_Sign_in" /></Link>)}
                 <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}>  <IntlMessages id="retrieve_password" /></Link>
                 <div className="spinner signup-btn" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
               </div>
@@ -119,6 +126,17 @@ function ForgottenPassword(props) {
     </div>
   );
 }
+const mapStateToProps = (state) => {
 
-export default ForgottenPassword
+  console.log(state?.App?.showForgot)
+
+  return {}
+ 
+}
+
+export default connect(
+  mapStateToProps,
+  { showSignin, showForgot }
+)(ForgottenPassword);
+
 

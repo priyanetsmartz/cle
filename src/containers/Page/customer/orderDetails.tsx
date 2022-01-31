@@ -15,6 +15,7 @@ function OrderDetails(props) {
     const [maxItems, setMaxitems] = useState(10);
     const [orderProgress, setOrderProgress] = useState(0);
     const [order, setOrder]: any = useState([]);
+    const [showReturn, setShowReturn] = useState(false);
     const [changeAddressModal, setChangeAddressModal] = useState(false);
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
@@ -65,20 +66,17 @@ function OrderDetails(props) {
         setOrder(orderDetails);
 
         let checkreturn: any = await checkIfReturnExists(orderDetails['entity_id']);
-        console.log(typeof checkreturn?.data?.[0])
+
 
 
         let myObject = checkreturn?.data?.[0];
 
-        checkreturn?.data?.[0].map(function (key, index) {
-            console.log(key.value);
-            return key.value === 'true'
-            //return myObject[key] === true;
+        let resultShow = myObject.filter(val => {
+            return val.value === 'false';
         });
-
-       
-
-        console.log(checkreturn?.data?.[0]);
+        if (resultShow.length > 0) {
+            setShowReturn(true);
+        }
 
         const p = result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'processing' ? 10 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'complete' ? 100 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'pending' ? 25 : 10;
         setOrderProgress(p)
@@ -261,7 +259,7 @@ function OrderDetails(props) {
                         <div className="order-delivery-address">
                             <div className="Address-title">
                                 <span className="float-start"><IntlMessages id="order.deliveryAddress" /></span>
-                                <Link to="#" onClick={toggleAddressModal} className="float-end"><IntlMessages id="order.change" /></Link>
+                                {/* <Link to="#" onClick={toggleAddressModal} className="float-end"><IntlMessages id="order.change" /></Link> */}
                                 <div className="clearfix"></div>
                             </div>
                             <p>
@@ -292,27 +290,17 @@ function OrderDetails(props) {
 
             <div className="container mb-5">
                 <div className="row">
-                    <div className="col-md-12 return-complaint-btns">
-                        {order.returnStatus && (
-                            <div className="float-start">
-                                <Link to={`/customer/create-return/${order.increment_id}`}><IntlMessages id="order.returnProducts" /></Link>
-                                {/* <Link to=""><IntlMessages id="order.makeAComplaint" /></Link> */}
-                            </div>
-                        )}
-                        {/* <div className="float-end">
-                            <div className="btn-group">
-                                <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    <IntlMessages id="magazine.sortby" />
-                                </button>
-                                <ul className="dropdown-menu dropdown-menu-end">
-                                    <li><button className="dropdown-item" type="button" onClick={() => sortHandler(0)}><IntlMessages id="filterPriceDesc" /></button></li>
-                                    <li><button className="dropdown-item" type="button" onClick={() => sortHandler(1)}><IntlMessages id="filterPriceAsc" /></button></li>
-                                </ul>
-                            </div>
-                        </div> */}
-                        <div className="clearfix"></div>
-                    </div>
+                    {showReturn && (
+                        <div className="col-md-12 return-complaint-btns">
+                            {order.returnStatus && (
+                                <div className="float-start">
+                                    <Link to={`/customer/create-return/${order.increment_id}`}><IntlMessages id="order.returnProducts" /></Link>
+                                    {/* <Link to=""><IntlMessages id="order.makeAComplaint" /></Link> */}
+                                </div>
+                            )}
+                            <div className="clearfix"></div>
+                        </div>
+                    )}
                 </div>
                 <ul className="order-pro-list">
                     {order && order.items && order.items.slice(0, maxItems).map((item, i) => {

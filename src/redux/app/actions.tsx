@@ -25,6 +25,7 @@ const actions = {
   SET_CAT: "SET_CAT",
   MENU_SETUP: "MENU_SETUP",
   SHOW_LOADER: "SHOW_LOADER",
+  SHOWFORGOT:"SHOWFORGOT",
 
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
@@ -54,6 +55,10 @@ const actions = {
   showSignin: showLogin => ({
     type: actions.SHOW_SIGHNIN,
     showLogin
+  }),
+  showForgot: showForgot => ({
+    type: actions.SHOWFORGOT,
+    showForgot
   }),
   showHelpus: showHelpus => ({
     type: actions.SHOW_HELPUS,

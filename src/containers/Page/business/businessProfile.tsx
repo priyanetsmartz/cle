@@ -1121,7 +1121,7 @@ function BusinessProfile(props) {
                             <span className="error">{errorsPersonal.errors["vendorTelephone"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Date of birth</label>
+                            <label className="form-label"><IntlMessages id= "myaccount.dob" /></label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">{intl.formatMessage({ id: "select" })}</option>

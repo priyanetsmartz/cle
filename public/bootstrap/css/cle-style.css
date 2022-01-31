@@ -7345,6 +7345,19 @@ p.sliderupper {
     border-color: #2e2baa;
     bottom: 2px;
 }
+.forgot a.sign-in {
+    margin: 0;
+    text-decoration: none;
+    color: #2e2baa;
+    font-family: 'Monument Extended';
+    font-size: 13px;
+    line-height: 33px;
+    font-weight: 500;
+    height: 33px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 180px;
+}
 
 .faq-form {
     background-color: #F7F7FC;
