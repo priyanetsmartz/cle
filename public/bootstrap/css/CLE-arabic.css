@@ -989,6 +989,43 @@ p.sliderupper {
 	margin-right: 0;
 }
 
+.back-block:hover .back-to-shop {
+    -webkit-transform: translateX(-7%);
+    -ms-transform: translateX(-7%);
+    transform: translateX(-7%);
+}
+
+.form-select{
+	background-position: left 0.75rem center;
+}
+.dobfeild .me-3 {
+    margin-left: 1rem !important;
+	margin-right:unset!important;
+}
+
+.deletePopup .modal-footer .btn-primary{
+	font-size: 18px;
+}
+
+.float-start {
+    float: right !important;
+}
+
+.ant-notification-notice-with-icon .ant-notification-notice-description{
+	margin-right:48px;
+	margin-left:unset;
+}
+
+.plp-viewall i{
+	left:10%;
+	right:unset;
+}
+
+.ant-notification-notice-close{
+	left:22px;
+	right:unset;
+}
+
 @media only screen and (min-width: 320px) and (max-width: 991px) {
   .cle-mobile-menu {
     float: left;
