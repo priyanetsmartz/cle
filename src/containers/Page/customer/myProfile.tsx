@@ -1079,7 +1079,7 @@ function MyProfile(props) {
                             </div>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Country<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="myaccount.country" /> <span className="maindatory">*</span></label>
                             <select value={customAttribute.country} onChange={handleChange} id="country" className="form-select" aria-label="Default select example">
                                 {COUNTRIES && COUNTRIES.map((opt, i) => {
                                     return (<option key={i} value={opt.full_name_english}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);

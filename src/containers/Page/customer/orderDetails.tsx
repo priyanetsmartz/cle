@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { searchOrders, getCountriesList, getorderReturnstatusapi, updateOrderAddress } from '../../../redux/pages/customers';
+import { searchOrders, getCountriesList, getorderReturnstatusapi, updateOrderAddress, checkIfReturnExists } from '../../../redux/pages/customers';
 import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
@@ -26,8 +26,8 @@ function OrderDetails(props) {
         city: "",
         country_id: "",
         street: "",
-        address_type:"",
-        email:""
+        address_type: "",
+        email: ""
 
     });
 
@@ -63,8 +63,23 @@ function OrderDetails(props) {
         orderDetails['entity_id'] = result.data.items[0] ? result.data.items[0].entity_id : 0;
         orderDetails['returnStatus'] = getorderReturnstatus(orderDetails['entity_id'])
         setOrder(orderDetails);
-        // console.log(result.data.items[0].extension_attributes.shipping_assignments[0].shipping.address)
-        //change this after clarification
+
+        let checkreturn: any = await checkIfReturnExists(orderDetails['entity_id']);
+        console.log(typeof checkreturn?.data?.[0])
+
+
+        let myObject = checkreturn?.data?.[0];
+
+        checkreturn?.data?.[0].map(function (key, index) {
+            console.log(key.value);
+            return key.value === 'true'
+            //return myObject[key] === true;
+        });
+
+       
+
+        console.log(checkreturn?.data?.[0]);
+
         const p = result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'processing' ? 10 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'complete' ? 100 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'pending' ? 25 : 10;
         setOrderProgress(p)
     }
@@ -97,9 +112,9 @@ function OrderDetails(props) {
             custAddForm.customer_id = custId;
             custAddForm.address_type = 'shipping';
             custAddForm.email = props.token.token_email;
-            let data =  {
+            let data = {
                 "entity": custAddForm
-                }
+            }
             console.log(custAddForm)
             let result: any = await updateOrderAddress(order.entity_id, data);
             console.log(result)
@@ -284,7 +299,7 @@ function OrderDetails(props) {
                                 {/* <Link to=""><IntlMessages id="order.makeAComplaint" /></Link> */}
                             </div>
                         )}
-                        <div className="float-end">
+                        {/* <div className="float-end">
                             <div className="btn-group">
                                 <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false">
@@ -295,7 +310,7 @@ function OrderDetails(props) {
                                     <li><button className="dropdown-item" type="button" onClick={() => sortHandler(1)}><IntlMessages id="filterPriceAsc" /></button></li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="clearfix"></div>
                     </div>
                 </div>
@@ -410,7 +425,7 @@ function OrderDetails(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Country<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                             <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
                                 {countries && countries.map(opt => {
                                     return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);

@@ -99,16 +99,26 @@ export async function getCustomerOrdersByPrice(priceFrom, priceTo, pageSize) {
 export async function sortCustomerOrders(sort, pageSize) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
     const custId = user.cust_id;
-    return adminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=${sort}`, "", "GET", "");
+    if (sort === ""){
+        return adminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}`, "", "GET", "");
+    } else {
+        return adminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}&searchCriteria[sortOrders][0][field]=grand_total&searchCriteria[sortOrders][0][direction]=${sort}`, "", "GET", "");
+    }
+
 }
 
 export function searchOrders(orderId) {
     // return adminApi.request(`rest/V1/orders/${orderId}`, "", "GET", "");
-    return adminApi.request(`rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=increment_id&searchCriteria[filter_groups][0][filters][0][value]=${orderId}&searchCriteria[filter_groups][0][filters][0][condition_type]=eq `, "", "GET", "")
+    return adminApi.request(`rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=increment_id&searchCriteria[filter_groups][0][filters][0][value]=${orderId}&searchCriteria[filter_groups][0][filters][0][condition_type]=eq`, "", "GET", "")
+}
+
+export function checkIfReturnExists(orderId) {
+    return adminApi.request(`rest/all/V1/return/canRmaItem/?orderId=${orderId}`, "", "GET", "")
 }
 export function updateOrderAddress(orderId, data) {
     return adminApi.request(`rest/all/V1/orders/${orderId}`, data, "PUT", "")
 }
+
 
 export async function getWishList() {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))

@@ -77,7 +77,7 @@ function OrdersAndReturns(props) {
                                     product. Product without chosen reason won't be returned.
                                 </p>
                             </div>
-                            <div className="float-end">
+                            {/* <div className="float-end">
                                 <div className="btn-group">
                                     <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -88,7 +88,7 @@ function OrdersAndReturns(props) {
                                         <li><button className="dropdown-item" type="button">Price: low to high</button></li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="clearfix"></div>
                         </div>
                     </div>

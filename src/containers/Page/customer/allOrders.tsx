@@ -299,10 +299,27 @@ function OrdersAndReturns(props) {
                                                                             </div>
                                                                         </div>
 
-                                                                        <div className="products">
+                                                                        <div className="col-sm-6">
+                                                                            <div className="prodcut_catg">
+                                                                                <div className="product_photo">
+                                                                                    <img src={item.items[0]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                                </div>
+                                                                                <div className="product_photo">
+                                                                                    <img src={item.items[1]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                                </div>
+                                                                                <div className="more_product">
+                                                                                    <Link to="#">
+                                                                                        <img src={item.items[2]?.extension_attributes.item_image} className="img-fluid" alt="" />
+                                                                                        <div className="overlay_img"></div>
+                                                                                        <span className="more_pro">{item.items.length}</span>
+                                                                                    </Link>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        {/* <div className="products">
                                                                             <label className="form-label"> <IntlMessages id="order.price" /></label>
                                                                             <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
-                                                                        </div>
+                                                                        </div> */}
                                                                     </div>
                                                                     <div className="col-sm-12">
                                                                         <div className="blank_bdr"></div>
@@ -316,7 +333,7 @@ function OrdersAndReturns(props) {
                                         })}
                                     </>
 
-                                    : !loaderOrders ?<p className='nodata'> <IntlMessages id="no_data" /></p> : ""}
+                                    : !loaderOrders ? <p className='nodata'> <IntlMessages id="no_data" /></p> : ""}
 
                                 <div className="resltspage_sec footer-pagints">
                                     <div className="paginatn_result">
