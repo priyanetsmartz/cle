@@ -13,13 +13,16 @@ import { formatprice } from '../../../components/utility/allutils';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import {useIntl} from 'react-intl';
+import { sessionService } from 'redux-react-session';
 
 function MyPayoutDetails(props) {
 
     const intl = useIntl();
     useEffect(() => {
+        getVendor()
         getDetails()
     }, [props.languages]);
+    const [vendorName, setVendorName] = useState('')
     const [isLoading, setIsLoading] = useState(true);
     const { payoutId }: any = useParams();
     const [payoutData, setPayoutData] = useState({});
@@ -78,7 +81,10 @@ function MyPayoutDetails(props) {
         setIsLoading(false);
 
     }
-
+    async function getVendor(){
+        let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+        setVendorName(vendor.vendor_name);
+    }
     const columns = [{
         name: intl.formatMessage({id:'order'}),
         selector: row => row.orderNumber,
@@ -227,7 +233,7 @@ function MyPayoutDetails(props) {
                                     {/* <td style={{ "textAlign": "right" }}>-</td>
                                   <th style={{ "textAlign": "left" }}>اسم</th>
                                   <td style={{ "textAlign": "center" }}>-</td> */}
-                                    <td style={{ "textAlign": "right" }}>-</td>
+                                    <td style={{ "textAlign": "right" }}>{vendorName}</td>
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Address Line 1</th>

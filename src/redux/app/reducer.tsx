@@ -8,7 +8,7 @@ const initState = {
   view: getView(window.innerWidth),
   height: window.innerHeight,
   openDrawer: false,
-  // openKeys: preKeys,
+  showForgot: false,
   showLogin: false,
   showSignUp: false,
   logoClass: 'normal',
@@ -40,6 +40,8 @@ export default function appReducer(state = initState, action) {
       return { ...state, current: [], openKeys: [] };
     case actions.SHOW_SIGHNIN:
       return { ...state, showLogin: action.showLogin };
+    case actions.SHOWFORGOT:
+      return { ...state, showForgot: action.showForgot };
     case actions.SHOW_HELPUS:
       return { ...state, showHelpus: action.showHelpus };
     case actions.OPEN_SIGN_UP:

@@ -16,7 +16,7 @@ import ForgottenPassword from '../Page/forgotPassword';
 import { useIntl } from 'react-intl';
 import { apiConfig } from '../../settings';
 var CryptoJS = require("crypto-js");
-const { showSignin, openSignUp, toggleOpenDrawer } = appAction;
+const { showSignin, openSignUp, toggleOpenDrawer, showForgot } = appAction;
 const { login, logout } = authAction;
 
 function SignIn(props) {
@@ -159,8 +159,8 @@ function SignIn(props) {
   const handleForgetPopup = (e) => {
     e.preventDefault();
     hideModal();
-    // props.showSignin(true);
-    setForgotPopup(true);
+    props.showForgot(true);
+    // setForgotPopup(true);
   }
 
   const hideModal = () => {
@@ -179,7 +179,9 @@ function SignIn(props) {
   // const hideModall = (e) => {
   //   setForgotPopup(false);
   // }
-  const hideModall = () => setForgotPopup(false);
+  const hideModall = () => {
+    props.showForgot(false);
+  }
   const togglePasswordVisiblity = () => {
     setPasswordShown(passwordShown ? false : true);
   };
@@ -208,7 +210,7 @@ function SignIn(props) {
               <input type={passwordShown ? "text" : "password"}
                 className="form-control"
                 id="password"
-                placeholder={intl.formatMessage({ id: "login.password" })+'*'}
+                placeholder={intl.formatMessage({ id: "login.password" }) + '*'}
                 value={state.password}
                 onChange={handleChange}
                 aria-describedby="basic-addon2"
@@ -252,12 +254,13 @@ function SignIn(props) {
         <Modal.Footer className="signup_footer" ><Link to="#" onClick={handleSignUp} className="sign-in-M"><IntlMessages id="signup.member_sign_up" /></Link><Link to="/contact-us" onClick={handleContact} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
       </Modal>
       {/*  forgot passord popup */}
-      <Modal show={forgotPopup} className="forgot-modal" onHide={hideModall}>
+     <Modal show={props.forgotPop} className="forgot-modal" onHide={hideModall}>
         <Modal.Body className="arabic-rtl-direction">
           <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModall} aria-label="Close"></button>
           <ForgottenPassword />
         </Modal.Body>
       </Modal>
+      
     </div>
   );
 }
@@ -267,10 +270,11 @@ function mapStateToProps(state) {
   return {
     auth: state.Auth.idToken,
     loading: state.Auth.loading,
+    forgotPop: state?.App?.showForgot
   }
 }
 
 export default connect(
   mapStateToProps,
-  { login, logout, showSignin, openSignUp, toggleOpenDrawer }
+  { login, logout, showSignin, openSignUp, toggleOpenDrawer, showForgot }
 )(SignIn);

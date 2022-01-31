@@ -21,8 +21,8 @@ import cartAction from "../../../redux/cart/productAction";
 import authAction from "../../../redux/auth/actions";
 import ForgottenPassword from '../../Page/forgotPassword';
 import MyAddress from './myProfile/myAddress';
-
-
+import appAction from "../../../redux/app/actions";
+const { showForgot } = appAction;
 const { closePrefPopup } = cartAction;
 const { logout, customer } = authAction;
 function MyProfile(props) {
@@ -140,9 +140,11 @@ function MyProfile(props) {
 
     const handleForgetPopup = (e) => {
         e.preventDefault();
-        setForgotPopup(true);
+        props.showForgot(true);
     }
-    const hideModall = () => setForgotPopup(false);
+    const hideModall = () => {
+        props.showForgot(false);
+    }
 
     async function getData() {
         let lang = props.languages ? props.languages : language;
@@ -1067,7 +1069,7 @@ function MyProfile(props) {
                                 <select className="form-select me-3" value={dob.month} aria-label="Default select example" onChange={dobHandler} id="month">
                                     <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {DROPDOWN.months.map(opt => {
-                                        return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
+                                        return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                     })}
                                 </select>
                                 <select className="form-select" value={dob.year} aria-label="Default select example" onChange={dobHandler} id="year">
@@ -1079,7 +1081,7 @@ function MyProfile(props) {
                             </div>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Country<span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="myaccount.country" /> <span className="maindatory">*</span></label>
                             <select value={customAttribute.country} onChange={handleChange} id="country" className="form-select" aria-label="Default select example">
                                 {COUNTRIES && COUNTRIES.map((opt, i) => {
                                     return (<option key={i} value={opt.full_name_english}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
@@ -1184,7 +1186,7 @@ function MyProfile(props) {
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             {DROPDOWN.months.map(opt => {
-                                                return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
+                                                return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                             })}
                                         </select>
                                         <select className="form-select" aria-label="Default select example" value={giftingPrefer.dobYear ? giftingPrefer.dobYear : currentDate[0]} id="dobYear"
@@ -1345,14 +1347,16 @@ const mapStateToProps = (state) => {
         languages = state.LanguageSwitcher.language
     }
 
+
     return {
         languages: languages,
         token: state.session.user,
-        prefrences: state.Cart.isPrepOpen
+        prefrences: state.Cart.isPrepOpen,
+        forgotPop: state?.App?.showForgot
     }
 }
 
 export default connect(
     mapStateToProps,
-    { closePrefPopup, logout, customer }
+    { closePrefPopup, logout, customer,showForgot }
 )(MyProfile);

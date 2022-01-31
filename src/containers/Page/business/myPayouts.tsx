@@ -9,7 +9,6 @@ import moment from 'moment';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getInvoice, getPayoutOrders, getVendorDetails } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
-import { getCookie } from '../../../helpers/session';
 import { capitalize, formatprice } from '../../../components/utility/allutils';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Link } from "react-router-dom";
@@ -303,11 +302,11 @@ function MyPayouts(props) {
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Name</th>
-                                    <td style={{ "textAlign": "center" }}>{vendorName}</td>
+                                    <td style={{ "textAlign": "center" }}></td>
                                     {/* <td style={{ "textAlign": "center" }}>-</td>
                                     <th style={{ "textAlign": "left" }}>اسم</th>
                                     <td style={{ "textAlign": "center" }}>-</td> */}
-                                    <td style={{ "textAlign": "right" }}>-</td>
+                                    <td style={{ "textAlign": "right" }}>{vendorName}</td>
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Address Line 1</th>
