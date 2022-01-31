@@ -148,7 +148,7 @@ function MyAnalysis(props) {
 
 
                     <div className="row mb-4" style={{ columnCount: 3 }}>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
                                 <h5><IntlMessages id="ordertotal" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
@@ -157,20 +157,20 @@ function MyAnalysis(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
                                 <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['averageOrder'] ? intl.formatMessage( {id:siteConfig.currency} ) + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
                                     {/* <h4>10%</h4> */}
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
                                 <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['payoutAmount'] ? intl.formatMessage( {id:siteConfig.currency} ) + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
                                     {/* <h4>5%</h4> */}
                                 </div>
                             </div>
@@ -183,8 +183,8 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>My Analysis</h1>
-                            <p>Order Information</p>
+                            <h1>{intl.formatMessage({id:'vendor.myAnalysis'})}</h1>
+                            <p>{intl.formatMessage({id:'orderInformation'})}</p>
                             <ResponsiveContainer width="100%" aspect={3}>
                                 <LineChart data={pdata} margin={{ right: 300 }}>
                                     <CartesianGrid />
@@ -210,7 +210,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h3>Product Information</h3>
+                            <h3>{intl.formatMessage({id:'productInformation'})}</h3>
                             <PieChart width={400} height={400}>
                                 <Pie
                                     data={pieChart}
@@ -233,7 +233,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h3>Payout Information</h3>
+                            <h3>{intl.formatMessage({id:'payoutInformation'})}</h3>
                             <BarChart
                                 width={500}
                                 height={300}

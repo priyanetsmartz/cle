@@ -923,6 +923,63 @@ p.sliderupper {
 	padding-left:.75rem;
 }
 
+.my_profile_sect h1{
+	font-family: "Conv_Meshki" !important;
+}
+
+.filter-tiles li a{
+	font-family: "Conv_Meshki" !important;
+	font-size:20px;
+}
+
+.CLE_pf_details h1{
+	font-family: "Conv_Meshki" !important;
+}
+
+.data_value li a{
+	font-family: "Greta Arabic Regular" !important;
+	font-size:24px;
+}
+
+.change-paswd-sec, 
+.newemail-sec {
+    float: right;
+}
+
+.myorder_sidebar ul li a i {
+    margin-right: 0;
+    margin-left: 20px;
+    float: right;
+}
+
+.fa-chevron-left:before{
+	content: "\f054";
+}
+.fa-chevron-right:before{
+	content: "\f053";
+}
+
+.my_profile_sect .rdt_Pagination{
+	direction: ltr;
+}
+
+.CLE_pf_details .cross_icn{
+	left: 14px;
+	right:unset;
+}
+
+.Frgt_paswd .confirm-btn {
+    float: left;
+}
+
+.my_profile_sect.check-als .btn-secondary:hover i {
+    margin-right: 15px;
+    margin-left:unset;
+}
+.user_show{
+	font-size:24px;
+}
+
 @media only screen and (min-width: 320px) and (max-width: 991px) {
   .cle-mobile-menu {
     float: left;

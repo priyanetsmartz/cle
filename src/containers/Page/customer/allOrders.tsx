@@ -156,12 +156,12 @@ function OrdersAndReturns(props) {
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
                                         <div className='pricerangeouter' >
                                             <InputNumber
-                                            min={1}
-                                            max={20000}
-                                            readOnly={true}
-                                            value={price.low}
-                                            onChange={handlePriceRange}
-                                        />
+                                                min={1}
+                                                max={20000}
+                                                readOnly={true}
+                                                value={price.low}
+                                                onChange={handlePriceRange}
+                                            />
                                             <span>-</span>
                                             <InputNumber
                                                 min={1}
@@ -170,9 +170,9 @@ function OrdersAndReturns(props) {
                                                 value={price.high}
                                                 onChange={handlePriceRange}
                                             />
-                                             <Slider range max={20000} defaultValue={[price.low, price.high]} onAfterChange={handlePriceRange} />
+                                            <Slider range max={20000} defaultValue={[price.low, price.high]} onAfterChange={handlePriceRange} />
                                         </div>
-                                       
+
 
 
                                     </div>
@@ -298,22 +298,10 @@ function OrdersAndReturns(props) {
 
                                                                             </div>
                                                                         </div>
-                                                                        <div className="col-sm-6">
-                                                                            <div className="prodcut_catg">
-                                                                                <div className="product_photo">
-                                                                                    <img src={item.items[0]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                                                                </div>
-                                                                                <div className="product_photo">
-                                                                                    <img src={item.items[1]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                                                                </div>
-                                                                                <div className="more_product">
-                                                                                    <Link to="#">
-                                                                                        <img src={item.items[2]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                                                                        <div className="overlay_img"></div>
-                                                                                        <span className="more_pro">{item.items.length}</span>
-                                                                                    </Link>
-                                                                                </div>
-                                                                            </div>
+
+                                                                        <div className="products">
+                                                                            <label className="form-label"> <IntlMessages id="order.price" /></label>
+                                                                            <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-sm-12">
@@ -327,89 +315,7 @@ function OrdersAndReturns(props) {
                                             )
                                         })}
                                     </>
-                                    // <div>
-                                    //     {orders && orders['Products'] && orders['Products'].map((item, i) => {
-                                    //         return (
 
-                                    //             <div key={i}>
-                                    //                 <div className="row my-3">
-                                    //                     <div className="col-sm-12">
-                                    //                         <div className="row mb-3">
-                                    //                             <div className="col-sm-6">
-                                    //                                 <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item['increment_id']}</h3>
-                                    //                             </div>
-                                    //                             <div className="col-sm-6">
-                                    //                                 <div className="viewall_btn">
-                                    //                                     <Link to={`/order-details/${item.increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
-                                    //                                 </div>
-                                    //                             </div>
-
-                                    //                         </div>
-                                    //                     </div>
-
-                                    //                     <div className="d-md-flex">
-                                    //                         <div className="col-sm-6">
-                                    //                             <div className="order-viewsec">
-                                    //                                 <div className="order-details">
-                                    //                                     <div className="order-date">
-                                    //                                         <label className="form-label"><IntlMessages id="order.orderDate" /></label>
-                                    //                                         <div className="labl_text">{item.created_at ? moment(item.created_at).format('ddd, D MMMM YYYY') : ''}</div>
-                                    //                                     </div>
-
-                                    //                                     <div className="products">
-                                    //                                         <label className="form-label"> <IntlMessages id="order.products" /></label>
-                                    //                                         <div className="labl_text"> {item && item.items ? item.items.length : 0}</div>
-                                    //                                     </div>
-                                    //                                 </div>
-
-                                    //                                 <div className="order-details">
-                                    //                                     <div className="order-date">
-                                    //                                         <label className="form-label"><IntlMessages id="order.shippingDate" /></label>
-                                    //                                         <div className="labl_text">{item.shipment_date}</div>
-                                    //                                     </div>
-
-                                    //                                     <div className="products">
-                                    //                                         <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                    //                                         <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
-                                    //                                     </div>
-                                    //                                 </div>
-
-                                    //                                 <div className="order-shipped">
-                                    //                                     <label className="form-label">
-                                    //                                         {/* <IntlMessages id="order.weHaveShipped" /> */}
-                                    //                                         {capitalize(item.status)}
-                                    //                                     </label>
-                                    //                                 </div>
-
-
-                                    //                             </div>
-                                    //                         </div>
-                                    //                         <div className="col-sm-6">
-                                    //                             <div className="prodcut_catg">
-                                    //                                 <div className="product_photo">
-                                    //                                     <img src={item.items[0]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                    //                                 </div>
-                                    //                                 <div className="product_photo">
-                                    //                                     <img src={item.items[1]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                    //                                 </div>
-                                    //                                 <div className="more_product">
-                                    //                                     <Link to="#">
-                                    //                                         <img src={item.items[2]?.extension_attributes.item_image} className="img-fluid" alt="" />
-                                    //                                         <div className="overlay_img"></div>
-                                    //                                         <span className="more_pro">{item.items.length}</span>
-                                    //                                     </Link>
-                                    //                                 </div>
-                                    //                             </div>
-                                    //                         </div>
-                                    //                     </div>
-                                    //                     <div className="col-sm-12">
-                                    //                         <div className="blank_bdr"></div>
-                                    //                     </div>
-                                    //                 </div>
-                                    //             </div>
-                                    //         );
-                                    //     })}
-                                    // </div>
                                     : !loaderOrders ? <IntlMessages id="no_data" /> : ""}
 
                                 <div className="resltspage_sec footer-pagints">

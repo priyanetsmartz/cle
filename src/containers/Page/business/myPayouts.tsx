@@ -96,7 +96,7 @@ function MyPayouts(props) {
 
     const columns = [
         {
-            name: 'ID',
+            name: intl.formatMessage({id:'id'}),
             selector: row => row.payout_id,
             button: true,
             cell: row => {
@@ -106,7 +106,7 @@ function MyPayouts(props) {
 
         },
         {
-            name: 'Price',
+            name: intl.formatMessage({id:'price'}),
             selector: row => row.price,
             button: true,
             cell: row => {
@@ -118,25 +118,25 @@ function MyPayouts(props) {
 
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             cell: row => (
                 // <span className='green'>{capitalize(row.status)}</span>
                 <div>
-                    {row.status === "scheduled" ? <span className="scheduled">{capitalize(row.status)}</span> : ""}
-                    {row.status === "pending" ? <span className="pending">{capitalize(row.status)}</span> : ""}
-                    {row.status === "processing" ? <span className="processing">{capitalize(row.status)}</span> : ""}
-                    {row.status === "hold" ? <span className="hold">{capitalize(row.status)}</span> : ""}
-                    {row.status === "paypal_ipn" ? <span className="paypal_ipn">{capitalize(row.status)}</span> : ""}
-                    {row.status === "paid" ? <span className="paid">{capitalize(row.status)}</span> : ""}
+                    {row.status === "scheduled" ? <span className="scheduled">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "processing" ? <span className="processing">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "hold" ? <span className="hold">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "paypal_ipn" ? <span className="paypal_ipn">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "paid" ? <span className="paid">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
 
-                    {row.status === "error" ? <span className="error">{capitalize(row.status)}</span> : ""}
+                    {row.status === "error" ? <span className="error">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
 
-                    {row.status === "canceled" ? <span className="canceled">{capitalize(row.status)}</span> : ""}
+                    {row.status === "canceled" ? <span className="canceled">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
                 </div>
             )
         },
@@ -148,7 +148,7 @@ function MyPayouts(props) {
                 if (row.data.payout_status === 'paid') {
                     return (
                         <p onClick={() => sortHandler(row.data.payout_id)}>
-                            <i className="fa fa-file-alt" aria-hidden="true"></i> Invoice</p>
+                            <i className="fa fa-file-alt" aria-hidden="true"></i> {intl.formatMessage({id:'Invoice'})}</p>
                     )
                 }
             }
@@ -183,7 +183,7 @@ function MyPayouts(props) {
         if (dataObj.length > 0) {
             dataLListing = dataObj.map((data) => {
                 let orderLoop: any = {};
-                orderLoop.price = intl.formatMessage( {id:siteConfig.currency} ) + data.total_payout;
+                orderLoop.price = siteConfig.currency+ data.total_payout;
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
                 orderLoop.payout_id = data.payout_id;
@@ -375,7 +375,7 @@ function MyPayouts(props) {
                                             <td>{data.invoice_id}</td>
                                             <td>{moment(data.invoice_created_at).format('DD MMM YYYY')}</td>
                                             <td>{data.invoice_status}</td>
-                                            <td>{intl.formatMessage( {id:siteConfig.currency} )} {data.order_amount}</td>
+                                            <td>{siteConfig.currency} {data.order_amount}</td>
                                         </tr>
                                     )
                                 })}
@@ -406,14 +406,14 @@ function MyPayouts(props) {
                                 <tr>
                                     <td></td>
                                     <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_orders : ""}</td>
-                                    <td>{intl.formatMessage( {id:siteConfig.currency} )} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payment_paid : ""}</td>
-                                    <td>{intl.formatMessage( {id:siteConfig.currency} )} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_payment : ""}</td>
+                                    <td>{siteConfig.currency} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payment_paid : ""}</td>
+                                    <td>{siteConfig.currency} {payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].total_payment : ""}</td>
                                 </tr>
                             </tbody>
                         </table>
 
-                        <p>Notes:</p>
-                        <p>Thanks you for the payment . You just made our day.</p>
+                        <p>{intl.formatMessage({id:'Notes'})}:</p>
+                        <p>{intl.formatMessage({id:'thanksforpayment'})}</p>
                     </section>
                     <br />
                     <br />
@@ -432,7 +432,7 @@ function MyPayouts(props) {
                     <div className="range_slider">
                         <div className="range_inner">
                             <div className="row">
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
                                         <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
@@ -449,7 +449,7 @@ function MyPayouts(props) {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.date" /></span>
                                         <DateRangePicker
@@ -478,7 +478,7 @@ function MyPayouts(props) {
                                         </select> */}
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-2">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
                                         <div className='pricerangeouter' >
@@ -501,7 +501,7 @@ function MyPayouts(props) {
                                         <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
                                 </div>
-                                <div className="col-sm-3">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
@@ -521,16 +521,16 @@ function MyPayouts(props) {
                             <tbody>
                                 <tr>
                                     <td><IntlMessages id="order.subTotal" /></td>
-                                    <th className="text-end">{intl.formatMessage( {id:siteConfig.currency} )}{formatprice(subtotal)}</th>
+                                    <th className="text-end">{siteConfig.currency}{formatprice(subtotal)}</th>
                                 </tr>
                                 <tr>
                                     <td><IntlMessages id="commission" /></td>
-                                    <th className="text-end">-{intl.formatMessage( {id:siteConfig.currency} )}{formatprice(commission)}</th>
+                                    <th className="text-end">-{siteConfig.currency}{formatprice(commission)}</th>
                                 </tr>
 
                                 <tr>
                                     <th className="bor-top-2"><IntlMessages id="order.total" /></th>
-                                    <td className="bor-top-2 text-end dark-col">{intl.formatMessage( {id:siteConfig.currency} )}{formatprice(totalP)}</td>
+                                    <td className="bor-top-2 text-end dark-col">{siteConfig.currency}{formatprice(totalP)}</td>
                                 </tr>
                             </tbody>
                         </table>

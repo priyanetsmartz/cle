@@ -131,19 +131,19 @@ function Dashboard(props) {
                 // <span className='green'>{row.status}</span>
 
                 <div>
-                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{row.status}</span> : ""}
-                    {row.status === "Canceled" ? <span className="canceled">{row.status}</span> : ""}
-                    {row.status === "Shipped" ? <span className="shipped">{row.status}</span> : ""}
-                    {row.status === "Pending" ? <span className="pending">{row.status}</span> : ""}
-                    {row.status === "Delivered" ? <span className="delivered">{row.status}</span> : ""}
-                    {row.status === "Returned" ? <span className="returned">{row.status}</span> : ""}
+                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Canceled" ? <span className="canceled">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Shipped" ? <span className="shipped">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Pending" ? <span className="pending">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Delivered" ? <span className="delivered">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Returned" ? <span className="returned">{intl.formatMessage({id:row.status})}</span> : ""}
 
                 </div>
             )
         },
         {
             name: intl.formatMessage({id:'order.total'}),
-            selector: row => row.total ? intl.formatMessage({ id: siteConfig.currency }) + ' ' + row.total : 0,
+            selector: row => row.total ? siteConfig.currency + ' ' + row.total : 0,
         },
     ];
 
@@ -168,12 +168,12 @@ function Dashboard(props) {
             cell: row => (
                 // <span className='green'>{capitalize(row.status)}</span>
                 <div>
-                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(row.status)}</span> : ""}
-                    {row.status === "pending" ? <span className="pending">{capitalize(row.status)}</span> : ""}
-                    {row.status === "approved" ? <span className="approved">{capitalize(row.status)}</span> : ""}
-                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(row.status)}</span> : ""}
-                    {row.status === "received" ? <span className="received">{capitalize(row.status)}</span> : ""}
-                    {row.status === "accept" ? <span className="accept">{capitalize(row.status)}</span> : ""}
+                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "approved" ? <span className="approved">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "received" ? <span className="received">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "accept" ? <span className="accept">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
                 </div>
             )
         },
@@ -201,7 +201,7 @@ function Dashboard(props) {
             name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             cell: row => (
-                <span className='green'>{capitalize(row.status)}</span>
+                <span className='green'>{(intl.formatMessage({id:capitalize(row.status)}))}</span>
             ),
         },
         { // To change column
@@ -211,7 +211,7 @@ function Dashboard(props) {
 
                 if (row.data.payout_status === 'paid') {
                     return (
-                        <Link to={`/vendor/payoutdetails/${row.payout_id}`}>View</Link>
+                        <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{intl.formatMessage({id:'view'})}</Link>
                     )
                 }
             }
@@ -249,7 +249,7 @@ function Dashboard(props) {
                 orderLoop.increment_id = [{ 'increment_id': data.increment_id, 'entity_id': data.entity_id }];
                 orderLoop.status = data.rma_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = intl.formatMessage({ id: siteConfig.currency }) + ' ' + data.grand_total;
+                orderLoop.total = siteConfig.currency + ' ' + data.grand_total;
                 return orderLoop;
             });
         }
@@ -268,7 +268,7 @@ function Dashboard(props) {
         if (dataObj.length > 0) {
             dataLListing = dataObj.slice(0, 5).map((data) => {
                 let orderLoop: any = {};
-                orderLoop.price = intl.formatMessage({ id: siteConfig.currency }) + data.total_payout;
+                orderLoop.price = siteConfig.currency + data.total_payout;
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
                 orderLoop.payout_id = data.payout_id;
@@ -441,7 +441,7 @@ function Dashboard(props) {
 
 
                     <div className="row mb-4" style={{ columnCount: 3 }}>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
                                 <h5><IntlMessages id="ordertotal" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
@@ -450,20 +450,20 @@ function Dashboard(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
                                 <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['averageOrder'] ? intl.formatMessage({ id: siteConfig.currency }) + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
                                     {/* <h4>10%</h4> */}
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
                                 <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['payoutAmount'] ? intl.formatMessage({ id: siteConfig.currency }) + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
                                     {/* <h4>5%</h4> */}
                                 </div>
                             </div>

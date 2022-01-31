@@ -111,7 +111,7 @@ function MySalesOrders(props) {
 
     const columns = [
         {
-            name: 'Order',
+            name: intl.formatMessage({id:'order'}),
             selector: row => row.increment_id,
             sortable: true,
             cell: row => (
@@ -120,31 +120,31 @@ function MySalesOrders(props) {
             )
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
             sortable: true
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             sortable: true,
             cell: row => (
                 // <span className='green'>{row.status}</span>
 
                 <div>
-                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{row.status}</span> : ""}
-                    {row.status === "Canceled" ? <span className="canceled">{row.status}</span> : ""}
-                    {row.status === "Shipped" ? <span className="shipped">{row.status}</span> : ""}
-                    {row.status === "Pending" ? <span className="pending">{row.status}</span> : ""}
-                    {row.status === "Delivered" ? <span className="delivered">{row.status}</span> : ""}
-                    {row.status === "Returned" ? <span className="returned">{row.status}</span> : ""}
+                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Canceled" ? <span className="canceled">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Shipped" ? <span className="shipped">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Pending" ? <span className="pending">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Delivered" ? <span className="delivered">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Returned" ? <span className="returned">{intl.formatMessage({id:row.status})}</span> : ""}
 
                 </div>
             )
         },
         {
-            name: 'Total',
-            selector: row => row.total ? intl.formatMessage( {id:siteConfig.currency} ) + ' ' + row.total : 0,
+            name: intl.formatMessage({id:'order.total'}),
+            selector: row => row.total ? siteConfig.currency + ' ' + row.total : 0,
         },
     ];
 
@@ -162,7 +162,7 @@ function MySalesOrders(props) {
                     <div className="range_slider">
                         <div className="range_inner">
                             <div className="row">
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
                                         <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
@@ -178,7 +178,7 @@ function MySalesOrders(props) {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.date" /></span>
                                         <DateRangePicker
@@ -199,7 +199,7 @@ function MySalesOrders(props) {
                                         </DateRangePicker>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-2">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
                                         <div className='pricerangeouter' >
@@ -222,7 +222,7 @@ function MySalesOrders(props) {
                                         <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
                                 </div>
-                                <div className="col-sm-3">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">

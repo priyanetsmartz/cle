@@ -1041,7 +1041,7 @@ function MyProfile(props) {
                             <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                 {DROPDOWN.gender.map(opt => {
-                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
                                 })}
                             </select>
                             <span className="error">{personalError.errors["gender"]}</span>
@@ -1067,7 +1067,7 @@ function MyProfile(props) {
                                 <select className="form-select me-3" value={dob.month} aria-label="Default select example" onChange={dobHandler} id="month">
                                     <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {DROPDOWN.months.map(opt => {
-                                        return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                        return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
                                     })}
                                 </select>
                                 <select className="form-select" value={dob.year} aria-label="Default select example" onChange={dobHandler} id="year">
@@ -1184,7 +1184,7 @@ function MyProfile(props) {
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             {DROPDOWN.months.map(opt => {
-                                                return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                                return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
                                             })}
                                         </select>
                                         <span className="error">{giftErrors.errors["dobMonth"]}</span>
@@ -1225,7 +1225,7 @@ function MyProfile(props) {
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                                 {DROPDOWN.months.map(opt => {
-                                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
                                                 })}
                                             </select>
                                             <span className="error">{giftErrors.errors["dodMonth"]}</span>
@@ -1246,7 +1246,7 @@ function MyProfile(props) {
                                         onChange={handleGiftingChange}>
                                         <option value="">{intl.formatMessage({ id: "select" })}</option>
                                         {DROPDOWN.gender.map(opt => {
-                                            return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                            return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
                                         })}
                                     </select>
                                     <span className="error">{giftErrors.errors["gender"]}</span>

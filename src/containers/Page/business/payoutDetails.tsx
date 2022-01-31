@@ -12,9 +12,11 @@ import { Link } from "react-router-dom";
 import { formatprice } from '../../../components/utility/allutils';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import {useIntl} from 'react-intl';
 
 function MyPayoutDetails(props) {
 
+    const intl = useIntl();
     useEffect(() => {
         getDetails()
     }, [props.languages]);
@@ -78,22 +80,22 @@ function MyPayoutDetails(props) {
     }
 
     const columns = [{
-        name: 'Order',
+        name: intl.formatMessage({id:'order'}),
         selector: row => row.orderNumber,
     },
     {
-        name: 'Date',
+        name: intl.formatMessage({id:'order.date'}),
         selector: row => row.date,
     },
     {
-        name: 'Link to order details',
+        name: intl.formatMessage({id:'linktoorderdetails'}),
         cell: row => (
-            <Link to={`/vendor/sales-orders/${row.link_to_orderdetails}`}>View Order Detail</Link>
+            <Link to={`/vendor/sales-orders/${row.link_to_orderdetails}`}>{intl.formatMessage({id:'vieworderdetail'})}</Link>
 
         )
     },
     {
-        name: 'Total',
+        name: intl.formatMessage({id:'order.total'}),
         selector: row => row.total,
     }
     ]
@@ -386,7 +388,7 @@ function MyPayoutDetails(props) {
                                             <div className="col-sm-12">
                                                 <div className="download-invoice">
                                                     <Link to="#" onClick={() => sortHandler(payoutId)}>
-                                                        Download invoice / receipt</Link>
+                                                        <IntlMessages id="downloadinvoiceorreceipt"/></Link>
                                                 </div>
                                             </div>
                                         </div>

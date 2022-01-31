@@ -12,7 +12,7 @@ import { siteConfig } from '../../../settings';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
-import { capitalize, formatprice } from '../../../components/utility/allutils';
+import { capitalize, formatprice, lowercase } from '../../../components/utility/allutils';
 
 
 function MyReturnsComplaints(props) {
@@ -48,7 +48,7 @@ function MyReturnsComplaints(props) {
                 orderLoop.increment_id = [{ 'increment_id': data.increment_id, 'entity_id': data.entity_id }];
                 orderLoop.status = data.rma_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
-                orderLoop.total = intl.formatMessage( {id:siteConfig.currency} ) + ' ' + formatPrice;
+                orderLoop.total = siteConfig.currency + ' ' + formatPrice;
                 return orderLoop;
             });
         }
@@ -120,7 +120,7 @@ function MyReturnsComplaints(props) {
 
     const columns = [
         {
-            name: 'Number',
+            name: intl.formatMessage({id:'orderNumber'}),
             sortable: true,
             cell: row => (
                 <Link to={`/vendor/returns-complaints/${row.increment_id[0].entity_id}`}>{row.increment_id[0].increment_id}</Link>
@@ -128,29 +128,29 @@ function MyReturnsComplaints(props) {
             )
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
             sortable: true
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             sortable: true,
             cell: row => (
                 // <span className='green'>{capitalize(row.status)}</span>
                 <div>
-                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(row.status)}</span> : ""}
-                    {row.status === "pending" ? <span className="pending">{capitalize(row.status)}</span> : ""}
-                    {row.status === "approved" ? <span className="approved">{capitalize(row.status)}</span> : ""}
-                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(row.status)}</span> : ""}
-                    {row.status === "received" ? <span className="received">{capitalize(row.status)}</span> : ""}
-                    {row.status === "accept" ? <span className="accept">{capitalize(row.status)}</span> : ""}
+                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "approved" ? <span className="approved">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "received" ? <span className="received">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "accept" ? <span className="accept">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
 
                 </div>
             )
         },
         {
-            name: 'Total',
+            name: intl.formatMessage({id:'order.total'}),
             selector: row => row.total,
         },
     ];
@@ -172,7 +172,7 @@ function MyReturnsComplaints(props) {
                     <div className="range_slider">
                         <div className="range_inner">
                             <div className="row">
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
                                         <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
@@ -180,14 +180,14 @@ function MyReturnsComplaints(props) {
 
                                             {Object.keys(statusOptions).map((item, i) => {
                                                 return (
-                                                    <option value={item} key={i}>{statusOptions[item]}</option>
+                                                    <option value={item} key={i}>{intl.formatMessage({id:lowercase(statusOptions[item])})}</option>
                                                 )
                                             })}
 
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.date" /></span>
                                         <DateRangePicker
@@ -208,7 +208,7 @@ function MyReturnsComplaints(props) {
                                         </DateRangePicker>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-2">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
                                         <div className='pricerangeouter' >
@@ -231,7 +231,7 @@ function MyReturnsComplaints(props) {
                                         <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
                                     </div>
                                 </div>
-                                <div className="col-sm-3">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">

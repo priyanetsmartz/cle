@@ -52,7 +52,7 @@ function MyProductListing(props) {
             productLoop.product = data;
             productLoop.date = moment(data.created_at).format('DD MMMM YYYY');
             productLoop.status = data.status;
-            productLoop.price = intl.formatMessage({ id: siteConfig.currency }) + data.price;
+            productLoop.price = siteConfig.currency + data.price;
             return productLoop;
         });
         setListingData(renObjData)
@@ -147,7 +147,7 @@ function MyProductListing(props) {
             cell: row => <img height="84px" width="56px" alt={row.image} src={row.image} />,
         },
         {
-            name: 'Product',
+            name: intl.formatMessage({id:'Product'}),
             sortable: true,
             cell: row => (
                 <div>
@@ -159,11 +159,11 @@ function MyProductListing(props) {
             ),
         },
         {
-            name: 'Date',
+            name: intl.formatMessage({id:'order.date'}),
             selector: row => row.date,
         },
         {
-            name: 'Status',
+            name: intl.formatMessage({id:'status'}),
             selector: row => row.status,
             cell: row => (
                 <div>
@@ -178,7 +178,7 @@ function MyProductListing(props) {
             ),
         },
         {
-            name: 'Price',
+            name: intl.formatMessage({id:'price'}),
             selector: row => row.price,
         }
     ];
@@ -200,7 +200,7 @@ function MyProductListing(props) {
                     <div className="range_slider">
                         <div className="range_inner">
                             <div className="row">
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="status" /></span>
                                         <select className="form-select" aria-label="Default select example" defaultValue={status} onChange={getOrdersByStatus}>
@@ -213,7 +213,7 @@ function MyProductListing(props) {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-4">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.date" /></span>
                                         <DateRangePicker
@@ -234,7 +234,7 @@ function MyProductListing(props) {
                                         </DateRangePicker>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 mb-2">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label"><IntlMessages id="order.price" /></span>
                                         <div className='pricerangeouter' >
@@ -258,7 +258,7 @@ function MyProductListing(props) {
                                     </div>
 
                                 </div>
-                                <div className="col-sm-3">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                                     <div className="form-group">
                                         <span className="form-label">&nbsp;</span>
                                         <div className="search_results">
