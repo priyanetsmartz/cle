@@ -322,7 +322,7 @@ function OrderDetails(props) {
                                                 <p> <Link to={'/product-details/' + item.sku}><strong>{item.name}</strong></Link></p>
                                                 <p>{capitalize(item.product_type)}</p>
                                             </div> */}
-                                            <Link to="#" className="float-end text-end order-pro-price">{siteConfig.currency}{formatprice(item.price)}</Link>
+                                            <Link to="#" className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{formatprice(item.price)}</Link>
                                             <div className="clearfix"></div>
                                         </div>
                                         <div className="pro-name-tag">
