@@ -65,7 +65,7 @@ function Breadcrumbs(props) {
                             } else if (local === 'thankyou') {
                                 return (
                                     <><li key={j} className="breadcrumb-item"><Link to="/customer/dashboard">My Account</Link></li>
-                                    <li key={j} className="breadcrumb-item"><Link to="/customer/orders-and-returns">My Orders and Return</Link></li>
+                                        <li key={j} className="breadcrumb-item"><Link to="/customer/orders-and-returns">My Orders and Return</Link></li>
                                         <li className="breadcrumb-item active">Thank you</li>
                                     </>
                                 )
@@ -136,7 +136,9 @@ function Breadcrumbs(props) {
                                     )
                                 } else if (local === 'order-details') {
                                     return (
-                                        <li key={j} className="breadcrumb-item"><Link to={'/customer/orders-and-returns'}>{local === 'order-details' ? 'Orders' : local}</Link></li>
+                                        <> <li key={j} className="breadcrumb-item"><Link to={'/customer/dashboard'}>My Account</Link></li>
+                                            <li key={j} className="breadcrumb-item"><Link to={"/customer/orders-and-returns"}>My Orders and Returns</Link></li>
+                                        </>
                                     )
                                 } else if (local === 'customer') {
                                     return (

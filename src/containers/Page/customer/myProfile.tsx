@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { sessionService } from 'redux-react-session';
 import {
     getCustomerDetails, saveCustomerDetails, changePassword,
-    updateCustEmail, getPreference,  savePreference
+    updateCustEmail, getPreference, savePreference
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
@@ -37,7 +37,7 @@ function MyProfile(props) {
     const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
     const [isShown, setIsShown] = useState(-1);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
-   
+
     const [attributes, setAttributes]: any = useState({});
     const [customerPrefer, setCustomerPrefer]: any = useState({
         interestedIn: '',
@@ -61,7 +61,7 @@ function MyProfile(props) {
     const [ishowGifting, setIshowGifting] = useState(false);
 
     const [forgotPopup, setForgotPopup] = useState(false);
-   
+
     const [dob, setDob] = useState({
         day: '',
         month: '',
@@ -85,8 +85,8 @@ function MyProfile(props) {
         country: 'Andorra',
         mp_sms_telephone: ''
     });
-    
-    
+
+
 
     const [changePass, setChangePass] = useState({
         password: "",
@@ -380,12 +380,12 @@ function MyProfile(props) {
         setPersonalError({ errors: error });
         return formIsValid;
     }
-   
 
 
 
 
-   
+
+
 
     //change password starts here----------------------------------------->
     const handlePassword = (e) => {
@@ -637,7 +637,7 @@ function MyProfile(props) {
         setMyAddressModal(!myAddressModal);
     }
 
-    
+
     const openGigitingModal = () => {
         setGiftErrors({ errors: {} })
         setGiftingModal(!giftingModal);
@@ -1041,7 +1041,7 @@ function MyProfile(props) {
                             <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                 {DROPDOWN.gender.map(opt => {
-                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
+                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
                                 })}
                             </select>
                             <span className="error">{personalError.errors["gender"]}</span>
@@ -1067,7 +1067,7 @@ function MyProfile(props) {
                                 <select className="form-select me-3" value={dob.month} aria-label="Default select example" onChange={dobHandler} id="month">
                                     <option value="">{intl.formatMessage({ id: "select" })}</option>
                                     {DROPDOWN.months.map(opt => {
-                                        return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
+                                        return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
                                     })}
                                 </select>
                                 <select className="form-select" value={dob.year} aria-label="Default select example" onChange={dobHandler} id="year">
@@ -1112,7 +1112,7 @@ function MyProfile(props) {
                 </Modal.Header>
             </Modal>
 
-           
+
 
             {/* Gifting preference details modal */}
 
@@ -1134,19 +1134,19 @@ function MyProfile(props) {
                             <div className="add_frd_birthdaysec">
                                 <h2><IntlMessages id="myaccount.addAFriend" /></h2>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.name" /><span className="maindatory">*</span></label>
+                                    <label htmlFor="name" className="form-label"><IntlMessages id="myaccount.name" /><span className="maindatory">*</span></label>
                                     <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "profile.name" })} value={giftingPrefer.name} id="name"
                                         onChange={handleGiftingChange} />
                                     <span className="error">{giftErrors.errors["name"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.surName" /></label><span className="maindatory">*</span>
+                                    <label htmlFor="surName" className="form-label"><IntlMessages id="myaccount.surName" /></label><span className="maindatory">*</span>
                                     <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.last_name" })} value={giftingPrefer.surName} id="surName"
                                         onChange={handleGiftingChange} />
                                     <span className="error">{giftErrors.errors["surName"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.occasion" /></label><span className="maindatory">*</span>
+                                    <label htmlFor="occasion" className="form-label"><IntlMessages id="myaccount.occasion" /></label><span className="maindatory">*</span>
                                     <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.occasion} id="occasion"
                                         onChange={handleGiftingChange}>
                                         <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1161,7 +1161,7 @@ function MyProfile(props) {
                                     <span className="error">{giftErrors.errors["occasion"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.annualReminder" /></label><span className="maindatory">*</span>
+                                    <label htmlFor="annualReminder" className="form-label"><IntlMessages id="myaccount.annualReminder" /></label><span className="maindatory">*</span>
                                     <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.annualReminder} id="annualReminder"
                                         onChange={handleGiftingChange}>
                                         <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1171,7 +1171,7 @@ function MyProfile(props) {
                                     <span className="error">{giftErrors.errors["annualReminder"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.date" /></label><span className="maindatory">*</span>
+                                    <label htmlFor="dobfeild" className="form-label"><IntlMessages id="gifting.date" /></label><span className="maindatory">*</span>
                                     <div className="dobfeild">
                                         <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobDate ? giftingPrefer.dobDate : currentDate[2]} id="dobDate"
                                             onChange={handleGiftingChange}>
@@ -1184,10 +1184,9 @@ function MyProfile(props) {
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
                                             {DROPDOWN.months.map(opt => {
-                                                return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
+                                                return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
                                             })}
                                         </select>
-                                        <span className="error">{giftErrors.errors["dobMonth"]}</span>
                                         <select className="form-select" aria-label="Default select example" value={giftingPrefer.dobYear ? giftingPrefer.dobYear : currentDate[0]} id="dobYear"
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1196,9 +1195,12 @@ function MyProfile(props) {
                                                 return (<option value={opt} key={opt}>{opt}</option>);
                                             })}
                                         </select>
-                                        <span className="error">{giftErrors.errors["dobYear"]}</span>
+
                                     </div>
-                                    <span className="error">{giftErrors.errors["dobDate"]}</span>
+                                    <div>
+                                        <span className="error">{giftErrors.errors["dobYear"]}</span>
+                                        <span className="error">{giftErrors.errors["dobDate"]}</span>
+                                    </div>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dateOfDelivery" /></label><span className="maindatory">*</span>
@@ -1212,7 +1214,8 @@ function MyProfile(props) {
                                 </div>
                                 {showCustomdate && (
                                     <div className="width-100 mb-3 form-field">
-                                        <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.datedelivry" /></label><div className="dobfeild">
+                                        <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.datedelivry" /></label>
+                                        <div className="dobfeild">
                                             <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodDate ? giftingPrefer.dodDate : currentDate[2]} id="dodDate"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1220,15 +1223,15 @@ function MyProfile(props) {
                                                     return (<option value={opt} key={opt}>{opt}</option>);
                                                 })}
                                             </select>
-                                            <span className="error">{giftErrors.errors["dodDate"]}</span>
+
                                             <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodMonth ? giftingPrefer.dodMonth : currentDate[1]} id="dodMonth"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                                 {DROPDOWN.months.map(opt => {
-                                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
+                                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
                                                 })}
                                             </select>
-                                            <span className="error">{giftErrors.errors["dodMonth"]}</span>
+
                                             <select className="form-select" aria-label="Default select example" value={giftingPrefer.dodYear ? giftingPrefer.dodYear : currentDate[0]} id="dodYear"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1236,6 +1239,10 @@ function MyProfile(props) {
                                                     return (<option value={opt} key={opt}>{opt}</option>);
                                                 })}
                                             </select>
+                                        </div>
+                                        <div>
+                                            <span className="error">{giftErrors.errors["dodMonth"]}</span>
+                                            <span className="error">{giftErrors.errors["dodDate"]}</span>
                                             <span className="error">{giftErrors.errors["dodYear"]}</span>
                                         </div>
                                     </div>
@@ -1246,7 +1253,7 @@ function MyProfile(props) {
                                         onChange={handleGiftingChange}>
                                         <option value="">{intl.formatMessage({ id: "select" })}</option>
                                         {DROPDOWN.gender.map(opt => {
-                                            return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
+                                            return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
                                         })}
                                     </select>
                                     <span className="error">{giftErrors.errors["gender"]}</span>

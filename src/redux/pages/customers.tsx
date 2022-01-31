@@ -106,6 +106,9 @@ export function searchOrders(orderId) {
     // return adminApi.request(`rest/V1/orders/${orderId}`, "", "GET", "");
     return adminApi.request(`rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=increment_id&searchCriteria[filter_groups][0][filters][0][value]=${orderId}&searchCriteria[filter_groups][0][filters][0][condition_type]=eq `, "", "GET", "")
 }
+export function updateOrderAddress(orderId, data) {
+    return adminApi.request(`rest/all/V1/orders/${orderId}`, data, "PUT", "")
+}
 
 export async function getWishList() {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))

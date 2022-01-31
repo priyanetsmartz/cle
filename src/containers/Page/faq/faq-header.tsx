@@ -25,7 +25,7 @@ function FaqHeader(props) {
         }
     }, [props.languages, location])
     async function getData() {
-        let results: any = await getFaqListinglabels(props.languages, url_key);      
+        let results: any = await getFaqListinglabels(props.languages, url_key);
         setBread(results?.data?.[0]?.title)
     }
 
@@ -36,7 +36,7 @@ function FaqHeader(props) {
                 if (e.target.value && e.target.value.length >= 3) {
                     faqSearchFunction(e.target.value);
                 }
-            }, 3000)
+            }, 2000)
 
         } else {
 
@@ -50,10 +50,10 @@ function FaqHeader(props) {
         let results: any = await faqSearch(lang, value, siteConfig.pageSize);
         if (results.data.items && results.data.items.length > 0) {
             SetNothingFound("")
-            SetSearchText(value)
+            // SetSearchText(value)
             SetAutoSuggestions(results.data.items)
         } else {
-            SetSearchText(value)
+            // SetSearchText(value)
             SetNothingFound("yes")
             SetAutoSuggestions([])
         }

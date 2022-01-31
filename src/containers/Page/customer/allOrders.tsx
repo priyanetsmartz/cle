@@ -16,7 +16,7 @@ import { getAccordingDate } from '../../../components/utility/allutils'
 function OrdersAndReturns(props) {
     const userGroup = localStorage.getItem('token');
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
-    const [pageSize, setPageSize] = useState(12);
+    const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     const [orderId, setOrderId] = useState('');
     const [pagination, setPagination] = useState(1);
     const [orderDate, setOrderDate] = useState('');
@@ -316,7 +316,7 @@ function OrdersAndReturns(props) {
                                         })}
                                     </>
 
-                                    : !loaderOrders ? <IntlMessages id="no_data" /> : ""}
+                                    : !loaderOrders ?<p className='nodata'> <IntlMessages id="no_data" /></p> : ""}
 
                                 <div className="resltspage_sec footer-pagints">
                                     <div className="paginatn_result">

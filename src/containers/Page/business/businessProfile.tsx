@@ -620,6 +620,7 @@ function BusinessProfile(props) {
     }
 
     const openBussinessModel = () => {
+        getData();
         setMyBussinessModel(!myBussinessModel);
     }
 

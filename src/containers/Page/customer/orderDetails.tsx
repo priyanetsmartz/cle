@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { searchOrders, getCountriesList, getorderReturnstatusapi } from '../../../redux/pages/customers';
+import { searchOrders, getCountriesList, getorderReturnstatusapi, updateOrderAddress } from '../../../redux/pages/customers';
 import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
@@ -25,7 +25,10 @@ function OrderDetails(props) {
         postcode: "",
         city: "",
         country_id: "",
-        street: ""
+        street: "",
+        address_type:"",
+        email:""
+
     });
 
     const [errors, setError] = useState({
@@ -91,7 +94,15 @@ function OrderDetails(props) {
     // for customer address popup window starts here
     const saveCustAddress = async (e) => {
         if (validateAddress()) {
-
+            custAddForm.customer_id = custId;
+            custAddForm.address_type = 'shipping';
+            custAddForm.email = props.token.token_email;
+            let data =  {
+                "entity": custAddForm
+                }
+            console.log(custAddForm)
+            let result: any = await updateOrderAddress(order.entity_id, data);
+            console.log(result)
         }
     }
 
