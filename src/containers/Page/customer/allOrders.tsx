@@ -283,7 +283,7 @@ function OrdersAndReturns(props) {
 
                                                                         <div className="products">
                                                                             <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                                                            <div className="labl_text">{intl.formatMessage({id: siteConfig.currency})} {formatprice(item.grand_total)}</div>
+                                                                            <div className="labl_text">{ siteConfig.currency} {formatprice(item.grand_total)}</div>
                                                                         </div>
                                                                     </div>
 

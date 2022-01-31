@@ -675,6 +675,9 @@
   "Phone":"هاتف",
   "Male":"ذكر",
   "Female":"أنثى",
-  "Other":"آخر"
+  "Other":"آخر",
+  "downloadinvoiceorreceipt":"تحميل الفاتورة / الإيصال",
+  "linktoorderdetails":"رابط لتفاصيل الطلب",
+  "vieworderdetail":"عرض تفاصيل الطلب"
 }
 

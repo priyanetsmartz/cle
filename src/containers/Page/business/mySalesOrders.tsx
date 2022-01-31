@@ -144,7 +144,7 @@ function MySalesOrders(props) {
         },
         {
             name: intl.formatMessage({id:'order.total'}),
-            selector: row => row.total ? intl.formatMessage( {id:siteConfig.currency} ) + ' ' + row.total : 0,
+            selector: row => row.total ? siteConfig.currency + ' ' + row.total : 0,
         },
     ];
 

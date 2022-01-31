@@ -721,7 +721,7 @@ function BusinessProfile(props) {
                                 <div className="col-sm-3">
                                     <div className='companylogo'> <img className="rounded-circle" src={businessDetailsForm['logoImagePath'] ? companylogo + '' + businessDetailsForm['logoImagePath'] + `?${Math.random()}` : user} alt={businessDetailsForm['businessCompanyName']} width="100%" height="100%" />
                                         <div className='onhoveredit'> <input type="file" onChange={onFileChange} /></div>
-                                        <div className='onhoveredit-2'>Edit</div>
+                                        <div className='onhoveredit-2'><IntlMessages id ="myaccount.edit"/></div>
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
@@ -1104,9 +1104,9 @@ function BusinessProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                             <select className="form-select" defaultValue={vendorForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
-                                <option value="">Select</option>
+                                <option value="">{intl.formatMessage({id:'select'})}</option>
                                 {DROPDOWN.genderVendor.map(opt => {
-                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
+                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
                                 })}
                             </select>
                             <span className="error">{errorsPersonal.errors["gender"]}</span>

@@ -675,5 +675,8 @@
   "Phone":"Phone",
   "Male":"Male",
   "Female":"Female",
-  "Other":"Other"
+  "Other":"Other",
+  "downloadinvoiceorreceipt":"Download invoice / receipt",
+  "linktoorderdetails":"Link to order details",
+  "vieworderdetail":"View Order Detail"
 }
