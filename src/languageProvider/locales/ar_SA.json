@@ -678,6 +678,8 @@
   "Other":"آخر",
   "downloadinvoiceorreceipt":"تحميل الفاتورة / الإيصال",
   "linktoorderdetails":"رابط لتفاصيل الطلب",
-  "vieworderdetail":"عرض تفاصيل الطلب"
+  "vieworderdetail":"عرض تفاصيل الطلب",  
+  "onesize":"حجم واحد",  
+  "productsnotavailable":"المنتجات غير متوفرة حاليا"
 }
 

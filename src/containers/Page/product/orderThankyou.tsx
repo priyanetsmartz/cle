@@ -146,8 +146,8 @@ function OrderThankyou(props) {
                                                 <div className="clearfix"></div>
                                             </div>
                                             <div className="pro-name-tag">
-                                                {item.product_type === 'simple' ? "" : <p>One Size</p>}
-                                                <p><strong>Product no.</strong> {item.product_id}</p>
+                                                {item.product_type === 'simple' ? "" : <p><IntlMessages id="onesize" /></p>}
+                                                <p><strong><IntlMessages id="order.productNo" /></strong> {item.sku}</p>
                                                 <div className="clearfix"></div>
                                             </div>
                                         </div>

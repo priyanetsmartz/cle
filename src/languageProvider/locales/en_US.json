@@ -678,5 +678,7 @@
   "Other":"Other",
   "downloadinvoiceorreceipt":"Download invoice / receipt",
   "linktoorderdetails":"Link to order details",
-  "vieworderdetail":"View Order Detail"
+  "vieworderdetail":"View Order Detail",
+  "onesize":"One Size",
+  "productsnotavailable":"Products currently unavailable"
 }

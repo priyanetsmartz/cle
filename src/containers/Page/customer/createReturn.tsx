@@ -314,7 +314,7 @@ function CreateReturn(props) {
                                             <div className="pro-name-tag">
                                                 {/* <p>One Size</p> */}
                                                 {/* will add this in alpha */}
-                                                <p><strong><IntlMessages id="order.productNo" /></strong> {item.product_id}</p>
+                                                <p><strong><IntlMessages id="order.productNo" /></strong> {item.sku}</p>
                                                 <div className="clearfix"></div>
 
                                             </div>
