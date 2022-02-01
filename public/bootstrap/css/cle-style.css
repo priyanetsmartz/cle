@@ -9901,6 +9901,26 @@ p.sliderupper {
 	}
 }
 
+@media only screen and (min-width: 820px) and (max-width: 1023px) {
+	#topheaderrr .section.banner{
+		padding:130px 0 0;
+	}
+	.banner-wrap .item{
+		position:relative;
+	}
+	.banner-wrap .slick-slide img{
+		width:100%;
+	}
+	.banner-wrap .slider-text-inner {
+        z-index: 3;
+    }
+	#headerrr .top-menuselect .h-mob-l, 
+	#headerrr .top-menuselect .h-mob-l + div, 
+	#headerrr .top-menuselect .h-mob-r {
+		display: none;
+	}
+}
+
 @media only screen and (min-width: 1024px) and (max-width: 1366px) {
 	.product-listing .slick-prev,
 	.product-listing .slick-next{
