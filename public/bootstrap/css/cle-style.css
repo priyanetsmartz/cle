@@ -6698,7 +6698,7 @@ transition: all .3s ease;
 }
 
 p.no-data {
-    text-align: left;
+    text-align: center;
     padding: 20px 0;
     font-size: 18px;
 }
