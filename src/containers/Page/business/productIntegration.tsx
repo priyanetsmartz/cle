@@ -53,7 +53,7 @@ function ProductIntegration(props) {
                     formData.push(ques);
                 })
             }
-            // console.log(result?.data?.[0]?.form_title.replace(/[`~!@#$%^&*()_|+\-=;:'",<>\{\}\[\]\\\/]/gi, ''));
+           
             setFormDd(formData)
             setForm(result?.data?.[0]);
         }
@@ -64,7 +64,9 @@ function ProductIntegration(props) {
     }, [props.languages]);
 
     const handleOnChange = async (e) => {
+        e.preventDefault();
         let attribute_code = e.target.getAttribute("data-attribute");
+        
         if (e.target.value === "option-2") {
             setShowEcom(true)
             setShowBulkUpload(false)
@@ -74,7 +76,10 @@ function ProductIntegration(props) {
         } else {
             setShowEcom(false)
             setShowBulkUpload(false)
-        }
+        }        
+       
+
+
         const tempObj = {
             value: e.target.value,
             label: attribute_code,
@@ -124,7 +129,7 @@ function ProductIntegration(props) {
         let attribute_code = e.target.getAttribute("data-attribute");
         console.log(e.target.files)
         const file = e.target.files[0];
-        const base64 = await convertToBase64(file);
+        const base64 = await getBase64(file);    
 
         const tempObj = {
             value: base64,
@@ -136,6 +141,7 @@ function ProductIntegration(props) {
             label: attribute_code,
             type: 'file'
         }
+       
 
         setPayload(prevState => ({
             ...prevState,
@@ -159,7 +165,14 @@ function ProductIntegration(props) {
             };
         });
     };
-
+    function getBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
+      }
     return (
         <div className="container">
             <div className="row">

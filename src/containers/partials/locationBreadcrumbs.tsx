@@ -64,8 +64,8 @@ function Breadcrumbs(props) {
                                 )
                             } else if (local === 'thankyou') {
                                 return (
-                                    <><li key={j} className="breadcrumb-item"><Link to="/customer/dashboard">My Account</Link></li>
-                                        <li key={j} className="breadcrumb-item"><Link to="/customer/orders-and-returns">My Orders and Return</Link></li>
+                                    <><li key={2} className="breadcrumb-item"><Link to="/customer/dashboard">My Account</Link></li>
+                                        <li key={3} className="breadcrumb-item"><Link to="/customer/orders-and-returns">My Orders and Return</Link></li>
                                         <li className="breadcrumb-item active">Thank you</li>
                                     </>
                                 )
@@ -92,8 +92,8 @@ function Breadcrumbs(props) {
                                 return (
                                     <p style={{ 'display': 'inline-flex' }} key="-3">
                                         <li key={-1} className="breadcrumb-item"><Link to='/vendor/dashboard'> / My Business Account </Link></li>
-                                        <li key={-1} className="breadcrumb-item"><Link to='/vendor/product-listing'>  My Product listing </Link></li>
-                                        <li key={-2} className="breadcrumb-item active">
+                                        <li key={-2} className="breadcrumb-item"><Link to='/vendor/product-listing'>  My Product listing </Link></li>
+                                        <li key={-3} className="breadcrumb-item active">
                                             {
                                                 data.map((answer, k) => {
                                                     return (<span key={k}>{capitalize(answer)} </span>)
@@ -136,8 +136,8 @@ function Breadcrumbs(props) {
                                     )
                                 } else if (local === 'order-details') {
                                     return (
-                                        <> <li key={j} className="breadcrumb-item"><Link to={'/customer/dashboard'}>My Account</Link></li>
-                                            <li key={j} className="breadcrumb-item"><Link to={"/customer/orders-and-returns"}>My Orders and Returns</Link></li>
+                                        <> <li key="-2" className="breadcrumb-item"><Link to={'/customer/dashboard'}>My Account</Link></li>
+                                            <li key="-1" className="breadcrumb-item"><Link to={"/customer/orders-and-returns"}>My Orders and Returns</Link></li>
                                         </>
                                     )
                                 } else if (local === 'customer') {

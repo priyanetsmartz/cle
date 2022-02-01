@@ -24,6 +24,7 @@ function OrdersAndReturns(props) {
             data['items'] = results.data[0].items;
             data['return_total'] = results.data[0].return_total;
         }
+        
         setReturnDetails(data);
     }
     return (

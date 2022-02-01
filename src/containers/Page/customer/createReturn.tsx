@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { connect } from "react-redux";
-import { createReturnRequest, getReturnReasonList, searchOrders } from '../../../redux/pages/customers';
+import { checkIfReturnExists, createReturnRequest, getReturnReasonList, searchOrders } from '../../../redux/pages/customers';
 import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
@@ -68,14 +68,35 @@ function CreateReturn(props) {
         orderDetails['base_tax_amount'] = result.data.items[0] ? result.data.items[0].base_tax_amount : 0;
         orderDetails['grand_total'] = result.data.items[0] ? result.data.items[0].grand_total : 0;
         let orderItems = result.data.items[0] ? result.data.items[0].items : {};
+
         let orderData = orderItems.filter(function (e) {
             return (e.qty_shipped >= 1 && e.qty_refunded === 0);
         });
+        let checkreturn: any = await checkIfReturnExists(orderDetails['entity_id']);
 
-        orderDetails['items'] = orderData;
+
+        let myObject = checkreturn?.data?.[0];
+
+        let resultShow = myObject.filter(val => {
+            return val.value === 'false';
+        });
+        // console.log(resultShow)
+        // console.log(orderData)
+
+        var onlyInReturn = orderData.filter(comparer(resultShow));
+      
+       
+        orderDetails['items'] = onlyInReturn;
         setOrder(orderDetails);
     }
-
+    function comparer(otherArray) {
+        return function (current) {
+            return otherArray.filter(function (other) {
+              //  console.log(parseInt(other.id),current.item_id )
+                return parseInt(other.id) === current.item_id
+            }).length == 0;
+        }
+    }
     const toggleAddressModal = () => {
         setChangeAddressModal(!changeAddressModal);
     }
@@ -349,30 +370,30 @@ function CreateReturn(props) {
 
                 <div className="row mt-5">
                     <div className="col-md-12">
-                        
-						<div className="row my-3">
-							<div className="col-md-3 mb-2">
-								<div className='return-reason' >
-									<select className="form-select customfliter" aria-label="Default select example" onChange={selectReturnOrExchange} >
-									<option value="">{intl.formatMessage({ id: "select" })}</option>
-									<option value="refund">{intl.formatMessage({ id: "return" })}</option>
-									<option value="exchange">{intl.formatMessage({ id: "exchange" })}</option>
-									</select>
-								</div>
-							</div>
-							<div className="col-md-3 align-self-end mb-2">
-								<label className="form-label"></label>
-								<Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="order.returnProducts" /></Link>
-							</div>
-							<div className="col-md-12 mb-2">
-								<label><IntlMessages id="comments" /></label>
-								<textarea className="form-select customfliter" onChange={handleChange}  rows={3} value={returnOrExchangeComment}>
-								</textarea>
-							</div>
-						</div>
-						
-					
-						
+
+                        <div className="row my-3">
+                            <div className="col-md-3 mb-2">
+                                <div className='return-reason' >
+                                    <select className="form-select customfliter" aria-label="Default select example" onChange={selectReturnOrExchange} >
+                                        <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                        <option value="refund">{intl.formatMessage({ id: "return" })}</option>
+                                        <option value="exchange">{intl.formatMessage({ id: "exchange" })}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-md-3 align-self-end mb-2">
+                                <label className="form-label"></label>
+                                <Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="order.returnProducts" /></Link>
+                            </div>
+                            <div className="col-md-12 mb-2">
+                                <label><IntlMessages id="comments" /></label>
+                                <textarea className="form-select customfliter" onChange={handleChange} rows={3} value={returnOrExchangeComment}>
+                                </textarea>
+                            </div>
+                        </div>
+
+
+
                     </div>
                 </div>
                 <ReturnFooter />

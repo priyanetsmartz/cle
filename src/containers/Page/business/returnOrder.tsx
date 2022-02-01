@@ -108,14 +108,16 @@ function RetunOrder(props) {
                                         <h6><IntlMessages id="order.paymentMethod" /></h6>
                                         <p><i className="fas fa-money-check"></i> {returnDetails['info'] ? returnDetails['info'].payment_method : ""}</p>
                                     </div>
-                                    <div className="col-sm-3 mb-3">
+                                    {(returnDetails['info'] && returnDetails['info']?.rma_reason === 'refund') && (<div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="returned.products" /></h6>
                                         <p>{returnDetails['info'] ? returnDetails['info'].return_qty : ""}</p>
                                     </div>
-                                    <div className="col-sm-3 mb-3">
+                                    )}
+                                    {(returnDetails['info'] && returnDetails['info']?.rma_reason === 'exchange') && (<div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="exchanged.products" /></h6>
                                         <p>{returnDetails['info'] ? returnDetails['info'].return_qty : ""}</p>
                                     </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -206,37 +208,37 @@ function RetunOrder(props) {
                         {returnShow && (
                             <div className="row">
                                 <div className="col-md-12">
-                                    
-								<div className="row my-3">
-									<div className="col-md-3 mb-2">
-										<div className='return-reason' >
-											<select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
-												<option value="">{intl.formatMessage({ id: "statusreturn" })}</option>
-												<option value="approved">{intl.formatMessage({ id: "returnaccept" })}</option>
-												<option value="declined">{intl.formatMessage({ id: "returndecline" })}</option>
-											</select>
-										</div>
-									</div>
-									
-									<div className="col-md-3 align-self-end mb-2">
-										<label className="form-label"></label>
-										<Link to="#" className="btn btn-secondary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link>
-									</div>
-									
-									<div className="col-md-12 mb-2">
-										{show && (<div className='return-comment' >
-                                        <label><IntlMessages id="comments" /></label>
-                                        <textarea className="form-control customfliter" onChange={handleChange} rows={3} value={statusReturnComment}>
-                                        </textarea>
-										</div>)}
-									</div>
-									
-								</div>  
-											  
-									
-									
-									
-									
+
+                                    <div className="row my-3">
+                                        <div className="col-md-3 mb-2">
+                                            <div className='return-reason' >
+                                                <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
+                                                    <option value="">{intl.formatMessage({ id: "statusreturn" })}</option>
+                                                    <option value="approved">{intl.formatMessage({ id: "returnaccept" })}</option>
+                                                    <option value="declined">{intl.formatMessage({ id: "returndecline" })}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-md-3 align-self-end mb-2">
+                                            <label className="form-label"></label>
+                                            <Link to="#" className="btn btn-secondary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link>
+                                        </div>
+
+                                        <div className="col-md-12 mb-2">
+                                            {show && (<div className='return-comment' >
+                                                <label><IntlMessages id="comments" /></label>
+                                                <textarea className="form-control customfliter" onChange={handleChange} rows={3} value={statusReturnComment}>
+                                                </textarea>
+                                            </div>)}
+                                        </div>
+
+                                    </div>
+
+
+
+
+
                                 </div>
                             </div>
                         )}

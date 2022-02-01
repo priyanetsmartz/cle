@@ -7,8 +7,11 @@ import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
 import { capitalize, formatprice, getCountryName } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
+import notification from '../../../components/notification';
+import { useIntl } from 'react-intl';
 
 function OrderDetails(props) {
+    const intl = useIntl();
     const [custId, setCustid] = useState(props.token.cust_id);
     const [countries, setCountries] = useState([]); // for countries dropdown
     const [orderId, setOrderId] = useState(props.match.params.orderId);
@@ -28,7 +31,10 @@ function OrderDetails(props) {
         country_id: "",
         street: "",
         address_type: "",
-        email: ""
+        email: "",
+        orderId: "",
+        post_code: "",
+        region: ""
 
     });
 
@@ -110,12 +116,20 @@ function OrderDetails(props) {
             custAddForm.customer_id = custId;
             custAddForm.address_type = 'shipping';
             custAddForm.email = props.token.token_email;
-            let data = {
-                "entity": custAddForm
+            custAddForm.orderId = order.entity_id;
+            custAddForm.post_code = custAddForm.postcode;
+            // let data = {
+            //     "entity": custAddForm
+            // }
+            // console.log(custAddForm)
+            let result: any = await updateOrderAddress(custAddForm);
+            if (result.data === 'address updated') {
+                setChangeAddressModal(!changeAddressModal);
+                notification("success", "", "Address updates");
+            } else {
+                setChangeAddressModal(!changeAddressModal);
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
             }
-            console.log(custAddForm)
-            let result: any = await updateOrderAddress(order.entity_id, data);
-            console.log(result)
         }
     }
 
@@ -259,7 +273,7 @@ function OrderDetails(props) {
                         <div className="order-delivery-address">
                             <div className="Address-title">
                                 <span className="float-start"><IntlMessages id="order.deliveryAddress" /></span>
-                                {/* <Link to="#" onClick={toggleAddressModal} className="float-end"><IntlMessages id="order.change" /></Link> */}
+                                <Link to="#" onClick={toggleAddressModal} className="float-end"><IntlMessages id="order.change" /></Link>
                                 <div className="clearfix"></div>
                             </div>
                             <p>
