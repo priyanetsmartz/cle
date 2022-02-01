@@ -9901,7 +9901,10 @@ p.sliderupper {
 	}
 }
 
-@media only screen and (min-width: 820px) and (max-width: 1180px) {
+@media only screen and (min-width: 820px) and (max-width: 1023px) {
+	#topheaderrr .section.banner{
+		padding:130px 0 0;
+	}
 	.banner-wrap .item{
 		position:relative;
 	}
