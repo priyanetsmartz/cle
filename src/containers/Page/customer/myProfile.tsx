@@ -897,7 +897,10 @@ function MyProfile(props) {
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="change-paswd-sec">
-                                <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
+                                <div className="width-100">
+										<label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
+									</div>
+								
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" />*</label>
                                     <input type={passMask.password ? 'password' : 'text'} className="form-control"
@@ -963,7 +966,9 @@ function MyProfile(props) {
                         <div className="row">
                             <div className="col-sm-6">
                                 <div className="newemail-sec">
-                                    <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+                                    <div className="width-100">
+										<label className="form-label heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+									</div>
                                     <div className="width-100 mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
                                         <input type="email" className="form-control" id="newEmail"
