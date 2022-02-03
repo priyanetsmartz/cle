@@ -680,6 +680,8 @@
   "linktoorderdetails":"رابط لتفاصيل الطلب",
   "vieworderdetail":"عرض تفاصيل الطلب",  
   "onesize":"حجم واحد",  
-  "productsnotavailable":"المنتجات غير متوفرة حاليا"
+  "productsnotavailable":"المنتجات غير متوفرة حاليا",  
+  "onlycsvallowed":"مطلوب نوع ملف CSV فقط",  
+  "uploadcsv":"يرجى تحميل ملف CSV"
 }
 

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { searchOrders, getCountriesList, getorderReturnstatusapi, updateOrderAddress, checkIfReturnExists } from '../../../redux/pages/customers';
+import { searchOrders, getCountriesList, getorderReturnstatusapi, updateOrderAddress, checkIfReturnExists, getRegionsByCountryID } from '../../../redux/pages/customers';
 import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-import { capitalize, formatprice, getCountryName } from '../../../components/utility/allutils';
+import { capitalize, formatprice, getCountryName, getRegionName } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import notification from '../../../components/notification';
 import { useIntl } from 'react-intl';
+import { COUNTRIES } from '../../../config/counties';
 
 function OrderDetails(props) {
     const intl = useIntl();
@@ -18,6 +19,7 @@ function OrderDetails(props) {
     const [maxItems, setMaxitems] = useState(10);
     const [orderProgress, setOrderProgress] = useState(0);
     const [order, setOrder]: any = useState([]);
+    const [regions, setRegions] = useState([]);
     const [showReturn, setShowReturn] = useState(false);
     const [changeAddressModal, setChangeAddressModal] = useState(false);
     const [custAddForm, setCustAddForm] = useState({
@@ -124,6 +126,7 @@ function OrderDetails(props) {
             // console.log(custAddForm)
             let result: any = await updateOrderAddress(custAddForm);
             if (result.data === 'address updated') {
+                getData();
                 setChangeAddressModal(!changeAddressModal);
                 notification("success", "", "Address updates");
             } else {
@@ -198,6 +201,29 @@ function OrderDetails(props) {
                 (order === 0) ? (comparison * -1) : comparison
             );
         };
+    }
+    const handleCountryChange = async (e) => {
+        const { id, value } = e.target;
+        setCustAddForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }));
+        getRegions(value);
+    }
+
+    const getRegions = async (value, i?) => {
+        const res: any = await getRegionsByCountryID(value);
+        if (res.data.available_regions === undefined) {
+            setRegions([]);
+            if (i) {
+                setCustAddForm(prevState => ({
+                    ...prevState,
+                    region: ''
+                }));
+            }
+        } else {
+            setRegions(res.data.available_regions);
+        }
     }
 
     return (
@@ -280,7 +306,8 @@ function OrderDetails(props) {
                                 {order['delivery_address']?.firstname + ' ' + order['delivery_address']?.lastname}<br />
                                 {order['delivery_address']?.street}<br />
                                 {order['delivery_address']?.postcode}<br />
-                                {order['delivery_address']?.city}<br />
+                                {order['delivery_address']?.city}<br />                     
+                                {order['delivery_address'] &&  order['delivery_address'].region ? getRegionName(order['delivery_address'].country_id,order['delivery_address'].region) : ""}<br/>
                                 {order['delivery_address'] ? getCountryName(order['delivery_address'].country_id) : ""}
                             </p>
                         </div>
@@ -428,13 +455,26 @@ function OrderDetails(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-                            <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
-                                {countries && countries.map(opt => {
-                                    return (<option key={opt.id} value={opt.id}>{opt.full_name_english}</option>);
+                            <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
+                                {COUNTRIES && COUNTRIES.map((opt, i) => {
+                                    return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
                         </div>
+                        {regions.length > 0 &&
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">
+                                    <IntlMessages id="myaccount.region" /></label>
+                                <select value={custAddForm.region} onChange={handleAddChange} id="region" className="form-select">
+                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                    {regions && regions.map(opt => {
+                                        return (<option key={opt.id} value={opt.id} >
+                                            {opt.name}</option>);
+                                    })}
+                                </select>
+                                <span className="error">{errors.errors["region"]}</span>
+                            </div>}
                     </Modal.Body>
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">

@@ -116,7 +116,7 @@ export function checkIfReturnExists(orderId) {
     return adminApi.request(`rest/all/V1/return/canRmaItem/?orderId=${orderId}`, "", "GET", "")
 }
 export function updateOrderAddress(data) {
-    return adminApi.request(`rest/all/V1/order/updateAddress/`, data, "PUT", "")
+    return adminApi.request(`rest/all/V1/order/updateAddress`, data, "PUT", "")
 }
 
 

@@ -21,7 +21,7 @@ export function capitalize(str) {
 
 export function lowercase(str) {
   //console.log(str)
-  return str.toLowerCase() ;
+  return str.toLowerCase();
 
 }
 
@@ -139,6 +139,7 @@ export function getCountryName(countryId) {
 }
 
 export function getRegionName(countryId = "AL", regionId) {
+ 
   let countryList: any = COUNTRIES.filter(obj => obj.id === countryId);
   if (countryList && countryList.length > 0 && countryList[0] && countryList[0].available_regions) {
     let regionList: any = countryList[0]?.available_regions.filter(obj2 => {
@@ -161,15 +162,15 @@ export function getCurrentMonth() {
 }
 
 export function getAccordingDate(data) {
-  if(data?.length){
+  if (data?.length) {
     return Object.values(data.reduce((acc, cur) => {
       let date = moment(cur.created_at).format("MMM YYYY")
       if (!acc[date])
-          acc[date] = { date: date, Products: [] };
+        acc[date] = { date: date, Products: [] };
       acc[date].Products.push(cur);
       return acc;
-  }, {}));
-  }else{
+    }, {}));
+  } else {
     return []
   }
 
