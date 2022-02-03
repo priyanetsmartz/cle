@@ -1,6 +1,7 @@
+
 body {
-  font-family: "Greta Arabic Regular" !important;
-  /* font-family: 'Conv_Meshki' !important; */
+  font-family: Cairo!important;
+  font-weight:400;
   direction: rtl;
 }
 
@@ -31,18 +32,18 @@ body {
 }
 .about-content h3 {
   text-align: right;
-  font-family: "Conv_Meshki";
+  font-family: Cairo;
 }
 .about-content p {
   text-align: right;
-  font-family: "Greta Arabic Regular" !important;
+  font-family: Cairo !important;
   font-size: 20px;
 }
 .arabic-rtl-direction {
   direction: rtl;
 }
 .sign-head {
-  font-family: "Conv_Meshki";
+  font-family: Cairo;
 }
 .or-bg .or-text {
   font-size: 24px;
@@ -75,7 +76,7 @@ p.signup-policy-links {
   font-size: 20px;
 }
 .mag-come-soon {
-  font-family: "Conv_Meshki";
+  font-family: Cairo;
 }
 .blue-back-image {
   top: -6%;
@@ -97,7 +98,7 @@ p.signup-policy-links {
   margin: auto;
   width: max-content;
   bottom: 10%;
-  font-family: "Conv_Meshki";
+  font-family: Cairo;
 }
 #our-story .about-inner .arabic-rtl-direction .col-md-4.offset-md-1 {
   margin-left: 0;
@@ -114,11 +115,11 @@ p.signup-policy-links {
 .see-more-sec .see-more-text {
   float: right;
   font-size: 24px;
-  font-family: "Greta Arabic Regular";
+  font-family: Cairo;
 }
 .see-more-sec .see-more-text a {
   font-size: 24px;
-  font-family: "Greta Arabic Regular";
+  font-family: Cairo;
 }
 .partner-pic {
   left: 7%;
@@ -149,17 +150,17 @@ p.signup-policy-links {
 .help-us-content h3 {
   font-size: 28px;
   font-weight: bold;
-  font-family: "Conv_Meshki";
+  font-family: Cairo;
 }
 .question-sec h4 {
   font-size: 22px;
 }
 .question-sec .select-answer button {
   font-size: 22px;
-  font-family: "Greta Arabic Regular";
+  font-family: Cairo;
 }
 .social-title h1 {
-  font-family: "Conv_Meshki";
+  font-family: Cairo;
 }
 .left-main-menu {
   order: 1;
@@ -183,14 +184,14 @@ p.signup-policy-links {
   margin-bottom: 20px;
   height: 50px;
   font-size: 24px;
-  font-family: "Greta Arabic Regular" !important;
+  font-family: Cairo !important;
 }
 .left-menu-content a.menu-btn {
   font-size: 16px;
 }
 .left-menu-content a.create-account {
   font-size: 24px;
-  font-family: "Conv_Meshki";
+  font-family: Cairo;
 }
 .right-menu-content li {
   margin-bottom: 20px;
@@ -206,7 +207,7 @@ p.signup-policy-links {
 }
 .partner-main-div h1 {
   margin-right: 20px;
-  font-family: "Conv_Meshki";
+  font-family: Cairo;
 }
 .partner-main-div {
   height: 430px;
@@ -241,7 +242,7 @@ p.signup-policy-links {
 .sign-up-btn a {
   padding: 12px 0;
   font-size: 24px;
-  font-family: "Conv_Meshki";
+  font-family: Cairo;
 }
 .about-inner .page-head svg text {
   transform: translate(105%, 100px);
@@ -290,19 +291,28 @@ p.signup-policy-links {
   direction: rtl;
 }
 .footer-links li.fl-title {
-  font-size: 20px;
-  font-family: "Conv_Meshki";
+  font-size: 18px;
+  font-family: Cairo;
+  font-weight:500;
+  line-height:28px;
 }
 .footer-links li a {
-  font-size: 20px;
-  font-family: "Greta Arabic Regular";
+  font-size: 16px;
+  font-family: Cairo;
+  font-weight:400;
+  line-height:28px;
 }
 .footer-address li {
-  font-family: "Greta Arabic Regular";
-  font-size: 18px;
+  font-size: 16px;
+  font-family: Cairo;
+  font-weight:500;
+  line-height:28px;
 }
 .footer-last-links a {
-  font-size: 16px;
+  font-size: 14px;
+  font-family: Cairo;
+  font-weight:500;
+  line-height:26px;
   margin: 0 5px;
 }
 .prive-top-banner {
@@ -313,7 +323,7 @@ p.signup-policy-links {
 }
 
 .social-menu-head {
-  font-family: "Greta Arabic Regular" !important;
+  font-family: Cairo !important;
 }
 
 .time-is-now svg text#YOUR {
@@ -326,6 +336,11 @@ p.signup-policy-links {
 }
 .social-title {
   margin: -55px auto 0;
+}
+
+.measur_guide .cross_icn{
+	left:6px;
+	right:unset;
 }
 
 @media (min-width: 360px) and (max-width: 768px) {
@@ -487,8 +502,17 @@ p.signup-policy-links {
   margin-left: 0 !important;
   margin-right: auto;
 }
+.search_top .form-control{
+	font-size:14px;
+	font-family: Cairo;
+	font-weight:500;
+}
 .search_top select.form-select {
-  text-align: left;
+  text-align: right;
+    font-size: 14px;
+    font-family: Cairo;
+    font-weight: 500;
+    line-height: 24px;
 }
 .miniaccount_details,
 .myaccount_details {
@@ -515,11 +539,36 @@ p.signup-policy-links {
 .minitotl_amnt .minicart_amount {
   text-align: left;
 }
+
+.newsletter-signup button.btn{
+	font-family: Cairo;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 .slider-text-inner {
   right: 60px;
   left: auto;
   text-align: right;
 }
+
+.head_one_txt{
+	font-size:16px;
+	font-family: Cairo;
+	font-weight:700;
+}
+.head_two_txt{
+	font-size:36px;
+	font-family: Cairo;
+	font-weight:600;
+}
+
+.head_three_txt{
+	font-size:18px;
+	font-family: Cairo;
+	font-weight:400;
+}
+
 /* .slick-list{direction: rtl;} */
 
 .list-prodctsale .accordion-item .accordion-button::after {
@@ -581,6 +630,21 @@ p.signup-policy-links {
 .discoverleft {
   float: right;
 }
+
+.discoverleft h2{
+	font-family: Cairo !important;
+    font-size: 36px;
+    font-weight: 700;
+	line-height:56px;
+}
+
+.discoverleft p{
+	font-family: Cairo !important;
+    font-size: 16px;
+    font-weight: 500;
+	line-height:32px;
+}
+
 .company-logo {
   left: -108px;
   right: unset;
@@ -622,24 +686,28 @@ p.signup-policy-links {
 
 .select-wearing ul li a.line-through-active,
 .select-wearing ul li a {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: Cairo !important;
 }
 
 .menuactive .active_megamenu > .nav-link {
-  font-size: 18px;
-  font-weight: normal;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Cairo !important;
 }
 
 .megamenu_bar ul.megamenugrid h3,
 .megamenu_bar ul.megamenugrid h3 a {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: Cairo !important;
 }
 
 .megamenu_bar ul.megamenugrid li a {
-  font-size: 16px;
-  font-weight: normal;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: Cairo !important;
 }
 
 .cart-total-price p span {
@@ -660,17 +728,23 @@ p.signup-policy-links {
   float: left !important;
 }
 .cta-dicover a {
-  font-size: 18px;
+  font-size: 14px;
+  font-family: Cairo;
+	font-weight:600;
   float: right;
 }
 .choose-shopping .btn {
   font-size: 18px;
 }
 .categoriy-list a.btn.details {
-  font-size: 18px;
+  font-size: 16px;
+  font-family: Cairo;
+	font-weight:600;
 }
 .categoriy-list a.cart {
-  font-size: 28px;
+  font-size: 17px;
+  font-family: Cairo;
+	font-weight:600;
 }
 .pro_categry_sidebar {
   float: right;
@@ -680,23 +754,53 @@ p.signup-policy-links {
 }
 
 .marketing_secs h2 {
-  font-family: "Conv_Meshki" !important;
-  font-size: 34px;
+  font-family: Cairo;
+  font-size: 24px;
+  font-weight:600;
 }
 .marketing_secs p {
-  font-size: 22px;
+  font-size: 16px;
+  font-family: Cairo;
+  font-weight:500;
 }
 .no-worries h3 {
   font-size: 14px;
+  font-family: Cairo;
+  font-weight:500;
+}
+.signup_footer a{
+	font-family: Cairo;
 }
 
+.signup-btn{
+	font-family: Cairo;
+	font-size: 14px;
+}
+.forgot h3{
+	font-family: Cairo;
+}
+.forgot p{
+	font-family: Cairo;
+}
+.forgot .signup-btn{
+	float:left;
+}
+.start-selling h3,
+.start-selling p{
+	font-family: Cairo;
+}
+.my_profile_sect.check-als .btn-secondary{
+	font-family: Cairo;
+    font-size: 14px!important;
+}
 .dis-catgry h1,
 .new-in-title h1,
 .new-in-title h1 a,
 .choose-foryou-sec .new-in-title h1,
 .DC-section-title {
-  font-family: "Conv_Meshki" !important;
-  font-size: 40px;
+  font-family: Cairo !important;
+  font-size: 36px;
+  font-weight:600;
 }
 
 .white-text {
@@ -704,74 +808,118 @@ p.signup-policy-links {
 }
 
 .white-text .btn {
-  font-size: 16px;
+  font-family: Cairo;
+  font-size: 14px;
+  font-weight:500;
 }
 
 .list-prodctsale .accordion-button:not(.collapsed),
 .list-prodctsale .accordion-button {
-  font-size: 24px;
+	font-family: Cairo;
+	font-size: 18px;
+	font-weight: 600;
+	line-height:32px;
 }
 
 .become-part-inner h1,
 .banner-content-2 h4 {
-  font-family: "Conv_Meshki" !important;
-  font-size: 40px;
+  font-family: Cairo;
+	font-size: 36px;
+	font-weight: 700;
+	line-height:60px;
 }
 .become-part-inner p {
-  font-size: 20px;
+   font-family: Cairo;
+	font-size: 16px;
+	font-weight: 500;
+	line-height:32px;
 }
 
 .become-part-inner a {
-  font-size: 22px;
+  font-family: Cairo;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.banner-content-2 p {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 500;
 }
 
 .terms-text {
   font-size: 14px;
+    line-height: 26px;
+    font-weight: 500;
+}
+
+.new-in-slider .product_vrity, .new-in-slider .product_vrity a{
+	font-family: Cairo;
+  font-size: 16px;
+  font-weight:400;
+  line-height:32px;
+}
+
+.product .product_vrity, .product .product_vrity, .product .product_vrity a{
+	font-family: Cairo;
+  font-size: 16px;
+  font-weight:400;
+  line-height:32px;
+}
+
+.plp-viewall a{
+	font-family: Cairo;
 }
 
 .exclusive-tab ul.nav .nav-item .nav-link,
 .exclusive-tab ul.nav .nav-item .nav-link.active,
 .exclusive-tab ul.nav .nav-item .nav-link:hover {
-  font-family: "Conv_Meshki" !important;
+  font-family: Cairo !important;
   font-size: 28px;
 }
 
 .view-all-btn {
   font-size: 28px;
+  font-family: Cairo !important;
 }
 
 h1.mb-4.text-center {
-  font-family: "Conv_Meshki" !important;
+  font-family: Cairo !important;
   font-size: 40px;
 }
 
 .DC-top-banner .DC-top-ban-inner h2 {
-  font-family: "Conv_Meshki" !important;
+  font-family: Cairo !important;
   font-size: 40px;
 }
 
 .DC-top-banner .DC-top-ban-inner p {
   font-size: 22px;
+  font-family: Cairo !important;
 }
 
 .DC-top-banner .DC-top-ban-inner a.ban-btn {
   font-size: 18px;
+  font-family: Cairo !important;
 }
 
 .product_details h1,
 .product_details h1 a {
-  font-family: "Conv_Meshki" !important;
+  font-family: Cairo;
   font-size: 28px;
 }
 .product_details h2 {
   font-size: 22px;
+  font-family: Cairo;
 }
 
 .accordion-flush .accordion-item .accordion-button {
   font-size: 22px;
+  font-family: Cairo;
 }
 .product_description .btn-primary {
   font-size: 14px;
+  font-family: Cairo;
 }
 
 .product_description .btn-primary:before {
@@ -791,10 +939,12 @@ h1.mb-4.text-center {
 
 .minicartprodt_name > h6 {
   text-align: right;
+  font-family: Cairo;
 }
 
 .miniaccount_details ul li a span.minicartprodt_name span.minicart_pname {
   text-align: right;
+  font-family: Cairo;
 }
 
 .sidebar_nav .list-unstyled {
@@ -802,12 +952,13 @@ h1.mb-4.text-center {
 }
 
 .recommendations-section h1 {
-  font-family: "Conv_Meshki" !important;
+  font-family: Cairo;
   font-size: 28px;
 }
 
 .btn-secondary {
-  font-size: 18px !important;
+  font-size: 18px;
+  font-family: Cairo;
 }
 
 .addnew_address,
@@ -816,19 +967,36 @@ h1.mb-4.text-center {
 }
 
 .customer-d-wrap h4 {
-  font-family: "Conv_Meshki" !important;
+  font-family: Cairo ;
   font-size: 24px;
+}
+
+.back-block .back-to-shop{
+	 font-family: Cairo;
+	 font-weight:600;
+}
+.my-cart-left-sec h2{
+	font-family: Cairo;
+	 font-weight:600;
+}
+
+.pro-name-tag .product_vrity a{
+	font-family: Cairo;
 }
 
 .product-listing .cart-button a,
 .releveant-slider .product .cart-button a,
 .DC-carousel .cart-button a {
-  font-size: 14px;
+  font-size: 12px;
+    font-family: Cairo;
+    font-weight: 700;
 }
 
 .mini-cart-btn a,
 .mini-cart-btn .btn-secondary {
-  font-size: 14px !important;
+  font-size: 12px !important;
+  font-family: Cairo;
+    font-weight: 700;
 }
 
 .pro-name-tag .cart-info-l,
@@ -841,10 +1009,12 @@ h1.mb-4.text-center {
   left: 0;
   right: unset;
   font-size: 14px;
+  font-family: Cairo;
 }
 
 .save-cart-btns a {
   font-size: 14px;
+  font-family: Cairo;
 }
 
 .product-total-price p span {
@@ -857,6 +1027,7 @@ h1.mb-4.text-center {
 
 .selection-process a {
   font-size: 16px;
+  font-family: Cairo;
 }
 
 .support-form .offset-lg-2,
@@ -866,7 +1037,7 @@ h1.mb-4.text-center {
 }
 
 .my_orders_returns_sec h1 {
-  font-family: "Conv_Meshki" !important;
+  font-family: Cairo !important;
   font-size: 40px;
 }
 .my_orders_returns_sec h2 {
@@ -876,6 +1047,34 @@ h1.mb-4.text-center {
 .delet_account_accordin .accordion-header img {
   margin-right: 0;
   margin-left: 10px;
+}
+
+.checkout-main .accordion-button{
+	font-family: Cairo;
+}
+
+.checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link.active,
+.checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link{
+	font-family: Cairo;
+}
+.order_tab_sec .nav-tabs .nav-link{
+	font-family: Cairo;
+}
+.product-listing .tagname, .product-listing .tagname a{
+	font-family: Cairo;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 32px;
+}
+.addnew_address{
+	font-family: Cairo;
+}
+.address-action a.edit_btn,
+.address-action a.delete_btn{
+	font-family: Cairo;
+}
+.form-label{
+	font-family: Cairo;
 }
 
 .hidden-pass {
@@ -897,6 +1096,7 @@ h1.mb-4.text-center {
 
 .product-listing .product:hover .wish-cart a {
   font-size: 14px !important;
+  font-family: Cairo;
 }
 
 p.sliderupper {
@@ -905,6 +1105,7 @@ p.sliderupper {
 
 .help-center-ban p{
 	font-size: 22px;
+	font-family: Cairo;
 }
 
 .help-center-ban .offset-lg-3,
@@ -924,20 +1125,20 @@ p.sliderupper {
 }
 
 .my_profile_sect h1{
-	font-family: "Conv_Meshki" !important;
+	font-family: Cairo !important;
 }
 
 .filter-tiles li a{
-	font-family: "Conv_Meshki" !important;
+	font-family: Cairo !important;
 	font-size:20px;
 }
 
 .CLE_pf_details h1{
-	font-family: "Conv_Meshki" !important;
+	font-family: Cairo !important;
 }
 
 .data_value li a{
-	font-family: "Greta Arabic Regular" !important;
+	font-family: Cairo !important;
 	font-size:24px;
 }
 
