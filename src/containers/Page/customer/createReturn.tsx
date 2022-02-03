@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { connect } from "react-redux";
-import { checkIfReturnExists, createReturnRequest, getReturnReasonList, searchOrders } from '../../../redux/pages/customers';
+import { checkIfReturnExists, createReturnRequest, getRegionsByCountryID, getReturnReasonList, searchOrders, updateOrderAddress } from '../../../redux/pages/customers';
 import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
@@ -19,6 +19,7 @@ function CreateReturn(props) {
     const [custId, setCustid] = useState(props.token.cust_id);
     const [maxItems, setMaxitems] = useState(10);
     const [order, setOrder]: any = useState([]);
+    const [regions, setRegions] = useState([]);
     const [issueList, setIssueList]: any = useState([]);
     const [changeAddressModal, setChangeAddressModal] = useState(false);
     const [returnOrExchange, setReturnOrExchange] = useState('');
@@ -33,7 +34,13 @@ function CreateReturn(props) {
         postcode: "",
         city: "",
         country_id: "",
-        street: ""
+        street: "",
+        address_type: "",
+        email: "",
+        orderId: "",
+        post_code: "",
+        region: ""
+
     });
 
     const [errors, setError] = useState({
@@ -84,15 +91,15 @@ function CreateReturn(props) {
         // console.log(orderData)
 
         var onlyInReturn = orderData.filter(comparer(resultShow));
-      
-       
+
+
         orderDetails['items'] = onlyInReturn;
         setOrder(orderDetails);
     }
     function comparer(otherArray) {
         return function (current) {
             return otherArray.filter(function (other) {
-              //  console.log(parseInt(other.id),current.item_id )
+                //  console.log(parseInt(other.id),current.item_id )
                 return parseInt(other.id) === current.item_id
             }).length == 0;
         }
@@ -112,7 +119,24 @@ function CreateReturn(props) {
     // for customer address popup window starts here
     const saveCustAddress = async (e) => {
         if (validateAddress()) {
-
+            custAddForm.customer_id = custId;
+            custAddForm.address_type = 'shipping';
+            custAddForm.email = props.token.token_email;
+            custAddForm.orderId = order.entity_id;
+            custAddForm.post_code = custAddForm.postcode;
+            // let data = {
+            //     "entity": custAddForm
+            // }
+            // console.log(custAddForm)
+            let result: any = await updateOrderAddress(custAddForm);
+            if (result.data === 'address updated') {
+                getData(returnId);
+                setChangeAddressModal(!changeAddressModal);
+                notification("success", "", "Address updates");
+            } else {
+                setChangeAddressModal(!changeAddressModal);
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            }
         }
     }
 
@@ -226,6 +250,30 @@ function CreateReturn(props) {
             notification("error", "", result?.data?.[0]?.message);
         }
 
+    }
+
+    const handleCountryChange = async (e) => {
+        const { id, value } = e.target;
+        setCustAddForm(prevState => ({
+            ...prevState,
+            [id]: value
+        }));
+        getRegions(value);
+    }
+
+    const getRegions = async (value, i?) => {
+        const res: any = await getRegionsByCountryID(value);
+        if (res.data.available_regions === undefined) {
+            setRegions([]);
+            if (i) {
+                setCustAddForm(prevState => ({
+                    ...prevState,
+                    region: ''
+                }));
+            }
+        } else {
+            setRegions(res.data.available_regions);
+        }
     }
 
 
@@ -463,14 +511,27 @@ function CreateReturn(props) {
 
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label">Country<span className="maindatory">*</span></label>
-                            <select value={custAddForm.country_id} onChange={handleAddChange} id="country_id" className="form-select">
+                            <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
+                            <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
                                 {COUNTRIES && COUNTRIES.map((opt, i) => {
                                     return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
                         </div>
+                        {regions.length > 0 &&
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label">
+                                    <IntlMessages id="myaccount.region" /></label>
+                                <select value={custAddForm.region} onChange={handleAddChange} id="region" className="form-select">
+                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                    {regions && regions.map(opt => {
+                                        return (<option key={opt.id} value={opt.id} >
+                                            {opt.name}</option>);
+                                    })}
+                                </select>
+                                <span className="error">{errors.errors["region"]}</span>
+                            </div>}
                     </Modal.Body>
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">

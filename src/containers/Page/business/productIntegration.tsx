@@ -53,7 +53,7 @@ function ProductIntegration(props) {
                     formData.push(ques);
                 })
             }
-           
+
             setFormDd(formData)
             setForm(result?.data?.[0]);
         }
@@ -66,7 +66,7 @@ function ProductIntegration(props) {
     const handleOnChange = async (e) => {
         e.preventDefault();
         let attribute_code = e.target.getAttribute("data-attribute");
-        
+
         if (e.target.value === "option-2") {
             setShowEcom(true)
             setShowBulkUpload(false)
@@ -76,8 +76,8 @@ function ProductIntegration(props) {
         } else {
             setShowEcom(false)
             setShowBulkUpload(false)
-        }        
-       
+        }
+
 
 
         const tempObj = {
@@ -109,6 +109,8 @@ function ProductIntegration(props) {
             return notification("error", "", intl.formatMessage({ id: "selectproductintegration" }));
         if (Object.values(formData)[0]['value'] === 'option-2' && Object.keys(formData).length < 2)
             return notification("error", "", intl.formatMessage({ id: "selectproductEcom" }));
+        if (Object.values(formData)[0]['value'] === 'option-3' && Object.keys(formData).length < 2)
+            return notification("error", "", intl.formatMessage({ id: "uploadcsv" }));
         payload.answer.response_json = JSON.stringify(formData);
         payload.answer.form_id = form.form_id;
         payload.answer.store_id = form.store_id;
@@ -126,10 +128,19 @@ function ProductIntegration(props) {
     }
 
     async function onFileChange(e) {
+
+        let allowedExtensions = ['.csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']
+
+        let filetype = e?.target?.files[0]?.type;
+        if (allowedExtensions.indexOf(filetype) === -1) {
+            notification("error", "", intl.formatMessage({ id: "onlycsvallowed" }));
+            return false;
+        }
         let attribute_code = e.target.getAttribute("data-attribute");
-        console.log(e.target.files)
+
         const file = e.target.files[0];
-        const base64 = await getBase64(file);    
+        const base64 = await getBase64(file);
+
 
         const tempObj = {
             value: base64,
@@ -141,7 +152,7 @@ function ProductIntegration(props) {
             label: attribute_code,
             type: 'file'
         }
-       
+
 
         setPayload(prevState => ({
             ...prevState,
@@ -167,12 +178,12 @@ function ProductIntegration(props) {
     };
     function getBase64(file) {
         return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = error => reject(error);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
         });
-      }
+    }
     return (
         <div className="container">
             <div className="row">
@@ -231,7 +242,7 @@ function ProductIntegration(props) {
                                         </Link>
                                         <div className="upload">
                                             <i className="fas fa-file-upload"></i>
-                                            <input type={formdd && formdd.length > 5 ? formdd[5].type : ""} name={formdd && formdd.length > 5 ? formdd[5].name : ""} onChange={onFileChange} data-attribute={formdd && formdd.length > 5 ? formdd[5].label : ""} />
+                                            <input type={formdd && formdd.length > 5 ? formdd[5].type : ""} name={formdd && formdd.length > 5 ? formdd[5].name : ""} onChange={onFileChange} data-attribute={formdd && formdd.length > 5 ? formdd[5].label : ""} accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
                                             <span>{formdd && formdd.length > 5 ? formdd[5].label : ""}</span>
                                         </div>
                                     </div>

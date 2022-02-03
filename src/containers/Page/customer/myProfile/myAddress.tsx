@@ -351,8 +351,8 @@ function MyAddress(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                             <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
-                                {countries && countries.map(opt => {
-                                    return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
+                                {COUNTRIES && COUNTRIES.map((opt, i) => {
+                                    return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}
                             </select>
                             <span className="error">{errors.errors["country_id"]}</span>

@@ -45,7 +45,9 @@ import RetrunSummary from './containers/Page/customer/retrunSummary';
 import ProductIntegration from './containers/Page/business/productIntegration';
 import ProductDetailsPrivate from './containers/Page/product/product-details/ProductDetailsPrivate';
 import BussinessResetEmail from './containers/Page/business/BussinessResetEmail';
-
+import CleXRoute from './components/all-route/CleXRoute';
+import SellProduct from './containers/Page/CLEX/sellProduct';
+import Howtosell from './containers/Page/CLEX/howtosell';
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -105,6 +107,8 @@ const PublicRoutes = ({ history }) => {
           <PriveRoute exact path="/prive-user" component={PriveUser} />
           <ProductRoutes exact path="/vendor-forgot-password" component={BusinessResetPassword} />
           <ProductRoutes exact path="/password-link-expired" component={PasswordLinkExpired} />
+          <CleXRoute exact path="/sell-products" component={SellProduct} />
+          <CleXRoute exact path="/how-to-sell" component={Howtosell} />
           <Route exact path="/post-comment">
             <PostComment />
           </Route>

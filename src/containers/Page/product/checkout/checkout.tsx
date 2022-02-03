@@ -765,13 +765,13 @@ function Checkout(props) {
     const validateAddress = () => {
         let error = {};
         let formIsValid = true;
-        if (custAddForm.telephone !== undefined) {
-            formIsValid = false;
-            if (!(/^\d{10}$/.test(custAddForm["telephone"]))) {
-                formIsValid = false;
-                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
-            }
-        }
+        // if (custAddForm.telephone !== undefined) {
+        //     formIsValid = false;
+        //     if (!(/^\d{10}$/.test(custAddForm["telephone"]))) {
+        //         formIsValid = false;
+        //         error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+        //     }
+        // }
         if (!custAddForm.telephone) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" });
@@ -810,13 +810,13 @@ function Checkout(props) {
         let error = {};
         let formIsValid = true;
 
-        if (billingAddressData.telephone !== undefined) {
-            formIsValid = false;
-            if (!(/^\d{10}$/.test(billingAddressData["telephone"]))) {
-                formIsValid = false;
-                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
-            }
-        }
+        // if (billingAddressData.telephone !== undefined) {
+        //     formIsValid = false;
+        //     if (!(/^\d{10}$/.test(billingAddressData["telephone"]))) {
+        //         formIsValid = false;
+        //         error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+        //     }
+        // }
      
         if (!billingAddressData.telephone) {
             formIsValid = false;
