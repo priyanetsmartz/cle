@@ -309,10 +309,10 @@ p.signup-policy-links {
   line-height:28px;
 }
 .footer-last-links a {
-  font-size: 18px;
+  font-size: 14px;
   font-family: Cairo;
   font-weight:500;
-  line-height:28px;
+  line-height:26px;
   margin: 0 5px;
 }
 .prive-top-banner {
@@ -502,8 +502,17 @@ p.signup-policy-links {
   margin-left: 0 !important;
   margin-right: auto;
 }
+.search_top .form-control{
+	font-size:14px;
+	font-family: Cairo;
+	font-weight:500;
+}
 .search_top select.form-select {
-  text-align: left;
+  text-align: right;
+    font-size: 14px;
+    font-family: Cairo;
+    font-weight: 500;
+    line-height: 24px;
 }
 .miniaccount_details,
 .myaccount_details {
@@ -530,6 +539,13 @@ p.signup-policy-links {
 .minitotl_amnt .minicart_amount {
   text-align: left;
 }
+
+.newsletter-signup button.btn{
+	font-family: Cairo;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 .slider-text-inner {
   right: 60px;
   left: auto;
@@ -738,16 +754,45 @@ p.signup-policy-links {
 }
 
 .marketing_secs h2 {
-  font-family: Cairo !important;
-  font-size: 34px;
+  font-family: Cairo;
+  font-size: 24px;
+  font-weight:600;
 }
 .marketing_secs p {
-  font-size: 22px;
+  font-size: 16px;
+  font-family: Cairo;
+  font-weight:500;
 }
 .no-worries h3 {
   font-size: 14px;
+  font-family: Cairo;
+  font-weight:500;
+}
+.signup_footer a{
+	font-family: Cairo;
 }
 
+.signup-btn{
+	font-family: Cairo;
+	font-size: 14px;
+}
+.forgot h3{
+	font-family: Cairo;
+}
+.forgot p{
+	font-family: Cairo;
+}
+.forgot .signup-btn{
+	float:left;
+}
+.start-selling h3,
+.start-selling p{
+	font-family: Cairo;
+}
+.my_profile_sect.check-als .btn-secondary{
+	font-family: Cairo;
+    font-size: 14px!important;
+}
 .dis-catgry h1,
 .new-in-title h1,
 .new-in-title h1 a,
@@ -781,7 +826,7 @@ p.signup-policy-links {
   font-family: Cairo;
 	font-size: 36px;
 	font-weight: 700;
-	line-height:68px;
+	line-height:60px;
 }
 .become-part-inner p {
    font-family: Cairo;
@@ -809,10 +854,21 @@ p.signup-policy-links {
 }
 
 .new-in-slider .product_vrity, .new-in-slider .product_vrity a{
-	font-family: Cairo !important;
+	font-family: Cairo;
   font-size: 16px;
   font-weight:400;
   line-height:32px;
+}
+
+.product .product_vrity, .product .product_vrity, .product .product_vrity a{
+	font-family: Cairo;
+  font-size: 16px;
+  font-weight:400;
+  line-height:32px;
+}
+
+.plp-viewall a{
+	font-family: Cairo;
 }
 
 .exclusive-tab ul.nav .nav-item .nav-link,
@@ -824,6 +880,7 @@ p.signup-policy-links {
 
 .view-all-btn {
   font-size: 28px;
+  font-family: Cairo !important;
 }
 
 h1.mb-4.text-center {
@@ -838,26 +895,31 @@ h1.mb-4.text-center {
 
 .DC-top-banner .DC-top-ban-inner p {
   font-size: 22px;
+  font-family: Cairo !important;
 }
 
 .DC-top-banner .DC-top-ban-inner a.ban-btn {
   font-size: 18px;
+  font-family: Cairo !important;
 }
 
 .product_details h1,
 .product_details h1 a {
-  font-family: Cairo !important;
+  font-family: Cairo;
   font-size: 28px;
 }
 .product_details h2 {
   font-size: 22px;
+  font-family: Cairo;
 }
 
 .accordion-flush .accordion-item .accordion-button {
   font-size: 22px;
+  font-family: Cairo;
 }
 .product_description .btn-primary {
   font-size: 14px;
+  font-family: Cairo;
 }
 
 .product_description .btn-primary:before {
@@ -877,10 +939,12 @@ h1.mb-4.text-center {
 
 .minicartprodt_name > h6 {
   text-align: right;
+  font-family: Cairo;
 }
 
 .miniaccount_details ul li a span.minicartprodt_name span.minicart_pname {
   text-align: right;
+  font-family: Cairo;
 }
 
 .sidebar_nav .list-unstyled {
@@ -888,12 +952,13 @@ h1.mb-4.text-center {
 }
 
 .recommendations-section h1 {
-  font-family: Cairo !important;
+  font-family: Cairo;
   font-size: 28px;
 }
 
 .btn-secondary {
-  font-size: 18px !important;
+  font-size: 18px;
+  font-family: Cairo;
 }
 
 .addnew_address,
@@ -902,22 +967,35 @@ h1.mb-4.text-center {
 }
 
 .customer-d-wrap h4 {
-  font-family: Cairo !important;
+  font-family: Cairo ;
   font-size: 24px;
+}
+
+.back-block .back-to-shop{
+	 font-family: Cairo;
+	 font-weight:600;
+}
+.my-cart-left-sec h2{
+	font-family: Cairo;
+	 font-weight:600;
+}
+
+.pro-name-tag .product_vrity a{
+	font-family: Cairo;
 }
 
 .product-listing .cart-button a,
 .releveant-slider .product .cart-button a,
 .DC-carousel .cart-button a {
   font-size: 12px;
-    font-family: 'Cairo';
+    font-family: Cairo;
     font-weight: 700;
 }
 
 .mini-cart-btn a,
 .mini-cart-btn .btn-secondary {
   font-size: 12px !important;
-  font-family: 'Cairo';
+  font-family: Cairo;
     font-weight: 700;
 }
 
@@ -931,10 +1009,12 @@ h1.mb-4.text-center {
   left: 0;
   right: unset;
   font-size: 14px;
+  font-family: Cairo;
 }
 
 .save-cart-btns a {
   font-size: 14px;
+  font-family: Cairo;
 }
 
 .product-total-price p span {
@@ -947,6 +1027,7 @@ h1.mb-4.text-center {
 
 .selection-process a {
   font-size: 16px;
+  font-family: Cairo;
 }
 
 .support-form .offset-lg-2,
@@ -968,6 +1049,34 @@ h1.mb-4.text-center {
   margin-left: 10px;
 }
 
+.checkout-main .accordion-button{
+	font-family: Cairo;
+}
+
+.checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link.active,
+.checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link{
+	font-family: Cairo;
+}
+.order_tab_sec .nav-tabs .nav-link{
+	font-family: Cairo;
+}
+.product-listing .tagname, .product-listing .tagname a{
+	font-family: Cairo;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 32px;
+}
+.addnew_address{
+	font-family: Cairo;
+}
+.address-action a.edit_btn,
+.address-action a.delete_btn{
+	font-family: Cairo;
+}
+.form-label{
+	font-family: Cairo;
+}
+
 .hidden-pass {
   float: right;
   position: absolute;
@@ -987,6 +1096,7 @@ h1.mb-4.text-center {
 
 .product-listing .product:hover .wish-cart a {
   font-size: 14px !important;
+  font-family: Cairo;
 }
 
 p.sliderupper {
@@ -995,6 +1105,7 @@ p.sliderupper {
 
 .help-center-ban p{
 	font-size: 22px;
+	font-family: Cairo;
 }
 
 .help-center-ban .offset-lg-3,
