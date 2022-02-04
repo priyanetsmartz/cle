@@ -1498,12 +1498,8 @@ p.promotion_alert {
 }
 
 .my_profile_sect h1 {
-    font-size: 24px;
-    font-family: 'Monument Extended';
-    font-style: normal;
     margin-top: 30px;
-    font-weight: 400;
-	line-height:46px;
+	font:normal normal 500 24px/46px Monument Extended
 }
 
 .my_profile_sect.check-als h1 {
@@ -1513,8 +1509,12 @@ p.promotion_alert {
 }
 
 .my_profile_sect p {
-    font-size: 18px;
-	font-weight: 500;
+    font: normal normal normal 16px/19px Lato;
+	margin-bottom:30px;
+}
+
+.my_profile_sect .edit{
+	width:158px;
 }
 
 .field_details {
@@ -1523,8 +1523,7 @@ p.promotion_alert {
 }
 
 .field_details .form-label {
-    font-size: 16px;
-    font-weight: 700;
+	font: normal normal 700 16px/19px Lato;
     margin-bottom: 0px;
 }
 
@@ -2014,10 +2013,7 @@ span.hidden-pass i {
     background-color: #2E2BAA;
     border-color: #2E2BAA;
     border-radius: 0;
-    font-family: 'Monument Extended';
-    font-weight: 500;
-    font-style: normal;
-    font-size: 16px;
+	font: normal normal 500 16px/20px Monument Extended;
     padding: 20px 20px !important;
 }
 
@@ -3040,11 +3036,11 @@ left: auto; */
 .myorder_sidebar ul li a {
     color: #000;
     text-decoration: none;
-    font-size: 16px;
+    font: normal normal 700 16px/24px Lato;
 }
 
 .myorder_sidebar ul li a span {
-    font-weight: 600;
+    font: normal normal 700 16px/24px Lato;
 }
 
 .myorder_sidebar ul li a:hover {
@@ -3071,10 +3067,7 @@ left: auto; */
 }
 
 .user_name {
-    font-size: 16px;
-    font-family: 'Monument Extended';
-    font-style: normal;
-    font-weight: 400;
+	font: normal normal 500 16px/24px Monument Extended;
     color: #000;
 }
 
@@ -8146,7 +8139,8 @@ p.sliderupper {
     border: 1px solid #000;
 }
 
-.opt-tabs .radio-toolbar input[type="radio"]:checked + label {
+.opt-tabs .radio-toolbar input[type="radio"]:checked + label,
+.opt-tabs .radio-toolbar input[type="radio"].active + label {
     background-color: #000;
     border-color: #000;
 	color:#fff;
@@ -8288,8 +8282,9 @@ p.sliderupper {
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
+	line-height:23px;
+	height: 22px;
+	padding:0 7px;
 	background-color: #fff;
 	display: block;
     word-break: keep-all;
@@ -8334,8 +8329,9 @@ p.sliderupper {
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
+	line-height:23px;
+	height: 22px;
+	padding:0 7px;
 	background-color: #fff;
 	display: block;
     word-break: keep-all;
@@ -8536,13 +8532,13 @@ p.sliderupper {
 }
 
 .companylogo img {
-    width: 100%;
+    width: 180px;
     height: 180px;
     -o-object-fit: cover;
        object-fit: cover;
     -o-object-position: center;
        object-position: center;
-    border: 3px solid #2E2BAA;
+    border: 2px solid #2E2BAA;
 }
 
 .companylogo .onhoveredit input[type="file"]{
@@ -8566,11 +8562,11 @@ p.sliderupper {
     bottom: 0;
     background-color: #2E2BAA;
     border-radius: 50%;
-    border: 3px solid #2E2BAA;
+    border: 2px solid #2E2BAA;
     color: #fff;
     z-index: 1;
-    width: 100%;
-    height: 100%;
+    width: 180px;
+    height: 180px;
 	-webkit-box-pack: center;
 	    -ms-flex-pack: center;
 	        justify-content: center;
@@ -8916,18 +8912,12 @@ p.sliderupper {
 }
 
 .start-selling h3{
-	font-size: 32px;
-    font-family: 'Monument Extended';
-    line-height: 42px;
-    font-weight: 500;
+	font: normal normal normal 36px/46px Monument Extended;
     color: #000;
     margin-top: 20px;
 }
 .start-selling p{
-	font-family: "Lato",sans-serif;
-	font-size: 18px;
-	font-weight: 400;
-	line-height: 27px;
+	font: normal normal 600 18px/27px Lato;
 	color: #000;
 }
 .start-selling a {

@@ -1163,6 +1163,26 @@ h1.mb-4.text-center {
 p.sliderupper {
   text-align: left;
 }
+.field_details .form-label{
+	font: normal normal 700 14px/19px Cairo;
+}
+.myorder_sidebar ul li a,
+.myorder_sidebar ul li a span{
+	font: normal normal 700 16px/24px Cairo;
+}
+.my_profile_sect p{
+	font: normal normal normal 16px/19px Cairo;
+}
+.deletePopup .modal-title,
+.deletePopup .modal-body p{
+	font-family: Cairo;
+}
+.deletePopup .modal-footer .btn-primary,
+.deletePopup .modal-footer .btn-secondary{
+	font-size: 12px;
+    font-family: Cairo;
+    font-weight: 700;
+}
 .support-form{
 	 font-family: Cairo;
 }
@@ -1285,9 +1305,6 @@ p.sliderupper {
 	margin-right:unset!important;
 }
 
-.deletePopup .modal-footer .btn-primary{
-	font-size: 18px;
-}
 
 .float-start {
     float: right !important;
