@@ -16,6 +16,7 @@ function MagazineCategory(props) {
     const [state, setState] = useState({
         email: ""
     })
+    const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     const [items, setItems] = useState([]);
     const [catMenu, setCatMenu] = useState([]);
     const [radio, setRadio] = useState('Womenswear');
@@ -52,20 +53,20 @@ function MagazineCategory(props) {
     }, [props.languages, category])
 
     async function getData(language, page, sortBy = "published_at", sortByValue = "desc") {
-        let result: any = await GetCategoryData(language, page, sortBy, sortByValue);
+        let result: any = await GetCategoryData(language, page, sortBy, sortByValue, pageSize);
         let featuredResult: any = await FeaturedList(language);
         setItems(result.data);
         let dataTotal = result.data && result.data.length > 0 ? result.data[0].total_page : 0;
         setPagination(dataTotal);
         setFeaturedItems(featuredResult.data);
-        setlatestItem(result.data.slice(-1)[0]);
-        console.log(result.data.slice(-1)[0])
+        setlatestItem(result?.data?.slice(-1)[0]);
+        //console.log(result.data.slice(-1)[0])
         // console.log(result.data.slice(-1)[0]);
         setOpacity(1);
     }
 
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
-        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, siteConfig.pageSize);
+        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, pageSize);
         setItems(result.data);
         if (result.data) {
             setlatestItem(result.data.slice(-1)[0]);
@@ -87,7 +88,7 @@ function MagazineCategory(props) {
     }
 
     async function getListData(languages, page, sortBy, sortByValue) {
-        let result: any = await GetCategoryData(languages, page, sortBy, sortByValue);
+        let result: any = await GetCategoryData(languages, page, sortBy, sortByValue, pageSize);
         setItems(result.data);
         setOpacity(1);
     }

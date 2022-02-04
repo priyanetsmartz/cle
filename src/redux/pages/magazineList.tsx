@@ -11,10 +11,10 @@ export function MagazineList(language: string, pageSize: number) {
 export function PostList() {
     return Api.request("rest/V1/post/list", "", "GET", "");
 }
-export function GetCategoryData(language: string, page: number, sortBy: string, sortByValue: string) {
+export function GetCategoryData(language: string, page: number, sortBy: string, sortByValue: string, pageSize: number) {
     var storeId = language === 'english' ? 3 : 2;
     var payload = {};
-    return Api.request(`rest/all/V1/blog/list?store_id=${storeId}&page_no=${page}&sortBy=${sortBy}&soryByValue=${sortByValue}`, payload, "GET", "");
+    return Api.request(`rest/all/V1/blog/list?store_id=${storeId}&page_no=${page}&sortBy=${sortBy}&soryByValue=${sortByValue}&pageSize=${pageSize}`, payload, "GET", "");
 }
 
 export function FeaturedList(language: string) {

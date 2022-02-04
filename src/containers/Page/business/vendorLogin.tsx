@@ -98,8 +98,8 @@ function VendorLogin(props) {
           setCookie("vendorusername", userInfo.username);
           setCookie("vendorpassword", ciphertext);
           setCookie("vendorremember_me", userInfo.rememberme);
-          // setCookie("currentLanguage", 'english')
-          // setValue('english');
+          setCookie("currentLanguage", 'english')
+          setValue('english');
         } else {
           //remove username and password and remember me from cookie
           removeCookie("vendorusername");
@@ -114,7 +114,8 @@ function VendorLogin(props) {
         // window.location.href = '/vendor/business-profile';
         setTimeout(() => {
           setIsShow(false);
-          history.push(`/vendor/dashboard`);
+         // history.push(`/vendor/dashboard`);
+          window.location.href = '/vendor/dashboard';
         }, 3000);
 
       } else {
