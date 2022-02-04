@@ -3069,6 +3069,7 @@ left: auto; */
 .user_name {
 	font: normal normal 500 16px/24px Monument Extended;
     color: #000;
+	text-transform: capitalize;
 }
 
 .my-userdetails {
@@ -7416,30 +7417,30 @@ p.sliderupper {
 }
 
 .login-popup {
-    margin: 40px 0 0;
+    margin: 30px 0 0;
 }
 
 .cookie_popup_login h2 {
-    font-family: 'Monument Extended';
-    font-size: 24px;
-    font-weight: 500;
-    margin-bottom: 15px;
+	font: normal normal 500 28px/24px Monument Extended;
+    padding: 10px 0;
     color: #000;
+	margin: 0;
+	text-transform: capitalize;
 }
 
 .cookie_popup_login h2.head-ble {
-    color: #2E2BAA;
+    font: normal normal 500 28px/24px Monument Extended;
+	color: #2E2BAA;
+	margin: 0;
 }
 
 .login-popup p {
-    font-size: 16px;
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
+	font: normal normal 500 16px/24px Lato;
     color: #000;
 }
 
 .log-benefit {
-    min-height: 400px;
+    min-height: 350px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -7447,7 +7448,7 @@ p.sliderupper {
         -ms-flex-align: center;
             align-items: center;
     position: relative;
-    margin: 40px 0;
+    margin: 20px 0;
 }
 
 .log-ban {
@@ -7465,7 +7466,7 @@ p.sliderupper {
     cursor: pointer;
 }
 .log-ban img {
-    height: 350px;
+    height: 300px;
     -o-object-fit: cover;
        object-fit: cover;
     width: 100%;
@@ -7474,7 +7475,7 @@ p.sliderupper {
 .log-benefit .log-bullet {
     background-color: #000;
     min-height: 100px;
-    min-width: 40%;
+    min-width: 50%;
     padding: 30px 20px;
     position: absolute;
     left: 0;
@@ -7495,6 +7496,34 @@ p.sliderupper {
 .log-bullet li {
     color: #fff;
     margin-bottom: 10px;
+}
+
+.start-selling-popup h2{
+	font: normal normal normal 24px/30px Monument Extended;
+	color: #FFFFFF;
+	text-align:center;
+}
+
+.start-selling-popup p{
+	text-align: center;
+	font: normal normal normal 16px/24px Lato;
+	color: #FFFFFF;
+	margin-bottom: 10px;
+}
+
+.start-selling-popup a{
+	font: normal normal 500 12px/16px Monument Extended;
+    color: #2E2BAA!important;
+    background-color: #fff;
+    padding: 10px 22px;
+    border: 1px solid #fff;
+	margin: 10px 0;
+    display: inline-block;
+}
+
+.start-selling-popup a:hover{
+	background-color: transparent;
+	color: #fff!important;
 }
 
 .profilemagazine .magazine_article h1 {
@@ -8372,11 +8401,16 @@ p.sliderupper {
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
-	line-height:16px;
-	padding:2px 6px;
+	line-height:23px;
+	height: 22px;
+	padding:0 6px;
 	background-color: #fff;
 	border: 1px solid #00CEA7;
     color: #00CEA7;
+}
+
+.paid{
+	display:block;
 }
 
 .rdt_TableCell, .rdt_TableCell a,
@@ -9065,6 +9099,10 @@ p.sliderupper {
 
 .pricerangeouter .ant-input-number {
     width: 48%;
+}
+
+.cookie_popup_login .modal-dialog{
+	max-width: 700px;
 }
 
 /* All media screen below */
