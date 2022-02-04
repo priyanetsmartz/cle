@@ -757,9 +757,9 @@ function BusinessProfile(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-3 mt-3">
+                        <div className="col-sm-3 mt-4">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary" onClick={openBussinessModel}>
+                                <button type="button" className="btn btn-secondary edit" onClick={openBussinessModel}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
@@ -812,9 +812,9 @@ function BusinessProfile(props) {
                         </div>
 
 
-                        <div className="col-sm-3 mt-3">
+                        <div className="col-sm-3 mt-4">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary" onClick={openMyDetails}>
+                                <button type="button" className="btn btn-secondary edit" onClick={openMyDetails}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
@@ -904,7 +904,7 @@ function BusinessProfile(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary" onClick={openBankDetailsModal}>
+                                <button type="button" className="btn btn-secondary edit" onClick={openBankDetailsModal}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
