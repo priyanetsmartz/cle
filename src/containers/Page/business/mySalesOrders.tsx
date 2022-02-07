@@ -111,7 +111,7 @@ function MySalesOrders(props) {
 
     const columns = [
         {
-            name: intl.formatMessage({id:'order'}),
+            name: intl.formatMessage({ id: 'order' }),
             selector: row => row.increment_id,
             sortable: true,
             cell: row => (
@@ -120,30 +120,30 @@ function MySalesOrders(props) {
             )
         },
         {
-            name: intl.formatMessage({id:'order.date'}),
+            name: intl.formatMessage({ id: 'order.date' }),
             selector: row => row.date,
             sortable: true
         },
         {
-            name: intl.formatMessage({id:'status'}),
+            name: intl.formatMessage({ id: 'status' }),
             selector: row => row.status,
             sortable: true,
             cell: row => (
                 // <span className='green'>{row.status}</span>
 
                 <div>
-                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Canceled" ? <span className="canceled">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Shipped" ? <span className="shipped">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Pending" ? <span className="pending">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Delivered" ? <span className="delivered">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Returned" ? <span className="returned">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Canceled" ? <span className="canceled">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Shipped" ? <span className="shipped">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Pending" ? <span className="pending">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Delivered" ? <span className="delivered">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Returned" ? <span className="returned">{intl.formatMessage({ id: row.status })}</span> : ""}
 
                 </div>
             )
         },
         {
-            name: intl.formatMessage({id:'order.total'}),
+            name: intl.formatMessage({ id: 'order.total' }),
             selector: row => row.total ? siteConfig.currency + ' ' + row.total : 0,
         },
     ];
@@ -192,7 +192,11 @@ function MySalesOrders(props) {
                                                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                                                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                                                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                                                },
+                                                locale: {
+                                                    format: "DD/MM/YYYY"
                                                 }
+
                                             }}
                                         >
                                             <input type="text" className="form-control" />
@@ -250,7 +254,7 @@ function MySalesOrders(props) {
 
 
                     <DataTable
-                        progressPending= {isLoading}
+                        progressPending={isLoading}
                         columns={columns}
                         data={myOrder}
                         pagination={true}

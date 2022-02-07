@@ -4,7 +4,7 @@ import { capitalize } from "../../components/utility/allutils";
 
 function Breadcrumbs(props) {
     const location = useLocation()
-    const { category, subcat, childcat, greatchildcat, cat, orderId, returnId }: any = useParams();
+    const { category, subcat, childcat, greatchildcat, cat, orderId, returnId, prodsku }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [keyUl, setKey] = useState('');
@@ -32,6 +32,7 @@ function Breadcrumbs(props) {
             {(location.pathname !== "/home") && (
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
+                  
                     {breadcrumsState.map((local, j) => {
 
                         let result = local.includes("new-in");
@@ -102,9 +103,10 @@ function Breadcrumbs(props) {
                                         </li>
                                     </p>
                                 )
-                            } else if (local === 'all' || local === cat || local === 'email') {
+                            } else if (local === 'all' || local === cat || local === 'email' || local === prodsku) {
                                 return ('')
                             }
+
                             else if (local === returnId) {
                                 return (
                                     <li key={j} className="breadcrumb-item">Return details</li>

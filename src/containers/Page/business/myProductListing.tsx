@@ -147,23 +147,24 @@ function MyProductListing(props) {
             cell: row => <img height="84px" width="56px" alt={row.image} src={row.image} />,
         },
         {
-            name: intl.formatMessage({id:'Product'}),
+            name: intl.formatMessage({ id: 'Product' }),
             sortable: true,
             cell: row => (
                 <div>
                     <p className='prodbrand'>{row.product.brand}</p>
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span><IntlMessages id="id" />:</span>{row.product.id}</p>
-                    <div className='data_value'><ul><li>{row.product.status === "2" ? <Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link> : <Link to={'/product-details/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
+                    <div className='data_value'><ul><li>{ <Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
+                    {/* <div className='data_value'><ul><li>{row.product.status === "2" ? <Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link> : <Link to={'/product-details/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div> */}
                 </div>
             ),
         },
         {
-            name: intl.formatMessage({id:'order.date'}),
+            name: intl.formatMessage({ id: 'order.date' }),
             selector: row => row.date,
         },
         {
-            name: intl.formatMessage({id:'status'}),
+            name: intl.formatMessage({ id: 'status' }),
             selector: row => row.status,
             cell: row => (
                 <div>
@@ -178,7 +179,7 @@ function MyProductListing(props) {
             ),
         },
         {
-            name: intl.formatMessage({id:'price'}),
+            name: intl.formatMessage({ id: 'price' }),
             selector: row => row.price,
         }
     ];
@@ -227,6 +228,9 @@ function MyProductListing(props) {
                                                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                                                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                                                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                                                },
+                                                locale: {
+                                                    format: "DD/MM/YYYY"
                                                 }
                                             }}
                                         >
@@ -289,15 +293,15 @@ function MyProductListing(props) {
 
 
                     <div className="product-listing">
-						<DataTable
-						progressPending= {isLoading}
-						columns={columns}
-						data={listingData}
-						pagination={true}
+                        <DataTable
+                            progressPending={isLoading}
+                            columns={columns}
+                            data={listingData}
+                            pagination={true}
                             // progressPending={pending}
-						paginationComponentOptions={paginationComponentOptions}
-						/>
-					</div>
+                            paginationComponentOptions={paginationComponentOptions}
+                        />
+                    </div>
                     <div className="row">
                         <div className="col-sm-12">
                             <Link className="btn btn-secondary" to="/product-integration" ><IntlMessages id="product_integration" /></Link>

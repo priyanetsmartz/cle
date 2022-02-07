@@ -7370,7 +7370,10 @@ p.sliderupper {
     text-align: center;
     font-size: 16px;
 }
-
+.deletePopup.successmail .modal-header > i {
+    font-size: 50px;
+    color: #2e2baa;
+}
 .faq-list {
     padding: 60px 0;
 }
