@@ -11,7 +11,6 @@ import { getCookie } from "../../../../helpers/session";
 import ProductsMagazine from './magazine';
 import { useParams } from "react-router-dom";
 import ProductImages from './productImges';
-import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { addToCartApi, addToCartApiGuest, addWhishlist, configLabels, createGuestToken, getGuestCart, getProductChildren, getProductDetails, getProductExtras, getWhishlistItemsForUser, removeWhishlist } from '../../../../redux/cart/productApi';
@@ -31,7 +30,7 @@ function ProductDetailsPrivate(props) {
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
     let venID = localToken && localToken.vendor_id ? localToken.vendor_id : 0;
-    const { vendorId, prodsku }: any = useParams();
+    const { vendorIdprev, prodsku }: any = useParams();
     const intl = useIntl();
     const language = getCookie('currentLanguage');
     const [opacity, setOpacity] = useState(1);
@@ -72,7 +71,7 @@ function ProductDetailsPrivate(props) {
         getProductDetailsFxn(prodsku);
         setShareUrl(window.location.href);
 
-        if (vendorId !== venID) {
+        if (vendorIdprev !== venID) {
             window.location.href = '/';
         }
         return () => {
@@ -149,6 +148,7 @@ function ProductDetailsPrivate(props) {
         projectSingle['type_id'] = selectChild.type_id;
         projectSingle['sku'] = selectChild.sku;
         projectSingle['name'] = selectChild.name;
+        projectSingle['status'] = selectChild.status;
         projectSingle['price'] = selectChild.price ? selectChild.price : 0;
         projectSingle['description'] = description;
         projectSingle['saleprice'] = special_price ? special_price : 0;
@@ -262,7 +262,7 @@ function ProductDetailsPrivate(props) {
             })
         }
 
-        // console.log(tags);
+        // console.log(result.data.status);
         //     console.log(result.data.price)
         projectSingle['id'] = result.data.id;
         projectSingle['type_id'] = result.data.type_id;
@@ -273,6 +273,7 @@ function ProductDetailsPrivate(props) {
         projectSingle['description'] = description;
         projectSingle['saleprice'] = special_price ? special_price : 0;
         projectSingle['watch_color'] = watch_color;
+        projectSingle['status'] = result.data.status;
         projectSingle['gift'] = gift;
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
@@ -424,6 +425,23 @@ function ProductDetailsPrivate(props) {
         <>
             <main>
                 {/* <Promotion /> */}
+
+                <section className='product-status'>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <div>
+                                   
+                                    {productDetails['status'] === 1 ? <span className="active">{intl.formatMessage({ id: "product.active" })}</span> : ""}
+                                    {productDetails['status'] === 8 ? <span className="sold">{intl.formatMessage({ id: "product.sold" })}</span> : ""}
+                                    {productDetails['status'] === 3 ? <span className="pending">{intl.formatMessage({ id: "product.pending" })}</span> : ""}
+                                    {productDetails['status'] === 10 ? <span className="rejected">{intl.formatMessage({ id: "product.rejected" })}</span> : ""}
+                                    {productDetails['status'] === 2 ? <span className="disabled">{intl.formatMessage({ id: "product.disabled" })}</span> : ""}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <section style={{ 'opacity': opacity }} >
                     <div className="container" id="productID" >
                         <div className="row">

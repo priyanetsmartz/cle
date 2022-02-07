@@ -26,7 +26,7 @@ function MyProductListing(props) {
     const [sortOrder, setSortOrder] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
-    const [vendorId, setVendorId] = useState(1);
+    const [vendorId, setVendorId] = useState(venID);
     const [deletePop, setDeletePop] = useState(false);
     const [deleteId, setDeleteID] = useState(0)
     const [isLoading, setIsLoading] = useState(true);
