@@ -49,6 +49,7 @@ function MyAnalysis(props) {
         if (results && results.data && results.data.length > 0) {
             //    console.log(results.data[0])
             let tiles_information = results?.data[0]?.tiles_information
+            console.log(tiles_information)
             setPdata(tiles_information?.order_information)
             setBarChartData([tiles_information?.product_information])
             setPieChart(tiles_information?.payout_information)
