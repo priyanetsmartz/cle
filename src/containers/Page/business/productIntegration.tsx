@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getCookie } from '../../../helpers/session';
-import { getProductIntegration } from '../../../redux/pages/vendorLogin';
+import { getProductIntegration, getProductIntegrationSample } from '../../../redux/pages/vendorLogin';
 import { SaveAnswers } from '../../../redux/pages/allPages';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
@@ -16,6 +16,9 @@ function ProductIntegration(props) {
     const [showEcom, setShowEcom] = useState(false);
     const [showBulkUpload, setShowBulkUpload] = useState(false);
     const [formData, setFormData] = useState({})
+    const [setEcom, setSetEcom] = useState('');
+    const [setFinal, setSetFinal] = useState('');
+    const [downloadSample, setDownloadSample] = useState('');
     const [formdd, setFormDd] = useState([])
     const [form, setForm] = useState({
         "title": "",
@@ -46,6 +49,8 @@ function ProductIntegration(props) {
     useEffect(() => {
         async function getData() {
             let lang = props.languages ? props.languages : language;
+            let sample: any = await getProductIntegrationSample(lang);
+            setDownloadSample(sample.data)
             let result: any = await getProductIntegration(lang);
             let formData = [];
             if (result.data[0] && result.data[0].form_json && result.data[0].form_json.length > 0) {
@@ -66,7 +71,8 @@ function ProductIntegration(props) {
     const handleOnChange = async (e) => {
         e.preventDefault();
         let attribute_code = e.target.getAttribute("data-attribute");
-
+        console.log(e.target.value)
+        setSetEcom(e.target.value)
         if (e.target.value === "option-2") {
             setShowEcom(true)
             setShowBulkUpload(false)
@@ -92,6 +98,7 @@ function ProductIntegration(props) {
     }
     const handleOnChangeEcom = async (e) => {
         let attribute_code = e.target.getAttribute("data-attribute");
+        setSetFinal(e.target.value);
         const tempObj = {
             value: e.target.value,
             label: attribute_code,
@@ -203,7 +210,7 @@ function ProductIntegration(props) {
                                     <ul className="radio-toolbar">
                                         {formdd && formdd.length > 1 && formdd[1].values.map((quest, i) => {
                                             return (
-                                                <> <li><input type="radio" id={`radioApple` + i} name={formdd && formdd.length > 1 ? formdd[1].name : ""} value={quest.value} onChange={handleOnChange} data-attribute={quest.label} />
+                                                <> <li><input type="radio" id={`radioApple` + i} name={formdd && formdd.length > 1 ? formdd[1].name : ""} value={quest.value} onChange={handleOnChange} data-attribute={quest.label} className={setEcom === quest.value ? "active" : ""} />
                                                     <label htmlFor="radioApple">{quest.label}</label></li>
                                                 </>
                                             )
@@ -219,7 +226,7 @@ function ProductIntegration(props) {
                                         <ul className="radio-toolbar">
                                             {formdd && formdd.length > 2 && formdd[2].values.map((quest, i) => {
                                                 return (
-                                                    <> <li><input type="radio" id={`step2` + i} name={formdd && formdd.length > 2 ? formdd[2].name : ""} value={quest.value} onChange={handleOnChangeEcom} data-attribute={quest.label} />
+                                                    <> <li><input type="radio" id={`step2` + i} name={formdd && formdd.length > 2 ? formdd[2].name : ""} value={quest.value} onChange={handleOnChangeEcom} data-attribute={quest.label} className={setFinal === quest.value ? "active" : ""} />
                                                         <label htmlFor="radioApple">{quest.label}</label></li>
                                                     </>
                                                 )
@@ -234,12 +241,13 @@ function ProductIntegration(props) {
                                     <p>{formdd && formdd.length > 4 ? formdd[4].label : ""}</p>
 
                                     <div className="bulk-upload">
-                                        <Link to="#">
+
+                                        <a href={downloadSample} target="_blank" rel="noopener noreferrer" download>
                                             <div className="download">
                                                 <i className="fas fa-file-download"></i>
                                                 <span>Download Sample</span>
                                             </div>
-                                        </Link>
+                                        </a>
                                         <div className="upload">
                                             <i className="fas fa-file-upload"></i>
                                             <input type={formdd && formdd.length > 5 ? formdd[5].type : ""} name={formdd && formdd.length > 5 ? formdd[5].name : ""} onChange={onFileChange} data-attribute={formdd && formdd.length > 5 ? formdd[5].label : ""} accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />

@@ -31,7 +31,7 @@ function ProductDetailsPrivate(props) {
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
     let venID = localToken && localToken.vendor_id ? localToken.vendor_id : 0;
-    const { vendorId, sku }: any = useParams();
+    const { vendorId, prodsku }: any = useParams();
     const intl = useIntl();
     const language = getCookie('currentLanguage');
     const [opacity, setOpacity] = useState(1);
@@ -69,16 +69,16 @@ function ProductDetailsPrivate(props) {
         }, 3000);
         const localToken = props.token.token;
         setToken(localToken)
-        getProductDetailsFxn(sku);
+        getProductDetailsFxn(prodsku);
         setShareUrl(window.location.href);
 
-        if (vendorId != venID) {
+        if (vendorId !== venID) {
             window.location.href = '/';
         }
         return () => {
             props.openGiftBoxes(0);
         }
-    }, [sku, props.languages, props.token])
+    }, [prodsku, props.languages, props.token])
 
 
     useEffect(() => {
@@ -352,7 +352,7 @@ function ProductDetailsPrivate(props) {
         localStorage.setItem('cartQuoteId', cartQuoteId);
         cartData = {
             "cartItem": {
-                "sku": sku,
+                "sku": prodsku,
                 "qty": quantity,
                 "quote_id": cartQuoteId
             }
@@ -391,12 +391,12 @@ function ProductDetailsPrivate(props) {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
                 notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
-                getProductDetailsFxn(sku)
+                getProductDetailsFxn(prodsku)
             } else {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
-                getProductDetailsFxn(sku)
+                getProductDetailsFxn(prodsku)
             }
         } else {
             props.showSignin(true);
@@ -412,12 +412,12 @@ function ProductDetailsPrivate(props) {
             setDelWishlist(0)
             setItemInWhishlist(0)
             notification("success", "", del.data[0].message);
-            getProductDetailsFxn(sku)
+            getProductDetailsFxn(prodsku)
         } else {
             props.addToWishlistTask(true);
             setDelWishlist(0)
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
-            getProductDetailsFxn(sku)
+            getProductDetailsFxn(prodsku)
         }
     }
     return (

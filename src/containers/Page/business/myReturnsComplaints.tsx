@@ -71,7 +71,7 @@ function MyReturnsComplaints(props) {
 
     const datePickerCallback = async (start, end, label) => {
         //console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
-        let from = moment(start).format("DD-MM-YYYY"), to = moment(end).format("DD-MM-YYYY");
+        let from = moment(start).format("MM-DD-YYYY"), to = moment(end).format("MM-DD-YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({
                 ...prevState,
@@ -201,6 +201,9 @@ function MyReturnsComplaints(props) {
                                                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                                                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                                                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                                                },
+                                                locale: {
+                                                    format: "DD/MM/YYYY"
                                                 }
                                             }}
                                         >

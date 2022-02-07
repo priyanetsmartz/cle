@@ -21,7 +21,8 @@ function Dashboard(props) {
     const language = getCookie('currentLanguage');
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
-    const [pageSize, setPageSize] = useState(siteConfig.pageSize);
+    let quater = moment().quarter();
+    // const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     let lang = props.languages ? props.languages : language;
     const [items, setItems] = useState([]);
     const [pagination, setPagination] = useState(1);
@@ -37,11 +38,15 @@ function Dashboard(props) {
     const [showRawPDF, setShowRawPDF] = useState(false)
     const [payoutData, setPayoutData] = useState([])
     const [showMonth, setShowMonth] = useState(true);
+    const [sowQuaters, setShowQuaters] = useState(false);
     const [isLoadingOrders, setIsLoadingOrders] = useState(true)
     const [isLoadingReturns, setIsLoadingReturns] = useState(true)
     const [isLoadingPayouts, setIsLoadingPayouts] = useState(true)
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
+    const [quaterSlider, setQuaterSlider] = useState('')
+    const [currentQuater, setCurrentQuater] = useState(quater)
+    // const [tilesDates, SetTilesDates] = useState({startDate:"", endDate : ""})
     useEffect(() => {
         let pop = getCookie('popUp');
         if (localToken.showpop === 1 || pop === localToken.vendor_id)
@@ -50,10 +55,12 @@ function Dashboard(props) {
             setMyDashboardModal(true)
         let currentDate = moment().endOf('month').format('MM/DD/YYYY');
         let oldDate = moment().startOf('month').format('MM/DD/YYYY');
+
         getDataTiles(oldDate, currentDate);
         getDataOfOrders()
         getVendorReturnsData()
         getDataOfPayouts();
+
         return () => {
             setItems([]);
             setMyDashboardModal(false)
@@ -63,6 +70,7 @@ function Dashboard(props) {
             setflagDates([])
             SetVendorName('')
             setMyOrders([])
+            setQuaterSlider('')
         }
     }, [])
     useEffect(() => {
@@ -73,7 +81,6 @@ function Dashboard(props) {
 
 
     const goToNextPage = (e) => {
-        let lang = props.languages ? props.languages : language;
         e.preventDefault();
         setCurrent((page) => page + 1);
 
@@ -110,7 +117,7 @@ function Dashboard(props) {
     }
     const columns = [
         {
-            name: intl.formatMessage({id:'order'}),
+            name: intl.formatMessage({ id: 'order' }),
             selector: row => row.increment_id,
             sortable: true,
             cell: row => (
@@ -119,37 +126,37 @@ function Dashboard(props) {
             )
         },
         {
-            name: intl.formatMessage({id:'order.date'}),
+            name: intl.formatMessage({ id: 'order.date' }),
             selector: row => row.date,
             sortable: true
         },
         {
-            name: intl.formatMessage({id:'status'}),
+            name: intl.formatMessage({ id: 'status' }),
             selector: row => row.status,
             sortable: true,
             cell: row => (
                 // <span className='green'>{row.status}</span>
 
                 <div>
-                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Canceled" ? <span className="canceled">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Shipped" ? <span className="shipped">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Pending" ? <span className="pending">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Delivered" ? <span className="delivered">{intl.formatMessage({id:row.status})}</span> : ""}
-                    {row.status === "Returned" ? <span className="returned">{intl.formatMessage({id:row.status})}</span> : ""}
+                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Canceled" ? <span className="canceled">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Shipped" ? <span className="shipped">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Pending" ? <span className="pending">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Delivered" ? <span className="delivered">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Returned" ? <span className="returned">{intl.formatMessage({ id: row.status })}</span> : ""}
 
                 </div>
             )
         },
         {
-            name: intl.formatMessage({id:'order.total'}),
+            name: intl.formatMessage({ id: 'order.total' }),
             selector: row => row.total ? siteConfig.currency + ' ' + row.total : 0,
         },
     ];
 
     const returnColumns = [
         {
-            name: intl.formatMessage({id:'orderNumber'}),
+            name: intl.formatMessage({ id: 'orderNumber' }),
             sortable: true,
             cell: row => (
                 <Link to={`/vendor/returns-complaints/${row.increment_id[0].entity_id}`}>{row.increment_id[0].increment_id}</Link>
@@ -157,35 +164,35 @@ function Dashboard(props) {
             )
         },
         {
-            name: intl.formatMessage({id:'order.date'}),
+            name: intl.formatMessage({ id: 'order.date' }),
             selector: row => row.date,
             sortable: true
         },
         {
-            name: intl.formatMessage({id:'status'}),
+            name: intl.formatMessage({ id: 'status' }),
             selector: row => row.status,
             sortable: true,
             cell: row => (
                 // <span className='green'>{capitalize(row.status)}</span>
                 <div>
-                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
-                    {row.status === "pending" ? <span className="pending">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
-                    {row.status === "approved" ? <span className="approved">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
-                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
-                    {row.status === "received" ? <span className="received">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
-                    {row.status === "accept" ? <span className="accept">{capitalize(intl.formatMessage({id:row.status}))}</span> : ""}
+                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
+                    {row.status === "approved" ? <span className="approved">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
+                    {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
+                    {row.status === "received" ? <span className="received">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
+                    {row.status === "accept" ? <span className="accept">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
                 </div>
             )
         },
         {
-            name: intl.formatMessage({id:'order.total'}),
+            name: intl.formatMessage({ id: 'order.total' }),
             selector: row => row.total,
         },
     ];
 
     const columnsPayouts = [
         {
-            name: intl.formatMessage({id:'order.price'}),
+            name: intl.formatMessage({ id: 'order.price' }),
             selector: row => row.price,
             button: true,
             cell: row => (
@@ -194,14 +201,14 @@ function Dashboard(props) {
 
         },
         {
-            name: intl.formatMessage({id:'order.date'}),
+            name: intl.formatMessage({ id: 'order.date' }),
             selector: row => row.date,
         },
         {
-            name: intl.formatMessage({id:'status'}),
+            name: intl.formatMessage({ id: 'status' }),
             selector: row => row.status,
             cell: row => (
-                <span className='green'>{(intl.formatMessage({id:capitalize(row.status)}))}</span>
+                <span className='green'>{(intl.formatMessage({ id: capitalize(row.status) }))}</span>
             ),
         },
         { // To change column
@@ -211,7 +218,7 @@ function Dashboard(props) {
 
                 if (row.data.payout_status === 'paid') {
                     return (
-                        <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{intl.formatMessage({id:'view'})}</Link>
+                        <Link to={`/vendor/payoutdetails/${row.payout_id}`}>{intl.formatMessage({ id: 'view' })}</Link>
                     )
                 }
             }
@@ -290,7 +297,7 @@ function Dashboard(props) {
 
     }
     async function openDashboardModal(oldDate, currentDate) {
-        let results: any = await closePopup(1);
+        await closePopup(1);
         setCookie("popUp", localToken.vendor_id)
         setMyDashboardModal(!myDashboardModal);
     }
@@ -307,21 +314,27 @@ function Dashboard(props) {
         let dates = [];
         if (flag === 0) {
             setShowMonth(true)
+            setShowQuaters(false)
             dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
-        } else if (1) {
+            getDataTiles(dates['start'], dates['end'])
+        } else if (flag === 1) {        
             setShowMonth(false)
-            let quater = moment().quarter();
-            dates['start'] = moment().quarter(quater).startOf('quarter').format('DD/MM/YYYY');
-            dates['end'] = moment().quarter(quater).endOf('quarter').format('DD/MM/YYYY');
+            setShowQuaters(true)
+            handleQuater(currentQuater);
+            // let quater = moment().quarter();
+            // dates['start'] = moment().quarter(quater).startOf('quarter').format('DD/MM/YYYY');
+            // dates['end'] = moment().quarter(quater).endOf('quarter').format('DD/MM/YYYY');
         } else {
             setShowMonth(false)
+            setShowQuaters(false)
             dates['start'] = moment().startOf('year').format('DD/MM/YYYY');
             dates['end'] = moment().endOf('year').format('DD/MM/YYYY');
+            getDataTiles(dates['start'], dates['end'])
         }
         setActive(flag)
-        //  setflagDates(dates)
-        getDataTiles(dates['start'], dates['end'])
+
+
     }
 
     function handleChangeLeft(i) {
@@ -330,7 +343,7 @@ function Dashboard(props) {
         let month = moment.monthsShort().filter((name, i) => {
             return i === monthKey
         })
-        console.log(monthKey)
+        // console.log(monthKey)
         if (monthKey === -1) return false;
         setCurrentMonthKey(monthKey);
         setCurrentMonth(month[0])
@@ -342,6 +355,7 @@ function Dashboard(props) {
 
         getDataTiles(startOfMonth, endOfMonth);
     }
+
 
     function handleChangeRight(i) {
 
@@ -357,6 +371,33 @@ function Dashboard(props) {
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
         getDataTiles(startOfMonth, endOfMonth);
+    }
+
+    function handleQuater(quater) {
+        let start = moment().quarter(quater).startOf('quarter').format('MMM');
+        let end = moment().quarter(quater).endOf('quarter').format('MMM');
+        let part = start + '-' + end;
+
+        let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
+        let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
+        getDataTiles(startOfMonth, endOfMonth);
+
+        setQuaterSlider(part);
+    }
+
+    function handleChangeLeftQuater(i) {
+        let quarter = currentQuater - 1;
+        if (quarter === 0) return false;
+        setCurrentQuater(quarter);
+        handleQuater(quarter);
+    }
+
+
+    function handleChangeRightQuater(i) {
+        let quarter = currentQuater + 1;
+        if (quarter === 5) return false;
+        setCurrentQuater(quarter);
+        handleQuater(quarter);
     }
     return (
         <div className="col-sm-9">
@@ -379,7 +420,7 @@ function Dashboard(props) {
                                             </div>
                                             <div className="important-cont">
                                                 <p className="announcement-heading">{item.title}</p>
-                                                <p className="announcement-text"><div dangerouslySetInnerHTML={{ __html: item.full_content }} /></p>
+                                                <div className="announcement-text"><p dangerouslySetInnerHTML={{ __html: item.full_content }} /></div>
                                             </div>
 
                                         </div>
@@ -433,7 +474,19 @@ function Dashboard(props) {
                                     {
                                         <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
                                     }
+
                                     <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
+                                </ul>
+                            )}
+                            {sowQuaters && (
+                                <ul className='monthsname pagination justify-content-center align-items-center'>
+                                    <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
+                                    {
+
+                                        <p>{quaterSlider}</p>
+                                    }
+
+                                    <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
                                 </ul>
                             )}
                         </div>

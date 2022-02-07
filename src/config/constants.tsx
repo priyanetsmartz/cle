@@ -4,7 +4,8 @@ export const DROPDOWN = {
     years: generateArrayOfYears(),
     nextYears: generateArrayOfNextYears(),
     gender: [{ id: '0', name: 'Male' }, { id: '1', name: 'Female' }, { id: '2', name: 'Other' }],
-    genderVendor: [{ id: 'male', name: 'Male' }, { id: 'female', name: 'Female' }, { id: 'other', name: 'Other' }]
+    genderVendor: [{ id: 'male', name: 'Male' }, { id: 'female', name: 'Female' }, { id: 'other', name: 'Other' }],
+    quarter: [{ id: '1', data: 'Jan-Mar' }, { id: '2', data: 'Apr-Jul' }, { id: '3', data: 'Jul-Sept' }, { id: '4', data: 'Oct-Dec' }]
 }
 
 function generateArrayOfYears() {

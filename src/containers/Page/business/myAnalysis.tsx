@@ -24,7 +24,8 @@ import { useIntl } from 'react-intl';
 
 
 function MyAnalysis(props) {
-    const intl= useIntl()
+    const intl = useIntl()
+    let quater = moment().quarter();
     const [active, setActive] = useState(0);
     const [dataTilesData, setDataTilesData] = useState([]);
     const [pdata, setPdata] = useState([]);
@@ -34,9 +35,13 @@ function MyAnalysis(props) {
     let currentDate = moment().endOf('month').format('MM/DD/YYYY');
     let oldDate = moment().startOf('month').format('MM/DD/YYYY');
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
+    const [sowQuaters, setShowQuaters] = useState(false);
+    const [quaterSlider, setQuaterSlider] = useState('')
+    const [currentQuater, setCurrentQuater] = useState(quater)
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     useEffect(() => {
         getDataTiles(oldDate, currentDate);
+        // handleQuater(currentQuater)
     }, [])
 
     async function getDataTiles(oldDate, currentDate) {
@@ -55,21 +60,26 @@ function MyAnalysis(props) {
         let dates = [];
         if (flag === 0) {
             setShowMonth(true)
+            setShowQuaters(false)
             dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
-        } else if (1) {
+            getDataTiles(dates['start'], dates['end'])
+        } else if (flag === 1) {
             setShowMonth(false)
-            let quater = moment().quarter();
-            dates['start'] = moment().quarter(quater).startOf('quarter').format('DD/MM/YYYY');
-            dates['end'] = moment().quarter(quater).endOf('quarter').format('DD/MM/YYYY');
+            setShowQuaters(true)
+            handleQuater(currentQuater);
+            // let quater = moment().quarter();
+            // dates['start'] = moment().quarter(quater).startOf('quarter').format('DD/MM/YYYY');
+            // dates['end'] = moment().quarter(quater).endOf('quarter').format('DD/MM/YYYY');
         } else {
             setShowMonth(false)
+            setShowQuaters(false)
             dates['start'] = moment().startOf('year').format('DD/MM/YYYY');
             dates['end'] = moment().endOf('year').format('DD/MM/YYYY');
+            getDataTiles(dates['start'], dates['end'])
         }
         setActive(flag)
-        //  setflagDates(dates)
-        getDataTiles(dates['start'], dates['end'])
+
     }
 
     function handleChangeLeft(i) {
@@ -121,6 +131,33 @@ function MyAnalysis(props) {
             </text>
         );
     };
+    function handleQuater(quater) {
+
+        let start = moment().quarter(quater).startOf('quarter').format('MMM');
+        let end = moment().quarter(quater).endOf('quarter').format('MMM');
+        let part = start + '-' + end;
+
+        let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
+        let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
+        getDataTiles(startOfMonth, endOfMonth);
+
+        setQuaterSlider(part);
+    }
+
+    function handleChangeLeftQuater(i) {
+        let quarter = currentQuater - 1;
+        if (quarter === 0) return false;
+        setCurrentQuater(quarter);
+        handleQuater(quarter);
+    }
+
+
+    function handleChangeRightQuater(i) {
+        let quarter = currentQuater + 1;
+        if (quarter === 5) return false;
+        setCurrentQuater(quarter);
+        handleQuater(quarter);
+    }
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
@@ -141,6 +178,17 @@ function MyAnalysis(props) {
                                         <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
                                     }
                                     <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
+                                </ul>
+                            )}
+                            {sowQuaters && (
+                                <ul className='monthsname pagination justify-content-center align-items-center'>
+                                    <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
+                                    {
+
+                                        <p>{quaterSlider}</p>
+                                    }
+
+                                    <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
                                 </ul>
                             )}
                         </div>
@@ -183,8 +231,8 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>{intl.formatMessage({id:'vendor.myAnalysis'})}</h1>
-                            <p>{intl.formatMessage({id:'orderInformation'})}</p>
+                            <h1>{intl.formatMessage({ id: 'vendor.myAnalysis' })}</h1>
+                            <p>{intl.formatMessage({ id: 'orderInformation' })}</p>
                             <ResponsiveContainer width="100%" aspect={3}>
                                 <LineChart data={pdata} margin={{ right: 300 }}>
                                     <CartesianGrid />
@@ -210,7 +258,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h3>{intl.formatMessage({id:'productInformation'})}</h3>
+                            <h3>{intl.formatMessage({ id: 'productInformation' })}</h3>
                             <PieChart width={400} height={400}>
                                 <Pie
                                     data={pieChart}
@@ -233,7 +281,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h3>{intl.formatMessage({id:'payoutInformation'})}</h3>
+                            <h3>{intl.formatMessage({ id: 'payoutInformation' })}</h3>
                             <BarChart
                                 width={500}
                                 height={300}
