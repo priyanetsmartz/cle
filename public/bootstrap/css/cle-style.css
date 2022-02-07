@@ -898,8 +898,7 @@ p.promotion_alert {
 }
 
 .accodian_descrpt .accordion-body {
-    padding: 0;
-    padding-bottom: 10px;
+    padding: 0 0 10px 10px;
     overflow: auto;
 }
 
@@ -5682,6 +5681,8 @@ color: #017abb;
     height: 100%;
 }
 
+
+
 .order-number {
     margin-bottom: 40px;
 }
@@ -5730,17 +5731,49 @@ color: #017abb;
     margin: auto;
 }
 
+.Address-title{
+	position: relative;
+}
+
 .Address-title span {
     font-weight: bold;
     margin-bottom: 20px;
     display: block;
 }
 
-.Address-title a {
+.order-delivery-address .Address-title a {
     font-family: 'Monument Extended';
     font-weight: 500;
     color: #2e2baa;
     font-size: 16px;
+	text-decoration: none;
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+    display: block;
+    position: absolute;
+	right: 0;
+}
+
+.order-delivery-address .Address-title a:hover{
+	padding-top: 5px;
+}
+
+.order-delivery-address .Address-title a:after{
+	content: "";
+    border-bottom: 1px solid transparent;
+    display: block;
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
+}
+
+.order-delivery-address .Address-title a:hover:after{
+	border-color: #2e2baa;
+    bottom: 2px;
 }
 
 .return-complaint-btns a {
@@ -6184,6 +6217,10 @@ h4.arrow-change:after {
     color: #2E2BAA;
 }
 
+.customer-d-wrap:hover a{
+	text-decoration:underline;
+}
+
 .container.about-inner {
     padding: 0;
 }
@@ -6268,16 +6305,17 @@ h4.arrow-change:after {
 .help-center .btn {
     background-color: #fff;
     color: #2E2BAA;
-    border-color: #2E2BAA;
+    border-color: #fff;
     font-family: 'Monument Extended';
     -webkit-transition: all .3s ease;
     -o-transition: all .3s ease;
     transition: all .3s ease;
+	font-size: 12px;
+    padding: 12px 30px;
 }
 
 .help-center .btn:hover {
-    border-color: #fff;
-    background-color: #2E2BAA;
+    background-color: transparent;
     color: #fff;
 }
 
@@ -7149,6 +7187,12 @@ button:focus {
     float: right;
     padding: 12px 30px;
 }
+
+.signup-btn{
+	padding: 12px 30px;
+}
+
+
 
 
 .pagination a.page-link.active {

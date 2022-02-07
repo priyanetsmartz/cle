@@ -816,6 +816,13 @@ p.signup-policy-links a {
 	font-family: Cairo;
     font-size: 14px!important;
 }
+.giftmessagebox .modal-header .btn-close{
+	left:20px;
+	right:unset;
+}
+.gifting_pref .me-3{
+	margin-right:0!important
+}
 .dis-catgry h1,
 .new-in-title h1,
 .new-in-title h1 a,
