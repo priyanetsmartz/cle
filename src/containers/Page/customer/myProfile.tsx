@@ -152,7 +152,7 @@ function MyProfile(props) {
         let result: any = await getCustomerDetails();
         // const today = moment();
         // console.log(result.data);
-        const d = result.data.dob ? result.data.dob.split("-") : moment().format("YYYY-MM-DD").split("-");
+        const d = result.data.dob ? result.data.dob.split("-") : "";
         dob.day = d[2];
         dob.month = d[1];
         dob.year = d[0];
@@ -362,7 +362,7 @@ function MyProfile(props) {
     const validateDetails = () => {
         let error = {};
         let formIsValid = true;
-
+      
         if (!custForm.firstname) {
             formIsValid = false;
             error["firstname"] = intl.formatMessage({ id: "firstnamerequired" })
@@ -371,10 +371,18 @@ function MyProfile(props) {
             formIsValid = false;
             error["lastname"] = intl.formatMessage({ id: "lastnamerequired" })
         }
-        // if (!custForm.gender) {
-        //     formIsValid = false;
-        //     error["gender"] = intl.formatMessage({ id: "gifting.gender" });
-        // }
+        if (!dob.day) {
+            formIsValid = false;
+            error["dob"] = intl.formatMessage({ id: "dateofbirthrequired" });
+        }
+        if (!dob.month) {
+            formIsValid = false;
+            error["dob"] = intl.formatMessage({ id: "dateofbirthrequired" });
+        }
+        if (!dob.year) {
+            formIsValid = false;
+            error["dob"] = intl.formatMessage({ id: "dateofbirthrequired" });
+        }
         if (!customAttribute.mp_sms_telephone) {
             formIsValid = false;
             error['mp_sms_telephone'] = intl.formatMessage({ id: "phonereq" })
@@ -624,6 +632,7 @@ function MyProfile(props) {
         return formIsValid;
     }
     const openMyDetails = () => {
+        getData();
         setMyDetailsModel(!myDetailsModel);
     }
 
@@ -898,9 +907,9 @@ function MyProfile(props) {
                         <div className="col-sm-6">
                             <div className="change-paswd-sec">
                                 <div className="width-100">
-										<label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
-									</div>
-								
+                                    <label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
+                                </div>
+
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" />*</label>
                                     <input type={passMask.password ? 'password' : 'text'} className="form-control"
@@ -967,8 +976,8 @@ function MyProfile(props) {
                             <div className="col-sm-6">
                                 <div className="newemail-sec">
                                     <div className="width-100">
-										<label className="form-label heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
-									</div>
+                                        <label className="form-label heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+                                    </div>
                                     <div className="width-100 mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
                                         <input type="email" className="form-control" id="newEmail"
@@ -1084,6 +1093,7 @@ function MyProfile(props) {
                                     })}
                                 </select>
                             </div>
+                            <span className="error">{personalError.errors["dob"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /> <span className="maindatory">*</span></label>
@@ -1363,5 +1373,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { closePrefPopup, logout, customer,showForgot }
+    { closePrefPopup, logout, customer, showForgot }
 )(MyProfile);

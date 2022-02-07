@@ -682,5 +682,6 @@
   "onesize":"One Size",
   "productsnotavailable":"Products currently unavailable",
   "onlycsvallowed":"Only CSV file type required",
-  "uploadcsv":"Kindly upload CSV file"
+  "uploadcsv":"Kindly upload CSV file",
+  "dateofbirthrequired":"Date of birth is required"
 }
