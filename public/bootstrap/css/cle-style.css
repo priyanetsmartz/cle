@@ -885,7 +885,7 @@ p.promotion_alert {
 }
 
 .details_product ul {
-    margin: 0 16px;
+    margin: 0;
     padding: 0;
 }
 
@@ -7048,6 +7048,15 @@ button:focus {
     margin-right: 5px !important;
 }
 
+.my-wishlist-main .resltspage_sec .sort_by {
+    width: 25%;
+}
+
+.my-wishlist-main .resltspage_sec .sort_by .form-select{
+	background-color: #fff;
+    border-color: #fff;
+}
+
 .bg-remove {
     position: absolute;
     top: 0;
@@ -8464,9 +8473,10 @@ p.sliderupper {
 .rdt_TableCol,
 .rdt_TableCol a {
     color: #000;
-    font-size: 14px;
-    font-family: "Lato",sans-serif;
+    /* font-size: 14px;
+    font-family: "Lato",sans-serif; */
 	word-spacing: 2px;
+	font: normal normal normal 16px/19px Lato;
 }
 
 .rdt_TableCell a:hover,
@@ -8485,7 +8495,7 @@ p.sliderupper {
 }
 .rdt_TableCell p{
 	margin-bottom:5px;
-	font-size: 14px;
+	font: normal normal normal 16px/19px Lato;
 }
 
 .rdt_TableCell {
@@ -8534,7 +8544,7 @@ p.sliderupper {
 }
 
 .product-listing .rdt_TableRow{
-	min-height:150px;
+	min-height:165px;
 }
 
 .product-listing .rdt_TableCell{
@@ -8605,7 +8615,7 @@ p.sliderupper {
 }
 
 .prodbrand, .prodId span {
-    font-weight: 600;
+    font-weight: 600 !important;
 }
 
 .companylogo {
