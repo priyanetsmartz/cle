@@ -8771,6 +8771,20 @@ p.sliderupper {
     bottom: 2px;
 }
 
+.product-status .disabled {
+    font-family: 'Monument Extended';
+    font-size: 9px;
+    font-weight: 500;
+    line-height: 23px;
+    height: 22px;
+    padding: 0 7px;
+    background-color: #fff;
+    display: inline-block;
+	margin-bottom:30px;
+	border: 1px solid #aca2a2;
+    color: #aca2a2;
+}
+
 .importance {
 	display: -webkit-box;
 	display: -ms-flexbox;
