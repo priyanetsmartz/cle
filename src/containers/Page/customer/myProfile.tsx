@@ -1071,7 +1071,7 @@ function MyProfile(props) {
                             <span className="error">{personalError.errors["mp_sms_telephone"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
+                            <label className="form-label"><IntlMessages id="myaccount.dob" /><span className="maindatory">*</span></label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">{intl.formatMessage({ id: "select" })}</option>

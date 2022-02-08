@@ -9175,7 +9175,9 @@ p.sliderupper {
 .cookie_popup_login .modal-dialog{
 	max-width: 700px;
 }
-
+p.invoiceLink {
+    cursor: pointer;
+}
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */
