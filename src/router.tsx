@@ -75,7 +75,7 @@ const PublicRoutes = ({ history }) => {
           <ProductHome exact path="/products/:category/:subcat" component={Categories} />
           <ProductHome exact path="/products/:category" component={Categories} />
 
-          <VendorRoute exact path="/product-details-preview/:vendorId/:prodsku" component={ProductDetailsPrivate} />
+          <VendorRoute exact path="/product-details-preview/:vendorIdprev/:prodsku" component={ProductDetailsPrivate} />
           <ProductRoutes exact path="/product-details/:sku" component={ProductDetails} />
           <LoggedInRoute exact path="/notifications" component={Notifications} />
           <LoggedInRoute exact path="/customer/:tab" component={Customer} />

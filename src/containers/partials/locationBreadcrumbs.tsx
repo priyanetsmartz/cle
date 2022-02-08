@@ -4,7 +4,7 @@ import { capitalize } from "../../components/utility/allutils";
 
 function Breadcrumbs(props) {
     const location = useLocation()
-    const { category, subcat, childcat, greatchildcat, cat, orderId, returnId, prodsku }: any = useParams();
+    const { category, subcat, childcat, greatchildcat, cat, orderId, returnId, prodsku, vendorIdprev }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [keyUl, setKey] = useState('');
@@ -29,10 +29,12 @@ function Breadcrumbs(props) {
 
     return (
         <nav aria-label="breadcrumb" className="new-breadcrumb">
+
             {(location.pathname !== "/home") && (
                 <ol className="breadcrumb">
-                    <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
-                  
+                    {!breadcrumsState.includes("product-details-preview") ?
+                        <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
+                        : ""}
                     {breadcrumsState.map((local, j) => {
 
                         let result = local.includes("new-in");
@@ -128,11 +130,11 @@ function Breadcrumbs(props) {
                             }
 
                         } else {
-                            if (local === "" || local === "settings") {
+                            if (local === "" || local === "settings" || local === vendorIdprev) {
                                 return "";
                             } else {
                                 //  console.log(local)
-                                if (local === 'product-details' || local === 'products') {
+                                if (local === 'product-details' || local === 'products' || local === 'product-details-preview') {
                                     return (
                                         ''
                                     )

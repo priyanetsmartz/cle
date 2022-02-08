@@ -41,7 +41,7 @@ function ForgottenPassword(props) {
       let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email1, websiteId: 1 });
       if (result.data && !result.data.message) {
         setShowSuccess(true)
-       // notification("success", "", intl.formatMessage({ id: "forgotpassmail" }));
+        // notification("success", "", intl.formatMessage({ id: "forgotpassmail" }));
         setState(prevState => ({
           ...prevState,
           email1: ""
@@ -121,7 +121,7 @@ function ForgottenPassword(props) {
               <br />
               <div className="row">
                 <div className="col-md-12">
-                  {state.email1 === '' && (<Link to="#" onClick={(e) => { handlesigninClick(e); }} className="sign-in"><IntlMessages id="menu_Sign_in" /></Link>)}
+                  {(localToken?.token_email === '' || localToken?.token_email === undefined) && (<Link to="#" onClick={(e) => { handlesigninClick(e); }} className="sign-in"><IntlMessages id="menu_Sign_in" /></Link>)}
                   <Link to={"/"} className="signup-btn" onClick={handleSubmitClick} style={{ "display": !isShow ? "inline-block" : "none" }}>  <IntlMessages id="retrieve_password" /></Link>
                   <div className="spinner signup-btn" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                 </div>
@@ -133,10 +133,10 @@ function ForgottenPassword(props) {
           <div className="deletePopup successmail">
             <div className="modal-header flex-column">
               <i className="fas fa-envelope-open-text"></i>
-              <h4 className="modal-title w-100 text-center">Check your email</h4>
+              <h4 className="modal-title w-100 text-center"><IntlMessages id="checkemail" /></h4>
             </div>
             <div className="modal-body">
-              <p>Check your email for instructions on how to reset your password. We wish you a nice day!</p>
+              <p><IntlMessages id="forgotpassmessage" /></p>
             </div>
             <div className="modal-footer justify-content-center">
               <button type="button" className="btn btn-secondary" onClick={(e) => { handlesigninClick(e); }} data-dismiss="modal"><IntlMessages id="menu_Sign_in" /></button>
@@ -148,11 +148,7 @@ function ForgottenPassword(props) {
   );
 }
 const mapStateToProps = (state) => {
-
-  console.log(state?.App?.showForgot)
-
   return {}
-
 }
 
 export default connect(

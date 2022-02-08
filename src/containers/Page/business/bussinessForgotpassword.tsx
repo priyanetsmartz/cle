@@ -37,7 +37,7 @@ function BusinessForgottenPassword(props) {
       }
 
       let result: any = await vendorRestpassword(payload);
-      console.log(result)
+    //  console.log(result)
       if (result.data) {
         // notification("success", "", intl.formatMessage({ id: "forgotpassmail" }));
         setShowSuccess(true)
@@ -127,7 +127,7 @@ function BusinessForgottenPassword(props) {
           <div className="deletePopup successmail">
             <div className="modal-header flex-column">
               <i className="fas fa-envelope-open-text"></i>
-              <h4 className="modal-title w-100">Check your email</h4>
+              <h4 className="modal-title w-100 text-center">Check your email</h4>
             </div>
             <div className="modal-body">
               <p>Check your email for instructions on how to reset your password. We wish you a nice day!</p>

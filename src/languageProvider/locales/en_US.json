@@ -682,5 +682,8 @@
   "onesize":"One Size",
   "productsnotavailable":"Products currently unavailable",
   "onlycsvallowed":"Only CSV file type required",
-  "uploadcsv":"Kindly upload CSV file"
+  "uploadcsv":"Kindly upload CSV file",
+  "dateofbirthrequired":"Date of birth is required",
+  "checkemail":"Check your email",
+  "forgotpassmessage":"Check your email for instructions on how to reset your password. We wish you a nice day!"
 }
