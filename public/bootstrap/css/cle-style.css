@@ -8771,7 +8771,8 @@ p.sliderupper {
     bottom: 2px;
 }
 
-.product-status .disabled {
+.product-status .disabled,
+.product-status .active {
     font-family: 'Monument Extended';
     font-size: 9px;
     font-weight: 500;
@@ -8781,10 +8782,16 @@ p.sliderupper {
     background-color: #fff;
     display: inline-block;
 	margin-bottom:30px;
+}
+
+.product-status .disabled{
 	border: 1px solid #aca2a2;
     color: #aca2a2;
 }
-
+.product-status .active{
+	border: 1px solid #00CEA7;
+	color: #00CEA7;
+}
 .importance {
 	display: -webkit-box;
 	display: -ms-flexbox;
