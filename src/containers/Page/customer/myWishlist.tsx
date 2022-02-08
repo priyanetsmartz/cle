@@ -155,9 +155,9 @@ function MyWishList(props) {
                     <h2><IntlMessages id="Profile.Wishlist-subTitle" /></h2>
                 </div>
 
-                <div className="col-md-6">
+                <div className="col-md-12">
                     <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                             <div className='input-group wishlistsearch'>
                                 <span className="input-group-text"><img src={IconZoomIn} alt="searchIcon" className="me-1" /></span>
                                 <input type="text"
@@ -168,32 +168,34 @@ function MyWishList(props) {
                                 />
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-sm-12 mt-4">
-                                <div className="resltspage_sec">
-                                    <div className="paginatn_result">
-                                        <span><IntlMessages id="order.resultPerPage" /></span>
-                                        <ul>
-                                            <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-                                            <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
-                                            <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
-                                        </ul>
-                                    </div>
-                                    <div className="sort_by">
-                                        <div className="sortbyfilter">
-                                            <select className="form-select" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
-                                                <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                                <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                                <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+						<div className="col-md-6"></div>
+					</div>
+					<div className="row">
+						<div className="col-sm-12 mt-4">
+							<div className="resltspage_sec">
+								<div className="paginatn_result">
+									<span><IntlMessages id="order.resultPerPage" /></span>
+									<ul>
+										<li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
+										<li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
+										<li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
+									</ul>
+								</div>
+								<div className="sort_by">
+									<div className="sortbyfilter">
+										<select className="form-select" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
+											<option value="">{intl.formatMessage({ id: "sorting" })}</option>
+											<option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+											<option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
 
-                                            </select>
-                                        </div>
-                                    </div>
+										</select>
+									</div>
+								</div>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+							</div>
+						</div>
+					</div>
+                    
                 </div>
                 <div className="col-md-6"></div>
                 <div className="product-listing" style={{ 'opacity': opacity }} >

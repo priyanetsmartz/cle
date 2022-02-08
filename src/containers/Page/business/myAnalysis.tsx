@@ -419,7 +419,10 @@ function MyAnalysis(props) {
                 </div>
             </section>
             <section>
-                <div className="product-listing">
+               <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+			   <div className="product-listing">
                     <DataTable
                         title="Product Listing"
                         progressPending={isLoading}
@@ -430,6 +433,9 @@ function MyAnalysis(props) {
                         paginationComponentOptions={paginationComponentOptions}
                     />
                 </div>
+				</div>
+				</div>
+				</div>
                 <Modal show={deletePop}>
                     <Modal.Body className="CLE_pf_details modal-confirm">
 
