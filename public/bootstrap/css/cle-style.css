@@ -8405,6 +8405,50 @@ p.sliderupper {
 	color:#777777;
 }
 
+.product-status .disabled,
+.product-status .active,
+.product-status .approved,
+.product-status .decline,
+.product-status .accept,
+.product-status .acknowledged {
+    font-family: 'Monument Extended';
+    font-size: 9px;
+    font-weight: 500;
+    line-height: 23px;
+    height: 22px;
+    padding: 0 7px;
+    background-color: #fff;
+    display: inline-block;
+	margin-bottom:30px;
+}
+
+.product-status .disabled{
+	border: 1px solid #aca2a2;
+    color: #aca2a2;
+}
+.product-status .active{
+	border: 1px solid #00CEA7;
+	color: #00CEA7;
+}
+
+.product-status .approved{
+	border: 1px solid #2E2BAA;
+    color: #2E2BAA;
+}
+.product-status .decline{
+	border: 1px solid #D9242C;
+	color: #D9242C;
+}
+
+.product-status .accept{
+	border: 1px solid #00CEA7;
+    color: #00CEA7;
+}
+.product-status .acknowledged{
+	border: 1px solid #007DE2;
+	color: #007DE2;
+}
+
 .rdt_TableRow .approved,
 .rdt_TableRow .decline,
 .rdt_TableRow .disabled,
@@ -8771,27 +8815,7 @@ p.sliderupper {
     bottom: 2px;
 }
 
-.product-status .disabled,
-.product-status .active {
-    font-family: 'Monument Extended';
-    font-size: 9px;
-    font-weight: 500;
-    line-height: 23px;
-    height: 22px;
-    padding: 0 7px;
-    background-color: #fff;
-    display: inline-block;
-	margin-bottom:30px;
-}
 
-.product-status .disabled{
-	border: 1px solid #aca2a2;
-    color: #aca2a2;
-}
-.product-status .active{
-	border: 1px solid #00CEA7;
-	color: #00CEA7;
-}
 .importance {
 	display: -webkit-box;
 	display: -ms-flexbox;
