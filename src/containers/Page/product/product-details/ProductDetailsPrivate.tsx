@@ -431,7 +431,7 @@ function ProductDetailsPrivate(props) {
                         <div className="row">
                             <div className="col-sm-12">
                                 <div>
-                                   
+
                                     {productDetails['status'] === 1 ? <span className="active">{intl.formatMessage({ id: "product.active" })}</span> : ""}
                                     {productDetails['status'] === 8 ? <span className="sold">{intl.formatMessage({ id: "product.sold" })}</span> : ""}
                                     {productDetails['status'] === 3 ? <span className="pending">{intl.formatMessage({ id: "product.pending" })}</span> : ""}
@@ -448,11 +448,8 @@ function ProductDetailsPrivate(props) {
                             <div className="col-sm-6">
                                 <div className="product-slider">
                                     <span className="pdp-favorite">
-                                        {iteminWhishlist === 0 ? (
-                                            <div>{isWishlist === prodId ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i>}
-                                            </div>
-                                        ) : <div>{delWishlist === iteminWhishlist ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(iteminWhishlist) }} aria-hidden="true"></i>}
-                                        </div>}
+                                        <div><i className="far fa-heart" aria-hidden="true"></i>
+                                        </div>
                                     </span>
                                     <ProductImages productImages={productImages} />
                                 </div>
@@ -546,9 +543,8 @@ function ProductDetailsPrivate(props) {
                                     <div className="width-100 my-3">
                                         <div className="d-grid">
                                             {productDetails['is_in_stock'] === true && (
-                                                <>  <button type="button" style={{ "display": !isShow ? "flex" : "none" }} onClick={() => { handleCart(productDetails['id'], productDetails['sku']) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                                <>  <button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
                                                     <IntlMessages id="product.addToCart" /></button>
-                                                    <button style={{ "display": isShow ? "inline-block" : "none" }} className="btn btn-primary"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></button>
                                                 </>
                                             )}
                                             {productDetails['is_in_stock'] === false && (
@@ -571,21 +567,13 @@ function ProductDetailsPrivate(props) {
                                                 }}   ><Link to="#"><i className="fas fa-share-alt"></i></Link></div>
                                                 {isShare && (<div className="share-options">
                                                     <ul className="list-inline">
-                                                        <li className="list-inline-item"> <FacebookShareButton
-                                                            url={shareUrl}
-                                                            quote={productDetails['name']}>
+                                                        <li className="list-inline-item">
                                                             <i className="fab fa-facebook" aria-hidden="true"></i>
-                                                        </FacebookShareButton></li>
-                                                        <li className="list-inline-item"><LinkedinShareButton
-                                                            url={shareUrl}
-                                                            title={productDetails['name']}>
-                                                            <i className="fab fa-linkedin" aria-hidden="true"></i>
-                                                        </LinkedinShareButton></li>
-                                                        <li className="list-inline-item"><TwitterShareButton
-                                                            url={shareUrl}
-                                                            title={productDetails['name']}>
+                                                        </li>
+                                                        <li className="list-inline-item"><i className="fab fa-linkedin" aria-hidden="true"></i></li>
+                                                        <li className="list-inline-item">
                                                             <i className='fab fa-twitter'></i>
-                                                        </TwitterShareButton></li>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                                 )}

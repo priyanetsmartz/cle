@@ -143,7 +143,7 @@ function MyAnalysis(props) {
         let month = moment.monthsShort().filter((name, i) => {
             return i === monthKey
         })
-        console.log(monthKey)
+        //console.log(monthKey)
         if (monthKey === -1) return false;
         setCurrentMonthKey(monthKey);
         setCurrentMonth(month[0])
@@ -344,7 +344,7 @@ function MyAnalysis(props) {
                                     <CartesianGrid />
                                     <XAxis dataKey="created_at"
                                         interval={'preserveStartEnd'} />
-                                    <YAxis  ></YAxis>
+                                    <YAxis dataKey="total_cost" ></YAxis>
                                     <Legend />
                                     <Tooltip />
                                     <Line dataKey="total_cost"
