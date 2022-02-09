@@ -1233,9 +1233,20 @@ p.sliderupper {
 }
 
 .my_profile_sect h1{
-	font-family: Cairo !important;
+	font-family: Cairo;
 }
-
+.my_profile_sect h2{
+	font-family: Cairo;
+}
+.my_profile_sect h2 + p{
+	font-family: Cairo;
+}
+.wishlist-head h1{
+	font-family: Cairo;
+}
+.wishlist-head h2{
+	font-family: Cairo;
+}
 .filter-tiles li a{
 	font-family: Cairo !important;
 	font-size:20px;
@@ -1287,6 +1298,7 @@ p.sliderupper {
 }
 .user_show{
 	font-size:24px;
+	font-family: Cairo;
 }
 
 .faq-topics h4 + ul{
@@ -1296,6 +1308,10 @@ p.sliderupper {
 .faq-view-all a{
 	font: normal normal 600 16px/30px Cairo;
 	margin-right: 0;
+}
+
+.magazine_article h1{
+	font: normal normal 700 32px/40px Cairo;
 }
 
 .back-block:hover .back-to-shop {
