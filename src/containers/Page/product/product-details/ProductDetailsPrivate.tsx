@@ -300,8 +300,8 @@ function ProductDetailsPrivate(props) {
         //     props.recomendedProducts(recomendationsData)
         // }
         // console.log(result.data)
-        setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
-        setMeasuringDetails(result.data.extension_attributes.mp_sizechart.rule_description);
+        setProductSizeDetails(result?.data?.extension_attributes?.mp_sizechart?.rule_content);
+        setMeasuringDetails(result?.data?.extension_attributes?.mp_sizechart?.rule_description);
         // console.log(productDetails)
     }
 
