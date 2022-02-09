@@ -1347,8 +1347,9 @@ function Checkout(props) {
                                                     })}
                                                 </>
                                             )}
+											 <hr />
                                             <div className="add-address-btn">
-                                                <hr />
+                                                <i className="fas fa-plus"></i>
                                                 <button className="add-ad-btn btn btn-link" onClick={toggleAddressModal}><IntlMessages id="myaccount.addNewAddress" /></button>
                                             </div>
                                             {addNewAddressModal && (
@@ -1576,8 +1577,9 @@ function Checkout(props) {
                                                 </div>
                                             )
                                             }
+											<hr />
                                             <div className="add-address-btn">
-                                                <hr />
+                                                <i className="fas fa-plus"></i>
                                                 <button className="add-ad-btn btn btn-link" onClick={() => {
                                                     toggleBillingAddressModal();
                                                 }} >
@@ -1685,13 +1687,13 @@ function Checkout(props) {
                                                     </div>
                                                 </div>
                                             )}
-                                            <div className="row">
+                                           
 
                                                 <div className="we-accept">
                                                     <p><strong><IntlMessages id="we-accept" />:</strong></p>
                                                     <img src={cardPlaceholder} alt="cards" />
                                                 </div>
-                                            </div>
+                                            
                                             <div className="choose-method">
                                                 <hr />
 
