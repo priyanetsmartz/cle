@@ -1171,6 +1171,12 @@ p.promotion_alert {
     .slick-current {
       opacity: 1;
     } */
+	
+	.product-listing > .rdt_TableHeader{
+		font: normal normal 500 24px/30px Monument Extended;
+		color:#000;
+		padding:0
+	}
 
 .magazine_article {
     width: 100%;
@@ -1209,9 +1215,8 @@ p.promotion_alert {
 }
 
 .magazine_article p {
-    font-size: 16px;
+    font: normal normal normal 16px/24px Lato!important;
     color: #000;
-    font-family: 'Lato', sans-serif;
     width: 100%;
     float: left;
     margin: 10px 0 25px 0;
@@ -1498,7 +1503,11 @@ p.promotion_alert {
 
 .my_profile_sect h1 {
     margin-top: 30px;
-	font:normal normal 500 24px/46px Monument Extended
+	font: normal normal normal 36px/46px Monument Extended;
+}
+
+.my_profile_sect h2 {
+	font: normal normal 500 24px/30px Monument Extended;
 }
 
 .my_profile_sect.check-als h1 {
@@ -1508,8 +1517,12 @@ p.promotion_alert {
 }
 
 .my_profile_sect p {
-    font: normal normal normal 16px/19px Lato;
+    font: normal normal 600 18px/27px Lato;
 	margin-bottom:30px;
+}
+
+.my_profile_sect h2 + p{
+	font: normal normal normal 16px/19px Lato;
 }
 
 .my_profile_sect .edit{
@@ -2383,7 +2396,7 @@ span.maindatory {
     font-size: 24px;
     font-family: 'Monument Extended';
     font-style: normal;
-    margin-top: 30px;
+    margin-top: 10px;
     font-weight: 500;
 }
 
@@ -8837,14 +8850,11 @@ p.sliderupper {
     display: inline-block;
     margin-right: 20px;
 	position: relative;
-	width: 90px;
+	width: 120px;
 }
 
 .filter-tiles li a{
-	font-size: 16px;
-    font-family: 'Monument Extended';
-	line-height:20px;
-    font-weight: 500;
+	font: normal normal 500 20px/25px Monument Extended;
 	color:#000;
 	-webkit-transition: all .5s ease-in-out;
 	-o-transition: all .5s ease-in-out;
@@ -8943,6 +8953,7 @@ p.sliderupper {
 
 .important-cont p{
 	margin-bottom:5px;
+	font: normal normal normal 16px/24px Lato;
 }
 
 .card-info {

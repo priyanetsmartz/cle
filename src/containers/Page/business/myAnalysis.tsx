@@ -270,7 +270,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row mb-4">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="datatiles" /></h1>
+                            <h2><IntlMessages id="datatiles" /></h2>
                             <ul className='filter-tiles'>
                                 <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
                                 <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
@@ -337,7 +337,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1>{intl.formatMessage({ id: 'vendor.myAnalysis' })}</h1>
+                            <h2>{intl.formatMessage({ id: 'vendor.myAnalysis' })}</h2>
                             <p>{intl.formatMessage({ id: 'orderInformation' })}</p>
                             {pdata?.length > 0 && (<ResponsiveContainer width="100%" aspect={3}>
                                 <LineChart data={pdata} margin={{ right: 300 }}>
@@ -364,7 +364,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h3>{intl.formatMessage({ id: 'productInformation' })}</h3>
+                            <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
                             {pieChart?.length > 0 && (
                                 <PieChart width={400} height={400}>
                                     <Pie
@@ -390,7 +390,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h3>{intl.formatMessage({ id: 'payoutInformation' })}</h3>
+                            <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>
                             {barChartData?.length > 0 && (
                                 <BarChart
                                     width={500}

@@ -712,7 +712,7 @@ function BusinessProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="business.Details" /></h1>
+                            <h2><IntlMessages id="business.Details" /></h2>
                             <p><IntlMessages id="vendor.feelFreeToEdit" /></p>
                         </div>
                     </div>
@@ -772,7 +772,7 @@ function BusinessProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="vendor.myDetails" /></h1>
+                            <h2><IntlMessages id="vendor.myDetails" /></h2>
                             <p><IntlMessages id="vendor.feelFreeToEdit" /></p>
                         </div>
                     </div>
@@ -827,7 +827,7 @@ function BusinessProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.myAddresses" /></h1>
+                            <h2><IntlMessages id="myaccount.myAddresses" /></h2>
                             <p><IntlMessages id="myaccount.addOrChange" /></p>
                         </div>
                     </div>
@@ -870,7 +870,7 @@ function BusinessProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="vendor.payouts" /></h1>
+                            <h2><IntlMessages id="vendor.payouts" /></h2>
                             <p><IntlMessages id="myaccount.addOrChangePayments" /> </p>
                         </div>
                     </div>
@@ -917,7 +917,7 @@ function BusinessProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.changePasswordEmail" /></h1>
+                            <h2><IntlMessages id="myaccount.changePasswordEmail" /></h2>
                             <p><IntlMessages id="myaccount.feelFreeToUpdate" /></p>
                         </div>
                     </div>
@@ -1047,7 +1047,7 @@ function BusinessProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1 className="text-center mb-4"><IntlMessages id="myaccount.checkAlso" /></h1>
+                            <h2 className="text-center mb-4"><IntlMessages id="myaccount.checkAlso" /></h2>
                         </div>
                     </div>
                     <div className="row">
