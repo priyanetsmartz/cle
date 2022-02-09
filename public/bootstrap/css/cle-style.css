@@ -8410,7 +8410,13 @@ p.sliderupper {
 .product-status .approved,
 .product-status .decline,
 .product-status .accept,
-.product-status .acknowledged {
+.product-status .acknowledged,
+.product-status .pending,
+.product-status .canceled,
+.product-status .ready-to-ship,
+.product-status .shipped,
+.product-status .delivered,
+.product-status .retured {
     font-family: 'Monument Extended';
     font-size: 9px;
     font-weight: 500;
@@ -8447,6 +8453,36 @@ p.sliderupper {
 .product-status .acknowledged{
 	border: 1px solid #007DE2;
 	color: #007DE2;
+}
+
+.product-status .pending{
+	border:1px solid #FF7756;
+	color:#FF7756;
+}
+
+.product-status .canceled{
+	border:1px solid #D9242C;
+	color:#D9242C;
+}
+
+.product-status .ready-to-ship{
+	border:1px solid #00CEA7;
+	color:#00CEA7;
+}
+
+.product-status .shipped{
+	border:1px solid #007DE2;
+	color:#007DE2;
+}
+
+.product-status .delivered{
+	border:1px solid #2E2BAA;
+	color:#2E2BAA;
+}
+
+.product-status .retured{
+	border:1px solid #777777;
+	color:#777777;
 }
 
 .rdt_TableRow .approved,
