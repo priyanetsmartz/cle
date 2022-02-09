@@ -246,7 +246,7 @@ function MyAddress(props) {
             <div className="container">
                 <div className="row">
                     <div className="col-sm-12">
-                        <h1><IntlMessages id="myaccount.myAddresses" /></h1>
+                        <h2><IntlMessages id="myaccount.myAddresses" /></h2>
                         <p><IntlMessages id="myaccount.addOrChange" /></p>
                     </div>
                 </div>

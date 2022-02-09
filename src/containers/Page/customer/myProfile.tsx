@@ -695,7 +695,7 @@ function MyProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.myDetails" /></h1>
+                            <h2><IntlMessages id="myaccount.myDetails" /></h2>
                             <p><IntlMessages id="myaccount.feelFreeToEdit" /></p>
                         </div>
                     </div>
@@ -753,7 +753,7 @@ function MyProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.myPreferences" /></h1>
+                            <h2><IntlMessages id="myaccount.myPreferences" /></h2>
                             <p><IntlMessages id="myaccount.youCanPersonalize" /></p>
                         </div>
                     </div>
@@ -838,7 +838,7 @@ function MyProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.giftingPreferences" /></h1>
+                            <h2><IntlMessages id="myaccount.giftingPreferences" /></h2>
                             <p><IntlMessages id="myaccount.youCanPutInfo" /> </p>
                         </div>
                     </div>
@@ -893,7 +893,7 @@ function MyProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="myaccount.changePasswordEmail" /></h1>
+                            <h2><IntlMessages id="myaccount.changePasswordEmail" /></h2>
                             <p><IntlMessages id="myaccount.feelFreeToUpdate" /></p>
                         </div>
                     </div>
