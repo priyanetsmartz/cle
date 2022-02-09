@@ -405,7 +405,7 @@ function Dashboard(props) {
                 <div className="container">
                     <div className="row mb-3">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="seller.announcements" /></h1>
+                            <h2><IntlMessages id="seller.announcements" /></h2>
                         </div>
                     </div>
                     <div className="row">
@@ -462,7 +462,7 @@ function Dashboard(props) {
                 <div className="container">
                     <div className="row mb-4">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="datatiles" /></h1>
+                            <h2><IntlMessages id="datatiles" /></h2>
                             <ul className='filter-tiles'>
                                 <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
                                 <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
@@ -529,7 +529,7 @@ function Dashboard(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="vendor.salesOrders" /></h1>
+                            <h2><IntlMessages id="vendor.salesOrders" /></h2>
                         </div>
                     </div>
                     <div className="row">
@@ -553,7 +553,7 @@ function Dashboard(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="vendor.returnandcomplaints" /></h1>
+                            <h2><IntlMessages id="vendor.returnandcomplaints" /></h2>
                         </div>
                     </div>
                     <div className="row">
@@ -577,7 +577,7 @@ function Dashboard(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h1><IntlMessages id="vendor.mypayouts" /></h1>
+                            <h2><IntlMessages id="vendor.mypayouts" /></h2>
                         </div>
                     </div>
                     <div className="row">
