@@ -1406,7 +1406,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="postcode"
-                                                                    placeholder="Post Code"
+                                                                    placeholder="Postal Code"
                                                                     value={custAddForm.postcode}
                                                                     onChange={handleAddChange} />
                                                                 <span className="error">{errors.errors["postcode"]}</span>
@@ -1642,7 +1642,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="postcode"
-                                                                    placeholder="Post Code"
+                                                                    placeholder="Postal Code"
                                                                     value={billingAddressData.postcode}
                                                                     onChange={handleBillingAddressChange} />
                                                                 <span className="error">{billingError.errors["postcode"]}</span>

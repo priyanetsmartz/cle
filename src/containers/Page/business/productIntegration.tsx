@@ -136,7 +136,7 @@ function ProductIntegration(props) {
 
     async function onFileChange(e) {
 
-        let allowedExtensions = ['.csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']
+        let allowedExtensions = ['text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']
 
         let filetype = e?.target?.files[0]?.type;
         if (allowedExtensions.indexOf(filetype) === -1) {
