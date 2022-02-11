@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 function Notifications(props) {
     const userGroup = localStorage.getItem('token')
-    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
+    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
     const [name, setName] = useState(localStorage.getItem('token_name'));
     const history = useHistory();
     const key = props.match.params.tab;

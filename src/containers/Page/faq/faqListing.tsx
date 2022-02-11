@@ -5,7 +5,6 @@ import { useParams, useLocation } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { capitalize } from '../../../components/utility/allutils';
 import FaqFooter from './faq-footer';
-import FaqHeader from './faq-header';
 function FaqListing(props) {
   const location = useLocation();
   const [categoryData, setCategoryData] = useState([])
@@ -20,13 +19,12 @@ function FaqListing(props) {
   }, [props.languages, location]);
 
   async function getData() {
-    let results: any = await getFaqListinglabels(props.languages, url_key);    
-    setCategoryData(results?.data)
+    let results: any = await getFaqListinglabels(props.languages, url_key);
+    setCategoryData(results.data)
   }
 
   return (
     <section>
-       <FaqHeader />
       <section className="faq-list">
         <div className="container">
           <div className="row">
@@ -66,16 +64,16 @@ function FaqListing(props) {
                 <h2><IntlMessages id="related.faq" /></h2>
                 {
                   categoryData.map((category, index) => (
-                    <div className="accordion" key={index} id="accordionExample1">
+                    <div className="accordion" key={index} id="accordionExample">
                       {
                         category['relatedquestions_array'].map((question, i) => (
                           <div key={i} className="accordion-item">
                             <h2 className="accordion-header" id={`headingSecTwo${i}`}>
-                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#collapseSecTwo${question['question_id']}`} aria-expanded="false" aria-controls="collapseFive">
+                              <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapseSecTwo${question['question_id']}`} aria-expanded="false" aria-controls="collapseFive">
                                 {question['title']}
                               </button>
                             </h2>
-                            <div id={`collapseSecTwo${question['question_id']}`} className="accordion-collapse collapse" aria-labelledby={`headingSecTwo${i}`} data-bs-parent="#accordionExample1">
+                            <div id={`collapseSecTwo${question['question_id']}`} className="accordion-collapse collapse" aria-labelledby={`headingSecTwo${i}`} data-bs-parent="#accordionExample">
                               <div className="accordion-body">
                                 <p dangerouslySetInnerHTML={{ __html: question['answer'] }} />
                               </div>

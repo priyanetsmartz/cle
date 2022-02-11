@@ -4,7 +4,7 @@ import { capitalize } from "../../components/utility/allutils";
 
 function Breadcrumbs(props) {
     const location = useLocation()
-    const { category, subcat, childcat, greatchildcat, cat, orderId, returnId, prodsku, vendorIdprev }: any = useParams();
+    const { category, subcat, childcat, greatchildcat, cat }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [keyUl, setKey] = useState('');
@@ -21,7 +21,7 @@ function Breadcrumbs(props) {
         }
 
         // let test = urlPath.split("/");
-        //  console.log(location)
+        //console.log(test)
         setKey(urlPath)
         let breads = location.pathname.split('\/');
         setBreadcrumsState(breads)
@@ -29,14 +29,11 @@ function Breadcrumbs(props) {
 
     return (
         <nav aria-label="breadcrumb" className="new-breadcrumb">
-
             {(location.pathname !== "/home") && (
                 <ol className="breadcrumb">
-                    {!breadcrumsState.includes("product-details-preview") ?
-                        <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
-                        : ""}
+                    <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
                     {breadcrumsState.map((local, j) => {
-
+                        // console.log(local)
                         let result = local.includes("new-in");
                         if (result) {
                             local = 'New in';
@@ -48,7 +45,7 @@ function Breadcrumbs(props) {
                         }
                         if (j === breadcrumsState.length - 1) {
                             let data = local.split('-')
-                            if (local === 'orders-and-returns' || local === 'wishlist' || local === 'profile' || local === 'support' || local === 'product-listing' || local === 'sales-orders' || local === 'payouts') {
+                            if (local === 'orders-and-returns' || local === 'wishlist' || local === 'profile' || local === 'support') {
                                 return (
                                     <li key={j} className="breadcrumb-item active">My
                                         {
@@ -58,25 +55,6 @@ function Breadcrumbs(props) {
                                         }
                                     </li>
 
-                                )
-                            } else if (local === 'returns-complaints') {
-                                return (
-                                    <p style={{ 'display': 'inline-flex' }} key="-3">
-                                        <li key={-1} className="breadcrumb-item"><Link to='/vendor/returns-complaints'> / My returns & complains </Link></li>
-                                    </p>
-                                )
-                            } else if (local === 'thankyou') {
-                                return (
-                                    <><li key={2} className="breadcrumb-item"><Link to="/customer/dashboard">My Account</Link></li>
-                                        <li key={3} className="breadcrumb-item"><Link to="/customer/orders-and-returns">My Orders and Return</Link></li>
-                                        <li className="breadcrumb-item active">Thank you</li>
-                                    </>
-                                )
-                            } else if (local === 'business-profile') {
-                                return (
-                                    <p style={{ 'display': 'inline-flex' }} key="-3">
-                                        <li key={-1} className="breadcrumb-item"><Link to='/vendor/business-profile'> / My business profile </Link></li>
-                                    </p>
                                 )
                             } else if (local === 'checkout') {
                                 return (
@@ -91,30 +69,9 @@ function Breadcrumbs(props) {
                                         </li>
                                     </p>
                                 )
-                            } else if (local === 'product-integration') {
-                                return (
-                                    <p style={{ 'display': 'inline-flex' }} key="-3">
-                                        <li key={-1} className="breadcrumb-item"><Link to='/vendor/dashboard'> / My Business Account </Link></li>
-                                        <li key={-2} className="breadcrumb-item"><Link to='/vendor/product-listing'>  My Product listing </Link></li>
-                                        <li key={-3} className="breadcrumb-item active">
-                                            {
-                                                data.map((answer, k) => {
-                                                    return (<span key={k}>{capitalize(answer)} </span>)
-                                                })
-                                            }
-                                        </li>
-                                    </p>
-                                )
-                            } else if (local === 'all' || local === cat || local === 'email' || local === prodsku) {
+                            } else if (local === 'all' || local === cat) {
                                 return ('')
-                            }
-
-                            else if (local === returnId) {
-                                return (
-                                    <li key={j} className="breadcrumb-item">Return details</li>
-                                )
-                            }
-                            else {
+                            } else {
                                 return (
 
                                     <li key={j} className="breadcrumb-item active">
@@ -130,19 +87,17 @@ function Breadcrumbs(props) {
                             }
 
                         } else {
-                            if (local === "" || local === "settings" || local === vendorIdprev) {
+                            if (local === "") {
                                 return "";
                             } else {
                                 //  console.log(local)
-                                if (local === 'product-details' || local === 'products' || local === 'product-details-preview') {
+                                if (local === 'product-details' || local === 'products') {
                                     return (
                                         ''
                                     )
                                 } else if (local === 'order-details') {
                                     return (
-                                        <> <li key="-2" className="breadcrumb-item"><Link to={'/customer/dashboard'}>My Account</Link></li>
-                                            <li key="-1" className="breadcrumb-item"><Link to={"/customer/orders-and-returns"}>My Orders and Returns</Link></li>
-                                        </>
+                                        <li key={j} className="breadcrumb-item"><Link to={'/customer/orders-and-returns'}>{local === 'order-details' ? 'Orders' : local}</Link></li>
                                     )
                                 } else if (local === 'customer') {
                                     return (
@@ -150,7 +105,7 @@ function Breadcrumbs(props) {
                                     )
                                 } else if (local === 'vendor') {
                                     return (
-                                        <li key={j} className="breadcrumb-item"><Link to={"/vendor/dashboard"}>My Business Account</Link></li>
+                                        <li key={j} className="breadcrumb-item"><Link to={"/customer/dashboard"}>My Business Account</Link></li>
                                     )
                                 } else if (local === category) {
                                     return (
@@ -171,37 +126,6 @@ function Breadcrumbs(props) {
                                 } else if (local === 'search') {
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={"/"}>Search Results</Link></li>
-                                    )
-                                } else if (local === 'returns-complaints') {
-                                    return (
-                                        <li key={j} className="breadcrumb-item"><Link to={'/vendor/returns-complaints'}>My returns & complains</Link></li>
-
-                                    )
-                                } else if (local === 'sales-orders') {
-                                    let data = local.split('-')
-                                    return (
-
-                                        <li key={j} className="breadcrumb-item"><Link to={'/vendor/sales-orders'}>My {
-
-                                            data.map((answer, i) => {
-                                                return (<span key={i}> {capitalize(answer)} </span>)
-                                            })
-                                        }</Link></li>
-                                    )
-                                } else if (local === 'payoutdetails') {
-                                    let data = local.split('-')
-                                    return (
-                                        <li key={j} className="breadcrumb-item"><Link to={'/vendor/payouts'}>My {
-
-                                            data.map((answer, i) => {
-                                                return (<span key={i}> Payouts </span>)
-                                            })
-                                        }</Link></li>
-
-                                    )
-                                } else if (local === 'create-return' || local === 'return-details') {
-                                    return (
-                                        <li key={j} className="breadcrumb-item"><Link to={"/customer/orders-and-returns"}>My Orders and Returns</Link></li>
                                     )
                                 } else {
                                     let str = local.replace(/-/g, ' ');

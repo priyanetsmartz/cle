@@ -1,244 +1,238 @@
-import moment from 'moment';
-import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { getCustomerReturn } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
-import IntlMessages from "../../../components/utility/intlMessages";
-import { getCookie } from '../../../helpers/session';
-import { useIntl } from 'react-intl';
-import { siteConfig } from '../../../settings/index'
-import { formatprice, getAccordingDate } from '../../../components/utility/allutils';
-
-function MyReturns(props) {
-    let pageSizeSetting = siteConfig.pageSize;
-    const [pageSize, setPageSize] = useState(pageSizeSetting);
-    const [returnPagination, setReturnPagination] = useState(1);
-    const [returs, setReturn] = useState([]);
-    const [page, setCurrent] = useState(1);
-    const language = getCookie('currentLanguage');
-    const [sortOrder, setSortOrder] = useState('');
-    const [loaderReturns, setLoaderReturns] = useState(false);
-
-    const [range, setRange] = useState({ low: 0, high: 20000 })
-    const [searchTerm, setSearchTerm] = useState('');
-    const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
-    const intl = useIntl();
-
-    useEffect(() => {
-        getReturnData();
-    }, [pageSize, props.languages, page]);
 
 
 
-    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = '', sortOrders: any = '', search: any = '') => {
-        let returns: any = await getCustomerReturn(pageSize, from_date, to_date, from_price, to_price, sortBy, sortOrders, search);
-
-        if (returns && returns.data && returns.data.length > 0 && returns.data[0]) {
-            let res = getAccordingDate(returns?.data?.[0])
-            setLoaderReturns(false);
-            setReturn(res);
-            setReturnPagination(Math.ceil(returns.data.total_count / pageSize));
-        }
-    }
-
-    const handlePageSize = (page) => {
-        setPageSize(page)
-    }
-
-    const sortOrdersHandler = async (e) => {
-        setLoaderReturns(true);
-        setSortOrder(e.target.value);
-        getReturnData(dateFilter.from, dateFilter.to, range.low, range.high, 'grand_total', e.target.value, searchTerm)
-    }
-
-    const goToNextPage = (e) => {
-        e.preventDefault();
-        setCurrent((page) => page + 1);
-    }
-
-    const goToPreviousPage = (e) => {
-        e.preventDefault();
-        setCurrent((page) => page - 1);
-    }
+function OrdersAndReturns(props) {
 
     return (
-        <>
-            <div className="row">
-                <div className="col-sm-12 mt-4">
-                    <div className="resltspage_sec">
-                        <div className="paginatn_result">
-                            <span><IntlMessages id="order.resultPerPage" /></span>
-                            <ul>
-                                <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-                                <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
-                                <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
-                            </ul>
-                        </div>
-                        <div className="sort_by">
-                            <div className="sortbyfilter">
-                                <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
-                                    <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                    <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                    <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                </select>
+        <main>
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-12">
+                        <nav aria-label="breadcrumb" className="new-breadcrumb">
+                            <ol className="breadcrumb mt-0">
+                                <li className="breadcrumb-item"><Link to="#">Home</Link></li>
+                                <li className="breadcrumb-item"><Link to="#">My Account</Link></li>
+                                <li className="breadcrumb-item"><Link to="#">My Orders and Returns</Link></li>
+                                <li className="breadcrumb-item active" aria-current="page">Return details</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <section className="order-detail-main">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="order-detail-head">
+                                <h2>Return details</h2>
+                                <p>We get it, Sometimes something just doesn't work for you and you want money back. You can return your
+                                    product here.</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
-            </div>
-            {loaderReturns && (
-                <div className="checkout-loading" >
-                    <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
-                </div>
-            )}
-            {returs && returs.length > 0 ?
-                <div>
-                    {returs && (returs.map((items, i) => {
-                        return (
-                            <>
-                                <div className="row my-3">
-                                    <h3>{items.date}</h3>
+
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="order-number">
+                                <h4>Order number: 101098675674686434</h4>
+                                <div className="row">
+                                    <div className="col-md-3">
+                                        <p><strong>Purchase Date</strong></p>
+                                        <p>Mon, 10 May 2021</p>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <p><strong>Shipping Date</strong></p>
+                                        <p>Mon, 10 May 2021</p>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <p><strong>Payment Method</strong></p>
+                                        <p>Mastercard</p>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <p><strong>Products</strong></p>
+                                        <p>23</p>
+                                    </div>
                                 </div>
-                                {items && items.Products && items.Products.map((item, i) => {
-                                    return (
-                                        <div key={i}>
-                                            <div className="row my-3">
-                                                <div className="col-sm-12">
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-6">
-                                                            <h3 className="order_numbr"><IntlMessages id="order.orderNo" />: {item.order_id}</h3>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <div className="viewall_btn">
-                                                                <Link to={`/customer/return-details/${item.rma_increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div className="d-md-flex">
-                                                    <div className="col-sm-6">
-                                                        <div className="order-viewsec">
-                                                            <div className="order-details">
-                                                                <div className="order-date">
-                                                                    <label className="form-label"><IntlMessages id="shipped.date" /></label>
-                                                                    <div className="labl_text">{item.shipped_date ? moment(item.shipped_date).format('ddd, D MMMM YYYY') : ''}</div>
-                                                                </div>
-
-                                                                <div className="products">
-                                                                    <label className="form-label"> <IntlMessages id="order.products" /></label>
-                                                                    <div className="labl_text"> {item && item.total_qty ? item.total_qty : 0}</div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div className="order-details">
-                                                                <div className="order-date">
-                                                                    <label className="form-label"><IntlMessages id="return.date" /></label>
-                                                                    <div className="labl_text">{item.return_date ? moment(item.return_date).format('ddd, D MMMM YYYY') : ''}</div>
-                                                                </div>
-
-                                                                <div className="products">
-                                                                    <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                                                    <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div className="order-shipped">
-                                                                <label className="form-label">
-                                                                </label>
-                                                            </div>
-
-
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-sm-6">
-                                                        {
-                                                            item && item.items && item.items.length > 0 && (
-                                                                <div className="prodcut_catg">
-                                                                    {item.items && (item.items.slice(0, 2).map((img, i) => {
-                                                                        return (
-                                                                            <div className="product_photo" key={i}>
-                                                                                <img src={img} className="img-fluid" alt="" />
-                                                                            </div>
-                                                                        )
-                                                                    }))}
-
-                                                                    {item.items.length > 2 && (
-                                                                        <div className="more_product">
-                                                                            <Link to="#">
-                                                                                <img src={item.items[2]} className="img-fluid" alt="" />
-                                                                                <div className="overlay_img"></div>
-                                                                                <span className="more_pro">{item.items.length - 2}</span>
-                                                                            </Link>
-                                                                        </div>
-                                                                    )
-                                                                    }
-                                                                </div>
-                                                            )
-                                                        }
-                                                    </div>
-                                                </div>
-                                                <div className="col-sm-12">
-                                                    <div className="blank_bdr"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </>
-                        )
-                    }))}
-                </div>
-                : !loaderReturns ? <IntlMessages id="no_data" /> : ""}
-            <div className="resltspage_sec footer-pagints">
-                <div className="paginatn_result">
-                    <span><IntlMessages id="order.resultPerPage" /></span>
-                    <ul>
-                        <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-                        <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
-                        <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
-                    </ul>
-                </div>
-                <div className="page_by">
-                    <div className="pagination">
-                        <div className="col-md-12 pagination">
-                            {returnPagination > 1 && (<nav aria-label="Page navigation example">
-                                <ul className="pagination justify-content-center">
-                                    <li
-                                        className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                        <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
-                                    </li>
-                                    <li className='pageofpage'><IntlMessages id="page" /> <span className='active'>{page}</span> <IntlMessages id="of" /> {returnPagination}</li>
-                                    <li className={`page-item next ${page === returnPagination ? 'disabled' : ''}`} >
-                                        <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                            to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
-                                    </li>
-                                </ul>
-                            </nav>
-                            )}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
-    )
+                <div className="container mb-5">
+                    <div className="row">
+                        <div className="col-md-12 return-complaint-btns">
+                            <div className="float-start w-75">
+                                <p>
+                                    Select items for return by clicking on the product. Please choose the reason if you want to return the
+                                    product. Product without chosen reason won't be returned.
+                                </p>
+                            </div>
+                            <div className="float-end">
+                                <div className="btn-group">
+                                    <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Sort By
+                                    </button>
+                                    <ul className="dropdown-menu dropdown-menu-end">
+                                        <li><button className="dropdown-item" type="button">Price: high to low</button></li>
+                                        <li><button className="dropdown-item" type="button">Price: low to high</button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="clearfix"></div>
+                        </div>
+                    </div>
+                    <ul className="order-pro-list order-return-list">
+                        <li className="pb-0 ps-0 pe-0 border">
+                            <div className="row">
+                                <div className="col-md-3">
+                                    <div className="product-image">
+                                        <img src="images/minicart_p1.png" alt="" />
+                                    </div>
+                                </div>
+                                <div className="col-md-9">
+                                    <div className="pro-name-tag mb-5">
+                                        <div className="float-start">
+                                            <p><strong>Gucci</strong></p>
+                                            <p>Web Strip &amp; gold PVD watch</p>
+                                        </div>
+                                        <Link to="#" className="float-end text-end order-pro-price">$1,344</Link>
+                                        <div className="clearfix"></div>
+                                    </div>
+                                    <div className="pro-name-tag">
+                                        <p>One Size</p>
+                                        <p><strong>Product no.</strong> 123456789</p>
+                                        <div className="clearfix"></div>
+                                    </div>
+                                </div>
+                                <div className="col-md-12">
+                                    <select className="form-select" aria-label="Default select example">
+                                        <option selected>Choose the reason</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li className="pb-0 ps-0 pe-0 border">
+                            <div className="row">
+                                <div className="col-md-3">
+                                    <div className="product-image">
+                                        <img src="images/minicart_p1.png" alt="" />
+                                    </div>
+                                </div>
+                                <div className="col-md-9">
+                                    <div className="pro-name-tag mb-5">
+                                        <div className="float-start">
+                                            <p><strong>Gucci</strong></p>
+                                            <p>Web Strip &amp; gold PVD watch</p>
+                                        </div>
+                                        <Link to="#" className="float-end text-end order-pro-price">$1,344</Link>
+                                        <div className="clearfix"></div>
+                                    </div>
+                                    <div className="pro-name-tag">
+                                        <p>One Size</p>
+                                        <p><strong>Product no.</strong> 123456789</p>
+                                        <div className="clearfix"></div>
+                                    </div>
+                                </div>
+                                <div className="col-md-12">
+                                    <select className="form-select" aria-label="Default select example">
+                                        <option selected>Choose the reason</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
 
+                <div className="container mb-5">
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="order-delivery-address">
+                                <div className="Address-title">
+                                    <span className="float-start">Delivery address</span>
+                                    <Link to="#" className="float-end">Change</Link>
+                                    <div className="clearfix"></div>
+                                </div>
+                                <p>
+                                    Anna Smith<br />
+                                    Baker Street<br />
+                                    40-333<br />
+                                    London<br />
+                                    Great Britain
+                                </p>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="order-delivery-address">
+                                <div className="Address-title">
+                                    <span>Delivery address</span>
+                                </div>
+                                <div className="product-total-price">
+                                    <p>Sub Total<span className="text-end">$1,237</span></p>
+                                    <p>Shipping<span className="text-end">$0</span></p>
+                                    <p>Tax<span className="text-end">$107</span></p>
+                                    <hr />
+                                    <div className="final-price">Total<span>$1,344</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row mt-5">
+                        <div className="col-md-12">
+                            <div className="return-pro-btn float-end"><Link to="#" className="btn btn-primary">Return Products</Link></div>
+                            <div className="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section className="return-footer-sec">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-6 pe-0">
+                            <div className="black-bg-footer">
+                                <div className="black-bg-inner">
+                                    <h2>Return Policy</h2>
+                                    <p>We want to make sure returns are as easy as possible to do, but if you need more information on our
+                                        Return Policy.</p>
+                                    <Link to="#" className="btn-white-primary">Check out</Link>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6 ps-0">
+                            <div className="blue-bg-footer">
+                                <div className="black-bg-inner">
+                                    <h2>Contact Us</h2>
+                                    <p>We are here to help and answer any questions you might have. We look forward to hearing from you!</p>
+                                    <Link to="#" className="btn-white-primary">Contact Us</Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    )
 }
 
 
-function mapStateToProps(state) {
-    let languages = ''
-    if (state && state.LanguageSwitcher) {
-        languages = state.LanguageSwitcher.language
-    }
 
+function mapStateToProps(state) {
     return {
-        languages: languages,
         state: state
-    }
+    };
 };
 export default connect(
     mapStateToProps
-)(MyReturns);
+)(OrdersAndReturns);

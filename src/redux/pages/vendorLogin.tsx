@@ -199,10 +199,6 @@ export async function getProductIntegration(language: string) {
     var storeId = language === 'english' ? 3 : 2;
     return adminToken.request(`rest/all/V1/customform/form?storeId=${storeId}&form_code=product_integration`, "", "GET", "");
 }
-export async function getProductIntegrationSample(language: string) {
-    var storeId = language === 'english' ? 3 : 2;
-    return adminToken.request(`rest/all/V1/productIntegration/sampleDownload?storeId=${storeId}`, "", "GET", "");
-}
 
 export async function returnProcessVendor(rmaId: number, status: string, comment: string = "") {
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))

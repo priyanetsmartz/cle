@@ -28,6 +28,7 @@ function CategoryBanner(props) {
                             <img src={categoryData['image']} alt="" />
                             <div className="DC-top-ban-inner">
                                 <h2>{categoryData['name']}</h2>
+                             
                                 <div dangerouslySetInnerHTML={{ __html: categoryData['description'] }} />
                                 {
                                     props.urls !== undefined && categoryData['name'] !== '' && categoryData['image'] !== undefined ? <Link to={props.urls} className="ban-btn" > <IntlMessages id="category.viewAll" /></Link> : ''

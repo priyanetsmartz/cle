@@ -15,7 +15,6 @@ import { useLocation } from 'react-router-dom';
 import cartAction from "../../../redux/cart/productAction";
 import { capitalize } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
-import Magazine from '../home/magazine';
 const { getCategoryData } = cartAction;
 
 
@@ -158,9 +157,9 @@ function Categories(props) {
             {/* <div className="section" >
                 <PromotedProducts cateData={categories} />
             </div> */}
-            <div className="section">
+            {/* <div className="section">
                 <Magazine />
-            </div>
+            </div> */}
             <div className="section">
                 <NewIn ctId={categoryId} urls={urlPathLink} />
             </div>

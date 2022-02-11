@@ -5,7 +5,6 @@ import { siteConfig } from '../../../settings';
 import { Link } from "react-router-dom";
 import FaqFooter from './faq-footer';
 import IntlMessages from "../../../components/utility/intlMessages";
-import FaqHeader from './faq-header';
 function Faq(props) {
 
 	const [faqData, setFaqData] = useState([])
@@ -19,16 +18,11 @@ function Faq(props) {
 
 	async function getData() {
 		let results: any = await getFaqlabels(props.languages, siteConfig.pageSize, siteConfig.questionLimitFaq);
-		//console.log(results.data, Object.keys(results.data).length);
-		if (results && results.data && Object.keys(results.data).length > 0 && results.data.items) {
-			setFaqData(results.data.items)
-		}
-
+		setFaqData(results.data.items)
 	}
 
 	return (
 		<section>
-			 <FaqHeader />
 			<section className="faq-topics">
 				<div className="container">
 					<div className="row">

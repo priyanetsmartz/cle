@@ -765,13 +765,13 @@ function Checkout(props) {
     const validateAddress = () => {
         let error = {};
         let formIsValid = true;
-        // if (custAddForm.telephone !== undefined) {
-        //     formIsValid = false;
-        //     if (!(/^\d{10}$/.test(custAddForm["telephone"]))) {
-        //         formIsValid = false;
-        //         error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
-        //     }
-        // }
+        if (custAddForm.telephone !== undefined) {
+            formIsValid = false;
+            if (!(/^\d{10}$/.test(custAddForm["telephone"]))) {
+                formIsValid = false;
+                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+            }
+        }
         if (!custAddForm.telephone) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" });
@@ -810,13 +810,13 @@ function Checkout(props) {
         let error = {};
         let formIsValid = true;
 
-        // if (billingAddressData.telephone !== undefined) {
-        //     formIsValid = false;
-        //     if (!(/^\d{10}$/.test(billingAddressData["telephone"]))) {
-        //         formIsValid = false;
-        //         error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
-        //     }
-        // }
+        if (billingAddressData.telephone !== undefined) {
+            formIsValid = false;
+            if (!(/^\d{10}$/.test(billingAddressData["telephone"]))) {
+                formIsValid = false;
+                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+            }
+        }
      
         if (!billingAddressData.telephone) {
             formIsValid = false;
@@ -1347,9 +1347,8 @@ function Checkout(props) {
                                                     })}
                                                 </>
                                             )}
-											 <hr />
                                             <div className="add-address-btn">
-                                                <i className="fas fa-plus"></i>
+                                                <hr />
                                                 <button className="add-ad-btn btn btn-link" onClick={toggleAddressModal}><IntlMessages id="myaccount.addNewAddress" /></button>
                                             </div>
                                             {addNewAddressModal && (
@@ -1406,7 +1405,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="postcode"
-                                                                    placeholder="Postal Code"
+                                                                    placeholder="Post Code"
                                                                     value={custAddForm.postcode}
                                                                     onChange={handleAddChange} />
                                                                 <span className="error">{errors.errors["postcode"]}</span>
@@ -1577,9 +1576,8 @@ function Checkout(props) {
                                                 </div>
                                             )
                                             }
-											<hr />
                                             <div className="add-address-btn">
-                                                <i className="fas fa-plus"></i>
+                                                <hr />
                                                 <button className="add-ad-btn btn btn-link" onClick={() => {
                                                     toggleBillingAddressModal();
                                                 }} >
@@ -1642,7 +1640,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="postcode"
-                                                                    placeholder="Postal Code"
+                                                                    placeholder="Post Code"
                                                                     value={billingAddressData.postcode}
                                                                     onChange={handleBillingAddressChange} />
                                                                 <span className="error">{billingError.errors["postcode"]}</span>
@@ -1687,13 +1685,13 @@ function Checkout(props) {
                                                     </div>
                                                 </div>
                                             )}
-                                           
+                                            <div className="row">
 
                                                 <div className="we-accept">
                                                     <p><strong><IntlMessages id="we-accept" />:</strong></p>
                                                     <img src={cardPlaceholder} alt="cards" />
                                                 </div>
-                                            
+                                            </div>
                                             <div className="choose-method">
                                                 <hr />
 

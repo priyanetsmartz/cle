@@ -19,16 +19,15 @@ function MyWishList(props) {
     const userGroup = props.token.token;
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
     const intl = useIntl();
-    const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     const [isShow, setIsShow] = useState(0);
     const [custId, setCustid] = useState(props.token.cust_id);
     const [delWishlist, setDelWishlist] = useState(0);
     const [wishList, setWishList] = useState([]);
     const [searchName, setSearchName] = useState('');
     const [sortOrder, setSortOrder] = useState('');
-    const [page, setCurrent] = useState(1);
+
     const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
-    const [pagination, setPagination] = useState(1);
+
     const [loaderOrders, setLoaderOrders] = useState(true);
     const [opacity, setOpacity] = useState(1);
 
@@ -41,12 +40,12 @@ function MyWishList(props) {
             setSortOrder('')
             setDelWishlist(0)
         }
-    }, [props.languages, sortOrder,pageSize])
+    }, [props.languages, sortOrder])
 
     const getData = async () => {
         setLoaderOrders(true)
         //  console.log(sortValue.sortBy, sortValue.sortByValue) 
-        let result: any = await wishListSearchSort(props.languages, pageSize, sortValue.sortBy, sortValue.sortByValue, '');
+        let result: any = await wishListSearchSort(props.languages, siteConfig.pageSize, sortValue.sortBy, sortValue.sortByValue, '');
         if (result && result.data) {
             setWishList(result.data);
             setOpacity(1)
@@ -78,11 +77,11 @@ function MyWishList(props) {
         setSearchName(e.target.value);
         setTimeout(() => {
             getSearchData(e.target.value);
-        }, 3000);
+        }, 3000);      
     }
 
 
-    const filtterData = (event) => {
+    const filtterData = (event) => {  
         // setCurrent(1)
         let sortBy = "";
         let sortByValue = "";
@@ -97,21 +96,6 @@ function MyWishList(props) {
         setSortOrder(event.target.value);
         setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
 
-    }
-
-    const handlePageSize = (page) => {
-        setPageSize(page)
-    }
-
-
-    const goToNextPage = (e) => {
-        e.preventDefault();
-        setCurrent((page) => page + 1);
-    }
-
-    const goToPreviousPage = (e) => {
-        e.preventDefault();
-        setCurrent((page) => page - 1);
     }
     async function handleDelWhishlist(id: number) {
         setDelWishlist(id)
@@ -155,11 +139,11 @@ function MyWishList(props) {
                     <h2><IntlMessages id="Profile.Wishlist-subTitle" /></h2>
                 </div>
 
-                <div className="col-md-12">
+                <div className="col-md-6">
                     <div className="row">
-                        <div className="col-md-4">
-                            <div className='input-group wishlistsearch'>
-                                <span className="input-group-text"><img src={IconZoomIn} alt="searchIcon" className="me-1" /></span>
+                        <div className="col-md-6">
+                            <div className='input-group wishlistsearch'> 
+							   <span className="input-group-text"><img src={IconZoomIn} alt="searchIcon" className="me-1" /></span>
                                 <input type="text"
                                     className="form-control"
                                     placeholder={intl.formatMessage({ id: "searchPlaceholder" })}
@@ -168,34 +152,16 @@ function MyWishList(props) {
                                 />
                             </div>
                         </div>
-						<div className="col-md-6"></div>
-					</div>
-					<div className="row">
-						<div className="col-sm-12 mt-4">
-							<div className="resltspage_sec">
-								<div className="paginatn_result">
-									<span><IntlMessages id="order.resultPerPage" /></span>
-									<ul>
-										<li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-										<li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
-										<li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
-									</ul>
-								</div>
-								<div className="sort_by">
-									<div className="sortbyfilter">
-										<select className="form-select" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
-											<option value="">{intl.formatMessage({ id: "sorting" })}</option>
-											<option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-											<option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                        <div className="col-md-6">
+                            <select className="form-select" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
+                                <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
 
-										</select>
-									</div>
-								</div>
+                            </select>
 
-							</div>
-						</div>
-					</div>
-                    
+                        </div>
+                    </div>
                 </div>
                 <div className="col-md-6"></div>
                 <div className="product-listing" style={{ 'opacity': opacity }} >
@@ -213,7 +179,7 @@ function MyWishList(props) {
                                             <span onClick={() => handleDelWhishlist(item.wishlist_item_id)} className="bg-remove">{delWishlist === item.wishlist_item_id ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-times" aria-hidden="true"></i>}</span>
                                             <div className="product p-4">
                                                 <div className="text-center">
-                                                    <Link to={'/product-details/' + item.sku}><img src={item.img_src} alt={item.name} width="200" /></Link>
+                                                    <Link to={'/product-details/' + item.sku}><img src={item.img_src} alt={item.name} width="200" /></Link>                                                   
 
 
                                                 </div>
@@ -234,37 +200,7 @@ function MyWishList(props) {
                                     );
                                 })}
                             </>
-                            : !loaderOrders ? <p className="nodata"> <IntlMessages id="no_data" /></p> : ""}
-                        <div className="resltspage_sec footer-pagints">
-                            <div className="paginatn_result">
-                                <span><IntlMessages id="order.resultPerPage" /></span>
-                                <ul>
-                                    <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-                                    <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
-                                    <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
-                                </ul>
-                            </div>
-                            <div className="page_by">
-                                <div className="pagination">
-                                    <div className="col-md-12 pagination">
-                                        {pagination > 1 && (<nav aria-label="Page navigation example">
-                                            <ul className="pagination justify-content-center">
-                                                <li
-                                                    className={`page-item prev ${page === 1 ? 'disabled' : ''}`}>
-                                                    <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
-                                                </li>
-                                                <li className='pageofpage'><IntlMessages id="page" /> <span className='active'>{page}</span> <IntlMessages id="of" /> {pagination}</li>
-                                                <li className={`page-item next ${page === pagination ? 'disabled' : ''}`} >
-                                                    <Link className="page-link" onClick={(e) => { goToNextPage(e); }}
-                                                        to="/"><i className="fa fa-chevron-right" aria-hidden="true"></i></Link>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            : !loaderOrders ? <IntlMessages id="no_data" /> : ""}
                     </div>
                 </div>
 

@@ -5,7 +5,6 @@ import { footer } from '../../redux/pages/allPages';
 import SignUp from '../Page/signup';
 import SignIn from '../Page/signin';
 import Recaptcha from 'react-google-invisible-recaptcha';
-import { apiConfig } from '../../settings';
 
 function FooterExtra(props) {
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
@@ -27,11 +26,11 @@ function FooterExtra(props) {
     const refRecaptcha = React.useRef(null);
     return (
         <div style={{ "clear": "both" }}>
-            <Recaptcha
+            {/* <Recaptcha
                 ref={refRecaptcha}
-                sitekey={apiConfig.captchaKey}
+                sitekey={"ddd"}
                 locale={props.languages === 'arabic' ? 'ar' : 'en'}
-                onResolved={() => console.log('Human detected.')} />
+                onResolved={() => console.log('Human detected.')} /> */}
             <SignIn showLogin={props.showLogin} />
             <SignUp signupModel={props.signupModel} />
             {pagesData ? <div dangerouslySetInnerHTML={{ __html: pagesData.content }} /> : ""}

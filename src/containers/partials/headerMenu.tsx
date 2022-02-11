@@ -330,10 +330,7 @@ function HeaderMenu(props) {
                             <div className="user_cart mob-hide">
                                 <div className="cartuser-info">
                                     <ul>
-                                        {props.token.type !== 'vendor' && (
-                                            <LanguageSwitcher />
-                                        )}
-                                         {/* <LanguageSwitcher /> */}
+                                        <LanguageSwitcher />
                                         {customerName ? <li><Link to="/customer/profile">{capitalize(customerName)}</Link></li> : ""}
                                         {props.token && props.token.vendor_name ? <li><Link to="/vendor/business-profile">{capitalize(props.token.vendor_name)}</Link></li> : ""}
                                         {/* <li> <Link to="/notifications"><img src={bell} alt="notification" /></Link> </li> */}

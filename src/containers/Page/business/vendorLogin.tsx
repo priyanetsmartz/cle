@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Checkbox } from 'antd';
 import IntlMessages from "../../../components/utility/intlMessages";
 import notification from '../../../components/notification';
@@ -13,12 +13,10 @@ import { useIntl } from 'react-intl';
 import { sessionService } from 'redux-react-session';
 import { getCookie, removeCookie, setCookie } from '../../../helpers/session';
 import { apiConfig } from '../../../settings';
-import { LanguageContext } from "../../../languageContext";
 var CryptoJS = require("crypto-js");
 const { login, vendorrrr } = authAction;
 
 function VendorLogin(props) {
-  const { setValue } = useContext(LanguageContext)
   const history = useHistory();
   const [passwordShown, setPasswordShown] = useState(false);
   const intl = useIntl();
@@ -48,7 +46,7 @@ function VendorLogin(props) {
   const checkIfLoggedIn = async () => {
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''));
     if (vendor && vendor.vendor_id) {
-      history.push(`/vendor/dashboard`);
+      history.push(`/vendor/business-profile`);
     }
   }
   const handleChange = (e) => {
@@ -71,8 +69,8 @@ function VendorLogin(props) {
       }
       // login({ userInfo });
       const result: any = await vendorLogin(userInfo);
-      //  console.log(result.data.length, result.data[0])
-      if (result && result.data && result.data && result.data.length > 0 && result.data[0].success) {
+    //  console.log(result.data.length, result.data[0])
+      if (result && result.data && result.data && result.data.length > 0  && result.data[0].success ) {
         setIsShow(true);
         // console.log(result.data)
         const vendorObj = {
@@ -98,8 +96,7 @@ function VendorLogin(props) {
           setCookie("vendorusername", userInfo.username);
           setCookie("vendorpassword", ciphertext);
           setCookie("vendorremember_me", userInfo.rememberme);
-          setCookie("currentLanguage", 'english')
-          setValue('english');
+
         } else {
           //remove username and password and remember me from cookie
           removeCookie("vendorusername");
@@ -114,18 +111,17 @@ function VendorLogin(props) {
         // window.location.href = '/vendor/business-profile';
         setTimeout(() => {
           setIsShow(false);
-         // history.push(`/vendor/dashboard`);
-          window.location.href = '/vendor/dashboard';
+          history.push(`/vendor/business-profile`);
         }, 3000);
 
       } else {
         setIsShow(false);
-        if (result && result.data && result.data && result.data.length > 0 && result.data[0].success === false) {
+        if(result && result.data && result.data && result.data.length > 0  && result.data[0].success === false){
           notification("warning", "", result.data[0].message);
-        } else {
+        }else{
           notification("warning", "", intl.formatMessage({ id: "genralerror" }));
         }
-
+       
       }
     } else {
       notification("warning", "", intl.formatMessage({ id: "valiemailpass" }));

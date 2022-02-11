@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { sessionService } from 'redux-react-session';
 import {
     getCustomerDetails, saveCustomerDetails, changePassword,
-    updateCustEmail, getPreference, savePreference
+    updateCustEmail, getPreference,  savePreference
 } from '../../../redux/pages/customers';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
@@ -21,8 +21,8 @@ import cartAction from "../../../redux/cart/productAction";
 import authAction from "../../../redux/auth/actions";
 import ForgottenPassword from '../../Page/forgotPassword';
 import MyAddress from './myProfile/myAddress';
-import appAction from "../../../redux/app/actions";
-const { showForgot } = appAction;
+
+
 const { closePrefPopup } = cartAction;
 const { logout, customer } = authAction;
 function MyProfile(props) {
@@ -37,7 +37,7 @@ function MyProfile(props) {
     const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
     const [isShown, setIsShown] = useState(-1);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
-
+   
     const [attributes, setAttributes]: any = useState({});
     const [customerPrefer, setCustomerPrefer]: any = useState({
         interestedIn: '',
@@ -61,7 +61,7 @@ function MyProfile(props) {
     const [ishowGifting, setIshowGifting] = useState(false);
 
     const [forgotPopup, setForgotPopup] = useState(false);
-
+   
     const [dob, setDob] = useState({
         day: '',
         month: '',
@@ -85,8 +85,8 @@ function MyProfile(props) {
         country: 'Andorra',
         mp_sms_telephone: ''
     });
-
-
+    
+    
 
     const [changePass, setChangePass] = useState({
         password: "",
@@ -140,11 +140,9 @@ function MyProfile(props) {
 
     const handleForgetPopup = (e) => {
         e.preventDefault();
-        props.showForgot(true);
+        setForgotPopup(true);
     }
-    const hideModall = () => {
-        props.showForgot(false);
-    }
+    const hideModall = () => setForgotPopup(false);
 
     async function getData() {
         let lang = props.languages ? props.languages : language;
@@ -152,7 +150,7 @@ function MyProfile(props) {
         let result: any = await getCustomerDetails();
         // const today = moment();
         // console.log(result.data);
-        const d = result.data.dob ? result.data.dob.split("-") : "";
+        const d = result.data.dob ? result.data.dob.split("-") : moment().format("YYYY-MM-DD").split("-");
         dob.day = d[2];
         dob.month = d[1];
         dob.year = d[0];
@@ -362,7 +360,7 @@ function MyProfile(props) {
     const validateDetails = () => {
         let error = {};
         let formIsValid = true;
-      
+
         if (!custForm.firstname) {
             formIsValid = false;
             error["firstname"] = intl.formatMessage({ id: "firstnamerequired" })
@@ -371,18 +369,10 @@ function MyProfile(props) {
             formIsValid = false;
             error["lastname"] = intl.formatMessage({ id: "lastnamerequired" })
         }
-        if (!dob.day) {
-            formIsValid = false;
-            error["dob"] = intl.formatMessage({ id: "dateofbirthrequired" });
-        }
-        if (!dob.month) {
-            formIsValid = false;
-            error["dob"] = intl.formatMessage({ id: "dateofbirthrequired" });
-        }
-        if (!dob.year) {
-            formIsValid = false;
-            error["dob"] = intl.formatMessage({ id: "dateofbirthrequired" });
-        }
+        // if (!custForm.gender) {
+        //     formIsValid = false;
+        //     error["gender"] = intl.formatMessage({ id: "gifting.gender" });
+        // }
         if (!customAttribute.mp_sms_telephone) {
             formIsValid = false;
             error['mp_sms_telephone'] = intl.formatMessage({ id: "phonereq" })
@@ -390,12 +380,12 @@ function MyProfile(props) {
         setPersonalError({ errors: error });
         return formIsValid;
     }
+   
 
 
 
 
-
-
+   
 
     //change password starts here----------------------------------------->
     const handlePassword = (e) => {
@@ -632,7 +622,6 @@ function MyProfile(props) {
         return formIsValid;
     }
     const openMyDetails = () => {
-        getData();
         setMyDetailsModel(!myDetailsModel);
     }
 
@@ -648,7 +637,7 @@ function MyProfile(props) {
         setMyAddressModal(!myAddressModal);
     }
 
-
+    
     const openGigitingModal = () => {
         setGiftErrors({ errors: {} })
         setGiftingModal(!giftingModal);
@@ -695,7 +684,7 @@ function MyProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2><IntlMessages id="myaccount.myDetails" /></h2>
+                            <h1><IntlMessages id="myaccount.myDetails" /></h1>
                             <p><IntlMessages id="myaccount.feelFreeToEdit" /></p>
                         </div>
                     </div>
@@ -753,7 +742,7 @@ function MyProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2><IntlMessages id="myaccount.myPreferences" /></h2>
+                            <h1><IntlMessages id="myaccount.myPreferences" /></h1>
                             <p><IntlMessages id="myaccount.youCanPersonalize" /></p>
                         </div>
                     </div>
@@ -838,7 +827,7 @@ function MyProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2><IntlMessages id="myaccount.giftingPreferences" /></h2>
+                            <h1><IntlMessages id="myaccount.giftingPreferences" /></h1>
                             <p><IntlMessages id="myaccount.youCanPutInfo" /> </p>
                         </div>
                     </div>
@@ -893,7 +882,7 @@ function MyProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2><IntlMessages id="myaccount.changePasswordEmail" /></h2>
+                            <h1><IntlMessages id="myaccount.changePasswordEmail" /></h1>
                             <p><IntlMessages id="myaccount.feelFreeToUpdate" /></p>
                         </div>
                     </div>
@@ -906,10 +895,7 @@ function MyProfile(props) {
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="change-paswd-sec">
-                                <div className="width-100">
-                                    <label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
-                                </div>
-
+                                <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" />*</label>
                                     <input type={passMask.password ? 'password' : 'text'} className="form-control"
@@ -975,9 +961,7 @@ function MyProfile(props) {
                         <div className="row">
                             <div className="col-sm-6">
                                 <div className="newemail-sec">
-                                    <div className="width-100">
-                                        <label className="form-label heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
-                                    </div>
+                                    <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
                                     <div className="width-100 mb-3">
                                         <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
                                         <input type="email" className="form-control" id="newEmail"
@@ -1057,7 +1041,7 @@ function MyProfile(props) {
                             <select className="form-select" value={custForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                 {DROPDOWN.gender.map(opt => {
-                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
+                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                 })}
                             </select>
                             <span className="error">{personalError.errors["gender"]}</span>
@@ -1071,7 +1055,7 @@ function MyProfile(props) {
                             <span className="error">{personalError.errors["mp_sms_telephone"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.dob" /><span className="maindatory">*</span></label>
+                            <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1093,10 +1077,9 @@ function MyProfile(props) {
                                     })}
                                 </select>
                             </div>
-                            <span className="error">{personalError.errors["dob"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id="myaccount.country" /> <span className="maindatory">*</span></label>
+                            <label className="form-label">Country<span className="maindatory">*</span></label>
                             <select value={customAttribute.country} onChange={handleChange} id="country" className="form-select" aria-label="Default select example">
                                 {COUNTRIES && COUNTRIES.map((opt, i) => {
                                     return (<option key={i} value={opt.full_name_english}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
@@ -1129,7 +1112,7 @@ function MyProfile(props) {
                 </Modal.Header>
             </Modal>
 
-
+           
 
             {/* Gifting preference details modal */}
 
@@ -1151,19 +1134,19 @@ function MyProfile(props) {
                             <div className="add_frd_birthdaysec">
                                 <h2><IntlMessages id="myaccount.addAFriend" /></h2>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="name" className="form-label"><IntlMessages id="myaccount.name" /><span className="maindatory">*</span></label>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.name" /><span className="maindatory">*</span></label>
                                     <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "profile.name" })} value={giftingPrefer.name} id="name"
                                         onChange={handleGiftingChange} />
                                     <span className="error">{giftErrors.errors["name"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="surName" className="form-label"><IntlMessages id="myaccount.surName" /></label><span className="maindatory">*</span>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.surName" /></label><span className="maindatory">*</span>
                                     <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.last_name" })} value={giftingPrefer.surName} id="surName"
                                         onChange={handleGiftingChange} />
                                     <span className="error">{giftErrors.errors["surName"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="occasion" className="form-label"><IntlMessages id="myaccount.occasion" /></label><span className="maindatory">*</span>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.occasion" /></label><span className="maindatory">*</span>
                                     <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.occasion} id="occasion"
                                         onChange={handleGiftingChange}>
                                         <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1178,7 +1161,7 @@ function MyProfile(props) {
                                     <span className="error">{giftErrors.errors["occasion"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="annualReminder" className="form-label"><IntlMessages id="myaccount.annualReminder" /></label><span className="maindatory">*</span>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.annualReminder" /></label><span className="maindatory">*</span>
                                     <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.annualReminder} id="annualReminder"
                                         onChange={handleGiftingChange}>
                                         <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1188,7 +1171,7 @@ function MyProfile(props) {
                                     <span className="error">{giftErrors.errors["annualReminder"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
-                                    <label htmlFor="dobfeild" className="form-label"><IntlMessages id="gifting.date" /></label><span className="maindatory">*</span>
+                                    <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.date" /></label><span className="maindatory">*</span>
                                     <div className="dobfeild">
                                         <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dobDate ? giftingPrefer.dobDate : currentDate[2]} id="dobDate"
                                             onChange={handleGiftingChange}>
@@ -1204,6 +1187,7 @@ function MyProfile(props) {
                                                 return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                             })}
                                         </select>
+                                        <span className="error">{giftErrors.errors["dobMonth"]}</span>
                                         <select className="form-select" aria-label="Default select example" value={giftingPrefer.dobYear ? giftingPrefer.dobYear : currentDate[0]} id="dobYear"
                                             onChange={handleGiftingChange}>
                                             <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1212,12 +1196,9 @@ function MyProfile(props) {
                                                 return (<option value={opt} key={opt}>{opt}</option>);
                                             })}
                                         </select>
-
-                                    </div>
-                                    <div>
                                         <span className="error">{giftErrors.errors["dobYear"]}</span>
-                                        <span className="error">{giftErrors.errors["dobDate"]}</span>
                                     </div>
+                                    <span className="error">{giftErrors.errors["dobDate"]}</span>
                                 </div>
                                 <div className="width-100 mb-3 form-field">
                                     <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="myaccount.dateOfDelivery" /></label><span className="maindatory">*</span>
@@ -1231,8 +1212,7 @@ function MyProfile(props) {
                                 </div>
                                 {showCustomdate && (
                                     <div className="width-100 mb-3 form-field">
-                                        <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.datedelivry" /></label>
-                                        <div className="dobfeild">
+                                        <label htmlFor="exampleInputEmail1" className="form-label"><IntlMessages id="gifting.datedelivry" /></label><div className="dobfeild">
                                             <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodDate ? giftingPrefer.dodDate : currentDate[2]} id="dodDate"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1240,15 +1220,15 @@ function MyProfile(props) {
                                                     return (<option value={opt} key={opt}>{opt}</option>);
                                                 })}
                                             </select>
-
+                                            <span className="error">{giftErrors.errors["dodDate"]}</span>
                                             <select className="form-select me-3" aria-label="Default select example" value={giftingPrefer.dodMonth ? giftingPrefer.dodMonth : currentDate[1]} id="dodMonth"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
                                                 {DROPDOWN.months.map(opt => {
-                                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
+                                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                                 })}
                                             </select>
-
+                                            <span className="error">{giftErrors.errors["dodMonth"]}</span>
                                             <select className="form-select" aria-label="Default select example" value={giftingPrefer.dodYear ? giftingPrefer.dodYear : currentDate[0]} id="dodYear"
                                                 onChange={handleGiftingChange}>
                                                 <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1256,10 +1236,6 @@ function MyProfile(props) {
                                                     return (<option value={opt} key={opt}>{opt}</option>);
                                                 })}
                                             </select>
-                                        </div>
-                                        <div>
-                                            <span className="error">{giftErrors.errors["dodMonth"]}</span>
-                                            <span className="error">{giftErrors.errors["dodDate"]}</span>
                                             <span className="error">{giftErrors.errors["dodYear"]}</span>
                                         </div>
                                     </div>
@@ -1270,7 +1246,7 @@ function MyProfile(props) {
                                         onChange={handleGiftingChange}>
                                         <option value="">{intl.formatMessage({ id: "select" })}</option>
                                         {DROPDOWN.gender.map(opt => {
-                                            return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
+                                            return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                         })}
                                     </select>
                                     <span className="error">{giftErrors.errors["gender"]}</span>
@@ -1362,16 +1338,14 @@ const mapStateToProps = (state) => {
         languages = state.LanguageSwitcher.language
     }
 
-
     return {
         languages: languages,
         token: state.session.user,
-        prefrences: state.Cart.isPrepOpen,
-        forgotPop: state?.App?.showForgot
+        prefrences: state.Cart.isPrepOpen
     }
 }
 
 export default connect(
     mapStateToProps,
-    { closePrefPopup, logout, customer, showForgot }
+    { closePrefPopup, logout, customer }
 )(MyProfile);

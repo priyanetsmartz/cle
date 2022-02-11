@@ -11,13 +11,15 @@ import { language } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import { DROPDOWN } from '../../../config/constants';
-import HtmlContent from '../../partials/htmlContent';
+import callIcon from '../../../image/call-icon.png';
+import deleteIcon from '../../../image/delete-icon.png';
+import timerIcon from '../../../image/timer_icon.png';
 import { sessionService } from 'redux-react-session';
 import { useIntl } from 'react-intl';
-import { getVendorDetails, editBusinessDetails, editVendor, editBankDetails, editVendorAddress, changePasswordVendor, vendorResetEmail } from '../../../redux/pages/vendorLogin';
+import { getVendorDetails, editBusinessDetails, editVendor, editBankDetails, editVendorAddress } from '../../../redux/pages/vendorLogin';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import user from '../../../image/user.png';
-import { capitalize, getCountryName, getRegionName } from '../../../components/utility/allutils';
+import { capitalize } from '../../../components/utility/allutils';
 import ForgottenPassword from './bussinessForgotpassword';
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
@@ -38,7 +40,7 @@ function BusinessProfile(props) {
         countryId: '',
         vendorDateofBirth: '',
         location: '',
-        gender: "",
+        gender: "male",
         contactMethod: ""
     });
 
@@ -55,7 +57,7 @@ function BusinessProfile(props) {
 
     const [bankDetails, setBankDetails] = useState({
         vendorId: vendorId,
-        companyName: "",
+        companyName: businessDetailsForm.businessCompanyName,
         bankName: "",
         accountNumber: ""
     });
@@ -105,7 +107,7 @@ function BusinessProfile(props) {
     const [changeEmail, setChangeEmail] = useState({
         newEmail: "",
         confirmNewEmail: "",
-        password2: "",
+        password: "",
     });
 
     const [errors, setError] = useState({
@@ -144,7 +146,7 @@ function BusinessProfile(props) {
         let lang = props.languages ? props.languages : language;
         let result: any = await getVendorDetails(lang);
         //  console.log(result['data'][0]['vendorPersonalDetails']);
-        const d = result && result['data'] && result['data'].length > 0 && result['data'][0]['vendorPersonalDetails'] ? result['data'][0]['vendorPersonalDetails'].vendorDateofBirth.split("-") : moment().format("YYYY-MM-DD").split("-");
+        const d = result && result['data'] && result['data'].length > 0 ? result['data'][0]['vendorPersonalDetails'].vendorDateofBirth.split("-") : moment().format("YYYY-MM-DD").split("-");
         // console.log(d[0])
         dob.day = d[2];
         dob.month = d[1];
@@ -183,7 +185,6 @@ function BusinessProfile(props) {
 
     const handleBankChange = (e) => {
         const { id, value } = e.target;
-
         setBankDetails(prevState => ({
             ...prevState,
             [id]: value
@@ -244,12 +245,8 @@ function BusinessProfile(props) {
     const saveCustAddress = async (e) => {
 
         if (validateAddress()) {
-
             vendorAddForm.vendorId = props.token.vendor_id;
-            // vendorAddForm.countryId = vendorAddForm['country']
-            delete vendorAddForm['countryName']
-            delete vendorAddForm['region']
-            vendorAddForm['region'] = vendorAddForm['region_id']
+            vendorAddForm.countryId = vendorAddForm['country']
             setIsAddShow(true);
             let result: any = await editVendorAddress(vendorAddForm);
             if (result && result.data && !result.data.message) {
@@ -266,8 +263,6 @@ function BusinessProfile(props) {
 
     const saveBankDetails = async (e) => {
         e.preventDefault()
-        bankDetails.companyName = businessDetailsForm.businessCompanyName;
-        console.log(bankDetails)
         if (validateBankDetails()) {
             setIsShow(true)
             bankDetails.vendorId = props.token.vendor_id;
@@ -293,8 +288,7 @@ function BusinessProfile(props) {
             "businessTax": businessDetailsForm.businessTax,
             "businessWebsite": businessDetailsForm.businessWebsite,
             "businessFacebook": businessDetailsForm.businessFacebook,
-            "businessInstagram": businessDetailsForm.businessInstagram,
-            "logoImagePath": ""
+            "businessInstagram": businessDetailsForm.businessInstagram
         }
         if (validateBussinessDetails()) {
             setSaveBusinessDetailsLoader(true)
@@ -321,19 +315,15 @@ function BusinessProfile(props) {
         }
         if (!vendorForm.location) {
             formIsValid = false;
-            error["location"] = intl.formatMessage({ id: "locationreq" });
-        }
-        if (!vendorForm.gender) {
-            formIsValid = false;
-            error["gender"] = intl.formatMessage({ id: "gifting.gender" });
+            error["location"] = intl.formatMessage({ id: "location" });
         }
 
-        // if (typeof (vendorForm.vendorTelephone) !== "undefined") {
-        //     if (!(/^(?:\+971|00971|0)(?:2|3|4|6|7|9|50|51|52|55|56)[0-9]{7}$/.test(vendorForm.vendorTelephone))) {
-        //         formIsValid = false;
-        //         error["vendorTelephone"] = intl.formatMessage({ id: "phoneinvalid" });
-        //     }
-        // }
+        if (typeof (vendorForm.vendorTelephone) !== "undefined") {
+            if (!(/^(?:\+971|00971|0)(?:2|3|4|6|7|9|50|51|52|55|56)[0-9]{7}$/.test(vendorForm.vendorTelephone))) {
+                formIsValid = false;
+                error["vendorTelephone"] = intl.formatMessage({ id: "phoneinvalid" });
+            }
+        }
         if (!vendorForm.vendorTelephone) {
             formIsValid = false;
             error['vendorTelephone'] = intl.formatMessage({ id: "phonereq" });
@@ -349,10 +339,6 @@ function BusinessProfile(props) {
     const validateAddress = () => {
         let error = {};
         let formIsValid = true;
-        if (!businessDetailsForm.businessCompanyName) {
-            formIsValid = false;
-            error["businessCompanyName"] = intl.formatMessage({ id: "companynamefirst" });
-        }
         if (!vendorAddForm.zip) {
             formIsValid = false;
             error["zip"] = intl.formatMessage({ id: "pinreq" });
@@ -373,20 +359,16 @@ function BusinessProfile(props) {
     const validateBankDetails = () => {
         let error = {};
         let formIsValid = true;
-        console.log(bankDetails.companyName)
+
         if (!bankDetails.companyName) {
             formIsValid = false;
-            error['companyName'] = intl.formatMessage({ id: "companynamefirst" });
+            error['companyName'] = intl.formatMessage({ id: "companyreq" });
         }
         if (!bankDetails.bankName) {
             formIsValid = false;
             error["bankName"] = intl.formatMessage({ id: "bankname" });
         }
-        console.log(bankDetails.accountNumber.length)
-        if (bankDetails.accountNumber && (bankDetails.accountNumber.length < 12 || bankDetails.accountNumber.length > 16)) {
-            formIsValid = false;
-            error['accountNumber'] = intl.formatMessage({ id: "accountnumberlength" });
-        }
+
         if (!bankDetails.accountNumber) {
             formIsValid = false;
             error['accountNumber'] = intl.formatMessage({ id: "accountnumber" });
@@ -443,9 +425,9 @@ function BusinessProfile(props) {
         return formIsValid;
     }
     // for customer address popup window ends here
-    // const deleteAdd = async () => {
+    const deleteAdd = async () => {
 
-    // }
+    }
     //edit existing address ends here--------------->
 
 
@@ -456,7 +438,6 @@ function BusinessProfile(props) {
             ...prevState,
             [id]: value
         }))
-
     }
 
 
@@ -487,12 +468,7 @@ function BusinessProfile(props) {
 
     const handleChangePass = async () => {
         if (handleValidation()) {
-            let data = {
-                email: props.token.email,
-                password: changePass.password,
-                confirmPass: changePass.newPassword
-            }
-            let result: any = await changePasswordVendor(data);
+            let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
             if (result && result.data && !result.data.message) {
                 notification("success", "", intl.formatMessage({ id: "passwordUpdate" }));
                 setChangePass({
@@ -501,11 +477,6 @@ function BusinessProfile(props) {
                     password: ""
                 });
             } else {
-                setChangePass({
-                    confirmNewPassword: "",
-                    newPassword: "",
-                    password: ""
-                });
                 if (result.data.message) {
                     notification("error", "", result.data.message);
                 } else {
@@ -554,19 +525,18 @@ function BusinessProfile(props) {
     const handleChangeEmail = async () => {
         if (handleValidationEmail()) {
             const req = {
-                email: props.token.email,
-                password: changeEmail.password2,
-                new_email: changeEmail.newEmail,
+                customerId: vendorId,
+                newEmail: changeEmail.newEmail,
+                password: changeEmail.password
             }
 
-            let result: any = await vendorResetEmail(req);
+            let result: any = await updateCustEmail(req);
             if (result && result.data && !result.data.message) {
-                console.log(result.data);
-                notification("success", "", intl.formatMessage({ id: "newEmailUpdatenotification" }));
+                notification("success", "", intl.formatMessage({ id: "newEmailUpdate" }));
                 setChangeEmail({
                     confirmNewEmail: "",
                     newEmail: "",
-                    password2: ""
+                    password: ""
                 })
             } else {
                 notification("error", "", intl.formatMessage({ id: "errorNewEmailUpdate" }));
@@ -599,14 +569,14 @@ function BusinessProfile(props) {
             error["confirmNewEmail"] = intl.formatMessage({ id: "confirmneemailreq" })
         }
 
-        if (!changeEmail["password2"]) {
+        if (!changeEmail["password"]) {
             formIsValid = false;
-            error["password2"] = intl.formatMessage({ id: "passwordreq" })
+            error["password"] = intl.formatMessage({ id: "passwordreq" })
         }
 
         if (changeEmail["confirmNewEmail"] !== changeEmail["newEmail"]) {
             formIsValid = false;
-            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmnewemailtmatched" })
+            error["confirmNewEmail"] = intl.formatMessage({ id: "confirmpasswordnotmatched" })
         }
 
         setError({ errors: error });
@@ -615,17 +585,14 @@ function BusinessProfile(props) {
     //change email ends here----------------------------------------->
 
     const openMyDetails = () => {
-        getData();
         setMyDetailsModel(!myDetailsModel);
     }
 
     const openBussinessModel = () => {
-        getData();
         setMyBussinessModel(!myBussinessModel);
     }
 
     const openBankDetailsModal = () => {
-        getData();
         setOpenBankModal(!openBankModal)
     }
     // const openMyPreferences = () => {
@@ -634,7 +601,6 @@ function BusinessProfile(props) {
     // }
 
     const openAddressModal = () => {
-        getData();
         setMyAddressModal(!myAddressModal);
     }
 
@@ -704,15 +670,13 @@ function BusinessProfile(props) {
 
     return (
         <div className="col-sm-9">
-
-
-
+{/* 
 
             <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2><IntlMessages id="business.Details" /></h2>
+                            <h1><IntlMessages id="business.Details" /></h1>
                             <p><IntlMessages id="vendor.feelFreeToEdit" /></p>
                         </div>
                     </div>
@@ -722,7 +686,6 @@ function BusinessProfile(props) {
                                 <div className="col-sm-3">
                                     <div className='companylogo'> <img className="rounded-circle" src={businessDetailsForm['logoImagePath'] ? companylogo + '' + businessDetailsForm['logoImagePath'] + `?${Math.random()}` : user} alt={businessDetailsForm['businessCompanyName']} width="100%" height="100%" />
                                         <div className='onhoveredit'> <input type="file" onChange={onFileChange} /></div>
-                                        <div className='onhoveredit-2'><IntlMessages id ="myaccount.edit"/></div>
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
@@ -757,104 +720,101 @@ function BusinessProfile(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-3 mt-4">
+                        <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary edit" onClick={openBussinessModel}>
+                                <button type="button" className="btn btn-secondary" onClick={openBussinessModel}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2><IntlMessages id="vendor.myDetails" /></h2>
+                            <h1><IntlMessages id="vendor.myDetails" /></h1>
                             <p><IntlMessages id="vendor.feelFreeToEdit" /></p>
                         </div>
                     </div>
-
                     <div className="row">
-                        <div className="col-sm-4">
-                            <div className="field_details mb-3">
-                                <label className="form-label"><IntlMessages id="vendor.fullname" /></label>
-                                <div className="field-name">{vendorForm.vendorName}</div>
-                            </div>
-                            <div className="field_details">
-                                <label className="form-label"><IntlMessages id="vendor.location" /></label>
-                                <div className="field-name">{vendorForm.location}</div>
+                        <div className="col-sm-9">
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <div className="field_details mb-3">
+                                        <label className="form-label"><IntlMessages id="vendor.fullname" /></label>
+                                        <div className="field-name">{vendorForm.vendorName}</div>
+                                    </div>
+                                    <div className="field_details">
+                                        <label className="form-label"><IntlMessages id="vendor.location" /></label>
+                                        <div className="field-name">{vendorForm.location}</div>
+                                    </div>
+                                </div>
+                                <div className="col-sm-4">
+
+                                    <div className="field_details mb-3">
+                                        <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
+                                        <div className="field-name">{capitalize(vendorForm.gender)} </div>
+                                    </div>
+                                    <div className="field_details">
+                                        <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
+                                        <div className="field-name">{vendorForm.vendorTelephone}</div>
+                                    </div>
+
+                                </div>
+                                <div className="col-sm-4">
+                                    <div className="field_details mb-3">
+                                        <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
+                                        <div className="field-name">{vendorForm.vendorDateofBirth} </div>
+                                    </div>
+                                    <div className="field_details">
+                                        <label className="form-label"><IntlMessages id="vendor.contactMethod" /></label>
+                                        <div className="field-name">{capitalize(vendorForm.contactMethod)}</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="col-sm-4">
-
-                            <div className="field_details mb-3">
-                                <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
-                                <div className="field-name">{vendorForm.gender ? capitalize(vendorForm.gender) : ""} </div>
-                            </div>
-                            <div className="field_details">
-                                <label className="form-label"><IntlMessages id="myaccount.phoneNo" /></label>
-                                <div className="field-name">{vendorForm.vendorTelephone}</div>
-                            </div>
-
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="field_details mb-3">
-                                <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
-                                <div className="field-name">{vendorForm.vendorDateofBirth} </div>
-                            </div>
-                            <div className="field_details">
-                                <label className="form-label"><IntlMessages id="vendor.contactMethod" /></label>
-                                <div className="field-name">{vendorForm.contactMethod ? capitalize(vendorForm.contactMethod) : ""}</div>
-                            </div>
-                        </div>
-
-
-                        <div className="col-sm-3 mt-4">
+                        {/* <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary edit" onClick={openMyDetails}>
+                                <button type="button" className="btn btn-secondary" onClick={openMyDetails}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
 
-            <section className="my_profile_sect mb-4">
+            {/* <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2><IntlMessages id="myaccount.myAddresses" /></h2>
+                            <h1><IntlMessages id="myaccount.myAddresses" /></h1>
                             <p><IntlMessages id="myaccount.addOrChange" /></p>
                         </div>
                     </div>
                     <div className="add_changeaddress">
-                        {(vendorAddForm && vendorAddForm.zip === '') && (
-                            <div className="addnew_address" onClick={openAddressModal}>
-                                <div className="addressnew_addressblue">
-                                    <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
-                                    <i className="fas fa-plus"></i>
-                                </div>
+                        <div className="addnew_address" onClick={openAddressModal}>
+                            <div className="addressnew_addressblue">
+                                <span> <IntlMessages id="myaccount.addNewAddress" /> </span>
                             </div>
-                        )}
+                        </div>
                         {(vendorAddForm) && (<>
                             <div className="addressnew_addressbodr" >
                                 <h3><IntlMessages id="myaccount.address" /></h3>
                                 <ul>
                                     <li>{businessDetailsForm['businessCompanyName']}</li>
-                                    <li>{vendorAddForm?.street}</li>
-                                    <li>{vendorAddForm?.zip}</li>
-                                    <li>{vendorAddForm?.city}</li>
-                                    <li>{vendorAddForm && vendorAddForm.region_id ? getRegionName(vendorAddForm.countryId, vendorAddForm.region_id) : ""}</li>
-                                    <li>{vendorAddForm.countryId ? getCountryName(vendorAddForm.countryId) : ""}</li>
+                                    <li>{vendorAddForm.street}</li>
+                                    <li>{vendorAddForm.zip}</li>
+                                    <li>{vendorAddForm.city}</li>
+                                    <li>{vendorAddForm.countryId}</li>
                                 </ul>
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
                                 <div className="address-action">
-                                    {/* <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link> */}
+                                    <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link>
                                     <Link to="#" className="edit_btn" onClick={() => openAddressModal()}>
                                         <IntlMessages id="myaccount.edit" />
                                     </Link>
@@ -870,14 +830,14 @@ function BusinessProfile(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2><IntlMessages id="vendor.payouts" /></h2>
+                            <h1><IntlMessages id="vendor.payouts" /></h1>
                             <p><IntlMessages id="myaccount.addOrChangePayments" /> </p>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
                             <h5><IntlMessages id="myaccount.Bank" /></h5>
-                            {/* <p><IntlMessages id="myaccount.addOrChangePayments" /> </p> */}
+                            <p><IntlMessages id="myaccount.addOrChangePayments" /> </p>
                         </div>
                         <div className="col-sm-12">
                             <div className="row">
@@ -904,20 +864,20 @@ function BusinessProfile(props) {
                         </div>
                         <div className="col-sm-3">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary edit" onClick={openBankDetailsModal}>
+                                <button type="button" className="btn btn-secondary" onClick={openBankDetailsModal}>
                                     <IntlMessages id="myaccount.edit" />
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
-            <section className="my_profile_sect change_passwordsec mb-4">
+            {/* <section className="my_profile_sect change_passwordsec mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2><IntlMessages id="myaccount.changePasswordEmail" /></h2>
+                            <h1><IntlMessages id="myaccount.changePasswordEmail" /></h1>
                             <p><IntlMessages id="myaccount.feelFreeToUpdate" /></p>
                         </div>
                     </div>
@@ -926,13 +886,11 @@ function BusinessProfile(props) {
                             <label className="form-label heading_lbl"><IntlMessages id="login.password" />*</label>
                             <div className="password_edit">*******</div>
                         </div>
-						<div className="col-sm-6"></div>
                     </div>
                     <div className="row">
+                        <div className="col-sm-12">
                             <div className="change-paswd-sec col-sm-6">
-                                <div className="width-100">
-								<label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
-								</div>
+                                <label className="heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
                                 <div className="width-100 mb-3 form-field">
                                     <label className="form-label"><IntlMessages id="login.password" />*</label>
                                     <input type={passMask.password ? 'password' : 'text'} className="form-control" placeholder=""
@@ -968,7 +926,7 @@ function BusinessProfile(props) {
                                     </span>
                                     <span className="error">{errors.errors["confirmNewPassword"]}</span>
                                 </div>
-                                <div className="width-100 mb-3 form-field forgot_paswd">
+                                <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
                                         <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" />?</Link>
                                     </div>
@@ -980,23 +938,17 @@ function BusinessProfile(props) {
                                     </div>
                                 </div>
                             </div>
-							<div className="col-sm-6"></div>
-                    </div>
-                        
-						<div className="row mb-3">
+                        </div>
+                        <div className="row">
 
                             <div className="col-sm-6">
                                 <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                                <div className="password_edit">{props.token.email}</div>
+                                <div className="password_edit">{vendorForm.email}</div>
                             </div>
-							<div className="col-sm-6"></div>
                         </div>
-						
-                        <div className="row">
+                        <div className="col-sm-12">
                             <div className="newemail-sec col-sm-6">
-                                <div className="width-100">
-								<label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
-								</div>
+                                <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
                                 <div className="width-100 mb-3">
                                     <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
                                     <input type="email" className="form-control" placeholder="" id="newEmail"
@@ -1016,13 +968,13 @@ function BusinessProfile(props) {
                                     <label className="form-label"><IntlMessages id="login.password" />*<span
                                         className="maindatory"></span></label>
                                     <input type={passMask.emailPass ? 'password' : 'text'} className="form-control" placeholder=""
-                                        id="password2"
-                                        value={changeEmail.password2}
+                                        id="password"
+                                        value={changeEmail.password}
                                         onChange={handleEmail} />
                                     <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
                                         {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
                                     </span>
-                                    <span className="error">{errors.errors["password2"]}</span>
+                                    <span className="error">{errors.errors["password"]}</span>
                                 </div>
                                 <div className="forgot_paswd">
                                     <div className="Frgt_paswd">
@@ -1034,50 +986,109 @@ function BusinessProfile(props) {
                                     </div>
                                 </div>
                             </div>
-							<div className="col-sm-6"></div>
                         </div>
-						
                     </div>
-               
+                </div>
             </section>
 
-            <HtmlContent identifier="vendor_block" />
-
-            <section className="my_profile_sect check-als mb-4">
+            <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2 className="text-center mb-4"><IntlMessages id="myaccount.checkAlso" /></h2>
+                            <h1><IntlMessages id="myaccount.deleteAccount" /></h1>
+                            <p><IntlMessages id="myaccount.weAreSorryToSee" /> </p>
+                            <p><IntlMessages id="myaccount.ifYouStillLike" /> </p>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-12 col-md-6 col-lg-4 mb-1">
-                            <div className="d-grid ">
-                                <Link to="/vendor/returns-complaints" className="btn btn-secondary">
-                                    <IntlMessages id="vendor.returnComplaints" />
-                                    <i className="fas fa-chevron-right"></i>
-                                </Link>
+                        <div className="col-sm-12">
+                            <div className="delet_account_accordin">
+                                <div className="accordion accordion-flush" id="accordionFlushExample">
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header" id="flush-headingOne">
+                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                <img src={callIcon} className="img-fluid" alt="" /> Step 1: Contact Customer Care
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                                            data-bs-parent="#accordionFlushExample">
+                                            <div className="accordion-body">Placeholder content for this accordion, which is intended to demonstrate
+                                                the <code>.accordion-flush</code> className. This is the first item's accordion body.</div>
+                                        </div>
+                                    </div>
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header" id="flush-headingTwo">
+                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                                <img src={deleteIcon} className="img-fluid" alt="" /> Step II: We'll deactivate your
+                                                account
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseTwo" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+                                            data-bs-parent="#accordionFlushExample">
+                                            <div className="accordion-body">Placeholder content for this accordion, which is intended to demonstrate
+                                                the <code>.accordion-flush</code> className. This is the second item's accordion body. Let's imagine
+                                                this being filled with some actual content.</div>
+                                        </div>
+                                    </div>
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header" id="flush-headingThree">
+                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                                <img src={timerIcon} className="img-fluid" alt="" /> Don't want to close your account but
+                                                fancy a break?
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseThree" className="accordion-collapse collapse" aria-labelledby="flush-headingThree"
+                                            data-bs-parent="#accordionFlushExample">
+                                            <div className="accordion-body">Placeholder content for this accordion, which is intended to demonstrate
+                                                the <code>.accordion-flush</code> className. This is the third item's accordion body. Nothing more
+                                                exciting happening here in terms of content, but just filling up the space to make it look, at
+                                                least at first glance, a bit more representative of how this would look in a real-world
+                                                application.</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-sm-12 col-md-6 col-lg-4 mb-1">
-                            <div className="d-grid ">
-                                <Link to="/vendor/sales-orders" className="btn btn-secondary">
-                                    <IntlMessages id="vendor.salesOrders" />
-                                    <i className="fas fa-chevron-right"></i>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-6 col-lg-4 mb-1">
-                            <div className="d-grid ">
-                                <Link to="/vendor/product-listing" className="btn btn-secondary">
-                                    <IntlMessages id="vendor.productListing" />
-                                    <i className="fas fa-chevron-right"></i>
+                            <div className="width-100 mt-3">
+                                <Link to="contact-us" className="btn btn-secondary">
+                                    <IntlMessages id="contact.title" />
                                 </Link>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <section className="my_profile_sect check-als mb-4">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h1 className="text-center mb-4"><IntlMessages id="myaccount.checkAlso" /></h1>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-4 mb-1">
+                            <div className="d-grid ">
+                                <Link to="customer-orders" className="btn btn-secondary">
+                                    <IntlMessages id="myaccount.myOrdersReturns" /></Link>
+                            </div>
+                        </div>
+                        <div className="col-sm-4 mb-1">
+                            <div className="d-grid ">
+                                <Link to="customer-orders" className="btn btn-secondary">
+                                    <IntlMessages id="myaccount.orderDetails" /></Link>
+                            </div>
+                        </div>
+                        <div className="col-sm-4 mb-1">
+                            <div className="d-grid ">
+                                <button type="button" className="btn btn-secondary"><IntlMessages id="myaccount.returnDetails" /></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section> */}
 
             {/* customer details modal */}
             <Modal show={myDetailsModel} >
@@ -1105,9 +1116,9 @@ function BusinessProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                             <select className="form-select" defaultValue={vendorForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
-                                <option value="">{intl.formatMessage({id:'select'})}</option>
+                                <option value="">Select</option>
                                 {DROPDOWN.genderVendor.map(opt => {
-                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
+                                    return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                 })}
                             </select>
                             <span className="error">{errorsPersonal.errors["gender"]}</span>
@@ -1121,23 +1132,23 @@ function BusinessProfile(props) {
                             <span className="error">{errorsPersonal.errors["vendorTelephone"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id= "myaccount.dob" /></label>
+                            <label className="form-label">Date of birth</label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
-                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                    <option value=""><IntlMessages id="select" /></option>
                                     {DROPDOWN.dates.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
                                     })}
 
                                 </select>
                                 <select className="form-select me-3" value={dob.month} aria-label="Default select example" onChange={dobHandler} id="month">
-                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                    <option value=""><IntlMessages id="select" /></option>
                                     {DROPDOWN.months.map(opt => {
                                         return (<option value={opt.id} key={opt.id}>{opt.name}</option>);
                                     })}
                                 </select>
                                 <select className="form-select" value={dob.year} aria-label="Default select example" onChange={dobHandler} id="year">
-                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                    <option value=""><IntlMessages id="select" /></option>
                                     {DROPDOWN.years.map(opt => {
                                         return (<option value={opt} key={opt}>{opt}</option>);
                                     })}
@@ -1147,8 +1158,8 @@ function BusinessProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="vendor.contactMethod" /><span className="maindatory">*</span></label>
                             <select value={vendorForm.contactMethod} onChange={handleChange} id="contactMethod" className="form-select" aria-label="Default select example">
-                                <option value="email">{intl.formatMessage({id:'profile.email'})}</option>
-                                <option value="phone">{intl.formatMessage({id:'Phone'})}</option>
+                                <option value="email">Email</option>
+                                <option value="phone">Phone</option>
                             </select>
                             <span className="error">{errors.errors["contactMethod"]}</span>
                         </div>
@@ -1241,13 +1252,13 @@ function BusinessProfile(props) {
                     <div className="">
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="business.companyname" /><span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "business.companyname" })}
-                                id="businessCompanyName"
+                            <input type="text" className="form-control" placeholder={intl.formatMessage({ id: "register.first_name" })}
+                                id="firstname"
                                 readOnly
                                 value={businessDetailsForm.businessCompanyName}
                                 onChange={handleAddChange} />
 
-                            <span className="error">{errors.errors["businessCompanyName"]}</span>
+                            <span className="error">{errors.errors["firstname"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
@@ -1278,8 +1289,7 @@ function BusinessProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
-
-                            <select value={vendorAddForm.countryId} onChange={handleCountryChangeAdd} id="countryId" className="form-select">
+                            <select value={vendorAddForm.country} onChange={handleCountryChangeAdd} id="countryId" className="form-select">
                                 {countries && countries.map(opt => {
                                     return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                 })}

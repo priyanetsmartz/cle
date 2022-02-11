@@ -11,7 +11,7 @@ const siteConfig = {
   linkedin: 'https://sa.linkedin.com/company/werecle',
   twitter: 'https://www.twitter.com/',
   pageSize: 12,
-  questionLimitFaq: 3
+  questionLimitFaq:3
 };
 const apiConfig = {
   fetchUrl: '',
@@ -19,9 +19,7 @@ const apiConfig = {
   adminToken: 'hcy0yuocc3geyjhoqd3esopkmjiky8tv',
   facebookKey: '236629564954102',
   googleClientId: '693205144964-fnh5afe5ihk2jmr6as9dmbqti52aq8a7.apps.googleusercontent.com',
-  encryptionkey: 'cleciphertext@123',
-  captchaKey: '6Lcl_gYeAAAAAGPwDZJddIjMQ0com8GwWvVELQnb',
-  placesKey: 'AIzaSyBbxeYM0ACV-xfWnw6W_fFnLAo-V0xGTnE'
+  encryptionkey : 'cleciphertext@123'
 };
 
 const language = 'english';

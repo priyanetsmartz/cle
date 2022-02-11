@@ -11,6 +11,7 @@ import { getCookie } from "../../../../helpers/session";
 import ProductsMagazine from './magazine';
 import { useParams } from "react-router-dom";
 import ProductImages from './productImges';
+import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { addToCartApi, addToCartApiGuest, addWhishlist, configLabels, createGuestToken, getGuestCart, getProductChildren, getProductDetails, getProductExtras, getWhishlistItemsForUser, removeWhishlist } from '../../../../redux/cart/productApi';
@@ -30,7 +31,7 @@ function ProductDetailsPrivate(props) {
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
     let venID = localToken && localToken.vendor_id ? localToken.vendor_id : 0;
-    const { vendorIdprev, prodsku }: any = useParams();
+    const { vendorId, sku }: any = useParams();
     const intl = useIntl();
     const language = getCookie('currentLanguage');
     const [opacity, setOpacity] = useState(1);
@@ -68,16 +69,16 @@ function ProductDetailsPrivate(props) {
         }, 3000);
         const localToken = props.token.token;
         setToken(localToken)
-        getProductDetailsFxn(prodsku);
+        getProductDetailsFxn(sku);
         setShareUrl(window.location.href);
 
-        if (vendorIdprev !== venID) {
+        if (vendorId != venID) {
             window.location.href = '/';
         }
         return () => {
             props.openGiftBoxes(0);
         }
-    }, [prodsku, props.languages, props.token])
+    }, [sku, props.languages, props.token])
 
 
     useEffect(() => {
@@ -148,7 +149,6 @@ function ProductDetailsPrivate(props) {
         projectSingle['type_id'] = selectChild.type_id;
         projectSingle['sku'] = selectChild.sku;
         projectSingle['name'] = selectChild.name;
-        projectSingle['status'] = selectChild.status;
         projectSingle['price'] = selectChild.price ? selectChild.price : 0;
         projectSingle['description'] = description;
         projectSingle['saleprice'] = special_price ? special_price : 0;
@@ -262,7 +262,7 @@ function ProductDetailsPrivate(props) {
             })
         }
 
-        // console.log(result.data.status);
+        // console.log(tags);
         //     console.log(result.data.price)
         projectSingle['id'] = result.data.id;
         projectSingle['type_id'] = result.data.type_id;
@@ -273,7 +273,6 @@ function ProductDetailsPrivate(props) {
         projectSingle['description'] = description;
         projectSingle['saleprice'] = special_price ? special_price : 0;
         projectSingle['watch_color'] = watch_color;
-        projectSingle['status'] = result.data.status;
         projectSingle['gift'] = gift;
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
@@ -300,8 +299,8 @@ function ProductDetailsPrivate(props) {
         //     props.recomendedProducts(recomendationsData)
         // }
         // console.log(result.data)
-        setProductSizeDetails(result?.data?.extension_attributes?.mp_sizechart?.rule_content);
-        setMeasuringDetails(result?.data?.extension_attributes?.mp_sizechart?.rule_description);
+        setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
+        setMeasuringDetails(result.data.extension_attributes.mp_sizechart.rule_description);
         // console.log(productDetails)
     }
 
@@ -353,7 +352,7 @@ function ProductDetailsPrivate(props) {
         localStorage.setItem('cartQuoteId', cartQuoteId);
         cartData = {
             "cartItem": {
-                "sku": prodsku,
+                "sku": sku,
                 "qty": quantity,
                 "quote_id": cartQuoteId
             }
@@ -392,12 +391,12 @@ function ProductDetailsPrivate(props) {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
                 notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
-                getProductDetailsFxn(prodsku)
+                getProductDetailsFxn(sku)
             } else {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
-                getProductDetailsFxn(prodsku)
+                getProductDetailsFxn(sku)
             }
         } else {
             props.showSignin(true);
@@ -413,43 +412,29 @@ function ProductDetailsPrivate(props) {
             setDelWishlist(0)
             setItemInWhishlist(0)
             notification("success", "", del.data[0].message);
-            getProductDetailsFxn(prodsku)
+            getProductDetailsFxn(sku)
         } else {
             props.addToWishlistTask(true);
             setDelWishlist(0)
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
-            getProductDetailsFxn(prodsku)
+            getProductDetailsFxn(sku)
         }
     }
     return (
         <>
             <main>
                 {/* <Promotion /> */}
-
-                <section className='product-status'>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-sm-12">
-                                <div>
-
-                                    {productDetails['status'] === 1 ? <span className="active">{intl.formatMessage({ id: "product.active" })}</span> : ""}
-                                    {productDetails['status'] === 8 ? <span className="sold">{intl.formatMessage({ id: "product.sold" })}</span> : ""}
-                                    {productDetails['status'] === 3 ? <span className="pending">{intl.formatMessage({ id: "product.pending" })}</span> : ""}
-                                    {productDetails['status'] === 10 ? <span className="rejected">{intl.formatMessage({ id: "product.rejected" })}</span> : ""}
-                                    {productDetails['status'] === 2 ? <span className="disabled">{intl.formatMessage({ id: "product.disabled" })}</span> : ""}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
                 <section style={{ 'opacity': opacity }} >
                     <div className="container" id="productID" >
                         <div className="row">
                             <div className="col-sm-6">
                                 <div className="product-slider">
                                     <span className="pdp-favorite">
-                                        <div><i className="far fa-heart" aria-hidden="true"></i>
-                                        </div>
+                                        {iteminWhishlist === 0 ? (
+                                            <div>{isWishlist === prodId ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(prodId) }} className="far fa-heart" aria-hidden="true"></i>}
+                                            </div>
+                                        ) : <div>{delWishlist === iteminWhishlist ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(iteminWhishlist) }} aria-hidden="true"></i>}
+                                        </div>}
                                     </span>
                                     <ProductImages productImages={productImages} />
                                 </div>
@@ -543,8 +528,9 @@ function ProductDetailsPrivate(props) {
                                     <div className="width-100 my-3">
                                         <div className="d-grid">
                                             {productDetails['is_in_stock'] === true && (
-                                                <>  <button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                                <>  <button type="button" style={{ "display": !isShow ? "flex" : "none" }} onClick={() => { handleCart(productDetails['id'], productDetails['sku']) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
                                                     <IntlMessages id="product.addToCart" /></button>
+                                                    <button style={{ "display": isShow ? "inline-block" : "none" }} className="btn btn-primary"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></button>
                                                 </>
                                             )}
                                             {productDetails['is_in_stock'] === false && (
@@ -567,13 +553,21 @@ function ProductDetailsPrivate(props) {
                                                 }}   ><Link to="#"><i className="fas fa-share-alt"></i></Link></div>
                                                 {isShare && (<div className="share-options">
                                                     <ul className="list-inline">
-                                                        <li className="list-inline-item">
+                                                        <li className="list-inline-item"> <FacebookShareButton
+                                                            url={shareUrl}
+                                                            quote={productDetails['name']}>
                                                             <i className="fab fa-facebook" aria-hidden="true"></i>
-                                                        </li>
-                                                        <li className="list-inline-item"><i className="fab fa-linkedin" aria-hidden="true"></i></li>
-                                                        <li className="list-inline-item">
+                                                        </FacebookShareButton></li>
+                                                        <li className="list-inline-item"><LinkedinShareButton
+                                                            url={shareUrl}
+                                                            title={productDetails['name']}>
+                                                            <i className="fab fa-linkedin" aria-hidden="true"></i>
+                                                        </LinkedinShareButton></li>
+                                                        <li className="list-inline-item"><TwitterShareButton
+                                                            url={shareUrl}
+                                                            title={productDetails['name']}>
                                                             <i className='fab fa-twitter'></i>
-                                                        </li>
+                                                        </TwitterShareButton></li>
                                                     </ul>
                                                 </div>
                                                 )}

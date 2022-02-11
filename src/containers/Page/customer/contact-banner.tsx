@@ -9,7 +9,7 @@ function ContactBannerFooter(props) {
                     <h3><IntlMessages id="mysupport.checkHelp" /></h3>
                     <p><IntlMessages id="mysupport.findTheAnswer" /></p>
                     {/* on check out redirect user to help center page */}
-                    <Link to="/help-center" type="submit" className="btn"><IntlMessages id="mysupport.cta" /></Link>
+                    <Link to="#" type="submit" className="btn"><IntlMessages id="mysupport.cta" /></Link>
                 </div>
             </div>
         </section>

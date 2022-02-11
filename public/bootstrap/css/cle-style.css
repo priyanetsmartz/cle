@@ -885,7 +885,7 @@ p.promotion_alert {
 }
 
 .details_product ul {
-    margin: 0;
+    margin: 0 16px;
     padding: 0;
 }
 
@@ -898,7 +898,8 @@ p.promotion_alert {
 }
 
 .accodian_descrpt .accordion-body {
-    padding: 0 0 10px 10px;
+    padding: 0;
+    padding-bottom: 10px;
     overflow: auto;
 }
 
@@ -1171,12 +1172,6 @@ p.promotion_alert {
     .slick-current {
       opacity: 1;
     } */
-	
-	.product-listing > .rdt_TableHeader{
-		font: normal normal 500 24px/30px Monument Extended;
-		color:#000;
-		padding:0
-	}
 
 .magazine_article {
     width: 100%;
@@ -1215,8 +1210,9 @@ p.promotion_alert {
 }
 
 .magazine_article p {
-    font: normal normal normal 16px/24px Lato!important;
+    font-size: 16px;
     color: #000;
+    font-family: 'Lato', sans-serif;
     width: 100%;
     float: left;
     margin: 10px 0 25px 0;
@@ -1502,12 +1498,12 @@ p.promotion_alert {
 }
 
 .my_profile_sect h1 {
+    font-size: 24px;
+    font-family: 'Monument Extended';
+    font-style: normal;
     margin-top: 30px;
-	font: normal normal normal 36px/46px Monument Extended;
-}
-
-.my_profile_sect h2 {
-	font: normal normal 500 24px/30px Monument Extended;
+    font-weight: 400;
+	line-height:46px;
 }
 
 .my_profile_sect.check-als h1 {
@@ -1517,16 +1513,8 @@ p.promotion_alert {
 }
 
 .my_profile_sect p {
-    font: normal normal 500 18px/27px Lato;
-	margin-bottom:30px;
-}
-
-.my_profile_sect h2 + p{
-	font: normal normal normal 16px/19px Lato;
-}
-
-.my_profile_sect .edit{
-	width:158px;
+    font-size: 18px;
+	font-weight: 500;
 }
 
 .field_details {
@@ -1535,7 +1523,8 @@ p.promotion_alert {
 }
 
 .field_details .form-label {
-	font: normal normal 700 16px/19px Lato;
+    font-size: 16px;
+    font-weight: 700;
     margin-bottom: 0px;
 }
 
@@ -2025,7 +2014,10 @@ span.hidden-pass i {
     background-color: #2E2BAA;
     border-color: #2E2BAA;
     border-radius: 0;
-	font: normal normal 500 16px/20px Monument Extended;
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    font-style: normal;
+    font-size: 16px;
     padding: 20px 20px !important;
 }
 
@@ -2188,7 +2180,6 @@ span.maindatory {
     transition: all .5s ease-in-out;
     display: block;
     position: absolute;
-	color: #2E2BAA;
 }
 
 .sizebtn .save-btn a:after {
@@ -2205,50 +2196,18 @@ span.maindatory {
 
 .sizebtn .save-btn a:hover {
     padding-top: 5px;
-	color: #2E2BAA;
 }
 
 .sizebtn .save-btn a:hover:after {
-    border-color: #2E2BAA;
+    border-color: #222;
     bottom: 2px;
 }
 
-.favt_dragdrop .removel_allbtn {
-    position: relative;
-	min-height: 20px;
-}
-.favt_dragdrop .removel_allbtn a {
-    text-decoration: none;
-    -webkit-transition: all .5s ease-in-out;
-    -o-transition: all .5s ease-in-out;
-    transition: all .5s ease-in-out;
-    display: block;
-    position: absolute;
-	color: #707070;
-	right:0;
-}
-.favt_dragdrop .removel_allbtn a:after {
-    content: "";
-    border-bottom: 1px solid transparent;
-    display: block;
-    -webkit-transition: all .5s ease-in-out;
-    -o-transition: all .5s ease-in-out;
-    transition: all .5s ease-in-out;
-    bottom: -5px;
-    position: absolute;
-    width: 100%;
-}
 
-.favt_dragdrop .removel_allbtn a:hover {
-    padding-top: 5px;
-	color: #000;
+.save-btn.removel_allbtn {
+    text-align: right;
+    padding-right: 15px;
 }
-
-.favt_dragdrop .removel_allbtn a:hover:after {
-    border-color: #000;
-    bottom: 2px;
-}
-
 
 /* .sizebtn.clothnmrgin {
     margin-top: 88px;
@@ -2396,7 +2355,7 @@ span.maindatory {
     font-size: 24px;
     font-family: 'Monument Extended';
     font-style: normal;
-    margin-top: 10px;
+    margin-top: 30px;
     font-weight: 500;
 }
 
@@ -3081,11 +3040,11 @@ left: auto; */
 .myorder_sidebar ul li a {
     color: #000;
     text-decoration: none;
-    font: normal normal 700 16px/24px Lato;
+    font-size: 16px;
 }
 
 .myorder_sidebar ul li a span {
-    font: normal normal 700 16px/24px Lato;
+    font-weight: 600;
 }
 
 .myorder_sidebar ul li a:hover {
@@ -3096,63 +3055,12 @@ left: auto; */
     color: #2E2BAA;
 }
 
-.myorder_sidebar ul li.active a span{
-	font-weight:900;
-}
-.add-address-btn{
-	display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    height: 30px;
-}
-.add-address-btn i{
-	color: #2E2BAA;
-	font-size: 14px;
-    display: none;
-    -webkit-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    transition: all .3s ease;
-}
-
-.add-address-btn:hover i{
-	display: block;
-}
-
 .add-address-btn .add-ad-btn {
-	font: normal normal normal 16px/20px Monument Extended;
-    color: #2E2BAA;
+    font-family: 'Monument Extended';
+    color: #000;
+    margin-right: 20px;
     text-decoration: none;
-	margin-bottom: 0;
-    -webkit-transform: translateX(0%);
-    -ms-transform: translateX(0%);
-    transform: translateX(0%);
-    display: inline-block;
-    -webkit-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    transition: all .3s ease;
-    line-height: 24px;
-	padding: 0;
 }
-
-.add-address-btn .add-ad-btn:hover{
-	color: #2E2BAA;
-}
-
-.add-address-btn:hover .add-ad-btn {
-    -webkit-transform: translateX(5%);
-    -ms-transform: translateX(5%);
-    transform: translateX(5%);
-}
-
-.we-accept{
-	background-color: #F7F7FC;
-	padding:10px;
-	margin-top:10px;
-}
-
 
 .user_show {
     font-size: 16px;
@@ -3163,9 +3071,11 @@ left: auto; */
 }
 
 .user_name {
-	font: normal normal 500 16px/24px Monument Extended;
+    font-size: 16px;
+    font-family: 'Monument Extended';
+    font-style: normal;
+    font-weight: 400;
     color: #000;
-	text-transform: capitalize;
 }
 
 .my-userdetails {
@@ -5778,8 +5688,6 @@ color: #017abb;
     height: 100%;
 }
 
-
-
 .order-number {
     margin-bottom: 40px;
 }
@@ -5828,49 +5736,17 @@ color: #017abb;
     margin: auto;
 }
 
-.Address-title{
-	position: relative;
-}
-
 .Address-title span {
     font-weight: bold;
     margin-bottom: 20px;
     display: block;
 }
 
-.order-delivery-address .Address-title a {
+.Address-title a {
     font-family: 'Monument Extended';
     font-weight: 500;
     color: #2e2baa;
     font-size: 16px;
-	text-decoration: none;
-    -webkit-transition: all .5s ease-in-out;
-    -o-transition: all .5s ease-in-out;
-    transition: all .5s ease-in-out;
-    display: block;
-    position: absolute;
-	right: 0;
-}
-
-.order-delivery-address .Address-title a:hover{
-	padding-top: 5px;
-}
-
-.order-delivery-address .Address-title a:after{
-	content: "";
-    border-bottom: 1px solid transparent;
-    display: block;
-    -webkit-transition: all .5s ease-in-out;
-    -o-transition: all .5s ease-in-out;
-    transition: all .5s ease-in-out;
-    bottom: -5px;
-    position: absolute;
-    width: 100%;
-}
-
-.order-delivery-address .Address-title a:hover:after{
-	border-color: #2e2baa;
-    bottom: 2px;
 }
 
 .return-complaint-btns a {
@@ -6314,10 +6190,6 @@ h4.arrow-change:after {
     color: #2E2BAA;
 }
 
-.customer-d-wrap:hover a{
-	text-decoration:underline;
-}
-
 .container.about-inner {
     padding: 0;
 }
@@ -6402,17 +6274,16 @@ h4.arrow-change:after {
 .help-center .btn {
     background-color: #fff;
     color: #2E2BAA;
-    border-color: #fff;
+    border-color: #2E2BAA;
     font-family: 'Monument Extended';
     -webkit-transition: all .3s ease;
     -o-transition: all .3s ease;
     transition: all .3s ease;
-	font-size: 12px;
-    padding: 12px 30px;
 }
 
 .help-center .btn:hover {
-    background-color: transparent;
+    border-color: #fff;
+    background-color: #2E2BAA;
     color: #fff;
 }
 
@@ -7145,15 +7016,6 @@ button:focus {
     margin-right: 5px !important;
 }
 
-.my-wishlist-main .resltspage_sec .sort_by {
-    width: 25%;
-}
-
-.my-wishlist-main .resltspage_sec .sort_by .form-select{
-	background-color: #fff;
-    border-color: #fff;
-}
-
 .bg-remove {
     position: absolute;
     top: 0;
@@ -7293,12 +7155,6 @@ button:focus {
     float: right;
     padding: 12px 30px;
 }
-
-.signup-btn{
-	padding: 12px 30px;
-}
-
-
 
 
 .pagination a.page-link.active {
@@ -7521,10 +7377,7 @@ p.sliderupper {
     text-align: center;
     font-size: 16px;
 }
-.deletePopup.successmail .modal-header > i {
-    font-size: 50px;
-    color: #2e2baa;
-}
+
 .faq-list {
     padding: 60px 0;
 }
@@ -7570,30 +7423,30 @@ p.sliderupper {
 }
 
 .login-popup {
-    margin: 30px 0 0;
+    margin: 40px 0 0;
 }
 
 .cookie_popup_login h2 {
-	font: normal normal 500 28px/24px Monument Extended;
-    padding: 10px 0;
+    font-family: 'Monument Extended';
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 15px;
     color: #000;
-	margin: 0;
-	text-transform: capitalize;
 }
 
 .cookie_popup_login h2.head-ble {
-    font: normal normal 500 28px/24px Monument Extended;
-	color: #2E2BAA;
-	margin: 0;
+    color: #2E2BAA;
 }
 
 .login-popup p {
-	font: normal normal 500 16px/24px Lato;
+    font-size: 16px;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
     color: #000;
 }
 
 .log-benefit {
-    min-height: 350px;
+    min-height: 400px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -7601,7 +7454,7 @@ p.sliderupper {
         -ms-flex-align: center;
             align-items: center;
     position: relative;
-    margin: 20px 0;
+    margin: 40px 0;
 }
 
 .log-ban {
@@ -7619,7 +7472,7 @@ p.sliderupper {
     cursor: pointer;
 }
 .log-ban img {
-    height: 300px;
+    height: 350px;
     -o-object-fit: cover;
        object-fit: cover;
     width: 100%;
@@ -7628,7 +7481,7 @@ p.sliderupper {
 .log-benefit .log-bullet {
     background-color: #000;
     min-height: 100px;
-    min-width: 50%;
+    min-width: 40%;
     padding: 30px 20px;
     position: absolute;
     left: 0;
@@ -7649,34 +7502,6 @@ p.sliderupper {
 .log-bullet li {
     color: #fff;
     margin-bottom: 10px;
-}
-
-.start-selling-popup h2{
-	font: normal normal normal 24px/30px Monument Extended;
-	color: #FFFFFF;
-	text-align:center;
-}
-
-.start-selling-popup p{
-	text-align: center;
-	font: normal normal normal 16px/24px Lato;
-	color: #FFFFFF;
-	margin-bottom: 10px;
-}
-
-.start-selling-popup a{
-	font: normal normal 500 12px/16px Monument Extended;
-    color: #2E2BAA!important;
-    background-color: #fff;
-    padding: 10px 22px;
-    border: 1px solid #fff;
-	margin: 10px 0;
-    display: inline-block;
-}
-
-.start-selling-popup a:hover{
-	background-color: transparent;
-	color: #fff!important;
 }
 
 .profilemagazine .magazine_article h1 {
@@ -8321,8 +8146,7 @@ p.sliderupper {
     border: 1px solid #000;
 }
 
-.opt-tabs .radio-toolbar input[type="radio"]:checked + label,
-.opt-tabs .radio-toolbar input[type="radio"].active + label {
+.opt-tabs .radio-toolbar input[type="radio"]:checked + label {
     background-color: #000;
     border-color: #000;
 	color:#fff;
@@ -8464,9 +8288,8 @@ p.sliderupper {
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
-	line-height:23px;
-	height: 22px;
-	padding:0 7px;
+	line-height:16px;
+	padding:2px 6px;
 	background-color: #fff;
 	display: block;
     word-break: keep-all;
@@ -8502,86 +8325,6 @@ p.sliderupper {
 	color:#777777;
 }
 
-.product-status .disabled,
-.product-status .active,
-.product-status .approved,
-.product-status .decline,
-.product-status .accept,
-.product-status .acknowledged,
-.product-status .pending,
-.product-status .canceled,
-.product-status .ready-to-ship,
-.product-status .shipped,
-.product-status .delivered,
-.product-status .retured {
-    font-family: 'Monument Extended';
-    font-size: 9px;
-    font-weight: 500;
-    line-height: 23px;
-    height: 22px;
-    padding: 0 7px;
-    background-color: #fff;
-    display: inline-block;
-	margin-bottom:30px;
-}
-
-.product-status .disabled{
-	border: 1px solid #aca2a2;
-    color: #aca2a2;
-}
-.product-status .active{
-	border: 1px solid #00CEA7;
-	color: #00CEA7;
-}
-
-.product-status .approved{
-	border: 1px solid #2E2BAA;
-    color: #2E2BAA;
-}
-.product-status .decline{
-	border: 1px solid #D9242C;
-	color: #D9242C;
-}
-
-.product-status .accept{
-	border: 1px solid #00CEA7;
-    color: #00CEA7;
-}
-.product-status .acknowledged{
-	border: 1px solid #007DE2;
-	color: #007DE2;
-}
-
-.product-status .pending{
-	border:1px solid #FF7756;
-	color:#FF7756;
-}
-
-.product-status .canceled{
-	border:1px solid #D9242C;
-	color:#D9242C;
-}
-
-.product-status .ready-to-ship{
-	border:1px solid #00CEA7;
-	color:#00CEA7;
-}
-
-.product-status .shipped{
-	border:1px solid #007DE2;
-	color:#007DE2;
-}
-
-.product-status .delivered{
-	border:1px solid #2E2BAA;
-	color:#2E2BAA;
-}
-
-.product-status .retured{
-	border:1px solid #777777;
-	color:#777777;
-}
-
 .rdt_TableRow .approved,
 .rdt_TableRow .decline,
 .rdt_TableRow .disabled,
@@ -8591,9 +8334,8 @@ p.sliderupper {
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
-	line-height:23px;
-	height: 22px;
-	padding:0 7px;
+	line-height:16px;
+	padding:2px 6px;
 	background-color: #fff;
 	display: block;
     word-break: keep-all;
@@ -8634,26 +8376,20 @@ p.sliderupper {
 	font-family: 'Monument Extended';
     font-size: 9px;
 	font-weight:500;
-	line-height:23px;
-	height: 22px;
-	padding:0 6px;
+	line-height:16px;
+	padding:2px 6px;
 	background-color: #fff;
 	border: 1px solid #00CEA7;
     color: #00CEA7;
-}
-
-.paid{
-	display:block;
 }
 
 .rdt_TableCell, .rdt_TableCell a,
 .rdt_TableCol,
 .rdt_TableCol a {
     color: #000;
-    /* font-size: 14px;
-    font-family: "Lato",sans-serif; */
+    font-size: 14px;
+    font-family: "Lato",sans-serif;
 	word-spacing: 2px;
-	font: normal normal normal 16px/19px Lato;
 }
 
 .rdt_TableCell a:hover,
@@ -8672,7 +8408,7 @@ p.sliderupper {
 }
 .rdt_TableCell p{
 	margin-bottom:5px;
-	font: normal normal normal 16px/19px Lato;
+	font-size: 14px;
 }
 
 .rdt_TableCell {
@@ -8721,7 +8457,7 @@ p.sliderupper {
 }
 
 .product-listing .rdt_TableRow{
-	min-height:165px;
+	min-height:150px;
 }
 
 .product-listing .rdt_TableCell{
@@ -8792,7 +8528,7 @@ p.sliderupper {
 }
 
 .prodbrand, .prodId span {
-    font-weight: 600 !important;
+    font-weight: 600;
 }
 
 .companylogo {
@@ -8800,13 +8536,13 @@ p.sliderupper {
 }
 
 .companylogo img {
-    width: 180px;
+    width: 100%;
     height: 180px;
     -o-object-fit: cover;
        object-fit: cover;
     -o-object-position: center;
        object-position: center;
-    border: 2px solid #2E2BAA;
+    border: 3px solid #2E2BAA;
 }
 
 .companylogo .onhoveredit input[type="file"]{
@@ -8830,11 +8566,11 @@ p.sliderupper {
     bottom: 0;
     background-color: #2E2BAA;
     border-radius: 50%;
-    border: 2px solid #2E2BAA;
+    border: 3px solid #2E2BAA;
     color: #fff;
     z-index: 1;
-    width: 180px;
-    height: 180px;
+    width: 100%;
+    height: 100%;
 	-webkit-box-pack: center;
 	    -ms-flex-pack: center;
 	        justify-content: center;
@@ -8901,11 +8637,14 @@ p.sliderupper {
     display: inline-block;
     margin-right: 20px;
 	position: relative;
-	width: 120px;
+	width: 90px;
 }
 
 .filter-tiles li a{
-	font: normal normal 500 20px/25px Monument Extended;
+	font-size: 16px;
+    font-family: 'Monument Extended';
+	line-height:20px;
+    font-weight: 500;
 	color:#000;
 	-webkit-transition: all .5s ease-in-out;
 	-o-transition: all .5s ease-in-out;
@@ -8944,7 +8683,6 @@ p.sliderupper {
     border-color: #2E2BAA;
     bottom: 2px;
 }
-
 
 .importance {
 	display: -webkit-box;
@@ -9004,7 +8742,6 @@ p.sliderupper {
 
 .important-cont p{
 	margin-bottom:5px;
-	font: normal normal normal 16px/24px Lato;
 }
 
 .card-info {
@@ -9179,12 +8916,18 @@ p.sliderupper {
 }
 
 .start-selling h3{
-	font: normal normal normal 36px/46px Monument Extended;
+	font-size: 32px;
+    font-family: 'Monument Extended';
+    line-height: 42px;
+    font-weight: 500;
     color: #000;
     margin-top: 20px;
 }
 .start-selling p{
-	font: normal normal 600 18px/27px Lato;
+	font-family: "Lato",sans-serif;
+	font-size: 18px;
+	font-weight: 400;
+	line-height: 27px;
 	color: #000;
 }
 .start-selling a {
@@ -9334,12 +9077,6 @@ p.sliderupper {
     width: 48%;
 }
 
-.cookie_popup_login .modal-dialog{
-	max-width: 700px;
-}
-p.invoiceLink {
-    cursor: pointer;
-}
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */
@@ -10122,7 +9859,7 @@ p.invoiceLink {
 		        order:1;
 	}
 	.product-full-img{
-		height:300px;
+		height:100%;
 	}
 	.product_description, .accodian_descrpt {
 		margin-left: 10px;
@@ -10163,9 +9900,6 @@ p.invoiceLink {
 	.new-breadcrumb .breadcrumb, .breadcrumb.breadcrumb{
 		display:flex!important;
 	}
-	.DC-top-banner {
-    margin: 15px 0;
-}
 }
 
 @media only screen and (min-width: 820px) and (max-width: 1023px) {
@@ -10290,9 +10024,6 @@ p.invoiceLink {
 	.releveant-slider .slick-next{
 		right: 0;
 	}
-	.DC-top-banner {
-    margin: 15px 0;
-}
 	
 }
 

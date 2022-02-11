@@ -5,7 +5,6 @@ import Login from '../../redux/auth/Login';
 import { sessionService } from 'redux-react-session';
 import { getCookie } from "../../helpers/session";
 import { COUNTRIES } from "../../config/counties";
-import moment from "moment";
 const loginApi = new Login();
 
 
@@ -16,12 +15,6 @@ export function formatprice(price) {
 export function capitalize(str) {
   //console.log(str)
   return str.charAt(0).toUpperCase() + str.slice(1);
-
-}
-
-export function lowercase(str) {
-  //console.log(str)
-  return str.toLowerCase();
 
 }
 
@@ -139,39 +132,11 @@ export function getCountryName(countryId) {
 }
 
 export function getRegionName(countryId = "AL", regionId) {
- 
   let countryList: any = COUNTRIES.filter(obj => obj.id === countryId);
-  if (countryList && countryList.length > 0 && countryList[0] && countryList[0].available_regions) {
-    let regionList: any = countryList[0]?.available_regions.filter(obj2 => {
-      return parseInt(obj2.id) === parseInt(regionId)
-    });
-    return regionList?.[0]?.name
-  } else {
-    return "";
-  }
-}
 
-export function getCurrentMonth() {
-  //console.log(moment().format('MMM'))
-  let data = {
-    name: moment().format('MMM'),
-    num: moment().month()
-  }
+  let regionList: any = countryList[0].available_regions.filter(obj2 => {
+    return parseInt(obj2.id) === parseInt(regionId)
+  });
 
-  return data;
-}
-
-export function getAccordingDate(data) {
-  if (data?.length) {
-    return Object.values(data.reduce((acc, cur) => {
-      let date = moment(cur.created_at).format("MMM YYYY")
-      if (!acc[date])
-        acc[date] = { date: date, Products: [] };
-      acc[date].Products.push(cur);
-      return acc;
-    }, {}));
-  } else {
-    return []
-  }
-
+ return regionList[0].name
 }
