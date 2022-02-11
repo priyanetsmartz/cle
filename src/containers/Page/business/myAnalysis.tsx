@@ -264,8 +264,8 @@ function MyAnalysis(props) {
             selector: row => row.price,
         }
     ];
-   
-    
+
+
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
@@ -342,20 +342,20 @@ function MyAnalysis(props) {
                             <h2>{intl.formatMessage({ id: 'vendor.myAnalysis' })}</h2>
                             <p>{intl.formatMessage({ id: 'orderInformation' })}</p>
                             {/* {console.log(pdata)} */}
-                            {pdata?.length > 0 && (                               
-                            <ResponsiveContainer width="100%" aspect={3}>
-                                <LineChart data={pdata} margin={{ right: 300 }}>
-                                    <CartesianGrid />
-                                    <XAxis dataKey="created_at" ></XAxis>
-                                    <YAxis dataKey="total_cost"  domain={[0, 20000]} ></YAxis>
-                                    <Legend />
-                                    <Tooltip />
-                                    <Line dataKey="total_cost"
-                                        stroke="black"  activeDot={{ r: 8 }} />
-                                    <Line dataKey="item_qty"
-                                        stroke="red" activeDot={{ r: 8 }} />
-                                </LineChart>
-                            </ResponsiveContainer>
+                            {pdata?.length > 0 && (
+                                <ResponsiveContainer width="100%" aspect={3}>
+                                    <LineChart data={pdata} margin={{ right: 300 }}>
+                                        <CartesianGrid />
+                                        <XAxis dataKey="created_at" ></XAxis>
+                                        <YAxis dataKey="total_cost" domain={[0, 20000]} ></YAxis>
+                                        <Legend />
+                                        <Tooltip />
+                                        <Line dataKey="total_cost"
+                                            stroke="black" activeDot={{ r: 8 }} />
+                                        <Line dataKey="item_qty"
+                                            stroke="red" activeDot={{ r: 8 }} />
+                                    </LineChart>
+                                </ResponsiveContainer>
                             )}
                             {pdata?.length === 0 ? <div className='text-center' >No data available</div> : ""}
                         </div>
@@ -369,19 +369,48 @@ function MyAnalysis(props) {
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
                             {pieChart?.length > 0 && (
-                                <PieChart width={400} height={400}>
-                                    <Pie
-                                        data={pieChart}
-                                        cx="50%"
-                                        cy="50%"
-                                        labelLine={false}
-                                        label={renderCustomizedLabel}
-                                        outerRadius={80}
-                                        fill="#8884d8"
-                                        dataKey="total_payout_amount"
-                                    >
-                                    </Pie>
-                                </PieChart>
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <PieChart height={250}>
+                                        <Pie
+                                            data={pieChart}
+                                            cx="50%"
+                                            cy="50%"
+                                            outerRadius={100}
+                                            fill="#8884d8"
+                                            dataKey="total_payout_amount"
+                                            label={({
+                                                cx,
+                                                cy,
+                                                midAngle,
+                                                innerRadius,
+                                                outerRadius,
+                                                total_payout_amount,
+                                                index
+                                            }) => {
+                                                console.log("handling label?");
+                                                const RADIAN = Math.PI / 180;
+                                                // eslint-disable-next-line
+                                                const radius = 25 + innerRadius + (outerRadius - innerRadius);
+                                                // eslint-disable-next-line
+                                                const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                                                // eslint-disable-next-line
+                                                const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+                                                return (
+                                                    <text
+                                                        x={x}
+                                                        y={y}
+                                                        fill="#8884d8"
+                                                        textAnchor={x > cx ? "start" : "end"}
+                                                        dominantBaseline="central"
+                                                    >
+                                                        {pieChart[index].po_created_at} ({total_payout_amount})
+                                                    </text>
+                                                );
+                                            }}
+                                        />
+                                    </PieChart>
+                                </ResponsiveContainer>
                             )}
                             {pieChart?.length === 0 ? <div className='text-center' >No data available</div> : ""}
                         </div>
@@ -422,23 +451,23 @@ function MyAnalysis(props) {
                 </div>
             </section>
             <section>
-               <div className="container">
+                <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-			   <div className="product-listing">
-                    <DataTable
-                        title="Product Listing"
-                        progressPending={isLoading}
-                        columns={columns}
-                        data={listingData}
-                        pagination={true}
-                        // progressPending={pending}
-                        paginationComponentOptions={paginationComponentOptions}
-                    />
+                            <div className="product-listing">
+                                <DataTable
+                                    title="Product Listing"
+                                    progressPending={isLoading}
+                                    columns={columns}
+                                    data={listingData}
+                                    pagination={true}
+                                    // progressPending={pending}
+                                    paginationComponentOptions={paginationComponentOptions}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-				</div>
-				</div>
-				</div>
                 <Modal show={deletePop}>
                     <Modal.Body className="CLE_pf_details modal-confirm">
 
