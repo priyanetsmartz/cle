@@ -859,7 +859,6 @@ p.signup-policy-links a {
 	font-size: 16px;
 	font-weight: 500;
 	line-height:32px;
-	margin-bottom:20px;
 }
 
 .become-part-inner a {
@@ -869,9 +868,11 @@ p.signup-policy-links a {
 }
 
 .banner-content-2 p {
-    font-size: 16px;
-    line-height: 22px;
-    font-weight: 500;
+    font-family: Cairo;
+	font-size: 16px;
+	font-weight: 500;
+	line-height:32px;
+	margin-bottom:20px;
 }
 
 .terms-text {
