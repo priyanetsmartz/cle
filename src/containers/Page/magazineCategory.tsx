@@ -227,15 +227,7 @@ function MagazineCategory(props) {
 
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md-12 back-home mb-2">
-                        <Link to="/">
-                            <svg className="me-2" xmlns="http://www.w3.org/2000/svg" width="6.08" height="9.743" viewBox="0 0 6.08 9.743">
-                                <path id="Path_13" data-name="Path 13" d="M0,5,4.5,0,9,5" transform="translate(0.747 9.372) rotate(-90)" fill="none" stroke="#2E2BAA" strokeWidth="1" />
-                            </svg> <IntlMessages id="backhome.link" />
-                        </Link>
-                    </div>
-                </div>
+                
             </div>
             {latest && (
                 <div className="mag-top-banner">
@@ -250,7 +242,7 @@ function MagazineCategory(props) {
                 </div>
             )}
 
-            <div className="highlight-list mt-5 py-5">
+            <div className="highlight-list py-5">
                 <h2 className="pb-3 text-center"><IntlMessages id="magazine.highlights" /></h2>
                 {featured.length > 0 && (
                     <div className="container">
@@ -260,12 +252,14 @@ function MagazineCategory(props) {
                                 return (
                                     <div className="col-md-4" key={i}>
                                         <div className="blog-sec-main">
-                                            <div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="list_thumbnail" /></div>
-                                            <div className="cate-name">{item.categroy}</div>
-                                            <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
-                                            <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
-                                            <p className="mag-blog-desc d-none">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
-                                            <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+                                            <div className="post-effect">
+												<div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="list_thumbnail" /></div>
+												<div className="cate-name">{item.categroy}</div>
+												<h3 className="mag-blog-title-2 my-2">{item.title}</h3>
+												<div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
+												<p className="mag-blog-desc">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
+												<Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
+											</div>
                                         </div>
                                     </div>
                                 );
@@ -313,16 +307,17 @@ function MagazineCategory(props) {
                         <div className="row my-3" style={{ opacity: opacityVal }}>
                             {items.map((item, i) => {
                                 return (
-                                    <div className="col-md-4" key={i}>
+                                    <div className="col-md-4 mb-5" key={i}>
                                         <div className="blog-sec-main">
-                                            <div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="list_thumbnail" /></div>
+                                            <div className="post-effect">
+											<div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="list_thumbnail" /></div>
                                             <div className="cate-name">{item.categroy}</div>
                                             <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
-                                            <p className="mag-blog-desc d-none">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
+                                            <p className="mag-blog-desc">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
                                             <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
                                         </div>
-
+										 </div>
                                     </div>
                                 );
                             })}
@@ -346,7 +341,9 @@ function MagazineCategory(props) {
                             </div>
                         </div>
                     )}
-                    <div className="row">
+                    
+					<section className="magazine-bottom">
+					<div className="row">
                         <div className="col-md-12">
                             <div className="banner-content-2 text-center">
                                 <figure className="newsletter-title">
@@ -406,7 +403,7 @@ function MagazineCategory(props) {
                             </div>
                         </div>
                     </div>
-
+					</section>
                 </div>
             </div>
         </>
