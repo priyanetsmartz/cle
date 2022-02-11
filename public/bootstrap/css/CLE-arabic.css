@@ -306,7 +306,7 @@ p.signup-policy-links a {
   font-size: 16px;
   font-family: Cairo;
   font-weight:500;
-  line-height:28px;
+  line-height:32px;
 }
 .footer-last-links a {
   font-size: 14px;
@@ -553,20 +553,14 @@ p.signup-policy-links a {
 }
 
 .head_one_txt{
-	font-size:16px;
-	font-family: Cairo;
-	font-weight:700;
+	font: normal normal 700 16px/24px Cairo;
 }
 .head_two_txt{
-	font-size:36px;
-	font-family: Cairo;
-	font-weight:600;
+	font: normal normal 600 36px/56px Cairo;
 }
 
 .head_three_txt{
-	font-size:18px;
-	font-family: Cairo;
-	font-weight:400;
+	font: normal normal 400 18px/36px Cairo;
 }
 
 /* .slick-list{direction: rtl;} */
@@ -643,10 +637,7 @@ p.signup-policy-links a {
 }
 
 .discoverleft p{
-	font-family: Cairo !important;
-    font-size: 16px;
-    font-weight: 500;
-	line-height:32px;
+	font: normal normal 500 16px/32px Cairo;
 }
 
 .company-logo {
@@ -743,6 +734,8 @@ p.signup-policy-links a {
 	font: normal normal 500 14px/26px Cairo;
 }
 
+
+
 .accordion-button::after {
   margin-right: auto;
   margin-left: unset;
@@ -752,9 +745,7 @@ p.signup-policy-links a {
   float: left !important;
 }
 .cta-dicover a {
-  font-size: 14px;
-  font-family: Cairo;
-	font-weight:600;
+  font: normal normal 600 14px/26px Cairo;
   float: right;
 }
 .choose-shopping .btn {
@@ -851,12 +842,17 @@ p.signup-policy-links a {
 	line-height:32px;
 }
 
+.list-prodctsale .accordion-body p{
+	font: normal normal medium 16px/32px Cairo;
+}
+
 .become-part-inner h1,
 .banner-content-2 h4 {
   font-family: Cairo;
 	font-size: 36px;
 	font-weight: 700;
 	line-height:60px;
+	margin-bottom:20px;
 }
 .become-part-inner p {
    font-family: Cairo;
@@ -872,15 +868,15 @@ p.signup-policy-links a {
 }
 
 .banner-content-2 p {
-    font-size: 16px;
-    line-height: 22px;
-    font-weight: 500;
+    font-family: Cairo;
+	font-size: 16px;
+	font-weight: 500;
+	line-height:32px;
+	margin-bottom:20px;
 }
 
 .terms-text {
-  font-size: 14px;
-    line-height: 26px;
-    font-weight: 500;
+  font: normal normal 500 14px/26px Cairo;
 }
 
 .new-in-slider .product_vrity, .new-in-slider .product_vrity a{
@@ -923,14 +919,18 @@ h1.mb-4.text-center {
 
 .DC-top-banner .DC-top-ban-inner h2 {
   font: normal normal 600 36px/56px Cairo;
+  margin-bottom: 10px;
 }
 
-.DC-top-banner .DC-top-ban-inner p {
+.DC-top-banner .DC-top-ban-inner p,
+.DC-top-banner .DC-top-ban-inner div {
   font: normal normal normal 18px/36px Cairo;
+  margin-bottom: 20px;
 }
 
 .DC-top-banner .DC-top-ban-inner a.ban-btn {
   font: normal normal 600 14px/26px Cairo;
+  display: inline-block;
 }
 
 .new-arrival{
@@ -1045,6 +1045,10 @@ h1.mb-4.text-center {
     font-weight: 700;
 }
 
+.cle-designer-desc{
+	font: normal normal 400 16px/32px Cairo;
+}
+
 .pro-name-tag .cart-info-l,
 .pro-name-tag .cart-info-r {
   float: right;
@@ -1054,7 +1058,7 @@ h1.mb-4.text-center {
 .pro-remove-tag > a {
   left: 0;
   right: unset;
-  font: normal normal 600 14px/22px Cairo;
+  font: normal normal 600 16px/22px Cairo;
 }
 
 .save-cart-btns a {
@@ -1121,6 +1125,18 @@ h1.mb-4.text-center {
 }
 .customer-d-wrap a, .customer-d-wrap p{
 	font: normal normal 500 16px/32px Cairo;
+}
+
+.product .product_price,
+.product-listing .pricetag{
+	font: normal normal 700 18px/33px Cairo;
+}
+
+.new-in-slider .product_name, 
+.new-in-slider .product_name a,
+.product .product_name, 
+.product .product_name a{
+	font: normal normal 700 18px/32px Cairo;
 }
 
 .help-center h3{
