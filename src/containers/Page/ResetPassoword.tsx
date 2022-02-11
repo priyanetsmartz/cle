@@ -5,6 +5,9 @@ import { ValidateToken, SaveNewPass } from "../../redux/pages/allPages";
 import notification from '../../components/notification';
 import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
+import { connect } from "react-redux";
+import appAction from "../../redux/app/actions";
+const { showSignin } = appAction;
 function ResetPassword(props) {
     let history = useHistory();
     const pass = useLocation().search;
@@ -62,10 +65,13 @@ function ResetPassword(props) {
                     confirmPassword: ""
                 }))
                 setIsShow(false);
-                history.push("/");
+                //history.push("/");
+                setTimeout(function () { props.showSignin(true); }, 3000);
+
             } else {
+                setIsShow(false);
                 notification("error", "", intl.formatMessage({ id: "tokenExpired" }));
-                history.push("/");
+               // history.push("/");
             }
         } else {
             setIsShow(false);
@@ -144,6 +150,14 @@ function ResetPassword(props) {
         </div>
     );
 }
+const mapStateToProps = (state) => {
+    return {}
+}
 
-export default ResetPassword;
+export default connect(
+    mapStateToProps,
+    { showSignin }
+)(ResetPassword);
+
+
 
