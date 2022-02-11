@@ -264,6 +264,8 @@ function MyAnalysis(props) {
             selector: row => row.price,
         }
     ];
+   
+    
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
@@ -339,16 +341,17 @@ function MyAnalysis(props) {
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'vendor.myAnalysis' })}</h2>
                             <p>{intl.formatMessage({ id: 'orderInformation' })}</p>
-                            {pdata?.length > 0 && (<ResponsiveContainer width="100%" aspect={3}>
+                            {/* {console.log(pdata)} */}
+                            {pdata?.length > 0 && (                               
+                            <ResponsiveContainer width="100%" aspect={3}>
                                 <LineChart data={pdata} margin={{ right: 300 }}>
                                     <CartesianGrid />
-                                    <XAxis dataKey="created_at"
-                                        interval={'preserveStartEnd'} />
-                                    <YAxis dataKey="total_cost" ></YAxis>
+                                    <XAxis dataKey="created_at" ></XAxis>
+                                    <YAxis dataKey="total_cost"  domain={[0, 20000]} ></YAxis>
                                     <Legend />
                                     <Tooltip />
                                     <Line dataKey="total_cost"
-                                        stroke="black" activeDot={{ r: 8 }} />
+                                        stroke="black"  activeDot={{ r: 8 }} />
                                     <Line dataKey="item_qty"
                                         stroke="red" activeDot={{ r: 8 }} />
                                 </LineChart>
@@ -408,7 +411,7 @@ function MyAnalysis(props) {
                                     <YAxis />
                                     <Tooltip />
                                     <Legend />
-                                    <Bar dataKey="totalProductPrice" fill="#8884d8" />
+                                    <Bar barSize={30} dataKey="totalProductPrice" fill="#8884d8" />
 
                                 </BarChart>
                             )}
