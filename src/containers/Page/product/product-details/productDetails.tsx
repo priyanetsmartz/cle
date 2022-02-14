@@ -7,7 +7,7 @@ import MeasuringGuide from './measuringGuide';
 import Recomendations from './recomendations';
 import { getCookie } from "../../../../helpers/session";
 import ProductsMagazine from './magazine';
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProductImages from './productImges';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
@@ -20,6 +20,7 @@ import GiftMessage from './GiftMessage';
 import Login from '../../../../redux/auth/Login';
 import appAction from "../../../../redux/app/actions";
 import { useIntl } from 'react-intl';
+import { useLastLocation } from 'react-router-last-location';
 const loginApi = new Login();
 const { showSignin, showLoader } = appAction;
 const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, openSizeGuide } = cartAction;
@@ -52,17 +53,16 @@ function ProductDetails(props) {
     const [slectedAttribute, setSlectedAttribute] = useState(0);
     const [extensionAttributes, setExtensionAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
-
-
-    const history = useHistory()
+    const [locationBread, setLocationBread] = useState([]);
+    const lastLocation = useLastLocation();
 
     useEffect(() => {
-        console.log(history.location)
-        return history.listen((location) => {
-            console.log(`You changed the page to: ${location.pathname}`)
-        })
-    }, [history])
-    useEffect(() => {
+       // console.log(lastLocation)
+        let path = lastLocation?.pathname;
+        const answer_array = path?.split('/');
+        //console.log(answer_array);
+        setLocationBread(answer_array)
+
         setTimeout(() => {
             window.scrollTo(0, 0)
             props.showLoader(false);
@@ -76,7 +76,6 @@ function ProductDetails(props) {
         }
     }, [sku, props.languages, props.token])
     useEffect(() => {
-        //  console.log(props.items.Cart.isOpenSizeGuide);
         let giftBox = props.items.Cart.openGiftBox === 0 ? false : true;
         setIsGiftMessage(giftBox)
         setSizeGuideModal(props.items.Cart.isOpenSizeGuide);
@@ -101,7 +100,6 @@ function ProductDetails(props) {
     }
 
     const handleChange = (e) => {
-        //  console.log(e.target[e.target.selectedIndex].getAttribute('data-order'));
         const index = e.target.selectedIndex;
         const el = e.target.childNodes[index]
         const option = el.getAttribute('id');
@@ -281,18 +279,7 @@ function ProductDetails(props) {
         setExtensionAttributes(qtyy);
         setproductDetails(projectSingle);
 
-        // check check check
-        // if (recomendationsData.length <= 0) {
-        //      console.log('sss')
-        //     setProdLinked(result.data.product_links);
-        //    // setRecomendations(result.data.product_links)
-        //     props.recomendedProducts(result.data.product_links)
-        // } else {
-        //     console.log(recomendationsData)
-        //   //  setRecomendations(recomendationsData)
-        //     props.recomendedProducts(recomendationsData)
-        // }
-        // console.log(result.data)
+
         if (result.data && result.data.extension_attributes && result.data.extension_attributes.mp_sizechart && result.data.extension_attributes.mp_sizechart.rule_content) {
             setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
         }
@@ -422,7 +409,38 @@ function ProductDetails(props) {
     return (
         <>
             <main>
-                {/* <Promotion /> */}
+                {/* <Promotion /> */}<section>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                {/* <AppBreadcrumbs />  */}
+                                <ol className="breadcrumb">
+                                    {locationBread?.length > 0 && (
+                                        <>
+                                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                                            {
+                                                locationBread.map((item, i) => {
+                                                    if (item === "" || item === 'products'|| item === 'category') return false;
+                                                    if (i === 2 )  return <li className="breadcrumb-item" key={i}><Link to={`/category/`+item}>{item}</Link></li>
+                                                    return <li className="breadcrumb-item" key={i}><Link to={lastLocation?.pathname}>{item}</Link></li>
+
+                                                })
+                                            }
+                                            <li className="breadcrumb-item">{productDetails?.['name']}</li>
+                                        </>
+
+                                    )}
+                                    {locationBread === undefined && (
+                                        <>
+                                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                                            <li className="breadcrumb-item">{productDetails?.['name']}</li>
+                                        </>
+                                    )}
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <section style={{ 'opacity': opacity }} >
                     <div className="container" id="productID" >
                         <div className="row">

@@ -65,13 +65,16 @@ function ResetPassword(props) {
                     confirmPassword: ""
                 }))
                 setIsShow(false);
-                //history.push("/");
-                setTimeout(function () { props.showSignin(true); }, 3000);
+
+                setTimeout(function () {
+                    history.push("/");
+                    props.showSignin(true);
+                }, 3000);
 
             } else {
                 setIsShow(false);
                 notification("error", "", intl.formatMessage({ id: "tokenExpired" }));
-               // history.push("/");
+                // history.push("/");
             }
         } else {
             setIsShow(false);
