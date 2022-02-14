@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useLocation, useHistory } from "react-router";
-import { ValidateToken, SaveNewPass } from "../../../redux/pages/allPages";
+import { sessionService } from 'redux-react-session';
 import notification from '../../../components/notification';
 import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
@@ -25,23 +25,18 @@ function BusinessResetPassword(props) {
     });
 
     useEffect(() => {
-        // async function getData() {
-        //     try {
-        //         let result: any = await ValidateToken(token, customerId);
-        //         if (result) {
-
-        //         }
-        //     } catch (err) {
-        //         history.push("password-link-expired");
-        //     }
-        // }
-        // getData()
+        logout();
         return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
+          
         }
     }, [])
+    const logout = async () => {
 
+        await sessionService.deleteSession();
+        await sessionService.deleteUser();
+
+        localStorage.removeItem('cle_vendor');
+    }
     const handleChange = (e) => {
         const { id, value } = e.target
         setState(prevState => ({

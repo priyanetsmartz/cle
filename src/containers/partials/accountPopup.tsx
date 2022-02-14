@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import IntlMessages from "../../components/utility/intlMessages";
 import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
@@ -22,7 +22,7 @@ function AccountPopup(props) {
         props.showSignin(true);
     }
     const logout = async () => {
-        if (cle_vendor) { //vendor logout
+        if (cle_vendor) {
             localStorage.removeItem('cle_vendor');
             history.replace('/vendor-login');
             return;
@@ -41,7 +41,7 @@ function AccountPopup(props) {
             <Link to="#" className="cross_icn" onClick={() => { hideAccountFxn() }} > <i className="fas fa-times"></i></Link>
             {(Object.keys(props.token).length > 0 && props.token.type === 'user') && (
                 <ul>
-                    {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
+                 
                     <li><Link to="/customer/profile"><IntlMessages id="dashboard" /> </Link></li>
                     <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li>
                     <li><Link to="/customer/profile"><IntlMessages id="myprofile" /></Link></li>
@@ -50,9 +50,9 @@ function AccountPopup(props) {
             )}
             {(Object.keys(props.token).length > 0 && props.token.type === 'vendor') && (
                 <ul>
-                    {/* <li><Link to="/customer/dashboard"><IntlMessages id="youraccount" /></Link></li> */}
+                  
                     <li><Link to="/vendor/dashboard"><IntlMessages id="dashboard" /> </Link></li>
-                    {/* <li><Link to="/customer/orders-and-returns"><IntlMessages id="myorderreturn" /></Link></li> */}
+                   
                     <li><Link to="/vendor/business-profile"><IntlMessages id="myprofile" /></Link></li>
                     <li><Link to="/vendor/support"><IntlMessages id="myspport" /></Link> </li>
                 </ul>
@@ -69,8 +69,6 @@ function AccountPopup(props) {
 };
 
 const mapStateToProps = (state) => {
-    // sessionService.loadSession().then(session => console.log(session));
-    //console.log(state.session.user);
     return {
 
         languages: state.LanguageSwitcher.language,

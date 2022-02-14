@@ -88,7 +88,7 @@ export function* loginRequest() {
 
           } else {
             setTimeout(() => {
-              window.location.href = '/';
+              window.location.href = '/customer/profile';
             }, 1000);
           }
         }
@@ -166,7 +166,7 @@ export function* registerRequest() {
 
           } else {
             setTimeout(() => {
-              window.location.href = '/';
+              window.location.href = '/customer/profile';
             }, 1000);
           }
 

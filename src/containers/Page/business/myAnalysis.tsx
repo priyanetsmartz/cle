@@ -367,7 +367,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
+                            <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>
                             {pieChart?.length > 0 && (
                                 <ResponsiveContainer width="100%" height={250}>
                                     <PieChart height={250}>
@@ -422,7 +422,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>
+                            <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
                             {barChartData?.length > 0 && (
                                 <BarChart
                                     width={500}
