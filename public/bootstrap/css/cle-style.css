@@ -104,7 +104,9 @@ a:hover {
     -o-transition: all 0.8s ease-in-out;
     transition: all 0.8s ease-in-out;
 }
-
+.nodata {
+    padding-left: 15px!important;
+}
 .btn-link-blue:hover {
     color: #000;
 }
@@ -7452,6 +7454,80 @@ p.sliderupper {
 
 .Frgt_paswd .save-btn {
     float: left;
+}
+.save-btn,
+.confirm-btn{
+	position: relative;
+	margin-bottom: 15px;
+}
+.save-btn .btnaddressave{
+	font-size: 16px;
+    text-decoration: none;
+    font-family: 'Monument Extended';
+    font-weight: normal;
+    font-style: normal;
+    position: absolute;
+    display: inline-block;
+    left: 0;
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+	padding:0;
+	color: #2E2BAA;
+}
+.save-btn .btnaddressave:after{
+	content: "";
+    border-bottom: 1px solid transparent;
+    display: block;
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
+}
+.save-btn .btnaddressave:hover{
+	padding-top: 5px;
+    color: #2E2BAA;
+}
+.save-btn .btnaddressave:hover:after{
+	border-color: #2E2BAA;
+    bottom: 2px;
+}
+
+.confirm-btn .btnaddressave{
+	font-size: 16px;
+    text-decoration: none;
+    font-family: 'Monument Extended';
+    font-weight: normal;
+    font-style: normal;
+    position: absolute;
+    display: inline-block;
+    right: 0;
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+	padding:0;
+	color: #707070;
+}
+.confirm-btn .btnaddressave:after{
+	content: "";
+    border-bottom: 1px solid transparent;
+    display: block;
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
+}
+.confirm-btn .btnaddressave:hover{
+	padding-top: 5px;
+    color: #707070;
+}
+.confirm-btn .btnaddressave:hover:after{
+	border-color: #707070;
+    bottom: 2px;
 }
 
 .faq-view-all a {
