@@ -297,19 +297,19 @@ p.signup-policy-links a {
   line-height:28px;
 }
 .footer-links li a {
-  font-size: 16px;
+  font-size: 14px;
   font-family: Cairo;
-  font-weight:400;
+  font-weight:500;
   line-height:28px;
 }
 .footer-address li {
-  font-size: 16px;
+  font-size: 14px;
   font-family: Cairo;
   font-weight:500;
   line-height:32px;
 }
 .footer-last-links a {
-  font-size: 14px;
+  font-size: 12px;
   font-family: Cairo;
   font-weight:500;
   line-height:26px;
