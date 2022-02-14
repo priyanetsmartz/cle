@@ -1,7 +1,5 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import SizeGuide from './sizeGuide';
 import cartAction from "../../../../redux/cart/productAction";
@@ -9,9 +7,8 @@ import MeasuringGuide from './measuringGuide';
 import Recomendations from './recomendations';
 import { getCookie } from "../../../../helpers/session";
 import ProductsMagazine from './magazine';
-import { useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import ProductImages from './productImges';
-import ShareIcon from '../../../../image/share-alt-solidicon.svg';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { addToCartApi, addToCartApiGuest, addWhishlist, configLabels, createGuestToken, getGuestCart, getProductChildren, getProductDetails, getProductExtras, getWhishlistItemsForUser, removeWhishlist } from '../../../../redux/cart/productApi';
@@ -57,7 +54,14 @@ function ProductDetails(props) {
     const [quantity, setQuantity] = useState(1);
 
 
+    const history = useHistory()
 
+    useEffect(() => {
+        console.log(history.location)
+        return history.listen((location) => {
+            console.log(`You changed the page to: ${location.pathname}`)
+        })
+    }, [history])
     useEffect(() => {
         setTimeout(() => {
             window.scrollTo(0, 0)

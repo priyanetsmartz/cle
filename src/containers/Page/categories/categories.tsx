@@ -6,7 +6,7 @@ import { getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
 import CategoryBanner from './banner';
 import PriveExclusive from './priveExclusive';
 import LatestProducts from './latestProducts';
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams ,useHistory} from "react-router-dom";
 import NewIn from './newIn';
 import Description from './description';
 import Footer from '../../../containers/partials/footer-new';
@@ -24,6 +24,7 @@ function Categories(props) {
     // console.log(category, subcat, childcat, greatchildcat)
     const baseUrl = process.env.REACT_APP_API_URL;
     const location = useLocation()
+    const history = useHistory()
     const [categoryId, setCategoryId] = useState(0);
     const [catname, setCatname] = useState('');
     const [urlPathLink, setUrlPath] = useState('');
@@ -40,6 +41,12 @@ function Categories(props) {
     })
     //let catID = getCookie("_TESTCOOKIE");
 
+
+    useEffect(() => {
+        return history.listen((location) => {
+            console.log(`You changed the page to: ${location.pathname}`)
+        })
+    },[history])
     useEffect(() => {
         const header = document.getElementById("headerrr");
         const sticky = header.offsetTop;
