@@ -209,7 +209,7 @@ function MagazineCategory(props) {
             <div className="container magazine-inner" style={{ opacity: opacityVal }}>
 
                 <div className="row mt-3 mag-list-head">
-                    <div className="col-md-6 offset-md-3 text-center">
+                    <div className="col-md-6 mx-auto text-center">
                         <h3><IntlMessages id="magazine.title" /></h3>
                         {catMenu.length > 0 && (
                             <ul>
