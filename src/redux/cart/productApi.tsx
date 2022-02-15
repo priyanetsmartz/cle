@@ -345,25 +345,27 @@ export function setUserDeliveryAddress(data) {
     return APi.request(`rest/V1/carts/${cartQuoteId}/shipping-information`, data, "POST", "");
 }
 
-export function placeGuestOrder(method) {
+export function placeGuestOrder(language, method) {
+    const lang = language === 'arabic' ? 'ar' : 'en';
     let data = {
         "paymentMethod": {
             "method": method
         }
     }
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
-    return APi.request(`rest/V1/guest-carts/${cartQuoteToken}/order`, data, "PUT", "");
+    return APi.request(`rest/${lang}/V1/guest-carts/${cartQuoteToken}/order`, data, "PUT", "");
 }
 
 
-export function placeUserOrder(method) {
+export function placeUserOrder(language, method) {
+    const lang = language === 'arabic' ? 'ar' : 'en';
     const cartQuoteId = localStorage.getItem('cartQuoteId');
     let data = {
         "paymentMethod": {
             "method": method
         }
     }
-    return APi.request(`rest/V1/carts/${cartQuoteId}/order`, data, "PUT", "");
+    return APi.request(`rest/${lang}/V1/carts/${cartQuoteId}/order`, data, "PUT", "");
 }
 
 export function getAddressById(addId: number) {
@@ -382,7 +384,7 @@ export function getGuestGiftMessage(itemId: number) {
 // my fatoora payment method
 export async function myFatoora(billAddress) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.token_email;
+    const localToken = user?.token_email;
     let data = {
         "PaymentMethodId": "2",
         "CustomerName": billAddress.name,

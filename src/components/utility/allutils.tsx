@@ -1,11 +1,12 @@
 import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, getWhishlistItemsForUser } from "../../redux/cart/productApi";
 import { getCategoryDetailsbyUrlKey, getCategoryDetailsbyUrlPath, getHomePageProducts } from "../../redux/pages/customers";
-import { siteConfig } from "../../settings";
+import { siteConfig, apiConfig } from "../../settings";
 import Login from '../../redux/auth/Login';
 import { sessionService } from 'redux-react-session';
 import { getCookie } from "../../helpers/session";
 import { COUNTRIES } from "../../config/counties";
 import moment from "moment";
+var axios = require('axios');
 const loginApi = new Login();
 
 
@@ -90,7 +91,7 @@ export async function handleCartFxn(id: number, sku: string) {
   let cartQuoteId = '';
   let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
   // console.log(user)
-  const customerId = user ? user.cust_id : '';
+  const customerId = user ? user?.cust_id : '';
   let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
   // console.log(cartQuoteIdLocal)
   if (customerId) {
@@ -106,10 +107,10 @@ export async function handleCartFxn(id: number, sku: string) {
       let guestToken: any = await createGuestToken();
       localStorage.setItem('cartQuoteToken', guestToken.data);
       let result: any = await getGuestCart(lang);
-      cartQuoteId = result && result.data && result.data.id ? result.data.id : 0;
+      cartQuoteId = result ? result?.data?.id : 0;
     } else {
       let result: any = await getGuestCart(lang);
-      cartQuoteId = result && result.data && result.data.id ? result.data.id : 0;
+      cartQuoteId = result ? result?.data?.id : 0;
     }
 
   }
@@ -139,7 +140,7 @@ export function getCountryName(countryId) {
 }
 
 export function getRegionName(countryId = "AL", regionId) {
- 
+
   let countryList: any = COUNTRIES.filter(obj => obj.id === countryId);
   if (countryList && countryList.length > 0 && countryList[0] && countryList[0].available_regions) {
     let regionList: any = countryList[0]?.available_regions.filter(obj2 => {

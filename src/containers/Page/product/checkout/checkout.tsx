@@ -3,15 +3,15 @@ import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import cardPlaceholder from '../../../../image/cards.png';
 import IntlMessages from "../../../../components/utility/intlMessages";
-import Modal from "react-bootstrap/Modal";
 import notification from '../../../../components/notification';
 import { useIntl } from 'react-intl';
 import { useHistory } from "react-router";
 import { siteConfig } from '../../../../settings'
 import cartAction from "../../../../redux/cart/productAction";
 import orderprocessing from "../../../../image/orderprocessing.gif";
+import { COUNTRIES } from '../../../../config/counties';
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora, getPaymentStatus, addPaymentDetailstoOrder } from '../../../../redux/cart/productApi';
-import { getCustomerDetails, getCountriesList, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
+import { getCustomerDetails,  getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
 import { formatprice, getCountryName, getRegionName } from '../../../../components/utility/allutils';
 
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
@@ -40,7 +40,6 @@ function Checkout(props) {
 
     //for customer address starts here------
     const [custId, setCustid] = useState(props.token.cust_id);
-    const [countries, setCountries] = useState([]); // for countries dropdown
     const [addNewAddressModal, setAddNewAddressModal] = useState(false);
     const [addBillingAddress, setAddBillingAddress] = useState(false);
     const [orderProcessing, setOrderProcessing] = useState(false);
@@ -50,7 +49,6 @@ function Checkout(props) {
     const [addBillingAddressLoader, setAddBillingAddressLoader] = useState(false)
 
     const [changeCountryLoader, setChangeCountryLoader] = useState(false)
-    // const [paymentMethodsList, SetPaymentMethodsList] = useState([])
     const [shippingMethods, SetShippingMethods] = useState([])
     const [isShow, setIsShow] = useState(false);
     const [isSetAddress, setIsSetAddress] = useState(0);
@@ -142,12 +140,8 @@ function Checkout(props) {
             getCutomerDetails();
 
         }
-        getCountries();
-
         return () => {
-            //   props.showPaymentMethods([]);
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
+
         }
     }, [props.languages, props.payTrue, props.guestShipp, props.guestBilling, props.token])
 
@@ -169,34 +163,34 @@ function Checkout(props) {
         }
         //  console.log(cartItems)
         let checkoutData = {}, checkItems = {}, ship = {};
-        checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
-        checkoutData['sub_total'] = cartTotal && cartTotal.data ? cartTotal.data.base_subtotal : 0;
-        checkoutData['shipping_charges'] = cartTotal && cartTotal.data ? cartTotal.data.base_shipping_amount : 0;
-        checkoutData['total'] = cartTotal && cartTotal.data ? cartTotal.data.base_grand_total : 0;
-        checkoutData['discount'] = cartTotal && cartTotal.data ? cartTotal.data.base_discount_amount : 0;
-        checkoutData['tax'] = cartTotal && cartTotal.data ? cartTotal.data.base_tax_amount : 0;
-        checkoutData['total_items'] = cartTotal && cartTotal.data ? cartTotal.data.items_qty : 0;
-        checkItems['items'] = cartItems && cartItems.data ? cartItems.data.items : [];
-        //  console.log(cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.id)
-        let shipingAdd = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.id : 0;
-        //  console.log(cartItems.data.extension_attributes.shipping_assignments[0].shipping.address)
-        ship['firstname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.firstname : '';
+        checkoutData['discount'] = cartTotal ? cartTotal?.data?.base_discount_amount : 0;
+        checkoutData['sub_total'] = cartTotal ? cartTotal?.data?.base_subtotal : 0;
+        checkoutData['shipping_charges'] = cartTotal ? cartTotal?.data?.base_shipping_amount : 0;
+        checkoutData['total'] = cartTotal ? cartTotal?.data?.base_grand_total : 0;
+        checkoutData['discount'] = cartTotal ? cartTotal?.data?.base_discount_amount : 0;
+        checkoutData['tax'] = cartTotal ? cartTotal?.data?.base_tax_amount : 0;
+        checkoutData['total_items'] = cartTotal ? cartTotal?.data?.items_qty : 0;
+        checkItems['items'] = cartItems ? cartItems?.data?.items : [];
+
+        let shipingAdd = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping.address.id : 0;
+
+        ship['firstname'] = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping.address?.firstname : '';
 
         ship['lastname'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.lastname : '';
 
-        ship['telephone'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.telephone : '';
+        ship['telephone'] = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping?.address?.telephone : '';
 
-        ship['postcode'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.postcode : '';
+        ship['postcode'] = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping?.address?.postcode : '';
 
-        ship['city'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.city : '';
+        ship['city'] = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping?.address?.city : '';
 
-        ship['country_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.country_id : '';
+        ship['country_id'] = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping?.address?.country_id : '';
 
-        ship['region_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.region_id : '';
+        ship['region_id'] = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping?.address?.region_id : '';
 
-        ship['street'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.street : '';
+        ship['street'] = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping?.address?.street : '';
 
-        ship['region_id'] = cartItems && cartItems.data && cartItems.data.extension_attributes && cartItems.data.extension_attributes.shipping_assignments && cartItems.data.extension_attributes.shipping_assignments.length > 0 ? cartItems.data.extension_attributes.shipping_assignments[0].shipping.address.region_id : '';
+        ship['region_id'] = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping?.address?.region_id : '';
 
         props.getCheckoutSideBar({
             checkData: checkoutData,
@@ -287,10 +281,9 @@ function Checkout(props) {
             addressInformation.shippingAddress = shippingAddress;
             addressInformation.billingAddress = billingAddress;
             addressData.addressInformation = addressInformation;
-            // console.log(addressData)
+
             let saveDelivery: any = await setUserDeliveryAddress(addressData);
-            // console.log(saveDelivery)
-            // props.showPaymentMethods(saveDelivery.data.payment_methods);
+
             setLoaderOnCheckout(false)
             if (result.data.addresses.length === 1) {
                 setCheckedData(prevState => ({
@@ -319,15 +312,11 @@ function Checkout(props) {
             error["email"] = "Email is required";
             setEmailError({ errors: error });
         } else {
-            // console.log('no here')
+
         }
     }
 
 
-    const getCountries = async () => {
-        let result: any = await getCountriesList();
-        setCountries(result.data);
-    }
 
     const toggleAddressModal = () => {
         setAddNewAddressModal(!addNewAddressModal);
@@ -639,7 +628,7 @@ function Checkout(props) {
                 notification("success", "", intl.formatMessage({ id: "customerAddressUpdate" }));
             } else {
                 setAddShippingAddressLoader(false)
-                notification("error", "", result.data.message);
+                notification("error", "", result?.data?.message);
             }
         }
 
@@ -817,7 +806,7 @@ function Checkout(props) {
         //         error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
         //     }
         // }
-     
+
         if (!billingAddressData.telephone) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" });
@@ -884,14 +873,14 @@ function Checkout(props) {
 
     //PLACE ORDER CODE GOES HERE
     const placeOrder = async () => {
-        // console.log('add')
+        console.log(props.token.cust_id)
         setIsShow(true);
         let customer_id = props.token.cust_id;
         let orderPlace: any;
         let billAddress: any = {};
         if (customer_id) {
             const add: any = itemsVal.address;
-            //  console.log(add)
+            console.log(add.addresses);
             add.addresses.forEach(el => {
                 if (el.default_billing || el.default_shipping || add.addresses.length === 1) {
                     billAddress.street = el.street[0];
@@ -915,15 +904,14 @@ function Checkout(props) {
             }
 
         }
-        //  console.log(selectedPaymentMethod);
+         console.log(billAddress);
         if (selectedPaymentMethod === 'myfatoorah_gateway') {
-            // console.log('fscfsd', billAddress)
+         
             const payment: any = await myFatoora(billAddress);
-            if (payment && payment.data && payment.data.length > 0 && payment.data[0].IsSuccess) {
-                let url = payment.data[0].Data.PaymentURL;
+            if (payment?.data?.length > 0 && payment?.data[0]?.IsSuccess) {
+                let url = payment?.data[0]?.Data.PaymentURL;
                 if (url) {
                     window.location.href = url;
-                    // history.push(url);
                 }
             }
 
@@ -938,7 +926,7 @@ function Checkout(props) {
                     return notification("error", "", intl.formatMessage({ id: "paymentmethoderror" }));
                 } else {
 
-                    orderPlace = await placeUserOrder(selectedPaymentMethod);
+                    orderPlace = await placeUserOrder(props.languages, selectedPaymentMethod);
                 }
 
 
@@ -968,7 +956,7 @@ function Checkout(props) {
                     return notification("error", "", intl.formatMessage({ id: "paymentmethoderror" }));
                 } else {
                     setIsShow(true)
-                    orderPlace = await placeGuestOrder(selectedPaymentMethod);
+                    orderPlace = await placeGuestOrder(props.languages, selectedPaymentMethod);
                 }
 
 
@@ -1055,9 +1043,9 @@ function Checkout(props) {
         let customer_id = props.token.cust_id;
         let orderPlace: any;
         if (customer_id) {
-            orderPlace = await placeUserOrder('myfatoorah_gateway');
+            orderPlace = await placeUserOrder(props.languages, 'myfatoorah_gateway');
         } else {
-            orderPlace = await placeGuestOrder('myfatoorah_gateway');
+            orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway');
         }
         if (orderPlace && orderPlace.data) {
             let details = {
@@ -1115,17 +1103,7 @@ function Checkout(props) {
                         <Link className="back-to-shop" to="/my-cart" ><IntlMessages id="checkout-back-link" /></Link>
                     </div>
 
-                    {/* {Object.keys(orderError).forEach((key) => {
-                     //   console.log(orderError[key])
-                        return (
-                            <div className="alert alert-warning alert-dismissible fade show" role="alert">
-                                <strong>Error</strong> {orderError[key]}
-                                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        )
-                    })} */}
+
                     <div className="row">
                         <div className="col-md-7 col-lg-8">
 
@@ -1220,8 +1198,8 @@ function Checkout(props) {
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
 
-                                            {props.token.token_email ? <span className="note"><IntlMessages id="emailchangenote" /></span> : ''}
-                                            <label><IntlMessages id="profile.email" /></label>
+                                            {props.token.token_email ?<p><span className="note"><IntlMessages id="emailchangenote" /></span></p> : ''}
+                                             <label><IntlMessages id="profile.email" /></label>
 
                                             <p>{props.token.token_email ?
                                                 props.token.token_email :
@@ -1253,7 +1231,7 @@ function Checkout(props) {
                                             {(props?.guestShipp?.firstname !== undefined || itemsVal?.address['addresses']?.length > 0) ?
                                                 <b><IntlMessages id="order.deliveryAddress" /></b>
                                                 : ""}
-                                            {!props.guestShipp && (
+                                            {props.guestShipp && (
 
                                                 <div className="row" >
                                                     <div className="col-md-7">
@@ -1265,6 +1243,7 @@ function Checkout(props) {
                                                                 }) : ""}
                                                                 <p>{props.guestShipp.postcode}</p>
                                                                 <p>{props.guestShipp.city}</p>
+                                                                {props.guestShipp.region_id ? <p>{getRegionName(props.guestShipp.country_id, props.guestShipp.region_id)}</p> : ""}
                                                                 <p>{props.guestShipp.country_id ? getCountryName(props.guestShipp.country_id) : ""}</p>
                                                             </div>
                                                         </div>
@@ -1347,7 +1326,7 @@ function Checkout(props) {
                                                     })}
                                                 </>
                                             )}
-											 <hr />
+                                            <hr />
                                             <div className="add-address-btn">
                                                 <i className="fas fa-plus"></i>
                                                 <button className="add-ad-btn btn btn-link" onClick={toggleAddressModal}><IntlMessages id="myaccount.addNewAddress" /></button>
@@ -1415,8 +1394,8 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                                                                 <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
-                                                                    {countries && countries.map(opt => {
-                                                                        return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
+                                                                    {COUNTRIES && COUNTRIES.map((opt, i) => {
+                                                                        return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                                                     })}
                                                                 </select>
                                                                 <span className="error">{errors.errors["country_id"]}</span>
@@ -1543,6 +1522,7 @@ function Checkout(props) {
                                                                             })}
                                                                             <p>{item.postcode}</p>
                                                                             <p>{item.city}</p>
+                                                                            {item.region_id ? <p>{getRegionName(item.country_id, item.region_id)}</p> : ""}
                                                                             {item.country_id ? <p>{getCountryName(item.country_id)}</p> : ""}
                                                                         </div>
                                                                         {item.id === parseInt(custForm.default_billing) ?
@@ -1577,7 +1557,7 @@ function Checkout(props) {
                                                 </div>
                                             )
                                             }
-											<hr />
+                                            <hr />
                                             <div className="add-address-btn">
                                                 <i className="fas fa-plus"></i>
                                                 <button className="add-ad-btn btn btn-link" onClick={() => {
@@ -1651,8 +1631,8 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                                                                 <select value={billingAddressData.country_id} onChange={handleCountryChangeBilling} id="country_id" className="form-select">
-                                                                    {countries && countries.map(opt => {
-                                                                        return (<option key={opt.id} value={opt.id} >{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
+                                                                    {COUNTRIES && COUNTRIES.map((opt, i) => {
+                                                                        return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
                                                                     })}
                                                                 </select>
                                                                 <span className="error">{billingError.errors["country_id"]}</span>
@@ -1687,22 +1667,20 @@ function Checkout(props) {
                                                     </div>
                                                 </div>
                                             )}
-                                           
 
-                                                <div className="we-accept">
-                                                    <p><strong><IntlMessages id="we-accept" />:</strong></p>
-                                                    <img src={cardPlaceholder} alt="cards" />
-                                                </div>
-                                            
+
+                                            <div className="we-accept">
+                                                <p><strong><IntlMessages id="we-accept" />:</strong></p>
+                                                <img src={cardPlaceholder} alt="cards" />
+                                            </div>
+
                                             <div className="choose-method">
                                                 <hr />
 
                                                 {
                                                     props.payTrue.length > 0 && (
-                                                        // console.log(props.payTrue.length) 
                                                         <div className="d-grid gap-2 col-6">
                                                             {props.payTrue.map((item, i) => {
-                                                                //  console.log(i)
                                                                 return (
                                                                     <div key={i}>
                                                                         <button type="button" onClick={() => {
@@ -1732,7 +1710,7 @@ function Checkout(props) {
 
                             </div>
                         </div>
-                        {/* <CheckoutSidebar sidebarData={itemsVal} /> */}
+
                         <div className="col-md-5 col-lg-4" id="checkoutsidebar">
                             <div className="sticky-cart">
                                 <div className="order-detail-checkout">
@@ -1753,7 +1731,7 @@ function Checkout(props) {
                                                                 )}
                                                                 <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                                 <p className="check-tag"><IntlMessages id="cart.qty" /> {item.qty}</p>
-                                                                {/* <br />One Size */}
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1764,11 +1742,6 @@ function Checkout(props) {
                                     )}
 
                                     <div className="product-total-price">
-                                        {/* {loaderOnCheckout && (
-                                            <div className="checkout-loading" >
-                                                <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
-                                            </div>
-                                        )} */}
                                         <p> <IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['sub_total'] ? formatprice(itemsVal.checkData['sub_total']) : 0} </span></p>
                                         <p> <IntlMessages id="order.discount" /><span className="text-end">{siteConfig.currency}{itemsVal.checkData['discount'] ? formatprice(itemsVal.checkData['discount']) : 0} </span></p>
                                         <p> <IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency}{itemsVal.checkData['shipping_charges'] ? formatprice(itemsVal.checkData['shipping_charges']) : 0}</span></p>
