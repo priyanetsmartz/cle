@@ -7,6 +7,12 @@ import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
 import { connect } from "react-redux";
 import appAction from "../../redux/app/actions";
+import { sessionService } from 'redux-react-session';
+import authAction from "../../redux/auth/actions";
+import cartAction from "../../redux/cart/productAction";
+
+const { addToCartTask } = cartAction;
+const { logout } = authAction;
 const { showSignin } = appAction;
 function ResetPassword(props) {
     let history = useHistory();
@@ -14,7 +20,7 @@ function ResetPassword(props) {
     const token = new URLSearchParams(pass).get("token");
     const customerId = new URLSearchParams(pass).get("id");
     const intl = useIntl();
-    // console.log(token, customerId);
+
 
     const [state, setState] = useState({
         password: "",
@@ -26,6 +32,7 @@ function ResetPassword(props) {
     });
 
     useEffect(() => {
+        logout();
         async function getData() {
             try {
                 let result: any = await ValidateToken(token, customerId);
@@ -38,10 +45,20 @@ function ResetPassword(props) {
         }
         getData()
         return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
+
         }
     }, [])
+
+    const logout = async () => {
+
+        await sessionService.deleteSession();
+        await sessionService.deleteUser();
+
+        localStorage.removeItem('cartQuoteId');
+        localStorage.removeItem('cartQuoteToken');
+        props.logout();
+        props.addToCartTask(true);
+    }
 
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -65,13 +82,16 @@ function ResetPassword(props) {
                     confirmPassword: ""
                 }))
                 setIsShow(false);
-                //history.push("/");
-                setTimeout(function () { props.showSignin(true); }, 3000);
+
+                setTimeout(function () {
+                    history.push("/");
+                    props.showSignin(true);
+                }, 3000);
 
             } else {
                 setIsShow(false);
                 notification("error", "", intl.formatMessage({ id: "tokenExpired" }));
-               // history.push("/");
+                // history.push("/");
             }
         } else {
             setIsShow(false);
@@ -156,7 +176,7 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { showSignin }
+    { showSignin, addToCartTask, logout }
 )(ResetPassword);
 
 

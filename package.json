@@ -49,6 +49,7 @@
     "react-router-dom": "^5.2.0",
     "react-router-dynamic-breadcrumbs": "^2.2.0",
     "react-router-hash-link": "^2.4.3",
+    "react-router-last-location": "^2.0.1",
     "react-router-redux": "^4.0.8",
     "react-router-sitemap": "^1.2.0",
     "react-scripts": "4.0.3",

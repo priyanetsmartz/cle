@@ -1,17 +1,15 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { connect } from 'react-redux';
 import { getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
 import CategoryBanner from './banner';
 import PriveExclusive from './priveExclusive';
 import LatestProducts from './latestProducts';
-import { Link, useParams ,useHistory} from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import NewIn from './newIn';
 import Description from './description';
 import Footer from '../../../containers/partials/footer-new';
 import Header from '../../../containers/partials/headerMenu';
-import { useLocation } from 'react-router-dom';
 import cartAction from "../../../redux/cart/productAction";
 import { capitalize } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
@@ -21,10 +19,8 @@ const { getCategoryData } = cartAction;
 
 function Categories(props) {
     const { category, subcat, childcat, greatchildcat }: any = useParams();
-    // console.log(category, subcat, childcat, greatchildcat)
     const baseUrl = process.env.REACT_APP_API_URL;
     const location = useLocation()
-    const history = useHistory()
     const [categoryId, setCategoryId] = useState(0);
     const [catname, setCatname] = useState('');
     const [urlPathLink, setUrlPath] = useState('');
@@ -39,14 +35,7 @@ function Categories(props) {
             meta_title: ""
         }
     })
-    //let catID = getCookie("_TESTCOOKIE");
 
-
-    useEffect(() => {
-        return history.listen((location) => {
-            console.log(`You changed the page to: ${location.pathname}`)
-        })
-    },[history])
     useEffect(() => {
         const header = document.getElementById("headerrr");
         const sticky = header.offsetTop;

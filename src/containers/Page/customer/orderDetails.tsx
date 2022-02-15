@@ -419,7 +419,7 @@ function OrderDetails(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label">Phone<span className="maindatory">*</span></label>
-                            <input type="text" className="form-control" id="telephone"
+                            <input type="number" className="form-control" id="telephone"
                                 placeholder="Phone"
                                 value={custAddForm.telephone}
                                 onChange={handleAddChange} />

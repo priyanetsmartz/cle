@@ -4,7 +4,7 @@ import { capitalize } from "../../components/utility/allutils";
 
 function Breadcrumbs(props) {
     const location = useLocation()
-    const { category, subcat, childcat, greatchildcat, cat, orderId, returnId, prodsku, vendorIdprev }: any = useParams();
+    const { category, subcat, childcat, greatchildcat, cat, returnId, prodsku, vendorIdprev, sku }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [keyUl, setKey] = useState('');
@@ -20,17 +20,14 @@ function Breadcrumbs(props) {
             urlPath = category;
         }
 
-        // let test = urlPath.split("/");
-        //  console.log(location)
         setKey(urlPath)
-        let breads = location.pathname.split('\/');
+        let breads = location.pathname.split('\/');      
         setBreadcrumsState(breads)
     }, [location]);
 
     return (
         <nav aria-label="breadcrumb" className="new-breadcrumb">
-
-            {(location.pathname !== "/home") && (
+            {(!location.pathname.includes("product-details")) && (
                 <ol className="breadcrumb">
                     {!breadcrumsState.includes("product-details-preview") ?
                         <li className="breadcrumb-item" key={100}><Link to="/">Home</Link></li>
