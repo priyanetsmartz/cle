@@ -651,7 +651,9 @@ p.signup-policy-links a {
 }
 
 .sort_by .customfliter {
-  float: left;
+	float: left;
+	font-size: 14px;
+	width: 50%;
 }
 
 .modal-header .btn-close {
@@ -761,9 +763,9 @@ p.signup-policy-links a {
   font-family: Cairo;
 	font-weight:600;
 }
-.pro_categry_sidebar {
+/* .pro_categry_sidebar {
   float: right;
-}
+} */
 .breadcrumb-item + .breadcrumb-item::before {
   float: right;
 }
@@ -1334,6 +1336,14 @@ p.sliderupper {
     -webkit-transform: translateX(-7%);
     -ms-transform: translateX(-7%);
     transform: translateX(-7%);
+}
+
+.my-wishlist-main .resltspage_sec .sort_by {
+    width: 30%;
+}
+
+.my-wishlist-main .resltspage_sec .sort_by .form-select{
+	font-size:14px;
 }
 
 .form-select{
