@@ -25,7 +25,18 @@ import { formatprice, getCurrentMonth } from '../../../components/utility/alluti
 import { siteConfig } from '../../../settings';
 import { useIntl } from 'react-intl';
 
-
+// function CustomTooltip({ payload, label, active }) {
+//     if (active) {
+//       return (
+//         <div className="custom-tooltip">
+//           <p className="label">{`${label} : ${payload[0].value}`}</p>
+//           <p className="desc">Anything you want can be displayed here.</p>
+//         </div>
+//       );
+//     }
+  
+//     return null;
+//   }
 function MyAnalysis(props) {
     const intl = useIntl()
     let quater = moment().quarter();
@@ -334,7 +345,7 @@ function MyAnalysis(props) {
                                 ><i className="fas fa-info-circle" ></i>
                                 </OverlayTrigger></h5>
                                 <div className="stats">
-                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    <h3>jk{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
                                 </div>
                             </div>
                         </div>
@@ -355,7 +366,10 @@ function MyAnalysis(props) {
                                         <XAxis dataKey="Created At" ></XAxis>
                                         <YAxis dataKey="Total Cost" domain={[0, 20000]} ></YAxis>
                                         <Legend />
-                                        <Tool />
+                                        <Tool
+                                        wrapperStyle={{ width: 100 }}
+                                        labelStyle={{ color: "green" }}
+                                        itemStyle={{ color: "cyan" }}/>
                                         <Line dataKey="Total Cost"
                                             stroke="black" activeDot={{ r: 8 }} />
                                         <Line dataKey="Quantity"
@@ -445,7 +459,10 @@ function MyAnalysis(props) {
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="Total Product Count" />
                                     <YAxis />
-                                    <Tool />
+                                    
+                                    <Tool wrapperStyle={{ width: "100px" }}
+            labelStyle={{ color: "green" }}
+            itemStyle={{ color: "cyan" }}/>
                                     <Legend />
                                     <Bar barSize={30} dataKey="Total Product Price" fill="#8884d8" />
 
