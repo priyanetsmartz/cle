@@ -51,7 +51,7 @@ function Products(props) {
     const [clearFilter, setclearFilter] = useState(false)
     const language = getCookie('currentLanguage');
     const [nameHeader, setNameHeader] = useState('')
-
+    const [nameHeaderOld, setNameHeaderOld] = useState('')
     const [metaData, setMetaData] = useState({
         meta_description: '',
         meta_keywords: "",
@@ -113,6 +113,7 @@ function Products(props) {
             setMetaData(obj);
         }
         setNameHeader(catName);
+        setNameHeaderOld(catName)
         setCatState(catID)
         setCatStateLoad(catID)
         getProductById(catID)
@@ -249,6 +250,12 @@ function Products(props) {
         } else {
             nameTop = category;
         }
+        setFilterArray(prevState => ({
+            ...prevState,
+            category: [],
+            price: '',
+            brand: []
+        }))
         setNameHeader(nameTop)
         setclearFilter(true)
 
@@ -348,7 +355,7 @@ function Products(props) {
 
     const removeSelectedCategories = (type, value) => {
         if (type !== 'category_id') {
-            let catID = catStateLoad ? catStateLoad : 178;
+            let catID = catState ? catState : 178;
             getProductById(catID);
             if (type === 'price') {
                 setFilterArray(prevState => ({
@@ -364,7 +371,8 @@ function Products(props) {
 
             }
         } else {
-            let catID = catState ? catState : 178;
+            setNameHeader(nameHeaderOld)
+            let catID = catStateLoad ? catStateLoad : 178;
             setFilterArray(prevState => ({
                 ...prevState,
                 category: [],

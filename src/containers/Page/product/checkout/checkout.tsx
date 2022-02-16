@@ -13,7 +13,7 @@ import { COUNTRIES } from '../../../../config/counties';
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora, getPaymentStatus, addPaymentDetailstoOrder } from '../../../../redux/cart/productApi';
 import { getCustomerDetails, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
 import { formatprice, getCountryName, getRegionName } from '../../../../components/utility/allutils';
-import ContactBannerFooter from '../../customer/contact-banner';
+import CheckoutBannerFooter from '../../customer/checkout-banner';
 
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
 
@@ -1732,9 +1732,9 @@ function Checkout(props) {
                             <div className="d-grid gap-2 col-8 mx-auto">
                                 {!isShow ?
                                     <button className="btn btn-secondary" disabled={(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) ? true : false} onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> </button>
-                                    : <div className="spinner"> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>}
-
-
+                                    : <div className="spinner"> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
+                                }
+                                <p className='checkouttc'><IntlMessages  id="tccheckout" /></p>
                             </div>
                         </div>
 
@@ -1783,7 +1783,7 @@ function Checkout(props) {
                     </div>
                 </div>
             </section >
-            <ContactBannerFooter />
+            <CheckoutBannerFooter />
 
         </main >
     )

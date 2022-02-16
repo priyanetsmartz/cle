@@ -5,11 +5,12 @@ import DataTable from 'react-data-table-component';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { dataTiles, removeProduct, searchProducts } from '../../../redux/pages/vendorLogin';
 import Modal from "react-bootstrap/Modal";
-
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import {
     LineChart,
     ResponsiveContainer,
-    Legend, Tooltip,
+    Legend, Tooltip as Tool,
     Line,
     XAxis,
     YAxis,
@@ -53,18 +54,20 @@ function MyAnalysis(props) {
     useEffect(() => {
         getVendorProductListing()
         getDataTiles(oldDate, currentDate);
+        return () => {
+            setPdata([])
+            setPieChart([]);
+            setBarChartData([])        }
     }, [])
 
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
         if (results && results.data && results.data.length > 0) {
-            let tiles_information = results?.data[0]?.tiles_information
-            console.log(tiles_information)
+            let tiles_information = results?.data[0]?.tiles_information;
             setPdata(tiles_information?.order_information)
             setBarChartData([tiles_information?.product_information])
             setPieChart(tiles_information?.payout_information)
             setDataTilesData(results?.data[0])
-
         }
     }
     const handleChange = (flag) => {
@@ -238,6 +241,11 @@ function MyAnalysis(props) {
         }
     ];
 
+  
+   const labelPieChart = async (prodId) => {
+    setDeleteID(prodId)
+    setDeletePop(true);
+}
 
     return (
         <div className="col-sm-9">
@@ -278,7 +286,17 @@ function MyAnalysis(props) {
                     <div className="row mb-4" style={{ columnCount: 3 }}>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
-                                <h5><IntlMessages id="ordertotal" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <h5><IntlMessages id="ordertotal" />
+                                    <OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                <IntlMessages id="totalordersplaces" />
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger></h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
                                 </div>
@@ -286,7 +304,18 @@ function MyAnalysis(props) {
                         </div>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
-                                <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <h5><IntlMessages id="order.orders" />
+                                    <OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                <IntlMessages id="totalaveragescost" />
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger>
+                                </h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
                                 </div>
@@ -294,7 +323,16 @@ function MyAnalysis(props) {
                         </div>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
-                                <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <h5><IntlMessages id="payments" />  <OverlayTrigger
+                                    delay={{ hide: 450, show: 300 }}
+                                    overlay={(props) => (
+                                        <Tooltip id="" {...props} >
+                                            <IntlMessages id="totalorderscost" />
+                                        </Tooltip>
+                                    )}
+                                    placement="right"
+                                ><i className="fas fa-info-circle" ></i>
+                                </OverlayTrigger></h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
                                 </div>
@@ -317,7 +355,7 @@ function MyAnalysis(props) {
                                         <XAxis dataKey="Created At" ></XAxis>
                                         <YAxis dataKey="Total Cost" domain={[0, 20000]} ></YAxis>
                                         <Legend />
-                                        <Tooltip />
+                                        <Tool />
                                         <Line dataKey="Total Cost"
                                             stroke="black" activeDot={{ r: 8 }} />
                                         <Line dataKey="Quantity"
@@ -335,7 +373,7 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>
+                            <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>                        
                             {pieChart?.length > 0 && (
                                 <ResponsiveContainer width="100%" height={250}>
                                     <PieChart height={250}>
@@ -344,6 +382,7 @@ function MyAnalysis(props) {
                                             cx="50%"
                                             cy="50%"
                                             outerRadius={100}
+                                            isAnimationActive={false}
                                             fill="#8884d8"
                                             dataKey="total_payout_amount"
                                             label={({
@@ -406,7 +445,7 @@ function MyAnalysis(props) {
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="Total Product Count" />
                                     <YAxis />
-                                    <Tooltip />
+                                    <Tool />
                                     <Legend />
                                     <Bar barSize={30} dataKey="Total Product Price" fill="#8884d8" />
 

@@ -36,8 +36,8 @@ function SearchResults(props) {
     const [catState, setCatState] = useState(0);
     const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
     const [sort, setSort] = useState('');
-
-
+    const [nameHeaderOld, setNameHeaderOld] = useState('')
+    const [catStateLoad, setCatStateLoad] = useState(0);
     const language = getCookie('currentLanguage');
     const [autoSuggestions, SetAutoSuggestions] = useState([]);
 
@@ -282,9 +282,9 @@ function SearchResults(props) {
     }
 
     const removeSelectedCategories = (type, value) => {
-        let catID = catState ? catState : 178;
-
+       
         if (type !== 'category_id') {
+            let catID = catState ? catState : 178;
             getData(searchText, catID)
             if (type === 'price') {
                 setFilterArray(prevState => ({
@@ -300,6 +300,8 @@ function SearchResults(props) {
 
             }
         } else {
+            //setNameHeader(nameHeaderOld)
+            let catID = catStateLoad ? catStateLoad : 178;
             setFilterArray(prevState => ({
                 ...prevState,
                 category: [],
