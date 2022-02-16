@@ -25,8 +25,6 @@ function OrdersAndReturns(props) {
     const [page, setCurrent] = useState(1);
     const [price, setPrice] = useState({ low: 0, high: 20000 })
     const [loaderOrders, setLoaderOrders] = useState(false);
-
-    // const language = getCookie('currentLanguage');
     const intl = useIntl();
     useEffect(() => {
         getData(pageSize);
@@ -289,9 +287,7 @@ function OrdersAndReturns(props) {
                                                                                 </div>
 
                                                                                 <div className="order-shipped">
-                                                                                    <label className="form-label">
-                                                                                        {/* <IntlMessages id="order.weHaveShipped" /> */}
-                                                                                        {capitalize(item.status)}
+                                                                                    <label className="form-label"> {capitalize(item.status)}
                                                                                     </label>
                                                                                 </div>
 
@@ -316,10 +312,6 @@ function OrdersAndReturns(props) {
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        {/* <div className="products">
-                                                                            <label className="form-label"> <IntlMessages id="order.price" /></label>
-                                                                            <div className="labl_text">{siteConfig.currency} {formatprice(item.grand_total)}</div>
-                                                                        </div> */}
                                                                     </div>
                                                                     <div className="col-sm-12">
                                                                         <div className="blank_bdr"></div>

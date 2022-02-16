@@ -61,9 +61,6 @@ function VendorOrderDetail(props) {
         let data = [];
         let productsData = [];
         if (results && results.data && results.data.length > 0) {
-            // data['info'] = results.data[0].info;
-            // data['address'] = results.data[0].address;
-            // data['items'] = results.data[0].items;
             data = results.data
             setOrderNumber(data[0][0].po_increment_id)
             setOrderPurchaseDate(moment(data[0][0].purchase_date).format('ddd DD MMMM YYYY; hh:mm a'))
@@ -120,10 +117,7 @@ function VendorOrderDetail(props) {
         setOrderDetails(productsData);
 
     }
-    const sortOrdersHandler = async (e) => {
-        setSortOrder(e.target.value);
-        getOrderDetailFxn(orderId,e.target.value)
-    }
+
     const selectStatus = (event) => {
         selectStatusOrder(event.target.value)
         if (event.target.value === 'reject') {
@@ -165,7 +159,6 @@ function VendorOrderDetail(props) {
                             <h1><IntlMessages id="orderdetail.title" /></h1>
                             <h2><IntlMessages id="orderdetail.description" /></h2>
                         </div>
-
 
                         <section>
                             <div className="return-det">
@@ -276,17 +269,6 @@ function VendorOrderDetail(props) {
 
                         </section>
                     </div>
-                    {/* <div className="col-sm-12">
-                            <div className="sort_by">
-                                <div className="sortbyfilter">
-                                    <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
-                                        <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                        <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                        <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div> */}
                 </div>
             </div>
             <br></br>

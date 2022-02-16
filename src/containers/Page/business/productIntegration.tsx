@@ -48,6 +48,7 @@ function ProductIntegration(props) {
     });
     useEffect(() => {
         async function getData() {
+            
             let lang = props.languages ? props.languages : language;
             let sample: any = await getProductIntegrationSample(lang);
             setDownloadSample(sample.data)
@@ -111,17 +112,21 @@ function ProductIntegration(props) {
     }
 
     const optionHandler = async (e) => {
-        //  console.log(Object.keys(formData))
         if (Object.keys(formData).length <= 0)
             return notification("error", "", intl.formatMessage({ id: "selectproductintegration" }));
         if (Object.values(formData)[0]['value'] === 'option-2' && Object.keys(formData).length < 2)
             return notification("error", "", intl.formatMessage({ id: "selectproductEcom" }));
         if (Object.values(formData)[0]['value'] === 'option-3' && Object.keys(formData).length < 2)
             return notification("error", "", intl.formatMessage({ id: "uploadcsv" }));
+        formData['hiddenemail'] = {
+            "value": localToken.email,
+            "label": "vendor_email",
+            "type": "textinput"
+        }
+        console.log(formData)
         payload.answer.response_json = JSON.stringify(formData);
         payload.answer.form_id = form.form_id;
         payload.answer.store_id = form.store_id;
-        // payload.answer.customer_id = localToken.vendor_id;
         payload.answer.form_name = form.title;
         payload.answer.form_code = 'product_integration';
 
@@ -171,18 +176,6 @@ function ProductIntegration(props) {
         }));
     }
 
-    const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(file);
-            fileReader.onload = () => {
-                resolve(fileReader.result);
-            };
-            fileReader.onerror = (error) => {
-                reject(error);
-            };
-        });
-    };
     function getBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -218,7 +211,6 @@ function ProductIntegration(props) {
                                     </ul>
                                 </div>
                             </div>
-                            {/* })} */}
                             {showEcom && (
                                 <div className="col-xs-12 col-md-12 col-lg-12 mt-4">
                                     <h3>{formdd && formdd.length > 2 ? formdd[2].label : ""}</h3>
@@ -269,9 +261,7 @@ function ProductIntegration(props) {
                             </div>
                         </div>
                     </section>
-
                     <ContactBannerFooter />
-
                 </div>
             </div>
         </div>

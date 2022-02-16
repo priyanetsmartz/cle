@@ -11,8 +11,9 @@ import cartAction from "../../../../redux/cart/productAction";
 import orderprocessing from "../../../../image/orderprocessing.gif";
 import { COUNTRIES } from '../../../../config/counties';
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora, getPaymentStatus, addPaymentDetailstoOrder } from '../../../../redux/cart/productApi';
-import { getCustomerDetails,  getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
+import { getCustomerDetails, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
 import { formatprice, getCountryName, getRegionName } from '../../../../components/utility/allutils';
+import ContactBannerFooter from '../../customer/contact-banner';
 
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
 
@@ -57,6 +58,7 @@ function Checkout(props) {
     const [selectedShippingMethod, setSelectedShippingMethod] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const [regions, setRegions] = useState([]);
+    const [cartBilling, setCartBilling] = useState({});
     const [paymentDetails, setPaymentDetails] = useState({});
     const [emailError, setEmailError] = useState({
         errors: {}
@@ -113,6 +115,7 @@ function Checkout(props) {
     });
     //for customer address ends here-------
     useEffect(() => {
+
         const header = document.getElementById("checkoutsidebar");
         const sticky = header.offsetTop;
         const scrollCallBack: any = window.addEventListener("scroll", () => {
@@ -127,13 +130,7 @@ function Checkout(props) {
         };
     }, [])
     useEffect(() => {
-        const queries = new URLSearchParams(props.location.search);
-        let paymentId = queries.get('paymentId');
-        let id = queries.get('Id');
-        if (paymentId && id) {
-            setOrderProcessing(true)
-            getPaymentStatusAPi(paymentId)
-        }
+
         let customer_id = props.token.cust_id;
         checkoutScreen();
         if (customer_id) {
@@ -145,6 +142,20 @@ function Checkout(props) {
         }
     }, [props.languages, props.payTrue, props.guestShipp, props.guestBilling, props.token])
 
+    useEffect(() => {
+
+        const queries = new URLSearchParams(props.location.search);
+        let paymentId = queries.get('paymentId');
+        let id = queries.get('Id');
+        if (paymentId && id) {
+            setOrderProcessing(true)
+            getPaymentStatusAPi(paymentId)
+        }
+
+        return () => {
+
+        };
+    }, [])
     async function checkoutScreen() {
         setLoaderOnCheckout(true)
         let cartItems: any, cartTotal: any;
@@ -161,8 +172,9 @@ function Checkout(props) {
                 cartTotal = await getGuestCartTotal();
             }
         }
-        //  console.log(cartItems)
-        let checkoutData = {}, checkItems = {}, ship = {};
+
+        let checkoutData = {}, checkItems = {}, ship = {}, billing_address = {};
+
         checkoutData['discount'] = cartTotal ? cartTotal?.data?.base_discount_amount : 0;
         checkoutData['sub_total'] = cartTotal ? cartTotal?.data?.base_subtotal : 0;
         checkoutData['shipping_charges'] = cartTotal ? cartTotal?.data?.base_shipping_amount : 0;
@@ -171,7 +183,8 @@ function Checkout(props) {
         checkoutData['tax'] = cartTotal ? cartTotal?.data?.base_tax_amount : 0;
         checkoutData['total_items'] = cartTotal ? cartTotal?.data?.items_qty : 0;
         checkItems['items'] = cartItems ? cartItems?.data?.items : [];
-
+        billing_address = cartItems ? cartItems?.data?.billing_address : {};
+        setCartBilling(billing_address)
         let shipingAdd = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping.address.id : 0;
 
         ship['firstname'] = cartItems && cartItems?.data?.extension_attributes?.shipping_assignments?.length > 0 ? cartItems?.data?.extension_attributes?.shipping_assignments[0]?.shipping.address?.firstname : '';
@@ -204,7 +217,7 @@ function Checkout(props) {
             checkData: checkoutData,
             items: checkItems,
             shippingAddress: shipingAdd,
-            shippingData: ship
+            shippingData: ship,
         }))
         setLoaderOnCheckout(false)
     }
@@ -248,7 +261,7 @@ function Checkout(props) {
         let addresses = {};
         let result: any = await getCustomerDetails();
         setCustForm(result.data);
-        // console.log(result.data.addresses)
+
         addresses['addresses'] = result.data ? result.data.addresses : '';
         let address = result.data.addresses[0];
         let addressData: any = {};
@@ -282,7 +295,7 @@ function Checkout(props) {
             addressInformation.billingAddress = billingAddress;
             addressData.addressInformation = addressInformation;
 
-            let saveDelivery: any = await setUserDeliveryAddress(addressData);
+            await setUserDeliveryAddress(addressData);
 
             setLoaderOnCheckout(false)
             if (result.data.addresses.length === 1) {
@@ -362,13 +375,13 @@ function Checkout(props) {
                     city: address.data.city,
                     country_id: address.data.country_id,
                     region_id: address.data.region_id,
-                    street: address.data.street,
-                    // email: localStorage.getItem('token_email')
+                    street: address.data.street
                 };
                 addressInformation.shippingAddress = shippingAddress;
                 addressData.addressInformation = addressInformation;
-                //console.log(addressData)
+
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
+
                 setIsSetAddress(0)
                 if (saveDelivery && saveDelivery.data && (saveDelivery.data.message === '' || saveDelivery.data.message === undefined)) {
                     checkoutScreen()
@@ -393,7 +406,7 @@ function Checkout(props) {
         let addId = e.target.value;
         let checked = e.target.checked;
         let selectedValue = parseInt(addId);
-        // console.log(itemsVal.shippingData['firstname'])
+
         if (checked) {
             setIsBillingAddress(selectedValue);
 
@@ -414,7 +427,7 @@ function Checkout(props) {
                     street: address.data.street
                 };
                 let shippingAddress = {}
-                //  console.log(itemsVal.shippingData['country_id'])
+
                 if (itemsVal.shippingData['country_id'] !== null) {
                     shippingAddress = {
                         customer_id: custId ? custId : 0,
@@ -428,7 +441,7 @@ function Checkout(props) {
                         street: itemsVal.shippingData['street']
                     }
                 } else {
-                    //  console.log(itemsVal.shippingData['country_id'])
+
                     shippingAddress = {
                         customer_id: custId ? custId : 0,
                         firstname: address.data.firstname,
@@ -445,7 +458,7 @@ function Checkout(props) {
                 addressInformation.shippingAddress = shippingAddress;
                 addressInformation.billingAddress = billingAddress;
                 addressData.addressInformation = addressInformation;
-                // console.log(addressData)
+
                 let saveDelivery: any = await setUserDeliveryAddress(addressData);
                 if (saveDelivery.data.payment_methods && (saveDelivery.data.message === undefined || saveDelivery.data.message === '')) {
                     setCheckedData(prevState => ({
@@ -577,17 +590,17 @@ function Checkout(props) {
                 custForm.addresses.push(obj);
                 console.log(obj)
                 let newAddress: any = await saveCustomerDetails({ customer: custForm });
-                // console.log(newAddress.data)
+
                 delete shippingAddress['default_shipping'];
 
                 delete shippingAddress['customer_id'];
                 delete shippingAddress['id'];
-                // delete shippingAddress['save_in_address_book'];
+
                 addressInformation.shippingAddress = shippingAddress;
                 address.addressInformation = addressInformation;
                 console.log(address)
                 result = await setUserDeliveryAddress(address);
-                // console.log(result)
+
                 if (newAddress.data) {
                     getCutomerDetails();
                 }
@@ -754,13 +767,7 @@ function Checkout(props) {
     const validateAddress = () => {
         let error = {};
         let formIsValid = true;
-        // if (custAddForm.telephone !== undefined) {
-        //     formIsValid = false;
-        //     if (!(/^\d{10}$/.test(custAddForm["telephone"]))) {
-        //         formIsValid = false;
-        //         error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
-        //     }
-        // }
+
         if (!custAddForm.telephone) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" });
@@ -799,13 +806,7 @@ function Checkout(props) {
         let error = {};
         let formIsValid = true;
 
-        // if (billingAddressData.telephone !== undefined) {
-        //     formIsValid = false;
-        //     if (!(/^\d{10}$/.test(billingAddressData["telephone"]))) {
-        //         formIsValid = false;
-        //         error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
-        //     }
-        // }
+
 
         if (!billingAddressData.telephone) {
             formIsValid = false;
@@ -873,22 +874,28 @@ function Checkout(props) {
 
     //PLACE ORDER CODE GOES HERE
     const placeOrder = async () => {
-        console.log(props.token.cust_id)
+        console.log(localToken.cust_id)
         setIsShow(true);
-        let customer_id = props.token.cust_id;
+        let customer_id = localToken.cust_id;
         let orderPlace: any;
         let billAddress: any = {};
         if (customer_id) {
             const add: any = itemsVal.address;
-            console.log(add.addresses);
-            add.addresses.forEach(el => {
-                if (el.default_billing || el.default_shipping || add.addresses.length === 1) {
-                    billAddress.street = el.street[0];
-                    billAddress.address = el.city;
-                    billAddress.phone = el.telephone;
-                    billAddress.name = el.firstname + ' ' + el.lastname;
-                }
-            })
+            if (cartBilling) {
+                billAddress.street = cartBilling['street'][0];
+                billAddress.address = cartBilling['city'];
+                billAddress.phone = cartBilling['telephone'];
+                billAddress.name = cartBilling['firstname'] + ' ' + cartBilling['lastname'];
+            } else {
+                add.addresses.forEach(el => {
+                    if (el.default_billing || el.default_shipping || add.addresses.length === 1) {
+                        billAddress.street = el.street[0];
+                        billAddress.address = el.city;
+                        billAddress.phone = el.telephone;
+                        billAddress.name = el.firstname + ' ' + el.lastname;
+                    }
+                })
+            }
         } else {
             if (state.email) {
                 if (props.guestBilling) {
@@ -904,9 +911,9 @@ function Checkout(props) {
             }
 
         }
-         console.log(billAddress);
+
         if (selectedPaymentMethod === 'myfatoorah_gateway') {
-         
+
             const payment: any = await myFatoora(billAddress);
             if (payment?.data?.length > 0 && payment?.data[0]?.IsSuccess) {
                 let url = payment?.data[0]?.Data.PaymentURL;
@@ -925,8 +932,8 @@ function Checkout(props) {
                     setIsShow(false)
                     return notification("error", "", intl.formatMessage({ id: "paymentmethoderror" }));
                 } else {
-
-                    orderPlace = await placeUserOrder(props.languages, selectedPaymentMethod);
+                    let cartToken = localStorage.getItem('cartQuoteId');
+                    orderPlace = await placeUserOrder(props.languages, selectedPaymentMethod, cartToken);
                 }
 
 
@@ -956,7 +963,8 @@ function Checkout(props) {
                     return notification("error", "", intl.formatMessage({ id: "paymentmethoderror" }));
                 } else {
                     setIsShow(true)
-                    orderPlace = await placeGuestOrder(props.languages, selectedPaymentMethod);
+                    let cartToken = localStorage.getItem('cartQuoteToken');
+                    orderPlace = await placeGuestOrder(props.languages, selectedPaymentMethod, cartToken);
                 }
 
 
@@ -1036,16 +1044,21 @@ function Checkout(props) {
         detailsRequired['InvoiceId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceId ? paymentStatus.data[0].Data.InvoiceId : 0;
         detailsRequired['PaymentGateway'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions[0].PaymentGateway ? paymentStatus.data[0].Data.InvoiceTransactions[0].PaymentGateway : 0;
         detailsRequired['TransactionStatus'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].IsSuccess ? paymentStatus.data[0].IsSuccess : 0;
-        //console.log(detailsRequired);
+
 
         setPaymentDetails(detailsRequired)
-        // placeOrderonMagento('myfatoorah_gateway')
-        let customer_id = props.token.cust_id;
+
+
+        let customer_id = localToken.cust_id;
         let orderPlace: any;
         if (customer_id) {
-            orderPlace = await placeUserOrder(props.languages, 'myfatoorah_gateway');
+            let cartToken = localStorage.getItem('cartQuoteId');
+            console.log(cartToken)
+            orderPlace = await placeUserOrder(props.languages, 'myfatoorah_gateway', cartToken);
         } else {
-            orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway');
+            let cartToken = localStorage.getItem('cartQuoteToken');
+            console.log(cartToken)
+            orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway', cartToken);
         }
         if (orderPlace && orderPlace.data) {
             let details = {
@@ -1198,8 +1211,8 @@ function Checkout(props) {
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
 
-                                            {props.token.token_email ?<p><span className="note"><IntlMessages id="emailchangenote" /></span></p> : ''}
-                                             <label><IntlMessages id="profile.email" /></label>
+                                            {props.token.token_email ? <p><span className="note"><IntlMessages id="emailchangenote" /></span></p> : ''}
+                                            <label><IntlMessages id="profile.email" /></label>
 
                                             <p>{props.token.token_email ?
                                                 props.token.token_email :
@@ -1340,6 +1353,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" placeholder="Ann"
+                                                                    autoComplete="off"
                                                                     id="firstname"
                                                                     value={custAddForm.firstname}
                                                                     onChange={handleAddChange} />
@@ -1349,6 +1363,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="lastname"
+                                                                    autoComplete="off"
                                                                     placeholder="Surname"
                                                                     value={custAddForm.lastname}
                                                                     onChange={handleAddChange} />
@@ -1358,6 +1373,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="telephone"
+                                                                    autoComplete="off"
                                                                     placeholder="Phone"
                                                                     value={custAddForm.telephone}
                                                                     onChange={handleAddChange} />
@@ -1367,6 +1383,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="street"
+                                                                    autoComplete="off"
                                                                     placeholder="Address"
                                                                     value={custAddForm.street}
                                                                     onChange={handleAddChange} />
@@ -1376,6 +1393,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="city"
+                                                                    autoComplete="off"
                                                                     placeholder="City"
                                                                     value={custAddForm.city}
                                                                     onChange={handleAddChange} />
@@ -1385,6 +1403,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="postcode"
+                                                                    autoComplete="off"
                                                                     placeholder="Postal Code"
                                                                     value={custAddForm.postcode}
                                                                     onChange={handleAddChange} />
@@ -1407,6 +1426,7 @@ function Checkout(props) {
                                                                 <label className="form-label">
                                                                     <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
                                                                 <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
+
                                                                     {regions && regions.map(opt => {
                                                                         return (<option key={opt.id} value={opt.id} >
                                                                             {opt.name}</option>);
@@ -1575,6 +1595,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="register.first_name" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" placeholder="Ann"
+                                                                    autoComplete="off"
                                                                     id="firstname"
                                                                     value={billingAddressData.firstname}
                                                                     onChange={handleBillingAddressChange} />
@@ -1584,6 +1605,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.surName" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="lastname"
+                                                                    autoComplete="off"
                                                                     placeholder="Surname"
                                                                     value={billingAddressData.lastname}
                                                                     onChange={handleBillingAddressChange} />
@@ -1592,7 +1614,9 @@ function Checkout(props) {
                                                             </div>
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.phoneNo" /><span className="maindatory">*</span></label>
-                                                                <input type="number" className="form-control" id="telephone"
+                                                                <input type="number"
+                                                                    autoComplete="off"
+                                                                    className="form-control" id="telephone"
                                                                     min="10"
                                                                     max="11"
                                                                     placeholder="Phone"
@@ -1604,6 +1628,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="street"
+                                                                    autoComplete="off"
                                                                     placeholder="Address"
                                                                     value={billingAddressData.street}
                                                                     onChange={handleBillingAddressChange} />
@@ -1613,6 +1638,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.city" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="city"
+                                                                    autoComplete="off"
                                                                     placeholder="City"
                                                                     value={billingAddressData.city}
                                                                     onChange={handleBillingAddressChange} />
@@ -1622,6 +1648,7 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.postCode" /><span className="maindatory">*</span></label>
                                                                 <input type="text" className="form-control" id="postcode"
+                                                                    autoComplete="off"
                                                                     placeholder="Postal Code"
                                                                     value={billingAddressData.postcode}
                                                                     onChange={handleBillingAddressChange} />
@@ -1756,7 +1783,7 @@ function Checkout(props) {
                     </div>
                 </div>
             </section >
-
+            <ContactBannerFooter />
 
         </main >
     )

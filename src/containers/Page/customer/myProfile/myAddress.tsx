@@ -7,7 +7,6 @@ import notification from '../../../../components/notification';
 import { deleteAddress, getCustomerDetails, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
 import Modal from "react-bootstrap/Modal";
 import { connect } from "react-redux";
-// import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 function MyAddress(props) {
     const intl = useIntl();
@@ -17,7 +16,6 @@ function MyAddress(props) {
     const [myAddressModal, setMyAddressModal] = useState(false);
     const [isShow, setIsShow] = useState(false);
     const [showAddress, setShowAddress] = useState(false);
-    const [countries, setCountries] = useState(COUNTRIES); // for countries dropdown
     const [regions, setRegions] = useState([]); // for regions dropdown
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
     const [custForm, setCustForm] = useState({
@@ -53,26 +51,6 @@ function MyAddress(props) {
             notification("success", "", intl.formatMessage({ id: "customerAddressDelete" }));
         }
     }
-
-    //edit existing address starts here------------->
-    // const editAddress = (index, id) => {
-    //     console.log(index, id)
-    //     // getData();
-    //     // let obj: any = { ...custForm.addresses };
-    //     // console.log(obj[index])
-    //     setTimeout(() => {
-
-    //         // console.log(obj[index])
-    //         //  console.log(custForm.addresses[index], obj[index])
-    //         delete custForm.addresses[index].region;
-    //         getRegions(custForm.addresses[index].country_id, index);
-    //         setAddIndex(index);
-    //         custForm.addresses[index].street = custForm.addresses[index].street[0];
-    //         setCustAddForm(custForm.addresses[index]);
-    //         openAddressModal();
-    //     }, 2000)
-
-    // }
 
     const editAddress = (index, id) => {
         delete custForm.addresses[index].region;
@@ -113,12 +91,10 @@ function MyAddress(props) {
     const getData = async () => {
         setShowAddress(true);
         let result: any = await getCustomerDetails();
-        // if (result?.dat) {
         setCustForm(result?.data);
         setShowAddress(false);
-        // }
-
     }
+
     // for customer address popup window starts here
     const saveCustAddress = async (e) => {
         if (validateAddress()) {
@@ -132,7 +108,6 @@ function MyAddress(props) {
             } else {
                 custForm.addresses[addIndex] = obj;
             }
-            //console.log(custAddForm);
             let result: any = await saveCustomerDetails({ customer: custForm });
             if (result) {
                 await getData();
@@ -169,12 +144,6 @@ function MyAddress(props) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" })
         }
-        // else if (typeof (custAddForm.telephone) !== "undefined") {
-        //     if (!(/^(?:\+971|00971|0)(?:2|3|4|6|7|9|50|51|52|55|56)[0-9]{7}$/.test(custAddForm.telephone))) {
-        //         formIsValid = false;
-        //         error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
-        //     }
-        // }
         if (!custAddForm.postcode) {
             formIsValid = false;
             error["postcode"] = intl.formatMessage({ id: "pinreq" })
@@ -257,10 +226,10 @@ function MyAddress(props) {
                             <i className="fas fa-plus"></i>
                         </div>
                     </div>
-                    {/* {showAddress && ("show...")} */}
+                  
                     {custForm && custForm.addresses && custForm.addresses.length > 0 && custForm.addresses.map((address, i) => {
                         let countryList: any = COUNTRIES.filter(obj => obj.id === address.country_id);
-                        // console.log(address)
+                      
                         return (<div className="addressnew_addressbodr" key={i}>
                             <h3><IntlMessages id="myaccount.address" /></h3>
                             <ul>
@@ -318,10 +287,7 @@ function MyAddress(props) {
                             <span className="error">{errors.errors["telephone"]}</span>
 
                         </div>
-                        <div className="width-100 mb-3 form-field">
-                            {/* <GooglePlacesAutocomplete
-                                apiKey=""
-                            /> */}
+                        <div className="width-100 mb-3 form-field">                        
                             <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="street"
                                 placeholder={intl.formatMessage({ id: 'myaccount.address' })}

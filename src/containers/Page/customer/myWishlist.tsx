@@ -8,12 +8,9 @@ import { removeWhishlist } from '../../../redux/cart/productApi';
 import IconZoomIn from '../../../image/Icon_zoom_in.svg';
 import cartAction from "../../../redux/cart/productAction";
 import IntlMessages from "../../../components/utility/intlMessages";
-import Login from '../../../redux/auth/Login';
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings';
 const { addToWishlistTask, addToCartTask } = cartAction;
-
-const loginApi = new Login();
 
 function MyWishList(props) {
     const userGroup = props.token.token;
@@ -21,7 +18,6 @@ function MyWishList(props) {
     const intl = useIntl();
     const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     const [isShow, setIsShow] = useState(0);
-    const [custId, setCustid] = useState(props.token.cust_id);
     const [delWishlist, setDelWishlist] = useState(0);
     const [wishList, setWishList] = useState([]);
     const [searchName, setSearchName] = useState('');
@@ -45,7 +41,6 @@ function MyWishList(props) {
 
     const getData = async () => {
         setLoaderOrders(true)
-        //  console.log(sortValue.sortBy, sortValue.sortByValue) 
         let result: any = await wishListSearchSort(props.languages, pageSize, sortValue.sortBy, sortValue.sortByValue, '');
         if (result && result.data) {
             setWishList(result.data);
@@ -60,7 +55,6 @@ function MyWishList(props) {
 
     const getSearchData = async (search) => {
         setLoaderOrders(true)
-        //  console.log(sortValue.sortBy, sortValue.sortByValue) 
         let result: any = await wishListSearchSort(props.languages, siteConfig.pageSize, sortValue.sortBy, sortValue.sortByValue, search);
         if (result && result.data) {
             setWishList(result.data);
@@ -83,7 +77,6 @@ function MyWishList(props) {
 
 
     const filtterData = (event) => {
-        // setCurrent(1)
         let sortBy = "";
         let sortByValue = "";
         if (event.target.value === "1") {
@@ -224,8 +217,7 @@ function MyWishList(props) {
                                                 </div>
                                                 <div className="wish text-left">
                                                     <h5><Link to={'/search/' + item.brand}>{item.brand}</Link></h5>
-                                                    <div className="tagname"><Link to={'/product-details/' + item.sku}>{item.name}</Link></div>
-                                                    {/* <div className="tagname" dangerouslySetInnerHTML={{ __html: item.description }} /> */}
+                                                    <div className="tagname"><Link to={'/product-details/' + item.sku}>{item.name}</Link></div>                                                    
                                                     <div className="pricetag">{siteConfig.currency} {formatprice(item.price)} </div>
                                                 </div>
 

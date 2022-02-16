@@ -16,10 +16,8 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { useLocation } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import Login from '../../../redux/auth/Login';
 import { siteConfig } from '../../../settings/index';
 const { showSignin } = appAction;
-const loginApi = new Login();
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
 const productUrl = `${baseUrl}/pub/media/catalog/product/cache/a09ccd23f44267233e786ebe0f84584c/`;
@@ -29,14 +27,13 @@ const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 function LatestProducts(props) {
     const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
-    let imageD = '', description = '', hoverImage = '', brand = '';
+    let imageD = '', brand = '';
     const location = useLocation()
     const [isHoverImage, setIsHoverImage] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [productsLatest, setProductsLatest] = useState([]);
     const [isWishlist, setIsWishlist] = useState(0);
     const [opacity, setOpacity] = useState(1);
-    const language = getCookie('currentLanguage');
 
     const settings = {
         dots: false,
@@ -105,7 +102,6 @@ function LatestProducts(props) {
         if (token) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-            //     console.log(result);
             if (result.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
@@ -143,17 +139,6 @@ function LatestProducts(props) {
 
     const someOtherHandler = (e) => {
         setIsHoverImage(0)
-    }
-
-    const changeImg = (e, item, type) => {
-        item.custom_attributes.forEach(el => {
-            if (el.attribute_code === "thumbnail" && type) {
-                e.target.src = el.value;
-            }
-            if (el.attribute_code === "image" && !type) {
-                e.target.src = el.value;
-            }
-        })
     }
 
     async function handleCart(id: number, sku: string) {
@@ -222,9 +207,6 @@ function LatestProducts(props) {
                                                                                     if (attributes.attribute_code === 'image') {
                                                                                         imageD = attributes.value;
                                                                                     }
-                                                                                    if (attributes.attribute_code === 'short_description') {
-                                                                                        description = attributes.value;
-                                                                                    }
 
                                                                                     if (attributes.attribute_code === 'brand') {
                                                                                         brand = attributes.value;
@@ -238,7 +220,6 @@ function LatestProducts(props) {
                                                                     </Link>
                                                                     <div className="product_name"><Link to={'/search/' + brand}>{brand}</Link></div>
                                                                     <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                                    {/* <div className="product_vrity">{item.short_description}</div> */}
                                                                     <div className="product_price">{siteConfig.currency} {formatprice(item.price)}</div>
                                                                     <div className="cart-button mt-3 px-2">
                                                                         {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
@@ -259,7 +240,7 @@ function LatestProducts(props) {
 
                             <div className="tab-pane fade" id="D-maylike" role="tabpanel" aria-labelledby="D-maylike-tab">
                                 <div className="row">
-                                    <WeChooseForYou  />
+                                    <WeChooseForYou />
                                 </div>
                             </div>
                         </div >

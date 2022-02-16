@@ -331,10 +331,12 @@ function SearchResults(props) {
                                                         let phigh = '', plow = '';
                                                         return (
                                                             <li className="mb-3" key={i}>
-                                                                <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                                    data-bs-target={`#home-collapse-${i}`} aria-expanded="false">
-                                                                    {item.label === 'Price' ? <IntlMessages id="order.price" /> : item.label === 'Category' ? <IntlMessages id="category" /> : item.label}
-                                                                </button>
+                                                                {item.options.length > 0 && (
+                                                                    <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                                        data-bs-target={`#home-collapse-${i}`} aria-expanded="false">
+                                                                        {item.label === 'Price' ? <IntlMessages id="order.price" /> : item.label === 'Category' ? <IntlMessages id="category" /> : item.label}
+                                                                    </button>
+                                                                )}
                                                                 {item.options.length > 0 && (
                                                                     <div className="collapse" id={`home-collapse-${i}`}>
                                                                         <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -348,9 +350,9 @@ function SearchResults(props) {
                                                                                     let priceHigh = parseInt(priceh[1]);
                                                                                     return (
                                                                                         <div className="sliderInner">
-                                                                                            
+
                                                                                             <Slider min={priceLow} max={priceHigh} range onAfterChange={handlePriceRange} />
-                                                                                           
+
                                                                                         </div>)
                                                                                 })()}</div>
                                                                                 :

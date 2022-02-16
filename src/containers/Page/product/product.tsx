@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import appAction from "../../../redux/app/actions";
 import { addWhishlist, getWhishlistItemsForUser, removeWhishlist, getProductsFilterRestCollection, getProductsFilterRestCollectionProducts } from '../../../redux/cart/productApi';
@@ -27,7 +27,7 @@ const { showSignin, showLoader } = appAction;
 function Products(props) {
     const { category, subcat, childcat, greatchildcat }: any = useParams();
 
-    let imageD = '', description = '', url = '';
+    let imageD = '', url = '';
     const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
     const [isShown, setIsShown] = useState('');
@@ -45,6 +45,7 @@ function Products(props) {
     const [sort, setSort] = useState('');
     const [filters, setFilters] = useState([]);
     const [total, setTotal] = useState(0);
+    const [catStateLoad, setCatStateLoad] = useState(0);
     const [catState, setCatState] = useState(0);
     const [currentFilter, setCurrentFilter] = useState('')
     const [clearFilter, setclearFilter] = useState(false)
@@ -58,24 +59,19 @@ function Products(props) {
     })
 
     useEffect(() => {
-        //console.log(filters)
-        let urlPath = '', nameTop = '';
+        let urlPath = '';
         if (category && subcat && childcat && greatchildcat) {
             urlPath = category + "/" + subcat + "/" + childcat + '/' + greatchildcat;
-            nameTop = greatchildcat;
         } else if (category && subcat && childcat) {
             urlPath = category + "/" + subcat + "/" + childcat;
-            nameTop = childcat;
         } else if (category && subcat) {
             urlPath = category + "/" + subcat;
-            nameTop = subcat;
         } else {
             urlPath = category;
-            nameTop = category;
         }
-        // setNameHeader(nameTop)
+
         seturlp(urlPath)
-        //    let catID = getCookie("_TESTCOOKIE");
+
         const localToken = props.token.token;
         setToken(localToken)
         if (urlPath) {
@@ -90,16 +86,14 @@ function Products(props) {
     }, [props.languages, clearFilter])
 
     useEffect(() => {
-        //   console.log('www')
-        if (catState === 0) {
-            getProductById(178);
-        } else {
+
+        if (catState !== 0) {
             getProductById(catState)
         }
     }, [sortValue, page, pageSize, sort, catState])
 
     async function getProducts(urlPath) {
-        //console.log(urlPath)
+
         let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         let result1: any = await getCategoryDetailsbyUrlPath(lang, urlPath, siteConfig.pageSize);
@@ -120,12 +114,13 @@ function Products(props) {
         }
         setNameHeader(catName);
         setCatState(catID)
+        setCatStateLoad(catID)
         getProductById(catID)
 
     }
 
     async function getProductById(catID) {
-        //    console.log(catID)
+
         let filter: any = await getProductsFilterRestCollection(catID, props.languages, sortValue, pageSize, page);
         let customer_id = props.token.cust_id;
         let total = 0, aggregations = [], items = [];
@@ -135,9 +130,9 @@ function Products(props) {
             total = filter.data[0].data.products.total_count;
             items = filter.data[0].data.products.items;
             let productResult = filter.data[0].data.products.items;
-            //   console.log(total);
+
             setPagination(Math.ceil(total / pageSize));
-            // setPagination(total);
+
             if (customer_id) {
                 let whishlist: any = await getWhishlistItemsForUser();
                 let products = items;
@@ -184,7 +179,7 @@ function Products(props) {
         if (token) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-            //     console.log(result);
+
             if (result.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
@@ -352,9 +347,8 @@ function Products(props) {
     }
 
     const removeSelectedCategories = (type, value) => {
-        let catID = catState ? catState : 178;
-
         if (type !== 'category_id') {
+            let catID = catStateLoad ? catStateLoad : 178;
             getProductById(catID);
             if (type === 'price') {
                 setFilterArray(prevState => ({
@@ -370,6 +364,7 @@ function Products(props) {
 
             }
         } else {
+            let catID = catState ? catState : 178;
             setFilterArray(prevState => ({
                 ...prevState,
                 category: [],
@@ -414,10 +409,12 @@ function Products(props) {
                                                             let phigh = '', plow = '';
                                                             return (
                                                                 <li className="mb-3" key={i}>
-                                                                    <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                                                                        data-bs-target={`#home-collapse-${i}`} aria-expanded="false">
-                                                                        {item.label === 'Price' ? <IntlMessages id="order.price" /> : item.label === 'Category' ? <IntlMessages id="category" /> : item.label}
-                                                                    </button>
+                                                                    {item.options.length > 0 && (
+                                                                        <button className="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                                                            data-bs-target={`#home-collapse-${i}`} aria-expanded="false">
+                                                                            {item.label === 'Price' ? <IntlMessages id="order.price" /> : item.label === 'Category' ? <IntlMessages id="category" /> : item.label}
+                                                                        </button>
+                                                                    )}
                                                                     {item.options.length > 0 && (
                                                                         <div className="collapse" id={`home-collapse-${i}`}>
                                                                             <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -437,7 +434,7 @@ function Products(props) {
                                                                                             </div>)
                                                                                     })()}</div>
                                                                                     :
-                                                                                    item.options.map((val, j) => {
+                                                                                    item?.options?.length > 0 && item.options.map((val, j) => {
                                                                                         return (
                                                                                             <li key={j} data-access={val.label} data-remove={item.attribute_code} className={parseInt(currentFilter) === parseInt(val.value) ? 'active' : ''} value={val.value} onClick={currentvalue} >{val.label}</li>)
                                                                                     })
@@ -497,7 +494,6 @@ function Products(props) {
                                                 <option value={0} key="0" >{intl.formatMessage({ id: "filterNewestFirst" })}</option>
                                                 <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
                                                 <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                                {/* <option value={3} key="3" >{intl.formatMessage({ id: "filterourpicks" })}</option> */}
                                             </select>
                                         </div>
                                     </div>
@@ -509,7 +505,7 @@ function Products(props) {
                                             url = parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus';
                                             return (
                                                 <div className="col-md-4" key={item.id}>
-                                                    {/* <Link to={'/product-details/' + item.sku}> */}
+
                                                     <div className="product py-4">
 
                                                         <span className="off bg-favorite">
@@ -531,9 +527,6 @@ function Products(props) {
                                                                     if (attributes.attribute_code === 'image') {
                                                                         imageD = attributes.value;
                                                                     }
-                                                                    if (attributes.attribute_code === 'short_description') {
-                                                                        description = attributes.value;
-                                                                    }
                                                                 })
 
                                                             }
@@ -544,24 +537,19 @@ function Products(props) {
                                                         <div className="about text-center">
                                                             <div className="product_name"><Link to={'/search/' + url}>{parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus'}</Link></div>
                                                             <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                            {/* <h5>{item.name}</h5>
-                                                            <div className="tagname" dangerouslySetInnerHTML={{ __html: description ? description : item.short_description && item.short_description.html ? item.short_description.html : '' }} /> */}
+
                                                             <div className="pricetag">{siteConfig.currency} {formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)} </div>
                                                         </div>
-                                                        {/* {item.type_id === 'simple' && (
-                                                        <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>
-                                                        </div>
-                                                    )}
-                                                    {item.type_id === 'configurable' && ( */}
+
                                                         <div className="cart-button mt-3 px-2">
                                                             {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                                 <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
                                                         </div>
-                                                        {/* )} */}
+
 
                                                     </div>
-                                                    {/* </Link> */}
+
                                                 </div>
                                             )
                                         })}
@@ -578,7 +566,7 @@ function Products(props) {
                                     </div>
                                     <div className="page_by">
                                         <div className="col-md-12 pagination">
-                                            {/* //   {console.log(pagination)} */}
+
                                             {pagination > 1 && (<nav aria-label="Page navigation example">
                                                 <ul className="pagination justify-content-center">
                                                     <li
@@ -607,58 +595,6 @@ function Products(props) {
             <section className="mb-5">
                 <Recomendations />
             </section>
-
-            {/* <section className="my_profile_sect check-als mb-5">
-                <div className="container">
-
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1 className="text-center mb-4"><IntlMessages id="products.exploreMore" /></h1>
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-sm-4 mb-1">
-                            <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary">New designers</button>
-                            </div>
-                        </div>
-                        <div className="col-sm-4 mb-1">
-                            <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary">New designers</button>
-                            </div>
-                        </div>
-                        <div className="col-sm-4 mb-1">
-                            <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary">New designers</button>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                </div>
-            </section> */}
-
-            {/* <section className="my-5">
-                <div className="container">
-                    <div className="row">
-                        <div className="versace_sec">
-                            <h4>CLÉ Versace</h4>
-                            <p>Founded in 1978 in Milan, Gianni Versace S.r.l. is one of the leading international fashion design houses
-                                and a symbol of Italian luxury world-wide. It designs, manufactures, distributes and retails fashion and
-                                lifestyle products including haute couture, prèt-à-porter, accessories, jewellery, watches, eyewear,
-                                fragrances, and home furnishings all bearing the distinctive Medusa logo. The Versace Group distributes
-                                its products through a world-wide D.O.S network which includes over 200 boutiques in the principal cities
-                                and over 1500 wholesalers worldwide. Donatella Versace has been Artistic Director of Versace since 1997
-                                and has steered the brand into the 21st century. Today, Versace represents its heritage through its strong
-                                and fearless designs, while addressing a new global audience which continues to strengthen Versace’s
-                                position in contemporary culture.</p>
-                        </div>
-                    </div>
-                </div>
-            </section> */}
-            {/* <Description catId={153} /> */}
 
         </main>
     )

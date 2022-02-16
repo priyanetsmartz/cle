@@ -8,7 +8,6 @@ function ContactBannerFooter(props) {
                 <div className="col-xs-12 col-md-12 col-lg-12">
                     <h3><IntlMessages id="mysupport.checkHelp" /></h3>
                     <p><IntlMessages id="mysupport.findTheAnswer" /></p>
-                    {/* on check out redirect user to help center page */}
                     <Link to="/help-center" type="submit" className="btn"><IntlMessages id="mysupport.cta" /></Link>
                 </div>
             </div>

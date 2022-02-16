@@ -18,10 +18,8 @@ import { sessionService } from 'redux-react-session';
 function MyPayoutDetails(props) {
 
     const intl = useIntl();
-    useEffect(() => {
-        getVendor()
-        getDetails()
-    }, [props.languages]);
+  
+
     const [vendorName, setVendorName] = useState('')
     const [isLoading, setIsLoading] = useState(true);
     const { payoutId }: any = useParams();
@@ -39,12 +37,15 @@ function MyPayoutDetails(props) {
     const [numberOfOrders, setNumberOfOrders] = useState(0)
     const [billType, setBillType] = useState('')
     const [showRawPDF, setShowRawPDF] = useState(false)
-    const [payoutDataInvoice, setPayoutDataInvoice] = useState([])
+
+    useEffect(() => {
+        getVendor()
+        getDetails()
+    }, [props.languages]);
 
     async function getDetails() {
         setIsLoading(true)
         let result: any = await getPayoutDetails(payoutId)
-        //console.log("reult3",result);
         if (result && result.data[0]) {
             setAlldata(result.data[0])
             setPayoutData(result.data[0].PayoutData[0])
@@ -66,9 +67,7 @@ function MyPayoutDetails(props) {
 
         let dataListing = [];
         if (dataObj.length > 0) {
-            //console.log("dataOj", dataObj)
             dataListing = dataObj.map(data => {
-                //   /  console.log("data", data)
                 let detailLoop: any = {};
                 detailLoop.orderNumber = data.order_increment_id;
                 detailLoop.link_to_orderdetails = data.link_to_orderdetails;
@@ -117,7 +116,6 @@ function MyPayoutDetails(props) {
             response['po_total'] = data.data[0].po_total
             response['selleraddress'] = data.data[0].selleraddress
         }
-        // console.log(response)
         setPayoutData(response)
         setShowRawPDF(true)
         printDocument();
@@ -128,14 +126,6 @@ function MyPayoutDetails(props) {
             .then((canvas: any) => {
                 var imgData = canvas.toDataURL("image/jpeg", 1);
                 var pdf = new jsPDF("p", "px", "a4");
-                var pageWidth = pdf.internal.pageSize.getWidth();
-                var pageHeight = pdf.internal.pageSize.getHeight();
-                var imageWidth = canvas.width;
-                var imageHeight = canvas.height;
-
-                // var ratio = imageWidth / imageHeight >= pageWidth / pageHeight ? pageWidth / imageWidth : pageHeight / imageHeight;
-                //pdf = new jsPDF(this.state.orientation, undefined, format);
-                //     console.log(imageWidth * ratio, imageHeight * ratio)
                 pdf.addImage(imgData, 'JPEG', 20, 20, 400, 600);
                 pdf.save("invoice.pdf");
 
@@ -143,29 +133,6 @@ function MyPayoutDetails(props) {
             });
         setShowRawPDF(false);
     }
-    // const printDocument = async () => {
-    //     const input = document.getElementById('pdfdiv');
-    //     await html2canvas(input).then((canvas) => {
-    
-    //         const componentWidth = input.offsetWidth
-    //         const componentHeight = input.offsetHeight
-
-    //         const orientation = componentWidth >= componentHeight ? 'l' : 'p'
-
-    //         const imgData = canvas.toDataURL('image/png')
-    //         const pdf = new jsPDF({
-    //             orientation,
-    //             unit: 'px'
-    //         })
-
-    //         pdf.internal.pageSize.width = componentWidth
-    //         pdf.internal.pageSize.height = componentHeight
-
-    //         pdf.addImage(imgData, 'PNG', 50, 50, componentWidth, componentHeight)
-    //         pdf.save('download.pdf')
-    //     });
-    //     setShowRawPDF(false);
-    // }
     return (
         <main>
             {showRawPDF && (
@@ -207,11 +174,6 @@ function MyPayoutDetails(props) {
                                         <td>-</td>
                                         <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payout_status : ""}</td>
                                     </tr>
-                                    {/* <tr>
-                                      <td>P.O.#</td>
-                                      <td>-</td>
-                                      <td>-</td>
-                                  </tr> */}
                                 </table>
                             </table>
                         </div>
@@ -230,50 +192,32 @@ function MyPayoutDetails(props) {
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Name</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    {/* <td style={{ "textAlign": "right" }}>-</td>
-                                  <th style={{ "textAlign": "left" }}>اسم</th>
-                                  <td style={{ "textAlign": "center" }}>-</td> */}
                                     <td style={{ "textAlign": "right" }}>{vendorName}</td>
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Address Line 1</th>
                                     <td style={{ "textAlign": "center" }}></td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>العنوان السطر 1</th>
-                                  <td style={{ "textAlign": "center" }}></td>
-                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Region</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>منطقة</th>
-                                  <td style={{ "textAlign": "center" }}>-</td>
-                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>City</th>
                                     <td style={{ "textAlign": "center" }}></td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>مدينة</th>
-                                  <td style={{ "textAlign": "center" }}></td>
-                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Country</th>
                                     <td style={{ "textAlign": "center" }}></td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>دولة</th>
-                                  <td style={{ "textAlign": "center" }}></td>
-                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Zip</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>أزيز</th>
-                                  <td style={{ "textAlign": "center" }}>-</td>
-                                  <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td> */}
                                 </tr>
 
                             </tbody>
@@ -300,7 +244,6 @@ function MyPayoutDetails(props) {
                                     <th style={{ "backgroundColor": "#ddd" }}>Order Amount</th>
                                 </tr>
                                 {payoutData && payoutData['Payout_orders'] && payoutData['Payout_orders'].length > 0 && payoutData['Payout_orders'].map((data, index) => {
-                                    // console.log(data)
                                     return (
                                         <tr key={index}>
                                             <td>{index + 1}</td>

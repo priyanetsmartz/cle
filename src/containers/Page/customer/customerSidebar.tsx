@@ -28,7 +28,6 @@ function Customer(props) {
     const [activeTab, setActiveTab] = useState('');
 
     useEffect(() => {
-      //  console.log(props.customerName)
         let namee = props.customerName ? props.customerName : usrername;
         setName(namee);
     }, [props.customerName])
@@ -80,11 +79,8 @@ function Customer(props) {
                                         <select className="form-select" aria-label="Default select example" onChange={changeMobTab}>
                                             <option value="dashboard">{intl.formatMessage({ id: 'register.email' })}</option>
                                             <option value="orders-and-returns">{intl.formatMessage({ id: 'customer.ordersAndReturns' })}</option>
-                                            {/* <option value="mytrades">{intl.formatMessage({ id: 'customer.myTrades' })}</option> */}
-                                            {/* <option value="rewards"><IntlMessages id="customer.myReward" /></option> */}
                                             <option value="wishlist">{intl.formatMessage({ id: 'customer.myWishlist' })}</option>
                                             <option value="profile">{intl.formatMessage({ id: 'customer.myProfile' })}</option>
-                                            {/* <option value="notifications"><IntlMessages id="customer.myNotifications" /></option> */}
                                             <option value="support">{intl.formatMessage({ id: 'customer.mySupport' })}</option>
                                         </select>
                                     </div>
@@ -104,15 +100,6 @@ function Customer(props) {
                                                     <span className="pl-2"><IntlMessages id="customer.ordersAndReturns" /></span>
                                                 </Link>
                                             </li>
-                                            {/* <li className={activeTab === 'mytrades' ? 'active' : ''}><Link to="#" onClick={() => changeTab('mytrades')}>
-                                            <img src={tradeIcon} alt="" className="img-fluid" /> <span className="pl-2">
-                                                <IntlMessages id="customer.myTrades" /></span></Link></li> */}
-                                            {/* <li className={activeTab === 'rewards' ? 'active' : ''}>
-                                            <Link to="#" onClick={() => changeTab('rewards')} className={isPriveUser ? 'prive-txt' : ''}>
-                                                <img src={rewardIcon} alt="" className="img-fluid" /> 
-                                                <span className="pl-2"> <IntlMessages id="customer.myReward" /></span>
-                                            </Link>
-                                        </li> */}
                                             <li className={activeTab === 'wishlist' ? 'active' : ''}>
                                                 <Link to="#" onClick={() => changeTab('wishlist')} className={isPriveUser ? 'prive-txt' : ''}>
                                                     <i className="fas fa-heart"></i>
@@ -125,12 +112,6 @@ function Customer(props) {
                                                     <span className="pl-2"> <IntlMessages id="customer.myProfile" /></span>
                                                 </Link>
                                             </li>
-                                            {/* <li className={activeTab === 'notifications' ? 'active' : ''}>
-                                            <Link to="#" onClick={() => changeTab('notifications')} className={isPriveUser ? 'prive-txt' : ''}>
-                                                <img src={notificationIcon} alt="" className="img-fluid" /> 
-                                                <span className="pl-2"><IntlMessages id="customer.myNotifications" /></span>
-                                            </Link>
-                                        </li> */}
                                             <li className={activeTab === 'support' ? 'active' : ''}>
                                                 <Link to="#" onClick={() => changeTab('support')} className={isPriveUser ? 'prive-txt' : ''}>
                                                     <i className="fas fa-phone-alt"></i>
@@ -144,7 +125,6 @@ function Customer(props) {
                         </div>
                         {activeTab === 'dashboard' ? <MyProfile /> :
                             activeTab === 'orders-and-returns' ? <OrdersAndReturns /> :
-                                // activeTab === 'mytrades' ? <MyTrades /> :
                                 activeTab === 'profile' ? <MyProfile /> :
                                     activeTab === 'wishlist' ? <MyWishList /> :
                                         activeTab === 'rewards' ? <MyRewards /> :
@@ -157,7 +137,6 @@ function Customer(props) {
     )
 }
 const mapStateToProps = (state) => {
-    //  console.log(state)
     return {
         token: state?.session?.user,
         customerName: state?.Auth?.customer,

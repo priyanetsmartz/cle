@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { getCustomerReturn } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
-import { getCookie } from '../../../helpers/session';
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings/index'
 import { formatprice, getAccordingDate } from '../../../components/utility/allutils';
@@ -15,7 +14,6 @@ function MyReturns(props) {
     const [returnPagination, setReturnPagination] = useState(1);
     const [returs, setReturn] = useState([]);
     const [page, setCurrent] = useState(1);
-    const language = getCookie('currentLanguage');
     const [sortOrder, setSortOrder] = useState('');
     const [loaderReturns, setLoaderReturns] = useState(false);
 

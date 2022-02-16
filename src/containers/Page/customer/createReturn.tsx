@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { checkIfReturnExists, createReturnRequest, getRegionsByCountryID, getReturnReasonList, searchOrders, updateOrderAddress } from '../../../redux/pages/customers';
 import moment from 'moment';
@@ -14,7 +14,6 @@ import notification from '../../../components/notification';
 
 function CreateReturn(props) {
     const intl = useIntl();
-    const selectRef = useRef();
     const { returnId }: any = useParams();
     const [custId, setCustid] = useState(props.token.cust_id);
     const [maxItems, setMaxitems] = useState(10);
@@ -341,7 +340,6 @@ function CreateReturn(props) {
                     {order && order.items && order.items.slice(0, maxItems).map((item, i) => {
                         return (
                             <div key={i}>
-                                {/* {console.log(item)} */}
                                 <li onClick={() => handleProductSelect(item.item_id)}>
                                     <div className="row">
                                         <div className="col-md-3">
@@ -360,8 +358,6 @@ function CreateReturn(props) {
                                                 <div className="clearfix"></div>
                                             </div>
                                             <div className="pro-name-tag">
-                                                {/* <p>One Size</p> */}
-                                                {/* will add this in alpha */}
                                                 <p><strong><IntlMessages id="order.productNo" /></strong> {item.sku}</p>
                                                 <div className="clearfix"></div>
 

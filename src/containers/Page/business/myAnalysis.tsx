@@ -53,13 +53,11 @@ function MyAnalysis(props) {
     useEffect(() => {
         getVendorProductListing()
         getDataTiles(oldDate, currentDate);
-        // handleQuater(currentQuater)
     }, [])
 
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
         if (results && results.data && results.data.length > 0) {
-            //    console.log(results.data[0])
             let tiles_information = results?.data[0]?.tiles_information
             console.log(tiles_information)
             setPdata(tiles_information?.order_information)
@@ -81,9 +79,6 @@ function MyAnalysis(props) {
             setShowMonth(false)
             setShowQuaters(true)
             handleQuater(currentQuater);
-            // let quater = moment().quarter();
-            // dates['start'] = moment().quarter(quater).startOf('quarter').format('DD/MM/YYYY');
-            // dates['end'] = moment().quarter(quater).endOf('quarter').format('DD/MM/YYYY');
         } else {
             setShowMonth(false)
             setShowQuaters(false)
@@ -129,8 +124,7 @@ function MyAnalysis(props) {
             },
             "saveOptions": true
         }
-        //console.log(payload)
-        let result: any = await removeProduct(payload)
+        await removeProduct(payload)
         getVendorProductListing();
         closePop();
     }
@@ -143,13 +137,11 @@ function MyAnalysis(props) {
         let month = moment.monthsShort().filter((name, i) => {
             return i === monthKey
         })
-        //console.log(monthKey)
         if (monthKey === -1) return false;
         setCurrentMonthKey(monthKey);
         setCurrentMonth(month[0])
         let input = monthKey + 1;
         const output = moment(input, "MM");
-        //  console.log(output)
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
 
@@ -172,22 +164,7 @@ function MyAnalysis(props) {
         getDataTiles(startOfMonth, endOfMonth);
     }
 
-
-    const RADIAN = Math.PI / 180;
-
-    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-        const x = cx + radius * Math.cos(-midAngle * RADIAN);
-        const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-        return (
-            <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-                {`${(percent * 100).toFixed(0)}%`}
-            </text>
-        );
-    };
     function handleQuater(quater) {
-
         let start = moment().quarter(quater).startOf('quarter').format('MMM');
         let end = moment().quarter(quater).endOf('quarter').format('MMM');
         let part = start + '-' + end;
@@ -195,7 +172,6 @@ function MyAnalysis(props) {
         let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
         let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
         getDataTiles(startOfMonth, endOfMonth);
-
         setQuaterSlider(part);
     }
 
@@ -236,7 +212,6 @@ function MyAnalysis(props) {
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span><IntlMessages id="id" />:</span>{row.product.id}</p>
                     <div className='data_value'><ul><li>{<Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
-                    {/* <div className='data_value'><ul><li>{row.product.status === "2" ? <Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link> : <Link to={'/product-details/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div> */}
                 </div>
             ),
         },
@@ -255,8 +230,6 @@ function MyAnalysis(props) {
                     {row.status === "10" ? <span className="rejected">{intl.formatMessage({ id: "product.rejected" })}</span> : ""}
                     {row.status === "2" ? <span className="disabled">{intl.formatMessage({ id: "product.disabled" })}</span> : ""}
                 </div>
-
-
             ),
         },
         {
@@ -292,7 +265,6 @@ function MyAnalysis(props) {
                                 <ul className='monthsname pagination justify-content-center align-items-center'>
                                     <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
                                     {
-
                                         <p>{quaterSlider}</p>
                                     }
 
@@ -309,7 +281,6 @@ function MyAnalysis(props) {
                                 <h5><IntlMessages id="ordertotal" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
-                                    {/* <h4>9%</h4> */}
                                 </div>
                             </div>
                         </div>
@@ -318,7 +289,6 @@ function MyAnalysis(props) {
                                 <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
-                                    {/* <h4>10%</h4> */}
                                 </div>
                             </div>
                         </div>
@@ -327,7 +297,6 @@ function MyAnalysis(props) {
                                 <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
-                                    {/* <h4>5%</h4> */}
                                 </div>
                             </div>
                         </div>
@@ -341,18 +310,17 @@ function MyAnalysis(props) {
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'vendor.myAnalysis' })}</h2>
                             <p>{intl.formatMessage({ id: 'orderInformation' })}</p>
-                            {/* {console.log(pdata)} */}
                             {pdata?.length > 0 && (
                                 <ResponsiveContainer width="100%" aspect={3}>
                                     <LineChart data={pdata} margin={{ right: 300 }}>
                                         <CartesianGrid />
-                                        <XAxis dataKey="created_at" ></XAxis>
-                                        <YAxis dataKey="total_cost" domain={[0, 20000]} ></YAxis>
+                                        <XAxis dataKey="Created At" ></XAxis>
+                                        <YAxis dataKey="Total Cost" domain={[0, 20000]} ></YAxis>
                                         <Legend />
                                         <Tooltip />
-                                        <Line dataKey="total_cost"
+                                        <Line dataKey="Total Cost"
                                             stroke="black" activeDot={{ r: 8 }} />
-                                        <Line dataKey="item_qty"
+                                        <Line dataKey="Quantity"
                                             stroke="red" activeDot={{ r: 8 }} />
                                     </LineChart>
                                 </ResponsiveContainer>
@@ -404,7 +372,7 @@ function MyAnalysis(props) {
                                                         textAnchor={x > cx ? "start" : "end"}
                                                         dominantBaseline="central"
                                                     >
-                                                        {pieChart[index].po_created_at} ({total_payout_amount})
+                                                        {pieChart[index].po_created_at} ({siteConfig.currency}{total_payout_amount})
                                                     </text>
                                                 );
                                             }}
@@ -436,11 +404,11 @@ function MyAnalysis(props) {
                                     }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="totalProductCount" />
+                                    <XAxis dataKey="Total Product Count" />
                                     <YAxis />
                                     <Tooltip />
                                     <Legend />
-                                    <Bar barSize={30} dataKey="totalProductPrice" fill="#8884d8" />
+                                    <Bar barSize={30} dataKey="Total Product Price" fill="#8884d8" />
 
                                 </BarChart>
                             )}
@@ -461,7 +429,6 @@ function MyAnalysis(props) {
                                     columns={columns}
                                     data={listingData}
                                     pagination={true}
-                                    // progressPending={pending}
                                     paginationComponentOptions={paginationComponentOptions}
                                 />
                             </div>

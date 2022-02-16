@@ -6,18 +6,10 @@ import Dashboard from './dashboard';
 import BusinessProfile from './businessProfile';
 import MyNotifications from './myNotifications';
 import MySupport from './mySupport';
-import dashboardIcon from '../../../image/dashboard_icon.svg';
-import ordersIcon from '../../../image/myorder_icon.svg';
-import rewardIcon from '../../../image/my_reward.svg';
-import wishlistIcon from '../../../image/mywish_list.svg';
-import profileIcon from '../../../image/my_profile.svg';
-import notificationIcon from '../../../image/my_notification.svg';
-import supportIcon from '../../../image/my_support.svg';
 import { sessionService } from 'redux-react-session';
 import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
-// import MyTrades from './mytrades';
-// import tradeIcon from '../../../image/my_trade.svg';
+
 
 import MySalesOrders from './mySalesOrders';
 import MyProductListing from './myProductListing';
@@ -76,7 +68,6 @@ function BusinessSidebar(props) {
                                          <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
                                         <option value="analysis">{intl.formatMessage({ id: 'vendor.myAnalysis' })}</option>
                                         <option value="profile">{intl.formatMessage({ id: 'vendor.businessProfile' })}</option>
-                                        {/* <option value="notifications">{intl.formatMessage({ id: 'vendor.notification' })}</option> */}
                                         <option value="support">{intl.formatMessage({ id: 'vendor.mySupport' })}</option>
                                     </select>
                                 </div>
@@ -114,9 +105,7 @@ function BusinessSidebar(props) {
                                                 <i className="fa fa-credit-card" aria-hidden="true"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.payouts" /></span>
                                             </Link>
-                                        </li>
-
-                                          
+                                        </li>                                          
                                         <li className={activeTab === 'analysis' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('analysis')}>
                                                 <i className="fas fa-chart-line"></i>
@@ -128,13 +117,7 @@ function BusinessSidebar(props) {
                                                 <i className="fas fa-user"></i>
                                                 <span className="pl-2"><IntlMessages id="vendor.businessProfile" /></span>
                                             </Link>
-                                        </li>
-                                        {/* <li className={activeTab === 'notifications' ? 'active' : ''}>
-                                            <Link to="#" onClick={() => changeTab('notifications')}>
-                                                <img src={notificationIcon} alt="" className="img-fluid" />
-                                                <span className="pl-2"><IntlMessages id="vendor.notification" /></span>
-                                            </Link>
-                                        </li> */}
+                                        </li>                                      
                                         <li className={activeTab === 'support' ? 'active' : ''}>
                                             <Link to="#" onClick={() => changeTab('support')}>
                                                 <i className="fas fa-phone-alt"></i>
@@ -161,7 +144,6 @@ function BusinessSidebar(props) {
     )
 }
 const mapStateToProps = (state) => {
-    // console.log(state)
     return {}
 }
 

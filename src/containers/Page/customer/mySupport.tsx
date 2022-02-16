@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-
+import { useState, useEffect } from 'react';
 import { connect } from "react-redux";
-
 import { getCookie } from "../../../helpers/session";
-import {  Pages } from '../../../redux/pages/allPages';
+import { Pages } from '../../../redux/pages/allPages';
 import ContactBannerFooter from './contact-banner';
 
 
@@ -14,25 +12,22 @@ function MySupport(props) {
     const language = getCookie('currentLanguage');
 
     useEffect(() => {
+
         let lang = props.languages ? props.languages : language;
         async function fetchMyAPI() {
             let result: any = await Pages('contact-us', lang);
-            // let test: any = await Pages1(pageIdentifier);
-            // console.log(test)
             var jsonData = result.data.items[0];
             SetPagesData(jsonData)
 
         }
         fetchMyAPI()
         return () => {
-            SetPagesData({ title: '', content: '' }) 
+            SetPagesData({ title: '', content: '' })
             setIsPriveUser(false)
         }
-    }, [ props.languages])
-
-
-
-
+    }, [props.languages])
+    
+    
     return (
         <>
             <div className={isPriveUser ? 'prive-txt col-sm-9' : 'col-sm-9'}>

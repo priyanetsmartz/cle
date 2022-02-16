@@ -16,6 +16,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.2",
     "bootstrap-daterangepicker": "^3.1.0",
+    "browserify-fs": "^1.0.0",
     "connected-react-router": "^6.9.1",
     "crypto-js": "^4.1.1",
     "graphql": "^15.6.1",

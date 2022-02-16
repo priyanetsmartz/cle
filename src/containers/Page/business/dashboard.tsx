@@ -22,7 +22,6 @@ function Dashboard(props) {
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
     let quater = moment().quarter();
-    // const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     let lang = props.languages ? props.languages : language;
     const [items, setItems] = useState([]);
     const [pagination, setPagination] = useState(1);
@@ -35,8 +34,6 @@ function Dashboard(props) {
     const [myOrders, setMyOrders] = useState([]);
     const [myReturn, setMyReturn] = useState([]);
     const [myPayouts, setMyPayouts] = useState([]);
-    const [showRawPDF, setShowRawPDF] = useState(false)
-    const [payoutData, setPayoutData] = useState([])
     const [showMonth, setShowMonth] = useState(true);
     const [sowQuaters, setShowQuaters] = useState(false);
     const [isLoadingOrders, setIsLoadingOrders] = useState(true)
@@ -45,8 +42,7 @@ function Dashboard(props) {
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     const [quaterSlider, setQuaterSlider] = useState('')
-    const [currentQuater, setCurrentQuater] = useState(quater)
-    // const [tilesDates, SetTilesDates] = useState({startDate:"", endDate : ""})
+    const [currentQuater, setCurrentQuater] = useState(quater);
     useEffect(() => {
         let pop = getCookie('popUp');
         if (localToken.showpop === 1 || pop === localToken.vendor_id)
@@ -74,7 +70,6 @@ function Dashboard(props) {
         }
     }, [])
     useEffect(() => {
-
         getDataOfCategory(lang, 9, page, 'published_at', 'desc')
     }, [page])
 
@@ -94,12 +89,12 @@ function Dashboard(props) {
         setIsLoadingOrders(true)
         let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, "", 0, 0, "", "", "", "");
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
-        //  console.log(dataObj)
+
         let dataLListing = [];
 
         if (dataObj && dataObj.OrderArray && dataObj.OrderArray.length > 0) {
             let detail = dataObj.OrderArray;
-            // console.log(detail)
+
             dataLListing = detail.slice(0, 5).map((data, index) => {
                 let orderLoop: any = {};
                 let price = data.total ? formatprice(data.total) : 0;
@@ -110,7 +105,6 @@ function Dashboard(props) {
                 return orderLoop;
             });
         }
-        // console.log(dataLListing)
         setMyOrders(dataLListing)
         setIsLoadingOrders(false)
 
@@ -135,8 +129,6 @@ function Dashboard(props) {
             selector: row => row.status,
             sortable: true,
             cell: row => (
-                // <span className='green'>{row.status}</span>
-
                 <div>
                     {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({ id: row.status })}</span> : ""}
                     {row.status === "Canceled" ? <span className="canceled">{intl.formatMessage({ id: row.status })}</span> : ""}
@@ -173,7 +165,6 @@ function Dashboard(props) {
             selector: row => row.status,
             sortable: true,
             cell: row => (
-                // <span className='green'>{capitalize(row.status)}</span>
                 <div>
                     {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
                     {row.status === "pending" ? <span className="pending">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
@@ -225,21 +216,7 @@ function Dashboard(props) {
 
         },
     ];
-    const sortHandler = async (payoutId) => {
-        let data: any = await getInvoice(payoutId);
-
-        let response = []
-        if (data && data.data.length > 0 && data.data[0]) {
-            response['Payout_info'] = data.data[0].Payout_info;
-            response['Payout_orders'] = data.data[0].Payout_orders
-            response['po_total'] = data.data[0].po_total
-            response['selleraddress'] = data.data[0].selleraddress
-        }
-        // console.log(response)
-        setPayoutData(response)
-        setShowRawPDF(true)
-        // printDocument();
-    };
+    
     // vendor return 
 
     async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
@@ -289,9 +266,7 @@ function Dashboard(props) {
     }
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, 2);
-        // console.log(Math.ceil(result.data.length / 2))
-        let paginationSize = result && result.data && result.data.length > 0 ? result.data[0].total_page : 0;
-        //   console.log(paginationSize)
+        let paginationSize = result && result.data && result.data.length > 0 ? result.data[0].total_page : 0;     
         setPagination(paginationSize);
         setItems(result.data);
 
@@ -303,7 +278,6 @@ function Dashboard(props) {
     }
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
-
         if (results && results.data && results.data.length > 0) {
             setDataTilesData(results.data[0])
         }
@@ -318,13 +292,10 @@ function Dashboard(props) {
             dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
             getDataTiles(dates['start'], dates['end'])
-        } else if (flag === 1) {        
+        } else if (flag === 1) {
             setShowMonth(false)
             setShowQuaters(true)
             handleQuater(currentQuater);
-            // let quater = moment().quarter();
-            // dates['start'] = moment().quarter(quater).startOf('quarter').format('DD/MM/YYYY');
-            // dates['end'] = moment().quarter(quater).endOf('quarter').format('DD/MM/YYYY');
         } else {
             setShowMonth(false)
             setShowQuaters(false)
@@ -343,13 +314,11 @@ function Dashboard(props) {
         let month = moment.monthsShort().filter((name, i) => {
             return i === monthKey
         })
-        // console.log(monthKey)
         if (monthKey === -1) return false;
         setCurrentMonthKey(monthKey);
         setCurrentMonth(month[0])
         let input = monthKey + 1;
         const output = moment(input, "MM");
-        //  console.log(output)
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
 
@@ -434,7 +403,6 @@ function Dashboard(props) {
 
                         <div className="page_by">
                             <div className="col-md-12 pagination justify-content-center">
-                                {/* //   {console.log(pagination)} */}
                                 {pagination > 1 && (
                                     <nav aria-label="Page navigation example">
                                         <ul className="pagination justify-content-center align-items-center">
@@ -508,7 +476,6 @@ function Dashboard(props) {
                                 <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
-                                    {/* <h4>10%</h4> */}
                                 </div>
                             </div>
                         </div>
@@ -517,7 +484,6 @@ function Dashboard(props) {
                                 <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
-                                    {/* <h4>5%</h4> */}
                                 </div>
                             </div>
                         </div>

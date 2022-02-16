@@ -62,19 +62,15 @@ function VendorLogin(props) {
   const loginHadler = async () => {
     if (handleValidation()) {
 
-      const { login } = props;
       const userInfo = {
         "type": "user",
         "username": loginForm.email,
         "password": loginForm.password,
         "rememberme": rememberMe
       }
-      // login({ userInfo });
       const result: any = await vendorLogin(userInfo);
-      //  console.log(result.data.length, result.data[0])
       if (result && result.data && result.data && result.data.length > 0 && result.data[0].success) {
         setIsShow(true);
-        // console.log(result.data)
         const vendorObj = {
           vendor_id: result.data[0].vendorData.vendor_id,
           vendor_name: result.data[0].vendorData.vendor_name,
@@ -92,7 +88,7 @@ function VendorLogin(props) {
 
         if (rememberMe === true) {
           let ciphertext = CryptoJS.AES.encrypt(userInfo.password, apiConfig.encryptionkey).toString();
-          //  console.log(ciphertext);
+
 
           //set username and password and remember me into cookie
           setCookie("vendorusername", userInfo.username);
@@ -109,12 +105,9 @@ function VendorLogin(props) {
 
         localStorage.removeItem('cartQuoteId');
         localStorage.removeItem('cartQuoteToken');
-        // localStorage.setItem('cle_vendor', JSON.stringify(vendorObj));
-        // history.push(`/vendor/business-profile`);
-        // window.location.href = '/vendor/business-profile';
+
         setTimeout(() => {
           setIsShow(false);
-         // history.push(`/vendor/dashboard`);
           window.location.href = '/vendor/dashboard';
         }, 3000);
 
@@ -149,7 +142,7 @@ function VendorLogin(props) {
       error["email"] = "Email is required";
     }
 
-    //email
+    //password
     if (!loginForm["password"]) {
       formIsValid = false;
       error["password"] = 'Password is required';
@@ -169,7 +162,6 @@ function VendorLogin(props) {
 
   const handleForgetPopup = (e) => {
     e.preventDefault();
-    // props.showSignin(true);
     setForgotPopup(true);
   }
 
@@ -247,14 +239,6 @@ function VendorLogin(props) {
                     <div className="clearfix"></div>
                   </div>
                 </div>
-                {/* <div className="or-bg-new">
-                <div className="or-text-new">Or</div>
-              </div>
-              <div className="social-login">
-                <GoogleLoginButton isVendor={true} />
-                <FacebookLoginButton isVendor={true} />
-
-              </div> */}
               </div>
             </div>
             <div className="col-md-3"></div>

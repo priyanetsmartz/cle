@@ -36,10 +36,8 @@ function BusinessForgottenPassword(props) {
         password: ""
       }
 
-      let result: any = await vendorRestpassword(payload);
-    //  console.log(result)
+      let result: any = await vendorRestpassword(payload);  
       if (result.data) {
-        // notification("success", "", intl.formatMessage({ id: "forgotpassmail" }));
         setShowSuccess(true)
         setState(prevState => ({
           ...prevState,
@@ -132,9 +130,6 @@ function BusinessForgottenPassword(props) {
             <div className="modal-body">
               <p>Check your email for instructions on how to reset your password. We wish you a nice day!</p>
             </div>
-            {/* <div className="modal-footer justify-content-center">
-              <button type="button" className="btn btn-primary" onClick={(e) => { handlesigninClick(e); }} data-dismiss="modal"><IntlMessages id="menu_Sign_in" /></button>
-            </div> */}
           </div>
         )}
       </div>

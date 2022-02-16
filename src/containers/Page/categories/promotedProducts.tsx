@@ -5,11 +5,8 @@ import { Link, useLocation } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
 import { formatprice } from '../../../components/utility/allutils';
 import {
-    addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist, addToCartApi,
-    getProductFilter, getGuestCart, addToCartApiGuest, createGuestToken
+    addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
 } from '../../../redux/cart/productApi';
-import { getCategoryDetails } from '../../../redux/pages/customers';
-import { Pages1 } from '../../../redux/pages/allPages';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
@@ -30,8 +27,6 @@ function PromotedProducts(props) {
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
 
     const language = getCookie('currentLanguage');
-    const baseUrl = process.env.REACT_APP_API_URL;
-    //check with magento team
     const [catId, setCatId] = useState(153)// for promoted products
     const [category, setCategory] = useState({
         name: '',
@@ -49,8 +44,6 @@ function PromotedProducts(props) {
         setCategory(props.cateData);
 
         return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
         }
     }, [props.languages, location, props.cateData])
 
@@ -79,11 +72,7 @@ function PromotedProducts(props) {
 
         }
         setOpacity(1);
-        //console.log(productResult)
         props.productList(productResult);
-        // get product page filter
-        //let result1: any = await getProductFilter(9);
-        // console.log(result1)
 
     }
 
@@ -94,10 +83,7 @@ function PromotedProducts(props) {
 
     }
     async function handleDelWhishlist(id: number) {
-        //need to get whishlist id first
-        // console.log(id);
         let del: any = await removeWhishlist(id);
-        //  console.log(del);
         notification("success", "", del.data[0].message);
         getProducts()
     }
@@ -117,8 +103,6 @@ function PromotedProducts(props) {
                 <div className="col-sm-12">
                     <div className="magazine_article ">
                         <h1 className="mb-4">{category.name}</h1>
-                        {/* <p className="new-in-brand-desc">They love to study fashion trends, sketch designs, select materials,
-                            and have a part in all the production aspects of their designs.</p> */}
                         <div dangerouslySetInnerHTML={{ __html: category.custom.desc }} />
                         <div className="row">
 
@@ -170,12 +154,10 @@ function PromotedProducts(props) {
                                                         <div className="tagname" dangerouslySetInnerHTML={{ __html: description }} />...
                                                         <div className="pricetag">{siteConfig.currency} {formatprice(item.price)}</div>
                                                     </div>
-                                                    {/* {token && ( */}
                                                     <div className="cart-button mt-3 px-2">
                                                         <Link to={'/product-details/' + item.sku} className="btn btn-primary text-uppercase">View Product</Link>
                                                         <div className="add"> <span className="product_fav"><i className="fa fa-heart-o"></i></span> <span className="product_fav"><i className="fa fa-opencart"></i></span> </div>
                                                     </div>
-                                                    {/* )} */}
                                                 </div>
                                             </div>
                                         )
