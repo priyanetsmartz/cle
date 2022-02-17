@@ -9471,10 +9471,17 @@ ul.vendor-menu li a {
     font-size: 13px;
     font-family: 'Monument Extended';
 }
+
 ul.vendor-menu li {
     list-style: none;
     padding: 3px 10px;
     display: inline-block;
+}
+
+ul.vendor-menu {
+    text-align: center;
+    display: block;
+    margin: 0 auto;
 }
 
 /* All media screen below */
