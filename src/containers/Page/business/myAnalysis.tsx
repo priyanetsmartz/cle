@@ -348,7 +348,7 @@ function MyAnalysis(props) {
                                 ><i className="fas fa-info-circle" ></i>
                                 </OverlayTrigger></h5>
                                 <div className="stats">
-                                    <h3>jk{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
                                 </div>
                             </div>
                         </div>
@@ -370,7 +370,15 @@ function MyAnalysis(props) {
                                     <YAxis dataKey="Total Cost" domain={[0, 20000]} />
                                     <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
                                     <Legend />
-                                    <Tool />
+                                    <Tool
+            formatter={function(value, name) {
+                if(name == 'Total Cost')
+                return `${siteConfig.currency+value}`
+                else
+                return `${value}`;
+              }}
+              labelFormatter={function(value) {
+                return `Date: ${value}`;}}/>
                                     <Line type="monotone" dataKey="Total Cost" stroke="#8884d8" />
                                     <Line type="monotone" dataKey="Quantity" stroke="#82ca9d" />
                                 </LineChart>
@@ -381,9 +389,14 @@ function MyAnalysis(props) {
                                         <YAxis dataKey="Total Cost" domain={[0, 20000]} ></YAxis>
                                         <Legend />
                                         <Tool
-                                        wrapperStyle={{ width: 100 }}
-                                        labelStyle={{ color: "green" }}
-                                        itemStyle={{ color: "cyan" }}/>
+                                        formatter={function(value, name) {
+                                            if(name == 'Total Cost')
+                                            return `${siteConfig.currency+value}`
+                                            else
+                                            return `${value}`;
+                                          }}
+                                          labelFormatter={function(value) {
+                                            return `Date: ${value}`;}}/>
                                         <Line dataKey="Total Cost"
                                             stroke="black" activeDot={{ r: 8 }} />
                                         <Line dataKey="Quantity"
@@ -478,9 +491,14 @@ function MyAnalysis(props) {
                                     <XAxis dataKey="Total Product Count" />
                                     <YAxis />
                                     
-                                    <Tool wrapperStyle={{ width: "100px" }}
-            labelStyle={{ color: "green" }}
-            itemStyle={{ color: "cyan" }}/>
+                                    <Tool formatter={function(value, name) {
+                if(name == 'Total Product Price')
+                return `${siteConfig.currency+value}`
+                else
+                return `${value}`;
+              }}
+              labelFormatter={function(value) {
+                return `Date: ${value}`;}}/>
                                     <Legend />
                                     <Bar barSize={30} dataKey="Total Product Price" fill="#8884d8" />
 
