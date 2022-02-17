@@ -5295,10 +5295,6 @@ left: auto; */
 }
 
 
-
-
-.checkout-main .container {}
-
 .checkout-main .container>a {
     font-family: 'Monument Extended';
     font-weight: 500;
@@ -5440,6 +5436,15 @@ left: auto; */
 
 .back-block:hover .back-icon {
     display: block;
+}
+
+.checkouttc {
+    font: normal normal normal 12px/18px Lato;
+    color: #707070;
+}
+
+.checkout-main + .help-center {
+    margin-top: 60px;
 }
 
 .checkout-main .accordion-button:not(.collapsed)::after {
@@ -6632,7 +6637,8 @@ h4.arrow-change:after {
 
 .social-login a {
     width: 100%;
-    display: block;
+    display: flex;
+	justify-content: space-evenly;
     border: 1px solid;
     padding: 10px;
     text-align: center;
@@ -9872,6 +9878,7 @@ ul.vendor-menu {
 
     .myaccount_details {
         left: 0;
+		width: 200px;
     }
 
     .top-menuselect {
