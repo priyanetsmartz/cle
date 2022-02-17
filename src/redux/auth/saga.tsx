@@ -116,23 +116,19 @@ export function* loginError() {
 export function* registerRequest() {
   yield takeEvery("REGISTER_REQUEST", function* (payload: any) {
     try {
-      //   console.log(payload.payload.userInfo);
       //user details
       let firstname = payload.payload.userInfo.first_name;
       let lastname = payload.payload.userInfo.last_name;
       let type = payload.payload.userInfo.type;
       let email = payload.payload.userInfo.email;
       let password = payload.payload.userInfo.password;
-      // let storeId = payload.payload.userInfo.storeId;
       let storeId = payload.payload.userInfo.storeId;
-      // console.log(type);
-      // var rememberMe = payload.payload.userInfo.rememberMe;
+
       //API call to login request
       const response = yield call(loginApi.register, firstname, lastname, email, password, type, storeId);
       console.log(response?.data?.id)
       if (response?.data?.id !== "" && response?.data?.id !== undefined ) {
         const token = yield call(loginApi.getAuthRegister, email);
-        //  console.log(token)
         if (token.data[0].new_token) {
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });
           yield put({

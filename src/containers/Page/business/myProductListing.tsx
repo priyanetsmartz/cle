@@ -18,7 +18,7 @@ function MyProductListing(props) {
     const intl = useIntl();
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
-    let venID = localToken && localToken.vendor_id ? localToken.vendor_id : 0;
+    let venID = localToken && localToken?.vendor_id ? localToken?.vendor_id : 0;
     const [pending, setPending] = useState(true)
     const [listingData, setListingData] = useState([])
     const [range, setRange] = useState({ low: 0, high: 20000 })
@@ -68,7 +68,6 @@ function MyProductListing(props) {
     }
 
     const datePickerCallback = async (start, end, label) => {
-        // console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({
@@ -122,18 +121,12 @@ function MyProductListing(props) {
 
     async function deleteProduct() {
         let payload = {
-            "product": {
-                "sku": deleteId,
-                "status": 2,
-                "custom_attributes": [{
-                    "attribute_code": "udropship_vendor",
-                    "value": vendorId
-                }]
-            },
-            "saveOptions": true
+            "sku": deleteId,
+            "status": 2,
+            "vendorId": vendorId,
+            "storeId": props.languages === 'english' ? '3' : '2'
         }
-        //console.log(payload)
-        let result: any = await removeProduct(payload)
+        await removeProduct(payload)
         getVendorProductListing();
         closePop();
     }
@@ -154,7 +147,7 @@ function MyProductListing(props) {
                     <p className='prodbrand'>{row.product.brand}</p>
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span><IntlMessages id="id" />:</span>{row.product.id}</p>
-                    <div className='data_value'><ul><li>{ <Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
+                    <div className='data_value'><ul><li>{<Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blank" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
                 </div>
             ),
         },

@@ -9,12 +9,11 @@ import moment from 'moment';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getInvoice, getPayoutOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
-import { capitalize, formatprice } from '../../../components/utility/allutils';
+import { capitalize, checkVendorLogin, formatprice } from '../../../components/utility/allutils';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Link } from "react-router-dom";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { sessionService } from 'redux-react-session';
 
 
 function MyPayouts(props) {
@@ -43,7 +42,7 @@ function MyPayouts(props) {
     }, [])
 
     async function getVendor() {
-        let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+       let vendor: any = await checkVendorLogin();
         setVendorName(vendor.vendor_name);
     }
     const getOrdersByStatus = (e) => {

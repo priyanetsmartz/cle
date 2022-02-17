@@ -24,7 +24,7 @@ const companylogo = `${baseUrl}pub/media/`;
 function BusinessProfile(props) {
     const intl = useIntl();
     const [forgotPopup, setForgotPopup] = useState(false);
-    const [vendorId, setVendorId] = useState(props.token.vendor_id)
+    const [vendorId, setVendorId] = useState(props?.token?.vendor_id)
     const [saveCustDetailsLoader, setSaveCustDetailsLoader] = useState(false);
     const [saveBusinessDetailsLoader, setSaveBusinessDetailsLoader] = useState(false);
 
@@ -206,7 +206,7 @@ function BusinessProfile(props) {
                 vendorForm.vendorDateofBirth = `${dob.year}-${dob.month}-${dob.day}`;
             }
             let payload = {
-                "vendorId": props.token.vendor_id,
+                "vendorId": props?.token?.vendor_id,
                 "location": vendorForm.location,
                 "vendorName": vendorForm.vendorName,
                 "telephone": vendorForm.vendorTelephone,
@@ -234,7 +234,7 @@ function BusinessProfile(props) {
 
         if (validateAddress()) {
 
-            vendorAddForm.vendorId = props.token.vendor_id;
+            vendorAddForm.vendorId = props?.token?.vendor_id;
             delete vendorAddForm['countryName']
             delete vendorAddForm['region']
             vendorAddForm['region'] = vendorAddForm['region_id']
@@ -258,7 +258,7 @@ function BusinessProfile(props) {
         console.log(bankDetails)
         if (validateBankDetails()) {
             setIsShow(true)
-            bankDetails.vendorId = props.token.vendor_id;
+            bankDetails.vendorId = props?.token?.vendor_id;
             let result: any = await editBankDetails(bankDetails);
             if (result && result.data && !result.data.message) {
                 setIsShow(false)
@@ -275,7 +275,7 @@ function BusinessProfile(props) {
 
         e.preventDefault()
         let payload = {
-            "vendorId": props.token.vendor_id,
+            "vendorId": props?.token?.vendor_id,
             "companyName": businessDetailsForm.businessCompanyName,
             "businessIBAMNo": businessDetailsForm.businessIbamNo,
             "businessTax": businessDetailsForm.businessTax,
@@ -602,7 +602,7 @@ function BusinessProfile(props) {
         getData();
         setOpenBankModal(!openBankModal)
     }
-    
+
     const openAddressModal = () => {
         getData();
         setMyAddressModal(!myAddressModal);
@@ -636,7 +636,7 @@ function BusinessProfile(props) {
         const base64 = await convertToBase64(file);
         setSelectedFile(base64);
         let payload = {
-            "vendorId": props.token.vendor_id,
+            "vendorId": props?.token?.vendor_id,
             "logoImagePath": base64
         }
         let result: any = await editBusinessDetails(payload);
@@ -816,7 +816,7 @@ function BusinessProfile(props) {
                                 </ul>
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
-                                <div className="address-action">                                   
+                                <div className="address-action">
                                     <Link to="#" className="edit_btn" onClick={() => openAddressModal()}>
                                         <IntlMessages id="myaccount.edit" />
                                     </Link>
@@ -838,7 +838,7 @@ function BusinessProfile(props) {
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
-                            <h5><IntlMessages id="myaccount.Bank" /></h5>                          
+                            <h5><IntlMessages id="myaccount.Bank" /></h5>
                         </div>
                         <div className="col-sm-12">
                             <div className="row">

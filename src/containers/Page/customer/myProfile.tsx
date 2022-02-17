@@ -23,7 +23,7 @@ import ForgottenPassword from '../../Page/forgotPassword';
 import MyAddress from './myProfile/myAddress';
 import appAction from "../../../redux/app/actions";
 const { showForgot } = appAction;
-const { closePrefPopup } = cartAction;
+const { closePrefPopup,addToCartTask } = cartAction;
 const { logout, customer } = authAction;
 function MyProfile(props) {
 
@@ -1323,5 +1323,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { closePrefPopup, logout, customer, showForgot }
+    { closePrefPopup, logout, customer, showForgot,addToCartTask }
 )(MyProfile);

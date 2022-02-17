@@ -13,35 +13,26 @@ import { useParams } from "react-router-dom";
 import ProductImages from './productImges';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
-import { addToCartApi, addToCartApiGuest, addWhishlist, configLabels, createGuestToken, getGuestCart, getProductChildren, getProductDetails, getProductExtras, getWhishlistItemsForUser, removeWhishlist } from '../../../../redux/cart/productApi';
+import { configLabels, getProductChildren, getProductDetails, getProductExtras, getWhishlistItemsForUser } from '../../../../redux/cart/productApi';
 import { formatprice } from '../../../../components/utility/allutils';
-import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import notification from '../../../../components/notification';
 import { siteConfig } from '../../../../settings';
 import GiftMessage from './GiftMessage';
-import Login from '../../../../redux/auth/Login';
 import appAction from "../../../../redux/app/actions";
 import { useIntl } from 'react-intl';
-const loginApi = new Login();
 const { showSignin, showLoader } = appAction;
 const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, openSizeGuide } = cartAction;
 function ProductDetailsPrivate(props) {
 
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
-    let venID = localToken && localToken.vendor_id ? localToken.vendor_id : 0;
+    let venID = localToken && localToken?.vendor_id ? localToken?.vendor_id : 0;
     const { vendorIdprev, prodsku }: any = useParams();
     const intl = useIntl();
     const language = getCookie('currentLanguage');
-    const [opacity, setOpacity] = useState(1);
-    const [isShow, setIsShow] = useState(false);
-    const [shareUrl, setShareUrl] = useState('');
-    const [iteminWhishlist, setItemInWhishlist] = useState(0);
-    const [isWishlist, setIsWishlist] = useState(0);
-    const [delWishlist, setDelWishlist] = useState(0);
-    const [prodId, setProdId] = useState(0);
-    const [token, setToken] = useState('');
+    const [opacity, setOpacity] = useState(1);   
     const [isPriveuser, setIsPriveUser] = useState(false);
+    const [iteminWhishlist, setItemInWhishlist] = useState(0);
     const [isShare, setIsLoaded] = useState(false);
     const [isGiftMessage, setIsGiftMessage] = useState(false);
     const [productImages, setProductImages] = useState([]);
@@ -54,10 +45,7 @@ function ProductDetailsPrivate(props) {
     const [childrenProducts, seChildrenProducts] = useState([]);
     const [productSizeDetails, setProductSizeDetails] = useState({});
     const [measuringDetails, setMeasuringDetails] = useState({});
-    const [tagsState, setTagsState] = useState([]);
     const [slectedAttribute, setSlectedAttribute] = useState(0);
-    const [extensionAttributes, setExtensionAttributes] = useState([]);
-    const [quantity, setQuantity] = useState(1);
 
 
 
@@ -66,10 +54,8 @@ function ProductDetailsPrivate(props) {
             window.scrollTo(0, 0)
             props.showLoader(false);
         }, 3000);
-        const localToken = props.token.token;
-        setToken(localToken)
+   
         getProductDetailsFxn(prodsku);
-        setShareUrl(window.location.href);
 
         if (vendorIdprev !== venID) {
             window.location.href = '/';
@@ -106,15 +92,14 @@ function ProductDetailsPrivate(props) {
     }
 
     const handleChange = (e) => {
-        //  console.log(e.target[e.target.selectedIndex].getAttribute('data-order'));
         const index = e.target.selectedIndex;
         const el = e.target.childNodes[index]
         const option = el.getAttribute('id');
-        //console.log(option)
+      
         let selected = e.target.value;
         setSlectedAttribute(selected);
         let selectChild = childrenProducts[option - 1];
-        //  console.log(selectChild);
+      
         let projectSingle = {};
         let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
 
@@ -168,20 +153,18 @@ function ProductDetailsPrivate(props) {
         const attributesDrop = [];
         attrs.forEach(async (i) => {
             attributesDrop.push(new Promise((resolve, reject) => {
-                const res: any = someAPICall(i);
-                // {...res, 'title': i.label}
+                const res: any = someAPICall(i);               
                 resolve(res);
             }));
         })
         const result = await Promise.all(attributesDrop);
-        // console.log(result);
+       
         setConfigurableOptions(result)
-        // return result;
+       
     }
 
 
-    async function someAPICall(attribute) {
-        //console.log(attribute)
+    async function someAPICall(attribute) {       
         let data: any = []
         let labels: any = await configLabels(attribute.attribute_id);
         data.title = attribute.label;
@@ -195,11 +178,11 @@ function ProductDetailsPrivate(props) {
         let lang = props.languages ? props.languages : language;
         let customer_id = props.token.cust_id;
         let result: any = await getProductDetails(skuUrl, lang);
-        //  console.log(result.data)
+      
         let projectSingle = {};
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
-            // let products = result.data.items;
+            
             let WhishlistData = whishlist.data;
 
             const inWhishlist = WhishlistData.find(element => element.sku === skuUrl);
@@ -262,8 +245,6 @@ function ProductDetailsPrivate(props) {
             })
         }
 
-        // console.log(result.data.status);
-        //     console.log(result.data.price)
         projectSingle['id'] = result.data.id;
         projectSingle['type_id'] = result.data.type_id;
         projectSingle['sku'] = result.data.sku;
@@ -278,37 +259,22 @@ function ProductDetailsPrivate(props) {
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = result.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
-        //  projectSingle['product_links'] = result.data.product_links;
+    
         setOpacity(1)
-        setProdId(projectSingle['id']);
-        setTagsState(tags)
+      
         setProductImages(result.data.media_gallery_entries)
-        // setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
-        let qtyy = result.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
-        setExtensionAttributes(qtyy);
+        let qtyy = result.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0    
         setproductDetails(projectSingle);
 
-        // check check check
-        // if (recomendationsData.length <= 0) {
-        //      console.log('sss')
-        //     setProdLinked(result.data.product_links);
-        //    // setRecomendations(result.data.product_links)
-        //     props.recomendedProducts(result.data.product_links)
-        // } else {
-        //     console.log(recomendationsData)
-        //   //  setRecomendations(recomendationsData)
-        //     props.recomendedProducts(recomendationsData)
-        // }
-        // console.log(result.data)
+        
         setProductSizeDetails(result?.data?.extension_attributes?.mp_sizechart?.rule_content);
         setMeasuringDetails(result?.data?.extension_attributes?.mp_sizechart?.rule_description);
-        // console.log(productDetails)
+      
     }
 
     const handleGiftMEssage = () => {
         if (productDetails['type_id'] === 'configurable') {
             if (slectedAttribute === 0) {
-                setIsShow(false);
                 notification("error", "", intl.formatMessage({ id: "selectproductsize" }));
                 return false;
             }
@@ -317,110 +283,10 @@ function ProductDetailsPrivate(props) {
             setIsGiftMessage(true)
         }
 
-    }
+    }  
 
-    async function handleCart(id: number, sku: string) {
-        //console.log('productDetails')
-        setIsShow(true);
-        let cartData = {};
-        let cartSucces: any;
-        let cartQuoteId = '';
-        let customer_id = props.token.cust_id;
-        let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        //console.log(cartQuoteIdLocal)
-        if (cartQuoteIdLocal && customer_id) {
-            //   console.log('vvvv')
-            let customerCart: any = await loginApi.genCartQuoteID(customer_id)
-            cartQuoteId = cartQuoteIdLocal
-            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
-                cartQuoteId = customerCart.data;
-            }
-        } else {
-            //  console.log(cartQuoteIdLocal)
-            if (!cartQuoteIdLocal) {
-                // console.log(cartQuoteIdLocal)
-                let guestToken: any = await createGuestToken();
-                localStorage.setItem('cartQuoteToken', guestToken.data);
-                let result: any = await getGuestCart(props.languages);
-                cartQuoteId = result.data.id
-            } else {
-                //   console.log('hdhdh')
-                let result: any = await getGuestCart(props.languages);
-                cartQuoteId = result.data.id
-            }
-
-        }
-        localStorage.setItem('cartQuoteId', cartQuoteId);
-        cartData = {
-            "cartItem": {
-                "sku": prodsku,
-                "qty": quantity,
-                "quote_id": cartQuoteId
-            }
-        }
-
-
-        if (customer_id) {
-            cartSucces = await addToCartApi(cartData)
-        } else {
-            cartSucces = await addToCartApiGuest(cartData)
-        }
-        if (cartSucces.data.item_id) {
-            props.addToCartTask(true);
-            notification("success", "", intl.formatMessage({ id: "addedtocart" }));
-            setIsShow(false);
-        } else {
-            if (cartSucces.data.message) {
-                notification("error", "", cartSucces.data.message);
-            } else {
-                notification("error", "", intl.formatMessage({ id: "genralerror" }));
-            }
-            setIsShow(false);
-        }
-    }
-
-    const handleQuantity = (event) => {
-        setQuantity(event.target.value)
-    }
-
-    async function handleWhishlist(id: number) {
-        if (token) {
-            setIsWishlist(id)
-            let result: any = await addWhishlist(id);
-            //     console.log(result);
-            if (result.data) {
-                props.addToWishlistTask(true);
-                setIsWishlist(0)
-                notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
-                getProductDetailsFxn(prodsku)
-            } else {
-                props.addToWishlistTask(true);
-                setIsWishlist(0)
-                notification("error", "", intl.formatMessage({ id: "genralerror" }));
-                getProductDetailsFxn(prodsku)
-            }
-        } else {
-            props.showSignin(true);
-        }
-    }
-    async function handleDelWhishlist(id: any) {
-        setDelWishlist(id)
-        //console.log(delWishlist, iteminWhishlist)
-        let del: any = await removeWhishlist(id);
-        // console.log(del)
-        if (del.data[0].message) {
-            props.addToWishlistTask(true);
-            setDelWishlist(0)
-            setItemInWhishlist(0)
-            notification("success", "", del.data[0].message);
-            getProductDetailsFxn(prodsku)
-        } else {
-            props.addToWishlistTask(true);
-            setDelWishlist(0)
-            notification("error", "", intl.formatMessage({ id: "genralerror" }));
-            getProductDetailsFxn(prodsku)
-        }
-    }
+    
+   
     return (
         <>
             <main>
@@ -457,15 +323,6 @@ function ProductDetailsPrivate(props) {
                             <div className="col-sm-6">
                                 <div className="product_description">
                                     <div className="list_accordon">
-                                        {/* {tagsState.length > 0 && (
-                                            <ul>
-                                                {tagsState.map((tag, i) => {
-                                                    return (<li key={i}><Link to="#" className="active">{tag}</Link></li>)
-                                                })}
-
-                                            </ul>
-                                        )
-                                        } */}
                                         {isPriveuser && <div className="logo_stampg">
                                             <Link to="#"><img src={cleWork} alt="" className="img-fluid" /></Link>
                                         </div>}
@@ -483,15 +340,8 @@ function ProductDetailsPrivate(props) {
                                             <div className="col-sm-4">
                                                 <div className="form-group">
                                                     <span className="form-label"><IntlMessages id="product.quantity" />:</span>
-                                                    {/* {(extensionAttributes) ? (
-                                                        <select className="form-select" onChange={handleQuantity} aria-label="Default select example">
-                                                            {Array.from(Array(extensionAttributes).slice(0, 10), (e, i) => {
-                                                                return <option key={i + 1}>{i + 1}</option>
-                                                            })}
-
-                                                        </select>
-                                                    ) : ""} */}
-                                                    <select className="form-select" onChange={handleQuantity} aria-label="Default select example">
+                                                   
+                                                    <select className="form-select" aria-label="Default select example">
                                                         {
 
                                                             Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].slice(0, 10), (e, i) => {
@@ -549,7 +399,7 @@ function ProductDetailsPrivate(props) {
                                             )}
                                             {productDetails['is_in_stock'] === false && (
                                                 <button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
-                                                    <IntlMessages id="product.outofstock" /></button>
+                                                   Add to Cart</button>
                                             )}
                                         </div>
                                     </div>
@@ -611,13 +461,7 @@ function ProductDetailsPrivate(props) {
                                                 <div className="accordion-body">
                                                     <div className="details_product">
                                                         <ul>
-                                                            <li>     <IntlMessages id="Colour" />: {productDetails['watch_color']}</li>
-                                                            {/* <li>Composition: 18kt gold-plated sterling silver.</li>
-                                                            <li>Country of origin: Italy</li>
-                                                            <li>Curb-chain links</li>
-                                                            <li>Picture jasper-stone links</li>
-                                                            <li>T bar</li>
-                                                            <li>Clasp fastening</li> */}
+                                                            <li>     <IntlMessages id="Colour" />: {productDetails['watch_color']}</li>                                                           
                                                         </ul>
                                                     </div>
                                                 </div>

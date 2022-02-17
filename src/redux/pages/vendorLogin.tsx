@@ -1,7 +1,6 @@
 import ADMINAPI from "../../restApi/Api";
 import ADMINTOKEN from "../../restApi/AdminApi";
-import { sessionService } from 'redux-react-session';
-import { store } from "../store";
+import { checkVendorLogin } from "../../components/utility/allutils";
 const AdminApi = new ADMINAPI();
 const adminToken = new ADMINTOKEN();
 
@@ -15,22 +14,21 @@ export function vendorLogout() {
 }
 
 export async function dataTiles(from, to) {
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/vendor/tiles?vendorId=${vendorId}&po_date_from=${from}&po_date_to=${to}`, "", "GET", "");
 }
 
 export async function getVendorDetails(language: string) {
-    var storeId = language === 'english' ? 3 : 2;
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     return adminToken.request(`/rest/all/V1/vendor/personaldetails?vendorId=${vendorId}`, "", "GET", "")
 }
 
 export async function getVendorProducts(language: string, status = '', from = '', to = '', type = '', sortValue) {
-    console.log(from, to)
+
     var storeId = language === 'english' ? 'en' : 'ar';
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let statusCriteria = ``;
     if (status) {
@@ -44,7 +42,7 @@ export async function getVendorProducts(language: string, status = '', from = ''
 
 export async function getVendorOrders(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
     var storeId = language === 'english' ? '3' : '2';
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
 
@@ -68,7 +66,7 @@ export async function getVendorOrders(language: string, pageSize: number, status
 }
 
 export async function closePopup(flag: number) {
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let payload = {
         vendor_id: vendorId,
@@ -99,13 +97,13 @@ export function vendorRestpassword(payload) {
 
 
 export function removeProduct(deleteInfo) {
-    return adminToken.request(`rest/all/V1/products`, deleteInfo, "POST", "");
+    return adminToken.request(`rest/all/V1/product/updateProductStatus`, deleteInfo, "POST", "");
 }
 
 export async function searchProducts(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
     var storeId = language === 'english' ? '3' : '2';
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const vendorId = vendor.vendor_id;
+   let vendor: any = await checkVendorLogin();
+    const vendorId = vendor?.vendor_id;
 
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
     if (status !== null && status !== '') {
@@ -130,7 +128,7 @@ export async function searchProducts(language: string, pageSize: number, status:
 
 export async function getVendorReturns(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
     var storeId = language === 'english' ? '3' : '2';
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
 
@@ -154,7 +152,7 @@ export async function getVendorReturns(language: string, pageSize: number, statu
 
 export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice, page_size, sort_order, search) {
 
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId;
     if (po_date_from != null && po_date_from !== '')
@@ -180,7 +178,7 @@ export async function getReturnDetail(id: number) {
 }
 
 export async function getOrderDetail(lang: string, id: number, sort_order: string) {
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId + "&orderId=" + id
     if (sort_order != null && sort_order != '')
@@ -190,7 +188,7 @@ export async function getOrderDetail(lang: string, id: number, sort_order: strin
 
 export async function getPayoutDetails(payoutId) {
     //var storeId = language === 'english' ? 3 : 2;
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/vendor/vendorPayoutDetailPage?vendorId=${vendorId}&pId=` + payoutId, "", "GET", "")
 }
@@ -205,19 +203,19 @@ export async function getProductIntegrationSample(language: string) {
 }
 
 export async function returnProcessVendor(rmaId: number, status: string, comment: string = "") {
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/vendor/returnConfirmationStatus?rmaId=${rmaId}&status=${status}&vendorId=${vendorId}&comment=${comment}`, "", "GET", "");
 }
 
 export async function getInvoice(payoutId: number) {
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/vendor/vendorPayoutPdf?vendorId=${vendorId}&payoutId=${payoutId}`, "", "GET", "");
 }
 
 export async function changeOrderSatus(orderId: number, statusOrder: string, statusOrderComment: string) {
-    let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+   let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let data = {
         vendorId: vendorId,

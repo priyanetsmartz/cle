@@ -45,7 +45,7 @@ function Dashboard(props) {
     const [currentQuater, setCurrentQuater] = useState(quater);
     useEffect(() => {
         let pop = getCookie('popUp');
-        if (localToken.showpop === 1 || pop === localToken.vendor_id)
+        if (localToken?.showpop === 1 || pop === localToken?.vendor_id)
             setMyDashboardModal(false)
         else
             setMyDashboardModal(true)
@@ -273,7 +273,7 @@ function Dashboard(props) {
     }
     async function openDashboardModal(oldDate, currentDate) {
         await closePopup(1);
-        setCookie("popUp", localToken.vendor_id)
+        setCookie("popUp", localToken?.vendor_id)
         setMyDashboardModal(!myDashboardModal);
     }
     async function getDataTiles(oldDate, currentDate) {

@@ -23,14 +23,14 @@ function GoogleLoginButton(props) {
             if (props.isVendor) {
                 return saveVendorLogin(response, name);
             }
-            // console.log(name[0],name[1])
             const userInfo = {
                 "first_name": name[0],
                 "last_name": name[1],
                 "email": response.profileObj.email,
                 "accessToken": response.accessToken,
                 "type": props.userSetype,
-                "storeId": props.languages
+                "storeId": props.languages,
+                "is_social_login": 1
             }
             fetchMyAPI(userInfo)
 
@@ -39,7 +39,7 @@ function GoogleLoginButton(props) {
 
     const saveVendorLogin = (res, name) => {
         const vendorObj = {
-            vendor_id: '', //need vendor id
+            vendor_id: '', 
             vendor_name: name[0],
             email: res.profileObj.email,
             telephone: '',
@@ -66,7 +66,8 @@ function GoogleLoginButton(props) {
                 'token': jsonData.group_id,
                 'id_token': jsonData.new_token,
                 'type': "user",
-                "storeId": props.languages
+                "storeId": props.languages,
+                "is_social_login": 1
             }
             sessionService.saveSession({ id_token })
             sessionService.saveUser(data)

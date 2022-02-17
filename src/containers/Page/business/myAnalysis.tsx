@@ -33,7 +33,7 @@ function MyAnalysis(props) {
     let quater = moment().quarter();
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
-    let venID = localToken && localToken.vendor_id ? localToken.vendor_id : 0;
+    let venID = localToken && localToken?.vendor_id ? localToken?.vendor_id : 0;
     const [active, setActive] = useState(0);
     const [dataTilesData, setDataTilesData] = useState([]);
     const [pdata, setPdata] = useState([]);
@@ -221,7 +221,7 @@ function MyAnalysis(props) {
                     <p className='prodbrand'>{row.product.brand}</p>
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span><IntlMessages id="id" />:</span>{row.product.id}</p>
-                    <div className='data_value'><ul><li>{<Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
+                    <div className='data_value'><ul><li>{<Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blank" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
                 </div>
             ),
         },

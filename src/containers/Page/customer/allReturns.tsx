@@ -28,7 +28,7 @@ function MyReturns(props) {
 
 
 
-    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = '', sortOrders: any = '', search: any = '') => {
+    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = 'created_at', sortOrders: any = 'DESC', search: any = '') => {
         let returns: any = await getCustomerReturn(pageSize, from_date, to_date, from_price, to_price, sortBy, sortOrders, search);
 
         if (returns && returns.data && returns.data.length > 0 && returns.data[0]) {

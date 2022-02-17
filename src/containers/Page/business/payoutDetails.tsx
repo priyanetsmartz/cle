@@ -9,11 +9,10 @@ import CLELogo from '../../../image/CLIlogo.png';
 import moment from 'moment';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { formatprice } from '../../../components/utility/allutils';
+import { checkVendorLogin, formatprice } from '../../../components/utility/allutils';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import {useIntl} from 'react-intl';
-import { sessionService } from 'redux-react-session';
 
 function MyPayoutDetails(props) {
 
@@ -81,7 +80,7 @@ function MyPayoutDetails(props) {
 
     }
     async function getVendor(){
-        let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
+       let vendor: any = await checkVendorLogin();
         setVendorName(vendor.vendor_name);
     }
     const columns = [{

@@ -1,12 +1,12 @@
 import { addToCartApi, addToCartApiGuest, createGuestToken, getGuestCart, getWhishlistItemsForUser } from "../../redux/cart/productApi";
 import { getCategoryDetailsbyUrlKey, getCategoryDetailsbyUrlPath, getHomePageProducts } from "../../redux/pages/customers";
-import { siteConfig, apiConfig } from "../../settings";
+import { siteConfig } from "../../settings";
 import Login from '../../redux/auth/Login';
 import { sessionService } from 'redux-react-session';
 import { getCookie } from "../../helpers/session";
 import { COUNTRIES } from "../../config/counties";
+import notification from '../../components/notification';
 import moment from "moment";
-var axios = require('axios');
 const loginApi = new Login();
 
 
@@ -15,13 +15,11 @@ export function formatprice(price) {
   return price ? price.toLocaleString(undefined, { maximumFractionDigits: 2 }) : price
 }
 export function capitalize(str) {
-  //console.log(str)
   return str.charAt(0).toUpperCase() + str.slice(1);
 
 }
 
 export function lowercase(str) {
-  //console.log(str)
   return str.toLowerCase();
 
 }
@@ -90,12 +88,16 @@ export async function handleCartFxn(id: number, sku: string) {
   let cartSucces: any;
   let cartQuoteId = '';
   let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-  // console.log(user)
+  let type = user ? user?.type : '';
+
+  if (type === 'vendor') {
+    let data1 = { "message": "You are  not allowed to purchase a product, kindly login as a valid customer!" };
+    cartSucces = data1;
+    return cartSucces;
+  }
   const customerId = user ? user?.cust_id : '';
   let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-  // console.log(cartQuoteIdLocal)
   if (customerId) {
-    // console.log(customerId)
     let customerCart: any = await loginApi.genCartQuoteID(customerId)
     cartQuoteId = cartQuoteIdLocal
     if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
@@ -135,7 +137,6 @@ export async function handleCartFxn(id: number, sku: string) {
 
 export function getCountryName(countryId) {
   let countryList: any = COUNTRIES.filter(obj => obj.id === countryId);
-  // console.log(countryList[0].full_name_locale)
   return countryList[0].full_name_locale;
 }
 
@@ -153,7 +154,6 @@ export function getRegionName(countryId = "AL", regionId) {
 }
 
 export function getCurrentMonth() {
-  //console.log(moment().format('MMM'))
   let data = {
     name: moment().format('MMM'),
     num: moment().month()
@@ -176,3 +176,11 @@ export function getAccordingDate(data) {
   }
 
 }
+export async function checkVendorLogin() {
+  return await sessionService.loadUser().then(user => {
+    return user;
+  }).catch(err =>
+    window.location.href = '/vendor-login'
+  )
+}
+

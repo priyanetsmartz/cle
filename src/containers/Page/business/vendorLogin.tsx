@@ -47,7 +47,7 @@ function VendorLogin(props) {
 
   const checkIfLoggedIn = async () => {
     let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''));
-    if (vendor && vendor.vendor_id) {
+    if (vendor && vendor?.vendor_id) {
       history.push(`/vendor/dashboard`);
     }
   }
@@ -72,13 +72,13 @@ function VendorLogin(props) {
       if (result && result.data && result.data && result.data.length > 0 && result.data[0].success) {
         setIsShow(true);
         const vendorObj = {
-          vendor_id: result.data[0].vendorData.vendor_id,
-          vendor_name: result.data[0].vendorData.vendor_name,
-          email: result.data[0].vendorData.email,
-          telephone: result.data[0].vendorData.telephone,
-          country_id: result.data[0].vendorData.country_id,
-          street: result.data[0].vendorData.street,
-          city: result.data[0].vendorData.city,
+          vendor_id: result?.data[0]?.vendorData?.vendor_id,
+          vendor_name: result?.data[0]?.vendorData?.vendor_name,
+          email: result?.data[0]?.vendorData?.email,
+          telephone: result?.data[0]?.vendorData?.telephone,
+          country_id: result?.data[0]?.vendorData?.country_id,
+          street: result?.data[0]?.vendorData?.street,
+          city: result?.data[0]?.vendorData?.city,
           type: "vendor",
           showpop: result.data[0].showPopUp
         }

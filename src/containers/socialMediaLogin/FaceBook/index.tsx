@@ -20,7 +20,6 @@ function FacebookLoginButton(props) {
 
         if (response.accessToken) {
             let name = response.name ? response.name.split(" ") : "";
-            //console.log(name[0],name[1])
             if (props.isVendor) {
                 return saveVendorLogin(response, name);
             }
@@ -30,9 +29,9 @@ function FacebookLoginButton(props) {
                 "email": response.email,
                 "accessToken": response.accessToken,
                 "type": props.userSetype,
-                "storeId":props.languages
+                "storeId": props.languages,
+                "is_social_login": 1
             }
-            // console.log(userInfo)
             fetchMyAPI(userInfo)
         }
     }
@@ -51,7 +50,8 @@ function FacebookLoginButton(props) {
                 'token_name': firstname + ' ' + lastname,
                 'token': jsonData.group_id,
                 'id_token': jsonData.new_token,
-                'type': "user"
+                'type': "user",
+                "is_social_login": 1
             }
             sessionService.saveSession({ id_token })
             sessionService.saveUser(data)
