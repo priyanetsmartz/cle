@@ -247,7 +247,7 @@ function MyAnalysis(props) {
             selector: row => row.price,
         }
     ];
-    const CustomizedLabelBar = ({ viewBox, value = 0}) => {
+    const CustomizedLabelBar = ({ viewBox, value = 0 }) => {
         const { x, y } = viewBox;
         return (
             <text
@@ -328,7 +328,6 @@ function MyAnalysis(props) {
                                     {
                                         <p>{quaterSlider}</p>
                                     }
-
                                     <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
                                 </ul>
                             )}
@@ -405,11 +404,20 @@ function MyAnalysis(props) {
 
                             {pdata?.length > 0 && (
                                 <>  <LineChart width={500} height={300} data={pdata} style={{ data: { fill: '#eee' } }}>
-                                    <XAxis dataKey="created_at" />
+                                    <XAxis dataKey="Created At" />
                                     <YAxis dataKey="Total Cost" domain={[0, 20000]} />
                                     <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
                                     <Legend />
-                                    <Tool />
+                                    <Tool
+                                        formatter={function (value, name) {
+                                            if (name === 'Total Cost')
+                                                return `${siteConfig.currency + value}`
+                                            else
+                                                return `${value}`;
+                                        }}
+                                        labelFormatter={function (value) {
+                                            return `Date: ${value}`;
+                                        }} />
                                     <Line type="monotone" dataKey="Total Cost" stroke="#8884d8" />
                                     <Line type="monotone" dataKey="Quantity" stroke="#82ca9d" />
                                 </LineChart>

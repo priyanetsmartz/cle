@@ -9460,6 +9460,23 @@ p.invoiceLink {
     cursor: pointer;
 }
 
+ul.vendor-menu li a {
+    line-height: 14px;
+    text-decoration: none;
+    color: #000;
+    position: relative;
+    padding-top: 27px !important;
+    padding-bottom: 27px !important;
+    font-weight: 400;
+    font-size: 13px;
+    font-family: 'Monument Extended';
+}
+ul.vendor-menu li {
+    list-style: none;
+    padding: 3px 10px;
+    display: inline-block;
+}
+
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */
