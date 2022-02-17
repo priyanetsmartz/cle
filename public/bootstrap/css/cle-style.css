@@ -6626,7 +6626,8 @@ h4.arrow-change:after {
 
 .social-login a {
     width: 100%;
-    display: block;
+    display: flex;
+	justify-content: space-evenly;
     border: 1px solid;
     padding: 10px;
     text-align: center;
@@ -9797,6 +9798,7 @@ p.invoiceLink {
 
     .myaccount_details {
         left: 0;
+		width: 200px;
     }
 
     .top-menuselect {
