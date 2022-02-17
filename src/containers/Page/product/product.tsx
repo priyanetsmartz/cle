@@ -15,7 +15,7 @@ import { capitalize, formatprice, handleCartFxn } from '../../../components/util
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { siteConfig } from '../../../settings/index'
 import { getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
-
+import orderprocessing from "../../../image/orderprocessing.gif";
 const commonFunctions = new CommonFunctions();
 
 const baseUrl = commonFunctions.getBaseUrl();
@@ -78,7 +78,6 @@ function Products(props) {
             getProducts(urlPath);
         }
 
-
         return () => {
             props.addToCartTask(false);
             props.addToWishlistTask(true);
@@ -93,7 +92,7 @@ function Products(props) {
     }, [sortValue, page, pageSize, sort, catState])
 
     async function getProducts(urlPath) {
-
+        props.loaderProducts(true);
         let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         let result1: any = await getCategoryDetailsbyUrlPath(lang, urlPath, siteConfig.pageSize);
@@ -112,25 +111,27 @@ function Products(props) {
             });
             setMetaData(obj);
         }
+        getProductById(catID)
         setNameHeader(catName);
         setNameHeaderOld(catName)
         setCatState(catID)
         setCatStateLoad(catID)
-        getProductById(catID)
+
 
     }
 
     async function getProductById(catID) {
-
         let filter: any = await getProductsFilterRestCollection(catID, props.languages, sortValue, pageSize, page);
         let customer_id = props.token.cust_id;
         let total = 0, aggregations = [], items = [];
 
-        if (filter && filter.data && filter.data.length > 0 && filter.data[0].data && filter.data[0].data.products) {
-            aggregations = filter.data[0].data.products.aggregations;
-            total = filter.data[0].data.products.total_count;
-            items = filter.data[0].data.products.items;
-            let productResult = filter.data[0].data.products.items;
+        if (filter && filter?.data[0]?.data?.products) {
+            let productArray = filter?.data[0]?.data?.products;
+            let productResult = productArray?.items;
+
+            aggregations = productArray?.aggregations;
+            total = productArray?.total_count;
+            items = productArray?.items;
 
             setPagination(Math.ceil(total / pageSize));
 
@@ -148,9 +149,10 @@ function Products(props) {
                     productResult = mergeById(products, WhishlistData);
                 }
             }
-            props.loaderProducts(false);
             props.productList(productResult);
+            props.loaderProducts(false);
         }
+
         setOpacity(1);
         setTotal(total)
         setFilters(aggregations)
@@ -302,16 +304,18 @@ function Products(props) {
                 }
             }
             props.productList(productResult);
+            props.loaderProducts(false);
         }
-        props.loaderProducts(false);
+
         setTotal(total)
     }
 
     const handlePriceRange = async (range) => {
+        props.loaderProducts(true);
         setCurrent(1)
         let catID = catState ? catState : 178;
         setCatState(catID)
-        props.loaderProducts(true);
+        
         let r = range[0] + '-' + range[1];
         setFilterArray(prevState => ({
             ...prevState,
@@ -321,6 +325,8 @@ function Products(props) {
     }
 
     const currentvalue = async (e) => {
+        props.loaderProducts(true);
+        setclearFilter(false)
         e.preventDefault();
         let catID = catState ? catState : 178;
         setCurrent(1)
@@ -349,11 +355,11 @@ function Products(props) {
             catt = catID;
             setCatState(catID)
         }
-        props.loaderProducts(true);
         makeFilterApicall(catt, props.languages, attribute_code, value, sortValue, pageSize)
     }
 
     const removeSelectedCategories = (type, value) => {
+        props.loaderProducts(true);
         if (type !== 'category_id') {
             let catID = catState ? catState : 178;
             getProductById(catID);
@@ -368,7 +374,6 @@ function Products(props) {
                     ...prevState,
                     brand: []
                 }))
-
             }
         } else {
             setNameHeader(nameHeaderOld)
@@ -434,10 +439,10 @@ function Products(props) {
                                                                                         let pricel = plow.split('_');
                                                                                         let priceLow = parseInt(pricel[0]);
                                                                                         let priceHigh = parseInt(priceh[1]);
+
                                                                                         return (
                                                                                             <div className="sliderInner">
-
-                                                                                                <Slider min={priceLow} max={priceHigh} range onAfterChange={handlePriceRange} />
+                                                                                                <Slider min={priceLow} max={priceHigh} range onAfterChange={handlePriceRange} defaultValue={[priceLow, priceHigh]} />
 
                                                                                             </div>)
                                                                                     })()}</div>
@@ -508,6 +513,8 @@ function Products(props) {
                                 </div>
 
                                 <div className="product-listing plp-listing" style={{ 'opacity': opacity }}>
+                                    {props.prodloader ? 
+                                   <p className='productloader' style={{ 'width': '200px' }}> <img className="loading-gif" src={orderprocessing} alt="loader" /></p>:
                                     <div className="row g-2">
                                         {props.items.map(item => {
                                             url = parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus';
@@ -562,6 +569,7 @@ function Products(props) {
                                             )
                                         })}
                                     </div>
+                                     }
                                 </div>
                                 <div className="resltspage_sec footer-pagints">
                                     <div className="paginatn_result">
@@ -593,7 +601,7 @@ function Products(props) {
                                     </div>
                                 </div>
                             </div>
-                            : <IntlMessages id="NotFound" />}
+                            : <>{props.prodloader ? <p className='productloader'> <img className="loading-gif" src={orderprocessing} alt="loader" /></p> : <IntlMessages id="NotFound" />}</>}
 
 
                     </div>
@@ -608,6 +616,7 @@ function Products(props) {
     )
 }
 const mapStateToProps = (state) => {
+
     let languages = '', load = '';
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language

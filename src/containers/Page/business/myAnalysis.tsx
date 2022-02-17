@@ -18,7 +18,8 @@ import {
     PieChart,
     Pie,
     BarChart,
-    Bar
+    Bar,
+    Cell
 } from 'recharts';
 import { Link } from "react-router-dom";
 import { formatprice, getCurrentMonth } from '../../../components/utility/allutils';
@@ -51,13 +52,15 @@ function MyAnalysis(props) {
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     const [deletePop, setDeletePop] = useState(false);
     const [deleteId, setDeleteID] = useState(0)
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
     useEffect(() => {
         getVendorProductListing()
         getDataTiles(oldDate, currentDate);
         return () => {
             setPdata([])
             setPieChart([]);
-            setBarChartData([])        }
+            setBarChartData([])
+        }
     }, [])
 
     async function getDataTiles(oldDate, currentDate) {
@@ -241,11 +244,11 @@ function MyAnalysis(props) {
         }
     ];
 
-  
-   const labelPieChart = async (prodId) => {
-    setDeleteID(prodId)
-    setDeletePop(true);
-}
+
+    const labelPieChart = async (prodId) => {
+        setDeleteID(prodId)
+        setDeletePop(true);
+    }
 
     return (
         <div className="col-sm-9">
@@ -348,20 +351,18 @@ function MyAnalysis(props) {
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'vendor.myAnalysis' })}</h2>
                             <p>{intl.formatMessage({ id: 'orderInformation' })}</p>
+
+
                             {pdata?.length > 0 && (
-                                <ResponsiveContainer width="100%" aspect={3}>
-                                    <LineChart data={pdata} margin={{ right: 300 }}>
-                                        <CartesianGrid />
-                                        <XAxis dataKey="Created At" ></XAxis>
-                                        <YAxis dataKey="Total Cost" domain={[0, 20000]} ></YAxis>
-                                        <Legend />
-                                        <Tool />
-                                        <Line dataKey="Total Cost"
-                                            stroke="black" activeDot={{ r: 8 }} />
-                                        <Line dataKey="Quantity"
-                                            stroke="red" activeDot={{ r: 8 }} />
-                                    </LineChart>
-                                </ResponsiveContainer>
+                                <LineChart width={500} height={300} data={pdata} style={{ data: { fill: '#eee' } }}>
+                                    <XAxis dataKey="Created At" />
+                                    <YAxis dataKey="Total Cost" domain={[0, 20000]} />
+                                    <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                                    <Legend />
+                                    <Tool />
+                                    <Line type="monotone" dataKey="Total Cost" stroke="#8884d8" />
+                                    <Line type="monotone" dataKey="Quantity" stroke="#82ca9d" />
+                                </LineChart>
                             )}
                             {pdata?.length === 0 ? <div className='text-center' >No data available</div> : ""}
                         </div>
@@ -373,7 +374,8 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>                        
+                            <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>
+
                             {pieChart?.length > 0 && (
                                 <ResponsiveContainer width="100%" height={250}>
                                     <PieChart height={250}>
@@ -392,15 +394,12 @@ function MyAnalysis(props) {
                                                 innerRadius,
                                                 outerRadius,
                                                 total_payout_amount,
+                                                percent,
                                                 index
                                             }) => {
-                                                console.log("handling label?");
                                                 const RADIAN = Math.PI / 180;
-                                                // eslint-disable-next-line
                                                 const radius = 25 + innerRadius + (outerRadius - innerRadius);
-                                                // eslint-disable-next-line
                                                 const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                                                // eslint-disable-next-line
                                                 const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
                                                 return (
@@ -411,11 +410,16 @@ function MyAnalysis(props) {
                                                         textAnchor={x > cx ? "start" : "end"}
                                                         dominantBaseline="central"
                                                     >
+
                                                         {pieChart[index].po_created_at} ({siteConfig.currency}{total_payout_amount})
+                                                        {/* {`${(percent * 100).toFixed(0)}%`} */}
                                                     </text>
                                                 );
-                                            }}
-                                        />
+                                            }}>
+                                            {
+                                                pieChart.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
+                                            }
+                                        </Pie>
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}

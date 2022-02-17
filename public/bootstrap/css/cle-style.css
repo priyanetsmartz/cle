@@ -9212,7 +9212,16 @@ p.sliderupper {
     margin-bottom: 10px;
     display: block;
 }
-
+.productloader .loading-gif {
+    position: relative;
+    width: 100%;
+    height: 50%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}
 .bor-top-2 {
     border-top: 2px solid #ddd;
 }

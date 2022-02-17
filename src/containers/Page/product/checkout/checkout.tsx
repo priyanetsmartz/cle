@@ -268,7 +268,7 @@ function Checkout(props) {
         let addressInformation: any = {};
         if (result && result.data && result.data.addresses && result.data.addresses.length > 0) {
             let billingAddress = {
-                customer_id: localToken.cust_id ? localToken.cust_id : 0,
+                customer_id: localToken?.cust_id ? localToken?.cust_id : 0,
                 firstname: address.firstname,
                 lastname: address.lastname,
                 telephone: address.telephone,
@@ -280,7 +280,7 @@ function Checkout(props) {
             };
             let shippingAddress = {}
             shippingAddress = {
-                customer_id: localToken.cust_id ? localToken.cust_id : 0,
+                customer_id: localToken?.cust_id ? localToken?.cust_id : 0,
                 firstname: address.firstname,
                 lastname: address.lastname,
                 telephone: address.telephone,
@@ -873,10 +873,9 @@ function Checkout(props) {
     }
 
     //PLACE ORDER CODE GOES HERE
-    const placeOrder = async () => {
-        console.log(localToken.cust_id)
+    const placeOrder = async () => {      
         setIsShow(true);
-        let customer_id = localToken.cust_id;
+        let customer_id = localToken?.cust_id;
         let orderPlace: any;
         let billAddress: any = {};
         if (customer_id) {
@@ -1049,7 +1048,7 @@ function Checkout(props) {
         setPaymentDetails(detailsRequired)
 
 
-        let customer_id = localToken.cust_id;
+        let customer_id = localToken?.cust_id;
         let orderPlace: any;
         if (customer_id) {
             let cartToken = localStorage.getItem('cartQuoteId');
@@ -1472,8 +1471,7 @@ function Checkout(props) {
                                                                     <div className="delivery-charges">{siteConfig.currency}{item.amount}</div>
                                                                 </div>
                                                                 <div className="col-md-5">
-                                                                    <label>{item.carrier_title}</label>
-                                                                    {/* <p></p>Delivery on or before Mon, 31 May 2021 */}
+                                                                    <label>{item.carrier_title} ({item.method_title})</label>
                                                                 </div>
                                                                 <div className="col-md-4">
                                                                     <div className="select-address-inner form-check">
@@ -1734,7 +1732,7 @@ function Checkout(props) {
                                     <button className="btn btn-secondary" disabled={(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) ? true : false} onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> </button>
                                     : <div className="spinner"> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                                 }
-                                <p className='checkouttc'><IntlMessages  id="tccheckout" /></p>
+                                <p className='checkouttc'><IntlMessages id="tccheckout" /></p>
                             </div>
                         </div>
 

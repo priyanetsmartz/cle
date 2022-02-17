@@ -36,7 +36,6 @@ function SearchResults(props) {
     const [catState, setCatState] = useState(0);
     const [sortValue, setSortValue] = useState({ sortBy: '', sortByValue: "" });
     const [sort, setSort] = useState('');
-    const [nameHeaderOld, setNameHeaderOld] = useState('')
     const [catStateLoad, setCatStateLoad] = useState(0);
     const language = getCookie('currentLanguage');
     const [autoSuggestions, SetAutoSuggestions] = useState([]);
@@ -47,7 +46,7 @@ function SearchResults(props) {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
         }
-    }, [searchText, sortValue, page, pageSize, props.languages, cat, props.token])
+    }, [searchText, sortValue, page, pageSize, props.languages, cat, props.token, clearFilter])
 
 
     const getData = async (searchText, catset = 178) => {
@@ -59,7 +58,6 @@ function SearchResults(props) {
         setCatState(catt)
 
         if (brandname) {
-            //  console.log('searddchText')
             filter = await getProductsFilterRestCollectionProducts(catt, props.languages, 'brand', brandname, sortValue, pageSize, '', 'test', page);
         } else {
             filter = await searchFields(searchText, catt, pageSize, lang, sortValue.sortBy, sortValue.sortByValue, page);
@@ -72,7 +70,6 @@ function SearchResults(props) {
             total = filter.data[0].data.products.total_count;
             items = filter.data[0].data.products.items;
             let productResult = filter.data[0].data.products.items;
-            //    console.log(total, Math.round(total / pageSize));
             setPagination(Math.ceil(total / pageSize));
             if (customer_id) {
                 let whishlist: any = await getWhishlistItemsForUser();
@@ -88,8 +85,6 @@ function SearchResults(props) {
                     productResult = mergeById(products, WhishlistData);
                 }
             }
-            // props.loaderProducts(false);
-            // props.productList(productResult);
             SetAutoSuggestions(productResult);
         }
         setOpacity(1);
@@ -99,6 +94,12 @@ function SearchResults(props) {
 
     }
     const clearfilter = (e) => {
+        setFilterArray(prevState => ({
+            ...prevState,
+            category: [],
+            price: '',
+            brand: []
+        }))
         setclearFilter(true)
     }
 
@@ -117,8 +118,6 @@ function SearchResults(props) {
 
         setSort(event.target.value);
         setSortValue({ sortBy: sortBy, sortByValue: sortByValue })
-        // props.sortingFilterProducts({ sortBy: sortBy, sortByValue: sortByValue })
-
     }
 
 
@@ -245,6 +244,7 @@ function SearchResults(props) {
         e.preventDefault();
         let catID = catState;
         setCurrent(1)
+        setclearFilter(false)
         let attribute_code = e.target.getAttribute("data-remove");
         let value = attribute_code === 'price' ? e.target.getAttribute("data-access") : e.target.value;
         //  console.log(e.target.getAttribute("data-access"))
@@ -272,17 +272,15 @@ function SearchResults(props) {
         props.loaderProducts(true);
 
         if (brandname) {
-            // filter = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, sortValue, pageSize, brandname);
             makeFilterApicall(catt, props.languages, attribute_code, value, sortValue, pageSize, brandname)
         } else {
-            // filter = await getProductsFilterRestCollectionProducts(catt, props.languages, attribute_code, value, sortValue, pageSize, '', '', page, searchText);
 
             makeFilterApicall(catt, props.languages, attribute_code, value, sortValue, pageSize, '', '', page, searchText)
         }
     }
 
     const removeSelectedCategories = (type, value) => {
-       
+
         if (type !== 'category_id') {
             let catID = catState ? catState : 178;
             getData(searchText, catID)
@@ -300,7 +298,6 @@ function SearchResults(props) {
 
             }
         } else {
-            //setNameHeader(nameHeaderOld)
             let catID = catStateLoad ? catStateLoad : 178;
             setFilterArray(prevState => ({
                 ...prevState,
@@ -353,7 +350,7 @@ function SearchResults(props) {
                                                                                     return (
                                                                                         <div className="sliderInner">
 
-                                                                                            <Slider min={priceLow} max={priceHigh} range onAfterChange={handlePriceRange} />
+                                                                                            <Slider min={priceLow} max={priceHigh} defaultValue={[priceLow, priceHigh]} range onAfterChange={handlePriceRange} />
 
                                                                                         </div>)
                                                                                 })()}</div>
