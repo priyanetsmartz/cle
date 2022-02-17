@@ -15,8 +15,8 @@ function OrdersAndReturns(props) {
         getReturnDetailFxn(returnId);
     }, []);
 
-    async function getReturnDetailFxn(orderId) {
-        let results: any = await retrunDetails(orderId);
+    async function getReturnDetailFxn(returnId) {
+        let results: any = await retrunDetails(returnId);
         let data = [];
         if (results && results.data && results.data.length > 0) {
             data['info'] = results.data[0].info;
@@ -78,18 +78,6 @@ function OrdersAndReturns(props) {
                                 <IntlMessages id = "create.return.details2"/>
                                 </p>
                             </div>
-                            {/* <div className="float-end">
-                                <div className="btn-group">
-                                    <button type="button" className="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <IntlMessages id = "sorting"/>
-                                    </button>
-                                    <ul className="dropdown-menu dropdown-menu-end">
-                                        <li><button className="dropdown-item" type="button"><IntlMessages id = "filterPriceDesc"/></button></li>
-                                        <li><button className="dropdown-item" type="button"><IntlMessages id = "filterPriceAsc"/></button></li>
-                                    </ul>
-                                </div>
-                            </div> */}
                             <div className="clearfix"></div>
                         </div>
                     </div>
@@ -105,7 +93,7 @@ function OrdersAndReturns(props) {
                                                 </div>
                                             </div>
                                             <div className="col-md-9">
-                                                <div className="pro-name-tag mb-5">
+                                                <div className="pro-name-tag">
                                                     <div className="float-start">
                                                         <p><strong>{item.brand}</strong></p>
                                                         <p>{item.name}</p>

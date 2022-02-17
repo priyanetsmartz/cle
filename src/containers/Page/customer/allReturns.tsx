@@ -94,7 +94,7 @@ function MyReturns(props) {
                 <div>
                     {returs && (returs.map((items, i) => {
                         return (
-                            <>
+                            <div key={i}>
                                 <div className="row my-3">
                                     <h3>{items.date}</h3>
                                 </div>
@@ -109,7 +109,7 @@ function MyReturns(props) {
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <div className="viewall_btn">
-                                                                <Link to={`/customer/return-details/${item.rma_increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
+                                                                <Link to={`/customer/return-details/${item.rma_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
                                                             </div>
                                                         </div>
 
@@ -185,7 +185,7 @@ function MyReturns(props) {
                                         </div>
                                     );
                                 })}
-                            </>
+                            </div>
                         )
                     }))}
                 </div>

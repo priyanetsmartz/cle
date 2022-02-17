@@ -80,7 +80,7 @@ function OrderDetails(props) {
         let myObject = checkreturn?.data?.[0];
 
         let resultShow = myObject.filter(val => {
-            return val.value === 'false';
+            return val.value === 'true';
         });
         if (resultShow.length > 0) {
             setShowReturn(true);

@@ -180,7 +180,7 @@ function VendorOrderDetail(props) {
 											  </div>
 											  <div className="col-md-3 align-self-end mb-2">
 												<label className="form-label"></label>
-												<Link to="#" className="btn btn-secondary m-0" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link>
+												<Link to="#" className="btn btn-secondary m-0" onClick={handleSubmitClick} ><IntlMessages id="confirm.order" /></Link>
 											  </div>
 											  <div className="col-md-12 mb-2">
 												{show && (<div className='return-comment' >

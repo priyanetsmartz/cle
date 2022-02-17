@@ -295,8 +295,8 @@ function Checkout(props) {
             addressInformation.billingAddress = billingAddress;
             addressData.addressInformation = addressInformation;
 
-            await setUserDeliveryAddress(addressData);
-
+            let test: any = await setUserDeliveryAddress(addressData);
+            console.log(test)
             setLoaderOnCheckout(false)
             if (result.data.addresses.length === 1) {
                 setCheckedData(prevState => ({
@@ -368,14 +368,14 @@ function Checkout(props) {
 
                 let shippingAddress = {
                     customer_id: custId ? custId : 0,
-                    firstname: address.data.firstname,
-                    lastname: address.data.lastname,
-                    telephone: address.data.telephone,
-                    postcode: address.data.postcode,
-                    city: address.data.city,
-                    country_id: address.data.country_id,
-                    region_id: address.data.region_id,
-                    street: address.data.street
+                    firstname: address?.data?.firstname,
+                    lastname: address?.data?.lastname,
+                    telephone: address?.data?.telephone,
+                    postcode: address?.data?.postcode,
+                    city: address?.data?.city,
+                    country_id: address?.data?.country_id,
+                    region_id: address?.data?.region_id,
+                    street: address?.data?.street
                 };
                 addressInformation.shippingAddress = shippingAddress;
                 addressData.addressInformation = addressInformation;
@@ -411,20 +411,20 @@ function Checkout(props) {
             setIsBillingAddress(selectedValue);
 
             const address: any = await getAddressById(addId);
-            if (address.data) {
+            if (address?.data) {
                 let addressData: any = {};
                 let addressInformation: any = {};
 
                 let billingAddress = {
                     customer_id: custId ? custId : 0,
-                    firstname: address.data.firstname,
-                    lastname: address.data.lastname,
-                    telephone: address.data.telephone,
-                    postcode: address.data.postcode,
-                    city: address.data.city,
-                    country_id: address.data.country_id,
-                    region_id: address.data.region_id,
-                    street: address.data.street
+                    firstname: address?.data?.firstname,
+                    lastname: address?.data?.lastname,
+                    telephone: address?.data?.telephone,
+                    postcode: address?.data?.postcode,
+                    city: address?.data?.city,
+                    country_id: address?.data?.country_id,
+                    region_id: address?.data?.region_id,
+                    street: address?.data?.street
                 };
                 let shippingAddress = {}
 
@@ -444,14 +444,14 @@ function Checkout(props) {
 
                     shippingAddress = {
                         customer_id: custId ? custId : 0,
-                        firstname: address.data.firstname,
-                        lastname: address.data.lastname,
-                        telephone: address.data.telephone,
-                        postcode: address.data.postcode,
-                        city: address.data.city,
-                        country_id: address.data.country_id,
-                        region_id: address.data.region_id,
-                        street: address.data.street
+                        firstname: address?.data?.firstname,
+                        lastname: address?.data?.lastname,
+                        telephone: address?.data?.telephone,
+                        postcode: address?.data?.postcode,
+                        city: address?.data?.city,
+                        country_id: address?.data?.country_id,
+                        region_id: address?.data?.region_id,
+                        street: address?.data?.street
                     };
                 }
 
@@ -873,7 +873,7 @@ function Checkout(props) {
     }
 
     //PLACE ORDER CODE GOES HERE
-    const placeOrder = async () => {      
+    const placeOrder = async () => {
         setIsShow(true);
         let customer_id = localToken?.cust_id;
         let orderPlace: any;

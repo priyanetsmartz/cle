@@ -66,7 +66,7 @@ function Breadcrumbs(props) {
                                 return (
                                     <><li key={2} className="breadcrumb-item"><Link to="/customer/dashboard">My Account</Link></li>
                                         <li key={3} className="breadcrumb-item"><Link to="/customer/orders-and-returns">My Orders and Return</Link></li>
-                                        <li className="breadcrumb-item active">Thank you</li>
+                                        <li key={4} className="breadcrumb-item active">Thank you</li>
                                     </>
                                 )
                             } else if (local === 'business-profile') {

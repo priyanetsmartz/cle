@@ -19,25 +19,15 @@ import {
     Pie,
     BarChart,
     Bar,
-    Cell
+    Cell,
+    Label
 } from 'recharts';
 import { Link } from "react-router-dom";
 import { formatprice, getCurrentMonth } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import { useIntl } from 'react-intl';
 
-// function CustomTooltip({ payload, label, active }) {
-//     if (active) {
-//       return (
-//         <div className="custom-tooltip">
-//           <p className="label">{`${label} : ${payload[0].value}`}</p>
-//           <p className="desc">Anything you want can be displayed here.</p>
-//         </div>
-//       );
-//     }
-  
-//     return null;
-//   }
+
 function MyAnalysis(props) {
     const intl = useIntl()
     let quater = moment().quarter();
@@ -48,6 +38,7 @@ function MyAnalysis(props) {
     const [dataTilesData, setDataTilesData] = useState([]);
     const [pdata, setPdata] = useState([]);
     const [barChartData, setBarChartData] = useState([]);
+    const [returnData, setReturnData] = useState([]);
     const [pieChart, setPieChart] = useState([]);
     const [showMonth, setShowMonth] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
@@ -71,6 +62,7 @@ function MyAnalysis(props) {
             setPdata([])
             setPieChart([]);
             setBarChartData([])
+            setReturnData([])
         }
     }, [])
 
@@ -82,6 +74,7 @@ function MyAnalysis(props) {
             setBarChartData([tiles_information?.product_information])
             setPieChart(tiles_information?.payout_information)
             setDataTilesData(results?.data[0])
+            setReturnData(tiles_information?.return_information)
         }
     }
     const handleChange = (flag) => {
@@ -254,13 +247,59 @@ function MyAnalysis(props) {
             selector: row => row.price,
         }
     ];
-
-
-    const labelPieChart = async (prodId) => {
-        setDeleteID(prodId)
-        setDeletePop(true);
+    const CustomizedLabelBar = ({ viewBox, value = 0}) => {
+        const { x, y } = viewBox;
+        return (
+            <text
+                x={x}
+                y={y}
+                dy={-4}
+                fontSize="16"
+                textAnchor="middle"
+            >
+                {value}
+            </text>
+        );
     }
 
+    const CustomLabel = ({ viewBox, noOfBubbleTeaSold = 0, noCost = 0 }) => {
+        const { cx, cy } = viewBox;
+        return (
+            <>
+                <text x={cx - 15} y={cy - 5}>
+                    <tspan
+                        style={{
+                            fontWeight: 700,
+                            fontSize: "1.5em",
+                            fill: "#2B5CE7"
+                        }}
+                    >
+                        {noOfBubbleTeaSold}
+                    </tspan>
+                </text>
+                <text x={cx - 50} y={cy + 15}>
+                    <tspan
+                        style={{
+                            fontSize: "0.8em",
+                            fill: "#000"
+                        }}
+                    >
+                        Total Product Cost:
+                    </tspan>
+                </text>
+                <text x={cx - 50} y={cy + 30}>
+                    <tspan
+                        style={{
+                            fontSize: "0.8em",
+                            fill: "#000"
+                        }}
+                    >
+                        {siteConfig.currency} {noCost}
+                    </tspan>
+                </text>
+            </>
+        );
+    };
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
@@ -348,7 +387,7 @@ function MyAnalysis(props) {
                                 ><i className="fas fa-info-circle" ></i>
                                 </OverlayTrigger></h5>
                                 <div className="stats">
-                                    <h3>jk{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
                                 </div>
                             </div>
                         </div>
@@ -365,8 +404,8 @@ function MyAnalysis(props) {
 
 
                             {pdata?.length > 0 && (
-                              <>  <LineChart width={500} height={300} data={pdata} style={{ data: { fill: '#eee' } }}>
-                                    <XAxis dataKey="Created At" />
+                                <>  <LineChart width={500} height={300} data={pdata} style={{ data: { fill: '#eee' } }}>
+                                    <XAxis dataKey="created_at" />
                                     <YAxis dataKey="Total Cost" domain={[0, 20000]} />
                                     <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
                                     <Legend />
@@ -374,22 +413,6 @@ function MyAnalysis(props) {
                                     <Line type="monotone" dataKey="Total Cost" stroke="#8884d8" />
                                     <Line type="monotone" dataKey="Quantity" stroke="#82ca9d" />
                                 </LineChart>
-                                <ResponsiveContainer width="100%" aspect={3}>
-                                    <LineChart data={pdata} margin={{ right: 300 }}>
-                                        <CartesianGrid />
-                                        <XAxis dataKey="Created At" ></XAxis>
-                                        <YAxis dataKey="Total Cost" domain={[0, 20000]} ></YAxis>
-                                        <Legend />
-                                        <Tool
-                                        wrapperStyle={{ width: 100 }}
-                                        labelStyle={{ color: "green" }}
-                                        itemStyle={{ color: "cyan" }}/>
-                                        <Line dataKey="Total Cost"
-                                            stroke="black" activeDot={{ r: 8 }} />
-                                        <Line dataKey="Quantity"
-                                            stroke="red" activeDot={{ r: 8 }} />
-                                    </LineChart>
-                                </ResponsiveContainer>
                                 </>
                             )}
                             {pdata?.length === 0 ? <div className='text-center' >No data available</div> : ""}
@@ -440,7 +463,6 @@ function MyAnalysis(props) {
                                                     >
 
                                                         {pieChart[index].po_created_at} ({siteConfig.currency}{total_payout_amount})
-                                                        {/* {`${(percent * 100).toFixed(0)}%`} */}
                                                     </text>
                                                 );
                                             }}>
@@ -462,32 +484,74 @@ function MyAnalysis(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
-                            {barChartData?.length > 0 && (
-                                <BarChart
-                                    width={500}
-                                    height={300}
+                            {barChartData?.length > 0 && (<PieChart width={730} height={250}>
+                                <Pie
                                     data={barChartData}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5
-                                    }}
+                                    cx="50%"
+                                    cy="50%"
+                                    dataKey="total_product_count" // make sure to map the dataKey to "value"
+                                    innerRadius={60} // the inner and outer radius helps to create the progress look
+                                    outerRadius={80}
                                 >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="Total Product Count" />
-                                    <YAxis />
-                                    
-                                    <Tool wrapperStyle={{ width: "100px" }}
-            labelStyle={{ color: "green" }}
-            itemStyle={{ color: "cyan" }}/>
-                                    <Legend />
-                                    <Bar barSize={30} dataKey="Total Product Price" fill="#8884d8" />
-
-                                </BarChart>
-                            )}
+                                    {barChartData.map((entry, index) => {
+                                        if (index === 1 || index === 2) { // the main change is here!!
+                                            return <Cell key={`cell-${index}`} fill="#f3f6f9" />;
+                                        }
+                                        return <Cell key={`cell-${index}`} fill="green" />;
+                                    })}
+                                    <Label
+                                        content={<CustomLabel viewBox={['cx', 'cy']} noOfBubbleTeaSold={barChartData[0]?.['total_product_count']} noCost={barChartData[0]?.['total_product_price']} />}
+                                        position="center"
+                                    />
+                                </Pie>
+                            </PieChart>)}
 
                             {barChartData?.length === 0 ? <div className='text-center' >No data available</div> : ""}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section className="my_profile_sect mb-4">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h2>Return Information</h2>
+                            {returnData?.length > 0 && (
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <BarChart
+                                        width={500}
+                                        height={400}
+                                        data={returnData}
+                                        margin={{ top: 25, right: 0, left: 0, bottom: 25 }}
+                                    >
+                                        <XAxis dataKey="created_at" dy="25" />
+                                        <YAxis />
+                                        <Tool />
+                                        <CartesianGrid stroke="rgba(0,0,0,0.1)" vertical={false} />
+                                        <Bar
+                                            dataKey="product_quantity"
+                                            barSize={50}
+                                            label={<CustomizedLabelBar viewBox={['cx', 'cy']} value={returnData[0]?.['product_quantity']} />}
+                                        >
+                                            {returnData.map((entry, index) => (
+                                                <Cell fill="#017fb1" />
+                                            ))}
+                                        </Bar>
+                                        <Bar
+                                            dataKey="total_return"
+                                            barSize={50}
+                                            label={<CustomizedLabelBar viewBox={['cx', 'cy']} value={returnData[0]?.['total_return']} />}
+                                        >
+                                            {returnData.map((entry, index) => (
+                                                <Cell fill="#017fb1" />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            )}
+
+                            {returnData?.length === 0 ? <div className='text-center' >No data available</div> : ""}
+
                         </div>
                     </div>
                 </div>

@@ -2,7 +2,7 @@ import { Route, Redirect } from "react-router";
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom';
 
-import Header from '../../containers/partials/headerMenu';
+import Header from '../../containers/partials/vendor/header';
 import Footer from '../../containers/partials/footer-new';
 import AppBreadcrumbs from "../../containers/partials/breadCrumbs";
 let localData = localStorage.getItem('redux-react-session/USER_DATA');

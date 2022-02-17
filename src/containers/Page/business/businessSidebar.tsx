@@ -67,7 +67,7 @@ function BusinessSidebar(props) {
                                         <option value="returns-complaints">{intl.formatMessage({ id: 'vendor.returnComplaints' })}</option>
                                          <option value="payouts">{intl.formatMessage({ id: 'vendor.payouts' })}</option>
                                         <option value="analysis">{intl.formatMessage({ id: 'vendor.myAnalysis' })}</option>
-                                        <option value="profile">{intl.formatMessage({ id: 'vendor.businessProfile' })}</option>
+                                        <option value="business-profile">{intl.formatMessage({ id: 'vendor.businessProfile' })}</option>
                                         <option value="support">{intl.formatMessage({ id: 'vendor.mySupport' })}</option>
                                     </select>
                                 </div>
