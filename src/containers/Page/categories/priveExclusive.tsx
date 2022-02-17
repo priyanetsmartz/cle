@@ -118,7 +118,6 @@ function PriveExclusive(props) {
     )
 }
 const mapStateToProps = (state) => {
-    //  console.log(state);
     return {
         items: state.Cart.items
     }

@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { getCustomerReturn } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
-import { getCookie } from '../../../helpers/session';
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings/index'
 import { formatprice, getAccordingDate } from '../../../components/utility/allutils';
@@ -15,7 +14,6 @@ function MyReturns(props) {
     const [returnPagination, setReturnPagination] = useState(1);
     const [returs, setReturn] = useState([]);
     const [page, setCurrent] = useState(1);
-    const language = getCookie('currentLanguage');
     const [sortOrder, setSortOrder] = useState('');
     const [loaderReturns, setLoaderReturns] = useState(false);
 
@@ -96,7 +94,7 @@ function MyReturns(props) {
                 <div>
                     {returs && (returs.map((items, i) => {
                         return (
-                            <>
+                            <div key={i}>
                                 <div className="row my-3">
                                     <h3>{items.date}</h3>
                                 </div>
@@ -111,7 +109,7 @@ function MyReturns(props) {
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <div className="viewall_btn">
-                                                                <Link to={`/customer/return-details/${item.rma_increment_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
+                                                                <Link to={`/customer/return-details/${item.rma_id}`} className=""><IntlMessages id="category.viewAll" /></Link>
                                                             </div>
                                                         </div>
 
@@ -187,7 +185,7 @@ function MyReturns(props) {
                                         </div>
                                     );
                                 })}
-                            </>
+                            </div>
                         )
                     }))}
                 </div>

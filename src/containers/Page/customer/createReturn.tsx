@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { checkIfReturnExists, createReturnRequest, getRegionsByCountryID, getReturnReasonList, searchOrders, updateOrderAddress } from '../../../redux/pages/customers';
 import moment from 'moment';
@@ -14,11 +14,11 @@ import notification from '../../../components/notification';
 
 function CreateReturn(props) {
     const intl = useIntl();
-    const selectRef = useRef();
     const { returnId }: any = useParams();
     const [custId, setCustid] = useState(props.token.cust_id);
     const [maxItems, setMaxitems] = useState(10);
     const [order, setOrder]: any = useState([]);
+    const [loader, setLoader]: any = useState(false);
     const [regions, setRegions] = useState([]);
     const [issueList, setIssueList]: any = useState([]);
     const [changeAddressModal, setChangeAddressModal] = useState(false);
@@ -87,9 +87,7 @@ function CreateReturn(props) {
         let resultShow = myObject.filter(val => {
             return val.value === 'false';
         });
-        // console.log(resultShow)
-        // console.log(orderData)
-
+  
         var onlyInReturn = orderData.filter(comparer(resultShow));
 
 
@@ -99,7 +97,6 @@ function CreateReturn(props) {
     function comparer(otherArray) {
         return function (current) {
             return otherArray.filter(function (other) {
-                //  console.log(parseInt(other.id),current.item_id )
                 return parseInt(other.id) === current.item_id
             }).length == 0;
         }
@@ -124,10 +121,7 @@ function CreateReturn(props) {
             custAddForm.email = props.token.token_email;
             custAddForm.orderId = order.entity_id;
             custAddForm.post_code = custAddForm.postcode;
-            // let data = {
-            //     "entity": custAddForm
-            // }
-            // console.log(custAddForm)
+          
             let result: any = await updateOrderAddress(custAddForm);
             if (result.data === 'address updated') {
                 getData(returnId);
@@ -220,12 +214,14 @@ function CreateReturn(props) {
         setReturnOrExchange(event.target.value)
     }
     const handleSubmitClick = async (e) => {
-
+        setLoader(true)
         if (reasonObject.length === 0) {
+            setLoader(false)
             notification("error", "", intl.formatMessage({ id: "selectreturnOrExchangeProducts" }));
             return false;
         }
         if (returnOrExchange === "" || returnOrExchange === null) {
+            setLoader(false)
             notification("error", "", intl.formatMessage({ id: "selectreturnOrExchange" }));
             return false;
         }
@@ -237,16 +233,19 @@ function CreateReturn(props) {
                 items: reasonObject
             }
         }
-        //    console.log(returnInfoData)
+
         let result: any = await createReturnRequest(returnInfoData);
-        console.log(result.data.status)
+
         if (result?.data?.[0]?.status === true) {
-            let key = Object.values(result?.data?.[0]?.rma);
-            let url = `/customer/return-details/${key[0]}`;
-            // console.log(key[0], url)
-            window.location.href = url;
-            notification("success", "", "Return created");
+            let key = Object.keys(result?.data?.[0]?.rma);
+            let url = `/customer/return-details/${key[0]}`;          
+            setLoader(false)
+            notification("success", "", "Return for your order has been created");
+            setTimeout(()=>{
+                window.location.href = url;
+            },3000)
         } else {
+            setLoader(false)
             notification("error", "", result?.data?.[0]?.message);
         }
 
@@ -301,7 +300,6 @@ function CreateReturn(props) {
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="shipment.date" /></strong></p>
-                                    {/* <p>{order['shipment_date'] ? moment(order['shipment_date']).format('ddd, D MMMM YYYY'): ''}</p> */}
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.paymentMethod" /></strong></p>
@@ -341,7 +339,6 @@ function CreateReturn(props) {
                     {order && order.items && order.items.slice(0, maxItems).map((item, i) => {
                         return (
                             <div key={i}>
-                                {/* {console.log(item)} */}
                                 <li onClick={() => handleProductSelect(item.item_id)}>
                                     <div className="row">
                                         <div className="col-md-3">
@@ -360,8 +357,6 @@ function CreateReturn(props) {
                                                 <div className="clearfix"></div>
                                             </div>
                                             <div className="pro-name-tag">
-                                                {/* <p>One Size</p> */}
-                                                {/* will add this in alpha */}
                                                 <p><strong><IntlMessages id="order.productNo" /></strong> {item.sku}</p>
                                                 <div className="clearfix"></div>
 
@@ -431,7 +426,10 @@ function CreateReturn(props) {
                             </div>
                             <div className="col-md-3 align-self-end mb-2">
                                 <label className="form-label"></label>
-                                <Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="order.returnProducts" /></Link>
+
+                                {loader ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                    <Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="order.returnProducts" /></Link>
+                                }
                             </div>
                             <div className="col-md-12 mb-2">
                                 <label><IntlMessages id="comments" /></label>

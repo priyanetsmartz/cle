@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 function Notifications(props) {
     const userGroup = localStorage.getItem('token')
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
-    const [name, setName] = useState(localStorage.getItem('token_name'));
     const history = useHistory();
     const key = props.match.params.tab;
     const [activeTab, setActiveTab] = useState('');
@@ -19,10 +18,6 @@ function Notifications(props) {
     const changeTab = (tab) => {
         history.push(`/customer/${tab}`);
         setActiveTab(tab);
-    }
-
-    const changeMobTab = (e) => {
-        changeTab(e.target.value);
     }
 
 

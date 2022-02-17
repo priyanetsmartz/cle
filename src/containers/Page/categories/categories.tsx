@@ -73,7 +73,6 @@ function Categories(props) {
             let obj: any = {};
             catname = result.data.items[0].name;
             result.data.items[0].custom_attributes.forEach(el => {
-                //  console.log(el.attribute_code)
                 if (el.attribute_code === "image") {
                     obj.image = baseUrl + el.value;
                 } else if (el.attribute_code === "description") {
@@ -88,7 +87,6 @@ function Categories(props) {
                 result.data.custom = obj;
             });
 
-            //  console.log(result.data)
             setCategoryId(result.data.items[0].id)
             setCatname(catname)
             setCategory(result.data);
@@ -113,7 +111,6 @@ function Categories(props) {
         <div className="sectiosn" id='topheaderrr'>
             <div className="section headerrr" id="headerrr" key='uniqueKey'>
                 <Header />
-                {/* {console.log(catname)} */}
                 <HelmetProvider>
                     <Helmet >
                         <title>{catname}</title>
@@ -131,7 +128,6 @@ function Categories(props) {
                     <div className="container">
                         <div className="row">
                             <div className="col-sm-12">
-                                {/* <AppBreadcrumbs />  */}
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item"><Link to={`/products/${category}`}>{capitalize(category)}</Link></li>
@@ -151,9 +147,6 @@ function Categories(props) {
             <div className="section" >
                 <LatestProducts ctId={categoryId} />
             </div>
-            {/* <div className="section" >
-                <PromotedProducts cateData={categories} />
-            </div> */}
             <div className="section">
                 <Magazine />
             </div>
@@ -170,7 +163,6 @@ function Categories(props) {
     )
 }
 const mapStateToProps = (state) => {
-    // console.log(state)
     let languages = '', cateData = {};
 
     if (state && state.LanguageSwitcher) {

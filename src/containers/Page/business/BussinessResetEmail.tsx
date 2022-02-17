@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useLocation, useHistory } from "react-router";
 import notification from '../../../components/notification';
@@ -11,9 +11,7 @@ function BusinessResetPassword(props) {
     let history = useHistory();
     const pass = useLocation().search;
     const token = new URLSearchParams(pass).get("token");
-    // const customerId = new URLSearchParams(pass).get("id");
     const intl = useIntl();
-    // console.log(token, customerId);
 
     const [state, setState] = useState({
         newEmail: ""
@@ -22,24 +20,6 @@ function BusinessResetPassword(props) {
     const [errors, setError] = useState({
         errors: {}
     });
-
-    useEffect(() => {
-        // async function getData() {
-        //     try {
-        //         let result: any = await ValidateToken(token, customerId);
-        //         if (result) {
-
-        //         }
-        //     } catch (err) {
-        //         history.push("password-link-expired");
-        //     }
-        // }
-        // getData()
-        return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
-        }
-    }, [])
 
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -51,7 +31,7 @@ function BusinessResetPassword(props) {
 
     const handleSubmitClick = async (e) => {
         e.preventDefault();
-         if (handleValidation()) {
+        if (handleValidation()) {
             setIsShow(true);
             let payload = {
                 confirm: token,
@@ -66,11 +46,11 @@ function BusinessResetPassword(props) {
                     new_email: ""
                 }))
                 setIsShow(false);
-              //vendor logout
-                    localStorage.removeItem('redux-react-session/USER-SESSION');
-                    localStorage.removeItem('redux-react-session/USER_DATA');
-                    history.replace('/vendor-login');
-                
+                //vendor logout
+                localStorage.removeItem('redux-react-session/USER-SESSION');
+                localStorage.removeItem('redux-react-session/USER_DATA');
+                history.replace('/vendor-login');
+
                 await sessionService.deleteSession();
                 await sessionService.deleteUser();
             } else {
@@ -79,7 +59,6 @@ function BusinessResetPassword(props) {
             }
         } else {
             setIsShow(false);
-            // notification("error", "", intl.formatMessage({ id: "validPass" }));
         }
     }
 

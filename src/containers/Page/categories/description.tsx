@@ -1,7 +1,5 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getCategoryDetails } from '../../../redux/pages/customers';
 import { useLocation } from 'react-router-dom';
 
 function Description(props) {

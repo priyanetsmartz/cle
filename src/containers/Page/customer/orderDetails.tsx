@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { searchOrders, getCountriesList, getorderReturnstatusapi, updateOrderAddress, checkIfReturnExists, getRegionsByCountryID } from '../../../redux/pages/customers';
 import moment from 'moment';
@@ -80,7 +80,7 @@ function OrderDetails(props) {
         let myObject = checkreturn?.data?.[0];
 
         let resultShow = myObject.filter(val => {
-            return val.value === 'false';
+            return val.value === 'true';
         });
         if (resultShow.length > 0) {
             setShowReturn(true);
@@ -120,10 +120,6 @@ function OrderDetails(props) {
             custAddForm.email = props.token.token_email;
             custAddForm.orderId = order.entity_id;
             custAddForm.post_code = custAddForm.postcode;
-            // let data = {
-            //     "entity": custAddForm
-            // }
-            // console.log(custAddForm)
             let result: any = await updateOrderAddress(custAddForm);
             if (result.data === 'address updated') {
                 getData();
@@ -176,31 +172,6 @@ function OrderDetails(props) {
 
     const showMore = () => {
         setMaxitems(1000);
-    }
-
-    const sortHandler = (sortOrder) => {
-        order.items.sort(compareValues(sortOrder))
-        setOrder(order);
-        // console.log(order.items);
-    }
-
-
-    const compareValues = (order) => {
-        return function innerSort(a, b) {
-
-            const varA = a.price;
-            const varB = b.price;
-
-            let comparison = 0;
-            if (varA > varB) {
-                comparison = 1;
-            } else if (varA < varB) {
-                comparison = -1;
-            }
-            return (
-                (order === 0) ? (comparison * -1) : comparison
-            );
-        };
     }
     const handleCountryChange = async (e) => {
         const { id, value } = e.target;
@@ -276,8 +247,7 @@ function OrderDetails(props) {
                                     <p>{moment(order['created_at']).format('ddd, D MMMM YYYY')}</p>
                                 </div>
                                 <div className="col-md-3">
-                                    <p><strong><IntlMessages id="shipment.date" /></strong></p>
-                                    {/* <p>{order['shipment_date'] ? moment(order['shipment_date']).format('ddd, D MMMM YYYY'): ''}</p> */}
+                                    <p><strong><IntlMessages id="shipment.date" /></strong></p>                                   
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.paymentMethod" /></strong></p>
@@ -335,8 +305,7 @@ function OrderDetails(props) {
                         <div className="col-md-12 return-complaint-btns">
                             {order.returnStatus && (
                                 <div className="float-start">
-                                    <Link to={`/customer/create-return/${order.increment_id}`}><IntlMessages id="order.returnProducts" /></Link>
-                                    {/* <Link to=""><IntlMessages id="order.makeAComplaint" /></Link> */}
+                                    <Link to={`/customer/create-return/${order.increment_id}`}><IntlMessages id="order.returnProducts" /></Link>                                  
                                 </div>
                             )}
                             <div className="clearfix"></div>
@@ -360,18 +329,10 @@ function OrderDetails(props) {
                                                 <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                 <p>{capitalize(item.product_type)}</p>
                                             </div>
-                                            {/* <div className="float-start">
-                                                {item.extension_attributes.barnd && (
-                                                    <b> <Link to={'/search/' + item.extension_attributes.barnd}><strong>{item.extension_attributes.barnd}</strong></Link></b>)}
-                                                <p> <Link to={'/product-details/' + item.sku}><strong>{item.name}</strong></Link></p>
-                                                <p>{capitalize(item.product_type)}</p>
-                                            </div> */}
                                             <Link to="#" className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{formatprice(item.price)}</Link>
                                             <div className="clearfix"></div>
                                         </div>
                                         <div className="pro-name-tag">
-                                            {/* <p>One Size</p> */}
-                                            {/* will add this in alpha */}
                                             <p><strong><IntlMessages id="order.productNo" /></strong> {item.sku}</p>
                                             <div className="clearfix"></div>
                                         </div>

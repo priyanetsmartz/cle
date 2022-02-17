@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import Modal from "react-bootstrap/Modal";
 import {
-    getCountriesList, changePassword,
-    updateCustEmail, getRegionsByCountryID
+    getCountriesList, getRegionsByCountryID
 } from '../../../redux/pages/customers';
 import moment from 'moment';
 import { language } from '../../../settings';
@@ -68,7 +67,7 @@ function BusinessProfile(props) {
     const [openBankModal, setOpenBankModal] = useState(false);
 
     const [myAddressModal, setMyAddressModal] = useState(false);
-    const [addCard, setAddCard] = useState(false);
+
     const [passMask, setPassMask] = useState({
         password: true,
         newPassword: true,
@@ -143,9 +142,9 @@ function BusinessProfile(props) {
     async function getData() {
         let lang = props.languages ? props.languages : language;
         let result: any = await getVendorDetails(lang);
-        //  console.log(result['data'][0]['vendorPersonalDetails']);
+
         const d = result && result['data'] && result['data'].length > 0 && result['data'][0]['vendorPersonalDetails'] ? result['data'][0]['vendorPersonalDetails'].vendorDateofBirth.split("-") : moment().format("YYYY-MM-DD").split("-");
-        // console.log(d[0])
+
         dob.day = d[2];
         dob.month = d[1];
         dob.year = d[0];
@@ -161,7 +160,6 @@ function BusinessProfile(props) {
 
     const getCountries = async () => {
         let result: any = await getCountriesList();
-        // console.log(result.data)
         let country = result && result.data ? result.data : []
         setCountries(country);
     }
@@ -188,15 +186,6 @@ function BusinessProfile(props) {
             ...prevState,
             [id]: value
         }))
-    }
-
-
-    const handleCountryChange = async (e) => {
-        const { id, value } = e.target;
-        setVendorForm(prevState => ({
-            ...prevState,
-            [id]: value
-        }));
     }
 
     const handleCountryChangeAdd = async (e) => {
@@ -246,7 +235,6 @@ function BusinessProfile(props) {
         if (validateAddress()) {
 
             vendorAddForm.vendorId = props.token.vendor_id;
-            // vendorAddForm.countryId = vendorAddForm['country']
             delete vendorAddForm['countryName']
             delete vendorAddForm['region']
             vendorAddForm['region'] = vendorAddForm['region_id']
@@ -328,12 +316,6 @@ function BusinessProfile(props) {
             error["gender"] = intl.formatMessage({ id: "gifting.gender" });
         }
 
-        // if (typeof (vendorForm.vendorTelephone) !== "undefined") {
-        //     if (!(/^(?:\+971|00971|0)(?:2|3|4|6|7|9|50|51|52|55|56)[0-9]{7}$/.test(vendorForm.vendorTelephone))) {
-        //         formIsValid = false;
-        //         error["vendorTelephone"] = intl.formatMessage({ id: "phoneinvalid" });
-        //     }
-        // }
         if (!vendorForm.vendorTelephone) {
             formIsValid = false;
             error['vendorTelephone'] = intl.formatMessage({ id: "phonereq" });
@@ -442,12 +424,6 @@ function BusinessProfile(props) {
         setErrorsBussiness({ errors: error });
         return formIsValid;
     }
-    // for customer address popup window ends here
-    // const deleteAdd = async () => {
-
-    // }
-    //edit existing address ends here--------------->
-
 
     //for customer address
     const handleAddChange = (e) => {
@@ -458,8 +434,6 @@ function BusinessProfile(props) {
         }))
 
     }
-
-
 
     const getRegions = async (value, i?) => {
         const res: any = await getRegionsByCountryID(value);
@@ -628,19 +602,12 @@ function BusinessProfile(props) {
         getData();
         setOpenBankModal(!openBankModal)
     }
-    // const openMyPreferences = () => {
-    //     getAttributes();
-    //     setMyPreferenceModel(!myPreferenceModel);
-    // }
-
+    
     const openAddressModal = () => {
         getData();
         setMyAddressModal(!myAddressModal);
     }
 
-    // const openGigitingModal = () => {
-    //     setGiftingModal(!giftingModal);
-    // }
 
     const dobHandler = (e) => {
         const { id, value } = e.target;
@@ -704,10 +671,6 @@ function BusinessProfile(props) {
 
     return (
         <div className="col-sm-9">
-
-
-
-
             <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">
@@ -722,7 +685,7 @@ function BusinessProfile(props) {
                                 <div className="col-sm-3">
                                     <div className='companylogo'> <img className="rounded-circle" src={businessDetailsForm['logoImagePath'] ? companylogo + '' + businessDetailsForm['logoImagePath'] + `?${Math.random()}` : user} alt={businessDetailsForm['businessCompanyName']} width="100%" height="100%" />
                                         <div className='onhoveredit'> <input type="file" onChange={onFileChange} /></div>
-                                        <div className='onhoveredit-2'><IntlMessages id ="myaccount.edit"/></div>
+                                        <div className='onhoveredit-2'><IntlMessages id="myaccount.edit" /></div>
                                     </div>
                                 </div>
                                 <div className="col-sm-3">
@@ -853,8 +816,7 @@ function BusinessProfile(props) {
                                 </ul>
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
-                                <div className="address-action">
-                                    {/* <Link to="#" className="delete_btn"><IntlMessages id="myaccount.delete" /></Link> */}
+                                <div className="address-action">                                   
                                     <Link to="#" className="edit_btn" onClick={() => openAddressModal()}>
                                         <IntlMessages id="myaccount.edit" />
                                     </Link>
@@ -876,8 +838,7 @@ function BusinessProfile(props) {
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
-                            <h5><IntlMessages id="myaccount.Bank" /></h5>
-                            {/* <p><IntlMessages id="myaccount.addOrChangePayments" /> </p> */}
+                            <h5><IntlMessages id="myaccount.Bank" /></h5>                          
                         </div>
                         <div className="col-sm-12">
                             <div className="row">
@@ -926,119 +887,119 @@ function BusinessProfile(props) {
                             <label className="form-label heading_lbl"><IntlMessages id="login.password" />*</label>
                             <div className="password_edit">*******</div>
                         </div>
-						<div className="col-sm-6"></div>
+                        <div className="col-sm-6"></div>
                     </div>
                     <div className="row">
-                            <div className="change-paswd-sec col-sm-6">
-                                <div className="width-100">
-								<label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
-								</div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="login.password" />*</label>
-                                    <input type={passMask.password ? 'password' : 'text'} className="form-control" placeholder=""
-                                        id="password"
-                                        value={changePass.password}
-                                        onChange={handlePassword} />
-                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('password')}>
-                                        {passMask.password ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
-                                    </span>
-                                    <span className="error">{errors.errors["password"]}</span>
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.newPassword" /> <span
-                                        className="maindatory">&#42;</span></label>
-                                    <input type={passMask.newPassword ? 'password' : 'text'} className="form-control" placeholder="" id="newPassword"
-                                        value={changePass.newPassword}
-                                        onChange={handlePassword} />
-                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('newPassword')}>
-                                        {passMask.newPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
-                                    </span>
+                        <div className="change-paswd-sec col-sm-6">
+                            <div className="width-100">
+                                <label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label"><IntlMessages id="login.password" />*</label>
+                                <input type={passMask.password ? 'password' : 'text'} className="form-control" placeholder=""
+                                    id="password"
+                                    value={changePass.password}
+                                    onChange={handlePassword} />
+                                <span className="hidden-pass" onClick={() => togglePasswordVisiblity('password')}>
+                                    {passMask.password ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                </span>
+                                <span className="error">{errors.errors["password"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label"><IntlMessages id="myaccount.newPassword" /> <span
+                                    className="maindatory">&#42;</span></label>
+                                <input type={passMask.newPassword ? 'password' : 'text'} className="form-control" placeholder="" id="newPassword"
+                                    value={changePass.newPassword}
+                                    onChange={handlePassword} />
+                                <span className="hidden-pass" onClick={() => togglePasswordVisiblity('newPassword')}>
+                                    {passMask.newPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                </span>
 
-                                    <span className="error">{errors.errors["newPassword"]}</span>
+                                <span className="error">{errors.errors["newPassword"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /> <span
+                                    className="maindatory">&#42;</span></label>
+                                <input type={passMask.confirmNewPassword ? 'password' : 'text'} className="form-control" placeholder=""
+                                    id="confirmNewPassword"
+                                    value={changePass.confirmNewPassword}
+                                    onChange={handlePassword} />
+                                <span className="hidden-pass" onClick={() => togglePasswordVisiblity('confirmNewPassword')}>
+                                    {passMask.confirmNewPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                </span>
+                                <span className="error">{errors.errors["confirmNewPassword"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field forgot_paswd">
+                                <div className="Frgt_paswd">
+                                    <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" />?</Link>
                                 </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /> <span
-                                        className="maindatory">&#42;</span></label>
-                                    <input type={passMask.confirmNewPassword ? 'password' : 'text'} className="form-control" placeholder=""
-                                        id="confirmNewPassword"
-                                        value={changePass.confirmNewPassword}
-                                        onChange={handlePassword} />
-                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('confirmNewPassword')}>
-                                        {passMask.confirmNewPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
-                                    </span>
-                                    <span className="error">{errors.errors["confirmNewPassword"]}</span>
-                                </div>
-                                <div className="width-100 mb-3 form-field forgot_paswd">
-                                    <div className="Frgt_paswd">
-                                        <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" />?</Link>
-                                    </div>
-                                    <div className="Frgt_paswd">
-                                        <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary" onClick={handleChangePass}>
-                                                <IntlMessages id="myaccount.confirm" /></button>
-                                        </div>
+                                <div className="Frgt_paswd">
+                                    <div className="confirm-btn">
+                                        <button type="button" className="btn btn-secondary" onClick={handleChangePass}>
+                                            <IntlMessages id="myaccount.confirm" /></button>
                                     </div>
                                 </div>
                             </div>
-							<div className="col-sm-6"></div>
+                        </div>
+                        <div className="col-sm-6"></div>
                     </div>
-                        
-						<div className="row mb-3">
 
-                            <div className="col-sm-6">
-                                <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                                <div className="password_edit">{props.token.email}</div>
-                            </div>
-							<div className="col-sm-6"></div>
+                    <div className="row mb-3">
+
+                        <div className="col-sm-6">
+                            <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
+                            <div className="password_edit">{props.token.email}</div>
                         </div>
-						
-                        <div className="row">
-                            <div className="newemail-sec col-sm-6">
-                                <div className="width-100">
-								<label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
-								</div>
-                                <div className="width-100 mb-3">
-                                    <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
-                                    <input type="email" className="form-control" placeholder="" id="newEmail"
-                                        value={changeEmail.newEmail}
-                                        onChange={handleEmail} />
-                                    <span className="error">{errors.errors["newEmail"]}</span>
-                                </div>
-                                <div className="width-100 mb-3">
-                                    <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
-                                        className="maindatory"></span></label>
-                                    <input type="email" className="form-control" placeholder="" id="confirmNewEmail"
-                                        value={changeEmail.confirmNewEmail}
-                                        onChange={handleEmail} />
-                                    <span className="error">{errors.errors["confirmNewEmail"]}</span>
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="login.password" />*<span
-                                        className="maindatory"></span></label>
-                                    <input type={passMask.emailPass ? 'password' : 'text'} className="form-control" placeholder=""
-                                        id="password2"
-                                        value={changeEmail.password2}
-                                        onChange={handleEmail} />
-                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
-                                        {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
-                                    </span>
-                                    <span className="error">{errors.errors["password2"]}</span>
-                                </div>
-                                <div className="forgot_paswd">
-                                    <div className="Frgt_paswd">
-                                        <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary" onClick={handleChangeEmail}>
-                                                <IntlMessages id="myaccount.confirm" />
-                                            </button>
-                                        </div>
+                        <div className="col-sm-6"></div>
+                    </div>
+
+                    <div className="row">
+                        <div className="newemail-sec col-sm-6">
+                            <div className="width-100">
+                                <label className="heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+                            </div>
+                            <div className="width-100 mb-3">
+                                <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
+                                <input type="email" className="form-control" placeholder="" id="newEmail"
+                                    value={changeEmail.newEmail}
+                                    onChange={handleEmail} />
+                                <span className="error">{errors.errors["newEmail"]}</span>
+                            </div>
+                            <div className="width-100 mb-3">
+                                <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
+                                    className="maindatory"></span></label>
+                                <input type="email" className="form-control" placeholder="" id="confirmNewEmail"
+                                    value={changeEmail.confirmNewEmail}
+                                    onChange={handleEmail} />
+                                <span className="error">{errors.errors["confirmNewEmail"]}</span>
+                            </div>
+                            <div className="width-100 mb-3 form-field">
+                                <label className="form-label"><IntlMessages id="login.password" />*<span
+                                    className="maindatory"></span></label>
+                                <input type={passMask.emailPass ? 'password' : 'text'} className="form-control" placeholder=""
+                                    id="password2"
+                                    value={changeEmail.password2}
+                                    onChange={handleEmail} />
+                                <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
+                                    {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                </span>
+                                <span className="error">{errors.errors["password2"]}</span>
+                            </div>
+                            <div className="forgot_paswd">
+                                <div className="Frgt_paswd">
+                                    <div className="confirm-btn">
+                                        <button type="button" className="btn btn-secondary" onClick={handleChangeEmail}>
+                                            <IntlMessages id="myaccount.confirm" />
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-							<div className="col-sm-6"></div>
                         </div>
-						
+                        <div className="col-sm-6"></div>
                     </div>
-               
+
+                </div>
+
             </section>
 
             <HtmlContent identifier="vendor_block" />
@@ -1105,9 +1066,9 @@ function BusinessProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.gender" /></label>
                             <select className="form-select" defaultValue={vendorForm.gender} aria-label="Default select example" onChange={handleChange} id="gender">
-                                <option value="">{intl.formatMessage({id:'select'})}</option>
+                                <option value="">{intl.formatMessage({ id: 'select' })}</option>
                                 {DROPDOWN.genderVendor.map(opt => {
-                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({id:opt.name})}</option>);
+                                    return (<option value={opt.id} key={opt.id}>{intl.formatMessage({ id: opt.name })}</option>);
                                 })}
                             </select>
                             <span className="error">{errorsPersonal.errors["gender"]}</span>
@@ -1121,7 +1082,7 @@ function BusinessProfile(props) {
                             <span className="error">{errorsPersonal.errors["vendorTelephone"]}</span>
                         </div>
                         <div className="width-100 mb-3 form-field">
-                            <label className="form-label"><IntlMessages id= "myaccount.dob" /></label>
+                            <label className="form-label"><IntlMessages id="myaccount.dob" /></label>
                             <div className="dobfeild">
                                 <select className="form-select me-3" value={dob.day} aria-label="Default select example" onChange={dobHandler} id="day">
                                     <option value="">{intl.formatMessage({ id: "select" })}</option>
@@ -1147,8 +1108,8 @@ function BusinessProfile(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="vendor.contactMethod" /><span className="maindatory">*</span></label>
                             <select value={vendorForm.contactMethod} onChange={handleChange} id="contactMethod" className="form-select" aria-label="Default select example">
-                                <option value="email">{intl.formatMessage({id:'profile.email'})}</option>
-                                <option value="phone">{intl.formatMessage({id:'Phone'})}</option>
+                                <option value="email">{intl.formatMessage({ id: 'profile.email' })}</option>
+                                <option value="phone">{intl.formatMessage({ id: 'Phone' })}</option>
                             </select>
                             <span className="error">{errors.errors["contactMethod"]}</span>
                         </div>

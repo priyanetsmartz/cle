@@ -57,11 +57,16 @@ function ProductDetails(props) {
     const lastLocation = useLastLocation();
 
     useEffect(() => {
-       // console.log(lastLocation)
+
         let path = lastLocation?.pathname;
-        const answer_array = path?.split('/');
-        //console.log(answer_array);
-        setLocationBread(answer_array)
+        const location_array = path?.split('/');
+      
+        if (!location_array?.includes('search')) {
+            setLocationBread(location_array)
+        }else{
+            setLocationBread(undefined)
+        }
+
 
         setTimeout(() => {
             window.scrollTo(0, 0)
@@ -103,11 +108,9 @@ function ProductDetails(props) {
         const index = e.target.selectedIndex;
         const el = e.target.childNodes[index]
         const option = el.getAttribute('id');
-        //console.log(option)
         let selected = e.target.value;
         setSlectedAttribute(selected);
         let selectChild = childrenProducts[option - 1];
-        //  console.log(selectChild);
         let projectSingle = {};
         let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
 
@@ -161,19 +164,15 @@ function ProductDetails(props) {
         attrs.forEach(async (i) => {
             attributesDrop.push(new Promise((resolve, reject) => {
                 const res: any = someAPICall(i);
-                // {...res, 'title': i.label}
                 resolve(res);
             }));
         })
         const result = await Promise.all(attributesDrop);
-        // console.log(result);
         setConfigurableOptions(result)
-        // return result;
     }
 
 
     async function someAPICall(attribute) {
-        //console.log(attribute)
         let data: any = []
         let labels: any = await configLabels(attribute.attribute_id);
         data.title = attribute.label;
@@ -191,7 +190,6 @@ function ProductDetails(props) {
         let projectSingle = {};
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
-            // let products = result.data.items;
             let WhishlistData = whishlist.data;
 
             const inWhishlist = WhishlistData.find(element => element.sku === skuUrl);
@@ -214,7 +212,6 @@ function ProductDetails(props) {
             let attributes = result.data.extension_attributes.configurable_product_options;
             let childProducts: any = await getProductChildren(skuUrl);
             props.getAttributeProducts(attributes)
-            // console.log(childProducts.data)
             seChildrenProducts(childProducts.data);
         }
         let description = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [];
@@ -253,9 +250,6 @@ function ProductDetails(props) {
 
             })
         }
-
-        // console.log(tags);
-        //     console.log(result.data.price)
         projectSingle['id'] = result.data.id;
         projectSingle['type_id'] = result.data.type_id;
         projectSingle['sku'] = result.data.sku;
@@ -269,12 +263,12 @@ function ProductDetails(props) {
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = result.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
-        //  projectSingle['product_links'] = result.data.product_links;
+      
         setOpacity(1)
         setProdId(projectSingle['id']);
         setTagsState(tags)
         setProductImages(result.data.media_gallery_entries)
-        // setConfigurableOptions(result.data.extension_attributes.configurable_product_options);
+        
         let qtyy = result.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
         setExtensionAttributes(qtyy);
         setproductDetails(projectSingle);
@@ -286,8 +280,6 @@ function ProductDetails(props) {
         if (result.data && result.data.extension_attributes && result.data.extension_attributes.mp_sizechart && result.data.extension_attributes.mp_sizechart.rule_description) {
             setMeasuringDetails(result.data.extension_attributes.mp_sizechart.rule_description);
         }
-
-        // console.log(productDetails)
     }
 
     const handleGiftMEssage = () => {
@@ -305,31 +297,25 @@ function ProductDetails(props) {
     }
 
     async function handleCart(id: number, sku: string) {
-        //console.log('productDetails')
         setIsShow(true);
         let cartData = {};
         let cartSucces: any;
         let cartQuoteId = '';
         let customer_id = props.token.cust_id;
         let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-        //console.log(cartQuoteIdLocal)
         if (cartQuoteIdLocal && customer_id) {
-            //   console.log('vvvv')
             let customerCart: any = await loginApi.genCartQuoteID(customer_id)
             cartQuoteId = cartQuoteIdLocal
             if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
                 cartQuoteId = customerCart.data;
             }
         } else {
-            //  console.log(cartQuoteIdLocal)
             if (!cartQuoteIdLocal) {
-                // console.log(cartQuoteIdLocal)
                 let guestToken: any = await createGuestToken();
                 localStorage.setItem('cartQuoteToken', guestToken.data);
                 let result: any = await getGuestCart(props.languages);
                 cartQuoteId = result.data.id
             } else {
-                //   console.log('hdhdh')
                 let result: any = await getGuestCart(props.languages);
                 cartQuoteId = result.data.id
             }
@@ -372,7 +358,6 @@ function ProductDetails(props) {
         if (token) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-            //     console.log(result);
             if (result.data) {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
@@ -390,9 +375,7 @@ function ProductDetails(props) {
     }
     async function handleDelWhishlist(id: any) {
         setDelWishlist(id)
-        //console.log(delWishlist, iteminWhishlist)
         let del: any = await removeWhishlist(id);
-        // console.log(del)
         if (del.data[0].message) {
             props.addToWishlistTask(true);
             setDelWishlist(0)
@@ -409,19 +392,19 @@ function ProductDetails(props) {
     return (
         <>
             <main>
-                {/* <Promotion /> */}<section>
+                <section>
                     <div className="container">
                         <div className="row">
                             <div className="col-sm-12">
-                                {/* <AppBreadcrumbs />  */}
                                 <ol className="breadcrumb">
                                     {locationBread?.length > 0 && (
                                         <>
                                             <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                             {
                                                 locationBread.map((item, i) => {
-                                                    if (item === "" || item === 'products'|| item === 'category') return false;
-                                                    if (i === 2 )  return <li className="breadcrumb-item" key={i}><Link to={`/category/`+item}>{item}</Link></li>
+                                                    console.log(locationBread)
+                                                    if (item === "" || item === 'products' || item === 'category') return false;
+                                                    if (i === 2) return <li className="breadcrumb-item" key={i}><Link to={`/category/` + item}>{item}</Link></li>
                                                     return <li className="breadcrumb-item" key={i}><Link to={lastLocation?.pathname}>{item}</Link></li>
 
                                                 })
@@ -459,15 +442,7 @@ function ProductDetails(props) {
                             <div className="col-sm-6">
                                 <div className="product_description">
                                     <div className="list_accordon">
-                                        {/* {tagsState.length > 0 && (
-                                            <ul>
-                                                {tagsState.map((tag, i) => {
-                                                    return (<li key={i}><Link to="#" className="active">{tag}</Link></li>)
-                                                })}
 
-                                            </ul>
-                                        )
-                                        } */}
                                         {isPriveuser && <div className="logo_stampg">
                                             <Link to="#"><img src={cleWork} alt="" className="img-fluid" /></Link>
                                         </div>}
@@ -485,14 +460,6 @@ function ProductDetails(props) {
                                             <div className="col-sm-4">
                                                 <div className="form-group">
                                                     <span className="form-label"><IntlMessages id="product.quantity" />:</span>
-                                                    {/* {(extensionAttributes) ? (
-                                                        <select className="form-select" onChange={handleQuantity} aria-label="Default select example">
-                                                            {Array.from(Array(extensionAttributes).slice(0, 10), (e, i) => {
-                                                                return <option key={i + 1}>{i + 1}</option>
-                                                            })}
-
-                                                        </select>
-                                                    ) : ""} */}
                                                     <select className="form-select" onChange={handleQuantity} aria-label="Default select example">
                                                         {
 
@@ -622,13 +589,7 @@ function ProductDetails(props) {
                                                 <div className="accordion-body">
                                                     <div className="details_product">
                                                         <ul>
-                                                            <li>     <IntlMessages id="Colour" />: {productDetails['watch_color']}</li>
-                                                            {/* <li>Composition: 18kt gold-plated sterling silver.</li>
-                                                            <li>Country of origin: Italy</li>
-                                                            <li>Curb-chain links</li>
-                                                            <li>Picture jasper-stone links</li>
-                                                            <li>T bar</li>
-                                                            <li>Clasp fastening</li> */}
+                                                            <li>     <IntlMessages id="Colour" />: {productDetails['watch_color']}</li>                                                          
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -645,12 +606,6 @@ function ProductDetails(props) {
                                                 data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">
                                                     <div className="details_product">
-                                                        {/* <ul>
-                                                            <li> Chain length 16.6in/42.5cm</li>
-                                                            <li> Max feature width 1.4in/3.8cm</li>
-                                                            <li> Max feature length 0.7in/1.3cm</li>
-                                                        </ul> */}
-                                                        {/* <Link to="#" className="sizeguid"> <IntlMessages id="product.sizeguide" /></Link> */}
                                                     </div>
                                                 </div>
                                             </div>

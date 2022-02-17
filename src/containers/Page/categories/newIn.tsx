@@ -25,7 +25,6 @@ const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 function NewIn(props) {
     const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
-    const location = useLocation()
     let imageD = '', description = '', brand = '';
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
@@ -38,15 +37,11 @@ function NewIn(props) {
         const localToken = props.token.token;
         setToken(localToken)
         getProducts(props.ctId);
-        //console.log(props.ctId)
         return () => {
-            // componentwillunmount in functional component.
-            // Anything in here is fired on component unmount.
         }
     }, [props.ctId])
 
     async function getProducts(catID) {
-       // console.log(props.ctId)
         setOpacity(0.3);
         let customer_id = props.token.cust_id;
         let result: any = await getProductByCategory(1, siteConfig.pageSize, props.ctId, 'created_at', 'DESC', props.languages);
@@ -65,7 +60,6 @@ function NewIn(props) {
             productResult = mergeById(products, WhishlistData);
 
         }
-        // console.log(productResult)
         setProducts(productResult);
         setOpacity(1);
 
@@ -139,7 +133,7 @@ function NewIn(props) {
                 products.length > 0 && (
                     <div className=" container" style={{ 'opacity': opacity }}>
                         <h1 className="new-arrival"><IntlMessages id="category.explore"></IntlMessages></h1>
-                        {/* {console.log(products)} */}
+                
                         <div className="row product-listing plp-listing g-2">
 
                             {products.slice(0, products.length > 1 ? products.length - 1 : products.length - 0).map(item => {
@@ -167,9 +161,6 @@ function NewIn(props) {
                                                                 if (attributes.attribute_code === 'image') {
                                                                     imageD = attributes.value;
                                                                 }
-                                                                if (attributes.attribute_code === 'short_description') {
-                                                                    description = attributes.value;
-                                                                }
                                                                 if (attributes.attribute_code === 'brand') {
                                                                     brand = attributes.value;
                                                                 }
@@ -186,13 +177,11 @@ function NewIn(props) {
                                                 <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                 <div className="pricetag"> {siteConfig.currency} {formatprice(item.price)}</div>
                                             </div>
-                                            {/* {token && ( */}
                                             <div className="cart-button mt-3 px-2">
                                                 {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                     <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
                                             </div>
-                                            {/* )} */}
                                         </div>
                                     </div>
                                 )

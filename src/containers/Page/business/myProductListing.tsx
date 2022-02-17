@@ -155,7 +155,6 @@ function MyProductListing(props) {
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span><IntlMessages id="id" />:</span>{row.product.id}</p>
                     <div className='data_value'><ul><li>{ <Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
-                    {/* <div className='data_value'><ul><li>{row.product.status === "2" ? <Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link> : <Link to={'/product-details/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div> */}
                 </div>
             ),
         },
@@ -298,7 +297,6 @@ function MyProductListing(props) {
                             columns={columns}
                             data={listingData}
                             pagination={true}
-                            // progressPending={pending}
                             paginationComponentOptions={paginationComponentOptions}
                         />
                     </div>

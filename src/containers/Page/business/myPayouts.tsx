@@ -7,7 +7,7 @@ import { InputNumber, Slider } from 'antd';
 import CLELogo from '../../../image/CLIlogo.png';
 import moment from 'moment';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
-import { getInvoice, getPayoutOrders, getVendorDetails } from '../../../redux/pages/vendorLogin';
+import { getInvoice, getPayoutOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
 import { capitalize, formatprice } from '../../../components/utility/allutils';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -20,8 +20,7 @@ import { sessionService } from 'redux-react-session';
 function MyPayouts(props) {
     const [vendorName, setVendorName] = useState('')
     const intl = useIntl();
-    const [myOrder, setMyOrders] = useState([])
-    const ref = useRef();
+    const [myOrder, setMyOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [accBalance, setAccBalance] = useState([])
     const [range, setRange] = useState({ low: 0, high: 20000 })
@@ -41,10 +40,9 @@ function MyPayouts(props) {
         return (
             setMyOrders([])
         )
-
-
     }, [])
-    async function getVendor(){
+
+    async function getVendor() {
         let vendor = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
         setVendorName(vendor.vendor_name);
     }
@@ -102,7 +100,7 @@ function MyPayouts(props) {
 
     const columns = [
         {
-            name: intl.formatMessage({id:'id'}),
+            name: intl.formatMessage({ id: 'id' }),
             selector: row => row.payout_id,
             button: true,
             cell: row => {
@@ -112,11 +110,10 @@ function MyPayouts(props) {
 
         },
         {
-            name: intl.formatMessage({id:'price'}),
+            name: intl.formatMessage({ id: 'price' }),
             selector: row => row.price,
             button: true,
             cell: row => {
-                //let priceT = row.price ? parseFloat(row.price).toFixed(2) : 0
                 let formatPrice = formatprice(row.price);
                 return (<Link to={`/vendor/payoutdetails/${row.payout_id}`}>{formatPrice}</Link>
                 )
@@ -124,25 +121,24 @@ function MyPayouts(props) {
 
         },
         {
-            name: intl.formatMessage({id:'order.date'}),
+            name: intl.formatMessage({ id: 'order.date' }),
             selector: row => row.date,
         },
         {
-            name: intl.formatMessage({id:'status'}),
+            name: intl.formatMessage({ id: 'status' }),
             selector: row => row.status,
             cell: row => (
-                // <span className='green'>{capitalize(row.status)}</span>
                 <div>
-                    {row.status === "scheduled" ? <span className="scheduled">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
-                    {row.status === "pending" ? <span className="pending">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
-                    {row.status === "processing" ? <span className="processing">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
-                    {row.status === "hold" ? <span className="hold">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
-                    {row.status === "paypal_ipn" ? <span className="paypal_ipn">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
-                    {row.status === "paid" ? <span className="paid">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "scheduled" ? <span className="scheduled">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
+                    {row.status === "pending" ? <span className="pending">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
+                    {row.status === "processing" ? <span className="processing">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
+                    {row.status === "hold" ? <span className="hold">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
+                    {row.status === "paypal_ipn" ? <span className="paypal_ipn">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
+                    {row.status === "paid" ? <span className="paid">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
 
-                    {row.status === "error" ? <span className="error">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "error" ? <span className="error">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
 
-                    {row.status === "canceled" ? <span className="canceled">{intl.formatMessage({id:capitalize(row.status)})}</span> : ""}
+                    {row.status === "canceled" ? <span className="canceled">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
                 </div>
             )
         },
@@ -154,7 +150,7 @@ function MyPayouts(props) {
                 if (row.data.payout_status === 'paid') {
                     return (
                         <p onClick={() => sortHandler(row.data.payout_id)}>
-                            <i className="fa fa-file-alt" aria-hidden="true"></i> {intl.formatMessage({id:'Invoice'})}</p>
+                            <i className="fa fa-file-alt" aria-hidden="true"></i> {intl.formatMessage({ id: 'Invoice' })}</p>
                     )
                 }
             }
@@ -175,7 +171,6 @@ function MyPayouts(props) {
             response['po_total'] = data.data[0].po_total
             response['selleraddress'] = data.data[0].selleraddress
         }
-        // console.log(response)
         setPayoutData(response)
         setShowRawPDF(true)
         printDocument();
@@ -189,7 +184,7 @@ function MyPayouts(props) {
         if (dataObj.length > 0) {
             dataLListing = dataObj.map((data) => {
                 let orderLoop: any = {};
-                orderLoop.price = siteConfig.currency+ data.total_payout;
+                orderLoop.price = siteConfig.currency + data.total_payout;
                 orderLoop.status = data.payout_status;
                 orderLoop.date = moment(data.created_at).format('DD MMMM YYYY');
                 orderLoop.payout_id = data.payout_id;
@@ -212,29 +207,14 @@ function MyPayouts(props) {
 
 
     }
-
-    // const handleChange = ({ selectedRows }) => {
-    //     console.log('Selected Rows: ', selectedRows);
-    // };
-
     const printDocument = () => {
         const input = document.getElementById('pdfdiv');
         html2canvas(input)
             .then((canvas: any) => {
                 var imgData = canvas.toDataURL("image/jpeg", 1);
-                var pdf = new jsPDF("p", "px", "a4");
-                var pageWidth = pdf.internal.pageSize.getWidth();
-                var pageHeight = pdf.internal.pageSize.getHeight();
-                var imageWidth = canvas.width;
-                var imageHeight = canvas.height;
-
-                // var ratio = imageWidth / imageHeight >= pageWidth / pageHeight ? pageWidth / imageWidth : pageHeight / imageHeight;
-                //pdf = new jsPDF(this.state.orientation, undefined, format);
-                //     console.log(imageWidth * ratio, imageHeight * ratio)
+                var pdf = new jsPDF("p", "px", "a4");               
                 pdf.addImage(imgData, 'JPEG', 20, 20, 400, 600);
                 pdf.save("invoice.pdf");
-
-
             });
         setShowRawPDF(false);
     }
@@ -280,11 +260,6 @@ function MyPayouts(props) {
                                         <td>-</td>
                                         <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payout_status : ""}</td>
                                     </tr>
-                                    {/* <tr>
-                                        <td>P.O.#</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr> */}
                                 </table>
                             </table>
                         </div>
@@ -303,50 +278,32 @@ function MyPayouts(props) {
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Name</th>
                                     <td style={{ "textAlign": "center" }}></td>
-                                    {/* <td style={{ "textAlign": "center" }}>-</td>
-                                    <th style={{ "textAlign": "left" }}>اسم</th>
-                                    <td style={{ "textAlign": "center" }}>-</td> */}
                                     <td style={{ "textAlign": "right" }}>{vendorName}</td>
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Address Line 1</th>
                                     <td style={{ "textAlign": "center" }}></td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>العنوان السطر 1</th>
-                                    <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].street : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Region</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>منطقة</th>
-                                    <td style={{ "textAlign": "center" }}>-</td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].region : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>City</th>
                                     <td style={{ "textAlign": "center" }}></td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>مدينة</th>
-                                    <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].city : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Country</th>
                                     <td style={{ "textAlign": "center" }}></td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>دولة</th>
-                                    <td style={{ "textAlign": "center" }}></td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].countryName : ""}</td> */}
                                 </tr>
                                 <tr>
                                     <th style={{ "textAlign": "left" }}>Zip</th>
                                     <td style={{ "textAlign": "center" }}>-</td>
                                     <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td>
-                                    {/* <th style={{ "textAlign": "left" }}>أزيز</th>
-                                    <td style={{ "textAlign": "center" }}>-</td>
-                                    <td style={{ "textAlign": "right" }}>{payoutData && payoutData['selleraddress'] ? payoutData['selleraddress'].zip : ""}</td> */}
                                 </tr>
 
                             </tbody>
@@ -373,7 +330,6 @@ function MyPayouts(props) {
                                     <th style={{ "backgroundColor": "#ddd" }}>Order Amount</th>
                                 </tr>
                                 {payoutData && payoutData['Payout_orders'] && payoutData['Payout_orders'].length > 0 && payoutData['Payout_orders'].map((data, index) => {
-                                    // console.log(data)
                                     return (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
@@ -387,12 +343,9 @@ function MyPayouts(props) {
                                 })}
                             </tbody>
                         </table>
-
                     </section>
                     <br />
                     <br />
-
-
                     <section>
 
                         <table style={{ "width": "100%", "textAlign": "center", "borderWidth": "1px" }} cellPadding="5" cellSpacing="5">
@@ -418,8 +371,8 @@ function MyPayouts(props) {
                             </tbody>
                         </table>
 
-                        <p>{intl.formatMessage({id:'Notes'})}:</p>
-                        <p>{intl.formatMessage({id:'thanksforpayment'})}</p>
+                        <p>{intl.formatMessage({ id: 'Notes' })}:</p>
+                        <p>{intl.formatMessage({ id: 'thanksforpayment' })}</p>
                     </section>
                     <br />
                     <br />
@@ -477,14 +430,6 @@ function MyPayouts(props) {
                                         >
                                             <input type="text" className="form-control" />
                                         </DateRangePicker>
-                                        {/* <span className="form-label"><IntlMessages id="order.date" /></span>
-                                        <select className="form-select" aria-label="Default select example" onChange={}>
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "last_month" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "lastthree" })}</option>
-                                            <option value="6">{intl.formatMessage({ id: "lastsix" })}</option>
-                                            <option value={moment().format('YYYY')} >{moment().format('YYYY')}</option>
-                                        </select> */}
                                     </div>
                                 </div>
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
@@ -567,7 +512,7 @@ function MyPayouts(props) {
                             columns={columns}
                             data={myOrder}
                             pagination={true}
-                            progressPending= {isLoading}
+                            progressPending={isLoading}
                             paginationComponentOptions={paginationComponentOptions}
                         />
                     </div>

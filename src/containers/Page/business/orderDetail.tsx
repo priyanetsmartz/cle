@@ -61,9 +61,6 @@ function VendorOrderDetail(props) {
         let data = [];
         let productsData = [];
         if (results && results.data && results.data.length > 0) {
-            // data['info'] = results.data[0].info;
-            // data['address'] = results.data[0].address;
-            // data['items'] = results.data[0].items;
             data = results.data
             setOrderNumber(data[0][0].po_increment_id)
             setOrderPurchaseDate(moment(data[0][0].purchase_date).format('ddd DD MMMM YYYY; hh:mm a'))
@@ -120,10 +117,7 @@ function VendorOrderDetail(props) {
         setOrderDetails(productsData);
 
     }
-    const sortOrdersHandler = async (e) => {
-        setSortOrder(e.target.value);
-        getOrderDetailFxn(orderId,e.target.value)
-    }
+
     const selectStatus = (event) => {
         selectStatusOrder(event.target.value)
         if (event.target.value === 'reject') {
@@ -166,7 +160,6 @@ function VendorOrderDetail(props) {
                             <h2><IntlMessages id="orderdetail.description" /></h2>
                         </div>
 
-
                         <section>
                             <div className="return-det">
                                 <div className="row">
@@ -187,7 +180,7 @@ function VendorOrderDetail(props) {
 											  </div>
 											  <div className="col-md-3 align-self-end mb-2">
 												<label className="form-label"></label>
-												<Link to="#" className="btn btn-secondary m-0" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link>
+												<Link to="#" className="btn btn-secondary m-0" onClick={handleSubmitClick} ><IntlMessages id="confirm.order" /></Link>
 											  </div>
 											  <div className="col-md-12 mb-2">
 												{show && (<div className='return-comment' >
@@ -276,17 +269,6 @@ function VendorOrderDetail(props) {
 
                         </section>
                     </div>
-                    {/* <div className="col-sm-12">
-                            <div className="sort_by">
-                                <div className="sortbyfilter">
-                                    <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
-                                        <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                        <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                        <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div> */}
                 </div>
             </div>
             <br></br>

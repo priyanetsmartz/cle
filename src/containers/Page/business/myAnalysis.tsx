@@ -5,11 +5,12 @@ import DataTable from 'react-data-table-component';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { dataTiles, removeProduct, searchProducts } from '../../../redux/pages/vendorLogin';
 import Modal from "react-bootstrap/Modal";
-
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import {
     LineChart,
     ResponsiveContainer,
-    Legend, Tooltip,
+    Legend, Tooltip as Tool,
     Line,
     XAxis,
     YAxis,
@@ -17,7 +18,9 @@ import {
     PieChart,
     Pie,
     BarChart,
-    Bar
+    Bar,
+    Cell,
+    Label
 } from 'recharts';
 import { Link } from "react-router-dom";
 import { formatprice, getCurrentMonth } from '../../../components/utility/allutils';
@@ -35,6 +38,7 @@ function MyAnalysis(props) {
     const [dataTilesData, setDataTilesData] = useState([]);
     const [pdata, setPdata] = useState([]);
     const [barChartData, setBarChartData] = useState([]);
+    const [returnData, setReturnData] = useState([]);
     const [pieChart, setPieChart] = useState([]);
     const [showMonth, setShowMonth] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
@@ -50,23 +54,27 @@ function MyAnalysis(props) {
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     const [deletePop, setDeletePop] = useState(false);
     const [deleteId, setDeleteID] = useState(0)
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
     useEffect(() => {
         getVendorProductListing()
         getDataTiles(oldDate, currentDate);
-        // handleQuater(currentQuater)
+        return () => {
+            setPdata([])
+            setPieChart([]);
+            setBarChartData([])
+            setReturnData([])
+        }
     }, [])
 
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
         if (results && results.data && results.data.length > 0) {
-            //    console.log(results.data[0])
-            let tiles_information = results?.data[0]?.tiles_information
-            console.log(tiles_information)
+            let tiles_information = results?.data[0]?.tiles_information;
             setPdata(tiles_information?.order_information)
             setBarChartData([tiles_information?.product_information])
             setPieChart(tiles_information?.payout_information)
             setDataTilesData(results?.data[0])
-
+            setReturnData(tiles_information?.return_information)
         }
     }
     const handleChange = (flag) => {
@@ -81,9 +89,6 @@ function MyAnalysis(props) {
             setShowMonth(false)
             setShowQuaters(true)
             handleQuater(currentQuater);
-            // let quater = moment().quarter();
-            // dates['start'] = moment().quarter(quater).startOf('quarter').format('DD/MM/YYYY');
-            // dates['end'] = moment().quarter(quater).endOf('quarter').format('DD/MM/YYYY');
         } else {
             setShowMonth(false)
             setShowQuaters(false)
@@ -129,8 +134,7 @@ function MyAnalysis(props) {
             },
             "saveOptions": true
         }
-        //console.log(payload)
-        let result: any = await removeProduct(payload)
+        await removeProduct(payload)
         getVendorProductListing();
         closePop();
     }
@@ -143,13 +147,11 @@ function MyAnalysis(props) {
         let month = moment.monthsShort().filter((name, i) => {
             return i === monthKey
         })
-        //console.log(monthKey)
         if (monthKey === -1) return false;
         setCurrentMonthKey(monthKey);
         setCurrentMonth(month[0])
         let input = monthKey + 1;
         const output = moment(input, "MM");
-        //  console.log(output)
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
 
@@ -172,22 +174,7 @@ function MyAnalysis(props) {
         getDataTiles(startOfMonth, endOfMonth);
     }
 
-
-    const RADIAN = Math.PI / 180;
-
-    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-        const x = cx + radius * Math.cos(-midAngle * RADIAN);
-        const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-        return (
-            <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-                {`${(percent * 100).toFixed(0)}%`}
-            </text>
-        );
-    };
     function handleQuater(quater) {
-
         let start = moment().quarter(quater).startOf('quarter').format('MMM');
         let end = moment().quarter(quater).endOf('quarter').format('MMM');
         let part = start + '-' + end;
@@ -195,7 +182,6 @@ function MyAnalysis(props) {
         let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
         let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
         getDataTiles(startOfMonth, endOfMonth);
-
         setQuaterSlider(part);
     }
 
@@ -236,7 +222,6 @@ function MyAnalysis(props) {
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span><IntlMessages id="id" />:</span>{row.product.id}</p>
                     <div className='data_value'><ul><li>{<Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
-                    {/* <div className='data_value'><ul><li>{row.product.status === "2" ? <Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link> : <Link to={'/product-details/' + row.product.sku} target="_blankl" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div> */}
                 </div>
             ),
         },
@@ -255,8 +240,6 @@ function MyAnalysis(props) {
                     {row.status === "10" ? <span className="rejected">{intl.formatMessage({ id: "product.rejected" })}</span> : ""}
                     {row.status === "2" ? <span className="disabled">{intl.formatMessage({ id: "product.disabled" })}</span> : ""}
                 </div>
-
-
             ),
         },
         {
@@ -264,8 +247,59 @@ function MyAnalysis(props) {
             selector: row => row.price,
         }
     ];
+    const CustomizedLabelBar = ({ viewBox, value = 0 }) => {
+        const { x, y } = viewBox;
+        return (
+            <text
+                x={x}
+                y={y}
+                dy={-4}
+                fontSize="16"
+                textAnchor="middle"
+            >
+                {value}
+            </text>
+        );
+    }
 
-
+    const CustomLabel = ({ viewBox, noOfBubbleTeaSold = 0, noCost = 0 }) => {
+        const { cx, cy } = viewBox;
+        return (
+            <>
+                <text x={cx - 15} y={cy - 5}>
+                    <tspan
+                        style={{
+                            fontWeight: 700,
+                            fontSize: "1.5em",
+                            fill: "#2B5CE7"
+                        }}
+                    >
+                        {noOfBubbleTeaSold}
+                    </tspan>
+                </text>
+                <text x={cx - 50} y={cy + 15}>
+                    <tspan
+                        style={{
+                            fontSize: "0.8em",
+                            fill: "#000"
+                        }}
+                    >
+                        Total Product Cost:
+                    </tspan>
+                </text>
+                <text x={cx - 50} y={cy + 30}>
+                    <tspan
+                        style={{
+                            fontSize: "0.8em",
+                            fill: "#000"
+                        }}
+                    >
+                        {siteConfig.currency} {noCost}
+                    </tspan>
+                </text>
+            </>
+        );
+    };
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
@@ -292,10 +326,8 @@ function MyAnalysis(props) {
                                 <ul className='monthsname pagination justify-content-center align-items-center'>
                                     <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
                                     {
-
                                         <p>{quaterSlider}</p>
                                     }
-
                                     <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
                                 </ul>
                             )}
@@ -306,28 +338,55 @@ function MyAnalysis(props) {
                     <div className="row mb-4" style={{ columnCount: 3 }}>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
-                                <h5><IntlMessages id="ordertotal" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <h5><IntlMessages id="ordertotal" />
+                                    <OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                <IntlMessages id="totalordersplaces" />
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger></h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
-                                    {/* <h4>9%</h4> */}
                                 </div>
                             </div>
                         </div>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
-                                <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <h5><IntlMessages id="order.orders" />
+                                    <OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                <IntlMessages id="totalaveragescost" />
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger>
+                                </h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
-                                    {/* <h4>10%</h4> */}
                                 </div>
                             </div>
                         </div>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                             <div className="card-info">
-                                <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
+                                <h5><IntlMessages id="payments" />  <OverlayTrigger
+                                    delay={{ hide: 450, show: 300 }}
+                                    overlay={(props) => (
+                                        <Tooltip id="" {...props} >
+                                            <IntlMessages id="totalorderscost" />
+                                        </Tooltip>
+                                    )}
+                                    placement="right"
+                                ><i className="fas fa-info-circle" ></i>
+                                </OverlayTrigger></h5>
                                 <div className="stats">
                                     <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
-                                    {/* <h4>5%</h4> */}
                                 </div>
                             </div>
                         </div>
@@ -341,21 +400,28 @@ function MyAnalysis(props) {
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'vendor.myAnalysis' })}</h2>
                             <p>{intl.formatMessage({ id: 'orderInformation' })}</p>
-                            {/* {console.log(pdata)} */}
+
+
                             {pdata?.length > 0 && (
-                                <ResponsiveContainer width="100%" aspect={3}>
-                                    <LineChart data={pdata} margin={{ right: 300 }}>
-                                        <CartesianGrid />
-                                        <XAxis dataKey="created_at" ></XAxis>
-                                        <YAxis dataKey="total_cost" domain={[0, 20000]} ></YAxis>
-                                        <Legend />
-                                        <Tooltip />
-                                        <Line dataKey="total_cost"
-                                            stroke="black" activeDot={{ r: 8 }} />
-                                        <Line dataKey="item_qty"
-                                            stroke="red" activeDot={{ r: 8 }} />
-                                    </LineChart>
-                                </ResponsiveContainer>
+                                <>  <LineChart width={500} height={300} data={pdata} style={{ data: { fill: '#eee' } }}>
+                                    <XAxis dataKey="Created At" />
+                                    <YAxis dataKey="Total Cost" domain={[0, 20000]} />
+                                    <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                                    <Legend />
+                                    <Tool
+                                        formatter={function (value, name) {
+                                            if (name === 'Total Cost')
+                                                return `${siteConfig.currency + value}`
+                                            else
+                                                return `${value}`;
+                                        }}
+                                        labelFormatter={function (value) {
+                                            return `Date: ${value}`;
+                                        }} />
+                                    <Line type="monotone" dataKey="Total Cost" stroke="#8884d8" />
+                                    <Line type="monotone" dataKey="Quantity" stroke="#82ca9d" />
+                                </LineChart>
+                                </>
                             )}
                             {pdata?.length === 0 ? <div className='text-center' >No data available</div> : ""}
                         </div>
@@ -368,6 +434,7 @@ function MyAnalysis(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>
+
                             {pieChart?.length > 0 && (
                                 <ResponsiveContainer width="100%" height={250}>
                                     <PieChart height={250}>
@@ -376,6 +443,7 @@ function MyAnalysis(props) {
                                             cx="50%"
                                             cy="50%"
                                             outerRadius={100}
+                                            isAnimationActive={false}
                                             fill="#8884d8"
                                             dataKey="total_payout_amount"
                                             label={({
@@ -385,15 +453,12 @@ function MyAnalysis(props) {
                                                 innerRadius,
                                                 outerRadius,
                                                 total_payout_amount,
+                                                percent,
                                                 index
                                             }) => {
-                                                console.log("handling label?");
                                                 const RADIAN = Math.PI / 180;
-                                                // eslint-disable-next-line
                                                 const radius = 25 + innerRadius + (outerRadius - innerRadius);
-                                                // eslint-disable-next-line
                                                 const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                                                // eslint-disable-next-line
                                                 const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
                                                 return (
@@ -404,11 +469,15 @@ function MyAnalysis(props) {
                                                         textAnchor={x > cx ? "start" : "end"}
                                                         dominantBaseline="central"
                                                     >
-                                                        {pieChart[index].po_created_at} ({total_payout_amount})
+
+                                                        {pieChart[index].po_created_at} ({siteConfig.currency}{total_payout_amount})
                                                     </text>
                                                 );
-                                            }}
-                                        />
+                                            }}>
+                                            {
+                                                pieChart.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
+                                            }
+                                        </Pie>
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}
@@ -423,29 +492,74 @@ function MyAnalysis(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
-                            {barChartData?.length > 0 && (
-                                <BarChart
-                                    width={500}
-                                    height={300}
+                            {barChartData?.length > 0 && (<PieChart width={730} height={250}>
+                                <Pie
                                     data={barChartData}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5
-                                    }}
+                                    cx="50%"
+                                    cy="50%"
+                                    dataKey="total_product_count" // make sure to map the dataKey to "value"
+                                    innerRadius={60} // the inner and outer radius helps to create the progress look
+                                    outerRadius={80}
                                 >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="totalProductCount" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Bar barSize={30} dataKey="totalProductPrice" fill="#8884d8" />
-
-                                </BarChart>
-                            )}
+                                    {barChartData.map((entry, index) => {
+                                        if (index === 1 || index === 2) { // the main change is here!!
+                                            return <Cell key={`cell-${index}`} fill="#f3f6f9" />;
+                                        }
+                                        return <Cell key={`cell-${index}`} fill="green" />;
+                                    })}
+                                    <Label
+                                        content={<CustomLabel viewBox={['cx', 'cy']} noOfBubbleTeaSold={barChartData[0]?.['total_product_count']} noCost={barChartData[0]?.['total_product_price']} />}
+                                        position="center"
+                                    />
+                                </Pie>
+                            </PieChart>)}
 
                             {barChartData?.length === 0 ? <div className='text-center' >No data available</div> : ""}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section className="my_profile_sect mb-4">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h2>Return Information</h2>
+                            {returnData?.length > 0 && (
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <BarChart
+                                        width={500}
+                                        height={400}
+                                        data={returnData}
+                                        margin={{ top: 25, right: 0, left: 0, bottom: 25 }}
+                                    >
+                                        <XAxis dataKey="created_at" dy="25" />
+                                        <YAxis />
+                                        <Tool />
+                                        <CartesianGrid stroke="rgba(0,0,0,0.1)" vertical={false} />
+                                        <Bar
+                                            dataKey="product_quantity"
+                                            barSize={50}
+                                            label={<CustomizedLabelBar viewBox={['cx', 'cy']} value={returnData[0]?.['product_quantity']} />}
+                                        >
+                                            {returnData.map((entry, index) => (
+                                                <Cell fill="#017fb1" />
+                                            ))}
+                                        </Bar>
+                                        <Bar
+                                            dataKey="total_return"
+                                            barSize={50}
+                                            label={<CustomizedLabelBar viewBox={['cx', 'cy']} value={returnData[0]?.['total_return']} />}
+                                        >
+                                            {returnData.map((entry, index) => (
+                                                <Cell fill="#017fb1" />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            )}
+
+                            {returnData?.length === 0 ? <div className='text-center' >No data available</div> : ""}
+
                         </div>
                     </div>
                 </div>
@@ -461,7 +575,6 @@ function MyAnalysis(props) {
                                     columns={columns}
                                     data={listingData}
                                     pagination={true}
-                                    // progressPending={pending}
                                     paginationComponentOptions={paginationComponentOptions}
                                 />
                             </div>

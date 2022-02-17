@@ -24,10 +24,8 @@ function MyPreferences(props) {
     const [isShow, setIsShow] = useState(false);
     const intl = useIntl();
     useEffect(() => {
-        // console.log(props.preferences, props.custData)
         getAttributes();
         return () => {
-            //
         }
     }, [props.preferences, props.custData]);
 
@@ -187,26 +185,6 @@ function MyPreferences(props) {
         }))
     }
 
-    //for selecting categories in the my prefernce modal
-    const selectDesigner = (i) => {
-        attributes.designers[activeDesigner][i].isChecked = !attributes.designers[activeDesigner][i].isChecked;
-        setAttributes(prevState => ({
-            ...prevState,
-            designers: attributes.designers
-        }));
-    }
-
-    //remove all selected categores in my preference modal
-    const removeAllDesign = () => {
-        attributes.designers[activeDesigner].forEach(el => {
-            el.isChecked = false;
-        });
-        setAttributes(prevState => ({
-            ...prevState,
-            designers: attributes.designers
-        }))
-    }
-
     const filterCategories = (e) => {
         let value = e.target.value.toLowerCase();
         let result = [];
@@ -219,9 +197,6 @@ function MyPreferences(props) {
         }
         setFavCat(result);
     }
-    // const setFilter = (result) => {
-    //     setFavCat(result);
-    // }
 
     const saveMyPreferences = async () => {
         setIsShow(true);
@@ -360,61 +335,9 @@ function MyPreferences(props) {
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-            {/* 
-            <div className="favorite_designers mb-4">
-                <h2><IntlMessages id="preferences.favDesigner" /></h2>
-                <div className="row">
-
-                    <div className="col-sm-6">
-                        <div className="search_results">
-                            <img src={searchIcon} alt="" className="me-1 search_icn" />
-                            <input type="search" placeholder="Search..." className="form-control me-1" />
-                        </div>
-                    </div>
-
-                </div>
-                <div className="row">
-                    <div className="col-sm-6">
-                        <div className="favt_section">
-                            <ul>
-                                {attributes.designers[activeDesigner] && attributes.designers[activeDesigner].map((design, i) => {
-                                    return (
-                                        // <li key={design.id}>
-                                        <div className="form-check" key={design.id} >
-                                            <input className="form-check-input" type="checkbox" value="" id={design.name}
-                                                checked={design.isChecked} onChange={() => selectDesigner(i)} />
-                                            <label className="form-check-label" htmlFor={design.name}>
-                                                {design.name}
-                                            </label>
-                                        </div>
-                                        // </li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="col-sm-6">
-                        <div className="favt_dragdrop">
-                            <div className="favdesignr_size_sec">
-                                <ul>
-                                    {attributes.designers[activeDesigner] && attributes.designers[activeDesigner].map(dg => {
-                                        return dg.isChecked &&
-                                            (<li key={dg.id}><Link to="#" >{dg.name}</Link></li>)
-                                    })}
-                                </ul>
-                                <div className="save-btn removel_allbtn">
-                                    <Link to="#" onClick={removeAllDesign} className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div> */}
+            
 
             <div className="favorite_designers mb-4">
                 <h2><IntlMessages id="preferences.favCategory" /></h2>
@@ -436,7 +359,6 @@ function MyPreferences(props) {
                             {(favCat && favCat.length > 0) ?
                                 <ul> {favCat.map((cat, i) => {
                                     return (
-                                        // <li key={cat.id}>
                                         <div className="form-check" key={cat.id}>
                                             <input className="form-check-input" type="checkbox" value="" id={cat.name}
                                                 checked={cat.isChecked} onChange={() => selectCategories(i, cat)} />
@@ -444,13 +366,11 @@ function MyPreferences(props) {
                                                 {cat.name}
                                             </label>
                                         </div>
-                                        // </li>
                                     )
                                 })} </ul> :
                                 <ul>
                                     {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length > 0 && attributes.categories[activeCategory].map((cat, i) => {
                                         return (
-                                            // <li key={cat.id}>
                                             <div className="form-check" key={cat.id}>
                                                 <input className="form-check-input" type="checkbox" value="" id={cat.name}
                                                     checked={cat.isChecked} onChange={() => selectCategories(i, cat)} />
@@ -458,7 +378,6 @@ function MyPreferences(props) {
                                                     {cat.name}
                                                 </label>
                                             </div>
-                                            // </li>
                                         )
                                     })}
                                 </ul>
@@ -472,7 +391,7 @@ function MyPreferences(props) {
                                     {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length && attributes.categories[activeCategory].map((cat, i) => {
                                         return cat.isChecked &&
                                             (<li key={i} onMouseEnter={() => setIsShown(cat.id)} onMouseLeave={() => setIsShown(0)} ><Link to="#"  >
-                                                {isShown == parseInt(cat.id) ? <span className='textname' onClick={() => removeSelectedCategories(cat)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textname' > {cat.name}</span>
+                                                {isShown === parseInt(cat.id) ? <span className='textname' onClick={() => removeSelectedCategories(cat)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textname' > {cat.name}</span>
                                                 }</Link></li>)
                                     })}
                                 </ul>
@@ -498,13 +417,10 @@ function MyPreferences(props) {
 }
 
 const mapStateToProps = (state) => {
-    //console.log(state)
     let languages = '';
-
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
-
     return {
         languages: languages,
         token: state.session.user

@@ -123,18 +123,16 @@ export function getProductsFilterRestCollectionProducts(category_id: number, lan
         let priceLow = price[0], priceHigh = price[1];
         data = '{products(' + selection + ' filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ':{from: "' + priceLow + '", to: "' + priceHigh + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     } else if (attribute === 'category_id') {
-        data = '{products(' + selection + ' filter:{category_id:{ eq: "' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+        let sort = sorting.sortBy? '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}':"";
+        data = '{products(' + selection + ' filter:{category_id:{ eq: "' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' '+sort+' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
-    else if (testing === 'test') {
-        // console.log('test')
+    else if (testing === 'test') {     
         data = '{products(search: "' + value + '", pageSize: ' + pageSize + ' ,currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
-    else if (category_id === undefined && branding) {
-        //   console.log('sasvs')
+    else if (category_id === undefined && branding) {      
         data = '{products(search: "' + branding + '", pageSize: ' + pageSize + ',currentPage: ' + currentPage + '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
-    else {
-        //console.log(attribute)
+    else {       
         data = '{products(' + selection + ' filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ': { eq:"' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
 
@@ -261,7 +259,6 @@ export async function getCartRelevantProducts(productIds: number, language: stri
 
 
 export function getGuestShippingMethods() {
-    // const cartQuoteId = localStorage.getItem('cartQuoteId');
     return APi.request(`/rest/V1/guest-carts/:cartId/shipping-methods`, "", "GET", "")
 }
 
@@ -289,7 +286,7 @@ export function searchFields(search: string, category: number, page: number, lan
         if (sortBy !== '') {
             sortt = 'sort: {' + sortBy + ': ' + sortByValue + '}';
         }
-        // console.log(search);
+      
         if (search !== 'all') {
             searching = 'search: "' + search + '",';
         }
@@ -331,7 +328,6 @@ export function getPaymentMethods() {
 
 export function getShippinMethods() {
     const cartQuoteId = localStorage.getItem('cartQuoteId');
-    // const cartQuoteId = 35;
     return APi.request(`rest/V1/carts/${cartQuoteId}/shipping-methods`, "", "GET", "");
 }
 
@@ -345,21 +341,19 @@ export function setUserDeliveryAddress(data) {
     return APi.request(`rest/V1/carts/${cartQuoteId}/shipping-information`, data, "POST", "");
 }
 
-export function placeGuestOrder(language, method) {
+export function placeGuestOrder(language, method, cartQuoteToken) {
     const lang = language === 'arabic' ? 'ar' : 'en';
     let data = {
         "paymentMethod": {
             "method": method
         }
     }
-    const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     return APi.request(`rest/${lang}/V1/guest-carts/${cartQuoteToken}/order`, data, "PUT", "");
 }
 
 
-export function placeUserOrder(language, method) {
+export function placeUserOrder(language, method, cartQuoteId) {
     const lang = language === 'arabic' ? 'ar' : 'en';
-    const cartQuoteId = localStorage.getItem('cartQuoteId');
     let data = {
         "paymentMethod": {
             "method": method

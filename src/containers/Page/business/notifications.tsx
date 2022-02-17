@@ -15,24 +15,12 @@ function Notifications(props) {
     useEffect(() => {
         setActiveTab(key);
     }, [key]);
-
-    const changeTab = (tab) => {
-        history.push(`/customer/${tab}`);
-        setActiveTab(tab);
-    }
-
-    const changeMobTab = (e) => {
-        changeTab(e.target.value);
-    }
-
-
-
+    
     return (
         <main>
             <section className="mt-5">
                 <div className="container">
                     <div className="row">
-
                         <div className="col-sm-3">
                             <div className="date-range">
                                 <h4>Date</h4>
@@ -114,7 +102,6 @@ function Notifications(props) {
                                     <h1>Notifications</h1>
                                     <h2>Check your notifications. Stay up to date with discounts and new collections.</h2>
                                 </div>
-
                                 <div className="notification-actions">
                                     <ul className="list-inline mb-1">
                                         <li className="list-inline-item">
@@ -155,7 +142,6 @@ function Notifications(props) {
 
 
                                 <section className="notification-list">
-
                                     <div className="notification-new">
                                         <h5>New</h5>
                                         <div className="notify">
@@ -332,13 +318,7 @@ function Notifications(props) {
                                                 </div>
                                             </div>
                                         </div>
-
-
-
-
-
                                     </div>
-
                                 </section>
 
 

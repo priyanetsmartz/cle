@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { getCookie } from "../../../helpers/session";
 import { Pages } from '../../../redux/pages/allPages';
 
-
 function MySupport(props) {
     const userGroup = localStorage.getItem('token');
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
@@ -14,8 +13,6 @@ function MySupport(props) {
         let lang = props.languages ? props.languages : language;
         async function fetchMyAPI() {
             let result: any = await Pages('contact-us', lang);
-            // let test: any = await Pages1(pageIdentifier);
-            // console.log(test)
             var jsonData = result && result.data && result.data.items.length > 0 ? result.data.items[0] : [];
             SetPagesData(jsonData)
 
@@ -25,6 +22,7 @@ function MySupport(props) {
             SetPagesData({ title: '', content: '' })
         }
     }, [props.languages])
+
     return (
         <div className='col-sm-9'>
             <div className="my_orders_returns_sec">

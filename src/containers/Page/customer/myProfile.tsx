@@ -132,7 +132,6 @@ function MyProfile(props) {
 
     useEffect(() => {
         getData();
-        // getCountries();
         return () => {
             setIsShow(false)
         }
@@ -148,10 +147,7 @@ function MyProfile(props) {
 
     async function getData() {
         let lang = props.languages ? props.languages : language;
-        // to get cutomer preferences
         let result: any = await getCustomerDetails();
-        // const today = moment();
-        // console.log(result.data);
         const d = result.data.dob ? result.data.dob.split("-") : "";
         dob.day = d[2];
         dob.month = d[1];
@@ -161,8 +157,7 @@ function MyProfile(props) {
 
         let clothing_size = [], shoes_size = [], mostly_intersted_in = 0, favourite_categories = [], favourite_designers = [];
         let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [], gifting_preferencees = [], phone = '', country = '';
-        //console.log(custom_attributes)
-        // match keys and extract values//
+    
         if (custom_attributes && custom_attributes.length > 0) {
             custom_attributes.map((attributes) => {
                 if (attributes.attribute_code === "clothing_size") {
@@ -179,7 +174,6 @@ function MyProfile(props) {
                 if (attributes.attribute_code === "favourite_categories") {
                     let favs = attributes.value
                     favourite_categories = favs.split(",");
-                    //console.log(favourite_categories)
                 }
                 if (attributes.attribute_code === "favourite_designers") {
                     let favDesigns = attributes.value
@@ -191,18 +185,15 @@ function MyProfile(props) {
                 }
                 if (attributes.attribute_code === "mp_sms_telephone") {
                     let phoneNo = attributes.value;
-                    // console.log(phoneNo)
                     phone = phoneNo
                 }
                 if (attributes.attribute_code === "country") {
                     let countryId = attributes.value;
-                    // console.log(countryId)
                     country = countryId;
                 }
             })
         }
 
-        // console.log(custForm)
         // to get all the preferences list
         let preference: any = await getPreference(lang);
         setAttributes(preference);
@@ -215,8 +206,6 @@ function MyProfile(props) {
         let intersted_in = mostly_intersted_inArray.filter((eq) => {
             return eq.id === mostly_intersted_in;
         });
-        // console.log(mostly_intersted_inArray)
-        // console.log(categories_array);
         let shoes_sizeData = shoes_size_inArray.filter(function (o1) {
             return shoes_size.some(function (o2) {
                 return o1.value === o2; // return the ones with equal id
@@ -228,17 +217,16 @@ function MyProfile(props) {
                 return o1.value === o2; // return the ones with equal id
             });
         });
-        // console.log(mostly_intersted_inArray, intersted_in)
+      
         if (mostly_intersted_inArray.length > 0 && intersted_in.length > 0) {
             let index = mostly_intersted_inArray.findIndex(x => x.name === intersted_in[0].name);
             catToShow = categories_array[index];
-            // console.log(catToShow)
+           
             var favCategoryArray = [];
             if (catToShow && catToShow.length > 0) {
                 favCategoryArray = catToShow.filter(function (o1) {
                     return favourite_categories.some(function (o2) {
-                        //  console.log(o1.id, o2)
-                        return o1.id === o2; // return the ones with equal id
+                        return o1.id === o2; 
                     });
                 });
             }
@@ -246,10 +234,10 @@ function MyProfile(props) {
 
         var favDesignerArray = designer_array[0].filter(function (o1) {
             return favourite_designers.some(function (o2) {
-                return o1.id === o2; // return the ones with equal id
+                return o1.id === o2; 
             });
         });
-        //    console.log(preference.data[0].preference.mostly_intersted)
+      
         setCustomerPrefer(prevState => ({
             ...prevState,
             interestedIn: intersted_in[0] ? intersted_in[0].name : "",
@@ -285,11 +273,6 @@ function MyProfile(props) {
         let result: any = await getPreference(lang);
         setAttributes(result);
     }
-
-    // const getCountries = async () => {
-    //     let result: any = await getCountriesList();
-    //     setCountries(result.data);
-    // }
 
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -327,7 +310,6 @@ function MyProfile(props) {
             if (dob.day !== '' && dob.month !== '' && dob.year !== '') {
                 custForm.dob = `${dob.month}/${dob.day}/${dob.year}`;
             }
-            // console.log(customAttribute.country);
             custForm.custom_attributes = [
                 {
                     "attribute_code": "mp_sms_telephone",
@@ -412,7 +394,6 @@ function MyProfile(props) {
             setLoaderPassChange(true);
             let result: any = await changePassword({ currentPassword: changePass.password, newPassword: changePass.newPassword });
             if (result.data && !result.data.message) {
-                // console.log(result.data)
                 notification("success", "", intl.formatMessage({ id: "passwordUpdate" }));
                 setChangePass({
                     confirmNewPassword: "",
@@ -488,7 +469,6 @@ function MyProfile(props) {
                 })
                 setloaderEmailChange(false)
             } else {
-                // console.log(result.data)
                 if (result.data.message) {
                     notification("error", "", result.data.message);
                 } else {
@@ -544,7 +524,6 @@ function MyProfile(props) {
 
         if (handleValidationGifting()) {
             setIshowGifting(true);
-            // console.log(giftingPrefer)
             let dateofevent = giftingPrefer.dobDate + '/' + giftingPrefer.dobMonth + '/' + giftingPrefer.dobYear;
             let customDod = giftingPrefer.dodDate + '/' + giftingPrefer.dodMonth + '/' + giftingPrefer.dodYear;
             let dateOfdelivery = giftingPrefer.DateOfDelivery === "1" ? dateofevent : customDod;
@@ -558,7 +537,6 @@ function MyProfile(props) {
                 customerId: props.token.cust_id,
                 gifting_preference: newObj.gifting_preferencees
             }
-            // console.log(data)
             const res = await savePreference(data);
             if (res) {
                 setGiftingPrefer({
@@ -643,12 +621,6 @@ function MyProfile(props) {
     const closeMyPreferences = () => {
         props.closePrefPopup(false);
     }
-
-    const openAddressModal = () => {
-        setMyAddressModal(!myAddressModal);
-    }
-
-
     const openGigitingModal = () => {
         setGiftErrors({ errors: {} })
         setGiftingModal(!giftingModal);
@@ -678,8 +650,6 @@ function MyProfile(props) {
             customerId: props.token.cust_id,
             gifting_preference: newObj.gifting_preferencees
         }
-
-        // console.log(newObj.gifting_preferencees);
 
         const res = await savePreference(data);
         if (res) {
@@ -789,16 +759,6 @@ function MyProfile(props) {
                                             }
                                         </div>
                                     </div>
-                                    {/* <div className="field_details">
-                                        <label className="form-label"><IntlMessages id="myaccount.favoriteDesigners" /></label>
-                                        <div className="field-name">
-                                            {
-                                                customerPrefer.favDesigner.map((favs, i) => {
-                                                    return (<span key={i}>{favs.name}, </span>)
-                                                })
-                                            }
-                                        </div>
-                                    </div> */}
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="field_details mb-3">
@@ -807,13 +767,6 @@ function MyProfile(props) {
                                             {customerPrefer && customerPrefer.favCat && customerPrefer.favCat.length > 0 && (
                                                 customerPrefer.favCat[0].name + ' ' + (customerPrefer.favCat.length - 1 > 0 ? ' /+ ' + (customerPrefer.favCat.length - 1) + ' ' + intl.formatMessage({ id: "more" }) : '')
                                             )}
-                                            {/* {customerPrefer.favCat.map((favs, i) => {
-                                                return (
-                                                    <span key={favs.id} >{favs.name}{i === customerPrefer.favCat.length - 1 ?
-                                                        '' : '/'} </span>
-                                                )
-                                            })
-                                            } */}
                                         </div>
                                     </div>
                                     <div className="field_details">
@@ -1318,9 +1271,7 @@ function MyProfile(props) {
                                                     );
                                                 })}
                                             </ul>
-
                                         </ul>
-                                        {/* <div className="save-btn removel_allbtn"><Link to="#" className="btn-link-grey"><IntlMessages id="preferences.removeAll" /></Link></div> */}
                                     </div>
                                 </div>
                             </div>
@@ -1356,8 +1307,7 @@ function MyProfile(props) {
 }
 const mapStateToProps = (state) => {
     let languages = '';
-    // console.log(state.Cart.isPrepOpen)
-
+    
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }

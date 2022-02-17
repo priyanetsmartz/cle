@@ -11,9 +11,8 @@ function BusinessResetPassword(props) {
     let history = useHistory();
     const pass = useLocation().search;
     const token = new URLSearchParams(pass).get("token");
-    // const customerId = new URLSearchParams(pass).get("id");
     const intl = useIntl();
-    // console.log(token, customerId);
+   
 
     const [state, setState] = useState({
         password: "",
@@ -54,7 +53,7 @@ function BusinessResetPassword(props) {
                 password: state.password
             }
             let result: any = await vendorRestpassword(payload);
-            //   console.log(result);
+       
             if (result.data) {
                 notification("success", "", intl.formatMessage({ id: "resetPassword" }));
                 setState(prevState => ({
