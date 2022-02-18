@@ -7,8 +7,10 @@ import { dataTiles, removeProduct, searchProducts } from '../../../redux/pages/v
 import Modal from "react-bootstrap/Modal";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import './myanalysis.css';
 import {
     LineChart,
+    Area,
     ResponsiveContainer,
     Legend, Tooltip as Tool,
     Line,
@@ -20,7 +22,8 @@ import {
     BarChart,
     Bar,
     Cell,
-    Label
+    Label,
+    AreaChart
 } from 'recharts';
 import { Link } from "react-router-dom";
 import { formatprice, getCurrentMonth } from '../../../components/utility/allutils';
@@ -262,6 +265,20 @@ function MyAnalysis(props) {
         );
     }
 
+    // function for custom x axis area chart
+    const CustomizedAxisTick = ({ x, y, payload }) => {
+
+        // console.log(payload.value.split(" "))
+        let dayArray = payload.value.split(" ");
+        const dateTip = dayArray[0].slice(0, -2) + ' ' + dayArray[1].slice(0, 3);
+        return (
+            <g transform={`translate(${x},${y})`} >
+                <text x={20} y={0} dy={20} fontSize="0.90em" transform="rotate(-45)" textAnchor="end" fill="#363636">
+                    {dateTip}</text>
+            </g>
+        );
+    }
+
     const CustomLabel = ({ viewBox, noOfBubbleTeaSold = 0, noCost = 0 }) => {
         const { cx, cy } = viewBox;
         return (
@@ -332,7 +349,49 @@ function MyAnalysis(props) {
             </div>
         )
     }
+    const CustomTooltip = ({ active, payload, label }) => {      
+        if (payload === null) return
+        if (active)
+            return (
+                <div className="custom-tooltip">
+                    <p className="desc-tooltip">
+                        <span className="value-tooltip"><b>Order Date</b> <br/>{payload[0].payload.created_at}</span>
+                    </p>
+                    <p className="desc-tooltip">
+                        <span className="value-tooltip"><b>Order Count</b> <br/>{payload[0].payload.orders_count}</span>
+                    </p>
+                    <p className="desc-tooltip">
+                        <span className="value-tooltip"><b>Quanties Sold</b> <br/>{payload[0].payload.quantity}</span>
+                    </p>
 
+                    <p className="desc-tooltip">
+                        <span className="value-tooltip"><b>Total Order Cost</b> <br/>{siteConfig.currency} {payload[0].payload.total_cost}</span>
+                    </p>
+                </div>
+            );
+        return null;
+    };
+
+    const CustomTooltipBar = ({ active, payload, label }) => {  
+         
+        if (payload === null) return
+        if (active)
+            return (
+                <div className="custom-tooltip">
+                    <p className="desc-tooltip">
+                        <span className="value-tooltip"><b>Return Date</b> <br/>{payload[0].payload.created_at}</span>
+                    </p>
+                    <p className="desc-tooltip">
+                        <span className="value-tooltip"><b>Product Quantity</b> <br/>{payload[0].payload.product_quantity}</span>
+                    </p>
+                    <p className="desc-tooltip">
+                        <span className="value-tooltip"><b>Total return</b> <br/>{payload[0].payload.total_return}</span>
+                    </p>
+                </div>
+            );
+        return null;
+    };
+    
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
@@ -429,24 +488,14 @@ function MyAnalysis(props) {
 
                             <DateChartFilters />
                             {pdata?.length > 0 && (
-                                <>  <LineChart width={500} height={300} data={pdata} style={{ data: { fill: '#eee' } }}>
-                                    <XAxis dataKey="Created At" />
-                                    <YAxis dataKey="Total Cost" domain={[0, 20000]} />
+                                <>  <AreaChart width={500} height={300} data={pdata} style={{ data: { fill: '#eee' } }}>
+                                    <XAxis dataKey="created_at" tick={CustomizedAxisTick} />
+                                    <YAxis dataKey="total_cost" domain={[0, 20000]} />
                                     <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                                    <Legend />
-                                    <Tool
-                                        formatter={function (value, name) {
-                                            if (name === 'Total Cost')
-                                                return `${siteConfig.currency + value}`
-                                            else
-                                                return `${value}`;
-                                        }}
-                                        labelFormatter={function (value) {
-                                            return `Date: ${value}`;
-                                        }} />
-                                    <Line type="monotone" dataKey="Total Cost" stroke="#8884d8" />
-                                    <Line type="monotone" dataKey="Quantity" stroke="#82ca9d" />
-                                </LineChart>
+                                    <Tool content={CustomTooltip} animationDuration={0} />                                 
+                                    <Area type="monotone" dataKey="total_cost" stroke="#8884d8" />
+                                    <Area type="monotone" dataKey="quantity" stroke="#82ca9d" />
+                                </AreaChart >
                                 </>
                             )}
                             {pdata?.length === 0 ? <div className='text-center' >No data available</div> : ""}
@@ -565,12 +614,12 @@ function MyAnalysis(props) {
                                     >
                                         <XAxis dataKey="created_at" dy="25" />
                                         <YAxis />
-                                        <Tool />
+                                        <Tool content={CustomTooltipBar} animationDuration={0} />
+                                        <Legend />
                                         <CartesianGrid stroke="rgba(0,0,0,0.1)" vertical={false} />
                                         <Bar
                                             dataKey="product_quantity"
                                             barSize={50}
-                                            label={<CustomizedLabelBar viewBox={['cx', 'cy']} value={returnData[0]?.['product_quantity']} />}
                                         >
                                             {returnData.map((entry, index) => (
                                                 <Cell fill="#0070dc" />
@@ -579,7 +628,6 @@ function MyAnalysis(props) {
                                         <Bar
                                             dataKey="total_return"
                                             barSize={50}
-                                            label={<CustomizedLabelBar viewBox={['cx', 'cy']} value={returnData[0]?.['total_return']} />}
                                         >
                                             {returnData.map((entry, index) => (
                                                 <Cell fill="#00c9ad" />

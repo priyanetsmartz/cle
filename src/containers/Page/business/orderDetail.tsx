@@ -138,7 +138,7 @@ function VendorOrderDetail(props) {
             return false;
         }
         let result: any = await changeOrderSatus(orderId, statusOrder, statusOrderComment);
-        if (result.data) {
+        if (result?.data) {
             selectStatusOrder('')
             setstatusOrderComment('')
             getOrderDetailFxn(orderId)
