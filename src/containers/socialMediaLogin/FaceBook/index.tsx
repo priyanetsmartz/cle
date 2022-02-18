@@ -50,8 +50,7 @@ function FacebookLoginButton(props) {
                 'token_name': firstname + ' ' + lastname,
                 'token': jsonData.group_id,
                 'id_token': jsonData.new_token,
-                'type': "user",
-                "is_social_login": 1
+                'type': "user"
             }
             sessionService.saveSession({ id_token })
             sessionService.saveUser(data)

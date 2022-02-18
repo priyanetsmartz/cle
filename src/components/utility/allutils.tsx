@@ -5,7 +5,7 @@ import Login from '../../redux/auth/Login';
 import { sessionService } from 'redux-react-session';
 import { getCookie } from "../../helpers/session";
 import { COUNTRIES } from "../../config/counties";
-import notification from '../../components/notification';
+import appAction from "../../redux/app/actions";
 import moment from "moment";
 const loginApi = new Login();
 
@@ -181,6 +181,14 @@ export async function checkVendorLogin() {
     return user;
   }).catch(err =>
     window.location.href = '/vendor-login'
+  )
+}
+
+export async function checkCustomerLogin() {
+  return await sessionService.loadUser().then(user => {
+    return user
+  }).catch(err =>
+    window.location.href = '/'
   )
 }
 

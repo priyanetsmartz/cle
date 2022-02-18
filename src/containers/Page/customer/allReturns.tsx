@@ -23,8 +23,10 @@ function MyReturns(props) {
     const intl = useIntl();
 
     useEffect(() => {
-        getReturnData();
-    }, [pageSize, props.languages, page]);
+        setLoaderReturns(props.loader);
+        setReturn(props.returnData);
+        setReturnPagination(props.pagination);
+    }, [pageSize, props.languages, page, props.loader, props.returnData, props.pagination]);
 
 
 

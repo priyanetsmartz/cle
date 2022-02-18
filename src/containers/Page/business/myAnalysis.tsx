@@ -300,37 +300,63 @@ function MyAnalysis(props) {
             </>
         );
     };
+    const DateChartFilters = () => {
+        return (
+            <div className="row mb-4">
+                <div className="col-sm-12">
+                    <ul className='filter-tiles'>
+                        <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
+                        <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
+                        <li><Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
+                    </ul>
+
+                    {showMonth && (
+                        <ul className='monthsname pagination justify-content-center align-items-center'>
+                            <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
+                            {
+                                <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
+                            }
+                            <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
+                        </ul>
+                    )}
+                    {sowQuaters && (
+                        <ul className='monthsname pagination justify-content-center align-items-center'>
+                            <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
+                            {
+                                <p>{quaterSlider}</p>
+                            }
+                            <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
+                        </ul>
+                    )}
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
                 <div className="container">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <h1>My Analysis</h1>
+                            <p>You can see your analysis here. Lorem ipsum dolor sit amet<br />
+                                consectetur adipiscing elit.</p>
+                        </div>
+                    </div>
+                    <div className="row mb-4">
+                        <div className="col-sm-12">
+                            <ul className='analysis-demo'>
+                                <li>Demographics</li>
+                                <li>Sales</li>
+                                <li>Product Statics</li>
+                            </ul>
+                        </div>
+                    </div>
                     <div className="row mb-4">
                         <div className="col-sm-12">
                             <h2><IntlMessages id="datatiles" /></h2>
-                            <ul className='filter-tiles'>
-                                <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
-                                <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
-                                <li><Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
-                            </ul>
-
-                            {showMonth && (
-                                <ul className='monthsname pagination justify-content-center align-items-center'>
-                                    <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
-                                    {
-                                        <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
-                                    }
-                                    <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
-                                </ul>
-                            )}
-                            {sowQuaters && (
-                                <ul className='monthsname pagination justify-content-center align-items-center'>
-                                    <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
-                                    {
-                                        <p>{quaterSlider}</p>
-                                    }
-                                    <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
-                                </ul>
-                            )}
+                            <DateChartFilters />
                         </div>
                     </div>
 
@@ -398,10 +424,10 @@ function MyAnalysis(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <h2>{intl.formatMessage({ id: 'vendor.myAnalysis' })}</h2>
-                            <p>{intl.formatMessage({ id: 'orderInformation' })}</p>
+                            <h2>{intl.formatMessage({ id: 'orderInformation' })}</h2>
+                            <p>You can see sales chart here.</p>
 
-
+                            <DateChartFilters />
                             {pdata?.length > 0 && (
                                 <>  <LineChart width={500} height={300} data={pdata} style={{ data: { fill: '#eee' } }}>
                                     <XAxis dataKey="Created At" />
@@ -434,7 +460,8 @@ function MyAnalysis(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>
-
+                            <p>You can see payout information chart here</p>
+                            <DateChartFilters />
                             {pieChart?.length > 0 && (
                                 <ResponsiveContainer width="100%" height={250}>
                                     <PieChart height={250}>
@@ -492,6 +519,8 @@ function MyAnalysis(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
+                            <p>You can see your active product and total cost of products chart here.</p>
+                            <DateChartFilters />
                             {barChartData?.length > 0 && (<PieChart width={730} height={250}>
                                 <Pie
                                     data={barChartData}
@@ -524,6 +553,8 @@ function MyAnalysis(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h2>Return Information</h2>
+                            <p>You can see return chart here.</p>
+                            <DateChartFilters />
                             {returnData?.length > 0 && (
                                 <ResponsiveContainer width="100%" height={250}>
                                     <BarChart
@@ -542,7 +573,7 @@ function MyAnalysis(props) {
                                             label={<CustomizedLabelBar viewBox={['cx', 'cy']} value={returnData[0]?.['product_quantity']} />}
                                         >
                                             {returnData.map((entry, index) => (
-                                                <Cell fill="#017fb1" />
+                                                <Cell fill="#0070dc" />
                                             ))}
                                         </Bar>
                                         <Bar
@@ -551,7 +582,7 @@ function MyAnalysis(props) {
                                             label={<CustomizedLabelBar viewBox={['cx', 'cy']} value={returnData[0]?.['total_return']} />}
                                         >
                                             {returnData.map((entry, index) => (
-                                                <Cell fill="#017fb1" />
+                                                <Cell fill="#00c9ad" />
                                             ))}
                                         </Bar>
                                     </BarChart>

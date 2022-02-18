@@ -66,8 +66,7 @@ function GoogleLoginButton(props) {
                 'token': jsonData.group_id,
                 'id_token': jsonData.new_token,
                 'type': "user",
-                "storeId": props.languages,
-                "is_social_login": 1
+                "storeId": props.languages
             }
             sessionService.saveSession({ id_token })
             sessionService.saveUser(data)

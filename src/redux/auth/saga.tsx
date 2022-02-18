@@ -123,11 +123,12 @@ export function* registerRequest() {
       let email = payload.payload.userInfo.email;
       let password = payload.payload.userInfo.password;
       let storeId = payload.payload.userInfo.storeId;
+      let is_social_login = payload.payload.userInfo.is_social_login ? payload.payload.userInfo.is_social_login : 0
 
       //API call to login request
-      const response = yield call(loginApi.register, firstname, lastname, email, password, type, storeId);
-      console.log(response?.data?.id)
-      if (response?.data?.id !== "" && response?.data?.id !== undefined ) {
+      const response = yield call(loginApi.register, firstname, lastname, email, password, type, storeId, is_social_login);
+     
+      if (response?.data?.id !== "" && response?.data?.id !== undefined) {
         const token = yield call(loginApi.getAuthRegister, email);
         if (token.data[0].new_token) {
           yield put({ type: appAction.OPEN_SIGN_UP, showSignUp: false });

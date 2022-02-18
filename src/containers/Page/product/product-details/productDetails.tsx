@@ -186,7 +186,7 @@ function ProductDetails(props) {
         let lang = props.languages ? props.languages : language;
         let customer_id = props.token.cust_id;
         let result: any = await getProductDetails(skuUrl, lang);
-        //  console.log(result.data)
+         console.log(result.data)
         let projectSingle = {};
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
@@ -402,7 +402,6 @@ function ProductDetails(props) {
                                             <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                             {
                                                 locationBread.map((item, i) => {
-                                                    console.log(locationBread)
                                                     if (item === "" || item === 'products' || item === 'category') return false;
                                                     if (i === 2) return <li className="breadcrumb-item" key={i}><Link to={`/category/` + item}>{item}</Link></li>
                                                     return <li className="breadcrumb-item" key={i}><Link to={lastLocation?.pathname}>{item}</Link></li>

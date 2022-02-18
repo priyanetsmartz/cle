@@ -14,10 +14,16 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 import { siteConfig } from '../../../../settings';
 import { formatprice } from '../../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
+import { useLastLocation } from 'react-router-last-location';
+
+
 const { openGiftBoxes, addToCartTask, addToWishlistTask } = cartAction;
 const { showSignin } = appAction;
 function CartItemPage(props) {
     const intl = useIntl();
+    const lastLocation = useLastLocation();
+    let path = lastLocation?.pathname ? lastLocation?.pathname : "/";
+    const [shopPath, setShopPath] = useState(path);
     const language = getCookie('currentLanguage');
     const [token, setToken] = useState('');
     const [isShow, setIsShow] = useState(0);
@@ -34,6 +40,7 @@ function CartItemPage(props) {
     const [delGiftMsg, setDelGiftMsg] = useState(0);
 
     useEffect(() => {
+        setShopPath(path);
         const header = document.getElementById("cartsidebar");
         const sticky = header.offsetTop;
         const scrollCallBack: any = window.addEventListener("scroll", () => {
@@ -49,7 +56,6 @@ function CartItemPage(props) {
     }, [])
 
     useEffect(() => {
-        //  console.log(props)
         const localToken = props.token.token;
         setToken(localToken)
         if (props.cart || !props.cart) {
@@ -62,9 +68,7 @@ function CartItemPage(props) {
     }, [props.languages, props.cart, props.token])
 
     useEffect(() => {
-        // console.log(props.items.Cart);
         let giftBox = props.giftCart.Cart.openGiftBox === 0 ? false : true;
-        // console.log(giftBox)
         setIsGiftMessage(giftBox)
         return () => {
             // componentwillunmount in functional component.
@@ -86,7 +90,6 @@ function CartItemPage(props) {
 
     async function someAPICall(product) {
         let giftCall: any = await getGiftMessage(product.item_id);
-        //    console.log(giftCall.data)
         let prod: any;
         if (giftCall.data && giftCall.data.gift_message_id) {
             prod = { ...product, isGift: true, gift_message_id: giftCall.data.gift_message_id }
@@ -111,8 +114,6 @@ function CartItemPage(props) {
             let whishlist: any = await getWhishlistItemsForUser();
             let WhishlistData = whishlist.data;
             let productNew = await getgidtMessageCall(products)
-            // console.log(productNew)
-
             const mergeById = (a1, a2) =>
                 a1.map(itm => ({
                     ...a2.find((item) => (item.sku === itm.sku) && item),
@@ -120,7 +121,6 @@ function CartItemPage(props) {
                 }));
 
             cartData = mergeById(productNew, WhishlistData);
-            //console.log(cartData)
         } else {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
@@ -141,7 +141,6 @@ function CartItemPage(props) {
             cartPrices['tax'] = cartTotal.data.base_tax_amount;
             cartValues['items'] = cartData;
             cartRelevant = cartValues['items'].length ? cartValues['items'][0].item_id : 0;
-            //console.log(cartRelevant)
             setCartRelevants(cartRelevant);
             setCartItems(cartValues)
             setCartTotal(cartPrices);
@@ -171,7 +170,6 @@ function CartItemPage(props) {
     }
     //to add the quantity
     async function handleAddQuantity(data) {
-        // console.log(data)
         setValue(data.item_id);
         setQty(data.qty + 1);
         let customer_id = props.token.cust_id;
@@ -294,7 +292,6 @@ function CartItemPage(props) {
         }
     }
     const handleGiftMEssage = (pId) => {
-        // console.log(pId)
         setProdId(pId)
         props.openGiftBoxes(pId);
         setIsGiftMessage(true)
@@ -311,8 +308,6 @@ function CartItemPage(props) {
             setDelGiftMsg(0)
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
-
-        // console.log(result);
     }
     const hideGiftModalModal = () => {
         props.openGiftBoxes(0);
@@ -327,7 +322,7 @@ function CartItemPage(props) {
                         <div className="col-md-7 col-lg-8">
                             <div className="back-block">
                                 <i className="fas fa-chevron-left back-icon"></i>
-                                <Link className="back-to-shop" to="/products" ><IntlMessages id="cart-back-link" /></Link>
+                                <Link className="back-to-shop" to={shopPath} ><IntlMessages id="cart-back-link" /></Link>
                             </div>
                             <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                 <h2><IntlMessages id="cart.Title" /></h2>
@@ -340,7 +335,6 @@ function CartItemPage(props) {
                                     (
                                         <ul className="cart-pro-list">
                                             {cartItemsVal['items'].map((item, i) => {
-                                                // console.log(item)
                                                 return (
                                                     <div key={i}>
                                                         <li>
@@ -377,20 +371,18 @@ function CartItemPage(props) {
                                                                         <div className="row mb-3">
                                                                             <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
                                                                             <div className="col-sm-3 cartschanger">
-                                                                                {/* {console.log(item.qty)} */}
                                                                                 <select defaultValue={value === item.item_id ? qty : item.qty} className="form-select" onChange={(e) => { handleChangeQty(e, item) }}>
                                                                                     {Array.from(Array(item.qty + 10), (e, i) => {
                                                                                         return <option value={i}
                                                                                             key={i}>{i}</option>
                                                                                     })}
 
-                                                                                </select>                                                                               
+                                                                                </select>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div className="cart-pro-price">{siteConfig.currency}{formatprice(item.price)} </div>
-                                                                    <div className="pro-remove-tag"  >
-                                                                        {/* <p className="float-start">Ready tp ship to the contiguous SA in 1-14 days</p> */}
+                                                                    <div className="pro-remove-tag">
                                                                         <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" >{isShow === item.item_id ? "Removing....." : <IntlMessages id="cart.remove" />}</Link>
                                                                     </div>
                                                                 </div>
@@ -419,28 +411,28 @@ function CartItemPage(props) {
                         </div>
                         <div className="col-md-5 col-lg-4" id="cartsidebar">
                             <div className="sticky-cart">
-							<div className="order-detail-sec">
-                                <h5><IntlMessages id="orderDetail" /> </h5>
+                                <div className="order-detail-sec">
+                                    <h5><IntlMessages id="orderDetail" /> </h5>
 
-                                <div className="cart-total-price">
-                                    <p><IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{cartTotals['sub_total'] ? formatprice(cartTotals['sub_total']) : 0} </span></p>
-                                    <p><IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency} {cartTotals['shipping_charges'] ? formatprice(cartTotals['shipping_charges']) : 0}</span></p>
-                                    <p><IntlMessages id="tax" /><span className="text-end">{siteConfig.currency} {cartTotals['tax'] ? formatprice(cartTotals['tax']) : 0} </span></p>
-                                    <hr />
-                                    {cartItemsVal['items'] && cartItemsVal['items'].length ? (<Link to="/checkout"><IntlMessages id="checkout" /></Link>) : ''}
-                                </div>
-                                <div className="we-accept">
-                                    <p><strong><IntlMessages id="we-accept" />:</strong></p>
-                                    <img src={cardPlaceholder} alt="cards" />
-                                    <p><IntlMessages id="coupontitle" /></p>
-                                </div>
+                                    <div className="cart-total-price">
+                                        <p><IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{cartTotals['sub_total'] ? formatprice(cartTotals['sub_total']) : 0} </span></p>
+                                        <p><IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency} {cartTotals['shipping_charges'] ? formatprice(cartTotals['shipping_charges']) : 0}</span></p>
+                                        <p><IntlMessages id="tax" /><span className="text-end">{siteConfig.currency} {cartTotals['tax'] ? formatprice(cartTotals['tax']) : 0} </span></p>
+                                        <hr />
+                                        {cartItemsVal['items'] && cartItemsVal['items'].length ? (<Link to="/checkout"><IntlMessages id="checkout" /></Link>) : ''}
+                                    </div>
+                                    <div className="we-accept">
+                                        <p><strong><IntlMessages id="we-accept" />:</strong></p>
+                                        <img src={cardPlaceholder} alt="cards" />
+                                        <p><IntlMessages id="coupontitle" /></p>
+                                    </div>
 
+                                </div>
+                                <div className="qus-contactUs">
+                                    <p><IntlMessages id="questionCart" /></p>
+                                    <Link to="/contact-us"><IntlMessages id="menu_contactnew" /> </Link>
+                                </div>
                             </div>
-                            <div className="qus-contactUs">
-                                <p><IntlMessages id="questionCart" /></p>
-                                <Link to="/contact-us"><IntlMessages id="menu_contactnew" /> </Link>
-                            </div>
-							</div>
                         </div>
                     </div>
                 </div>
@@ -461,7 +453,6 @@ function CartItemPage(props) {
 
 
 const mapStateToProps = (state) => {
-    // console.log(state.session)
     return {
         items: state.Cart.addedItems,
         giftCart: state,

@@ -62,8 +62,7 @@ function MySalesOrders(props) {
         getDataOfOrders(value, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const datePickerCallback = async (start, end, label) => {
-        console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
+    const datePickerCallback = async (start, end, label) => {    
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({

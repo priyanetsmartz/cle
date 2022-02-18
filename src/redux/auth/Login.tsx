@@ -22,7 +22,7 @@ class Login {
     var payload = {};
     return AdminApi.request("/rest/V1/customerGroups/search/?searchCriteria[filterGroups][0][filters][0][field]=id&searchCriteria[filterGroups][0][filters][0][value]=3&searchCriteria[filterGroups][0][filters][0][condition_type]=gt", payload, "GET", "");
   }
-  register(firstname: string, lastname: string, email: string, password: string, type: number, store: string) {
+  register(firstname: string, lastname: string, email: string, password: string, type: number, store: string, is_social_login: number) {
     var storeId = store === 'english' ? 3 : 2;
     var payload = {
       "customer": {
@@ -31,14 +31,14 @@ class Login {
         "lastname": lastname,
         "storeId": storeId,
         "websiteId": 1,
-        "group_id": type
+        "group_id": type,
+        "is_social_login": is_social_login
       },
       "password": password,
       "extension_attributes": {
         "is_subscribed": false
       }
     }
-    //console.log(payload)
     return AdminApi.request("default/rest/all/V1/customers", payload, "POST", "");
   }
 
@@ -55,7 +55,6 @@ class Login {
   }
 
   genCartQuoteID(localToken) {
-    //console.log('hetre');
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     const language = getCookie('currentLanguage');
     var storeId = language === 'arabic' ? 'ar' : 'en';
@@ -64,8 +63,6 @@ class Login {
     } else {
       localStorage.removeItem('cartQuoteToken');
       return AdminApi.request(`rest/V1/customers/${localToken}/carts`, "", "POST", "")
-
-      // return Api.request(`rest/V1/carts/mine`, '', 'GET', "")
     }
   }
 

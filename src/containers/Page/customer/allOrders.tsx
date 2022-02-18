@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders, getCustomerOrdersByPrice } from '../../../redux/pages/customers';
+import { getCustomerOrders, searchOrders, getCustomerOrdersByDate, sortCustomerOrders, getCustomerOrdersByPrice, getCustomerReturn } from '../../../redux/pages/customers';
 import { Link } from "react-router-dom";
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import IntlMessages from "../../../components/utility/intlMessages";
@@ -15,6 +15,7 @@ import { getAccordingDate } from '../../../components/utility/allutils'
 
 function OrdersAndReturns(props) {
     const userGroup = localStorage.getItem('token');
+    const [returnPagination, setReturnPagination] = useState(1);
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
     const [pageSize, setPageSize] = useState(siteConfig.pageSize);
     const [orderId, setOrderId] = useState('');
@@ -25,9 +26,13 @@ function OrdersAndReturns(props) {
     const [page, setCurrent] = useState(1);
     const [price, setPrice] = useState({ low: 0, high: 20000 })
     const [loaderOrders, setLoaderOrders] = useState(false);
+    const [stateView, setStateView] = useState('orders');
+    const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
+    const [loaderReturns, setLoaderReturns] = useState(false);
+    const [returs, setReturn] = useState([]);
     const intl = useIntl();
     useEffect(() => {
-        getData(pageSize);
+        getData(pageSize);        
     }, [pageSize, props.languages, page]);
 
 
@@ -50,12 +55,16 @@ function OrdersAndReturns(props) {
         setOrderId(val);
         if (val === "") return getData(pageSize);
         if (val.length >= 3) {
-            let result: any = await searchOrders(val);
-            if (result && result.data && !result.data.message) {
-                let res = getAccordingDate(result?.data?.items)
-                setLoaderOrders(false);
-                setOrders(res);
+            if (stateView === 'orders') {
+                let result: any = await searchOrders(val);
+                if (result && result.data && !result.data.message) {
+                    let res = getAccordingDate(result?.data?.items)
+                    setLoaderOrders(false);
+                    setOrders(res);
 
+                }
+            } else {
+                getReturnData(dateFilter.from, dateFilter.to, price.low, price.high, "created_at", "DESC", val);
             }
         }
     }
@@ -67,11 +76,15 @@ function OrdersAndReturns(props) {
             low: range[0],
             high: range[1]
         }))
-        let result: any = await getCustomerOrdersByPrice((range[0]), (range[1]), pageSize);
-        if (result.data) {
-            let res = getAccordingDate(result?.data?.items)
-            setOrders(res);
-            setLoaderOrders(false);
+        if (stateView === 'orders') {
+            let result: any = await getCustomerOrdersByPrice((range[0]), (range[1]), pageSize);
+            if (result.data) {
+                let res = getAccordingDate(result?.data?.items)
+                setOrders(res);
+                setLoaderOrders(false);
+            }
+        } else {
+            getReturnData(dateFilter.from, dateFilter.to, range[0], range[1], "created_at", "DESC", orderId);
         }
     }
 
@@ -92,11 +105,45 @@ function OrdersAndReturns(props) {
         setOrderDate(fromDate);
         const dateFrom = moment(fromDate).format("YYYY-MM-DD h:mm:ss");
         const dateTo = moment(currentDate.toJSON()).format("YYYY-MM-DD h:mm:ss")
-        let result: any = await getCustomerOrdersByDate(dateFrom, dateTo, pageSize);
-        if (result) {
-            setLoaderOrders(false);
-            let res = getAccordingDate(result?.data?.items)
-            setOrders(res);
+        if (stateView === 'orders') {
+            let result: any = await getCustomerOrdersByDate(dateFrom, dateTo, pageSize);
+            if (result) {
+                setLoaderOrders(false);
+                let res = getAccordingDate(result?.data?.items)
+                setOrders(res);
+            }
+        } else {
+           
+            const dateFrom = moment(fromDate).format("MM-DD-YYYY");
+            const dateTo = moment(currentDate.toJSON()).format("MM-DD-YYYY")
+            if (value === '') {
+                setDateFilter(prevState => ({
+                    ...prevState,
+                    from: '',
+                    to: ''
+                }))
+                getReturnData("", "", price.low, price.high, "created_at", "DESC", orderId);
+            } else {
+                setDateFilter(prevState => ({
+                    ...prevState,
+                    from: dateFrom,
+                    to: dateTo
+                }))
+                getReturnData(dateFrom, dateTo, price.low, price.high, "created_at", "DESC", orderId);
+            }
+        }
+
+    }
+
+    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = 'created_at', sortOrders: any = 'DESC', search: any = '') => {
+        setLoaderReturns(true);
+        let returns: any = await getCustomerReturn(pageSize, from_date, to_date, from_price, to_price, sortBy, sortOrders, search);
+
+        if (returns && returns.data && returns.data.length > 0 && returns.data[0]) {
+            let res = getAccordingDate(returns?.data?.[0])
+            setLoaderReturns(false);
+            setReturn(res);
+            setReturnPagination(Math.ceil(returns.data.total_count / pageSize));
         }
     }
 
@@ -126,6 +173,10 @@ function OrdersAndReturns(props) {
         setCurrent((page) => page - 1);
     }
 
+    const fxnSetView = (view) => {
+        setStateView(view)
+        getReturnData();
+    }
     return (
         <>
             <div className={isPriveUser ? 'prive-txt col-sm-9' : 'col-sm-9'}>
@@ -193,11 +244,11 @@ function OrdersAndReturns(props) {
                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
-                                    type="button" role="tab" aria-controls="home" aria-selected="true"><IntlMessages id="order.orders" /></button>
+                                    type="button" role="tab" aria-controls="home" aria-selected="true" onClick={() => { fxnSetView('orders') }}><IntlMessages id="order.orders" /></button>
                             </li>
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
-                                    type="button" role="tab" aria-controls="profile" aria-selected="false"><IntlMessages id="order.returns" /></button>
+                                    type="button" role="tab" aria-controls="profile" aria-selected="false" onClick={() => { fxnSetView('returns') }} ><IntlMessages id="order.returns" /></button>
                             </li>
 
                         </ul>
@@ -360,7 +411,7 @@ function OrdersAndReturns(props) {
 
                             </div>
                             <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <AllReturns />
+                                <AllReturns returnData = {returs} pagination={returnPagination} loader={loaderReturns} />
                             </div>
 
                         </div>
