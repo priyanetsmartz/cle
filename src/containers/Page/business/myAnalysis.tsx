@@ -403,15 +403,26 @@ function MyAnalysis(props) {
                                 consectetur adipiscing elit.</p>
                         </div>
                     </div>
-                    <div className="row mb-4">
+                    
+					<div className="row mb-4">
                         <div className="col-sm-12">
-                            <ul className='analysis-demo'>
-                                <li>Demographics</li>
-                                <li>Sales</li>
-                                <li>Product Statics</li>
+                            <ul className="analysis-demo">
+                                <li>
+									<input type="radio" id="radioApple1" name="radioFruit1" value="apple1" className="active" />
+									<label>Demographics</label>
+								</li>
+                                <li>
+									<input type="radio" id="radioApple2" name="radioFruit2" value="apple2" />
+									<label>Sales</label>
+								</li>
+                                <li>
+									<input type="radio" id="radioApple3" name="radioFruit3" value="apple3" />
+									<label> Statics</label>
+								</li>
                             </ul>
                         </div>
                     </div>
+					
                     <div className="row mb-4">
                         <div className="col-sm-12">
                             <h2><IntlMessages id="datatiles" /></h2>
