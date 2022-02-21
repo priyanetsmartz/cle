@@ -45,7 +45,12 @@ function PostComment(props) {
         const { id, value } = e.target
         setState(prevState => ({
             ...prevState,
-            [id]: value
+            [id]: value,
+            name: props.token.token_name,
+            email: props.token.token_email,
+            post_id: props.postId,
+            store_id: props.auth.LanguageSwitcher.language === 'english' ? 3 : 2,
+            customer_id: props.token.cust_id
         }))
     }
     const handleSubmitClick = async (e) => {
