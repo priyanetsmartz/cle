@@ -351,7 +351,7 @@ function OrdersAndReturns(props) {
                                                                         <div className="col-sm-6">
                                                                             <div className="prodcut_catg">
                                                                                 {
-                                                                                    item?.items?.length > 0 && item?.items.map((image, index) => {
+                                                                                    item?.items?.length > 0 && item?.items.slice(0,1).map((image, index) => {
                                                                                         return (
                                                                                             <div className="product_photo" key={index}>
                                                                                                 <img src={image?.extension_attributes?.item_image} className="img-fluid" alt="" />
