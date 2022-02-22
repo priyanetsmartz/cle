@@ -30,9 +30,9 @@ function Unsubscribe(props){
     <div className="row">
         <div className="col-md-12">
             <div className="subscription text-left">
-                <h6>Your subscription has been cancelled successfully.</h6>
+                <h6>{message}</h6>
             </div>
-            
+            <br/>
             <button className="btn btn-secondary" type="button"><Link to="/customer/profile">Go Home</Link></button></div>
         </div>
     </div>
