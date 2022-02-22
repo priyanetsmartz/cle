@@ -24,6 +24,7 @@ function MyAnalysis(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [listingData, setListingData] = useState([])
     const [pending, setPending] = useState(true);
+    const [viewState, setViewState] = useState('all');
     const [vendorId, setVendorId] = useState(venID);
     const [deletePop, setDeletePop] = useState(false);
     const [deleteId, setDeleteID] = useState(0)
@@ -121,6 +122,9 @@ function MyAnalysis(props) {
         }
     ];
 
+    function changeData(e) {
+        setViewState(e.target.value);
+    }
 
 
 
@@ -140,67 +144,88 @@ function MyAnalysis(props) {
                         <div className="col-sm-12">
                             <ul className="analysis-demo">
                                 <li>
-                                    <input type="radio" id="radioApple1" name="radioFruit1" value="apple1" className="active" />
+                                    <input type="radio" id="all" name="radioanalysis" value="all" onClick={changeData} checked={viewState === 'all'}  />
+                                    <label>All</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="demographics" name="radioanalysis" value="demographics" checked={viewState === 'demographics'} onClick={changeData} />
                                     <label>Demographics</label>
                                 </li>
                                 <li>
-                                    <input type="radio" id="radioApple2" name="radioFruit2" value="apple2" />
+                                    <input type="radio" id="sales" checked={viewState === 'sales'} name="radioanalysis" value="sales" onClick={changeData} />
                                     <label>Sales</label>
                                 </li>
                                 <li>
-                                    <input type="radio" id="radioApple3" name="radioFruit3" value="apple3" />
-                                    <label> Statics</label>
+                                    <input type="radio" id="statics"  checked={viewState === 'statics'} name="radioanalysis" value="statics" onClick={changeData} />
+                                    <label>Statics</label>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div >
             </section>
-            <MyAnalysisDataTiles />
-            <MyAnalysisCustomer />
-            <MyAnalysisOrders />
-            <MyAnalysisPayouts />
-            <MyAnalysisProducts />
-            <MyAnalysisReturn />
+            {(viewState === 'statics' || viewState === 'all') && (
+                <>
+                    <MyAnalysisDataTiles />
+                    <MyAnalysisCustomer />
+                </>
+            )}
+            {(viewState === 'sales' || viewState === 'all') && (
+                <>
+                    <MyAnalysisOrders />
+                    <MyAnalysisReturn />
+                </>
+            )}
+            {(viewState === 'demographics' || viewState === 'all') && (
+                <>
+                    <MyAnalysisOrders />
+                    <MyAnalysisPayouts />
+                    <MyAnalysisProducts />
+                    <MyAnalysisReturn />
+                </>
+            )}
 
 
-            <section>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="product-listing">
-                                <DataTable
-                                    title="Product Listing"
-                                    progressPending={isLoading}
-                                    columns={columns}
-                                    data={listingData}
-                                    pagination={true}
-                                    paginationComponentOptions={paginationComponentOptions}
-                                />
+
+            {(viewState === 'sales' || viewState === 'all') && (
+                <section>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <div className="product-listing">
+                                    <DataTable
+                                        title="Product Listing"
+                                        progressPending={isLoading}
+                                        columns={columns}
+                                        data={listingData}
+                                        pagination={true}
+                                        paginationComponentOptions={paginationComponentOptions}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <Modal show={deletePop}>
-                    <Modal.Body className="CLE_pf_details modal-confirm">
+                    <Modal show={deletePop}>
+                        <Modal.Body className="CLE_pf_details modal-confirm">
 
-                        <div className="deletePopup">
-                            <div className="modal-header flex-column">
-                                <i className="far fa-times-circle"></i>
-                                <h4 className="modal-title w-100"><IntlMessages id="deletetheproduct" /></h4>
-                                <Link to="#" onClick={closePop} className="close"> <i className="fas fa-times"></i></Link>
+                            <div className="deletePopup">
+                                <div className="modal-header flex-column">
+                                    <i className="far fa-times-circle"></i>
+                                    <h4 className="modal-title w-100"><IntlMessages id="deletetheproduct" /></h4>
+                                    <Link to="#" onClick={closePop} className="close"> <i className="fas fa-times"></i></Link>
+                                </div>
+                                <div className="modal-body">
+                                    <p><IntlMessages id="deleteProduct.confirmation" /></p>
+                                </div>
+                                <div className="modal-footer justify-content-center">
+                                    <button type="button" className="btn btn-primary" onClick={closePop} data-dismiss="modal"><IntlMessages id="productEdit.cancel" /></button>
+                                    <button type="button" className="btn btn-secondary" onClick={deleteProduct} ><IntlMessages id="productEdit.delete" /></button>
+                                </div>
                             </div>
-                            <div className="modal-body">
-                                <p><IntlMessages id="deleteProduct.confirmation" /></p>
-                            </div>
-                            <div className="modal-footer justify-content-center">
-                                <button type="button" className="btn btn-primary" onClick={closePop} data-dismiss="modal"><IntlMessages id="productEdit.cancel" /></button>
-                                <button type="button" className="btn btn-secondary" onClick={deleteProduct} ><IntlMessages id="productEdit.delete" /></button>
-                            </div>
-                        </div>
-                    </Modal.Body>
-                </Modal>
-            </section>
+                        </Modal.Body>
+                    </Modal>
+                </section>
+            )}
         </div >
     )
 }

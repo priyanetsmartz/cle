@@ -44,9 +44,12 @@ function MyAnalysisCustomer(props) {
 
             let repeatCustomer = calculatePercentage(tiles_information?.customers?.repeated_customer, tiles_information?.customers?.total_orders);
             let data = []
-            data['all'] = 100;
-            data['newCustomer'] = Math.ceil(newCustomer);
-            data['repeatCustomer'] = Math.ceil(repeatCustomer);
+            data['all'] = tiles_information?.customers?.total_orders ? 100 : 0;
+            data['newCustomer'] = newCustomer ? Math.ceil(newCustomer) : 0;
+            data['repeatCustomer'] = repeatCustomer ? Math.ceil(repeatCustomer) : 0;
+            data['totalcustomer'] = tiles_information?.customers?.total_orders;
+            data['repeated_customer'] = tiles_information?.customers?.repeated_customer;
+            data['one_time_customer'] = tiles_information?.customers?.one_time_customer;
             setCustomerData(data)
         }
     }
@@ -208,11 +211,11 @@ function MyAnalysisCustomer(props) {
                         <h2>Customer Information</h2>
                         <p>You can see Customer information chart here</p>
                         <DateChartFilters data="piechart" />
-                        <div className='circularData'>
-                            <div className='circularDataInner'>
-                                <span>Total customers </span>
+                        <div className='row circularData'>
+                            <div className='col-md-4'>
+                                <span><b>Total customers: {customerData?.['totalcustomer']}</b></span>
                                 <br />
-                                <div >
+                                <div className='circularDataInner' >
                                     <CircularProgressBar
                                         strokeWidth="10"
                                         sqSize="150"
@@ -220,10 +223,10 @@ function MyAnalysisCustomer(props) {
                                 </div>
                             </div>
 
-                            <div className='circularDataInner'>
-                                <span>Persistant  customers </span>
+                            <div className='col-md-4'>
+                                <span><b>Persistant  customers: {customerData?.['repeated_customer']}</b></span>
                                 <br />
-                                <div>
+                                <div className='circularDataInner' >
                                     <CircularProgressBar
                                         strokeWidth="10"
                                         sqSize="150"
@@ -231,10 +234,10 @@ function MyAnalysisCustomer(props) {
                                 </div>
                             </div>
 
-                            <div className='circularDataInner'>
-                                <span>New  customers </span>
+                            <div className='col-md-4'>
+                                <span><b>New  customers: {customerData?.['one_time_customer']}</b></span>
                                 <br />
-                                <div>
+                                <div className='circularDataInner' >
                                     <CircularProgressBar
                                         strokeWidth="10"
                                         sqSize="150"

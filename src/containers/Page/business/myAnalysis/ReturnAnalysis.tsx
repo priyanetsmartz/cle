@@ -246,7 +246,7 @@ function MyAnalysisReturn(props) {
                                     barSize={50}
                                 >
                                     {returnData.map((entry, index) => (
-                                        <Cell fill="#0070dc" />
+                                        <Cell key={index} fill="#0070dc" />
                                     ))}
                                 </Bar>
                                 <Bar
@@ -254,7 +254,7 @@ function MyAnalysisReturn(props) {
                                     barSize={50}
                                 >
                                     {returnData.map((entry, index) => (
-                                        <Cell fill="#00c9ad" />
+                                        <Cell key={index} fill="#00c9ad" />
                                     ))}
                                 </Bar>
                             </BarChart>

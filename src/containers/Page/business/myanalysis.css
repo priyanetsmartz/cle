@@ -52,10 +52,6 @@
   fill: green;
 }
 
-.circularData {
-  display: inline-flex;
-}
-
 .circularDataInner {
   margin: 10px;
 }
