@@ -91,7 +91,7 @@ function SinglePost(props) {
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                                    <li className="breadcrumb-item">Magazine</li>
+                                    <li className="breadcrumb-item"><Link to="/magazines">Magazine</Link></li>
                                     {slug && (<li className="breadcrumb-item">{bread}</li>)}
                                 </ol>
                             </nav>

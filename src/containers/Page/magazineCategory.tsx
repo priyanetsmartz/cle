@@ -73,7 +73,7 @@ function MagazineCategory(props) {
                 ...prevState
             }))
         }
-        let featuredCat = result?.data.filter(catData => catData.is_featured === "1");
+        let featuredCat = result.data.filter(catData => catData.is_featured === "1");
         setFeaturedItems(featuredCat);
         setOpacity(1);
     }
@@ -231,7 +231,7 @@ function MagazineCategory(props) {
                     <img src={latest.list_thumbnail} alt="list_thumbnail" />
                     <div className="banner-content text-center">
                         <h4>{latest.title}</h4>
-                        <div className="cat-date">{latest.categroy}<span>{moment(latest.published_at).format('LL')}</span></div>
+                        <div className="cat-date"><Link to={"/magazine/" + latest.post_id} >{latest.categroy}</Link><span>{moment(latest.published_at).format('LL')}</span></div>
                         <p>  <div dangerouslySetInnerHTML={{ __html: latest.short_content }} /></p>
                         <Link to={"/magazine/" + latest.post_id} ><IntlMessages id="magazine.read_more" /></Link>
                     </div>
@@ -245,13 +245,12 @@ function MagazineCategory(props) {
                     <div className="container">
                         <div className="row my-3">
                             {featured.slice(0, 3).map((item, i) => {
-                                //   console.log(typeof (item.category))
                                 return (
                                     <div className="col-md-4" key={i}>
                                         <div className="blog-sec-main">
                                             <div className="post-effect">
 												<div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="list_thumbnail" /></div>
-												<div className="cate-name">{item.categroy}</div>
+												<div className="cate-name"><Link to={"/magazine/" + latest.post_id} >{item.categroy}</Link></div>
 												<h3 className="mag-blog-title-2 my-2">{item.title}</h3>
 												<div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
 												<p className="mag-blog-desc">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
@@ -410,7 +409,6 @@ function MagazineCategory(props) {
 
 function mapStateToProps(state) {
     let languages = '', categorySet = '';
-    ///  console.log(state);
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language;
         categorySet = state.App.setCategory;
