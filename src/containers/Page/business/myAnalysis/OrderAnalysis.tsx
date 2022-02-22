@@ -182,7 +182,7 @@ function MyAnalysisOrders(props) {
     };
     const DateChartFilters = (type) => {
         return (
-            <div className="row mb-4">
+            <div className="row">
                 <div className="col-sm-12">
                     <ul className='filter-tiles'>
                         <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
@@ -222,14 +222,14 @@ function MyAnalysisOrders(props) {
         )
     }
     return (
-        <section className="my_profile_sect mb-4">
+        <section className="my_profile_sect mb-5">
             <div className="container">
-                <div className="row">
+                <div className="row  mb-4">
                     <div className="col-sm-12">
                         <h2>{intl.formatMessage({ id: 'orderInformation' })}</h2>
-                        <p>You can see sales chart here.</p>
-
+                        <p className='datap'>You can see sales chart here.</p>
                         <DateChartFilters data="areachart" />
+                        <div className="row mb-4" style={{ columnCount: 3 }}>
                         {pdata?.length > 0 && (
                             <>  <AreaChart width={600} height={300} data={pdata} style={{ data: { fill: '#eee' } }}>
                                 <XAxis dataKey="created_at" dy="50" tick={CustomizedAxisTick} />
@@ -242,6 +242,7 @@ function MyAnalysisOrders(props) {
                             </>
                         )}
                         {pdata?.length === 0 ? <div className='text-center' >No data available</div> : ""}
+                        </div>
                     </div>
                 </div>
             </div>

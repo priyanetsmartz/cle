@@ -4,7 +4,7 @@ import CLELogo from '../../image/CLIlogo.png';
 import loading from "../../image/CLE_LogoMotionGraphics.gif";
 import avatar from '../../image/avtar.svg';
 import favorit from '../../image/favrot.svg';
-import {  isMobile } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import { Link, useParams } from "react-router-dom";
 import { menu } from '../../redux/pages/allPages';
 import appAction from "../../redux/app/actions";
@@ -304,7 +304,9 @@ function HeaderMenu(props) {
                                         {!Object.keys(props.token).length && (
                                             <li> <Link to="#" onClick={(e) => { handlesigninClickMobile(e); }}><img src={favorit} alt="wishlist" /></Link> </li>
                                         )}
-                                        <MiniCart />
+                                        {props.token.type !== 'vendor' && (
+                                            <MiniCart />
+                                        )}
                                     </ul>
                                 </div>
                             </div>
@@ -397,7 +399,9 @@ function HeaderMenu(props) {
                                 <div className="user_cart">
                                     <div className="cartuser-info">
                                         <ul>
-                                            <LanguageSwitcher />
+                                            {props.token.type !== 'vendor' && (
+                                                <LanguageSwitcher />
+                                            )}
                                             <li className="my_account"> <Link to="#" onClick={() => { showAccountFxnMobile() }} onBlur={() => { showAccountFxnBlurMobile() }} ><svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="22" height="22" viewBox="0 0 22 22">
                                                 <path id="user_people_profile_avatar" data-name="user, people, profile, avatar" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9.641,9.641,0,0,1-5.209-1.674,7,7,0,0,1,10.418,0A9.167,9.167,0,0,1,12,21Zm6.694-3.006a8.98,8.98,0,0,0-13.388,0,9,9,0,1,1,13.388,0ZM12,6a4,4,0,1,0,4,4A4,4,0,0,0,12,6Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,12Z" transform="translate(-1 -1)" />
                                             </svg> </Link>
@@ -412,7 +416,10 @@ function HeaderMenu(props) {
                                                     </g>
                                                 </svg></Link> </li>
                                             )}
-                                            <MiniCart />
+                                            {props.token.type !== 'vendor' && (
+                                                <MiniCart />
+                                            )}
+
                                         </ul>
                                     </div>
                                     <SearchBar />
@@ -440,5 +447,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    {  setCurrentCat, showSignin, openSignUp, accountPopup, miniCartPopup, menuSetup, showLoader, addToCartTask, setCatSearch, userType }
+    { setCurrentCat, showSignin, openSignUp, accountPopup, miniCartPopup, menuSetup, showLoader, addToCartTask, setCatSearch, userType }
 )(HeaderMenu);

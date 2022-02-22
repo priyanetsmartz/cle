@@ -39,7 +39,7 @@ function Dashboard(props) {
     const [isLoadingPayouts, setIsLoadingPayouts] = useState(true)
     useEffect(() => {
         let pop = getCookie('popUp');
-        if (localToken?.showpop === 1 || pop === localToken?.vendor_id)
+        if (localToken?.showpop === "1" || localToken?.showpop === 1 || pop === localToken?.vendor_id)
             setMyDashboardModal(false)
         else
             setMyDashboardModal(true)

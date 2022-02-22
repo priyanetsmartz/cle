@@ -144,7 +144,7 @@ function MyAnalysis(props) {
                         <div className="col-sm-12">
                             <ul className="analysis-demo">
                                 <li>
-                                    <input type="radio" id="all" name="radioanalysis" value="all" onClick={changeData} checked={viewState === 'all'}  />
+                                    <input type="radio" id="all" name="radioanalysis" value="all" onClick={changeData} checked={viewState === 'all'} />
                                     <label>All</label>
                                 </li>
                                 <li>
@@ -156,7 +156,7 @@ function MyAnalysis(props) {
                                     <label>Sales</label>
                                 </li>
                                 <li>
-                                    <input type="radio" id="statics"  checked={viewState === 'statics'} name="radioanalysis" value="statics" onClick={changeData} />
+                                    <input type="radio" id="statics" checked={viewState === 'statics'} name="radioanalysis" value="statics" onClick={changeData} />
                                     <label>Statics</label>
                                 </li>
                             </ul>
@@ -167,27 +167,28 @@ function MyAnalysis(props) {
             {(viewState === 'statics' || viewState === 'all') && (
                 <>
                     <MyAnalysisDataTiles />
+                </>
+            )}
+            {(viewState === 'demographics' || viewState === 'statics' || viewState === 'all') && (
+                <>
                     <MyAnalysisCustomer />
+
                 </>
             )}
             {(viewState === 'sales' || viewState === 'all') && (
                 <>
+
                     <MyAnalysisOrders />
                     <MyAnalysisReturn />
-                </>
-            )}
-            {(viewState === 'demographics' || viewState === 'all') && (
-                <>
-                    <MyAnalysisOrders />
                     <MyAnalysisPayouts />
                     <MyAnalysisProducts />
-                    <MyAnalysisReturn />
                 </>
             )}
 
 
 
-            {(viewState === 'sales' || viewState === 'all') && (
+
+            {(viewState === 'statics' || viewState === 'all') && (
                 <section>
                     <div className="container">
                         <div className="row">

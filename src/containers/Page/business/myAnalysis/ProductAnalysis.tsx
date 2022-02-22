@@ -185,7 +185,7 @@ function MyAnalysisProducts(props) {
     }
     const DateChartFilters = (type) => {
         return (
-            <div className="row mb-4">
+            <div className="row">
                 <div className="col-sm-12">
                     <ul className='filter-tiles'>
                         <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
@@ -240,40 +240,40 @@ function MyAnalysisProducts(props) {
         return null;
     };
     return (
-        <section className="my_profile_sect mb-4">
+        <section className="my_profile_sect mb-5">
             <div className="container">
-                <div className="row">
+                <div className="row  mb-4">
                     <div className="col-sm-12">
                         <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
-                        <p>You can see your active product and total cost of products chart here.</p>
-                       
-                        {(barChartData?.length > 0 && barChartData?.[0]?.total_product_count > 0)? (
-                            <p>  <DateChartFilters data="product" />
-                                <PieChart width={730} height={250}>
-                                    <Pie
-                                        data={barChartData}
-                                        cx="50%"
-                                        cy="50%"
-                                        dataKey="total_product_count" // make sure to map the dataKey to "value"
-                                        innerRadius={60} // the inner and outer radius helps to create the progress look
-                                        outerRadius={80}
-                                    >
-                                        {barChartData.map((entry, index) => {
-                                            if (index === 1 || index === 2) { // the main change is here!!
-                                                return <Cell key={`cell-${index}`} fill="#f3f6f9" />;
-                                            }
-                                            return <Cell key={`cell-${index}`} fill="green" />;
-                                        })}
+                        <p className='datap'>You can see your active product and total cost of products chart here.</p>
+                        <DateChartFilters data="product" />
+                        {(barChartData?.length > 0 && barChartData?.[0]?.total_product_count > 0) ? (
 
-                                        <Label
-                                            content={<CustomLabel viewBox={['cx', 'cy']} noOfBubbleTeaSold={barChartData[0]?.['total_product_count']} noCost={barChartData[0]?.['total_product_price']} />}
-                                            position="center"
-                                        />
-                                    </Pie>
-                                    <Tool content={CustomTooltip} animationDuration={0} position={{ x: 600, y: 0 }} />
-                                </PieChart>
-                            </p>
-                        ): <div className='text-center' >No data available</div>}
+                            <PieChart width={730} height={250}>
+                                <Pie
+                                    data={barChartData}
+                                    cx="50%"
+                                    cy="50%"
+                                    dataKey="total_product_count" // make sure to map the dataKey to "value"
+                                    innerRadius={60} // the inner and outer radius helps to create the progress look
+                                    outerRadius={80}
+                                >
+                                    {barChartData.map((entry, index) => {
+                                        if (index === 1 || index === 2) { // the main change is here!!
+                                            return <Cell key={`cell-${index}`} fill="#f3f6f9" />;
+                                        }
+                                        return <Cell key={`cell-${index}`} fill="green" />;
+                                    })}
+
+                                    <Label
+                                        content={<CustomLabel viewBox={['cx', 'cy']} noOfBubbleTeaSold={barChartData[0]?.['total_product_count']} noCost={barChartData[0]?.['total_product_price']} />}
+                                        position="center"
+                                    />
+                                </Pie>
+                                <Tool content={CustomTooltip} animationDuration={0} position={{ x: 600, y: 0 }} />
+                            </PieChart>
+
+                        ) : <div className='text-center' >No data available</div>}
                     </div>
                 </div>
             </div>

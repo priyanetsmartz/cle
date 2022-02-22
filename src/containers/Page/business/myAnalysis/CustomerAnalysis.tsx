@@ -164,7 +164,7 @@ function MyAnalysisCustomer(props) {
 
     const DateChartFilters = (type) => {
         return (
-            <div className="row mb-4">
+            <div className="row">
                 <div className="col-sm-12">
                     <ul className='filter-tiles'>
                         <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
@@ -204,14 +204,15 @@ function MyAnalysisCustomer(props) {
         )
     }
     return (
-        <section className="my_profile_sect mb-4">
+        <section className="my_profile_sect mb-5">
             <div className="container">
                 <div className="row">
                     <div className="col-sm-12">
                         <h2>Customer Information</h2>
-                        <p>You can see Customer information chart here</p>
+                        <p className='datap'>You can see Customer information chart here</p>
                         <DateChartFilters data="piechart" />
-                        <div className='row circularData'>
+                        <div className='row mb-4' style={{ columnCount: 3 }}>
+                            
                             <div className='col-md-4'>
                                 <span><b>Total customers: {customerData?.['totalcustomer']}</b></span>
                                 <br />

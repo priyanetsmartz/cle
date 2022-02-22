@@ -156,7 +156,7 @@ function MyAnalysisReturn(props) {
     }
     const DateChartFilters = (type) => {
         return (
-            <div className="row mb-4">
+            <div className="row">
                 <div className="col-sm-12">
                     <ul className='filter-tiles'>
                         <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
@@ -217,12 +217,12 @@ function MyAnalysisReturn(props) {
     };
   
     return (
-        <section className="my_profile_sect mb-4">
+        <section className="my_profile_sect mb-5">
             <div className="container">
-                <div className="row">
+                <div className="row  mb-4">
                     <div className="col-sm-12">
                         <h2>Return Information</h2>
-                        <p>You can see return chart here.</p>
+                        <p className='datap'>You can see return chart here.</p>
                         <DateChartFilters data="barchart" />
                         {returnData?.length > 0 && (
                             <BarChart

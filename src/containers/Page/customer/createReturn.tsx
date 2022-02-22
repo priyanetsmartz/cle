@@ -60,21 +60,20 @@ function CreateReturn(props) {
     const getData = async (returnId) => {
         let orderDetails = [];
         let result: any = await searchOrders(returnId);
-        // console.log(result.data.items[0].payment.additional_information[0])
-        orderDetails['entity_id'] = result.data.items[0] ? result.data.items[0].entity_id : 0;
-        orderDetails['increment_id'] = result.data.items[0] ? result.data.items[0].increment_id : 0;
-        orderDetails['created_at'] = result.data.items[0] ? result.data.items[0].created_at : 0;
-        orderDetails['shipment_date'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipment_date ? result.data.items[0].extension_attributes.shipment_date : 0;
-        orderDetails['payment-method'] = result.data.items[0]?.payment?.additional_information?.[0];
-        orderDetails['total_item_count'] = result.data.items[0] ? result.data.items[0].total_item_count : 0;
-        orderDetails['delivery_address'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipping_assignments && result.data.items[0].extension_attributes.shipping_assignments[0].shipping ? result.data.items[0].extension_attributes.shipping_assignments[0].shipping.address : 0;
-        orderDetails['base_subtotal'] = result.data.items[0] ? result.data.items[0].base_subtotal : 0;
-        orderDetails['base_discount_amount'] = result.data.items[0] ? result.data.items[0].base_discount_amount : 0;
-        orderDetails['base_shipping_amount'] = result.data.items[0] ? result.data.items[0].base_shipping_amount : 0;
-        orderDetails['base_shipping_tax_amount'] = result.data.items[0] ? result.data.items[0].base_shipping_tax_amount : 0;
-        orderDetails['base_tax_amount'] = result.data.items[0] ? result.data.items[0].base_tax_amount : 0;
-        orderDetails['grand_total'] = result.data.items[0] ? result.data.items[0].grand_total : 0;
-        let orderItems = result.data.items[0] ? result.data.items[0].items : {};
+        orderDetails['entity_id'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.entity_id : 0;
+        orderDetails['increment_id'] = result?.data?.items?.[0] ?  result?.data?.items?.[0]?.increment_id : 0;
+        orderDetails['created_at'] = result?.data?.items?.[0] ?  result?.data?.items?.[0]?.created_at : 0;
+        orderDetails['shipment_date'] =  result?.data?.items?.[0] &&  result?.data?.items?.[0].extension_attributes &&  result?.data?.items?.[0]?.extension_attributes?.shipment_date ?  result?.data?.items?.[0]?.extension_attributes?.shipment_date : 0;
+        orderDetails['payment-method'] =  result?.data?.items?.[0]?.payment?.additional_information?.[0];
+        orderDetails['total_item_count'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.total_item_count : 0;
+        orderDetails['delivery_address'] =  result?.data?.items?.[0] &&  result?.data?.items?.[0]?.extension_attributes &&  result?.data?.items?.[0]?.extension_attributes?.shipping_assignments &&  result?.data?.items?.[0]?.extension_attributes?.shipping_assignments?.[0]?.shipping ?  result?.data?.items?.[0].extension_attributes?.shipping_assignments?.[0]?.shipping.address : 0;
+        orderDetails['base_subtotal'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_subtotal : 0;
+        orderDetails['base_discount_amount'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_discount_amount : 0;
+        orderDetails['base_shipping_amount'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_shipping_amount : 0;
+        orderDetails['base_shipping_tax_amount'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_shipping_tax_amount : 0;
+        orderDetails['base_tax_amount'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_tax_amount : 0;
+        orderDetails['grand_total'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.grand_total : 0;
+        let orderItems =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.items : {};
 
         let orderData = orderItems.filter(function (e) {
             return (e.qty_shipped >= 1 && e.qty_refunded === 0);
@@ -445,7 +444,7 @@ function CreateReturn(props) {
                 <ReturnFooter />
             </div>
 
-            {/* change delivery address modalc */}
+            {/* change delivery address modal */}
             <Modal show={changeAddressModal}>
                 <div className="CLE_pf_details">
                     <Modal.Header>

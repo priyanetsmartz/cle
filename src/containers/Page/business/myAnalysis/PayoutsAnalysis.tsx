@@ -130,7 +130,7 @@ function MyAnalysisPayouts(props) {
         handleQuater(quarter);
     }
 
-    
+
     function handleChangeLeftYear(i) {
         let year = currentYear - 1;
         let startOfMonth = '01/01/' + year;
@@ -158,13 +158,13 @@ function MyAnalysisPayouts(props) {
                     </p>
                     <p className="desc-tooltip">
                         <span className="value-tooltip"><b>PO Date</b> <br /> {payload[0].payload.po_created_at}</span>
-                    </p>  
+                    </p>
                     <p className="desc-tooltip">
                         <span className="value-tooltip"><b>Discount Amount</b> <br />{siteConfig.currency} {payload[0].payload.discount_amount}</span>
-                    </p> 
+                    </p>
                     <p className="desc-tooltip">
                         <span className="value-tooltip"><b>Tax Amount</b> <br />{siteConfig.currency} {payload[0].payload.tax_amount}</span>
-                    </p>                 
+                    </p>
                 </div>
             );
         return null;
@@ -174,7 +174,7 @@ function MyAnalysisPayouts(props) {
 
     const DateChartFilters = (type) => {
         return (
-            <div className="row mb-4">
+            <div className="row">
                 <div className="col-sm-12">
                     <ul className='filter-tiles'>
                         <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
@@ -214,61 +214,63 @@ function MyAnalysisPayouts(props) {
         )
     }
     return (
-        <section className="my_profile_sect mb-4">
+        <section className="my_profile_sect mb-5">
             <div className="container">
-                <div className="row">
+                <div className="row  mb-4">
                     <div className="col-sm-12">
                         <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>
-                        <p>You can see payout information chart here</p>
+                        <p className='datap'>You can see payout information chart here</p>
                         <DateChartFilters data="piechart" />
-                        {pieChart?.length > 0 && (
-                            <ResponsiveContainer width="100%" height={250}>
-                                <PieChart height={250}>
-                                    <Pie
-                                        data={pieChart}
-                                        cx="50%"
-                                        cy="50%"
-                                        outerRadius={100}
-                                        isAnimationActive={false}
-                                        fill="#8884d8"
-                                        dataKey="total_payout_amount"
-                                        label={({
-                                            cx,
-                                            cy,
-                                            midAngle,
-                                            innerRadius,
-                                            outerRadius,
-                                            total_payout_amount,
-                                            percent,
-                                            index
-                                        }) => {
-                                            const RADIAN = Math.PI / 180;
-                                            const radius = 25 + innerRadius + (outerRadius - innerRadius);
-                                            const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                                            const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                        <div className="row mb-4" style={{ columnCount: 3 }}>
+                            {pieChart?.length > 0 && (
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <PieChart height={250}>
+                                        <Pie
+                                            data={pieChart}
+                                            cx="50%"
+                                            cy="50%"
+                                            outerRadius={100}
+                                            isAnimationActive={false}
+                                            fill="#8884d8"
+                                            dataKey="total_payout_amount"
+                                            label={({
+                                                cx,
+                                                cy,
+                                                midAngle,
+                                                innerRadius,
+                                                outerRadius,
+                                                total_payout_amount,
+                                                percent,
+                                                index
+                                            }) => {
+                                                const RADIAN = Math.PI / 180;
+                                                const radius = 25 + innerRadius + (outerRadius - innerRadius);
+                                                const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                                                const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-                                            return (
-                                                <text
-                                                    x={x}
-                                                    y={y}
-                                                    fill="#8884d8"
-                                                    textAnchor={x > cx ? "start" : "end"}
-                                                    dominantBaseline="central"
-                                                >
+                                                return (
+                                                    <text
+                                                        x={x}
+                                                        y={y}
+                                                        fill="#8884d8"
+                                                        textAnchor={x > cx ? "start" : "end"}
+                                                        dominantBaseline="central"
+                                                    >
 
-                                                    {pieChart[index].po_created_at} ({siteConfig.currency}{total_payout_amount})
-                                                </text>
-                                            );
-                                        }}>
-                                        {
-                                            pieChart.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
-                                        }
-                                    </Pie>
-                                    <Tool content={CustomTooltip} animationDuration={0} position={{ x:700, y: 0 }} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        )}
-                        {pieChart?.length === 0 ? <div className='text-center' >No data available</div> : ""}
+                                                        {pieChart[index].po_created_at} ({siteConfig.currency}{total_payout_amount})
+                                                    </text>
+                                                );
+                                            }}>
+                                            {
+                                                pieChart.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
+                                            }
+                                        </Pie>
+                                        <Tool content={CustomTooltip} animationDuration={0} position={{ x: 700, y: 0 }} />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            )}
+                            {pieChart?.length === 0 ? <div className='text-center' >No data available</div> : ""}
+                        </div>
                     </div>
                 </div>
             </div>

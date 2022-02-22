@@ -229,7 +229,6 @@ function Checkout(props) {
         }))
     }
     const handleBlur = (e) => {
-        //console.log('herer')
         let error = {};
         let formIsValid = true;
 
@@ -245,14 +244,17 @@ function Checkout(props) {
             formIsValid = false;
             error["email"] = "Email is required";
         }
-        const acc = document.getElementById("accordion-buttonacc");
-        const CheckoutTwo = document.getElementById("CheckoutTwo");
-        acc.classList.remove("show");
-        setCheckedData(prevState => ({
-            ...prevState,
-            email: true
-        }))
-        CheckoutTwo.classList.remove("show");
+        if (error["email"] === undefined || error["email"] === null || error["email"] === "") {
+            const acc = document.getElementById("accordion-buttonacc");
+            const CheckoutTwo = document.getElementById("CheckoutTwo");
+            acc.classList.remove("show");
+            setCheckedData(prevState => ({
+                ...prevState,
+                email: true
+            }))
+            CheckoutTwo.classList.remove("show");
+        }
+
         setEmailError({ errors: error });
         return formIsValid;
     }
@@ -314,7 +316,6 @@ function Checkout(props) {
     const checkEmailData = async () => {
 
         if (state.email === "" && custId === "") {
-            console.log("collapsed");
             const acc = document.getElementById("accordion-buttonacc");
             const CheckoutTwo = document.getElementById("CheckoutTwo");
 
@@ -684,14 +685,13 @@ function Checkout(props) {
             delete billingAddress['default_shipping']
             addressInformation.billingAddress = billingAddress;
             address.addressInformation = addressInformation;
-            //console.log(address)
+
             if (customer_id) {
 
                 custForm.addresses.push(billingObj);
-                // console.log(custForm)
+
                 let newAddress: any = await saveCustomerDetails({ customer: custForm });
-                // console.log(newAddress.data)
-                // delete billingAddress['default_shipping'];
+
                 delete billingAddress['default_billing'];
                 delete shippingAddress['customer_id'];
                 delete shippingAddress['id'];
@@ -699,7 +699,7 @@ function Checkout(props) {
                 addressInformation.shippingAddress = shippingAddress;
                 address.addressInformation = addressInformation;
 
-                // console.log(obj)
+
                 result = await setUserDeliveryAddress(address);
                 if (newAddress.data) {
                     getCutomerDetails();
@@ -973,7 +973,7 @@ function Checkout(props) {
                 localStorage.removeItem('cartQuoteId');
                 localStorage.removeItem('cartQuoteToken');
                 let orderId = parseInt(orderPlace.data);
-                //return <Redirect to={'/thankyou/' + orderId} />
+
                 history.push('/thankyou?id=' + orderId);
             } else {
                 setIsShow(false)
@@ -1036,7 +1036,7 @@ function Checkout(props) {
 
     const getPaymentStatusAPi = async (getPaymentStatusAPi) => {
         let paymentStatus: any = await getPaymentStatus(getPaymentStatusAPi);
-        // console.log(paymentStatus.data);
+
         let detailsRequired = [];
         detailsRequired['transactionId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId ? paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId : 0;
         detailsRequired['InvoiceId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceId ? paymentStatus.data[0].Data.InvoiceId : 0;
@@ -1293,8 +1293,6 @@ function Checkout(props) {
                                                                                     name={`billingaddress`}
                                                                                     onChange={handleBillingChange}
                                                                                     className="form-check-input"
-
-                                                                                    // checked={item.id === isBillingAddressConfirm ? true : false}
                                                                                     checked={item.id === isBillingAddressConfirm ? true : false}
                                                                                 />
 
@@ -1731,7 +1729,7 @@ function Checkout(props) {
                                     <button className="btn btn-secondary" disabled={(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) ? true : false} onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> </button>
                                     : <div className="spinner"> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                                 }
-                                <p className='checkouttc'><IntlMessages id="tccheckout" /></p>
+                                <p className='checkouttc'><IntlMessages id="tccheckout1" /><Link to={"/terms-and-conditions"} target="_blank"> <IntlMessages id="signup.terms_conditions" /></Link>, <Link to={"/privacy-policy"} target="_blank" ><IntlMessages id="signup.privacy_policy" /></Link><IntlMessages id="tccheckout2" /></p>
                             </div>
                         </div>
 
@@ -1787,7 +1785,7 @@ function Checkout(props) {
 }
 const mapStateToProps = (state) => {
     let languages = '', payTrue = '', guestShipp = [], guestBilling = [];
-    // console.log(state);
+
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
@@ -1801,7 +1799,7 @@ const mapStateToProps = (state) => {
     if (state && state.Cart.billing) {
         guestBilling = state.Cart.billing
     }
-    // console.log(state.Cart.billing.firstname)
+
     return {
         languages: languages,
         payTrue: payTrue,

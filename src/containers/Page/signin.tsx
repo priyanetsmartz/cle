@@ -96,7 +96,6 @@ function SignIn(props) {
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    // props.toggleOpenDrawer(false);
     props.showSignin(false);
     props.openSignUp(true);
   }
@@ -115,12 +114,6 @@ function SignIn(props) {
         "rememberme": rememberMe
       }
       login({ userInfo });
-      //  setIsShow(false);
-      // if (getCookie("remember_me") === "true") {
-      //   setState({ email: getCookie("username"), password: getCookie("password") })
-      // } else {
-      //   setState({ email: '', password: '' })
-      // }
     } else {
       setIsShow(false);
       notification("warning", "", intl.formatMessage({ id: "commentRequired" }));
@@ -160,14 +153,12 @@ function SignIn(props) {
     e.preventDefault();
     hideModal();
     props.showForgot(true);
-    // setForgotPopup(true);
   }
 
   const hideModal = () => {
     const { showSignin } = props;
     setError({ errors: {} });
     setPasswordShown(false);
-    // console.log(getCookie("remember_me"))
     if (getCookie("remember_me") === "true") {
       setState({ email: getCookie("username"), password: getCookie("password") })
     } else {
@@ -176,9 +167,6 @@ function SignIn(props) {
     showSignin(false);
   };
 
-  // const hideModall = (e) => {
-  //   setForgotPopup(false);
-  // }
   const hideModall = () => {
     props.showForgot(false);
   }
@@ -193,7 +181,6 @@ function SignIn(props) {
         <Modal.Header> <img src={logo} alt="logo" />
           <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModal} aria-label="Close"></button></Modal.Header>
         <Modal.Body className="arabic-rtl-direction"><h2 className="sign-head"><IntlMessages id="login.title" /></h2>
-          {/* <p><IntlMessages id="login.subtitle" /></p> */}
           <div className="row g-3">
             <div className="col-sm-12">
               <input type="email"
@@ -247,20 +234,19 @@ function SignIn(props) {
           </div>
           <div className="social-login">
             <GoogleLoginButton />
-            {/* <AppleSigninButton /> */}
             <FacebookLoginButton />
           </div>
           <p className="signup-policy-links"> <IntlMessages id="signup.by_registering_you_agree" /> <Link to={"/terms-and-conditions"} target="_blank"><IntlMessages id="signup.terms_conditions" /></Link>  <IntlMessages id="signup.and" /> <Link to={"/privacy-policy"} target="_blank" ><IntlMessages id="signup.privacy_policy" /></Link>.</p></Modal.Body>
         <Modal.Footer className="signup_footer" ><Link to="#" onClick={handleSignUp} className="sign-in-M"><IntlMessages id="signup.member_sign_up" /></Link><Link to="/contact-us" onClick={handleContact} className="B-partner"><IntlMessages id="signup.become_partner" /></Link></Modal.Footer>
       </Modal>
       {/*  forgot passord popup */}
-     <Modal show={props.forgotPop} className="forgot-modal" onHide={hideModall}>
+      <Modal show={props.forgotPop} className="forgot-modal" onHide={hideModall}>
         <Modal.Body className="arabic-rtl-direction">
           <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideModall} aria-label="Close"></button>
           <ForgottenPassword />
         </Modal.Body>
       </Modal>
-      
+
     </div>
   );
 }

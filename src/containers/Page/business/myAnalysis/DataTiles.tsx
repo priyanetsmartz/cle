@@ -136,10 +136,10 @@ function MyAnalysisDataTiles(props) {
         setCurrentYear(year);
         getDataTiles(startOfMonth, endOfMonth);
     }
-    
+
     const DateChartFilters = (type) => {
         return (
-            <div className="row mb-4">
+            <div className="row">
                 <div className="col-sm-12">
                     <ul className='filter-tiles'>
                         <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
@@ -165,7 +165,7 @@ function MyAnalysisDataTiles(props) {
                             <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
                         </ul>
                     )}
-                     {showYears && (
+                    {showYears && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeftYear(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -179,73 +179,74 @@ function MyAnalysisDataTiles(props) {
         )
     }
     return (
-        <section className="my_profile_sect mb-4">
+        <section className="my_profile_sect mb-5">
             <div className="container">
                 <div className="row mb-4">
                     <div className="col-sm-12">
                         <h2><IntlMessages id="datatiles" /></h2>
                         <DateChartFilters data="datatiles" />
+                        <div className="row mb-4" style={{ columnCount: 3 }}>
+                            <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
+                                <div className="card-info">
+                                    <h5><IntlMessages id="ordertotal" />
+                                        <OverlayTrigger
+                                            delay={{ hide: 450, show: 300 }}
+                                            overlay={(props) => (
+                                                <Tooltip id="" {...props} >
+                                                    <IntlMessages id="totalordersplaces" />
+                                                </Tooltip>
+                                            )}
+                                            placement="right"
+                                        ><i className="fas fa-info-circle" ></i>
+                                        </OverlayTrigger></h5>
+                                    <div className="stats">
+                                        <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
+                                <div className="card-info">
+                                    <h5><IntlMessages id="order.orders" />
+                                        <OverlayTrigger
+                                            delay={{ hide: 450, show: 300 }}
+                                            overlay={(props) => (
+                                                <Tooltip id="" {...props} >
+                                                    <IntlMessages id="totalaveragescost" />
+                                                </Tooltip>
+                                            )}
+                                            placement="right"
+                                        ><i className="fas fa-info-circle" ></i>
+                                        </OverlayTrigger>
+                                    </h5>
+                                    <div className="stats">
+                                        <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
+                                <div className="card-info">
+                                    <h5><IntlMessages id="payments" />  <OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                <IntlMessages id="totalorderscost" />
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger></h5>
+                                    <div className="stats">
+                                        <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
 
-                <div className="row mb-4" style={{ columnCount: 3 }}>
-                    <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
-                        <div className="card-info">
-                            <h5><IntlMessages id="ordertotal" />
-                                <OverlayTrigger
-                                    delay={{ hide: 450, show: 300 }}
-                                    overlay={(props) => (
-                                        <Tooltip id="" {...props} >
-                                            <IntlMessages id="totalordersplaces" />
-                                        </Tooltip>
-                                    )}
-                                    placement="right"
-                                ><i className="fas fa-info-circle" ></i>
-                                </OverlayTrigger></h5>
-                            <div className="stats">
-                                <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
-                        <div className="card-info">
-                            <h5><IntlMessages id="order.orders" />
-                                <OverlayTrigger
-                                    delay={{ hide: 450, show: 300 }}
-                                    overlay={(props) => (
-                                        <Tooltip id="" {...props} >
-                                            <IntlMessages id="totalaveragescost" />
-                                        </Tooltip>
-                                    )}
-                                    placement="right"
-                                ><i className="fas fa-info-circle" ></i>
-                                </OverlayTrigger>
-                            </h5>
-                            <div className="stats">
-                                <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
-                        <div className="card-info">
-                            <h5><IntlMessages id="payments" />  <OverlayTrigger
-                                delay={{ hide: 450, show: 300 }}
-                                overlay={(props) => (
-                                    <Tooltip id="" {...props} >
-                                        <IntlMessages id="totalorderscost" />
-                                    </Tooltip>
-                                )}
-                                placement="right"
-                            ><i className="fas fa-info-circle" ></i>
-                            </OverlayTrigger></h5>
-                            <div className="stats">
-                                <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
+
 
             </div >
         </section >
