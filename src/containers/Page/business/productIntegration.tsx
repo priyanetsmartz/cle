@@ -54,8 +54,8 @@ function ProductIntegration(props) {
             setDownloadSample(sample.data)
             let result: any = await getProductIntegration(lang);
             let formData = [];
-            if (result.data[0] && result.data[0].form_json && result.data[0].form_json.length > 0) {
-                result.data[0].form_json[0].map((ques, i) => {
+            if (result?.data?.[0] && result?.data?.[0]?.form_json && result?.data?.[0]?.form_json.length > 0) {
+                result?.data?.[0]?.form_json[0].map((ques, i) => {
                     formData.push(ques);
                 })
             }
@@ -132,7 +132,7 @@ function ProductIntegration(props) {
 
         let result: any = await SaveAnswers(payload);
         //console.log(result);
-        if (result.data && result.data.answer_id) {
+        if (result?.data && result?.data?.answer_id) {
             notification("success", "", intl.formatMessage({ id: "productintegration" }));
         } else {
             notification("error", "", intl.formatMessage({ id: "genralerror" }));

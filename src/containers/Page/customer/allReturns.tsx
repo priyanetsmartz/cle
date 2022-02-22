@@ -38,6 +38,8 @@ function MyReturns(props) {
             setLoaderReturns(false);
             setReturn(res);
             setReturnPagination(Math.ceil(returns.data.total_count / pageSize));
+        }else{
+            setLoaderReturns(false);
         }
     }
 

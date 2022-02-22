@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Slider from "react-slick";
 import cartAction from "../../../redux/cart/productAction";
 import appAction from "../../../redux/app/actions";
-import { formatprice, getHomePageProductsFxn, handleCartFxn } from '../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice, getHomePageProductsFxn, handleCartFxn } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import notification from "../../../components/notification";
@@ -96,8 +96,7 @@ function BestSeller(props) {
         if (token) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-            //     console.log(result);
-            if (result.data) {
+            if (result?.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
                 notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
@@ -109,6 +108,11 @@ function BestSeller(props) {
                 getData(catId);
             }
         } else {
+            let vendorCheck = await checkVendorLoginWishlist();
+            if (vendorCheck?.type === 'vendor') {
+                notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
+                return false;
+            }
             props.showSignin(true);
         }
     }
@@ -131,9 +135,7 @@ function BestSeller(props) {
     }
     const someHandler = (id) => {
         let prod = parseInt(id)
-        // console.log(prod, typeof (prod))
         setIsHoverImage(prod)
-        // console.log(typeof(isHoverImage));
     }
 
     const someOtherHandler = (e) => {

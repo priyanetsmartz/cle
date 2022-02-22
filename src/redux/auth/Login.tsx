@@ -22,7 +22,7 @@ class Login {
     var payload = {};
     return AdminApi.request("/rest/V1/customerGroups/search/?searchCriteria[filterGroups][0][filters][0][field]=id&searchCriteria[filterGroups][0][filters][0][value]=3&searchCriteria[filterGroups][0][filters][0][condition_type]=gt", payload, "GET", "");
   }
-  register(firstname: string, lastname: string, email: string, password: string, type: number, store: string, is_social_login: number) {
+  register(firstname: string, lastname: string, email: string, password: string, type: number, store: string, is_social_login: string) {
     var storeId = store === 'english' ? 3 : 2;
     var payload = {
       "customer": {
@@ -32,13 +32,18 @@ class Login {
         "storeId": storeId,
         "websiteId": 1,
         "group_id": type,
-        "is_social_login": is_social_login
+        "extension_attributes": {
+          "is_subscribed": false
+        },
+        "custom_attributes":
+          [{
+            "attribute_code": "is_social_login",
+            "value": is_social_login
+          }]
       },
-      "password": password,
-      "extension_attributes": {
-        "is_subscribed": false
-      }
+      "password": password
     }
+
     return AdminApi.request("default/rest/all/V1/customers", payload, "POST", "");
   }
 

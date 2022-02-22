@@ -59,11 +59,11 @@ function RetunOrder(props) {
             return false;
         }
         let result: any = await returnProcessVendor(returnId, statusReturn, statusReturnComment);
-        if (result.data) {
+        if (result?.data) {
             getReturnDetailFxn(returnId)
             selectStatusReturn('')
             setstatusReturnComment('')
-            notification("success", "", result.data);
+            notification("success", "", result?.data);
         } else {
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }

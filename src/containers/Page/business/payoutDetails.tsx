@@ -45,24 +45,24 @@ function MyPayoutDetails(props) {
     async function getDetails() {
         setIsLoading(true)
         let result: any = await getPayoutDetails(payoutId)
-        if (result && result.data[0]) {
-            setAlldata(result.data[0])
-            setPayoutData(result.data[0].PayoutData[0])
-            setPayoutOrders(result.data[0].PayoutOrders)
-            setInvoiceData(result.data[0].invoiceData)
-            setSubtotal(result.data[0].subtotal)
-            setCommission(result.data[0].commission)
-            setWithdrawal(result.data[0].subtotal - result.data[0].commission)
-            setDateOfRequest(moment(result.data[0].PayoutData[0].created_at).format('DD MMMM YYYY'))
-            setNumberOfOrders(result.data[0].PayoutData[0].total_orders)
-            if (result.data[0].invoiceData.invoiceDate) {
-                setDateOfPayment(moment(result.data[0].invoiceData.invoiceDate).format('DD MMMM YYYY'))
+        if (result && result?.data[0]) {
+            setAlldata(result?.data?.[0])
+            setPayoutData(result?.data?.[0]?.PayoutData[0])
+            setPayoutOrders(result?.data?.[0]?.PayoutOrders)
+            setInvoiceData(result?.data?.[0]?.invoiceData)
+            setSubtotal(result?.data?.[0]?.subtotal)
+            setCommission(result?.data?.[0]?.commission)
+            setWithdrawal(result?.data?.[0]?.subtotal - result?.data?.[0]?.commission)
+            setDateOfRequest(moment(result?.data?.[0]?.PayoutData[0]?.created_at).format('DD MMMM YYYY'))
+            setNumberOfOrders(result?.data?.[0]?.PayoutData?.[0]?.total_orders)
+            if (result?.data?.[0]?.invoiceData?.invoiceDate) {
+                setDateOfPayment(moment(result?.data?.[0]?.invoiceData?.invoiceDate).format('DD MMMM YYYY'))
             } else {
                 setDateOfPayment('')
             }
         }
 
-        let dataObj: any = result && result.data[0] && result.data[0].PayoutOrders ? result.data[0].PayoutOrders : []
+        let dataObj: any = result && result?.data?.[0] && result?.data?.[0]?.PayoutOrders ? result?.data?.[0]?.PayoutOrders : []
 
         let dataListing = [];
         if (dataObj.length > 0) {

@@ -38,7 +38,7 @@ function BusinessResetPassword(props) {
                 new_email: state.newEmail
             }
             let result: any = await vendorResetEmail(payload);
-            if (result.data) {
+            if (result?.data) {
                 notification("success", "", intl.formatMessage({ id: "newEmailUpdate" }));
                 setState(prevState => ({
                     ...prevState,

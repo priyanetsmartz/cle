@@ -36,7 +36,7 @@ function PostComment(props) {
 
     const getComments = async () => {
         let result: any = await GetComments(props.postId);
-        setComments(result.data)
+        setComments(result?.data)
     }
 
 
@@ -98,7 +98,6 @@ function PostComment(props) {
                         <div className="d-flex flex-column comment-section">
                             <div className="bg-light p-2">
                                 <div className="d-flex flex-row align-items-start">
-                                    {/* <img className="rounded-circle" src={UserImg} width="40" /> */}
                                     <textarea className="form-control ml-1 shadow-none textarea"
                                         value={state.message} onChange={handleChange} id="message"></textarea>
                                     <span className="error">{errors.errors["message"]}</span>
@@ -124,7 +123,6 @@ function PostComment(props) {
                                     <div className="card p-3 mt-4" key={i}>
                                         <div className="d-flex justify-content-between align-items-center">
                                             <div className="user d-flex flex-row align-items-center">
-                                                {/* <img src={UserImg} width="30" className="user-img rounded-circle mr-2" alt="user-image" /> */}
                                                 <span>&nbsp;&nbsp;<small className="font-weight-bold text-primary">{item.name}</small>
                                                     &nbsp;&nbsp;<small className="font-weight-bold">{item.message}</small>
                                                 </span>

@@ -183,6 +183,13 @@ export async function checkVendorLogin() {
     window.location.href = '/vendor-login'
   )
 }
+export async function checkVendorLoginWishlist() {
+  return await sessionService.loadUser().then(user => {
+    return user;
+  }).catch(err =>
+    console.log(err)
+  )
+}
 
 export async function checkCustomerLogin() {
   return await sessionService.loadUser().then(user => {

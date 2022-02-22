@@ -51,7 +51,7 @@ function OrderForm(props) {
         async function getData() {
             let lang = props.languages ? props.languages : language;
             let result: any = await GetOrderUsForm(lang);
-            setForm(result.data[0]);
+            setForm(result?.data?.[0]);
         }
         getData()
         return () => {
@@ -101,7 +101,7 @@ function OrderForm(props) {
         } else {
             setloading(true);
             let result: any = await SaveAnswers(payload);
-            if (result.data) {
+            if (result?.data) {
                 setIsSurveyEnd(true);
                 setloading(false);
                 //  setCookie("help-us", customerId);

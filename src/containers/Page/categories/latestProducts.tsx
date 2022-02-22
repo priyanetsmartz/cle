@@ -5,13 +5,12 @@ import {
     addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
 } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
-import { getCookie } from '../../../helpers/session';
 import cartAction from "../../../redux/cart/productAction";
 import WeChooseForYou from '../home/weChooseForYou';
 import { Link } from "react-router-dom";
 import appAction from "../../../redux/app/actions";
 import Slider from "react-slick";
-import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { useLocation } from 'react-router-dom';
@@ -79,10 +78,10 @@ function LatestProducts(props) {
         let customer_id = props.token.cust_id;
         let result: any = await getProductByCategory(1, 4, catID, 'created_at', 'DESC', props.languages);
 
-        let productResult = result.data.items;
+        let productResult = result?.data?.items;
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
-            let products = result.data.items;
+            let products = result?.data?.items;
             let WhishlistData = whishlist.data;
             const mergeById = (a1, a2) =>
                 a1.map(itm => ({
@@ -102,7 +101,7 @@ function LatestProducts(props) {
         if (token) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-            if (result.data) {
+            if (result?.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
                 notification("success", "", intl.formatMessage({ id: "addedtowishlist" }));
@@ -114,6 +113,11 @@ function LatestProducts(props) {
                 getProducts(props.ctId)
             }
         } else {
+            let vendorCheck = await checkVendorLoginWishlist();
+            if (vendorCheck?.type === 'vendor') {
+                notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
+                return false;
+            }
             props.showSignin(true);
         }
     }

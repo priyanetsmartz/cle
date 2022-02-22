@@ -37,7 +37,7 @@ function BusinessForgottenPassword(props) {
       }
 
       let result: any = await vendorRestpassword(payload);  
-      if (result.data) {
+      if (result?.data) {
         setShowSuccess(true)
         setState(prevState => ({
           ...prevState,

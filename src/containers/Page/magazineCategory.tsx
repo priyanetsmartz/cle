@@ -55,28 +55,25 @@ function MagazineCategory(props) {
     async function getData(language, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetCategoryData(language, page, sortBy, sortByValue, pageSize);
         let featuredResult: any = await FeaturedList(language);
-        setItems(result.data);
-        let dataTotal = result.data && result.data.length > 0 ? result.data[0].total_page : 0;
+        setItems(result?.data);
+        let dataTotal = result?.data && result?.data?.length > 0 ? result?.data[0]?.total_page : 0;
         setPagination(dataTotal);
-        setFeaturedItems(featuredResult.data);
+        setFeaturedItems(featuredResult?.data);
         setlatestItem(result?.data?.slice(-1)[0]);
-        //console.log(result.data.slice(-1)[0])
-        // console.log(result.data.slice(-1)[0]);
         setOpacity(1);
     }
 
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, pageSize);
-        setItems(result.data);
-        if (result.data) {
-            setlatestItem(result.data.slice(-1)[0]);
+        setItems(result?.data);
+        if (result?.data) {
+            setlatestItem(result?.data.slice(-1)[0]);
         } else {
             setlatestItem(prevState => ({
                 ...prevState
             }))
         }
-        // console.log(result.data.slice(-1)[0]);
-        let featuredCat = result.data.filter(catData => catData.is_featured === "1");
+        let featuredCat = result?.data.filter(catData => catData.is_featured === "1");
         setFeaturedItems(featuredCat);
         setOpacity(1);
     }
@@ -84,12 +81,12 @@ function MagazineCategory(props) {
     async function getCategoryList(language) {
         let lang = props.languages ? props.languages : language;
         let result: any = await GetCategoryList(lang);
-        setCatMenu(result.data);
+        setCatMenu(result?.data);
     }
 
     async function getListData(languages, page, sortBy, sortByValue) {
         let result: any = await GetCategoryData(languages, page, sortBy, sortByValue, pageSize);
-        setItems(result.data);
+        setItems(result?.data);
         setOpacity(1);
     }
     const onValueChange = (e) => {
@@ -188,8 +185,8 @@ function MagazineCategory(props) {
                 "type": radio
             }
             const result: any = await SendNewsletter({ userInfo }, lang);
-            if (result.data[0].success === 1) {
-                notification("success", "", result.data[0].message);
+            if (result?.data?.[0]?.success === 1) {
+                notification("success", "", result?.data?.[0]?.message);
                 setState(prevState => ({
                     ...prevState,
                     email: ""
@@ -197,7 +194,7 @@ function MagazineCategory(props) {
                 setIsShow(false);
             } else {
                 setIsShow(false);
-                notification("error", "", result.data[0].message);
+                notification("error", "", result?.data?.[0]?.message);
             }
         } else {
             setIsShow(false);

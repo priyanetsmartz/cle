@@ -56,11 +56,9 @@ function GiftMessage(props) {
                 let guestToken: any = await createGuestToken();
                 localStorage.setItem('cartQuoteToken', guestToken.data);
                 let result: any = await getGuestCart(lang);
-                cartQuoteId = result.data.id
-                //  console.log(result.data)
+                cartQuoteId = result?.data?.id;
             }
             localStorage.setItem('cartQuoteId', cartQuoteId);
-            //  console.log(props)
             if (props.items.id) {
                 cartData = {
                     "cartItem": {
@@ -76,7 +74,7 @@ function GiftMessage(props) {
                 } else {
                     results = await addToCartApiGuest(cartData)
                 }
-                if (results.data.item_id) {
+                if (results?.data?.item_id) {
                     const giftMEssageData = {
                         "giftMessage": {
                             "gift_message_id": 0,
@@ -115,7 +113,7 @@ function GiftMessage(props) {
                 }
             }
 
-            if (result.data === true) {
+            if (result?.data === true) {
 
                 setIsShow(false);
                 setState({
@@ -131,7 +129,7 @@ function GiftMessage(props) {
             } else {
                 props.openGiftBoxes(0);
                 setIsShow(false);
-                notification("error", "", result.data.message);
+                notification("error", "", result?.data?.message);
             }
         } else {
             setIsShow(false);

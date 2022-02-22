@@ -39,7 +39,7 @@ function ForgottenPassword(props) {
     if (handleValidation()) {
       setIsShow(true);
       let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email1, websiteId: 1 });
-      if (result.data && !result.data.message) {
+      if (result?.data && !result.data?.message) {
         setShowSuccess(true)
         // notification("success", "", intl.formatMessage({ id: "forgotpassmail" }));
         setState(prevState => ({
@@ -53,7 +53,7 @@ function ForgottenPassword(props) {
           ...prevState,
           email1: ""
         }));
-        if (result.data.message === 'Request failed with status code 404' || result.data.message === 'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value') {
+        if (result?.data?.message === 'Request failed with status code 404' || result?.data?.message === 'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value') {
           notification("error", "", intl.formatMessage({ id: "emailnotfound" }));
         } else {
           notification("error", "", intl.formatMessage({ id: "genralerror" }));

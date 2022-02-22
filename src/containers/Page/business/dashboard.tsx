@@ -8,12 +8,13 @@ import DataTable from 'react-data-table-component';
 import { Link } from "react-router-dom";
 import HtmlContent from '../../partials/htmlContent';
 import Magazine from '../home/magazine';
-import { closePopup, dataTiles, getInvoice, getPayoutOrders, getVendorReturns } from '../../../redux/pages/vendorLogin';
+import { closePopup, getPayoutOrders, getVendorReturns } from '../../../redux/pages/vendorLogin';
 import moment from 'moment';
 import { getVendorOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
-import { capitalize, formatprice, getCurrentMonth } from '../../../components/utility/allutils';
+import { capitalize, formatprice } from '../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
+import MyAnalysisDataTiles from './myAnalysis/DataTiles';
 
 
 function Dashboard(props) {
@@ -26,33 +27,22 @@ function Dashboard(props) {
     const [items, setItems] = useState([]);
     const [pagination, setPagination] = useState(1);
     const [page, setCurrent] = useState(1);
-    const [dataTilesData, setDataTilesData] = useState([]);
-    const [flagDates, setflagDates] = useState([]);
-    const [active, setActive] = useState(0);
+
     const [vendorName, SetVendorName] = useState(localToken.vendor_name);
     const [myDashboardModal, setMyDashboardModal] = useState(true);
     const [myOrders, setMyOrders] = useState([]);
     const [myReturn, setMyReturn] = useState([]);
     const [myPayouts, setMyPayouts] = useState([]);
-    const [showMonth, setShowMonth] = useState(true);
-    const [sowQuaters, setShowQuaters] = useState(false);
+
     const [isLoadingOrders, setIsLoadingOrders] = useState(true)
     const [isLoadingReturns, setIsLoadingReturns] = useState(true)
     const [isLoadingPayouts, setIsLoadingPayouts] = useState(true)
-    const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
-    const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
-    const [quaterSlider, setQuaterSlider] = useState('')
-    const [currentQuater, setCurrentQuater] = useState(quater);
     useEffect(() => {
         let pop = getCookie('popUp');
         if (localToken?.showpop === 1 || pop === localToken?.vendor_id)
             setMyDashboardModal(false)
         else
             setMyDashboardModal(true)
-        let currentDate = moment().endOf('month').format('MM/DD/YYYY');
-        let oldDate = moment().startOf('month').format('MM/DD/YYYY');
-
-        getDataTiles(oldDate, currentDate);
         getDataOfOrders()
         getVendorReturnsData()
         getDataOfPayouts();
@@ -60,13 +50,9 @@ function Dashboard(props) {
         return () => {
             setItems([]);
             setMyDashboardModal(false)
-            setDataTilesData([])
-            setActive(0)
             setPagination(1)
-            setflagDates([])
             SetVendorName('')
             setMyOrders([])
-            setQuaterSlider('')
         }
     }, [])
     useEffect(() => {
@@ -216,7 +202,7 @@ function Dashboard(props) {
 
         },
     ];
-    
+
     // vendor return 
 
     async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
@@ -266,107 +252,15 @@ function Dashboard(props) {
     }
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, 2);
-        let paginationSize = result && result.data && result.data.length > 0 ? result.data[0].total_page : 0;     
+        let paginationSize = result && result.data && result.data.length > 0 ? result.data[0].total_page : 0;
         setPagination(paginationSize);
-        setItems(result.data);
+        setItems(result?.data);
 
     }
     async function openDashboardModal(oldDate, currentDate) {
         await closePopup(1);
         setCookie("popUp", localToken?.vendor_id)
         setMyDashboardModal(!myDashboardModal);
-    }
-    async function getDataTiles(oldDate, currentDate) {
-        let results: any = await dataTiles(oldDate, currentDate);
-        if (results && results.data && results.data.length > 0) {
-            setDataTilesData(results.data[0])
-        }
-    }
-
-
-    const handleChange = (flag) => {
-        let dates = [];
-        if (flag === 0) {
-            setShowMonth(true)
-            setShowQuaters(false)
-            dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
-            dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
-            getDataTiles(dates['start'], dates['end'])
-        } else if (flag === 1) {
-            setShowMonth(false)
-            setShowQuaters(true)
-            handleQuater(currentQuater);
-        } else {
-            setShowMonth(false)
-            setShowQuaters(false)
-            dates['start'] = moment().startOf('year').format('DD/MM/YYYY');
-            dates['end'] = moment().endOf('year').format('DD/MM/YYYY');
-            getDataTiles(dates['start'], dates['end'])
-        }
-        setActive(flag)
-
-
-    }
-
-    function handleChangeLeft(i) {
-
-        let monthKey = currentMonthkey - 1;
-        let month = moment.monthsShort().filter((name, i) => {
-            return i === monthKey
-        })
-        if (monthKey === -1) return false;
-        setCurrentMonthKey(monthKey);
-        setCurrentMonth(month[0])
-        let input = monthKey + 1;
-        const output = moment(input, "MM");
-        let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
-        let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
-
-        getDataTiles(startOfMonth, endOfMonth);
-    }
-
-
-    function handleChangeRight(i) {
-
-        let monthKey = currentMonthkey + 1;
-        if (monthKey === 12) return false;
-        let month = moment.monthsShort().filter((name, i) => {
-            return i === monthKey
-        })
-        setCurrentMonthKey(monthKey);
-        setCurrentMonth(month[0])
-        let input = monthKey + 1;
-        const output = moment(input, "MM");
-        let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
-        let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
-        getDataTiles(startOfMonth, endOfMonth);
-    }
-
-    function handleQuater(quater) {
-        let start = moment().quarter(quater).startOf('quarter').format('MMM');
-        let end = moment().quarter(quater).endOf('quarter').format('MMM');
-        let part = start + '-' + end;
-
-        let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
-        let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
-        getDataTiles(startOfMonth, endOfMonth);
-
-        setQuaterSlider(part);
-    }
-
-    function handleChangeLeftQuater(i) {
-        let quarter = currentQuater - 1;
-        if (quarter === 0) return false;
-        setCurrentQuater(quarter);
-        handleQuater(quarter);
-    }
-
-
-    function handleChangeRightQuater(i) {
-        let quarter = currentQuater + 1;
-        if (quarter === 5) return false;
-        setCurrentQuater(quarter);
-        handleQuater(quarter);
     }
     return (
         <div className="col-sm-9">
@@ -426,71 +320,7 @@ function Dashboard(props) {
 
                 </div >
             </section>
-            <section className="my_profile_sect mb-4">
-                <div className="container">
-                    <div className="row mb-4">
-                        <div className="col-sm-12">
-                            <h2><IntlMessages id="datatiles" /></h2>
-                            <ul className='filter-tiles'>
-                                <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
-                                <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
-                                <li><Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
-                            </ul>
-                            {showMonth && (
-                                <ul className='monthsname pagination justify-content-center align-items-center'>
-                                    <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
-                                    {
-                                        <p data-attribute={getCurrentMonth().num}>{currentMonth}</p>
-                                    }
-
-                                    <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
-                                </ul>
-                            )}
-                            {sowQuaters && (
-                                <ul className='monthsname pagination justify-content-center align-items-center'>
-                                    <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
-                                    {
-
-                                        <p>{quaterSlider}</p>
-                                    }
-
-                                    <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
-                                </ul>
-                            )}
-                        </div>
-                    </div>
-
-
-                    <div className="row mb-4" style={{ columnCount: 3 }}>
-                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
-                            <div className="card-info">
-                                <h5><IntlMessages id="ordertotal" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
-                                <div className="stats">
-                                    <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
-                                    {/* <h4>9%</h4> */}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
-                            <div className="card-info">
-                                <h5><IntlMessages id="order.orders" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
-                                <div className="stats">
-                                    <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
-                            <div className="card-info">
-                                <h5><IntlMessages id="payments" /> <i className="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom"></i></h5>
-                                <div className="stats">
-                                    <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div >
-            </section>
+            <MyAnalysisDataTiles />
             <section className="my_profile_sect mb-4">
                 <div className="container">
                     <div className="row">

@@ -54,7 +54,7 @@ function BusinessResetPassword(props) {
             }
             let result: any = await vendorRestpassword(payload);
        
-            if (result.data) {
+            if (result?.data) {
                 notification("success", "", intl.formatMessage({ id: "resetPassword" }));
                 setState(prevState => ({
                     ...prevState,

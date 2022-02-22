@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import appAction from "../../../redux/app/actions";
 import { addWhishlist, getWhishlistItemsForUser, removeWhishlist } from '../../../redux/cart/productApi';
 import Slider from "react-slick";
-import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
@@ -73,11 +73,10 @@ function WeChooseForYou(props) {
     const getData = async () => {
         let customerId = props.token.cust_id
         let result: any = await getWeChooseForYou(props.languages, customerId);
-        if (result && result.data && result.data[0] && result.data[0].customerProducts.length > 0) {
-            // setCookie("relevant", true)
+        if (result && result.data && result.data[0] && result.data[0].customerProducts.length > 0) {        
 
             let whishlist: any = await getgidtMessageCall();
-            let products = result.data[0].customerProducts;
+            let products = result?.data[0]?.customerProducts;
 
             const mergeById = (a1, a2) =>
                 a1.length > 0 && a1.map(itm => ({
@@ -88,7 +87,6 @@ function WeChooseForYou(props) {
 
             setProducts(productResult);
         } else {
-            // setCookie("relevant", false)
         }
     }
     async function getgidtMessageCall() {
@@ -124,8 +122,7 @@ function WeChooseForYou(props) {
         if (token) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-            //     console.log(result);
-            if (result.data) {
+            if (result?.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
                 notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
@@ -137,6 +134,11 @@ function WeChooseForYou(props) {
                 getData()
             }
         } else {
+            let vendorCheck = await checkVendorLoginWishlist();
+            if (vendorCheck?.type === 'vendor') {
+                notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
+                return false;
+            }
             props.showSignin(true);
         }
     }
@@ -213,8 +215,6 @@ function WeChooseForYou(props) {
                                                             </div></Link>
                                                             <div className="product_name  mt-2"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
                                                             <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                            {/* <div className="product_name mt-2">  <Link to={'/product-details/' + item.sku}>{item.name} </Link></div>
-                                                            <div className="product_vrity" dangerouslySetInnerHTML={{ __html: item.short_description }}></div> */}
                                                             <div className="product_price">{siteConfig.currency}{formatprice(item.price)} </div>
                                                             <div className="cart-button mt-3 px-2">
                                                                 {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :

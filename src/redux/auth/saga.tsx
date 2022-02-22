@@ -123,7 +123,7 @@ export function* registerRequest() {
       let email = payload.payload.userInfo.email;
       let password = payload.payload.userInfo.password;
       let storeId = payload.payload.userInfo.storeId;
-      let is_social_login = payload.payload.userInfo.is_social_login ? payload.payload.userInfo.is_social_login : 0
+      let is_social_login = payload.payload.userInfo.is_social_login ? "1" : "0";
 
       //API call to login request
       const response = yield call(loginApi.register, firstname, lastname, email, password, type, storeId, is_social_login);

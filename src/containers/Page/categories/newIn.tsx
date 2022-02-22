@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
-import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import {
     addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
 } from '../../../redux/cart/productApi';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
-import { useLocation } from 'react-router-dom';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 
 import appAction from "../../../redux/app/actions";
@@ -69,7 +68,7 @@ function NewIn(props) {
         if (token) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-            if (result.data) {
+            if (result?.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
                 notification("success", "", intl.formatMessage({ id: "addedtowishlist" }));
@@ -81,6 +80,11 @@ function NewIn(props) {
                 getProducts(props.ctId);
             }
         } else {
+            let vendorCheck = await checkVendorLoginWishlist();
+            if (vendorCheck?.type === 'vendor') {
+                notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
+                return false;
+            }
             props.showSignin(true);
         }
     }
@@ -133,7 +137,7 @@ function NewIn(props) {
                 products.length > 0 && (
                     <div className=" container" style={{ 'opacity': opacity }}>
                         <h1 className="new-arrival"><IntlMessages id="category.explore"></IntlMessages></h1>
-                
+
                         <div className="row product-listing plp-listing g-2">
 
                             {products.slice(0, products.length > 1 ? products.length - 1 : products.length - 0).map(item => {
@@ -187,12 +191,12 @@ function NewIn(props) {
                                 )
                             })}
                             <div className="col-md-4 col-lg-3">
-								<div className="plp-viewall">
-									<Link to={props.urls} className="view-all-btn" >
-										<IntlMessages id="category.viewAll" />
-									</Link>
-									<i className="fas fa-chevron-right"></i>
-								</div>
+                                <div className="plp-viewall">
+                                    <Link to={props.urls} className="view-all-btn" >
+                                        <IntlMessages id="category.viewAll" />
+                                    </Link>
+                                    <i className="fas fa-chevron-right"></i>
+                                </div>
                             </div>
 
                         </div>

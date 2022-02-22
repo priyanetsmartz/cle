@@ -23,7 +23,7 @@ import ForgottenPassword from '../../Page/forgotPassword';
 import MyAddress from './myProfile/myAddress';
 import appAction from "../../../redux/app/actions";
 const { showForgot } = appAction;
-const { closePrefPopup,addToCartTask } = cartAction;
+const { closePrefPopup, addToCartTask } = cartAction;
 const { logout, customer } = authAction;
 function MyProfile(props) {
 
@@ -50,7 +50,6 @@ function MyProfile(props) {
     const [loaderPassChange, setLoaderPassChange] = useState(false);
     const [loaderEmailChange, setloaderEmailChange] = useState(false);
     const [myDetailsModel, setMyDetailsModel] = useState(false);
-    const [myAddressModal, setMyAddressModal] = useState(false);
     const [giftingModal, setGiftingModal] = useState(false);
     const [passMask, setPassMask] = useState({
         password: true,
@@ -83,7 +82,8 @@ function MyProfile(props) {
 
     const [customAttribute, setCustomAttribute] = useState({
         country: 'Andorra',
-        mp_sms_telephone: ''
+        mp_sms_telephone: '',
+        is_social_login: ''
     });
 
 
@@ -148,7 +148,7 @@ function MyProfile(props) {
     async function getData() {
         let lang = props.languages ? props.languages : language;
         let result: any = await getCustomerDetails();
-        const d = result.data.dob ? result.data.dob.split("-") : "";
+        const d = result?.data?.dob ? result?.data?.dob?.split("-") : "";
         dob.day = d[2];
         dob.month = d[1];
         dob.year = d[0];
@@ -156,8 +156,8 @@ function MyProfile(props) {
         let custom_attributes = result.data.custom_attributes;
 
         let clothing_size = [], shoes_size = [], mostly_intersted_in = 0, favourite_categories = [], favourite_designers = [];
-        let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [], gifting_preferencees = [], phone = '', country = '';
-    
+        let mostly_intersted_inArray = [], shoes_size_inArray = [], clothing_size_inArray = [], categories_array = [], catToShow = [], designer_array = [], gifting_preferencees = [], phone = '', country = '', social = "";
+
         if (custom_attributes && custom_attributes.length > 0) {
             custom_attributes.map((attributes) => {
                 if (attributes.attribute_code === "clothing_size") {
@@ -191,6 +191,10 @@ function MyProfile(props) {
                     let countryId = attributes.value;
                     country = countryId;
                 }
+                if (attributes.attribute_code === "is_social_login") {
+                    let socialLog = attributes.value;
+                    social = socialLog;
+                }
             })
         }
 
@@ -217,16 +221,16 @@ function MyProfile(props) {
                 return o1.value === o2; // return the ones with equal id
             });
         });
-      
+
         if (mostly_intersted_inArray.length > 0 && intersted_in.length > 0) {
             let index = mostly_intersted_inArray.findIndex(x => x.name === intersted_in[0].name);
             catToShow = categories_array[index];
-           
+
             var favCategoryArray = [];
             if (catToShow && catToShow.length > 0) {
                 favCategoryArray = catToShow.filter(function (o1) {
                     return favourite_categories.some(function (o2) {
-                        return o1.id === o2; 
+                        return o1.id === o2;
                     });
                 });
             }
@@ -234,10 +238,10 @@ function MyProfile(props) {
 
         var favDesignerArray = designer_array[0].filter(function (o1) {
             return favourite_designers.some(function (o2) {
-                return o1.id === o2; 
+                return o1.id === o2;
             });
         });
-      
+
         setCustomerPrefer(prevState => ({
             ...prevState,
             interestedIn: intersted_in[0] ? intersted_in[0].name : "",
@@ -254,7 +258,8 @@ function MyProfile(props) {
             setCustomAttribute(prevState => ({
                 ...prevState,
                 mp_sms_telephone: phone,
-                country: country
+                country: country,
+                is_social_login: social
             }))
 
         } else {
@@ -318,6 +323,10 @@ function MyProfile(props) {
                 {
                     "attribute_code": "country",
                     "value": customAttribute.country ? customAttribute.country : "Andorra"
+                },
+                {
+                    "attribute_code": "is_social_login",
+                    "value": customAttribute.is_social_login ? customAttribute.is_social_login : "0"
                 }
             ]
             let result: any = await saveCustomerDetails({ customer: custForm });
@@ -344,7 +353,7 @@ function MyProfile(props) {
     const validateDetails = () => {
         let error = {};
         let formIsValid = true;
-      
+
         if (!custForm.firstname) {
             formIsValid = false;
             error["firstname"] = intl.formatMessage({ id: "firstnamerequired" })
@@ -841,130 +850,73 @@ function MyProfile(props) {
             </section>
 
             <MyAddress />
-
-            <section className="my_profile_sect change_passwordsec mb-4">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h2><IntlMessages id="myaccount.changePasswordEmail" /></h2>
-                            <p><IntlMessages id="myaccount.feelFreeToUpdate" /></p>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <label className="form-label heading_lbl"><IntlMessages id="login.password" /><span className="maindatory">&#42;</span></label>
-                            <div className="password_edit">********</div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <div className="change-paswd-sec">
-                                <div className="width-100">
-                                    <label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
-                                </div>
-
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="login.password" />*</label>
-                                    <input type={passMask.password ? 'password' : 'text'} className="form-control"
-                                        id="password"
-                                        value={changePass.password}
-                                        onChange={handlePassword} />
-                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('password')}>
-                                        {passMask.password ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
-                                    </span>
-                                    <span className="error">{errors.errors["password"]}</span>
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.newPassword" /><span
-                                        className="maindatory">&#42;</span></label>
-                                    <input type={passMask.newPassword ? 'password' : 'text'} className="form-control" id="newPassword"
-                                        value={changePass.newPassword}
-                                        onChange={handlePassword} />
-                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('newPassword')}>
-                                        {passMask.newPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
-                                    </span>
-
-                                    <span className="error">{errors.errors["newPassword"]}</span>
-                                </div>
-                                <div className="width-100 mb-3 form-field">
-                                    <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /><span
-                                        className="maindatory">&#42;</span></label>
-                                    <input type={passMask.confirmNewPassword ? 'password' : 'text'} className="form-control"
-                                        id="confirmNewPassword"
-                                        value={changePass.confirmNewPassword}
-                                        onChange={handlePassword} />
-                                    <span className="hidden-pass" onClick={() => togglePasswordVisiblity('confirmNewPassword')}>
-                                        {passMask.confirmNewPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
-                                    </span>
-                                    <span className="error">{errors.errors["confirmNewPassword"]}</span>
-                                </div>
-                                <div className="forgot_paswd">
-                                    <div className="Frgt_paswd">
-                                        <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" />?</Link>
-
-                                    </div>
-                                    <div className="Frgt_paswd">
-                                        <div className="confirm-btn">
-                                            <button type="button" className="btn btn-secondary" style={{ "display": !loaderPassChange ? "inline-block" : "none" }} onClick={handleChangePass}>
-                                                <IntlMessages id="myaccount.confirm" /></button>
-                                            <div className="btn btn-secondary" style={{ "display": loaderPassChange ? "inline-block" : "none" }}>
-                                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                                <IntlMessages id="loading" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="profile-new-email">
+            {customAttribute.is_social_login === "0" && (
+                <section className="my_profile_sect change_passwordsec mb-4">
+                    <div className="container">
                         <div className="row">
-                            <div className="col-sm-6">
-                                <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
-                                <div className="password_edit">{custForm.email}</div>
+                            <div className="col-sm-12">
+                                <h2><IntlMessages id="myaccount.changePasswordEmail" /></h2>
+                                <p><IntlMessages id="myaccount.feelFreeToUpdate" /></p>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-6">
-                                <div className="newemail-sec">
+                                <label className="form-label heading_lbl"><IntlMessages id="login.password" /><span className="maindatory">&#42;</span></label>
+                                <div className="password_edit">********</div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <div className="change-paswd-sec">
                                     <div className="width-100">
-                                        <label className="form-label heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+                                        <label className="form-label heading_lbl"><IntlMessages id="myaccount.changePassword" /></label>
                                     </div>
-                                    <div className="width-100 mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
-                                        <input type="email" className="form-control" id="newEmail"
-                                            value={changeEmail.newEmail}
-                                            onChange={handleEmail} />
-                                        <span className="error">{errors.errors["newEmail"]}</span>
-                                    </div>
-                                    <div className="width-100 mb-3">
-                                        <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
-                                            className="maindatory"></span></label>
-                                        <input type="email" className="form-control" id="confirmNewEmail"
-                                            value={changeEmail.confirmNewEmail}
-                                            onChange={handleEmail} />
-                                        <span className="error">{errors.errors["confirmNewEmail"]}</span>
+
+                                    <div className="width-100 mb-3 form-field">
+                                        <label className="form-label"><IntlMessages id="login.password" />*</label>
+                                        <input type={passMask.password ? 'password' : 'text'} className="form-control"
+                                            id="password"
+                                            value={changePass.password}
+                                            onChange={handlePassword} />
+                                        <span className="hidden-pass" onClick={() => togglePasswordVisiblity('password')}>
+                                            {passMask.password ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                        </span>
+                                        <span className="error">{errors.errors["password"]}</span>
                                     </div>
                                     <div className="width-100 mb-3 form-field">
-                                        <label className="form-label"><IntlMessages id="login.password" /><span
+                                        <label className="form-label"><IntlMessages id="myaccount.newPassword" /><span
                                             className="maindatory">&#42;</span></label>
-                                        <input type={passMask.emailPass ? 'password' : 'text'} className="form-control"
-                                            id="password2"
-                                            value={changeEmail.password2}
-                                            onChange={handleEmail} />
-                                        <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
-                                            {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                        <input type={passMask.newPassword ? 'password' : 'text'} className="form-control" id="newPassword"
+                                            value={changePass.newPassword}
+                                            onChange={handlePassword} />
+                                        <span className="hidden-pass" onClick={() => togglePasswordVisiblity('newPassword')}>
+                                            {passMask.newPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
                                         </span>
-                                        <span className="error">{errors.errors["password2"]}</span>
+
+                                        <span className="error">{errors.errors["newPassword"]}</span>
+                                    </div>
+                                    <div className="width-100 mb-3 form-field">
+                                        <label className="form-label"><IntlMessages id="myaccount.confirmPassword" /><span
+                                            className="maindatory">&#42;</span></label>
+                                        <input type={passMask.confirmNewPassword ? 'password' : 'text'} className="form-control"
+                                            id="confirmNewPassword"
+                                            value={changePass.confirmNewPassword}
+                                            onChange={handlePassword} />
+                                        <span className="hidden-pass" onClick={() => togglePasswordVisiblity('confirmNewPassword')}>
+                                            {passMask.confirmNewPassword ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                        </span>
+                                        <span className="error">{errors.errors["confirmNewPassword"]}</span>
                                     </div>
                                     <div className="forgot_paswd">
                                         <div className="Frgt_paswd">
+                                            <Link to='#' onClick={(e) => { handleForgetPopup(e); }} className="forgt-pasdw"><IntlMessages id="myaccount.forgotPassword" />?</Link>
+
+                                        </div>
+                                        <div className="Frgt_paswd">
                                             <div className="confirm-btn">
-                                                <button type="button" className="btn btn-secondary" style={{ "display": !loaderEmailChange ? "inline-block" : "none" }} onClick={handleChangeEmail}>
-                                                    <IntlMessages id="myaccount.confirm" />
-                                                </button>
-                                                <div className="btn btn-secondary" style={{ "display": loaderEmailChange ? "inline-block" : "none" }}>
+                                                <button type="button" className="btn btn-secondary" style={{ "display": !loaderPassChange ? "inline-block" : "none" }} onClick={handleChangePass}>
+                                                    <IntlMessages id="myaccount.confirm" /></button>
+                                                <div className="btn btn-secondary" style={{ "display": loaderPassChange ? "inline-block" : "none" }}>
                                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
                                                     <IntlMessages id="loading" />
                                                 </div>
@@ -974,9 +926,67 @@ function MyProfile(props) {
                                 </div>
                             </div>
                         </div>
+
+                        <div className="profile-new-email">
+                            <div className="row">
+                                <div className="col-sm-6">
+                                    <label className="form-label heading_lbl"><IntlMessages id="login.email" /></label>
+                                    <div className="password_edit">{custForm.email}</div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-6">
+                                    <div className="newemail-sec">
+                                        <div className="width-100">
+                                            <label className="form-label heading_lbl"><IntlMessages id="myaccount.newEmail" /></label>
+                                        </div>
+                                        <div className="width-100 mb-3">
+                                            <label className="form-label"><IntlMessages id="myaccount.newEmailAddress" /></label>
+                                            <input type="email" className="form-control" id="newEmail"
+                                                value={changeEmail.newEmail}
+                                                onChange={handleEmail} />
+                                            <span className="error">{errors.errors["newEmail"]}</span>
+                                        </div>
+                                        <div className="width-100 mb-3">
+                                            <label className="form-label"><IntlMessages id="myaccount.confirmNewEmailAddress" /><span
+                                                className="maindatory"></span></label>
+                                            <input type="email" className="form-control" id="confirmNewEmail"
+                                                value={changeEmail.confirmNewEmail}
+                                                onChange={handleEmail} />
+                                            <span className="error">{errors.errors["confirmNewEmail"]}</span>
+                                        </div>
+                                        <div className="width-100 mb-3 form-field">
+                                            <label className="form-label"><IntlMessages id="login.password" /><span
+                                                className="maindatory">&#42;</span></label>
+                                            <input type={passMask.emailPass ? 'password' : 'text'} className="form-control"
+                                                id="password2"
+                                                value={changeEmail.password2}
+                                                onChange={handleEmail} />
+                                            <span className="hidden-pass" onClick={() => togglePasswordVisiblity('emailPass')}>
+                                                {passMask.emailPass ? <i className="far fa-eye-slash"></i> : <i className="far fa-eye"></i>}
+                                            </span>
+                                            <span className="error">{errors.errors["password2"]}</span>
+                                        </div>
+                                        <div className="forgot_paswd">
+                                            <div className="Frgt_paswd">
+                                                <div className="confirm-btn">
+                                                    <button type="button" className="btn btn-secondary" style={{ "display": !loaderEmailChange ? "inline-block" : "none" }} onClick={handleChangeEmail}>
+                                                        <IntlMessages id="myaccount.confirm" />
+                                                    </button>
+                                                    <div className="btn btn-secondary" style={{ "display": loaderEmailChange ? "inline-block" : "none" }}>
+                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                        <IntlMessages id="loading" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             <HtmlContent identifier="customer_block" />
 
@@ -1307,7 +1317,7 @@ function MyProfile(props) {
 }
 const mapStateToProps = (state) => {
     let languages = '';
-    
+
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
@@ -1323,5 +1333,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { closePrefPopup, logout, customer, showForgot,addToCartTask }
+    { closePrefPopup, logout, customer, showForgot, addToCartTask }
 )(MyProfile);

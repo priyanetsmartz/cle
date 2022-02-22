@@ -12,7 +12,7 @@ import Modal from "react-bootstrap/Modal";
 import GiftMessage from "../product-details/GiftMessage";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { siteConfig } from '../../../../settings';
-import { formatprice } from '../../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice } from '../../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
 import { useLastLocation } from 'react-router-last-location';
 
@@ -258,10 +258,10 @@ function CartItemPage(props) {
         if (token) {
             setIsWishlist(sku)
             let result: any = await addWhishlistBySku(sku);
-            if (result.data[0].message) {
+            if (result?.data?.[0]?.message) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
-                notification("success", "", result.data[0].message);
+                notification("success", "", result?.data[0]?.message);
                 callGetCartItems()
             } else {
                 setIsWishlist(0)
@@ -270,6 +270,11 @@ function CartItemPage(props) {
                 callGetCartItems()
             }
         } else {
+            let vendorCheck =  await checkVendorLoginWishlist();
+            if (vendorCheck?.type === 'vendor') {
+                notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
+                return false;
+            }
             props.showSignin(true);
         }
 
@@ -300,7 +305,7 @@ function CartItemPage(props) {
         setDelGiftMsg(itemId)
         let lang = props.languages ? props.languages : language;
         let result: any = await giftMessageDelete(giftId, itemId, lang);
-        if (result.data) {
+        if (result?.data) {
             setDelGiftMsg(0)
             callGetCartItems()
             notification("success", "", intl.formatMessage({ id: "giftmessagedeleted" }));

@@ -201,7 +201,7 @@ function ProductDetailsPrivate(props) {
 
         }
 
-        if (result.data.type_id === "configurable") {
+        if (result?.data?.type_id === "configurable") {
             let attributes = result.data.extension_attributes.configurable_product_options;
             let childProducts: any = await getProductChildren(skuUrl);
             props.getAttributeProducts(attributes)
@@ -209,7 +209,7 @@ function ProductDetailsPrivate(props) {
             seChildrenProducts(childProducts.data);
         }
         let description = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [];
-        if (result.data.custom_attributes) {
+        if (result?.data?.custom_attributes) {
             result.data.custom_attributes.map((attributes) => {
                 if (attributes.attribute_code === "description") {
                     description = attributes.value;

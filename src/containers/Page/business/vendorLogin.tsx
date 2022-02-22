@@ -80,7 +80,7 @@ function VendorLogin(props) {
           street: result?.data[0]?.vendorData?.street,
           city: result?.data[0]?.vendorData?.city,
           type: "vendor",
-          showpop: result.data[0].showPopUp
+          showpop: result?.data?.[0]?.showPopUp
         }
         props.vendorrrr(vendorObj)
         await sessionService.saveSession(vendorObj)

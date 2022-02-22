@@ -260,13 +260,13 @@ function Checkout(props) {
     const getCutomerDetails = async () => {
         let addresses = {};
         let result: any = await getCustomerDetails();
-        setCustForm(result.data);
+        setCustForm(result?.data);
 
-        addresses['addresses'] = result.data ? result.data.addresses : '';
-        let address = result.data.addresses[0];
+        addresses['addresses'] = result.data ? result?.data?.addresses : '';
+        let address = result?.data?.addresses[0];
         let addressData: any = {};
         let addressInformation: any = {};
-        if (result && result.data && result.data.addresses && result.data.addresses.length > 0) {
+        if (result && result?.data && result?.data?.addresses && result?.data?.addresses?.length > 0) {
             let billingAddress = {
                 customer_id: localToken?.cust_id ? localToken?.cust_id : 0,
                 firstname: address.firstname,
@@ -298,7 +298,7 @@ function Checkout(props) {
             let test: any = await setUserDeliveryAddress(addressData);
             console.log(test)
             setLoaderOnCheckout(false)
-            if (result.data.addresses.length === 1) {
+            if (result?.data?.addresses?.length === 1) {
                 setCheckedData(prevState => ({
                     ...prevState,
                     address: true
@@ -530,7 +530,7 @@ function Checkout(props) {
             notification("error", "", intl.formatMessage({ id: "selectdeliveryaddress" }));
         } else {
             let result: any = await getShippinMethods();
-            SetShippingMethods(result.data)
+            SetShippingMethods(result?.data)
         }
     }
     const cancelCustAddress = async () => {
@@ -716,9 +716,9 @@ function Checkout(props) {
                 result = await setGuestUserDeliveryAddress(address);
             }
 
-            if (result.data.message === undefined || result.data.message === '') {
+            if (result?.data?.message === undefined || result?.data?.message === '') {
                 // here 
-                props.showPaymentMethods(result.data.payment_methods);
+                props.showPaymentMethods(result?.data?.payment_methods);
                 checkoutScreen();
                 toggleBillingAddressModal()
                 setCheckedData(prevState => ({
@@ -854,8 +854,7 @@ function Checkout(props) {
         } else {
             result = await applyPromoCodeGuest(promoCode, props.languages)
         }
-        //console.log(result.data)
-        if (!result.data.message) {
+        if (!result?.data?.message) {
             setCheckedData(prevState => ({
                 ...prevState,
                 promo: true
@@ -867,8 +866,8 @@ function Checkout(props) {
         } else {
             setErrorPromo("");
             setLoaderOnCheckout(false)
-            setErrorPromo(result.data.message)
-            return notification("error", "", result.data.message);
+            setErrorPromo(result?.data?.message)
+            return notification("error", "", result?.data?.message);
         }
     }
 

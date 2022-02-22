@@ -39,7 +39,7 @@ function SinglePost(props) {
 
     const getCategory = async () => {
         let result: any = await GetCategoryList(props.languages);
-        setCatMenu(result.data);
+        setCatMenu(result?.data);
     }
 
     useEffect(() => {
@@ -58,12 +58,11 @@ function SinglePost(props) {
         let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
         let result: any = await PostData(lang, slug);
-        let catId = result.data[0].categories[0];
         let featuredResult: any = await RelatedList(lang, slug);
-        const filteredItems = featuredResult.data.filter(item => item.post_id !== slug)
+        const filteredItems = featuredResult?.data.filter(item => item.post_id !== slug)
         setRelated(filteredItems);
         setBread(result?.data?.[0]?.title)
-        setPost(result.data[0]);
+        setPost(result?.data[0]);
         window.scrollTo(0, 0)
         setOpacity(1);
     }

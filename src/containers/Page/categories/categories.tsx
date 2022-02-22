@@ -87,9 +87,9 @@ function Categories(props) {
                 result.data.custom = obj;
             });
 
-            setCategoryId(result.data.items[0].id)
+            setCategoryId(result?.data?.items?.[0]?.id)
             setCatname(catname)
-            setCategory(result.data);
+            setCategory(result?.data);
         } else {
             setCategoryId(0)
             setCategory({

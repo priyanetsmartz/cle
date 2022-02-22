@@ -12,7 +12,7 @@ import ProductImages from './productImges';
 import cleWork from '../../../../image/cle work-logo.svg';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { addToCartApi, addToCartApiGuest, addWhishlist, configLabels, createGuestToken, getGuestCart, getProductChildren, getProductDetails, getProductExtras, getWhishlistItemsForUser, removeWhishlist } from '../../../../redux/cart/productApi';
-import { formatprice } from '../../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice } from '../../../../components/utility/allutils';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "react-share";
 import notification from '../../../../components/notification';
 import { siteConfig } from '../../../../settings';
@@ -60,10 +60,10 @@ function ProductDetails(props) {
 
         let path = lastLocation?.pathname;
         const location_array = path?.split('/');
-      
+
         if (!location_array?.includes('search')) {
             setLocationBread(location_array)
-        }else{
+        } else {
             setLocationBread(undefined)
         }
 
@@ -186,7 +186,7 @@ function ProductDetails(props) {
         let lang = props.languages ? props.languages : language;
         let customer_id = props.token.cust_id;
         let result: any = await getProductDetails(skuUrl, lang);
-         console.log(result.data)
+       
         let projectSingle = {};
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
@@ -208,14 +208,14 @@ function ProductDetails(props) {
 
         }
 
-        if (result.data.type_id === "configurable") {
+        if (result?.data?.type_id === "configurable") {
             let attributes = result.data.extension_attributes.configurable_product_options;
             let childProducts: any = await getProductChildren(skuUrl);
             props.getAttributeProducts(attributes)
             seChildrenProducts(childProducts.data);
         }
         let description = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [];
-        if (result.data.custom_attributes) {
+        if (result?.data?.custom_attributes) {
             result.data.custom_attributes.map((attributes) => {
                 if (attributes.attribute_code === "description") {
                     description = attributes.value;
@@ -262,22 +262,22 @@ function ProductDetails(props) {
         projectSingle['gift'] = gift;
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
-        projectSingle['is_in_stock'] = result.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
-      
+        projectSingle['is_in_stock'] = result?.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
+
         setOpacity(1)
         setProdId(projectSingle['id']);
         setTagsState(tags)
-        setProductImages(result.data.media_gallery_entries)
-        
-        let qtyy = result.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
+        setProductImages(result?.data?.media_gallery_entries)
+
+        let qtyy = result?.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
         setExtensionAttributes(qtyy);
         setproductDetails(projectSingle);
 
 
-        if (result.data && result.data.extension_attributes && result.data.extension_attributes.mp_sizechart && result.data.extension_attributes.mp_sizechart.rule_content) {
+        if (result?.data && result.data.extension_attributes && result.data.extension_attributes.mp_sizechart && result.data.extension_attributes.mp_sizechart.rule_content) {
             setProductSizeDetails(result.data.extension_attributes.mp_sizechart.rule_content);
         }
-        if (result.data && result.data.extension_attributes && result.data.extension_attributes.mp_sizechart && result.data.extension_attributes.mp_sizechart.rule_description) {
+        if (result?.data && result.data.extension_attributes && result.data.extension_attributes.mp_sizechart && result.data.extension_attributes.mp_sizechart.rule_description) {
             setMeasuringDetails(result.data.extension_attributes.mp_sizechart.rule_description);
         }
     }
@@ -297,6 +297,11 @@ function ProductDetails(props) {
     }
 
     async function handleCart(id: number, sku: string) {
+        let vendorCheck = await checkVendorLoginWishlist();
+        if (vendorCheck?.type === 'vendor') {
+            notification("error", "", "You are  not allowed to purchase a product, kindly login as a valid customer!");
+            return false;
+        }
         setIsShow(true);
         let cartData = {};
         let cartSucces: any;
@@ -306,18 +311,18 @@ function ProductDetails(props) {
         if (cartQuoteIdLocal && customer_id) {
             let customerCart: any = await loginApi.genCartQuoteID(customer_id)
             cartQuoteId = cartQuoteIdLocal
-            if (customerCart.data !== parseInt(cartQuoteIdLocal)) {
-                cartQuoteId = customerCart.data;
+            if (customerCart?.data !== parseInt(cartQuoteIdLocal)) {
+                cartQuoteId = customerCart?.data;
             }
         } else {
             if (!cartQuoteIdLocal) {
                 let guestToken: any = await createGuestToken();
                 localStorage.setItem('cartQuoteToken', guestToken.data);
                 let result: any = await getGuestCart(props.languages);
-                cartQuoteId = result.data.id
+                cartQuoteId = result?.data?.id
             } else {
                 let result: any = await getGuestCart(props.languages);
-                cartQuoteId = result.data.id
+                cartQuoteId = result?.data?.id
             }
 
         }
@@ -358,7 +363,7 @@ function ProductDetails(props) {
         if (token) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-            if (result.data) {
+            if (result?.data) {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
                 notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
@@ -370,6 +375,11 @@ function ProductDetails(props) {
                 getProductDetailsFxn(sku)
             }
         } else {
+            let vendorCheck = await checkVendorLoginWishlist();
+            if (vendorCheck?.type === 'vendor') {
+                notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
+                return false;
+            }
             props.showSignin(true);
         }
     }
@@ -588,7 +598,7 @@ function ProductDetails(props) {
                                                 <div className="accordion-body">
                                                     <div className="details_product">
                                                         <ul>
-                                                            <li>     <IntlMessages id="Colour" />: {productDetails['watch_color']}</li>                                                          
+                                                            <li>     <IntlMessages id="Colour" />: {productDetails['watch_color']}</li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -663,7 +673,6 @@ function ProductDetails(props) {
 }
 
 const mapStateToProps = (state) => {
-    // console.log(state.Cart)
     let attributeConfig = [], languages = '';
     if (state.Cart && state.Cart.attribute_section) {
         attributeConfig = state.Cart.attribute_section;

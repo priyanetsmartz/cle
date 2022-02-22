@@ -123,7 +123,7 @@ function CreateReturn(props) {
             custAddForm.post_code = custAddForm.postcode;
           
             let result: any = await updateOrderAddress(custAddForm);
-            if (result.data === 'address updated') {
+            if (result?.data === 'address updated') {
                 getData(returnId);
                 setChangeAddressModal(!changeAddressModal);
                 notification("success", "", "Address updates");

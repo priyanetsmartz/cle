@@ -11,7 +11,7 @@ import Recomendations from './product-details/recomendations';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Slider } from 'antd';
 import { useIntl } from 'react-intl';
-import { capitalize, formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { capitalize, checkVendorLoginWishlist, formatprice, handleCartFxn } from '../../../components/utility/allutils';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { siteConfig } from '../../../settings/index'
 import { getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
@@ -183,7 +183,7 @@ function Products(props) {
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
 
-            if (result.data) {
+            if (result?.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
                 notification("success", "", intl.formatMessage({ id: "addedToWhishlist" }));
@@ -195,6 +195,11 @@ function Products(props) {
                 getProducts(urlp)
             }
         } else {
+            let vendorCheck = await checkVendorLoginWishlist();
+            if (vendorCheck?.type === 'vendor') {
+                notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
+                return false;
+            }
             props.showSignin(true);
         }
     }
@@ -315,7 +320,7 @@ function Products(props) {
         setCurrent(1)
         let catID = catState ? catState : 178;
         setCatState(catID)
-        
+
         let r = range[0] + '-' + range[1];
         setFilterArray(prevState => ({
             ...prevState,
@@ -513,63 +518,63 @@ function Products(props) {
                                 </div>
 
                                 <div className="product-listing plp-listing" style={{ 'opacity': opacity }}>
-                                    {props.prodloader ? 
-                                   <p className='productloader' style={{ 'width': '200px' }}> <img className="loading-gif" src={orderprocessing} alt="loader" /></p>:
-                                    <div className="row g-2">
-                                        {props.items.map(item => {
-                                            url = parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus';
-                                            return (
-                                                <div className="col-md-4" key={item.id}>
+                                    {props.prodloader ?
+                                        <p className='productloader' style={{ 'width': '200px' }}> <img className="loading-gif" src={orderprocessing} alt="loader" /></p> :
+                                        <div className="row g-2">
+                                            {props.items.map(item => {
+                                                url = parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus';
+                                                return (
+                                                    <div className="col-md-4" key={item.id}>
 
-                                                    <div className="product py-4">
+                                                        <div className="product py-4">
 
-                                                        <span className="off bg-favorite">
-                                                            {!item.wishlist_item_id && (
-                                                                <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
-                                                                </div>
-                                                            )}
+                                                            <span className="off bg-favorite">
+                                                                {!item.wishlist_item_id && (
+                                                                    <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
+                                                                    </div>
+                                                                )}
 
-                                                            {item.wishlist_item_id && (
-                                                                <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
-                                                                </div>
-                                                            )}
-                                                        </span>
+                                                                {item.wishlist_item_id && (
+                                                                    <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
+                                                                    </div>
+                                                                )}
+                                                            </span>
 
-                                                        <div className="text-center" onMouseEnter={() => someHandler(item.id)}
-                                                            onMouseLeave={() => someOtherHandler(item.id)}>
-                                                            {
-                                                                item.custom_attributes && item.custom_attributes.length > 0 && item.custom_attributes.map((attributes) => {
-                                                                    if (attributes.attribute_code === 'image') {
-                                                                        imageD = attributes.value;
-                                                                    }
-                                                                })
+                                                            <div className="text-center" onMouseEnter={() => someHandler(item.id)}
+                                                                onMouseLeave={() => someOtherHandler(item.id)}>
+                                                                {
+                                                                    item.custom_attributes && item.custom_attributes.length > 0 && item.custom_attributes.map((attributes) => {
+                                                                        if (attributes.attribute_code === 'image') {
+                                                                            imageD = attributes.value;
+                                                                        }
+                                                                    })
 
-                                                            }
-                                                            <Link to={'/product-details/' + item.sku}>
-                                                                {isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries && item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD ? imageD : item.image.url} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD ? imageD : item.image.url} className="image-fluid" alt={item.name} height="150" />
-                                                                }</Link>
+                                                                }
+                                                                <Link to={'/product-details/' + item.sku}>
+                                                                    {isHoverImage === parseInt(item.id) ? <img src={item.media_gallery_entries && item.media_gallery_entries.length > 2 ? `${productUrl}/${item.media_gallery_entries[1].file}` : imageD ? imageD : item.image.url} className="image-fluid hover" alt={item.name} height="150" /> : <img src={imageD ? imageD : item.image.url} className="image-fluid" alt={item.name} height="150" />
+                                                                    }</Link>
+                                                            </div>
+                                                            <div className="about text-center">
+                                                                <div className="product_name"><Link to={'/search/' + url}>{parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus'}</Link></div>
+                                                                <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+
+                                                                <div className="pricetag">{siteConfig.currency} {formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)} </div>
+                                                            </div>
+
+                                                            <div className="cart-button mt-3 px-2">
+                                                                {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                                    <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
+                                                            </div>
+
+
                                                         </div>
-                                                        <div className="about text-center">
-                                                            <div className="product_name"><Link to={'/search/' + url}>{parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus'}</Link></div>
-                                                            <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-
-                                                            <div className="pricetag">{siteConfig.currency} {formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)} </div>
-                                                        </div>
-
-                                                        <div className="cart-button mt-3 px-2">
-                                                            {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
-                                                                <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
-
-                                                        </div>
-
 
                                                     </div>
-
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                     }
+                                                )
+                                            })}
+                                        </div>
+                                    }
                                 </div>
                                 <div className="resltspage_sec footer-pagints">
                                     <div className="paginatn_result">

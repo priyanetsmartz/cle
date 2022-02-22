@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { InputNumber, Slider } from 'antd';
-import { getCookie } from '../../../helpers/session';
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings/index'
 import { capitalize, formatprice } from '../../../components/utility/allutils';
@@ -32,7 +31,7 @@ function OrdersAndReturns(props) {
     const [returs, setReturn] = useState([]);
     const intl = useIntl();
     useEffect(() => {
-        getData(pageSize);        
+        getData(pageSize);
     }, [pageSize, props.languages, page]);
 
 
@@ -78,7 +77,7 @@ function OrdersAndReturns(props) {
         }))
         if (stateView === 'orders') {
             let result: any = await getCustomerOrdersByPrice((range[0]), (range[1]), pageSize);
-            if (result.data) {
+            if (result?.data) {
                 let res = getAccordingDate(result?.data?.items)
                 setOrders(res);
                 setLoaderOrders(false);
@@ -113,7 +112,7 @@ function OrdersAndReturns(props) {
                 setOrders(res);
             }
         } else {
-           
+
             const dateFrom = moment(fromDate).format("MM-DD-YYYY");
             const dateTo = moment(currentDate.toJSON()).format("MM-DD-YYYY")
             if (value === '') {
@@ -144,6 +143,8 @@ function OrdersAndReturns(props) {
             setLoaderReturns(false);
             setReturn(res);
             setReturnPagination(Math.ceil(returns.data.total_count / pageSize));
+        } else {
+            setLoaderReturns(false);
         }
     }
 
@@ -411,7 +412,7 @@ function OrdersAndReturns(props) {
 
                             </div>
                             <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <AllReturns returnData = {returs} pagination={returnPagination} loader={loaderReturns} />
+                                <AllReturns returnData={returs} pagination={returnPagination} loader={loaderReturns} />
                             </div>
 
                         </div>

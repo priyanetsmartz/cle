@@ -49,11 +49,9 @@ function Personal(props) {
     const [answers, setAnswers] = useState({});
     const language = getCookie('currentLanguage');
     useEffect(() => {
-        //console.log(props.currentCAT) 
         async function getData() {
             let lang = props.languages ? props.languages : language;
             let result: any = await GetHelpUsForm(lang, props.currentCAT);
-            //  console.log(result.data[0].form_json.length)
             if (result && result.data && result.data.length > 0) {
                 setForm(result.data[0]);
             } else {
@@ -113,7 +111,7 @@ function Personal(props) {
         }
 
         answers[form.form_json[activeIndex][0].name] = tempObj
-        //console.log(answers)
+       
         setAnswers(answers);
         payload.answer.response_json = JSON.stringify(answers);
         payload.answer.form_id = form.form_id;
@@ -122,14 +120,14 @@ function Personal(props) {
         payload.answer.form_name = form.title;
         payload.answer.form_code = formCode;
         setPayload(payload);
-       // console.log(payload)
+     
         if (form.form_json[activeIndex + 1]) {
             setActiveIndex(activeIndex + 1);
             setActiveTab(activeTab + 1);
         } else {
             setloading(true);
             let result: any = await SaveAnswers(payload);
-            if (result.data) {
+            if (result?.data) {
                 setIsSurveyEnd(true);
                 setloading(false);
                 setCookie(formCode, customerId);

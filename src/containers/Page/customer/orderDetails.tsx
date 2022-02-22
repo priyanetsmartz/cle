@@ -92,12 +92,12 @@ function OrderDetails(props) {
 
     const getorderReturnstatus = async (id) => {
         let result: any = await getorderReturnstatusapi(id);
-        return result.data;
+        return result?.data;
 
     }
     const getCountries = async () => {
         let result: any = await getCountriesList();
-        setCountries(result.data);
+        setCountries(result?.data);
     }
 
     const toggleAddressModal = () => {

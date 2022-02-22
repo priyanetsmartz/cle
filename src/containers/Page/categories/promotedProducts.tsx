@@ -3,10 +3,11 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Link, useLocation } from "react-router-dom";
 import cartAction from "../../../redux/cart/productAction";
-import { formatprice } from '../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice } from '../../../components/utility/allutils';
 import {
     addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
 } from '../../../redux/cart/productApi';
+import { useIntl } from 'react-intl';
 import notification from "../../../components/notification";
 import { getCookie } from '../../../helpers/session';
 import IntlMessages from "../../../components/utility/intlMessages";
@@ -19,10 +20,12 @@ const { addToCart, productList } = cartAction;
 
 function PromotedProducts(props) {
     let imageD = '', description = '';
+    const intl = useIntl();
+    const [delWishlist, setDelWishlist] = useState(0);
     const location = useLocation()
     const [isHoverImage, setIsHoverImage] = useState(0);
     const [opacity, setOpacity] = useState(1);
-
+    const [isWishlist, setIsWishlist] = useState(0);
     const [token, setToken] = useState('');
     const [sortValue, setSortValue] = useState({ sortBy: 'created_at', sortByValue: "DESC" });
 
@@ -38,7 +41,7 @@ function PromotedProducts(props) {
     })
     useEffect(() => {
         let lang = props.languages ? props.languages : language;
-        const localToken =props.token.token;
+        const localToken = props.token.token;
         setToken(localToken)
         getProducts();
         setCategory(props.cateData);
@@ -76,16 +79,45 @@ function PromotedProducts(props) {
 
     }
 
-    async function handleWhishlist(id: number) {
-        let result: any = await addWhishlist(id);
-        notification("success", "", result.data[0].message);
-        getProducts()
 
+    async function handleWhishlist(id: number) {
+        if (token) {
+            setIsWishlist(id)
+            let result: any = await addWhishlist(id);
+            if (result?.data) {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("success", "", intl.formatMessage({ id: "addedtowishlist" }));
+                getProducts()
+            } else {
+                setIsWishlist(0)
+                props.addToWishlistTask(true);
+                notification("error", "", intl.formatMessage({ id: "genralerror" }));
+                getProducts()
+            }
+        } else {
+            let vendorCheck =  await checkVendorLoginWishlist();
+            if (vendorCheck?.type === 'vendor') {
+                notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
+                return false;
+            }
+            props.showSignin(true);
+        }
     }
     async function handleDelWhishlist(id: number) {
+        setDelWishlist(id)
         let del: any = await removeWhishlist(id);
-        notification("success", "", del.data[0].message);
-        getProducts()
+        if (del.data[0].message) {
+            setDelWishlist(0)
+            props.addToWishlistTask(true);
+            notification("success", "", del.data[0].message);
+            getProducts()
+        } else {
+            setDelWishlist(0)
+            props.addToWishlistTask(true);
+            notification("error", "", intl.formatMessage({ id: "genralerror" }));
+            getProducts()
+        }
     }
 
     const someHandler = (id) => {
@@ -124,11 +156,13 @@ function PromotedProducts(props) {
                                                     {token && (
                                                         <span className="off bg-favorite">
                                                             {!item.wishlist_item_id && (
-                                                                <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>
+                                                                <div>{isWishlist === item.id ? <i className="fas fa-circle-notch fa-spin"></i> : <i onClick={() => { handleWhishlist(item.id) }} className="far fa-heart" aria-hidden="true"></i>}
+                                                                </div>
                                                             )}
                                                             {item.wishlist_item_id && (
-                                                                <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>
-                                                            )}
+                                                                <div>{delWishlist === parseInt(item.wishlist_item_id) ? <i className="fas fa-circle-notch fa-spin"></i> : <i className="fa fa-heart" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} aria-hidden="true"></i>}
+                                                                </div>
+                                                            )}                                                           
                                                         </span>
                                                     )
                                                     }

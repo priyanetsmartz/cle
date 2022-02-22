@@ -1,32 +1,61 @@
 .custom-tooltip {
-    padding: 10px 10px 10px 10px;
-    background: black;
-    color: white;
-    border: 2px solid black;
-    float: right;
-    width: 200px;
+  padding: 10px 10px 10px 10px;
+  background: black;
+  color: white;
+  border: 2px solid black;
+  float: right;
+  width: 200px;
 
 }
 
 .custom-tooltip p {
-    font-weight: bold;
-    margin-bottom: 1px;
-    font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 1px;
+  font-size: 13px;
 }
 
 .custom-tooltip span {
-    display: block;
+  display: block;
 }
 
 .custom-tooltip::after {
-    content: "";
-    height: 0;
-    width: 0;
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-style: solid;
-    border-width: 10px 10px 0 10px;
-    border-color: rgba(73, 71, 76, 0.9) transparent transparent transparent;
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  top: 30%;
+  left: -15px;
+  transform: rotate(90deg);
+  border-style: solid;
+  border-width: 10px 10px 0 10px;
+  border-color: rgba(00, 00, 00, 1) transparent transparent transparent;
+}
+
+.circle-background,
+.circle-progress {
+  fill: none;
+}
+
+.circle-background {
+  stroke: #ddd;
+}
+
+.circle-progress {
+  stroke: green;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.circle-text {
+  font-size: 3em;
+  font-weight: bold;
+  fill: green;
+}
+
+.circularData {
+  display: inline-flex;
+}
+
+.circularDataInner {
+  margin: 10px;
 }

@@ -12,7 +12,7 @@ function Magazine(props) {
         async function getData() {
             let lang = props.languages ? props.languages : language;
             let result: any = await MagazineList(lang, siteConfig.pageSize);
-            setItems(result.data);
+            setItems(result?.data);
         }
         getData()
         return () => {
