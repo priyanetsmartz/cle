@@ -221,3 +221,8 @@ export function getorderReturnstatusapi(orderId) {
     return adminApi.request(`rest/all/V1/return/canRma/?orderId=${orderId}`, "", "GET", "")
 }
 
+
+export function unsubscribeNewsletter(payload){
+    return adminApi.request(`/rest/all/V1/newsletter/unsubscriber`, payload, "POST", "")
+}
+
