@@ -48,6 +48,7 @@ import BussinessResetEmail from './containers/Page/business/BussinessResetEmail'
 import CleXRoute from './components/all-route/CleXRoute';
 import SellProduct from './containers/Page/CLEX/sellProduct';
 import Howtosell from './containers/Page/CLEX/howtosell';
+import Unsubscribe from './containers/Page/customer/unsubscribe';
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -82,6 +83,7 @@ const PublicRoutes = ({ history }) => {
             <LoggedInRoute exact path="/customer/:tab" component={Customer} />
             <LoggedInRoute exact path="/customer/return-details/:returnId" component={returnsDetails} />
             <LoggedInRoute exact path="/customer/create-return/:returnId" component={CreateReturn} />
+            <LoggedInRoute exact path="/unsubscribe/:email/:storeId" component={Unsubscribe} />
             <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
             <VendorRoute exact path="/vendor/returns-complaints/:returnId" component={RetunOrder} />
             <VendorRoute exact path="/vendor/sales-orders/:orderId" component={VendorOrderDetails} />
