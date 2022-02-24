@@ -162,9 +162,9 @@ function SinglePost(props) {
                                                         <div className="col-md-4" key={i}>
                                                             <div className="blog-sec-main">
                                                                 <div className="post-effect">
-																<div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="post-thumbnail" /></div>
+																<div className="mag-blog-pic-2"><Link to={`/magazine/${item.post_id}`}><img src={item.list_thumbnail} alt="post-thumbnail" /></Link></div>
                                                                 <div className="cate-name">{item.categroy}</div>
-                                                                <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
+                                                                <h3 className="mag-blog-title-2 my-2"><Link to={`/magazine/${item.post_id}`}> {item.title}</Link></h3>
                                                                 <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                                                 <p className="mag-blog-desc"> <div dangerouslySetInnerHTML={{ __html: post.short_content }} /></p>
 																</div>

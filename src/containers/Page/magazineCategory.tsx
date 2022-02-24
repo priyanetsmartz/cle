@@ -29,7 +29,7 @@ function MagazineCategory(props) {
     const [errors, setError] = useState({
         errors: {}
     });
-    const [latest, setlatestItem] = useState({ title: '', published_at: '', short_content: '', post_id: '', list_thumbnail: '', categroy: '' });
+    const [latest, setlatestItem] = useState({ title: '', published_at: '', short_content: '', post_id: '', list_thumbnail: '', categroy: '', post_thumbnail:'' });
     const location = useLocation();
 
     useEffect(() => {
@@ -59,6 +59,7 @@ function MagazineCategory(props) {
         setPagination(dataTotal);
         setFeaturedItems(featuredResult?.data);
         setlatestItem(result?.data?.slice(-1)[0]);
+        console.log("lats",latest)
         setOpacity(1);
     }
 
@@ -216,7 +217,7 @@ function MagazineCategory(props) {
             </div>
             {latest && (
                 <div className="mag-top-banner">
-                    <img src={latest.list_thumbnail} alt="list_thumbnail" />
+                    <Link to={"/magazine/" + latest.post_id} ><img src={latest.post_thumbnail} alt="post_thumbnail" /></Link>
                     <div className="banner-content text-center">
                         <h4>{latest.title}</h4>
                         <div className="cat-date">{latest.categroy}<span>{moment(latest.published_at).format('LL')}</span></div>
@@ -288,9 +289,9 @@ function MagazineCategory(props) {
                                     <div className="col-md-4 mb-5" key={i}>
                                         <div className="blog-sec-main">
                                             <div className="post-effect">
-											<div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="list_thumbnail" /></div>
+											<div className="mag-blog-pic-2"><Link to={"/magazine/" + latest.post_id} ><img src={item.list_thumbnail} alt="list_thumbnail" /></Link></div>
                                             <div className="cate-name">{item.categroy}</div>
-                                            <h3 className="mag-blog-title-2 my-2">{item.title}</h3>
+                                            <h3 className="mag-blog-title-2 my-2"><Link to={"/magazine/" + latest.post_id} >{item.title}</Link></h3>
                                             <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
                                             <p className="mag-blog-desc">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
                                             <Link to={"/magazine/" + item.post_id} className="signup-btn"><IntlMessages id="magazine.read_more" /></Link>
@@ -363,7 +364,7 @@ function MagazineCategory(props) {
                                     <span className="error">{errors.errors["email"]}</span>
                                 </form>
                                 <div className="terms-text text-center">
-                                    <IntlMessages id="newsletter.foot" /> <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link> <IntlMessages id="signup.and" /> <Link to="/privacy-policy"><IntlMessages id="signup.privacy_policy" /></Link>. <IntlMessages id="newsletter.optout" />
+                                    <IntlMessages id="newsletter.foot" /> <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link> <IntlMessages id="signup.and" /> <Link to="/privacy-policy"><IntlMessages id="signup.privacy_policy" />bkjbk</Link>. <IntlMessages id="newsletter.optout" />hbjhb
                                 </div>
 
                                 <div className="join-cle-bottom-2">
