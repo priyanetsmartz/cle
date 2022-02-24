@@ -186,7 +186,7 @@ function ProductDetails(props) {
         let lang = props.languages ? props.languages : language;
         let customer_id = props.token.cust_id;
         let result: any = await getProductDetails(skuUrl, lang);
-       
+
         let projectSingle = {};
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
@@ -214,7 +214,7 @@ function ProductDetails(props) {
             props.getAttributeProducts(attributes)
             seChildrenProducts(childProducts.data);
         }
-        let description = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [];
+        let description = "", img = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [];
         if (result?.data?.custom_attributes) {
             result.data.custom_attributes.map((attributes) => {
                 if (attributes.attribute_code === "description") {
@@ -247,6 +247,9 @@ function ProductDetails(props) {
                 if (attributes.attribute_code === "sale" && attributes.value === "1") {
                     tags.push("Sale");
                 }
+                if (attributes.attribute_code === "image") {
+                    img = attributes.value;
+                }
 
             })
         }
@@ -261,13 +264,15 @@ function ProductDetails(props) {
         projectSingle['watch_color'] = watch_color;
         projectSingle['gift'] = gift;
         projectSingle['short_description'] = short;
+        projectSingle['img'] = img;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = result?.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
 
         setOpacity(1)
         setProdId(projectSingle['id']);
         setTagsState(tags)
-        setProductImages(result?.data?.media_gallery_entries)
+       
+        setProductImages(result?.data?.media_gallery_entries?.length > 0 ? result?.data?.media_gallery_entries : projectSingle['img'])
 
         let qtyy = result?.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
         setExtensionAttributes(qtyy);

@@ -198,3 +198,7 @@ export async function checkCustomerLogin() {
   )
 }
 
+export async function getLocatstorageUser() {
+  let localData = localStorage.getItem('redux-react-session/USER_DATA');
+  return JSON.parse((localData));
+}

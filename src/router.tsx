@@ -54,7 +54,7 @@ const PublicRoutes = ({ history }) => {
       <Suspense fallback={<Loader />}>
         <LastLocationProvider>
           <Switch>
-            <ProductRoutes exact path="/magazines/:category" component={AllPosts} />
+            <ProductRoutes exact path="/magazines/:magazinecategory" component={AllPosts} />
             <ProductRoutes exact path="/magazines" component={AllPosts} />
             <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />           
 

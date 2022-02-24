@@ -6,8 +6,12 @@ const ProductImages = (props) => {
     const [fullSizedImg, setFullSizedImg] = useState(featuredImage);
     useEffect(() => {
         setProductImages(props.productImages)
-        if (props.productImages && props.productImages.length > 0) {
+       
+        if (props.productImages && props.productImages.length > 0 && typeof props.productImages === 'object') {
             setFullSizedImg(props.productImages[0]);
+        } else {
+            let data = { file: props.productImages }
+            setFullSizedImg(data);
         }
 
     }, [props.productImages])
@@ -24,17 +28,22 @@ const ProductImages = (props) => {
 
     return (
         <div className="row">
-            <div className="col-md-4 col-lg-2">
-            <button onClick={scrolldown} className="pdp-thumbnail-pre"><i className="fas fa-chevron-up"></i></button>
-                <div className="product-img-slider" id="inner">
-                    {productImage.map((img, i) => {
-                        return (
-                            <img src={img.file} className="product-img" key={i} alt="" onClick={() => changeImg(i)} />
-                        );
-                    })}
-                </div>
-                <button onClick={scrollup} className="pdp-thumbnail-next"><i className="fas fa-chevron-down"></i></button>
-            </div>
+            {typeof productImage === 'object' && (
+                <>
+                    <div className="col-md-4 col-lg-2">
+                        <button onClick={scrolldown} className="pdp-thumbnail-pre"><i className="fas fa-chevron-up"></i></button>
+                        <div className="product-img-slider" id="inner">
+                            {productImage?.length > 0 && productImage.map((img, i) => {
+                                return (
+                                    <img src={img.file} className="product-img" key={i} alt="" onClick={() => changeImg(i)} />
+                                );
+                            })}
+                        </div>
+                        <button onClick={scrollup} className="pdp-thumbnail-next"><i className="fas fa-chevron-down"></i></button>
+                    </div>
+                </>
+            )}
+
             <div className="col-md-8 col-lg-10 img-container">
                 {
                     fullSizedImg && fullSizedImg.media_type === 'external-video' ? (

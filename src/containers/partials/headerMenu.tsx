@@ -11,27 +11,27 @@ import appAction from "../../redux/app/actions";
 import cartAction from "../../redux/cart/productAction";
 import MiniCart from './mini-cart';
 import SearchBar from './searchBar';
-import { capitalize } from '../../components/utility/allutils';
+import { capitalize, getLocatstorageUser } from '../../components/utility/allutils';
 import LanguageSwitcher from '../LanguageSwitcher';
 import AccountPopup from './accountPopup';
 const { showSignin, openSignUp, menuSetup, showLoader, userType } = appAction;
 const { accountPopup, miniCartPopup, addToCartTask, setCatSearch, setCurrentCat } = cartAction;
-function HeaderMenu(props) {
-    let localData = localStorage.getItem('redux-react-session/USER_DATA');
-    let localToken = JSON.parse((localData));
+function HeaderMenu(props) {  
+
     const baseUrl = process.env.REACT_APP_API_URL;
+
     const [isPriveUser, setIsPriveUser] = useState((props.token.token && props.token.token === '4') ? true : false);
 
     let customerName = props.token.token_name;
     const { category, subcat, childcat, greatchildcat, signup, member, categoryname } = useParams();
-    const [isLoaded, setIsLoaded] = useState(true);
+
     const [activeMobileMenu, setActiveMobileMenu] = useState('');
     const [activeMobileMenuLevel2, setActiveMobileMenuLevel2] = useState('');
     const [activeMobileMenuLevel3, setActiveMobileMenuLevel3] = useState('');
     const [mobileMenu, setMobileMenu] = useState(false);
+
     const [menuData, SetMenuData] = useState([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
     const [activeCat, SetActiveCat] = useState('women')
-    const [activeOne, SetActiveOne] = useState('');
 
     useEffect(() => {
 
@@ -43,10 +43,9 @@ function HeaderMenu(props) {
         async function fetchMyAPI() {
             let result: any = await menu(props.languages);
             var jsonData = result && result.data && result.data.length > 0 ? result.data[0].parent.child : {};
-            let catMenu = category ? category : jsonData && jsonData.length ? jsonData[0].url_key : {}
+
 
             SetMenuData(jsonData);
-            SetActiveOne(catMenu)
             let active = categoryname ? categoryname : category ? category : 'women';
             SetActiveCat(active);
         }
@@ -54,15 +53,15 @@ function HeaderMenu(props) {
         return () => {
             setMobileMenu(false);
             props.accountPopup(false)
-            setIsLoaded(true)
             SetMenuData([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
-            SetActiveCat('')
-            SetActiveOne('')
+            SetActiveCat('');
         }
     }, [props.languages, category])
 
     useEffect(() => {
+        let localToken: any = getLocatstorageUser();
         let tokken = localToken ? localToken.token : undefined;
+        console.log(tokken)
         if (signup === 'true' && member === 'prive' && tokken === undefined) {
             props.openSignUp(true);
             props.userType(4);
@@ -103,10 +102,8 @@ function HeaderMenu(props) {
     useEffect(() => {
 
         return () => {
-            setIsLoaded(true)
             SetMenuData([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
             SetActiveCat('')
-            SetActiveOne('')
             setActiveMobileMenu('');
             setActiveMobileMenuLevel2('');
             setActiveMobileMenuLevel3('');

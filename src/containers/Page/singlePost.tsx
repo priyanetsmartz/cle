@@ -166,7 +166,7 @@ function SinglePost(props) {
                                                                 <div className="cate-name">{item.categroy}</div>
                                                                 <h3 className="mag-blog-title-2 my-2"><Link to={`/magazine/${item.post_id}`}> {item.title}</Link></h3>
                                                                 <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
-                                                                <p className="mag-blog-desc"> <div dangerouslySetInnerHTML={{ __html: post.short_content }} /></p>
+                                                                <div className="mag-blog-desc"> <div dangerouslySetInnerHTML={{ __html: post.short_content }} /></div>
 																</div>
                                                                 <Link to={`/magazine/${item.post_id}`} className="signup-btn mx-auto "><IntlMessages id="magazine.read_more" /></Link>
                                                             </div>
