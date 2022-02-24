@@ -155,19 +155,19 @@ export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fr
    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId;
-    if (po_date_from != null && po_date_from !== '')
+    if (po_date_from !== null && po_date_from !== '')
         queryString += "&po_date_from=" + po_date_from
-    if (po_date_to != null && po_date_to !== '')
+    if (po_date_to !== null && po_date_to !== '')
         queryString += "&po_date_to=" + po_date_to
-    if (po_status != null && po_status !== '')
+    if (po_status !== null && po_status !== '')
         queryString += "&po_status=" + po_status
-    if (po_fromPrice != null && po_fromPrice !== '' && po_fromPrice !== 0)
+    if (po_fromPrice !== null && po_fromPrice !== '' && po_fromPrice !== 0)
         queryString += "&po_fromPrice=" + po_fromPrice
-    if (po_toPrice != null && po_toPrice !== '' && po_toPrice !== 0)
+    if (po_toPrice !== null && po_toPrice !== '' && po_toPrice !== 0)
         queryString += "&po_toPrice=" + po_toPrice
-    if (search != null && search !== '')
+    if (search !== null && search !== '')
         queryString += "&search=" + search
-    if (sort_order != null && sort_order != '')
+    if (sort_order !== null && sort_order != '')
         queryString += '&sort_order=' + sort_order
     return adminToken.request(`default/rest/all/V1/vendor/vendorPayoutCollection?${queryString}`, "", "GET", "")
 
