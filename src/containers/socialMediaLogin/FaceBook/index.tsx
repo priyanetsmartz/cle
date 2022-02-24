@@ -39,7 +39,7 @@ function FacebookLoginButton(props) {
         let result: any = await loginApi.getAuthRegister(userInfo.email);
 
         var jsonData = result && result.data && result.data.length > 0 ? result.data[0] : [];
-        //   console.log(result, jsonData)
+
         if (result && result.data && result.data.length > 0) {
             let id_token = jsonData.new_token;
             let firstname = jsonData.firstname ? jsonData.firstname : '';
@@ -56,7 +56,7 @@ function FacebookLoginButton(props) {
             sessionService.saveUser(data)
             setCookie("username", jsonData.email)
             props.loginSuccess(jsonData.new_token)
-            //console.log(jsonData.group_id)
+           
             if (jsonData.group_id === "4") {
                 history.push("/prive-user");
             }
@@ -106,7 +106,7 @@ function FacebookLoginButton(props) {
 
 
 function mapStateToProps(state) {
-    //console.log(state)
+
     let loginState = '', languages = '';
     if (state && state.App && state.App.showLogin) {
         loginState = state.App.showLogin

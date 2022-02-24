@@ -171,7 +171,7 @@ function RetunOrder(props) {
                             {returnDetails['items'] && returnDetails['items'].length > 0 && (
                                 <ul className="order-pro-list">
                                     {returnDetails['items'].map((item, i) => {
-                                        // console.log(item);
+                         
                                         return (<li key={i}>
                                             <div className="row">
                                                 <div className="col-md-3">

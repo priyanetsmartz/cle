@@ -3,7 +3,6 @@ import { apiConfig } from '../settings';
 import CommonFunctions from "../commonFunctions/CommonFunctions";
 const commonFunctions = new CommonFunctions();
 const baseUrl = commonFunctions.getBaseUrl();
-//const qs = require("qs");
 const axios = require("axios");
 const processResponse = true;
 
@@ -23,7 +22,6 @@ class API {
     if (queryString === undefined) {
       queryString = '';
     }
-    //Get token value from cookie
     let authtoken = '';
 
     const token = apiConfig.adminToken;

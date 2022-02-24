@@ -135,10 +135,6 @@ function Personal(props) {
         }
     }
 
-    const toggleHelpUs = () => {
-        setIsHidden(!isHidden);
-    }
-
     const handleClick = () => {
         const { showSignin } = props;
         showSignin(true);

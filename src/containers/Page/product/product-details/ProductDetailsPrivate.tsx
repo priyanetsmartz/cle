@@ -30,7 +30,7 @@ function ProductDetailsPrivate(props) {
     const { vendorIdprev, prodsku }: any = useParams();
     const intl = useIntl();
     const language = getCookie('currentLanguage');
-    const [opacity, setOpacity] = useState(1);   
+    const [opacity, setOpacity] = useState(1);
     const [isPriveuser, setIsPriveUser] = useState(false);
     const [iteminWhishlist, setItemInWhishlist] = useState(0);
     const [isShare, setIsLoaded] = useState(false);
@@ -54,7 +54,7 @@ function ProductDetailsPrivate(props) {
             window.scrollTo(0, 0)
             props.showLoader(false);
         }, 3000);
-   
+
         getProductDetailsFxn(prodsku);
 
         if (vendorIdprev !== venID) {
@@ -67,7 +67,6 @@ function ProductDetailsPrivate(props) {
 
 
     useEffect(() => {
-        //  console.log(props.items.Cart.isOpenSizeGuide);
         let giftBox = props.items.Cart.openGiftBox === 0 ? false : true;
         setIsGiftMessage(giftBox)
         setSizeGuideModal(props.items.Cart.isOpenSizeGuide);
@@ -95,11 +94,11 @@ function ProductDetailsPrivate(props) {
         const index = e.target.selectedIndex;
         const el = e.target.childNodes[index]
         const option = el.getAttribute('id');
-      
+
         let selected = e.target.value;
         setSlectedAttribute(selected);
         let selectChild = childrenProducts[option - 1];
-      
+
         let projectSingle = {};
         let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
 
@@ -153,18 +152,18 @@ function ProductDetailsPrivate(props) {
         const attributesDrop = [];
         attrs.forEach(async (i) => {
             attributesDrop.push(new Promise((resolve, reject) => {
-                const res: any = someAPICall(i);               
+                const res: any = someAPICall(i);
                 resolve(res);
             }));
         })
         const result = await Promise.all(attributesDrop);
-       
+
         setConfigurableOptions(result)
-       
+
     }
 
 
-    async function someAPICall(attribute) {       
+    async function someAPICall(attribute) {
         let data: any = []
         let labels: any = await configLabels(attribute.attribute_id);
         data.title = attribute.label;
@@ -178,11 +177,11 @@ function ProductDetailsPrivate(props) {
         let lang = props.languages ? props.languages : language;
         let customer_id = props.token.cust_id;
         let result: any = await getProductDetails(skuUrl, lang);
-      
+
         let projectSingle = {};
         if (customer_id) {
             let whishlist: any = await getWhishlistItemsForUser();
-            
+
             let WhishlistData = whishlist.data;
 
             const inWhishlist = WhishlistData.find(element => element.sku === skuUrl);
@@ -205,7 +204,7 @@ function ProductDetailsPrivate(props) {
             let attributes = result.data.extension_attributes.configurable_product_options;
             let childProducts: any = await getProductChildren(skuUrl);
             props.getAttributeProducts(attributes)
-            // console.log(childProducts.data)
+            
             seChildrenProducts(childProducts.data);
         }
         let description = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [];
@@ -259,17 +258,17 @@ function ProductDetailsPrivate(props) {
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = result.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
-    
+
         setOpacity(1)
-      
+
         setProductImages(result.data.media_gallery_entries)
-        let qtyy = result.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0    
+        let qtyy = result.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
         setproductDetails(projectSingle);
 
-        
+
         setProductSizeDetails(result?.data?.extension_attributes?.mp_sizechart?.rule_content);
         setMeasuringDetails(result?.data?.extension_attributes?.mp_sizechart?.rule_description);
-      
+
     }
 
     const handleGiftMEssage = () => {
@@ -283,10 +282,10 @@ function ProductDetailsPrivate(props) {
             setIsGiftMessage(true)
         }
 
-    }  
+    }
 
-    
-   
+
+
     return (
         <>
             <main>
@@ -340,7 +339,7 @@ function ProductDetailsPrivate(props) {
                                             <div className="col-sm-4">
                                                 <div className="form-group">
                                                     <span className="form-label"><IntlMessages id="product.quantity" />:</span>
-                                                   
+
                                                     <select className="form-select" aria-label="Default select example">
                                                         {
 
@@ -399,7 +398,7 @@ function ProductDetailsPrivate(props) {
                                             )}
                                             {productDetails['is_in_stock'] === false && (
                                                 <button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
-                                                   Add to Cart</button>
+                                                    Add to Cart</button>
                                             )}
                                         </div>
                                     </div>
@@ -461,7 +460,7 @@ function ProductDetailsPrivate(props) {
                                                 <div className="accordion-body">
                                                     <div className="details_product">
                                                         <ul>
-                                                            <li>     <IntlMessages id="Colour" />: {productDetails['watch_color']}</li>                                                           
+                                                            <li>     <IntlMessages id="Colour" />: {productDetails['watch_color']}</li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -478,12 +477,6 @@ function ProductDetailsPrivate(props) {
                                                 data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">
                                                     <div className="details_product">
-                                                        {/* <ul>
-                                                            <li> Chain length 16.6in/42.5cm</li>
-                                                            <li> Max feature width 1.4in/3.8cm</li>
-                                                            <li> Max feature length 0.7in/1.3cm</li>
-                                                        </ul> */}
-                                                        {/* <Link to="#" className="sizeguid"> <IntlMessages id="product.sizeguide" /></Link> */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -542,7 +535,6 @@ function ProductDetailsPrivate(props) {
 }
 
 const mapStateToProps = (state) => {
-    // console.log(state.Cart)
     let attributeConfig = [], languages = '';
     if (state.Cart && state.Cart.attribute_section) {
         attributeConfig = state.Cart.attribute_section;

@@ -382,7 +382,7 @@ function Notifications(props) {
     )
 }
 const mapStateToProps = (state) => {
-    // console.log(state)
+
     return {}
 }
 

@@ -252,7 +252,6 @@ function SignIn(props) {
 }
 
 function mapStateToProps(state) {
-  // console.log(state.Auth.loading);
   return {
     auth: state.Auth.idToken,
     loading: state.Auth.loading,

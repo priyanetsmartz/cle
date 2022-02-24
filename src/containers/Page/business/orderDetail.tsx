@@ -55,9 +55,9 @@ function VendorOrderDetail(props) {
 
     async function getOrderDetailFxn(orderId,sort_order:any ='') {
         sort_order = sort_order?sort_order:sortOrder;
-        console.log("sort order", sort_order)
+       
         let results: any = await getOrderDetail(props.languages, orderId, sort_order);
-        console.log("results", results.data[0]);
+
         let data = [];
         let productsData = [];
         if (results && results.data && results.data.length > 0) {
@@ -75,7 +75,7 @@ function VendorOrderDetail(props) {
             setOrderStatus(data[0][0].udropship_statuslabel)
             setPaymentStatus(data[0][0].invoice_data.invoice_status)
             setStatusCode(data[0][0].udropship_status)
-            console.log("data[0][0].udropship_status)",data[0][0].udropship_status)
+     
 
             if (data[0][0].billing_address.length > 0) {
                 let addr: any = data[0][0].billing_address[0]

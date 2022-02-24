@@ -12,7 +12,6 @@ function BecomePartner(props) {
     const intl = useIntl();
     const language = getCookie('currentLanguage');
     const [radio, setRadio] = useState(intl.formatMessage({ id: "newsletter.option1" }));
-   // console.log(radio)
     const [isShow, setIsShow] = useState(false);
     const [state, setState] = useState({
         email: ""

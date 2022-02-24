@@ -280,17 +280,8 @@ export function searchFields(search: string, category: number, page: number, lan
     var storeId = language === 'english' ? 3 : 2
     let data: any;
     if (category === 0) {
-        return APi.request(`rest/V1/products/?
-        searchCriteria[filter_groups][0][filters][0][field]=visibility&
-        searchCriteria[filter_groups][0][filters][0][value]=4&
-        searchCriteria[filter_groups][0][filters][0][condition_type]=eq&
-        searchCriteria[filter_groups][1][filters][0][field]=name&
-        searchCriteria[filter_groups][1][filters][0][value]=%${search}%&
-        searchCriteria[filter_groups][1][filters][0][condition_type]=like&
-        fields=items[sku,brand,name,id,custom_attributes,custom_attributes,price]&
-        searchCriteria[currentPage]=1&searchCriteria[pageSize]=${page}&
-        searchCriteria[sortOrders][0][field]=${sortBy}&
-        searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
+        return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&
+        searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=name&searchCriteria[filter_groups][1][filters][0][value]=%${search}%&searchCriteria[filter_groups][1][filters][0][condition_type]=like&fields=items[sku,brand,name,id,custom_attributes,custom_attributes,price]&searchCriteria[currentPage]=1&searchCriteria[pageSize]=${page}&searchCriteria[sortOrders][0][field]=${sortBy}&searchCriteria[sortOrders][0][direction]=${sortByValue}&storeId=${storeId}`, "", "GET", "")
     } else {
         let sortt = '', searching = '';
         if (sortBy !== '') {

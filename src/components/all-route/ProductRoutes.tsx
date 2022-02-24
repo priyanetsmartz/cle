@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import AppBreadcrumbs from "../../containers/partials/breadCrumbs";
 import Header from '../../containers/partials/headerMenu';
 import Footer from '../../containers/partials/footer-new';
-import FaqHeader from '../../containers/Page/faq/faq-header';
 const ProductRoutes = ({ component: Component, auth, ...rest }) => (
 
   <Route
@@ -13,12 +12,10 @@ const ProductRoutes = ({ component: Component, auth, ...rest }) => (
         <div className="section headerrr" id="headerrr" key='uniqueKey'>
           <Header />
         </div>
-        {/* {console.log(props.location.pathname)} */}
         <div className='customwrapper' >
           {(!props.location.pathname.includes('help-center') && !props.location.pathname.includes('magazine')) && (
             <AppBreadcrumbs />
           )}
-          {/* <AppBreadcrumbs /> */}
           <Component {...props} />
         </div>
         <Footer />

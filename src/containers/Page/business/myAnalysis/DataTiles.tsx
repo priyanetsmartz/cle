@@ -13,16 +13,15 @@ function MyAnalysisDataTiles(props) {
     let oldDate = moment().startOf('month').format('MM/DD/YYYY');
     let quater = moment().quarter();
     let year = moment().year();
-    const [active, setActive] = useState(0);
-    const [showMonth, setShowMonth] = useState(true);
-    const [sowQuaters, setShowQuaters] = useState(false);
     const [dataTilesData, setDataTilesData] = useState([]);
     const [currentQuater, setCurrentQuater] = useState(quater);
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     const [quaterSlider, setQuaterSlider] = useState('')
-    const [showYears, setShowYears] = useState(false);
+
     const [currentYear, setCurrentYear] = useState(year);
+
+    const [showStates, setShowStates] = useState({ showYears: false, sowQuaters: false, showMonth: true, active: 0 });
     useEffect(() => {
         getDataTiles(oldDate, currentDate);
         return () => {
@@ -32,33 +31,47 @@ function MyAnalysisDataTiles(props) {
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
         if (results && results.data && results.data.length > 0) {
+            
             setDataTilesData(results?.data[0])
+        }else{
+            
         }
     }
 
     const handleChange = (flag) => {
         let dates = [];
         if (flag === 0) {
-            setShowMonth(true)
-            setShowQuaters(false)
-            setShowYears(false);
+            setShowStates({ showYears: false, sowQuaters: false, showMonth: true, active: 0 })
+            setCurrentMonthKey(getCurrentMonth().num)
+            setCurrentMonth(getCurrentMonth().name)
             dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
+            setDataTilesData([])
+            
             getDataTiles(dates['start'], dates['end'])
         } else if (flag === 1) {
-            setShowMonth(false)
-            setShowQuaters(true)
-            setShowYears(false);
-            handleQuater(currentQuater);
+            let quater = moment().quarter();
+            setCurrentQuater(quater)
+            setShowStates({ showYears: false, sowQuaters: true, showMonth: false, active: 1 })
+            setDataTilesData([])
+            
+            let start = moment().quarter(quater).startOf('quarter').format('MMM');
+            let end = moment().quarter(quater).endOf('quarter').format('MMM');
+            let part = start + '-' + end;
+
+            let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
+            let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
+            getDataTiles(startOfMonth, endOfMonth);
+            setQuaterSlider(part);
         } else {
-            setShowMonth(false)
-            setShowQuaters(false)
-            setShowYears(true);
+            setCurrentYear(year)
+            setShowStates({ showYears: true, sowQuaters: false, showMonth: false, active: 2 })
+            setDataTilesData([])
+            
             dates['start'] = moment().startOf('year').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('year').format('MM/DD/YYYY');
             getDataTiles(dates['start'], dates['end'])
         }
-        setActive(flag)
 
     }
 
@@ -69,6 +82,8 @@ function MyAnalysisDataTiles(props) {
 
         let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
         let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
+        setDataTilesData([])
+        
         getDataTiles(startOfMonth, endOfMonth);
         setQuaterSlider(part);
     }
@@ -85,7 +100,8 @@ function MyAnalysisDataTiles(props) {
         const output = moment(input, "MM");
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
-
+        setDataTilesData([])
+        
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -102,6 +118,8 @@ function MyAnalysisDataTiles(props) {
         const output = moment(input, "MM");
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
+        setDataTilesData([])
+        
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -125,6 +143,8 @@ function MyAnalysisDataTiles(props) {
         let startOfMonth = '01/01/' + year;
         let endOfMonth = '12/31/' + year;
         setCurrentYear(year);
+        
+        setDataTilesData([])
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -134,6 +154,8 @@ function MyAnalysisDataTiles(props) {
         let startOfMonth = '01/01/' + year;
         let endOfMonth = '12/31/' + year;
         setCurrentYear(year);
+        
+        setDataTilesData([])
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -142,12 +164,12 @@ function MyAnalysisDataTiles(props) {
             <div className="row">
                 <div className="col-sm-12">
                     <ul className='filter-tiles'>
-                        <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
-                        <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
-                        <li><Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
+                        <li><Link to="#" className={showStates.active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
+                        <li><Link to="#" className={showStates.active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }}><IntlMessages id="quarter" /></Link></li>
+                        <li><Link to="#" className={showStates.active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
                     </ul>
 
-                    {showMonth && (
+                    {showStates.showMonth && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -156,7 +178,7 @@ function MyAnalysisDataTiles(props) {
                             <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
                         </ul>
                     )}
-                    {sowQuaters && (
+                    {showStates.sowQuaters && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -165,7 +187,7 @@ function MyAnalysisDataTiles(props) {
                             <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
                         </ul>
                     )}
-                    {showYears && (
+                    {showStates.showYears && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeftYear(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -185,6 +207,8 @@ function MyAnalysisDataTiles(props) {
                     <div className="col-sm-12">
                         <h2><IntlMessages id="datatiles" /></h2>
                         <DateChartFilters data="datatiles" />
+                     
+                        
                         <div className="row mb-4" style={{ columnCount: 3 }}>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">

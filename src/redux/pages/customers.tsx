@@ -45,7 +45,6 @@ export function updateCustAddress(custId, data) {
 
 export function getPreference(language) {
     const storeId = language === 'english' ? 3 : 2;
-    // return adminApi.request(`rest/V1/customer/attributes?id=${custId}`, "", "GET", "");
     return adminApi.request(`rest/all/V1/customer/preferences?storeId=${storeId}`, "", "GET", "");
 }
 
@@ -108,7 +107,6 @@ export async function sortCustomerOrders(sort, pageSize) {
 }
 
 export function searchOrders(orderId) {
-    // return adminApi.request(`rest/V1/orders/${orderId}`, "", "GET", "");
     return adminApi.request(`rest/V1/orders?searchCriteria[filter_groups][0][filters][0][field]=increment_id&searchCriteria[filter_groups][0][filters][0][value]=${orderId}&searchCriteria[filter_groups][0][filters][0][condition_type]=eq`, "", "GET", "")
 }
 
@@ -130,10 +128,6 @@ export function addItemToWishList(productId) {
     return Api.request(`rest/V1/wishlist/add/${productId}`, "", "GET", "");
 }
 
-// export function removeItemFromWishList(custId, wishlist_item_id) {
-//     custId = 114; //remove that
-//     return Api.request(`rest/V1/wishlist/delete/${wishlist_item_id}?customerId=${custId}`, "", "DELETE", "");
-// }
 
 export async function wishListSearchSort(language, pageSize, sortOrder, sortBy, searchName) {
     const storeId = language === 'english' ? '3' : '2';
@@ -160,7 +154,6 @@ export function getContent(language: string, indentifier) {
 }
 
 export function getCategoryDetails(language, catId) {
-    //console.log(catId)
     const storeId = language === 'english' ? 3 : 2;
     return adminApi.request(`rest/V1/categories/${catId}?storeId=${storeId}`, "", "GET", "");
 }
@@ -175,15 +168,8 @@ export function getCategoryDetailsbyUrlKey(language, urlkey, pageSize) {
     return adminApi.request(`rest/${storeId}/V1/categories/list?searchCriteria[filterGroups][0][filters][0][field]=url_key&searchCriteria[filterGroups][0][filters][0][value]=${urlkey}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}`, "", "GET", "");
 }
 
-
-// export function getWeChooseForYou(language, custId) {
-//     const storeId = language === 'english' ? 3 : 2;
-//     return adminApi.request(`rest/all/V1/product/relevantProducts?storeId=${storeId}&customerId=${custId}`, "", "GET", "");
-// }
-
 export function getWeChooseForYou(language, custId) {
     const storeId = language === 'english' ? 3 : 2;
-    // console.log(storeId)
     return adminApi.request(`rest/all/V1/product/newin?storeId=${storeId}&customerId=${custId}`, "", "GET", "");
 }
 

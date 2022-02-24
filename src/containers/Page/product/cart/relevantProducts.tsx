@@ -68,7 +68,6 @@ function RelevantProducts(props) {
     };
 
     const getReleveantProds = async () => {
-        //console.log(props.cartItem)
         let lang = props.languages ? props.languages : language;
         let cartItems: any = await getCartRelevantProducts(props.cartItem, lang);
         let relVData = cartItems.data;

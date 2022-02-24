@@ -69,8 +69,7 @@ function BestSeller(props) {
     }, [props.bestSeller, props.currentCAT, props.languages])
 
     const getData = async (catId) => {
-        let result: any = await getHomePageProductsFxn(props.languages, catId);
-        //console.log(result['bestSeller']) 
+        let result: any = await getHomePageProductsFxn(props.languages, catId);   
         setBestseller(result['bestSeller']);
         setOpacity(1);
     }
@@ -91,7 +90,7 @@ function BestSeller(props) {
     }
 
     async function handleWhishlist(id: number) {
-        console.log(catId)
+
         const token = props.token.token;
         if (token) {
             setIsWishlist(id)

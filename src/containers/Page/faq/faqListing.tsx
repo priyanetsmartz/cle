@@ -41,8 +41,7 @@ function FaqListing(props) {
                         {
                           category['questionArray'].map((question, i) => (
 
-                            <div key={i} className="accordion-item">
-                              {/* {console.log(ser.replace(/ /g, ''), '#' + question['title'].replace(/ /g, ''))} */}
+                            <div key={i} className="accordion-item">                        
                               <h2 className="accordion-header" id={`heading${i}`}>
                                 <button className={'#' + question['title'].replace(/ /g, '') === ser.replace(/ /g, '') ? `accordion-button` : `accordion-button collapsed`} type="button" data-bs-toggle="collapse" data-bs-target={`#collapseSecOne${question['question_id']}`} aria-expanded="false" aria-controls={`collapseSectwo${question['question_id']}`}>
                                   {question['title']}

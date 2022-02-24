@@ -108,9 +108,7 @@ function HelpUs(props) {
         }
     }
 
-    const toggleHelpUs = () => {
-        setIsHidden(!isHidden);
-    }
+   
 
     const handleClick = () => {
         const { showSignin } = props;

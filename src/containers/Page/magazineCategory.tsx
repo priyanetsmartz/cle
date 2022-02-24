@@ -31,7 +31,6 @@ function MagazineCategory(props) {
     });
     const [latest, setlatestItem] = useState({ title: '', published_at: '', short_content: '', post_id: '', list_thumbnail: '', categroy: '' });
     const location = useLocation();
-    // let filters = [{ id: 1, value: "Most Popular" }, { id: 2, value: "Least Popular" }, { id: 3, value: "Alphabetical: A to Z" }, { id: 4, value: "Alphabetical: Z to A" }]
 
     useEffect(() => {
         window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
@@ -127,11 +126,7 @@ function MagazineCategory(props) {
         }
     }
 
-    const getPaginationGroup = () => {
-        let start = Math.floor((page - 1) / 4) * 4;
-        let fill = pagination > 5 ? 4 : pagination;
-        return new Array(fill).fill(fill).map((_, idx) => start + idx + 1);
-    };
+ 
 
     const goToNextPage = (e) => {
         let lang = props.languages ? props.languages : language;
@@ -141,14 +136,7 @@ function MagazineCategory(props) {
         setCurrent((page) => page + 1);
 
     }
-    function changePage(event) {
-        let lang = props.languages ? props.languages : language;
-        setOpacity(0.3);
-        event.preventDefault()
-        const pageNumber = Number(event.target.textContent);
-        setCurrent(pageNumber);
-        getListData(lang, pageNumber, sortValue.sortBy, sortValue.sortByValue);
-    }
+
     const goToPreviousPage = (e) => {
         let lang = props.languages ? props.languages : language;
         setOpacity(0.3);
@@ -231,7 +219,7 @@ function MagazineCategory(props) {
                     <img src={latest.list_thumbnail} alt="list_thumbnail" />
                     <div className="banner-content text-center">
                         <h4>{latest.title}</h4>
-                        <div className="cat-date"><Link to={"/magazine/" + latest.post_id} >{latest.categroy}</Link><span>{moment(latest.published_at).format('LL')}</span></div>
+                        <div className="cat-date">{latest.categroy}<span>{moment(latest.published_at).format('LL')}</span></div>
                         <p>  <div dangerouslySetInnerHTML={{ __html: latest.short_content }} /></p>
                         <Link to={"/magazine/" + latest.post_id} ><IntlMessages id="magazine.read_more" /></Link>
                     </div>
@@ -250,7 +238,7 @@ function MagazineCategory(props) {
                                         <div className="blog-sec-main">
                                             <div className="post-effect">
 												<div className="mag-blog-pic-2"><img src={item.list_thumbnail} alt="list_thumbnail" /></div>
-												<div className="cate-name"><Link to={"/magazine/" + latest.post_id} >{item.categroy}</Link></div>
+												<div className="cate-name"><Link to={"/magazine/" + latest?.post_id} >{item?.categroy}</Link></div>
 												<h3 className="mag-blog-title-2 my-2">{item.title}</h3>
 												<div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
 												<p className="mag-blog-desc">  <div dangerouslySetInnerHTML={{ __html: item.short_content }} /></p>
@@ -286,13 +274,7 @@ function MagazineCategory(props) {
                                         <option value={2} key="2" >{intl.formatMessage({ id: "magazine.filter2" })}</option>
                                         <option value={3} key="3" >{intl.formatMessage({ id: "magazine.filter3" })}</option>
                                         <option value={4} key="4" >{intl.formatMessage({ id: "magazine.filter4" })}</option>
-                                        {/* {
-                                            filters.map((item, i) => {
-                                                return (
-                                                    <option value={item.id} key={i} >{item.value}</option>
-                                                )
-                                            })
-                                        } */}
+                                    
                                     </select>
                                 </div>
                             </div>

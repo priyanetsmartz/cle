@@ -27,7 +27,6 @@ function AboutUs(props) {
 
     useEffect(() => {
         let tokenCheckFilter = !props.helpusVal ? props.token : props.helpusVal;
-        // console.log(tokenCheckFilter)
         if (!tokenCheckFilter) {
             setOnLogin(false);
         } else {
@@ -75,14 +74,12 @@ function mapStateToProps(state) {
     if (state && state.App) {
         signupModel = state.App.showSignUp
     }
-    // console.log(signupModel)
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language
     }
     if (state && state.Auth && state.Auth.idToken) {
         helpusVal = state.Auth.idToken;
     }
-    // console.log(state.LanguageSwitcher)
     return {
         signupModel: signupModel,
         languages: languages,

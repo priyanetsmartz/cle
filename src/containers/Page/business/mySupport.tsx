@@ -4,9 +4,7 @@ import { getCookie } from "../../../helpers/session";
 import { Pages } from '../../../redux/pages/allPages';
 
 function MySupport(props) {
-    const userGroup = localStorage.getItem('token');
     const [pagesData, SetPagesData] = useState({ title: '', content: '' })
-    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
     const language = getCookie('currentLanguage');
 
     useEffect(() => {

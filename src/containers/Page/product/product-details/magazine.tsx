@@ -7,8 +7,6 @@ function ProductsMagazine(props) {
 
     useEffect(() => {
         setRelatedPosts(props.posts)
-        // console.log(relatedPosts)
-        //    console.log(typeof (recomendedProducts))
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.

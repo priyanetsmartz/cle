@@ -14,7 +14,6 @@ export function* loginRequest() {
 
   yield takeEvery("LOGIN_REQUEST", function* (payload: any) {
     try {
-      // console.log(payload.payload.userInfo);
       //user details
       var type = payload.payload.userInfo.group_id;
       var email = payload.payload.userInfo.email;
@@ -36,7 +35,7 @@ export function* loginRequest() {
             'id_token': response.data,
             'type': "user"
           }
-          // console.log(data);
+     
           sessionService.saveSession({ id_token })
           sessionService.saveUser(data)
           const cartToken = yield call(loginApi.genCartQuoteID, token.data[0].entity_id);
@@ -57,7 +56,7 @@ export function* loginRequest() {
           });
           if (userInfo.rememberme === true) {
             let ciphertext = CryptoJS.AES.encrypt(userInfo.password, apiConfig.encryptionkey).toString();
-            //  console.log(ciphertext);
+       
 
             //set username and password and remember me into cookie
             yield setCookie("username", userInfo.email);
@@ -81,7 +80,7 @@ export function* loginRequest() {
           });
           notification("success", "", "Successfully Logged in");
           if (token.data[0].group_id === "4") {
-            //yield put(push("/prive-user"));
+           
             setTimeout(() => {
               window.location.href = '/prive-user';
             }, 1000);
@@ -156,7 +155,7 @@ export function* registerRequest() {
           localStorage.removeItem('cartQuoteToken');
           localStorage.removeItem('cartQuoteId');
           if (token.data[0].group_id === "4") {
-            //yield put(push("/prive-user"));
+            
             setTimeout(() => {
               window.location.href = '/prive-user';
             }, 1000);

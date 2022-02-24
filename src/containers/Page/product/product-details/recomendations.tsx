@@ -21,9 +21,9 @@ const Recommendations = (props) => {
     const [isShow, setIsShow] = useState(0);
     const [recomendedProducts, setRecomendedProducts] = useState([]);
     const [slidetoshow, setSlidetoshow] = useState(4);
-    // console.log(recomendedProducts)
+
     useEffect(() => {
-        // console.log(props.recomend)
+   
         if (props.recomend && props.recomend.length > 0) {
             getAttributes(props.recomend);
         }
@@ -37,7 +37,7 @@ const Recommendations = (props) => {
 
     async function getAttributes(recomends) {
         let allProducts: any;
-        //console.log(recomends)
+   
         if (recomends && recomends.length > 0 && recomends[0].link_type) {
             var filteredItems = await recomends.filter(function (item) {
                 return item.link_type === 'related';
@@ -49,14 +49,14 @@ const Recommendations = (props) => {
             allProducts = recomends;
         }
 
-        // console.log('recomends', allProducts)
+ 
         let prods = allProducts.length > 8 ? allProducts.slice(0, 8) : allProducts;
         setSlidetoshow(prods.length)
         setRecomendedProducts(prods)
-        // console.log(prods)
+   
     }
     async function getgidtMessageCall(items) {
-        // console.log(items)
+   
         const promises = [];
         items.forEach(async (i) => {
             promises.push(new Promise((resolve, reject) => {
@@ -71,9 +71,9 @@ const Recommendations = (props) => {
     async function someAPICall(product) {
         let lang = props.languages ? props.languages : language;
         let giftCall: any = await getProductDetails(product.linked_product_sku, lang);
-        // console.log(giftCall.data)
+     
         return giftCall.data;
-        // return giftCall.data;
+        
     }
     const settings = {
         dots: false,
@@ -146,7 +146,6 @@ const Recommendations = (props) => {
                                                 </Link>
                                                 <div className="product_name"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
                                                 <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                {/* <div className="product_vrity">{item.short_description}</div> */}
                                                 <div className="product_price">{siteConfig.currency}  {formatprice(item.price)}</div>
                                                 <div className="cart-button mt-3 px-2">
                                                     {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
@@ -166,7 +165,7 @@ const Recommendations = (props) => {
 }
 
 const mapStateToProps = (state) => {
-    // console.log(state)
+   
     let recomended = [], languages = '';
     if (state && state.Cart.recomended.length > 0) {
         recomended = state.Cart.recomended;

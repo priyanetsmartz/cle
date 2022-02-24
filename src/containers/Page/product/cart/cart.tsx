@@ -168,34 +168,11 @@ function CartItemPage(props) {
             setIsShow(0)
         }
     }
-    //to add the quantity
-    async function handleAddQuantity(data) {
-        setValue(data.item_id);
-        setQty(data.qty + 1);
-        let customer_id = props.token.cust_id;
-        let cartData = {
-            "cartItem": {
-                "sku": data.sku,
-                "qty": data.qty + 1,
-                "quote_id": localStorage.getItem('cartQuoteId')
-            }
-        }
-        if (customer_id) {
-            await updateCartItem(data.item_id, cartData);
-        } else {
-            await updateGuestCartItem(data.item_id, cartData);
-        }
-
-        callGetCartItems()
-        props.addToCartTask(true);
-        notification("success", "", intl.formatMessage({ id: "cartupdated" }));
-    }
-
+   
     async function handleChangeQty(e, data) {
         setValue(data.item_id);
         let value = parseInt(e.target.value);
         setQty(value);
-        console.log(value)
         let customer_id = props.token.cust_id;
         let cartData = {
             "cartItem": {
@@ -223,37 +200,7 @@ function CartItemPage(props) {
         props.addToCartTask(true);
         notification("success", "", intl.formatMessage({ id: "cartupdated" }));
     }
-    //to substruct from the quantity
-    async function handleSubtractQuantity(data) {
-        setValue(data.item_id);
-        setQty(data.qty - 1);
-        let customer_id = props.token.cust_id;
-        let cartData = {
-            "cartItem": {
-                "sku": data.sku,
-                "qty": data.qty - 1,
-                "quote_id": localStorage.getItem('cartQuoteId')
-            }
-        }
-        if (customer_id) {
-            if (data.qty === 1) {
-                await removeItemFromCart(data.item_id);
-
-            } else {
-                await updateCartItem(data.item_id, cartData);
-            }
-        } else {
-            if (data.qty === 1) {
-                await removeItemFromGuestCart(data.item_id);
-
-            } else {
-                await updateGuestCartItem(data.item_id, cartData);
-            }
-        }
-        callGetCartItems()
-        props.addToCartTask(true);
-        notification("success", "", intl.formatMessage({ id: "cartupdated" }));
-    }
+    
     async function handleWhishlist(sku: any) {
         if (token) {
             setIsWishlist(sku)

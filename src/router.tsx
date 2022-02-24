@@ -28,7 +28,6 @@ import Categories from './containers/Page/categories/categories';
 import ProductDetails from './containers/Page/product/product-details/productDetails';
 import VendorLogin from './containers/Page/business/vendorLogin';
 import Checkout from './containers/Page/product/checkout/checkout';
-import ExploreDesigner from './containers/Page/designer/exploreDesigner';
 import Faq from './containers/Page/faq/faq';
 import FaqListing from './containers/Page/faq/faqListing';
 import Search from './containers/Page/search';
@@ -56,8 +55,8 @@ const PublicRoutes = ({ history }) => {
         <LastLocationProvider>
           <Switch>
             <ProductRoutes exact path="/magazines/:category" component={AllPosts} />
-            <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />
             <ProductRoutes exact path="/magazines" component={AllPosts} />
+            <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />           
 
             <ProductRoutes exact path="/help-center/:url_key" component={FaqListing} page='faq' />
             <ProductRoutes exact path="/vendor/forgot-password" component={BussinessResetpassword} />
@@ -83,7 +82,7 @@ const PublicRoutes = ({ history }) => {
             <LoggedInRoute exact path="/customer/:tab" component={Customer} />
             <LoggedInRoute exact path="/customer/return-details/:returnId" component={returnsDetails} />
             <LoggedInRoute exact path="/customer/create-return/:returnId" component={CreateReturn} />
-            <LoggedInRoute exact path="/unsubscribe/:email/:storeId" component={Unsubscribe} />
+            <ProductRoutes exact path="/unsubscribe" component={Unsubscribe} />
             <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
             <VendorRoute exact path="/vendor/returns-complaints/:returnId" component={RetunOrder} />
             <VendorRoute exact path="/vendor/sales-orders/:orderId" component={VendorOrderDetails} />
@@ -93,7 +92,6 @@ const PublicRoutes = ({ history }) => {
             <ProductHome exact path="/:signup/:member" component={HomePage} />
             <ProductRoutes exact path="/return-order" component={ReturnPage} />
 
-            <LoggedInRoute exact path="/explore-desginer" component={ExploreDesigner} />
 
 
             <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />

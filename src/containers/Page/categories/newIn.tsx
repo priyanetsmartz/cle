@@ -24,14 +24,14 @@ const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 function NewIn(props) {
     const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
-    let imageD = '', description = '', brand = '';
+    let imageD = '',  brand = '';
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [opacity, setOpacity] = useState(1);
     const [products, setProducts] = useState([]);
     const [token, setToken] = useState('');
     const [isHoverImage, setIsHoverImage] = useState(0);
-    const language = getCookie('currentLanguage');
+
     useEffect(() => {
         const localToken = props.token.token;
         setToken(localToken)

@@ -693,5 +693,9 @@
   "tccheckout1":"By placing your order you agree to our",
   "tccheckout2":". You also consent to some of your data being stored by CLE, which may be used to make future shopping experiences better for you.",
   "confirm.order":"Confirm Order",
-  "product.outofstock":"Out of Stock"
+  "product.outofstock":"Out of Stock",
+  "successunsubscribe":"Your have successfully unsubscribed from the CLE mailing list",
+  "errorunsubscribe":"Something went wrong! Kindly contact to site admin for more details",
+  "alreadyunsubscribe":"Your have already unsubscribed from the CLE mailing list",
+  "home":"Go to Home"
 }

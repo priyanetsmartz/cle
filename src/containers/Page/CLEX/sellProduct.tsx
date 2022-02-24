@@ -4,7 +4,6 @@ function SellProduct(props) {
     const handleOnChange = async (e) => {
         e.preventDefault();
         const [value]  = e.target;
-        console.log(value);
     }
     return (
         <div className="container about-inner-clex inner-pages-clex"  >

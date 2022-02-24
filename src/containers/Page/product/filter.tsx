@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { getProductsFilterRestCollection, getProductsFilterRestCollectionProducts, getWhishlistItemsForUser } from "../../../redux/cart/productApi";
 import cartAction from "../../../redux/cart/productAction";
@@ -6,9 +5,7 @@ import { connect } from "react-redux";
 import { getCookie } from "../../../helpers/session";
 const { productList, loaderProducts } = cartAction;
 function Filters(props) {
-    //let catID = getCookie("_TESTCOOKIE");
     let catID = props.catid;
-    //console.log(catID);
     const [filters, setFilters] = useState([]);
     const [total, setTotal] = useState(0);
     const [catState, setCatState] = useState(catID);
@@ -95,12 +92,12 @@ function Filters(props) {
 
 
             }
-            //props.loaderProducts(false);
+
             props.productList(productResult);
         }
         props.loaderProducts(false);
         setTotal(total)
-        //   props.productList(items);
+
     }
     return (
         <div className="col-sm-3">
@@ -144,7 +141,7 @@ function Filters(props) {
 }
 
 const mapStateToProps = (state) => {
-    //   console.log(state.Cart)
+
     let languages = '', filtering = {}, pageeSize = '';
     if (state && state.LanguageSwitcher) {
         languages = state.LanguageSwitcher.language

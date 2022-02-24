@@ -176,11 +176,7 @@ function SinglePost(props) {
                                             </div>
                                         </div>
                                     )}
-                                    {/* {!related.length && (
-                                        <div className="container">
-                                            <IntlMessages id="no_data" />
-                                        </div>
-                                    )} */}
+                                   
                                 </div>
                             </div>
                         </div>

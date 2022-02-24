@@ -1,43 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import moment from 'moment';
 import { dataTiles } from '../../../../redux/pages/vendorLogin';
 import { getCurrentMonth } from '../../../../components/utility/allutils';
-import { useIntl } from 'react-intl';
 import CircularProgressBar from './CircularProgress';
 
-function MyAnalysisCustomer(props) {
-    const intl = useIntl()
+
+function MyAnalysisCustomer(props) { 
     let currentDate = moment().endOf('month').format('MM/DD/YYYY');
     let oldDate = moment().startOf('month').format('MM/DD/YYYY');
     let quater = moment().quarter();
     let year = moment().year();
-    const [active, setActive] = useState(0);
-    const [showMonth, setShowMonth] = useState(true);
-    const [sowQuaters, setShowQuaters] = useState(false);
+    const [loader, setLoader] = useState(false);
     const [currentQuater, setCurrentQuater] = useState(quater);
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     const [quaterSlider, setQuaterSlider] = useState('')
     const [customerData, setCustomerData] = useState([]);
-    const [showYears, setShowYears] = useState(false);
+    const [showStates, setShowStates] = useState({ showYears: false, sowQuaters: false, showMonth: true, active: 0 });
     const [currentYear, setCurrentYear] = useState(year);
 
+    let data = []
+    data['all'] = 0;
+    data['newCustomer'] = 0;
+    data['repeatCustomer'] = 0;
     useEffect(() => {
         getDataTiles(oldDate, currentDate);
-        let data = []
-        data['all'] = 0;
-        data['newCustomer'] = 0;
-        data['repeatCustomer'] = 0;
+
         setCustomerData(data);
         return () => {
             setCustomerData([]);
         }
     }, [])
     async function getDataTiles(oldDate, currentDate) {
+        setLoader(true)
         let results: any = await dataTiles(oldDate, currentDate);
         if (results && results.data && results.data.length > 0) {
+            setLoader(false)
             let tiles_information = results?.data[0]?.tiles_information;
 
             let newCustomer = calculatePercentage(tiles_information?.customers?.one_time_customer, tiles_information?.customers?.total_orders);
@@ -47,10 +47,12 @@ function MyAnalysisCustomer(props) {
             data['all'] = tiles_information?.customers?.total_orders ? 100 : 0;
             data['newCustomer'] = newCustomer ? Math.ceil(newCustomer) : 0;
             data['repeatCustomer'] = repeatCustomer ? Math.ceil(repeatCustomer) : 0;
-            data['totalcustomer'] = tiles_information?.customers?.total_orders;
-            data['repeated_customer'] = tiles_information?.customers?.repeated_customer;
-            data['one_time_customer'] = tiles_information?.customers?.one_time_customer;
+            data['totalcustomer'] = tiles_information?.customers?.total_orders ? tiles_information?.customers?.total_orders : 0;
+            data['repeated_customer'] = tiles_information?.customers?.repeated_customer ? tiles_information?.customers?.repeated_customer : 0;
+            data['one_time_customer'] = tiles_information?.customers?.one_time_customer ? tiles_information?.customers?.one_time_customer : 0;
             setCustomerData(data)
+        } else {
+            setLoader(false)
         }
     }
 
@@ -61,26 +63,37 @@ function MyAnalysisCustomer(props) {
     const handleChange = (flag) => {
         let dates = [];
         if (flag === 0) {
-            setShowMonth(true)
-            setShowQuaters(false)
-            setShowYears(false);
+            setShowStates({ showYears: false, sowQuaters: false, showMonth: true, active: 0 })
+            setCurrentMonthKey(getCurrentMonth().num)
+            setCurrentMonth(getCurrentMonth().name)
             dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
+            setCustomerData(data)
+            setLoader(true)
             getDataTiles(dates['start'], dates['end'])
         } else if (flag === 1) {
-            setShowMonth(false)
-            setShowQuaters(true)
-            setShowYears(false);
-            handleQuater(currentQuater);
+            let quater = moment().quarter();
+            setCurrentQuater(quater)
+            setShowStates({ showYears: false, sowQuaters: true, showMonth: false, active: 1 })
+            setCustomerData(data)
+            setLoader(true)
+            let start = moment().quarter(quater).startOf('quarter').format('MMM');
+            let end = moment().quarter(quater).endOf('quarter').format('MMM');
+            let part = start + '-' + end;
+
+            let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
+            let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
+            getDataTiles(startOfMonth, endOfMonth);
+            setQuaterSlider(part);
         } else {
-            setShowMonth(false)
-            setShowQuaters(false)
-            setShowYears(true);
+            setCurrentYear(year)
+            setShowStates({ showYears: true, sowQuaters: false, showMonth: false, active: 2 })
+            setCustomerData(data)
+            setLoader(true)
             dates['start'] = moment().startOf('year').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('year').format('MM/DD/YYYY');
             getDataTiles(dates['start'], dates['end'])
-        }
-        setActive(flag)
+        }   
 
     }
     function handleQuater(quater) {
@@ -90,6 +103,8 @@ function MyAnalysisCustomer(props) {
 
         let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
         let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
+        setCustomerData(data)
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
         setQuaterSlider(part);
     }
@@ -106,7 +121,8 @@ function MyAnalysisCustomer(props) {
         const output = moment(input, "MM");
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
-
+        setCustomerData(data)
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -123,6 +139,8 @@ function MyAnalysisCustomer(props) {
         const output = moment(input, "MM");
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
+        setCustomerData(data)
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -147,6 +165,8 @@ function MyAnalysisCustomer(props) {
         let startOfMonth = '01/01/' + year;
         let endOfMonth = '12/31/' + year;
         setCurrentYear(year);
+        setCustomerData(data)
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -156,6 +176,8 @@ function MyAnalysisCustomer(props) {
         let startOfMonth = '01/01/' + year;
         let endOfMonth = '12/31/' + year;
         setCurrentYear(year);
+        setCustomerData(data)
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -167,12 +189,12 @@ function MyAnalysisCustomer(props) {
             <div className="row">
                 <div className="col-sm-12">
                     <ul className='filter-tiles'>
-                        <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
-                        <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
-                        <li><Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
+                        <li><Link to="#" className={showStates.active === 0 ? 'active' : ""}  onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
+                        <li><Link to="#" className={showStates.active === 1 ? 'active' : ""}  onClick={() => { handleChange(1) }}><IntlMessages id="quarter" /></Link></li>
+                        <li><Link to="#" className={showStates.active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
                     </ul>
 
-                    {showMonth && (
+                    {showStates.showMonth && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -181,7 +203,7 @@ function MyAnalysisCustomer(props) {
                             <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
                         </ul>
                     )}
-                    {sowQuaters && (
+                    {showStates.sowQuaters && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -190,7 +212,7 @@ function MyAnalysisCustomer(props) {
                             <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
                         </ul>
                     )}
-                    {showYears && (
+                    {showStates.showYears && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeftYear(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -211,42 +233,49 @@ function MyAnalysisCustomer(props) {
                         <h2>Customer Information</h2>
                         <p className='datap'>You can see Customer information chart here</p>
                         <DateChartFilters data="piechart" />
-                        <div className='row mb-4' style={{ columnCount: 3 }}>
-                            
-                            <div className='col-md-4'>
-                                <span><b>Total customers: {customerData?.['totalcustomer']}</b></span>
-                                <br />
-                                <div className='circularDataInner' >
-                                    <CircularProgressBar
-                                        strokeWidth="10"
-                                        sqSize="150"
-                                        percentage={customerData?.['all']} />
-                                </div>
+                        {loader && (
+                            <div className="checkout-loading text-center" >
+                                <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
                             </div>
-
-                            <div className='col-md-4'>
-                                <span><b>Persistant  customers: {customerData?.['repeated_customer']}</b></span>
-                                <br />
-                                <div className='circularDataInner' >
-                                    <CircularProgressBar
-                                        strokeWidth="10"
-                                        sqSize="150"
-                                        percentage={customerData?.['repeatCustomer']} />
+                        )}
+                        {customerData?.['all'] > 0 && (
+                            <div className='row mb-4' style={{ columnCount: 3 }}>
+                                <div className='col-md-4'>
+                                    <span><b>Total customers: {customerData?.['totalcustomer']}</b></span>
+                                    <br />
+                                    <div className='circularDataInner' >
+                                        <CircularProgressBar
+                                            strokeWidth="10"
+                                            sqSize="150"
+                                            percentage={customerData?.['all']} />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className='col-md-4'>
-                                <span><b>New  customers: {customerData?.['one_time_customer']}</b></span>
-                                <br />
-                                <div className='circularDataInner' >
-                                    <CircularProgressBar
-                                        strokeWidth="10"
-                                        sqSize="150"
-                                        percentage={customerData?.['newCustomer']} />
+                                <div className='col-md-4'>
+                                    <span><b>Persistant  customers: {customerData?.['repeated_customer']}</b></span>
+                                    <br />
+                                    <div className='circularDataInner' >
+                                        <CircularProgressBar
+                                            strokeWidth="10"
+                                            sqSize="150"
+                                            percentage={customerData?.['repeatCustomer']} />
+                                    </div>
                                 </div>
-                            </div>
 
-                        </div>
+                                <div className='col-md-4'>
+                                    <span><b>New  customers: {customerData?.['one_time_customer']}</b></span>
+                                    <br />
+                                    <div className='circularDataInner' >
+                                        <CircularProgressBar
+                                            strokeWidth="10"
+                                            sqSize="150"
+                                            percentage={customerData?.['newCustomer']} />
+                                    </div>
+                                </div>
+
+                            </div>
+                        )}
+                      {(customerData?.['all'] === 0 && !loader) ? <div className='text-center' >No data available</div> : ""}
                     </div>
                 </div>
             </div>

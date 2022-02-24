@@ -7,7 +7,6 @@ import Personal from './personal';
 import BestSeller from './bestSeller';
 import NewIn from './newIn';
 import WeChooseForYou from './weChooseForYou';
-import Magazine from './magazine';
 import BecomePartner from './becomePartner';
 import Footer from '../../../containers/partials/footer-new';
 import Header from '../../../containers/partials/headerMenu';
@@ -27,7 +26,6 @@ function HomePage(props) {
 
     useEffect(() => {
         let categoryNAME = categoryname === props.currentCAT ? props.currentCAT : categoryname === undefined ? 'women' : categoryname;
-        //console.log(categoryNAME)
         if (categoryNAME) {
             getData(categoryNAME);
         }
@@ -84,8 +82,6 @@ function HomePage(props) {
     )
 }
 const mapStateToProps = (state) => {
-    // console.log(state)
-
     let languages = '';
 
     if (state && state.LanguageSwitcher) {

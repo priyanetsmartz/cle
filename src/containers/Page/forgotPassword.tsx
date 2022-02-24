@@ -11,7 +11,7 @@ function ForgottenPassword(props) {
   let localData = localStorage.getItem('redux-react-session/USER_DATA');
   let localToken = JSON.parse((localData));
   const [deletePop, setDeletePop] = useState(false);
-  // console.log(localToken)
+
   const intl = useIntl();
   const [state, setState] = useState({
     email1: localToken && localToken.token_email ? localToken.token_email : ""
@@ -41,14 +41,12 @@ function ForgottenPassword(props) {
       let result: any = await SendMailForgotPass({ template: "email_reset", email: state.email1, websiteId: 1 });
       if (result?.data && !result.data?.message) {
         setShowSuccess(true)
-        // notification("success", "", intl.formatMessage({ id: "forgotpassmail" }));
         setState(prevState => ({
           ...prevState,
           email1: ""
         }));
         setIsShow(false);
       } else {
-        console.log(result.message)
         setState(prevState => ({
           ...prevState,
           email1: ""
@@ -85,9 +83,6 @@ function ForgottenPassword(props) {
 
     setError({ errors: error });
     return formIsValid;
-  }
-  const closePop = () => {
-    setDeletePop(false);
   }
 
 

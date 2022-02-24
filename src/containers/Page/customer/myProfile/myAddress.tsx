@@ -102,7 +102,7 @@ function MyAddress(props) {
             let obj: any = { ...custAddForm };
             if (obj.region_id === '') delete obj.region_id;
             obj.street = [obj.street];
-            console.log(obj.id, obj)
+      
             if (obj.id === 0) {
                 custForm.addresses.push(obj);
             } else {

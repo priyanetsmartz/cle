@@ -26,7 +26,6 @@ const CleRoute = ({ component: Component, auth, tokenSession, ...rest }) => (
 );
 
 function mapStateToProps(state) {
-    // console.log(state.session.user.token);
     return {
         auth: state.Auth.idToken,
         token: state.Auth && state.Auth.userInfo ? state.Auth.userInfo.group_id : "",

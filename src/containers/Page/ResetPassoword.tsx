@@ -90,7 +90,7 @@ function ResetPassword(props) {
             } else {
                 setIsShow(false);
                 notification("error", "", intl.formatMessage({ id: "tokenExpired" }));
-                // history.push("/");
+         
             }
         } else {
             setIsShow(false);

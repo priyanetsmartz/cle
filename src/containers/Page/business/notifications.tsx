@@ -1,21 +1,15 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 function Notifications(props) {
-    const userGroup = localStorage.getItem('token')
-    const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup == '4') ? true : false);
-    const [name, setName] = useState(localStorage.getItem('token_name'));
-    const history = useHistory();
     const key = props.match.params.tab;
     const [activeTab, setActiveTab] = useState('');
 
     useEffect(() => {
         setActiveTab(key);
     }, [key]);
-    
+
     return (
         <main>
             <section className="mt-5">
@@ -369,7 +363,6 @@ function Notifications(props) {
     )
 }
 const mapStateToProps = (state) => {
-    // console.log(state)
     return {}
 }
 

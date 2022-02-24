@@ -165,7 +165,7 @@ function Checkout(props) {
             // get cart total 
             cartTotal = await getCartTotal();
         } else {
-            //console.log('hetet')
+
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
                 cartItems = await getGuestCart(props.languages);
@@ -298,7 +298,7 @@ function Checkout(props) {
             addressData.addressInformation = addressInformation;
 
             let test: any = await setUserDeliveryAddress(addressData);
-            console.log(test)
+
             setLoaderOnCheckout(false)
             if (result?.data?.addresses?.length === 1) {
                 setCheckedData(prevState => ({
@@ -589,7 +589,7 @@ function Checkout(props) {
             delete shippingAddress['default_billing'];
             if (customer_id) {
                 custForm.addresses.push(obj);
-                console.log(obj)
+
                 let newAddress: any = await saveCustomerDetails({ customer: custForm });
 
                 delete shippingAddress['default_shipping'];
@@ -599,7 +599,7 @@ function Checkout(props) {
 
                 addressInformation.shippingAddress = shippingAddress;
                 address.addressInformation = addressInformation;
-                console.log(address)
+
                 result = await setUserDeliveryAddress(address);
 
                 if (newAddress.data) {
@@ -607,14 +607,14 @@ function Checkout(props) {
                 }
 
             } else {
-                //dkdkdk
+
                 props.shippingAddressState(shippingAddress)
                 delete shippingAddress['customer_id'];
                 delete shippingAddress['id'];
                 delete shippingAddress['default_shipping'];
                 addressInformation.shippingAddress = shippingAddress;
                 address.addressInformation = addressInformation;
-                // console.log(address)
+
                 result = await setGuestUserDeliveryAddress(address);
             }
             if (result && result.data && (result.data.message === '' || result.data.message === undefined)) {
@@ -662,7 +662,7 @@ function Checkout(props) {
             if (!customer_id) {
                 obj.email = state.email;
             }
-            // let shippingAddress = obj;
+
             let shippingAddress = {
                 customer_id: custId ? custId : 0,
                 firstname: itemsVal.shippingData['firstname'],
@@ -717,7 +717,7 @@ function Checkout(props) {
             }
 
             if (result?.data?.message === undefined || result?.data?.message === '') {
-                // here 
+
                 props.showPaymentMethods(result?.data?.payment_methods);
                 checkoutScreen();
                 toggleBillingAddressModal()
@@ -939,7 +939,7 @@ function Checkout(props) {
                 if (!props.guestBilling.firstname) {
                     setIsShow(false)
                     return notification("error", "", intl.formatMessage({ id: "addbillingaddress" }));
-                    // return false;
+
                 }
 
                 if (!props.guestShipp.firstname) {
@@ -1051,11 +1051,11 @@ function Checkout(props) {
         let orderPlace: any;
         if (customer_id) {
             let cartToken = localStorage.getItem('cartQuoteId');
-            console.log(cartToken)
+
             orderPlace = await placeUserOrder(props.languages, 'myfatoorah_gateway', cartToken);
         } else {
             let cartToken = localStorage.getItem('cartQuoteToken');
-            console.log(cartToken)
+
             orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway', cartToken);
         }
         if (orderPlace && orderPlace.data) {

@@ -128,7 +128,7 @@ function SearchResults(props) {
            
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-            //     console.log(result);
+     
             if (result?.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
@@ -168,7 +168,6 @@ function SearchResults(props) {
     const handlePageSize = (page: number) => {
         setPageSize(page)
         setCurrent(1)
-        //  props.setPageFilter(page)
     }
 
 
@@ -254,7 +253,7 @@ function SearchResults(props) {
         setclearFilter(false)
         let attribute_code = e.target.getAttribute("data-remove");
         let value = attribute_code === 'price' ? e.target.getAttribute("data-access") : e.target.value;
-        //  console.log(e.target.getAttribute("data-access"))
+      
         let catt = catID;
         let catdata = [];
         catdata['id'] = e.target.value;
@@ -419,8 +418,7 @@ function SearchResults(props) {
                                     <option value="" key="4" >{intl.formatMessage({ id: "sorting" })}</option>
                                     <option value={0} key="0" >{intl.formatMessage({ id: "filterNewestFirst" })}</option>
                                     <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                    <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>Our picks
-                                    {/* <option value={3} key="3" >{intl.formatMessage({ id: "filterourpicks" })}</option> */}
+                                    <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
                                 </select>
                             </div>
                         </div>
@@ -433,7 +431,6 @@ function SearchResults(props) {
                                     let url = parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus';
                                     return (
                                         <div className="col-md-4" key={item.id}>
-                                            {/* <Link to={'/product-details/' + item.sku}> */}
                                             <div className="product py-4">
                                                 <span className="off bg-favorite">
                                                     {!item.wishlist_item_id && (
@@ -448,16 +445,7 @@ function SearchResults(props) {
                                                 </span>
 
                                                 <div className="text-center">
-                                                    {/* {
-                                                        item.custom_attributes.map((attributes) => {
-                                                            if (attributes.attribute_code === 'image') {
-                                                                imageD = attributes.value;
-                                                            }
-                                                            if (attributes.attribute_code === 'short_description') {
-                                                                description = attributes.value;
-                                                            }
-                                                        })
-                                                    } */}
+                                                   
                                                     <Link to={'/product-details/' + item.sku}><img src={item.image.url} alt={item.name} width="200" /></Link>
                                                 </div>
                                                 <div className="about text-center">
@@ -465,20 +453,16 @@ function SearchResults(props) {
                                                     <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                     <div className="pricetag">{siteConfig.currency} {formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)}</div>
                                                 </div>
-                                                {/* {item.type_id === 'simple' && (
-                                            <div className="cart-button mt-3 px-2"> <button onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase">{isShow === item.id ? "Adding....." : "Add to cart"}</button>
-                                            </div>
-                                        )}
-                                        {item.type_id === 'configurable' && ( */}
+                                               
                                                 <div className="cart-button mt-3 px-2">
                                                     {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                         <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
                                                 </div>
-                                                {/* )} */}
+                                               
 
                                             </div>
-                                            {/* </Link> */}
+                                           
                                         </div>
                                     )
                                 })}
@@ -528,7 +512,7 @@ function SearchResults(props) {
 
 
 const mapStateToProps = (state) => {
-    //console.log(state)
+
     return {
         languages: state.LanguageSwitcher.language,
         token: state.session.user

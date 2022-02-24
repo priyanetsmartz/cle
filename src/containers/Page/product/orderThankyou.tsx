@@ -41,7 +41,7 @@ function OrderThankyou(props) {
         orderDetails['base_tax_amount'] = results.data ? results.data.base_tax_amount : 0;
         orderDetails['grand_total'] = results.data ? results.data.grand_total : 0;
         orderDetails['items'] = results.data ? results.data.items : {};
-        //console.log(orderDetails)
+      
         setOrderDetails(orderDetails);
     }
     return (
@@ -93,7 +93,7 @@ function OrderThankyou(props) {
                             <div className="order-delivery-address">
                                 <div className="Address-title">
                                     <span className="float-start"><IntlMessages id="order.deliveryAddress" /></span>
-                                    {/* <Link to="#" className="float-end">Change</Link> */}
+                                 
                                     <div className="clearfix"></div>
                                 </div>
                                 <p>
@@ -128,7 +128,7 @@ function OrderThankyou(props) {
                     {orderDetails['items'] && orderDetails['items'].length > 0 && (
                         <ul className="order-pro-list">
                             {orderDetails['items'].map((item, i) => {
-                                // console.log(item);
+                            
                                 return (<li key={i}>
                                     <div className="row">
                                         <div className="col-md-3">
@@ -140,7 +140,6 @@ function OrderThankyou(props) {
                                             <div className="pro-name-tag mb-5">
                                                 <div className="float-start">
                                                     <p><strong>{item.name}</strong></p>
-                                                    {/* <p>Web Strip &amp; gold PVD watch</p> */}
                                                 </div>
                                                 <Link to="#" className="float-end text-end order-pro-price">{siteConfig.currency}{item.original_price}</Link>
                                                 <div className="clearfix"></div>

@@ -8,16 +8,16 @@ import moment from 'moment';
 const { showSignin } = appAction;
 
 function OrderForm(props) {
-    //    let statuspop = getCookie('help-us-hide') === 'true' ? false : true;
+
     const [customerId, setCustomerId] = useState(props.token.cust_id);
     const [isSurvey, setIsSurvey] = useState(true);
 
-    // const [onLogin, setOnLogin] = useState(false);
+
     const [activeTab, setActiveTab] = useState(1);
     const [isSurveyEnd, setIsSurveyEnd] = useState(false);
-    const [isHidden, setIsHidden] = useState(false);
+
     const [loading, setloading] = useState(false);
-    // const [hidePersonal, setHidePersonal] = useState(statuspop);
+
     const [activeIndex, setActiveIndex] = useState(0);
 
     const [form, setForm] = useState({
@@ -64,9 +64,9 @@ function OrderForm(props) {
         let tokenCheck = props.token.id_token;
         let tokenCheckFilter = !props.helpusVal ? tokenCheck : props.helpusVal;
         if (!tokenCheckFilter) {
-            //  setOnLogin(false);
+
         } else {
-            //setOnLogin(true);
+
             setCustomerId(props.token.cust_id);
             setIsSurvey(true);
         }
@@ -77,8 +77,6 @@ function OrderForm(props) {
     })
 
     const optionHandler = async (optionIndex) => {
-        // if (!onLogin) return handleClick();
-
         const tempObj = {
             value: form.form_json[activeIndex][0].values[optionIndex].label,
             label: form.form_json[activeIndex][0].label,
@@ -86,7 +84,7 @@ function OrderForm(props) {
         }
         var formCode = props.language === 'english' ? 'checkout_process_feedback' : 'checkout_process_feedback_arabic';
         answers[form.form_json[activeIndex][0].name] = tempObj
-        console.log(answers)
+    
         setAnswers(answers);
         payload.answer.response_json = JSON.stringify(answers);
         payload.answer.form_id = form.form_id;
@@ -104,7 +102,6 @@ function OrderForm(props) {
             if (result?.data) {
                 setIsSurveyEnd(true);
                 setloading(false);
-                //  setCookie("help-us", customerId);
             }
         }
     }
@@ -157,9 +154,6 @@ function OrderForm(props) {
                                     })}
                                 </div>
                             </>}
-                            {/* <div className="no-worries">
-                                <h3><IntlMessages id="home.noWorries" /></h3>
-                            </div> */}
 
                         </div>
                     </div>

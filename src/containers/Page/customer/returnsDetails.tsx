@@ -107,14 +107,6 @@ function OrdersAndReturns(props) {
                                                     <div className="clearfix"></div>
                                                 </div>
                                             </div>
-                                            {/* <div className="col-md-12">
-                                                <select className="form-select" aria-label="Default select example">
-                                                    <option selected>Choose the reason</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
-                                                </select>
-                                            </div> */}
                                         </div>
                                     </li>
                                 )
@@ -129,7 +121,7 @@ function OrdersAndReturns(props) {
                             <div className="order-delivery-address">
                                 <div className="Address-title">
                                     <span className="float-start"><IntlMessages id = "order.deliveryAddress"/></span>
-                                    {/* <Link to="#" className="float-end">Change</Link> */}
+                                  
                                     <div className="clearfix"></div>
                                 </div>
                                 {returnDetails['address'] ?

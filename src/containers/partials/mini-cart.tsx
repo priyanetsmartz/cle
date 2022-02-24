@@ -17,7 +17,6 @@ function MiniCart(props) {
 
     useEffect(() => {
         if (props.items || !props.items) {
-            //  console.log('dddd')
             callGetCartItems()
         }
 
@@ -42,9 +41,6 @@ function MiniCart(props) {
             cartTotal = await getCartTotal();
             total = cartTotal && cartTotal.data ? cartTotal.data.grand_total : {};
 
-
-            //console.log(total) 
-
         } if (cartQuoteToken && cartQuoteId) {
             const cartQuoteToken = localStorage.getItem('cartQuoteToken');
             if (cartQuoteToken) {
@@ -58,7 +54,6 @@ function MiniCart(props) {
 
         let cartValues = {};
         cartValues['items'] = cartData;
-        //  console.log(cartValues);
         setCartItems(cartValues)
         setCartTotal(total);
 
@@ -74,7 +69,6 @@ function MiniCart(props) {
         }, 200)
     }
     const hideCart = () => {
-        // console.log('close')
         props.miniCartPopup(false)
     }
     return (
@@ -93,15 +87,13 @@ function MiniCart(props) {
                 <ul>
                     {cartItemsVal && cartItemsVal['items'] && cartItemsVal['items'].length ?
                         (
-                            // <p></p>
                             cartItemsVal['items'].slice(0, 4).map((item, i) => {
                                 return (
                                     <li key={i}>
                                         <Link to={'/product-details/' + item.sku}><span className="minicartprodt_img"><img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} className="imge-fluid" /></span>
                                             <span className="minicartprodt_name">
                                                 <h6 className="minicart_pname">{item.extension_attributes.brand}</h6>
-                                                <span className="minicart_pname">{item.name}</span>
-                                                {/* <span className="minicart_prodt_tag">Manager pattern bag</span> */}
+                                                <span className="minicart_pname">{item.name}</span>                                              
                                             </span>
                                         </Link>
                                     </li>
@@ -124,11 +116,6 @@ function MiniCart(props) {
                             (
                                 <Link to="/my-cart" className="btn btn-secondary" type="button"><IntlMessages id="cart.menu" /></Link>
                             ) : ""}
-
-                        {/* {cartItemsVal && cartItemsVal['items'] && cartItemsVal['items'].length ?
-                            (
-                                <Link to="/checkout" className="btn btn-secondary" type="button"><IntlMessages id="checkout.menu" /></Link>
-                            ) : ""} */}
                     </div>
                 </div>
             </div>
@@ -138,7 +125,6 @@ function MiniCart(props) {
 
 
 const mapStateToProps = (state) => {
-    //console.log(state.session.user);
     return {
         items: state.Cart.addToCartTask,
         showMiniCart: state.Cart.openMiniCartPop,

@@ -10,8 +10,7 @@ import {
     PieChart,
     Pie,
     Tooltip as Tool,
-    Cell,
-    Legend
+    Cell
 } from 'recharts';
 import { siteConfig } from '../../../../settings';
 
@@ -21,16 +20,14 @@ function MyAnalysisPayouts(props) {
     let oldDate = moment().startOf('month').format('MM/DD/YYYY');
     let quater = moment().quarter();
     let year = moment().year();
-    const [active, setActive] = useState(0);
-    const [showMonth, setShowMonth] = useState(true);
-    const [sowQuaters, setShowQuaters] = useState(false);
+    const [loader, setLoader] = useState(false);  
     const [currentQuater, setCurrentQuater] = useState(quater);
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     const [quaterSlider, setQuaterSlider] = useState('')
-    const [pieChart, setPieChart] = useState([]);
-    const [showYears, setShowYears] = useState(false);
+    const [pieChart, setPieChart] = useState([]);   
     const [currentYear, setCurrentYear] = useState(year);
+    const [showStates, setShowStates] = useState({ showYears: false, sowQuaters: false, showMonth: true, active: 0 });
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
     useEffect(() => {
@@ -41,35 +38,51 @@ function MyAnalysisPayouts(props) {
     }, [])
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
+        setLoader(true)
         if (results && results.data && results.data.length > 0) {
             let tiles_information = results?.data[0]?.tiles_information;
             setPieChart(tiles_information?.payout_information)
+            setLoader(false)
+        } else {
+
+            setLoader(false)
         }
     }
 
     const handleChange = (flag) => {
         let dates = [];
         if (flag === 0) {
-            setShowMonth(true)
-            setShowQuaters(false)
-            setShowYears(false);
+            setShowStates({ showYears: false, sowQuaters: false, showMonth: true, active: 0 })
+            setCurrentMonthKey(getCurrentMonth().num)
+            setCurrentMonth(getCurrentMonth().name)
             dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
+            setPieChart([])
+            setLoader(true)
             getDataTiles(dates['start'], dates['end'])
         } else if (flag === 1) {
-            setShowMonth(false)
-            setShowQuaters(true)
-            setShowYears(false);
-            handleQuater(currentQuater);
+            let quater = moment().quarter();
+            setCurrentQuater(quater)
+            setShowStates({ showYears: false, sowQuaters: true, showMonth: false, active: 1 })
+            setPieChart([])
+            setLoader(true)
+            let start = moment().quarter(quater).startOf('quarter').format('MMM');
+            let end = moment().quarter(quater).endOf('quarter').format('MMM');
+            let part = start + '-' + end;
+
+            let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
+            let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
+            getDataTiles(startOfMonth, endOfMonth);
+            setQuaterSlider(part);
         } else {
-            setShowMonth(false)
-            setShowQuaters(false)
-            setShowYears(true);
+            setCurrentYear(year)
+            setShowStates({ showYears: true, sowQuaters: false, showMonth: false, active: 2 })
+            setPieChart([])
+            setLoader(true)
             dates['start'] = moment().startOf('year').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('year').format('MM/DD/YYYY');
             getDataTiles(dates['start'], dates['end'])
-        }
-        setActive(flag)
+        }   
 
     }
     function handleQuater(quater) {
@@ -79,6 +92,8 @@ function MyAnalysisPayouts(props) {
 
         let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
         let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
+        setPieChart([]);
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
         setQuaterSlider(part);
     }
@@ -95,7 +110,8 @@ function MyAnalysisPayouts(props) {
         const output = moment(input, "MM");
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
-
+        setPieChart([]);
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -112,6 +128,8 @@ function MyAnalysisPayouts(props) {
         const output = moment(input, "MM");
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
+        setPieChart([]);
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -136,6 +154,8 @@ function MyAnalysisPayouts(props) {
         let startOfMonth = '01/01/' + year;
         let endOfMonth = '12/31/' + year;
         setCurrentYear(year);
+        setPieChart([]);
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -145,6 +165,8 @@ function MyAnalysisPayouts(props) {
         let startOfMonth = '01/01/' + year;
         let endOfMonth = '12/31/' + year;
         setCurrentYear(year);
+        setPieChart([]);
+        setLoader(true)
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -153,6 +175,7 @@ function MyAnalysisPayouts(props) {
         if (active)
             return (
                 <div className="custom-tooltip">
+                    <h5>Details</h5>
                     <p className="desc-tooltip">
                         <span className="value-tooltip"><b>Total Amount</b> <br />{siteConfig.currency} {payload[0].payload.total_payout_amount}</span>
                     </p>
@@ -177,12 +200,12 @@ function MyAnalysisPayouts(props) {
             <div className="row">
                 <div className="col-sm-12">
                     <ul className='filter-tiles'>
-                        <li><Link to="#" className={active === 0 ? 'active' : ""} onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
-                        <li><Link to="#" className={active === 1 ? 'active' : ""} onClick={() => { handleChange(1) }} ><IntlMessages id="quarter" /></Link></li>
-                        <li><Link to="#" className={active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
+                        <li><Link to="#" className={showStates.active === 0 ? 'active' : ""}  onClick={() => { handleChange(0) }} ><IntlMessages id="month" /></Link></li>
+                        <li><Link to="#" className={showStates.active === 1 ? 'active' : ""}  onClick={() => { handleChange(1) }}><IntlMessages id="quarter" /></Link></li>
+                        <li><Link to="#" className={showStates.active === 2 ? 'active' : ""} onClick={() => { handleChange(2) }} ><IntlMessages id="year" /></Link></li>
                     </ul>
 
-                    {showMonth && (
+                    {showStates.showMonth && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeft(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -191,7 +214,7 @@ function MyAnalysisPayouts(props) {
                             <p className='rightarrow' onClick={() => { handleChangeRight(1) }}> <i className="fa fa-caret-right"></i> </p>
                         </ul>
                     )}
-                    {sowQuaters && (
+                    {showStates.sowQuaters && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeftQuater(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -200,7 +223,7 @@ function MyAnalysisPayouts(props) {
                             <p className='rightarrow' onClick={() => { handleChangeRightQuater(1) }}> <i className="fa fa-caret-right"></i> </p>
                         </ul>
                     )}
-                    {showYears && (
+                    {showStates.showYears && (
                         <ul className='monthsname pagination justify-content-center align-items-center'>
                             <p className='leftarrow' onClick={() => { handleChangeLeftYear(1) }}> <i className="fa fa-caret-left"></i> </p>
                             {
@@ -222,16 +245,22 @@ function MyAnalysisPayouts(props) {
                         <p className='datap'>You can see payout information chart here</p>
                         <DateChartFilters data="piechart" />
                         <div className="row mb-4" style={{ columnCount: 3 }}>
+                            {loader && (
+                                <div className="checkout-loading text-center" >
+                                    <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                </div>
+                            )}
                             {pieChart?.length > 0 && (
-                                <ResponsiveContainer width="100%" height={250}>
+                                <ResponsiveContainer width="100%" height={300}>
                                     <PieChart height={250}>
+
                                         <Pie
                                             data={pieChart}
                                             cx="50%"
                                             cy="50%"
                                             outerRadius={100}
-                                            isAnimationActive={false}
-                                            fill="#8884d8"
+                                            fill="#8884d8"                                            
+                                            labelLine={false}
                                             dataKey="total_payout_amount"
                                             label={({
                                                 cx,
@@ -239,12 +268,11 @@ function MyAnalysisPayouts(props) {
                                                 midAngle,
                                                 innerRadius,
                                                 outerRadius,
-                                                total_payout_amount,
                                                 percent,
                                                 index
-                                            }) => {
+                                            }: any) => {
                                                 const RADIAN = Math.PI / 180;
-                                                const radius = 25 + innerRadius + (outerRadius - innerRadius);
+                                                const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
                                                 const x = cx + radius * Math.cos(-midAngle * RADIAN);
                                                 const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -252,12 +280,11 @@ function MyAnalysisPayouts(props) {
                                                     <text
                                                         x={x}
                                                         y={y}
-                                                        fill="#8884d8"
+                                                        fill="white"
                                                         textAnchor={x > cx ? "start" : "end"}
                                                         dominantBaseline="central"
                                                     >
-
-                                                        {pieChart[index].po_created_at} ({siteConfig.currency}{total_payout_amount})
+                                                        {`${(percent * 100).toFixed(0)}%`}
                                                     </text>
                                                 );
                                             }}>
@@ -269,7 +296,7 @@ function MyAnalysisPayouts(props) {
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}
-                            {pieChart?.length === 0 ? <div className='text-center' >No data available</div> : ""}
+                            {(pieChart?.length === 0 && !loader) ? <div className='text-center' >No data available</div> : ""}
                         </div>
                     </div>
                 </div>

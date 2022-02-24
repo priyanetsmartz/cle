@@ -54,7 +54,7 @@ function MyReturnsComplaints(props) {
         }
 
         if (dataObj && dataObj.status_list && Object.keys(dataObj.status_list).length > 0) {
-            console.log(dataObj.status_list)
+  
             setStatusOptions(dataObj.status_list)
         }
 
@@ -70,7 +70,6 @@ function MyReturnsComplaints(props) {
     }
 
     const datePickerCallback = async (start, end, label) => {
-        //console.log(moment(start).format("MM/DD/YYYY"), moment(end).format("MM/DD/YYYY"), label);
         let from = moment(start).format("MM-DD-YYYY"), to = moment(end).format("MM-DD-YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({
@@ -102,7 +101,7 @@ function MyReturnsComplaints(props) {
     }
 
     const getOrdersBySearchTerm = async (e) => {
-        console.log(e.target.value)
+
         if (e.target.value.length >= 3) {
             setTimeout(() => {
                 setSearchTerm(e.target.value)

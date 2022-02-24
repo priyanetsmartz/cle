@@ -7,10 +7,9 @@ function CheckoutSidebar(props) {
         checkData: {}, items: {}
     });
     useEffect(() => {
-      //  console.log(props.sidebarData)
-        // console.log(props.sidebarData.checkData, props.sidebarData.items)
+    
         SetItems({ checkData: props.sidebarData.checkData, items: props.sidebarData.items });
-        // checkoutScreen();
+      
 
         return () => {
             // componentwillunmount in functional component.
@@ -29,9 +28,7 @@ function CheckoutSidebar(props) {
                                 <Link to={'/product-details/' + item.sku}><span className="order-pro_img"><img src={item.extension_attributes.item_image} alt="minicart" className="imge-fluid" /></span>
                                     <span className="order-pro_name">
                                         <span className="order-pro_pname">{item.name}</span>
-                                        {/* <span className="order-pro_prodt_tag">Manager pattern bag</span> */}
                                         <br /><IntlMessages id="cart.qty" /> {item.qty}
-                                        {/* <br />One Size */}
                                     </span>
                                 </Link>
                             </li>)
@@ -53,7 +50,7 @@ function CheckoutSidebar(props) {
 
 
 const mapStateToProps = (state) => {
-//console.log(state)
+
     return {
 
     }

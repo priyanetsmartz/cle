@@ -38,7 +38,7 @@ function MyReturns(props) {
             setLoaderReturns(false);
             setReturn(res);
             setReturnPagination(Math.ceil(returns.data.total_count / pageSize));
-        }else{
+        } else {
             setLoaderReturns(false);
         }
     }
@@ -156,30 +156,32 @@ function MyReturns(props) {
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        {
-                                                            item && item.items && item.items.length > 0 && (
-                                                                <div className="prodcut_catg">
-                                                                    {item.items && (item.items.slice(0, 2).map((img, i) => {
-                                                                        return (
-                                                                            <div className="product_photo" key={i}>
-                                                                                <img src={img} className="img-fluid" alt="" />
-                                                                            </div>
-                                                                        )
-                                                                    }))}
-
-                                                                    {item.items.length > 2 && (
-                                                                        <div className="more_product">
+                                                        <div className="prodcut_catg">
+                                                            {
+                                                                item?.items?.length > 0 && item?.items.slice(0, 2).map((image, index) => {
+                                                                    if (item?.items.slice(0, 2).length === index + 1) {
+                                                                        return (<div className="more_product">
                                                                             <Link to="#">
-                                                                                <img src={item.items[2]} className="img-fluid" alt="" />
+                                                                                <img src={image} className="img-fluid" alt="" />
                                                                                 <div className="overlay_img"></div>
-                                                                                <span className="more_pro">{item.items.length - 2}</span>
+                                                                                <span className="more_pro">{item?.items?.length-1 >0 ?item?.items?.length-1: ""}</span>
                                                                             </Link>
                                                                         </div>
-                                                                    )
+                                                                        )
+                                                                    } else {
+                                                                        return (
+                                                                            <div className="product_photo" key={index}>
+                                                                                <img src={image} className="img-fluid" alt="" />
+                                                                            </div>
+
+                                                                        )
                                                                     }
-                                                                </div>
-                                                            )
-                                                        }
+
+                                                                })
+                                                            }
+
+
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-12">

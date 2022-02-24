@@ -113,14 +113,7 @@ function Header(props) {
         };
     }, []);
 
-    const handleTopMenuClick = (urlKey, id) => {
-        SetActiveCat(urlKey)
-        props.setCatSearch(id)
-        props.setCurrentCat(urlKey)
-        setMobileMenu(!mobileMenu);
-    }
-
-
+  
 
 
     const showAccountFxn = () => {
@@ -146,58 +139,9 @@ function Header(props) {
         setMobileMenu(!mobileMenu);
     }
 
-    const handlesigninClickMobile = (e) => {
-        e.preventDefault();
-        props.showSignin(true);
-    }
-
-    const handleMenuClickMob = (e, id) => {
-        setMobileMenu(false);
-        setActiveMobileMenu('');
-        setActiveMobileMenuLevel2('');
-        setActiveMobileMenuLevel3('');
-    }
-    const stopFunction1 = (e) => {
-        e.preventDefault();
-        let iddd = document.getElementById(e.target.id);
-        // iddd.classList.add("minus");
-        let activity = activeMobileMenu === e.target.id ? '' : e.target.id;
-        if (activity === '') {
-            iddd.classList.remove("minus");
-        } else {
-            iddd.classList.add("minus");
-        }
-        setActiveMobileMenu(activity);
-        setActiveMobileMenuLevel2('');
-        setActiveMobileMenuLevel3('');
-    }
-    const stopFunction2 = (e) => {
-        e.preventDefault();
-        let iddd = document.getElementById(e.target.id);
-
-        let activity = activeMobileMenuLevel2 === e.target.id ? '' : e.target.id;
-        if (activity === '') {
-            iddd.classList.remove("minus");
-        } else {
-            iddd.classList.add("minus");
-        }
-        setActiveMobileMenuLevel2(activity);
-        setActiveMobileMenuLevel3('');
-        // props.showSignin(true);
-    }
-    const stopFunction3 = (e) => {
-        e.preventDefault();
-        let iddd = document.getElementById(e.target.id);
-        // iddd.classList.add("minus");
-        let activity = activeMobileMenuLevel3 === e.target.id ? '' : e.target.id;
-        if (activity === '') {
-            iddd.classList.remove("minus");
-        } else {
-            iddd.classList.add("minus");
-        }
-        setActiveMobileMenuLevel3(activity);
-        // props.showSignin(true);
-    }
+  
+  
+ 
 
     return (
         <div>

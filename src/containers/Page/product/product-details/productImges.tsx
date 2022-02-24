@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import homeVideo from "../../../../image/Website1440px.mp4"
 
 const ProductImages = (props) => {
     let featuredImage = props.productImages ? props.productImages[0] : "";
@@ -13,9 +12,7 @@ const ProductImages = (props) => {
 
     }, [props.productImages])
     const changeImg = (i) => {
-        // console.log(productImage[i])
         setFullSizedImg(productImage[i]);
-        // console.log(fullSizedImg.extension_attributes.video_content.video_url)
     }
 
     const scrolldown = () => {

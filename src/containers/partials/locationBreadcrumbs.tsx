@@ -134,7 +134,7 @@ function Breadcrumbs(props) {
                             if (local === "" || local === "settings" || local === vendorIdprev) {
                                 return "";
                             } else {
-                                //  console.log(local)
+                           
                                 if (local === 'product-details' || local === 'products' || local === 'product-details-preview') {
                                     return (
                                         ''

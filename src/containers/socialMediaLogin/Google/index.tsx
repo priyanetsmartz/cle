@@ -52,7 +52,7 @@ function GoogleLoginButton(props) {
 
     async function fetchMyAPI(userInfo) {
         let result: any = await loginApi.getAuthRegister(userInfo.email);
-        //  console.log(result)
+  
         var jsonData = result && result.data && result.data.length > 0 ? result.data[0] : [];
         if (result && result.data && result.data.length > 0) {
             let id_token = jsonData.new_token;

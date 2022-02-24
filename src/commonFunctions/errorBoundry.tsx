@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 class ErrorBoundary extends Component {
-    constructor(props:string) {
+    constructor(props: string) {
         super(props);
         this.state = { hasError: false };
     }

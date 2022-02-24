@@ -19,7 +19,6 @@ function Faq(props) {
 
 	async function getData() {
 		let results: any = await getFaqlabels(props.languages, siteConfig.pageSize, siteConfig.questionLimitFaq);
-		//console.log(results.data, Object.keys(results.data).length);
 		if (results && results.data && Object.keys(results.data).length > 0 && results.data.items) {
 			setFaqData(results.data.items)
 		}
@@ -28,7 +27,7 @@ function Faq(props) {
 
 	return (
 		<section>
-			 <FaqHeader />
+			<FaqHeader />
 			<section className="faq-topics">
 				<div className="container">
 					<div className="row">

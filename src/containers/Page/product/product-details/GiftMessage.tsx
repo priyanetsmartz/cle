@@ -17,7 +17,6 @@ function GiftMessage(props) {
     const intl = useIntl();
     let history = useHistory();
     useEffect(() => {
-        // console.log(props)
         return () => {
             setIsShow(false);
 
@@ -217,7 +216,7 @@ function GiftMessage(props) {
 }
 
 const mapStateToProps = (state) => {
-    //  console.log(state)
+
     return {
         items: state.Cart.openGiftBox,
         product: state.Cart.items,

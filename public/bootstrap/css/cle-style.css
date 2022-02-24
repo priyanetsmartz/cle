@@ -8997,7 +8997,22 @@ p.sliderupper {
     position: relative;
     width: 120px;
 }
-
+.datasubsribe {
+    padding: 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    margin: 0 auto;
+    width: 528px;
+    border: 1px solid;
+}
+.datasubsribe .error {
+    font-size: 75px;
+}
+.datasubsribe .success {
+    font-size: 75px;
+    color: green;
+}
 .filter-tiles li a {
     font: normal normal 500 20px/25px Monument Extended;
     color: #000;
@@ -9449,11 +9464,12 @@ p.sliderupper {
     background-color: transparent;
 }
 
-.blog-sec-main .cate-name {
+.blog-sec-main .cate-name a {
     color: #2e2baa;
     font: normal normal 600 13px/24px Lato;
     text-transform: uppercase;
     margin-top: 10px;
+    text-decoration: none;
 }
 
 .mag-blog-desc {

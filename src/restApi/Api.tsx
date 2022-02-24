@@ -9,7 +9,6 @@ const processResponse = true;
 class AdminApi {
     //Request Method
     async request(name, postData, method, queryString) {
-        //Check Internet connection is in working mode
         const connection = navigator.onLine ? true : false;
         if (!connection) {
             Notification(
@@ -27,10 +26,6 @@ class AdminApi {
 
         let authtoken = '';
         let token = await sessionService.loadSession().then(session => { return session.id_token }).catch(err => console.log(''))
-
-        //  console.log(postData, token)
-        // const token = apiConfig.adminToken;
-       // console.log(token)
         authtoken = `Bearer ${token}`;
         return new Promise(function (resolve, reject) {
             var url = baseUrl + name

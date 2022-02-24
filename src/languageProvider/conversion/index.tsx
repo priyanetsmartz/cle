@@ -30,12 +30,6 @@ export function getValues(enMessages) {
     keys.forEach((key, index) => {
       obj[key] = translatedDAta[index + 1];
     });
-    console.log(
-      langsNm[ii],
-      translatedDAta.length,
-      keys.length,
-      '\n',
-      JSON.stringify(obj, null, 2)
-    );
+  
   });
 }

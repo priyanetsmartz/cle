@@ -162,7 +162,6 @@ function HeaderMenu(props) {
     const stopFunction1 = (e) => {
         e.preventDefault();
         let iddd = document.getElementById(e.target.id);
-        // iddd.classList.add("minus");
         let activity = activeMobileMenu === e.target.id ? '' : e.target.id;
         if (activity === '') {
             iddd.classList.remove("minus");
@@ -185,12 +184,10 @@ function HeaderMenu(props) {
         }
         setActiveMobileMenuLevel2(activity);
         setActiveMobileMenuLevel3('');
-        // props.showSignin(true);
     }
     const stopFunction3 = (e) => {
         e.preventDefault();
         let iddd = document.getElementById(e.target.id);
-        // iddd.classList.add("minus");
         let activity = activeMobileMenuLevel3 === e.target.id ? '' : e.target.id;
         if (activity === '') {
             iddd.classList.remove("minus");
@@ -198,7 +195,6 @@ function HeaderMenu(props) {
             iddd.classList.add("minus");
         }
         setActiveMobileMenuLevel3(activity);
-        // props.showSignin(true);
     }
 
     return (

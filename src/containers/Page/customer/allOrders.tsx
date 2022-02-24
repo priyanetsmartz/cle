@@ -285,7 +285,7 @@ function OrdersAndReturns(props) {
                                         <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
                                     </div>
                                 )}
-                                {console.log(orders)}
+                               
                                 {orders && orders.length > 0 ?
                                     <>
                                         {orders.map((items, i) => {
@@ -349,24 +349,32 @@ function OrdersAndReturns(props) {
                                                                         </div>
 
                                                                         <div className="col-sm-6">
+                                                                          
                                                                             <div className="prodcut_catg">
                                                                                 {
-                                                                                    item?.items?.length > 0 && item?.items.slice(0,1).map((image, index) => {
-                                                                                        return (
-                                                                                            <div className="product_photo" key={index}>
-                                                                                                <img src={image?.extension_attributes?.item_image} className="img-fluid" alt="" />
+                                                                                    item?.items?.length > 0 && item?.items.slice(0, 2).map((image, index) => {
+                                                                                        if (item?.items.slice(0, 2).length === index + 1) {
+                                                                                            return (<div className="more_product">
+                                                                                                <Link to="#">
+                                                                                                    <img src={image?.extension_attributes?.item_image} className="img-fluid" alt="" />
+                                                                                                    <div className="overlay_img"></div>
+                                                                                                    <span className="more_pro">{item?.items?.length }</span>
+                                                                                                </Link>
                                                                                             </div>
-                                                                                        )
+                                                                                            )
+                                                                                        } else {
+                                                                                            return (
+                                                                                                <div className="product_photo" key={index}>
+                                                                                                    <img src={image?.extension_attributes?.item_image} className="img-fluid" alt="" />
+                                                                                                </div>
+
+                                                                                            )
+                                                                                        }
+
                                                                                     })
                                                                                 }
-                                                                             
-                                                                                <div className="more_product">
-                                                                                    <Link to="#">
-                                                                                        <img src={item.items[2]?.extension_attributes?.item_image} className="img-fluid" alt="" />
-                                                                                        <div className="overlay_img"></div>
-                                                                                        <span className="more_pro">{item.items.length}</span>
-                                                                                    </Link>
-                                                                                </div>
+
+
                                                                             </div>
                                                                         </div>
                                                                     </div>

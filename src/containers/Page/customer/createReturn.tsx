@@ -196,7 +196,6 @@ function CreateReturn(props) {
     }
 
     const handleProductSelect = (prodID) => {
-        console.log(prodID);
     }
     const selectReason = (event) => {
         let attribute_code = event.target.getAttribute("data-attribute");

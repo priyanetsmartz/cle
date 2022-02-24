@@ -1,8 +1,4 @@
-// import { getDefaultPath } from '../../helpers/urlSync';
 import actions, { getView } from './actions';
-
-// const preKeys = getDefaultPath();
-
 const initState = {
   collapsed: window.innerWidth > 1220 ? false : true,
   view: getView(window.innerWidth),

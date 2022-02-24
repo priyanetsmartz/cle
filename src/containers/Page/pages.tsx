@@ -32,7 +32,6 @@ function AllPages(props) {
                         <meta name="keywords" content={pagesData?.meta_keywords} />
                         <meta property="og:title" content={pagesData?.meta_title} />
                         <meta property="og:description" content={pagesData?.meta_description} />
-                        {/* <meta property="og:image" content="$OG_IMAGE" /> */}
                     </Helmet>
                 </HelmetProvider>
                     <figure className="text-center page-head">

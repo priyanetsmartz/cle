@@ -5,10 +5,10 @@ export function* postCommentRequest() {
 
   yield takeEvery("POST_COMMENTS", function* (payload) {
     try {
-    //  console.log('SAGA-POST', payload);
+   
 
     } catch (e) {
-      //console.log(e.data);
+   
     }
   });
 }

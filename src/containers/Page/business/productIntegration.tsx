@@ -72,7 +72,7 @@ function ProductIntegration(props) {
     const handleOnChange = async (e) => {
         e.preventDefault();
         let attribute_code = e.target.getAttribute("data-attribute");
-        console.log(e.target.value)
+
         setSetEcom(e.target.value)
         if (e.target.value === "option-2") {
             setShowEcom(true)
@@ -123,7 +123,7 @@ function ProductIntegration(props) {
             "label": "vendor_email",
             "type": "textinput"
         }
-        console.log(formData)
+
         payload.answer.response_json = JSON.stringify(formData);
         payload.answer.form_id = form.form_id;
         payload.answer.store_id = form.store_id;
@@ -131,7 +131,6 @@ function ProductIntegration(props) {
         payload.answer.form_code = 'product_integration';
 
         let result: any = await SaveAnswers(payload);
-        //console.log(result);
         if (result?.data && result?.data?.answer_id) {
             notification("success", "", intl.formatMessage({ id: "productintegration" }));
         } else {

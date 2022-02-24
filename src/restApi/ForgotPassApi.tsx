@@ -10,7 +10,6 @@ const processResponse = true;
 class ForgotPassApi {
     //Request Method
     async  request(name, postData, method, queryString) {
-        //Check Internet connection is in working mode
         const connection = navigator.onLine ? true : false;
         if (!connection) {
             Notification(
@@ -50,7 +49,6 @@ class ForgotPassApi {
                     }
                 })
                 .catch(function (err) {
-                    // reject(err.response);
                     resolve(err.response);
                 });
         });

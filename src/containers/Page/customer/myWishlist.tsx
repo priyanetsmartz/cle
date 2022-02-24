@@ -125,7 +125,7 @@ function MyWishList(props) {
     async function handleCart(id: number, sku: string) {
         setIsShow(id);
         let cartResults: any = await handleCartFxn(id, sku);
-        console.log(cartResults)
+   
         if (cartResults.item_id) {
             props.addToCartTask(true);
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));

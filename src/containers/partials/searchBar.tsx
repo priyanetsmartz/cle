@@ -79,7 +79,6 @@ function SearchBar(props) {
 
     const searchwithCategory = async (e) => {
         const { value } = e.target;
-        //console.log(searchKeyword)
         SetSelectedCat(value)
         if (searchKeyword) {
             window.location.href = `/search/${searchKeyword}/${value}`;
@@ -141,8 +140,7 @@ function SearchBar(props) {
                                                     <span className="minicartprodt_name">
                                                         <h6 className="minicart_pname">{description}</h6>
                                                         <span className="minicart_prodt_tag">{item.name}</span>
-                                                        {/* <span className="minicart_prodt_tag" dangerouslySetInnerHTML={{ __html: description }} /> */}
-
+                                                       
                                                     </span>
                                                 </Link>
                                             </li>
@@ -165,7 +163,7 @@ function SearchBar(props) {
 }
 
 const mapStateToProps = (state) => {
-    // console.log(state)
+   
     return {
         languages: state.LanguageSwitcher.language,
         categoryD: state.Cart.catIdd

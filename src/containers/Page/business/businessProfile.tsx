@@ -133,7 +133,6 @@ function BusinessProfile(props) {
     async function getVendor() {
         let vendor = await sessionService.loadUser()
         if (vendor && vendor.type === "vendor") {
-            // setVendorForm(vendor);
         } else {
             window.location.href = '/';
         }
@@ -255,7 +254,6 @@ function BusinessProfile(props) {
     const saveBankDetails = async (e) => {
         e.preventDefault()
         bankDetails.companyName = businessDetailsForm.businessCompanyName;
-        console.log(bankDetails)
         if (validateBankDetails()) {
             setIsShow(true)
             bankDetails.vendorId = props?.token?.vendor_id;
@@ -355,7 +353,6 @@ function BusinessProfile(props) {
     const validateBankDetails = () => {
         let error = {};
         let formIsValid = true;
-        console.log(bankDetails.companyName)
         if (!bankDetails.companyName) {
             formIsValid = false;
             error['companyName'] = intl.formatMessage({ id: "companynamefirst" });
@@ -364,7 +361,6 @@ function BusinessProfile(props) {
             formIsValid = false;
             error["bankName"] = intl.formatMessage({ id: "bankname" });
         }
-        console.log(bankDetails.accountNumber.length)
         if (bankDetails.accountNumber && (bankDetails.accountNumber.length < 12 || bankDetails.accountNumber.length > 16)) {
             formIsValid = false;
             error['accountNumber'] = intl.formatMessage({ id: "accountnumberlength" });
@@ -378,7 +374,6 @@ function BusinessProfile(props) {
     }
 
     const validateBussinessDetails = () => {
-        console.log(businessDetailsForm)
         let error = {};
         let formIsValid = true;
 
@@ -535,7 +530,6 @@ function BusinessProfile(props) {
 
             let result: any = await vendorResetEmail(req);
             if (result && result.data && !result.data.message) {
-                console.log(result.data);
                 notification("success", "", intl.formatMessage({ id: "newEmailUpdatenotification" }));
                 setChangeEmail({
                     confirmNewEmail: "",

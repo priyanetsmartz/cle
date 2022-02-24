@@ -34,7 +34,6 @@ const VendorRoute = ({ component: Component, token, ...rest }) => (
 
 
 function mapStateToProps(state) {
-  //console.log(state.session)
   return {
     vendordata: state.Auth.vendorr,
     token: state.session.user

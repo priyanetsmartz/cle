@@ -50,10 +50,10 @@ function FaqHeader(props) {
         let results: any = await faqSearch(lang, value, siteConfig.pageSize);
         if (results.data.items && results.data.items.length > 0) {
             SetNothingFound("")
-            // SetSearchText(value)
+
             SetAutoSuggestions(results.data.items)
         } else {
-            // SetSearchText(value)
+   
             SetNothingFound("yes")
             SetAutoSuggestions([])
         }
@@ -89,10 +89,7 @@ function FaqHeader(props) {
                                     </div>
                                 ) : (nothingFound ? <div className="nothing_found">
                                     <IntlMessages id="no_data" />
-                                </div> : "")}
-                                {/* <div className="nothing_found">
-                                {nothingFound}
-                            </div> */}
+                                </div> : "")}                            
                             </div>
                         </div>
                     </div>

@@ -39,7 +39,6 @@ const cartReducer = (state = initState, action) => {
         case actions.OPEN_GIFT_BOX:
             return { ...state, openGiftBox: action.isOpen };
         case actions.ADD_TO_WISHLIST_TASK_NEw:
-            //  console.log('sadff', action.isShow, state);
             return { ...state, addToWishlist: action.isShow };
         case actions.ACCOUNT_SECTION:
             return { ...state, openAccountPop: action.isShow };
