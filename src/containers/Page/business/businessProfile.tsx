@@ -716,9 +716,6 @@ function BusinessProfile(props) {
                         </div>
                         <div className="col-sm-3 mt-4">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary edit" onClick={openBussinessModel}>
-                                    <IntlMessages id="myaccount.edit" />
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -771,9 +768,6 @@ function BusinessProfile(props) {
 
                         <div className="col-sm-3 mt-4">
                             <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary edit" onClick={openMyDetails}>
-                                    <IntlMessages id="myaccount.edit" />
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -811,9 +805,6 @@ function BusinessProfile(props) {
                                 <div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div>
                                 <div className="address-action">
-                                    <Link to="#" className="edit_btn" onClick={() => openAddressModal()}>
-                                        <IntlMessages id="myaccount.edit" />
-                                    </Link>
                                 </div>
                             </div>
                         </>)}
@@ -858,10 +849,7 @@ function BusinessProfile(props) {
                             </div>
                         </div>
                         <div className="col-sm-3">
-                            <div className="d-grid ">
-                                <button type="button" className="btn btn-secondary edit" onClick={openBankDetailsModal}>
-                                    <IntlMessages id="myaccount.edit" />
-                                </button>
+                            <div className="d-grid ">                               
                             </div>
                         </div>
                     </div>

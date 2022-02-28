@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { useHistory } from "react-router";
 import cartAction from "../../../../redux/cart/productAction";
 import { getCookie } from "../../../../helpers/session";
 import cardPlaceholder from '../../../../image/cards.png';
@@ -21,6 +22,7 @@ const { openGiftBoxes, addToCartTask, addToWishlistTask } = cartAction;
 const { showSignin } = appAction;
 function CartItemPage(props) {
     const intl = useIntl();
+    let history = useHistory();
     const lastLocation = useLastLocation();
     let path = lastLocation?.pathname ? lastLocation?.pathname : "/";
     const [shopPath, setShopPath] = useState(path);
@@ -150,7 +152,7 @@ function CartItemPage(props) {
         }
     }
 
-    async function handleRemove(item_id) {
+    async function handleRemove(item_id, wishlistAction = '') {
         setIsShow(item_id)
         let customer_id = props.token.cust_id;
         let deleteCartItem: any
@@ -160,15 +162,21 @@ function CartItemPage(props) {
             deleteCartItem = await removeItemFromGuestCart(item_id);
         }
         if (deleteCartItem.data === true) {
+
             props.addToCartTask(true);
-            callGetCartItems()
-            notification("success", "", intl.formatMessage({ id: "removedcart" }));
+            if (wishlistAction === 'whishlist') {
+                history.push("/customer/wishlist");
+            } else {
+                callGetCartItems()
+                notification("success", "", intl.formatMessage({ id: "removedcart" }));
+            }
+
         } else {
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
             setIsShow(0)
         }
     }
-   
+
     async function handleChangeQty(e, data) {
         setValue(data.item_id);
         let value = parseInt(e.target.value);
@@ -200,8 +208,8 @@ function CartItemPage(props) {
         props.addToCartTask(true);
         notification("success", "", intl.formatMessage({ id: "cartupdated" }));
     }
-    
-    async function handleWhishlist(sku: any) {
+
+    async function handleWhishlist(sku: any, item_id) {
         if (token) {
             setIsWishlist(sku)
             let result: any = await addWhishlistBySku(sku);
@@ -209,7 +217,7 @@ function CartItemPage(props) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
                 notification("success", "", result?.data[0]?.message);
-                callGetCartItems()
+                handleRemove(item_id, 'whishlist')
             } else {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
@@ -217,7 +225,7 @@ function CartItemPage(props) {
                 callGetCartItems()
             }
         } else {
-            let vendorCheck =  await checkVendorLoginWishlist();
+            let vendorCheck = await checkVendorLoginWishlist();
             if (vendorCheck?.type === 'vendor') {
                 notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
                 return false;
@@ -307,7 +315,7 @@ function CartItemPage(props) {
                                                                             <p>{item.desc}</p>
                                                                             <span className="off bg-favorite">
                                                                                 {!item.wishlist_item_id && (
-                                                                                    <Link to="#" onClick={() => { handleWhishlist(item['sku']) }} className="float-end text-end">{isWishlist === item['sku'] ? "Adding....." : <IntlMessages id="cart.addWishlist" />}</Link>
+                                                                                    <Link to="#" onClick={() => { handleWhishlist(item['sku'], item.item_id) }} className="float-end text-end">{isWishlist === item['sku'] ? "Adding....." : <IntlMessages id="cart.addWishlist" />}</Link>
                                                                                 )}
                                                                                 {item.wishlist_item_id && (
                                                                                     <Link to="#" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} className="float-end text-end">{delWishlist === parseInt(item.wishlist_item_id) ? "Removing....." : <IntlMessages id="cart.removeWishlist" />}</Link>

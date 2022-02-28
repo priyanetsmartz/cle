@@ -164,7 +164,7 @@ function VendorOrderDetail(props) {
                             <div className="return-det">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <h5><IntlMessages id="order.orderNo" />: {orderNumber} <p className='status_class'>(<IntlMessages id="paymentstatus" />: {paymentStatus})</p></h5>
+                                        <h5><IntlMessages id="order.orderNo" />: {orderNumber} </h5>
                                     </div>
                                     {statusCode === "0" && (
                                         <div className="col-sm-12">
