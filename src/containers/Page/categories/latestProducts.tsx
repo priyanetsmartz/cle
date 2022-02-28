@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
     addWhishlist, getProductByCategory, getWhishlistItemsForUser, removeWhishlist
@@ -70,7 +69,10 @@ function LatestProducts(props) {
 
     useEffect(() => {
         getProducts(props.ctId);
-
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        }
     }, [location, props.ctId]);
 
     async function getProducts(catID) {

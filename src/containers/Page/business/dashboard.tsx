@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { getCookie, setCookie } from '../../../helpers/session';
-import { GetDataOfCategory } from '../../../redux/pages/magazineList';
+import { GetAnouncements } from '../../../redux/pages/magazineList';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import DataTable from 'react-data-table-component';
@@ -22,7 +22,7 @@ function Dashboard(props) {
     const language = getCookie('currentLanguage');
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
-    let quater = moment().quarter();
+
     let lang = props.languages ? props.languages : language;
     const [items, setItems] = useState([]);
     const [pagination, setPagination] = useState(1);
@@ -251,7 +251,7 @@ function Dashboard(props) {
 
     }
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
-        let result: any = await GetDataOfCategory(languages, cat, page, sortBy, sortByValue, 2);
+        let result: any = await GetAnouncements(languages, cat, page, sortBy, sortByValue, 2);
         let paginationSize = result && result.data && result.data.length > 0 ? result.data[0].total_page : 0;
         setPagination(paginationSize);
         setItems(result?.data);
@@ -302,7 +302,7 @@ function Dashboard(props) {
                                         <ul className="pagination justify-content-center align-items-center">
                                             <li
                                                 className={`previousAnno ${page === 1 ? 'disabled' : ''}`}>
-                                                <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className="page-link" aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
+                                                <Link onClick={(e) => { goToPreviousPage(e); }}  to="#" className={`page-link pagenextAnno ${page === 1 ? 'disabled' : ''}`} aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
                                             </li>
                                             <li className='pageofpage'><IntlMessages id="page" /> <span className='active'>{page}</span> <IntlMessages id="of" /> {pagination}</li>
                                             <li className={`nextAnno ${page === pagination ? 'disabled' : ''}`} >

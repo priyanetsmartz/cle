@@ -80,10 +80,11 @@ function SinglePost(props) {
     const stats = readingTime(post.full_content);
     return (
         <div style={{ opacity: opacityVal }}>
-
-            <div className="main-banner">
-                <img style={imgStyle} src={post.post_thumbnail} alt="post-thumbnail" />
-            </div>
+            {post?.post_thumbnail && (
+                <div className="main-banner">
+                    <img style={imgStyle} src={post.post_thumbnail} alt="post-thumbnail" />
+                </div>
+            )}
             <section>
                 <div className="container">
                     <div className="row">
@@ -162,12 +163,12 @@ function SinglePost(props) {
                                                         <div className="col-md-4" key={i}>
                                                             <div className="blog-sec-main">
                                                                 <div className="post-effect">
-																<div className="mag-blog-pic-2"><Link to={`/magazine/${item.post_id}`}><img src={item.list_thumbnail} alt="post-thumbnail" /></Link></div>
-                                                                <div className="cate-name">{item.categroy}</div>
-                                                                <h3 className="mag-blog-title-2 my-2"><Link to={`/magazine/${item.post_id}`}> {item.title}</Link></h3>
-                                                                <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
-                                                                <div className="mag-blog-desc"> <div dangerouslySetInnerHTML={{ __html: post.short_content }} /></div>
-																</div>
+                                                                    <div className="mag-blog-pic-2"><Link to={`/magazine/${item.post_id}`}><img src={item.list_thumbnail} alt="post-thumbnail" /></Link></div>
+                                                                    <div className="cate-name">{item.categroy}</div>
+                                                                    <h3 className="mag-blog-title-2 my-2"><Link to={`/magazine/${item.post_id}`}> {item.title}</Link></h3>
+                                                                    <div className="cate-date mb-2">{moment(item.published_at).format('LL')}</div>
+                                                                    <div className="mag-blog-desc"> <div dangerouslySetInnerHTML={{ __html: post.short_content }} /></div>
+                                                                </div>
                                                                 <Link to={`/magazine/${item.post_id}`} className="signup-btn mx-auto "><IntlMessages id="magazine.read_more" /></Link>
                                                             </div>
                                                         </div>
@@ -176,7 +177,7 @@ function SinglePost(props) {
                                             </div>
                                         </div>
                                     )}
-                                   
+
                                 </div>
                             </div>
                         </div>

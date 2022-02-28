@@ -26,7 +26,7 @@ function MeasuringGuide(props) {
                 <div className="CLE_product">
                     <div className="CLE_guide">
                         <div className="measur_guide">
-                            <h1 className="measuring_guide">Measuring Guide</h1>
+                            <h1 className="measuring_guide"><IntlMessages id="product.mesguideHead" /></h1>
                             <Link to="#" onClick={measuringGuideHanler} className="cross_icn"> <i className="fas fa-times"></i></Link>
                             <div className="view_size"><Link to="#" onClick={sizeGuideModalHandler}><IntlMessages id="product.sizeguide" /></Link></div>
                             <div dangerouslySetInnerHTML={{ __html: props.measuringDetailsg }} />

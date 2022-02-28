@@ -20,7 +20,7 @@ export async function dataTiles(from, to) {
 }
 
 export async function getVendorDetails(language: string) {
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     return adminToken.request(`/rest/all/V1/vendor/personaldetails?vendorId=${vendorId}`, "", "GET", "")
 }
@@ -28,7 +28,7 @@ export async function getVendorDetails(language: string) {
 export async function getVendorProducts(language: string, status = '', from = '', to = '', type = '', sortValue) {
 
     var storeId = language === 'english' ? 'en' : 'ar';
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let statusCriteria = ``;
     if (status) {
@@ -40,7 +40,7 @@ export async function getVendorProducts(language: string, status = '', from = ''
     return adminToken.request(`/rest/${storeId}/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]=4&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=udropship_vendor&searchCriteria[filter_groups][1][filters][0][value]=${vendorId}&searchCriteria[filter_groups][1][filters][0][condition_type]=eq${statusCriteria}&searchCriteria[sortOrders][0][field]=${sortValue.sortBy}&searchCriteria[sortOrders][0][direction]=${sortValue.sortByValue}&fields=items[sku,name,id,price,status,custom_attributes,created_at]`, "", "GET", "");
 }
 
-export async function getVendorOrders(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
+export async function getVendorOrders(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any = 'desc') {
     var storeId = language === 'english' ? '3' : '2';
     let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
@@ -61,12 +61,15 @@ export async function getVendorOrders(language: string, pageSize: number, status
     if (sortOrders !== '') {
         queryString += "&sortOrder=" + sortOrders;
     }
+    if (pageSize) {
+        queryString += "&pageSize=" + pageSize;
+    }
 
     return adminToken.request(`rest/all/V1/vendor/vendorOrderCollection?${queryString}`, "", "GET", "");
 }
 
 export async function closePopup(flag: number) {
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let payload = {
         vendor_id: vendorId,
@@ -102,7 +105,7 @@ export function removeProduct(deleteInfo) {
 
 export async function searchProducts(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
     var storeId = language === 'english' ? '3' : '2';
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor?.vendor_id;
 
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
@@ -121,6 +124,9 @@ export async function searchProducts(language: string, pageSize: number, status:
     if (sortOrders !== '') {
         queryString += "&sortOrder=" + sortOrders;
     }
+    if (pageSize) {
+        queryString += "&pageSize=" + pageSize;
+    }
 
     return adminToken.request(`rest/all/V1/product/searchProducts?${queryString}`, "", "GET", "")
 
@@ -128,7 +134,7 @@ export async function searchProducts(language: string, pageSize: number, status:
 
 export async function getVendorReturns(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
     var storeId = language === 'english' ? '3' : '2';
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
 
@@ -147,12 +153,13 @@ export async function getVendorReturns(language: string, pageSize: number, statu
     if (sortOrders !== '') {
         queryString += "&sortBy=grand_total&sortOrders=" + sortOrders;
     }
+
     return adminToken.request(`rest/all/V1/vendor/returnCollection?${queryString}`, "", "GET", "");
 }
 
 export async function getPayoutOrders(po_date_from, po_date_to, po_status, po_fromPrice, po_toPrice, page_size, sort_order, search) {
 
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId;
     if (po_date_from !== null && po_date_from !== '')
@@ -178,7 +185,7 @@ export async function getReturnDetail(id: number) {
 }
 
 export async function getOrderDetail(lang: string, id: number, sort_order: string) {
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let queryString = "vendorId=" + vendorId + "&orderId=" + id
     if (sort_order != null && sort_order != '')
@@ -187,8 +194,7 @@ export async function getOrderDetail(lang: string, id: number, sort_order: strin
 }
 
 export async function getPayoutDetails(payoutId) {
-    //var storeId = language === 'english' ? 3 : 2;
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/vendor/vendorPayoutDetailPage?vendorId=${vendorId}&pId=` + payoutId, "", "GET", "")
 }
@@ -203,19 +209,19 @@ export async function getProductIntegrationSample(language: string) {
 }
 
 export async function returnProcessVendor(rmaId: number, status: string, comment: string = "") {
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/vendor/returnConfirmationStatus?rmaId=${rmaId}&status=${status}&vendorId=${vendorId}&comment=${comment}`, "", "GET", "");
 }
 
 export async function getInvoice(payoutId: number) {
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     return adminToken.request(`rest/all/V1/vendor/vendorPayoutPdf?vendorId=${vendorId}&payoutId=${payoutId}`, "", "GET", "");
 }
 
 export async function changeOrderSatus(orderId: number, statusOrder: string, statusOrderComment: string) {
-   let vendor: any = await checkVendorLogin();
+    let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
     let data = {
         vendorId: vendorId,

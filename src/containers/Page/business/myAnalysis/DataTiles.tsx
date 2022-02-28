@@ -31,10 +31,10 @@ function MyAnalysisDataTiles(props) {
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
         if (results && results.data && results.data.length > 0) {
-            
+
             setDataTilesData(results?.data[0])
-        }else{
-            
+        } else {
+
         }
     }
 
@@ -47,14 +47,14 @@ function MyAnalysisDataTiles(props) {
             dates['start'] = moment().startOf('month').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('month').format('MM/DD/YYYY');
             setDataTilesData([])
-            
+
             getDataTiles(dates['start'], dates['end'])
         } else if (flag === 1) {
             let quater = moment().quarter();
             setCurrentQuater(quater)
             setShowStates({ showYears: false, sowQuaters: true, showMonth: false, active: 1 })
             setDataTilesData([])
-            
+
             let start = moment().quarter(quater).startOf('quarter').format('MMM');
             let end = moment().quarter(quater).endOf('quarter').format('MMM');
             let part = start + '-' + end;
@@ -67,7 +67,7 @@ function MyAnalysisDataTiles(props) {
             setCurrentYear(year)
             setShowStates({ showYears: true, sowQuaters: false, showMonth: false, active: 2 })
             setDataTilesData([])
-            
+
             dates['start'] = moment().startOf('year').format('MM/DD/YYYY');
             dates['end'] = moment().endOf('year').format('MM/DD/YYYY');
             getDataTiles(dates['start'], dates['end'])
@@ -83,7 +83,7 @@ function MyAnalysisDataTiles(props) {
         let startOfMonth = moment().quarter(quater).startOf('quarter').format('MM/DD/YYYY');
         let endOfMonth = moment().quarter(quater).endOf('quarter').format('MM/DD/YYYY');
         setDataTilesData([])
-        
+
         getDataTiles(startOfMonth, endOfMonth);
         setQuaterSlider(part);
     }
@@ -101,7 +101,7 @@ function MyAnalysisDataTiles(props) {
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
         setDataTilesData([])
-        
+
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -119,7 +119,7 @@ function MyAnalysisDataTiles(props) {
         let startOfMonth = output.startOf('month').format('MM/DD/YYYY');
         let endOfMonth = output.endOf('month').format('MM/DD/YYYY')
         setDataTilesData([])
-        
+
         getDataTiles(startOfMonth, endOfMonth);
     }
 
@@ -143,7 +143,7 @@ function MyAnalysisDataTiles(props) {
         let startOfMonth = '01/01/' + year;
         let endOfMonth = '12/31/' + year;
         setCurrentYear(year);
-        
+
         setDataTilesData([])
         getDataTiles(startOfMonth, endOfMonth);
     }
@@ -154,7 +154,7 @@ function MyAnalysisDataTiles(props) {
         let startOfMonth = '01/01/' + year;
         let endOfMonth = '12/31/' + year;
         setCurrentYear(year);
-        
+
         setDataTilesData([])
         getDataTiles(startOfMonth, endOfMonth);
     }
@@ -207,22 +207,20 @@ function MyAnalysisDataTiles(props) {
                     <div className="col-sm-12">
                         <h2><IntlMessages id="datatiles" /></h2>
                         <DateChartFilters data="datatiles" />
-                     
-                        
+
+
                         <div className="row mb-4" style={{ columnCount: 3 }}>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
-                                    <h5><IntlMessages id="ordertotal" />
-                                        <OverlayTrigger
-                                            delay={{ hide: 450, show: 300 }}
-                                            overlay={(props) => (
-                                                <Tooltip id="" {...props} >
-                                                    <IntlMessages id="totalordersplaces" />
-                                                </Tooltip>
-                                            )}
-                                            placement="right"
-                                        ><i className="fas fa-info-circle" ></i>
-                                        </OverlayTrigger></h5>
+                                    <h5><IntlMessages id="ordertotal" /><OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                <IntlMessages id="totalordersplaces" />                               </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger></h5>
                                     <div className="stats">
                                         <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
                                     </div>
@@ -230,8 +228,7 @@ function MyAnalysisDataTiles(props) {
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
-                                    <h5><IntlMessages id="order.orders" />
-                                        <OverlayTrigger
+                                    <h5><IntlMessages id="order.orders" /><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
                                                 <Tooltip id="" {...props} >
@@ -249,7 +246,7 @@ function MyAnalysisDataTiles(props) {
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
-                                    <h5><IntlMessages id="payments" />  <OverlayTrigger
+                                    <h5><IntlMessages id="payments" /><OverlayTrigger
                                         delay={{ hide: 450, show: 300 }}
                                         overlay={(props) => (
                                             <Tooltip id="" {...props} >

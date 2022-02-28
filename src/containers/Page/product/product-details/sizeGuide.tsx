@@ -26,7 +26,7 @@ function SizeGuide(props) {
             <div className="col-sm-12">
                 <div className="size_details">
                     <div className="size_tbl">
-                        <h1>Size Guide</h1>
+                        <h1><IntlMessages id="product.sizeguideHead" /></h1>
                         <Link className="cross_icn" to="#" onClick={sizeGuideModalHandler}> <i className="fas fa-times"></i></Link>
                         <div className="view_measuring">
                             <Link to="#" onClick={measuringGuideHanler}><IntlMessages id="product.measuringGuide" /> </Link>

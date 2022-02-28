@@ -8,6 +8,9 @@ function HtmlContent(props) {
 
     useEffect(() => {
         getData();
+        return () => {
+            SetPagesData({ title: '', content: '' })
+        }
     }, [props.languages, props.currentId, props.currentCAT]);
 
     const getData = async () => {

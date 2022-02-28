@@ -60,8 +60,7 @@ function HeaderMenu(props) {
 
     useEffect(() => {
         let localToken: any = getLocatstorageUser();
-        let tokken = localToken ? localToken.token : undefined;
-        console.log(tokken)
+        let tokken = localToken ? localToken.token : undefined;     
         if (signup === 'true' && member === 'prive' && tokken === undefined) {
             props.openSignUp(true);
             props.userType(4);

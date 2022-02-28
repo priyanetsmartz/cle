@@ -56,9 +56,10 @@ function MagazineCategory(props) {
         let featuredResult: any = await FeaturedList(language);
         setItems(result?.data);
         let dataTotal = result?.data && result?.data?.length > 0 ? result?.data[0]?.total_page : 0;
+        console.log(result?.data, featuredResult?.data)
         setPagination(dataTotal);
         setFeaturedItems(featuredResult?.data);
-        setlatestItem(result?.data?.slice(-1)[0]);  
+        setlatestItem(result?.data?.slice(-1)[0]);
         setOpacity(1);
     }
 
@@ -216,7 +217,8 @@ function MagazineCategory(props) {
             </div>
             {latest && (
                 <div className="mag-top-banner">
-                    <Link to={"/magazine/" + latest.post_id} ><img src={latest.post_thumbnail} alt="post_thumbnail" /></Link>
+                    {latest?.post_thumbnail && (<Link to={"/magazine/" + latest.post_id} ><img src={latest.post_thumbnail} alt="post_thumbnail" /></Link>
+                    )}
                     <div className="banner-content text-center">
                         <h4>{latest.title}</h4>
                         <div className="cat-date">{latest.categroy}<span>{moment(latest.published_at).format('LL')}</span></div>
@@ -260,7 +262,7 @@ function MagazineCategory(props) {
             )}
             {!featured.length && (
                 <div className="container">
-                   <p className="no-data"> <IntlMessages id="no_data" /></p>
+                    <p className="no-data"> <IntlMessages id="no_data" /></p>
                 </div>
             )}
 
@@ -372,7 +374,7 @@ function MagazineCategory(props) {
                                         <span className="error">{errors.errors["email"]}</span>
                                     </form>
                                     <div className="terms-text text-center">
-                                        <IntlMessages id="newsletter.foot" /> <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link> <IntlMessages id="signup.and" /> <Link to="/privacy-policy"><IntlMessages id="signup.privacy_policy" />bkjbk</Link>. <IntlMessages id="newsletter.optout" />hbjhb
+                                        <IntlMessages id="newsletter.foot" /> <Link to="/terms-and-conditions"><IntlMessages id="signup.terms_conditions" /></Link> <IntlMessages id="signup.and" /> <Link to="/privacy-policy"><IntlMessages id="signup.privacy_policy" /></Link>. <IntlMessages id="newsletter.optout" />
                                     </div>
 
                                     <div className="join-cle-bottom-2">

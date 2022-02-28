@@ -240,7 +240,7 @@ function MyAnalysisCustomer(props) {
                         )}
                         {customerData?.['all'] > 0 && (
                             <div className='row mb-4' style={{ columnCount: 3 }}>
-                                <div className='col-md-4'>
+                                <div className='col-md-4 text-center'>
                                     <span><b>Total customers: {customerData?.['totalcustomer']}</b></span>
                                     <br />
                                     <div className='circularDataInner' >
@@ -251,7 +251,7 @@ function MyAnalysisCustomer(props) {
                                     </div>
                                 </div>
 
-                                <div className='col-md-4'>
+                                <div className='col-md-4 text-center'>
                                     <span><b>Persistant  customers: {customerData?.['repeated_customer']}</b></span>
                                     <br />
                                     <div className='circularDataInner' >
@@ -262,7 +262,7 @@ function MyAnalysisCustomer(props) {
                                     </div>
                                 </div>
 
-                                <div className='col-md-4'>
+                                <div className='col-md-4 text-center'>
                                     <span><b>New  customers: {customerData?.['one_time_customer']}</b></span>
                                     <br />
                                     <div className='circularDataInner' >

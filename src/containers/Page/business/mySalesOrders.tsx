@@ -18,7 +18,7 @@ import { formatprice } from '../../../components/utility/allutils';
 function MySalesOrders(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
-    const [sortOrder, setSortOrder] = useState('');
+    const [sortOrder, setSortOrder] = useState('desc');
     const [range, setRange] = useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState();
     const [searchTerm, setSearchTerm] = useState('');
@@ -37,7 +37,8 @@ function MySalesOrders(props) {
     };
     async function getDataOfOrders(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
         setIsLoading(true);
-        let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder)
+        let pageSize = props.pageData ? props.pageData : "";
+        let result: any = await getVendorOrders(props.languages, pageSize, status, from, to, term, dateFrom, dateTo, sortorder)
         let dataObj = result && result.data && result.data.length > 0 && result.data[0] && result.data[0].OrderArray ? result.data[0].OrderArray : [];
         let dataLListing = []
         if (dataObj.length > 0) {
@@ -62,7 +63,7 @@ function MySalesOrders(props) {
         getDataOfOrders(value, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const datePickerCallback = async (start, end, label) => {    
+    const datePickerCallback = async (start, end, label) => {
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({
@@ -128,7 +129,6 @@ function MySalesOrders(props) {
             selector: row => row.status,
             sortable: true,
             cell: row => (
-                // <span className='green'>{row.status}</span>
 
                 <div>
                     {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({ id: row.status })}</span> : ""}
@@ -149,108 +149,111 @@ function MySalesOrders(props) {
 
 
     return (
-        <div className="col-sm-9">
+        <div className={props.pageData ? "col-sm-12" : "col-sm-9"}>
             <section className="my_profile_sect mb-4">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <h1><IntlMessages id="salesOrder.title" /></h1>
-                            <p><IntlMessages id="salesOrder.description.1" /><br /><IntlMessages id="salesOrder.description.2" /></p>
-                        </div>
-                    </div>
-                    <div className="range_slider">
-                        <div className="range_inner">
+                    {!props.pageData && (
+                        <>
                             <div className="row">
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
-                                    <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="status" /></span>
-                                        <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
-                                            <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                            <option value="0">{intl.formatMessage({ id: "product.pending" })}</option>
-                                            <option value="1">{intl.formatMessage({ id: "Shipped" })}</option>
-                                            <option value="3">{intl.formatMessage({ id: "readytoship" })}</option>
-                                            <option value="4">{intl.formatMessage({ id: "onhold" })}</option>
-                                            <option value="6">{intl.formatMessage({ id: "canceled" })}</option>
-                                            <option value="7">{intl.formatMessage({ id: "delivered" })}</option>
-                                            <option value="9">{intl.formatMessage({ id: "acknowledged" })}</option>
-                                            <option value="11">{intl.formatMessage({ id: "returned" })}</option>
-                                        </select>
-                                    </div>
+                                <div className="col-sm-12">
+                                    <h1><IntlMessages id="salesOrder.title" /></h1>
+                                    <p><IntlMessages id="salesOrder.description.1" /><br /><IntlMessages id="salesOrder.description.2" /></p>
                                 </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
-                                    <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="order.date" /></span>
-                                        <DateRangePicker
-                                            onCallback={datePickerCallback}
-                                            initialSettings={{
-                                                startDate: moment(),
-                                                endDate: moment(),
-                                                ranges: {
-                                                    'All': "",
-                                                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                                                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                                                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                                                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                                                },
-                                                locale: {
-                                                    format: "DD/MM/YYYY"
-                                                }
-
-                                            }}
-                                        >
-                                            <input type="text" className="form-control" />
-                                        </DateRangePicker>
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
-                                    <div className="form-group">
-                                        <span className="form-label"><IntlMessages id="order.price" /></span>
-                                        <div className='pricerangeouter' >
-                                            <InputNumber
-                                                min={1}
-                                                max={20000}
-                                                readOnly={true}
-                                                value={range.low}
-                                                onChange={getOrdersByPrice}
-                                            />
-                                            <span>-</span>
-                                            <InputNumber
-                                                min={1}
-                                                max={20000}
-                                                readOnly={true}
-                                                value={range.high}
-                                                onChange={getOrdersByPrice}
-                                            />
+                            </div>
+                            <div className="range_slider">
+                                <div className="range_inner">
+                                    <div className="row">
+                                        <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
+                                            <div className="form-group">
+                                                <span className="form-label"><IntlMessages id="status" /></span>
+                                                <select className="form-select" aria-label="Default select example" value={status} onChange={getOrdersByStatus}>
+                                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                                    <option value="0">{intl.formatMessage({ id: "product.pending" })}</option>
+                                                    <option value="1">{intl.formatMessage({ id: "Shipped" })}</option>
+                                                    <option value="3">{intl.formatMessage({ id: "readytoship" })}</option>
+                                                    <option value="4">{intl.formatMessage({ id: "onhold" })}</option>
+                                                    <option value="6">{intl.formatMessage({ id: "canceled" })}</option>
+                                                    <option value="7">{intl.formatMessage({ id: "delivered" })}</option>
+                                                    <option value="9">{intl.formatMessage({ id: "acknowledged" })}</option>
+                                                    <option value="11">{intl.formatMessage({ id: "returned" })}</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
-                                    <div className="form-group">
-                                        <span className="form-label">&nbsp;</span>
-                                        <div className="search_results">
-                                            <img src={searchIcon} alt="" className="me-1 search_icn" />
-                                            <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                        <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
+                                            <div className="form-group">
+                                                <span className="form-label"><IntlMessages id="order.date" /></span>
+                                                <DateRangePicker
+                                                    onCallback={datePickerCallback}
+                                                    initialSettings={{
+                                                        startDate: moment(),
+                                                        endDate: moment(),
+                                                        ranges: {
+                                                            'All': "",
+                                                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                                                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                                                            'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                                            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                                                        },
+                                                        locale: {
+                                                            format: "DD/MM/YYYY"
+                                                        }
+
+                                                    }}
+                                                >
+                                                    <input type="text" className="form-control" />
+                                                </DateRangePicker>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
+                                            <div className="form-group">
+                                                <span className="form-label"><IntlMessages id="order.price" /></span>
+                                                <div className='pricerangeouter' >
+                                                    <InputNumber
+                                                        min={1}
+                                                        max={20000}
+                                                        readOnly={true}
+                                                        value={range.low}
+                                                        onChange={getOrdersByPrice}
+                                                    />
+                                                    <span>-</span>
+                                                    <InputNumber
+                                                        min={1}
+                                                        max={20000}
+                                                        readOnly={true}
+                                                        value={range.high}
+                                                        onChange={getOrdersByPrice}
+                                                    />
+                                                </div>
+                                                <Slider range max={20000} defaultValue={[range.low, range.high]} onAfterChange={getOrdersByPrice} />
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
+                                            <div className="form-group">
+                                                <span className="form-label">&nbsp;</span>
+                                                <div className="search_results">
+                                                    <img src={searchIcon} alt="" className="me-1 search_icn" />
+                                                    <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} className="form-control me-1" onChange={getOrdersBySearchTerm} />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="float-right">
-                            <div className="sort_by">
-                                <div className="sortbyfilter">
-                                    <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
-                                        <option value="">{intl.formatMessage({ id: "sorting" })}</option>
-                                        <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
-                                        <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-                                    </select>
+                            <div className="row">
+                                <div className="float-right">
+                                    <div className="sort_by">
+                                        <div className="sortbyfilter">
+                                            <select value={sortOrder} onChange={sortOrdersHandler} className="form-select customfliter" aria-label="Default select example">
+                                                <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                                <option value="asc">{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                                                <option value="desc">{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
+                        </>
+                    )}
 
                     <DataTable
                         progressPending={isLoading}

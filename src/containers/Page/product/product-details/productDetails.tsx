@@ -79,7 +79,7 @@ function ProductDetails(props) {
         return () => {
             props.openGiftBoxes(0);
         }
-    }, [sku, props.languages, props.token])
+    }, [sku, props.languages])
     useEffect(() => {
         let giftBox = props.items.Cart.openGiftBox === 0 ? false : true;
         setIsGiftMessage(giftBox)
@@ -112,7 +112,7 @@ function ProductDetails(props) {
         setSlectedAttribute(selected);
         let selectChild = childrenProducts[option - 1];
         let projectSingle = {};
-        let description = "", special_price: 0, short, shipping_and_returns: "", tags = [];
+        let description = "", special_price: 0, short, shipping_and_returns: "", tags = [], img = "";
 
 
         selectChild.custom_attributes.map((attributes) => {
@@ -137,6 +137,10 @@ function ProductDetails(props) {
             if (attributes.attribute_code === "sale" && attributes.value === "1") {
                 tags.push("Sale");
             }
+            if (attributes.attribute_code === "image") {
+                img = attributes.value;
+            }
+
 
         })
 
@@ -150,6 +154,7 @@ function ProductDetails(props) {
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = productDetails['is_in_stock']
+        projectSingle['img'] = img;
         setproductDetails(projectSingle);
 
     }
@@ -251,6 +256,7 @@ function ProductDetails(props) {
                     img = attributes.value;
                 }
 
+
             })
         }
         projectSingle['id'] = result.data.id;
@@ -267,11 +273,12 @@ function ProductDetails(props) {
         projectSingle['img'] = img;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
         projectSingle['is_in_stock'] = result?.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
-
+        let jsonBread = result?.data?.extension_attributes?.category_path ? JSON.parse(result?.data?.extension_attributes?.category_path) : [];
+        projectSingle['breadcrumbsArray'] = jsonBread;
         setOpacity(1)
         setProdId(projectSingle['id']);
         setTagsState(tags)
-       
+
         setProductImages(result?.data?.media_gallery_entries?.length > 0 ? result?.data?.media_gallery_entries : projectSingle['img'])
 
         let qtyy = result?.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
@@ -404,6 +411,22 @@ function ProductDetails(props) {
             getProductDetailsFxn(sku)
         }
     }
+    const getAnimalsContent = catsName => {
+        let content = [];
+       
+        for (let i = 0; i <= catsName?.length; i++) {
+            if (i === 0)
+                content.push(<li className="breadcrumb-item" key={i}>{catsName[0]?.url_key ? <Link to={"/category/" + catsName[0].url_key}>{catsName[0].name}</Link> : catsName[0].name}</li>)
+            if (i === 1)
+                content.push(<li className="breadcrumb-item" key={i}>{catsName[1]?.url_key ? <Link to={"/products/" + catsName[0].url_key + "/" + catsName[1].url_key}>{catsName[1].name}</Link> : catsName[1].name}</li>)
+            if (i === 2)
+                content.push(<li className="breadcrumb-item" key={i}>{catsName[2]?.url_key ? <Link to={"/products/" + catsName[0].url_key + "/" + catsName[1].url_key + "/" + catsName[2].url_key}>{catsName[2].name}</Link> : catsName[2].name}</li>)
+            if (i === 3)
+                content.push(<li className="breadcrumb-item" key={i}>{catsName[3]?.url_key ? <Link to={"/products/" + catsName[0].url_key + "/" + catsName[1].url_key + "/" + catsName[2].url_key + "/" + catsName[3].url_key}>{catsName[3].name}</Link> : catsName[3].name}</li>)
+
+        }
+        return content;
+    };
     return (
         <>
             <main>
@@ -412,26 +435,14 @@ function ProductDetails(props) {
                         <div className="row">
                             <div className="col-sm-12">
                                 <ol className="breadcrumb">
-                                    {locationBread?.length > 0 && (
+
+                                    {productDetails?.['breadcrumbsArray']?.length > 0 && (
                                         <>
                                             <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                                            {
-                                                locationBread.map((item, i) => {
-                                                    if (item === "" || item === 'products' || item === 'category') return false;
-                                                    if (i === 2) return <li className="breadcrumb-item" key={i}><Link to={`/category/` + item}>{item}</Link></li>
-                                                    return <li className="breadcrumb-item" key={i}><Link to={lastLocation?.pathname}>{item}</Link></li>
-
-                                                })
-                                            }
+                                            {getAnimalsContent(productDetails?.['breadcrumbsArray'])}
                                             <li className="breadcrumb-item">{productDetails?.['name']}</li>
                                         </>
 
-                                    )}
-                                    {locationBread === undefined && (
-                                        <>
-                                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                                            <li className="breadcrumb-item">{productDetails?.['name']}</li>
-                                        </>
                                     )}
                                 </ol>
                             </div>
