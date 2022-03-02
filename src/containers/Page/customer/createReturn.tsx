@@ -9,7 +9,6 @@ import { capitalize, formatprice, getCountryName } from '../../../components/uti
 import { siteConfig } from '../../../settings';
 import ReturnFooter from './returnFooter';
 import { useIntl } from 'react-intl';
-import { COUNTRIES } from '../../../config/counties';
 import notification from '../../../components/notification';
 
 function CreateReturn(props) {
@@ -19,7 +18,6 @@ function CreateReturn(props) {
     const [maxItems, setMaxitems] = useState(10);
     const [order, setOrder]: any = useState([]);
     const [loader, setLoader]: any = useState(false);
-    const [regions, setRegions] = useState([]);
     const [issueList, setIssueList]: any = useState([]);
     const [changeAddressModal, setChangeAddressModal] = useState(false);
     const [returnOrExchange, setReturnOrExchange] = useState('');
@@ -61,19 +59,19 @@ function CreateReturn(props) {
         let orderDetails = [];
         let result: any = await searchOrders(returnId);
         orderDetails['entity_id'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.entity_id : 0;
-        orderDetails['increment_id'] = result?.data?.items?.[0] ?  result?.data?.items?.[0]?.increment_id : 0;
-        orderDetails['created_at'] = result?.data?.items?.[0] ?  result?.data?.items?.[0]?.created_at : 0;
-        orderDetails['shipment_date'] =  result?.data?.items?.[0] &&  result?.data?.items?.[0].extension_attributes &&  result?.data?.items?.[0]?.extension_attributes?.shipment_date ?  result?.data?.items?.[0]?.extension_attributes?.shipment_date : 0;
-        orderDetails['payment-method'] =  result?.data?.items?.[0]?.payment?.additional_information?.[0];
-        orderDetails['total_item_count'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.total_item_count : 0;
-        orderDetails['delivery_address'] =  result?.data?.items?.[0] &&  result?.data?.items?.[0]?.extension_attributes &&  result?.data?.items?.[0]?.extension_attributes?.shipping_assignments &&  result?.data?.items?.[0]?.extension_attributes?.shipping_assignments?.[0]?.shipping ?  result?.data?.items?.[0].extension_attributes?.shipping_assignments?.[0]?.shipping.address : 0;
-        orderDetails['base_subtotal'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_subtotal : 0;
-        orderDetails['base_discount_amount'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_discount_amount : 0;
-        orderDetails['base_shipping_amount'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_shipping_amount : 0;
-        orderDetails['base_shipping_tax_amount'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_shipping_tax_amount : 0;
-        orderDetails['base_tax_amount'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.base_tax_amount : 0;
-        orderDetails['grand_total'] =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.grand_total : 0;
-        let orderItems =  result?.data?.items?.[0] ?  result?.data?.items?.[0]?.items : {};
+        orderDetails['increment_id'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.increment_id : 0;
+        orderDetails['created_at'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.created_at : 0;
+        orderDetails['shipment_date'] = result?.data?.items?.[0] && result?.data?.items?.[0].extension_attributes && result?.data?.items?.[0]?.extension_attributes?.shipment_date ? result?.data?.items?.[0]?.extension_attributes?.shipment_date : 0;
+        orderDetails['payment-method'] = result?.data?.items?.[0]?.payment?.additional_information?.[0];
+        orderDetails['total_item_count'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.total_item_count : 0;
+        orderDetails['delivery_address'] = result?.data?.items?.[0] && result?.data?.items?.[0]?.extension_attributes && result?.data?.items?.[0]?.extension_attributes?.shipping_assignments && result?.data?.items?.[0]?.extension_attributes?.shipping_assignments?.[0]?.shipping ? result?.data?.items?.[0].extension_attributes?.shipping_assignments?.[0]?.shipping.address : 0;
+        orderDetails['base_subtotal'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.base_subtotal : 0;
+        orderDetails['base_discount_amount'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.base_discount_amount : 0;
+        orderDetails['base_shipping_amount'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.base_shipping_amount : 0;
+        orderDetails['base_shipping_tax_amount'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.base_shipping_tax_amount : 0;
+        orderDetails['base_tax_amount'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.base_tax_amount : 0;
+        orderDetails['grand_total'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.grand_total : 0;
+        let orderItems = result?.data?.items?.[0] ? result?.data?.items?.[0]?.items : {};
 
         let orderData = orderItems.filter(function (e) {
             return (e.qty_shipped >= 1 && e.qty_refunded === 0);
@@ -86,7 +84,7 @@ function CreateReturn(props) {
         let resultShow = myObject.filter(val => {
             return val.value === 'false';
         });
-  
+
         var onlyInReturn = orderData.filter(comparer(resultShow));
 
 
@@ -120,7 +118,7 @@ function CreateReturn(props) {
             custAddForm.email = props.token.token_email;
             custAddForm.orderId = order.entity_id;
             custAddForm.post_code = custAddForm.postcode;
-          
+
             let result: any = await updateOrderAddress(custAddForm);
             if (result?.data === 'address updated') {
                 getData(returnId);
@@ -136,7 +134,12 @@ function CreateReturn(props) {
     const validateAddress = () => {
         let error = {};
         let formIsValid = true;
-
+        if (typeof custAddForm.telephone !== "undefined") {
+            if (!(/^((?:[+?0?0?966]+)(?:\s?\d{2})(?:\s?\d{7}))$/.test(custAddForm.telephone))) {
+                formIsValid = false;
+                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+            }
+        }
         if (!custAddForm.telephone) {
             formIsValid = false;
             error['telephone'] = 'Phone is required';
@@ -236,12 +239,12 @@ function CreateReturn(props) {
 
         if (result?.data?.[0]?.status === true) {
             let key = Object.keys(result?.data?.[0]?.rma);
-            let url = `/customer/return-details/${key[0]}`;          
+            let url = `/customer/return-details/${key[0]}`;
             setLoader(false)
             notification("success", "", "Return for your order has been created");
-            setTimeout(()=>{
+            setTimeout(() => {
                 window.location.href = url;
-            },3000)
+            }, 3000)
         } else {
             setLoader(false)
             notification("error", "", result?.data?.[0]?.message);
@@ -255,22 +258,6 @@ function CreateReturn(props) {
             ...prevState,
             [id]: value
         }));
-        getRegions(value);
-    }
-
-    const getRegions = async (value, i?) => {
-        const res: any = await getRegionsByCountryID(value);
-        if (res.data.available_regions === undefined) {
-            setRegions([]);
-            if (i) {
-                setCustAddForm(prevState => ({
-                    ...prevState,
-                    region: ''
-                }));
-            }
-        } else {
-            setRegions(res.data.available_regions);
-        }
     }
 
 
@@ -389,7 +376,7 @@ function CreateReturn(props) {
                                 {order['delivery_address']?.street}<br />
                                 {order['delivery_address']?.postcode}<br />
                                 {order['delivery_address']?.city}<br />
-                                {order['delivery_address'] && order['delivery_address'].country_id ? getCountryName(order['delivery_address'].country_id) : ""}
+                                {order['delivery_address'] && order['delivery_address'].country_id ? "Saudi Arabia" : ""}
                             </p>
                         </div>
                     </div>
@@ -401,7 +388,7 @@ function CreateReturn(props) {
                             <div className="product-total-price">
                                 <p><IntlMessages id="order.subTotal" /><span className="text-end">{siteConfig.currency}{formatprice(order.base_subtotal)}</span></p>
                                 <p><IntlMessages id="order.shipping" /><span className="text-end">{siteConfig.currency}{formatprice(order.base_shipping_amount)}</span></p>
-                                <p><IntlMessages id="order.tax" /><span className="text-end">{siteConfig.currency}{formatprice(order.shipping_amount)}</span></p>
+                                <p><IntlMessages id="order.tax" /><span className="text-end">{siteConfig.currency}{formatprice(order.base_tax_amount)}</span></p>
                                 <hr />
                                 <div className="final-price"><IntlMessages id="order.total" /><span>{siteConfig.currency}{formatprice(order.grand_total)}</span></div>
                             </div>
@@ -484,6 +471,7 @@ function CreateReturn(props) {
                             <input type="text" className="form-control" id="street"
                                 placeholder="Address"
                                 value={custAddForm.street}
+                                maxLength={50}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["address"]}</span>
 
@@ -509,25 +497,11 @@ function CreateReturn(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                             <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
-                                {COUNTRIES && COUNTRIES.map((opt, i) => {
-                                    return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                })}
+                                <option key="0" value="">{intl.formatMessage({ id: 'select' })}</option>
+                                <option key="1" value="SA">{intl.formatMessage({ id: 'saudi' })}</option>
                             </select>
-                            <span className="error">{errors.errors["country"]}</span>
+                            <span className="error">{errors.errors["country_id"]}</span>
                         </div>
-                        {regions.length > 0 &&
-                            <div className="width-100 mb-3 form-field">
-                                <label className="form-label">
-                                    <IntlMessages id="myaccount.region" /></label>
-                                <select value={custAddForm.region} onChange={handleAddChange} id="region" className="form-select">
-                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                    {regions && regions.map(opt => {
-                                        return (<option key={opt.id} value={opt.id} >
-                                            {opt.name}</option>);
-                                    })}
-                                </select>
-                                <span className="error">{errors.errors["region"]}</span>
-                            </div>}
                     </Modal.Body>
                     <Modal.Footer className="width-100 mb-3 form-field">
                         <div className="Frgt_paswd">

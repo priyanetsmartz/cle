@@ -66,7 +66,7 @@ export function SendNewsletter(payload, language = 'english') {
 
 export async function postViews(language, id, ip) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.id_token;
+    const localToken = user?.id_token;
     const data = {
         "postId": id,
         "customerId": null,

@@ -19,30 +19,30 @@ export function getProductByCategory(page, pageSize, category, sortBy, sortByVal
 
 export async function addWhishlist(id: number) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.cust_id;
+    const localToken = user?.cust_id;
     return APi.request(`rest/V1/wishlist/add/${id}?customerId=${localToken}`, "", "POST", "")
 }
 export async function addWhishlistBySku(sku: String) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.cust_id;
+    const localToken = user?.cust_id;
     return APi.request(`rest/V1/wishlist/addBySku/${sku}?customerId=${localToken}`, "", "POST", "");
 }
 
 export async function removeWhishlist(wishlist_item_id: number) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.cust_id;
+    const localToken = user?.cust_id;
     return APi.request(`rest/V1/wishlist/delete/${wishlist_item_id}?customerId=${localToken}`, "", "DELETE", "")
 }
 
 export async function getWhishlistItems() {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.cust_id;
+    const localToken = user?.cust_id;
     return APi.request(`rest/V1/wishlist/items?customerId=${localToken}`, "", "GET", "");
 }
 
 export async function getWhishlistItemsForUser() {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.cust_id;
+    const localToken = user?.cust_id;
     return APi.request(`rest/all/V1/customer/wishlistItems?customerId=${localToken}`, "", "GET", "")
 }
 
@@ -63,7 +63,7 @@ export function getCartTotal() {
 
 export async function getcustomercartquoet() {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.token;
+    const localToken = user?.token;
     return APi.request(`rest/V1/customers/${localToken}/carts`, "", "POST", "");
 }
 export function removeItemFromCart(id: number) {
@@ -185,7 +185,7 @@ export function getProductDetails(sku: string, language: string) {
 export async function getProductExtras(productId: number, language: string) {
     var storeId = language === 'arabic' ? '2' : '3';
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.cust_id;
+    const localToken = user?.cust_id;
     return APi.request(`rest/V1/product/recommendation?storeId=${storeId}&customerId=${localToken}&productId=${productId}`, "", "GET", "");
 }
 
@@ -218,7 +218,7 @@ export function updateGuestCartItem(id, cartData) {
 
 export async function assignGuestCartToUSer(language) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.cust_id;
+    const localToken = user?.cust_id;
     const cartQuoteToken = localStorage.getItem('cartQuoteToken');
     var storeId = language === 'arabic' ? 2 : 3;
     let cartData = {
@@ -252,7 +252,7 @@ export async function getCartRelevantProducts(productIds: number, language: stri
     var storeId = language === 'arabic' ? 2 : 3;
 
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const customerId = user.cust_id;
+    const customerId = user?.cust_id;
 
     return APi.request(`/rest/V1/product/relevantProducts?customerId=${customerId}&storeId=${storeId}&productIds=${productIds}`, "", "GET", "")
 }
@@ -304,7 +304,7 @@ export function searchFields(search: string, category: number, page: number, lan
 
 export async function setDefaultShippingAddress(addressId) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const customerId = user.cust_id;
+    const customerId = user?.cust_id;
     let cartData = {
         "customerId": customerId,
         "addressId": addressId
@@ -314,7 +314,7 @@ export async function setDefaultShippingAddress(addressId) {
 
 export async function setDefaultBillngAddress(addressId) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const customerId = user.cust_id;
+    const customerId = user?.cust_id;
     let cartData = {
         "customerId": customerId,
         "addressId": addressId

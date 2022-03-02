@@ -33,10 +33,10 @@ function MyReturnsComplaints(props) {
         )
     }, [])
 
-    async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
+    async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = 'DESC', sortBy = 'created_at') {
         setIsLoading(true);
         let pageSize = props.pageData ? props.pageData : "";
-        let result: any = await getVendorReturns(props.languages, pageSize, status, from, to, term, dateFrom, dateTo, sortorder);
+        let result: any = await getVendorReturns(props.languages, pageSize, status, from, to, term, dateFrom, dateTo, sortorder, sortBy);
 
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
         let dataLListing = []
@@ -117,7 +117,7 @@ function MyReturnsComplaints(props) {
 
     const sortOrdersHandler = async (e) => {
         setSortOrder(e.target.value);
-        getVendorReturnsData(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, e.target.value)
+        getVendorReturnsData(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, e.target.value, 'grand_total')
     }
 
     const columns = [
@@ -161,7 +161,7 @@ function MyReturnsComplaints(props) {
     };
 
     return (
-        <div className={props.pageData ? "col-sm-12":"col-sm-9" }>
+        <div className={props.pageData ? "col-sm-12" : "col-sm-9"}>
             <section className="my_profile_sect mb-4">
                 <div className="container">
                     {!props.pageData && (

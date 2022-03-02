@@ -699,5 +699,7 @@
   "successunsubscribe":"Your have successfully unsubscribed from the CLE mailing list",
   "errorunsubscribe":"Something went wrong! Kindly contact to site admin for more details",
   "alreadyunsubscribe":"Your have already unsubscribed from the CLE mailing list",
-  "home":"Go to Home"
+  "home":"Go to Home",
+  "saudi":"Saudi Arabia",
+  "order.canceled":"It's cancelled "
 }

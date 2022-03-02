@@ -207,7 +207,7 @@ function Dashboard(props) {
 
     async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
         setIsLoadingReturns(true)
-        let result: any = await getVendorReturns(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder);
+        let result: any = await getVendorReturns(props.languages, siteConfig.pageSize, status, from, to, term, dateFrom, dateTo, sortorder, 'created_at');
 
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
         let dataLListing = []
@@ -302,7 +302,7 @@ function Dashboard(props) {
                                         <ul className="pagination justify-content-center align-items-center">
                                             <li
                                                 className={`previousAnno ${page === 1 ? 'disabled' : ''}`}>
-                                                <Link onClick={(e) => { goToPreviousPage(e); }}  to="#" className={`page-link pagenextAnno ${page === 1 ? 'disabled' : ''}`} aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
+                                                <Link onClick={(e) => { goToPreviousPage(e); }} to="#" className={`page-link pagenextAnno ${page === 1 ? 'disabled' : ''}`} aria-disabled="true"><i className="fa fa-chevron-left" aria-hidden="true"></i></Link>
                                             </li>
                                             <li className='pageofpage'><IntlMessages id="page" /> <span className='active'>{page}</span> <IntlMessages id="of" /> {pagination}</li>
                                             <li className={`nextAnno ${page === pagination ? 'disabled' : ''}`} >

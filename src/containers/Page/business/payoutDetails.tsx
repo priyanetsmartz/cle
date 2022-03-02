@@ -9,15 +9,15 @@ import CLELogo from '../../../image/CLIlogo.png';
 import moment from 'moment';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { checkVendorLogin, formatprice } from '../../../components/utility/allutils';
+import { capitalize, checkVendorLogin, formatprice } from '../../../components/utility/allutils';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import {useIntl} from 'react-intl';
+import { useIntl } from 'react-intl';
 
 function MyPayoutDetails(props) {
 
     const intl = useIntl();
-  
+
 
     const [vendorName, setVendorName] = useState('')
     const [isLoading, setIsLoading] = useState(true);
@@ -79,27 +79,27 @@ function MyPayoutDetails(props) {
         setIsLoading(false);
 
     }
-    async function getVendor(){
-       let vendor: any = await checkVendorLogin();
+    async function getVendor() {
+        let vendor: any = await checkVendorLogin();
         setVendorName(vendor.vendor_name);
     }
     const columns = [{
-        name: intl.formatMessage({id:'order'}),
+        name: intl.formatMessage({ id: 'order' }),
         selector: row => row.orderNumber,
     },
     {
-        name: intl.formatMessage({id:'order.date'}),
+        name: intl.formatMessage({ id: 'order.date' }),
         selector: row => row.date,
     },
     {
-        name: intl.formatMessage({id:'linktoorderdetails'}),
+        name: intl.formatMessage({ id: 'linktoorderdetails' }),
         cell: row => (
-            <Link to={`/vendor/sales-orders/${row.link_to_orderdetails}`}>{intl.formatMessage({id:'vieworderdetail'})}</Link>
+            <Link to={`/vendor/sales-orders/${row.link_to_orderdetails}`}>{intl.formatMessage({ id: 'vieworderdetail' })}</Link>
 
         )
     },
     {
-        name: intl.formatMessage({id:'order.total'}),
+        name: intl.formatMessage({ id: 'order.total' }),
         selector: row => row.total,
     }
     ]
@@ -161,17 +161,17 @@ function MyPayoutDetails(props) {
                                     <tr>
                                         <td>Invoice Issue Date</td>
                                         <td>-</td>
-                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? moment(payoutData['Payout_info'][0].created_at).format('DD MMMM YYYY') : ""}</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 && payoutData['Payout_info']?.[0]?.created_at ? moment(payoutData['Payout_info'][0].created_at).format('DD MMMM YYYY') : ""}</td>
                                     </tr>
                                     <tr>
                                         <td>Due Date</td>
                                         <td>-</td>
-                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? moment(payoutData['Payout_info'][0].date_to).format('DD MMMM YYYY') : ""}</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 && payoutData['Payout_info']?.[0]?.date_to ? moment(payoutData['Payout_info']?.[0]?.date_to).format('DD MMMM YYYY') : ""}</td>
                                     </tr>
                                     <tr>
                                         <td>Status</td>
                                         <td>-</td>
-                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payout_status : ""}</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? capitalize(payoutData['Payout_info'][0].payout_status) : ""}</td>
                                     </tr>
                                 </table>
                             </table>
@@ -248,7 +248,7 @@ function MyPayoutDetails(props) {
                                             <td>{index + 1}</td>
                                             <td>{data.order_increment_id}</td>
                                             <td>{data.invoice_id}</td>
-                                            <td>{moment(data.invoice_created_at).format('DD MMM YYYY')}</td>
+                                            <td>{data?.invoice_created_at ? moment(data.invoice_created_at).format('DD MMM YYYY') : ""}</td>
                                             <td>{data.invoice_status}</td>
                                             <td>{siteConfig.currency} {data.order_amount}</td>
                                         </tr>
@@ -336,7 +336,7 @@ function MyPayoutDetails(props) {
                                             <div className="col-sm-12">
                                                 <div className="download-invoice">
                                                     <Link to="#" onClick={() => sortHandler(payoutId)}>
-                                                        <IntlMessages id="downloadinvoiceorreceipt"/></Link>
+                                                        <IntlMessages id="downloadinvoiceorreceipt" /></Link>
                                                 </div>
                                             </div>
                                         </div>

@@ -1522,10 +1522,14 @@ p.promotion_alert {
 
 .my_profile_sect p {
     font: normal normal bold 18px/27px Lato;
-    /* font: normal normal 500 16px/20px Lato; */
     margin-bottom: 30px;
 }
-
+.single-address p {
+    margin-bottom: 8px;
+}
+.progress-bar-area .ant-progress-inner {
+    border-radius: 0;
+}
 .my_profile_sect h2+p {
     font: normal normal normal 16px/19px Lato;
 }

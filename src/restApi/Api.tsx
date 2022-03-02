@@ -26,7 +26,7 @@ class AdminApi {
 
         let authtoken = '';
         let token = await sessionService.loadSession().then(session => { return session.id_token }).catch(err => console.log(''))
-        authtoken = `Bearer ${token}`;
+        authtoken = token ? `Bearer ${token}` : "";
         return new Promise(function (resolve, reject) {
             var url = baseUrl + name
             if (method === undefined) {

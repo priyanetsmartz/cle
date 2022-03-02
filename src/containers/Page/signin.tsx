@@ -27,7 +27,7 @@ function SignIn(props) {
   const [errors, setError] = useState({
     errors: {}
   });
-  const [forgotPopup, setForgotPopup] = useState(false);
+ 
   const [isLoaded, setIsLoaded] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
@@ -128,12 +128,12 @@ function SignIn(props) {
 
     //Email   
     if (typeof state["email"] !== "undefined") {
-
       if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(state["email"]))) {
         formIsValid = false;
         error["email"] = intl.formatMessage({ id: "emailvalidation" });
       }
     }
+    
     if (!state["email"]) {
       formIsValid = false;
       error["email"] = intl.formatMessage({ id: "emailrequired" });
@@ -211,7 +211,8 @@ function SignIn(props) {
                   </svg>
                 }
               </span>
-              <span className="error">{errors.errors["password"]}</span>
+              
+              
             </div>
             <div className="form-group text-left">
               <div className="checkbox ">

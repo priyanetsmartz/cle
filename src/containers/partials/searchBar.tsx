@@ -6,10 +6,8 @@ import IconZoomIn from '../../image/Icon_zoom_in.svg';
 import { getCategoryList, searchFields } from '../../redux/cart/productApi';
 import { useHistory } from "react-router-dom";
 import { useIntl } from 'react-intl';
-import { siteConfig } from '../../settings';
 
 function SearchBar(props) {
-    const history = useHistory();
     let imageD = '', description = '';
     const language = getCookie('currentLanguage');
     const [autoSuggestions, SetAutoSuggestions] = useState([]);

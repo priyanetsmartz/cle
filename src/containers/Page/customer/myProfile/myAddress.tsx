@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
-import { COUNTRIES } from '../../../../config/counties';
 import { useIntl } from 'react-intl';
 import notification from '../../../../components/notification';
-import { deleteAddress, getCustomerDetails, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
+import { deleteAddress, getCustomerDetails, saveCustomerDetails } from '../../../../redux/pages/customers';
 import Modal from "react-bootstrap/Modal";
 import { connect } from "react-redux";
 
@@ -15,8 +14,6 @@ function MyAddress(props) {
     const userGroup = localToken ? localToken.token : '';
     const [myAddressModal, setMyAddressModal] = useState(false);
     const [isShow, setIsShow] = useState(false);
-    const [showAddress, setShowAddress] = useState(false);
-    const [regions, setRegions] = useState([]); // for regions dropdown
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
     const [custForm, setCustForm] = useState({
         addresses: []
@@ -33,7 +30,7 @@ function MyAddress(props) {
         telephone: "",
         postcode: "",
         city: "",
-        country_id: "AD",
+        country_id: "",
         region_id: "",
         street: ""
     });
@@ -54,7 +51,6 @@ function MyAddress(props) {
 
     const editAddress = (index, id) => {
         delete custForm.addresses[index].region;
-        getRegions(custForm.addresses[index].country_id, index);
         setAddIndex(index);
         getData();
         custForm.addresses[index].street = custForm.addresses[index].street[0];
@@ -73,7 +69,7 @@ function MyAddress(props) {
             telephone: "",
             postcode: "",
             city: "",
-            country_id: "AD",
+            country_id: "",
             region_id: "",
             street: ""
         });
@@ -89,10 +85,8 @@ function MyAddress(props) {
     }, []);
 
     const getData = async () => {
-        setShowAddress(true);
         let result: any = await getCustomerDetails();
         setCustForm(result?.data);
-        setShowAddress(false);
     }
 
     // for customer address popup window starts here
@@ -102,7 +96,7 @@ function MyAddress(props) {
             let obj: any = { ...custAddForm };
             if (obj.region_id === '') delete obj.region_id;
             obj.street = [obj.street];
-      
+
             if (obj.id === 0) {
                 custForm.addresses.push(obj);
             } else {
@@ -125,7 +119,7 @@ function MyAddress(props) {
                     telephone: "",
                     postcode: "",
                     city: "",
-                    country_id: "AD",
+                    country_id: "",
                     region_id: "",
                     street: ""
                 });
@@ -139,11 +133,20 @@ function MyAddress(props) {
     const validateAddress = () => {
         let error = {};
         let formIsValid = true;
-
+        if (typeof custAddForm.telephone !== "undefined") {
+            if (!(/^((?:[+?0?0?966]+)(?:\s?\d{2})(?:\s?\d{7}))$/.test(custAddForm.telephone))) {
+                formIsValid = false;
+                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+            }
+        }
+        
         if (!custAddForm.telephone) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" })
         }
+
+
+
         if (!custAddForm.postcode) {
             formIsValid = false;
             error["postcode"] = intl.formatMessage({ id: "pinreq" })
@@ -190,23 +193,10 @@ function MyAddress(props) {
             ...prevState,
             [id]: value
         }));
-        getRegions(value);
+
     }
 
-    const getRegions = async (value, i?) => {
-        const res: any = await getRegionsByCountryID(value);
-        if (res.data.available_regions === undefined) {
-            setRegions([]);
-            if (i) {
-                setCustAddForm(prevState => ({
-                    ...prevState,
-                    region_id: ''
-                }));
-            }
-        } else {
-            setRegions(res.data.available_regions);
-        }
-    }
+
     // for customer address popup window ends here
 
     //edit existing address ends here--------------->
@@ -226,10 +216,10 @@ function MyAddress(props) {
                             <i className="fas fa-plus"></i>
                         </div>
                     </div>
-                  
+
                     {custForm && custForm.addresses && custForm.addresses.length > 0 && custForm.addresses.map((address, i) => {
-                        let countryList: any = COUNTRIES.filter(obj => obj.id === address.country_id);
-                      
+                       
+
                         return (<div className="addressnew_addressbodr" key={i}>
                             <h3><IntlMessages id="myaccount.address" /></h3>
                             <ul>
@@ -237,7 +227,7 @@ function MyAddress(props) {
                                 <li>{address.street}</li>
                                 <li>{address.postcode}</li>
                                 <li>{address.city}</li>
-                                <li>{countryList[0].full_name_locale}</li>
+                                <li>Saudi Arabia</li>
                             </ul>
                             {i === 0 && <><div className="default_dlivy mt-3"><IntlMessages id="myaccount.defaultDeliveryAddress" /></div>
                                 <div className="default_billing"><IntlMessages id="myaccount.defaultBillingAddress" /></div></>}
@@ -287,11 +277,12 @@ function MyAddress(props) {
                             <span className="error">{errors.errors["telephone"]}</span>
 
                         </div>
-                        <div className="width-100 mb-3 form-field">                        
+                        <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.address" /><span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="street"
                                 placeholder={intl.formatMessage({ id: 'myaccount.address' })}
                                 value={custAddForm.street}
+                                maxLength={50}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["street"]}</span>
 
@@ -316,26 +307,13 @@ function MyAddress(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
+
                             <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
-                                {COUNTRIES && COUNTRIES.map((opt, i) => {
-                                    return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                })}
+                                <option key="0" value="">{intl.formatMessage({ id: 'select' })}</option>
+                                <option key="1" value="SA">{intl.formatMessage({ id: 'saudi' })}</option>
                             </select>
                             <span className="error">{errors.errors["country_id"]}</span>
                         </div>
-                        {regions.length > 0 &&
-                            <div className="width-100 mb-3 form-field">
-                                <label className="form-label">
-                                    <IntlMessages id="myaccount.region" /></label>
-                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-                                    <option value="">{intl.formatMessage({ id: "select" })}</option>
-                                    {regions && regions.map(opt => {
-                                        return (<option key={opt.id} value={opt.id} >
-                                            {opt.name}</option>);
-                                    })}
-                                </select>
-                                <span className="error">{errors.errors["region_id"]}</span>
-                            </div>}
                         <Modal.Footer>
                             <div className="width-100 mb-3 form-field">
                                 <div className="Frgt_paswd">

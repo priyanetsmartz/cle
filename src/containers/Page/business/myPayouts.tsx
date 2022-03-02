@@ -42,7 +42,7 @@ function MyPayouts(props) {
     }, [])
 
     async function getVendor() {
-       let vendor: any = await checkVendorLogin();
+        let vendor: any = await checkVendorLogin();
         setVendorName(vendor.vendor_name);
     }
     const getOrdersByStatus = (e) => {
@@ -211,7 +211,7 @@ function MyPayouts(props) {
         html2canvas(input)
             .then((canvas: any) => {
                 var imgData = canvas.toDataURL("image/jpeg", 1);
-                var pdf = new jsPDF("p", "px", "a4");               
+                var pdf = new jsPDF("p", "px", "a4");
                 pdf.addImage(imgData, 'JPEG', 20, 20, 400, 600);
                 pdf.save("invoice.pdf");
             });
@@ -247,17 +247,17 @@ function MyPayouts(props) {
                                     <tr>
                                         <td>Invoice Issue Date</td>
                                         <td>-</td>
-                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? moment(payoutData['Payout_info'][0].created_at).format('DD MMMM YYYY') : ""}</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 && payoutData['Payout_info']?.[0]?.created_at ? moment(payoutData['Payout_info'][0].created_at).format('DD MMMM YYYY') : ""}</td>
                                     </tr>
                                     <tr>
                                         <td>Due Date</td>
                                         <td>-</td>
-                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? moment(payoutData['Payout_info'][0].date_to).format('DD MMMM YYYY') : ""}</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 && payoutData['Payout_info']?.[0]?.date_to ? moment(payoutData['Payout_info']?.[0]?.date_to).format('DD MMMM YYYY') : ""}</td>
                                     </tr>
                                     <tr>
                                         <td>Status</td>
                                         <td>-</td>
-                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? payoutData['Payout_info'][0].payout_status : ""}</td>
+                                        <td>{payoutData && payoutData['Payout_info'] && payoutData['Payout_info'].length > 0 ? capitalize(payoutData['Payout_info'][0].payout_status) : ""}</td>
                                     </tr>
                                 </table>
                             </table>
@@ -334,7 +334,7 @@ function MyPayouts(props) {
                                             <td>{index + 1}</td>
                                             <td>{data.order_increment_id}</td>
                                             <td>{data.invoice_id}</td>
-                                            <td>{moment(data.invoice_created_at).format('DD MMM YYYY')}</td>
+                                            <td>{data?.invoice_created_at ? moment(data.invoice_created_at).format('DD MMM YYYY') : ""}</td>
                                             <td>{data.invoice_status}</td>
                                             <td>{siteConfig.currency} {data.order_amount}</td>
                                         </tr>

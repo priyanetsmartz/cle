@@ -121,13 +121,11 @@ function MySalesOrders(props) {
         },
         {
             name: intl.formatMessage({ id: 'order.date' }),
-            selector: row => row.date,
-            sortable: true
+            selector: row => row.date
         },
         {
             name: intl.formatMessage({ id: 'status' }),
             selector: row => row.status,
-            sortable: true,
             cell: row => (
 
                 <div>

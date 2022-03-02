@@ -132,11 +132,12 @@ export async function searchProducts(language: string, pageSize: number, status:
 
 }
 
-export async function getVendorReturns(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any) {
+export async function getVendorReturns(language: string, pageSize: number, status: any, from: any, to: any, term: any, dateFrom: any, dateTo: any, sortOrders: any, sortBy: any) {
+
     var storeId = language === 'english' ? '3' : '2';
     let vendor: any = await checkVendorLogin();
     const vendorId = vendor.vendor_id;
-    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId;
+    let queryString = "vendorId=" + vendorId + "&storeId=" + storeId+"&sortBy="+sortBy+"&sortOrders=" + sortOrders;
 
     if (status !== null && status !== '') {
         queryString += "&status=" + status;
@@ -150,9 +151,7 @@ export async function getVendorReturns(language: string, pageSize: number, statu
     if ((dateFrom !== null && dateFrom !== '') && (dateTo !== null && dateTo !== '')) {
         queryString += "&from_date=" + dateFrom + "&to_date=" + dateTo;
     }
-    if (sortOrders !== '') {
-        queryString += "&sortBy=grand_total&sortOrders=" + sortOrders;
-    }
+    
 
     return adminToken.request(`rest/all/V1/vendor/returnCollection?${queryString}`, "", "GET", "");
 }

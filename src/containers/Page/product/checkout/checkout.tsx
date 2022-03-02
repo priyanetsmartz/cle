@@ -9,10 +9,9 @@ import { useHistory } from "react-router";
 import { siteConfig } from '../../../../settings'
 import cartAction from "../../../../redux/cart/productAction";
 import orderprocessing from "../../../../image/orderprocessing.gif";
-import { COUNTRIES } from '../../../../config/counties';
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromoCode, getShippinMethods, applyPromoCodeGuest, setGuestUserDeliveryAddress, placeGuestOrder, placeUserOrder, setUserDeliveryAddress, getAddressById, myFatoora, getPaymentStatus, addPaymentDetailstoOrder } from '../../../../redux/cart/productApi';
-import { getCustomerDetails, getRegionsByCountryID, saveCustomerDetails } from '../../../../redux/pages/customers';
-import { formatprice, getCountryName, getRegionName } from '../../../../components/utility/allutils';
+import { getCustomerDetails, saveCustomerDetails } from '../../../../redux/pages/customers';
+import { formatprice } from '../../../../components/utility/allutils';
 import CheckoutBannerFooter from '../../customer/checkout-banner';
 
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
@@ -48,8 +47,6 @@ function Checkout(props) {
     const [loaderOnCheckout, setLoaderOnCheckout] = useState(false);
     const [addShippingAddressLoader, setAddShippingAddressLoader] = useState(false)
     const [addBillingAddressLoader, setAddBillingAddressLoader] = useState(false)
-
-    const [changeCountryLoader, setChangeCountryLoader] = useState(false)
     const [shippingMethods, SetShippingMethods] = useState([])
     const [isShow, setIsShow] = useState(false);
     const [isSetAddress, setIsSetAddress] = useState(0);
@@ -57,9 +54,7 @@ function Checkout(props) {
     const [isBillingAddressConfirm, setIsBillingAddressConfirm] = useState(0);
     const [selectedShippingMethod, setSelectedShippingMethod] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
-    const [regions, setRegions] = useState([]);
     const [cartBilling, setCartBilling] = useState({});
-    const [paymentDetails, setPaymentDetails] = useState({});
     const [emailError, setEmailError] = useState({
         errors: {}
     });
@@ -71,7 +66,7 @@ function Checkout(props) {
         telephone: "",
         postcode: "",
         city: "",
-        country_id: "AD",
+        country_id: "",
         region_id: 0,
         street: "",
         default_shipping: true,
@@ -86,7 +81,7 @@ function Checkout(props) {
         telephone: "",
         postcode: "",
         city: "",
-        country_id: "AD",
+        country_id: "",
         region_id: 0,
         street: "",
         default_shipping: true,
@@ -486,43 +481,19 @@ function Checkout(props) {
 
 
     const handleCountryChange = async (e) => {
-        setChangeCountryLoader(true)
         const { id, value } = e.target;
         setCustAddForm(prevState => ({
             ...prevState,
             [id]: value
         }));
-
-
-        const res: any = await getRegionsByCountryID(value);
-        if (res.data.available_regions === undefined) {
-            setChangeCountryLoader(false)
-            setRegions([]);
-        } else {
-            setChangeCountryLoader(false)
-            setRegions(res.data.available_regions);
-        }
-
     }
 
     const handleCountryChangeBilling = async (e) => {
-        setChangeCountryLoader(true)
         const { id, value } = e.target;
         setBillingAddress(prevState => ({
             ...prevState,
             [id]: value
         }));
-
-
-        const res: any = await getRegionsByCountryID(value);
-        if (res.data.available_regions === undefined) {
-            setChangeCountryLoader(false)
-            setRegions([]);
-        } else {
-            setChangeCountryLoader(false)
-            setRegions(res.data.available_regions);
-        }
-
     }
 
     // get shipping methods
@@ -543,7 +514,7 @@ function Checkout(props) {
             telephone: "",
             postcode: "",
             city: "",
-            country_id: "AD",
+            country_id: "",
             region_id: 0,
             street: "",
             default_shipping: true,
@@ -560,7 +531,7 @@ function Checkout(props) {
             telephone: "",
             postcode: "",
             city: "",
-            country_id: "AD",
+            country_id: "",
             region_id: 0,
             street: "",
             default_shipping: true,
@@ -628,7 +599,7 @@ function Checkout(props) {
                     telephone: "",
                     postcode: "",
                     city: "",
-                    country_id: "AD",
+                    country_id: "",
                     region_id: 0,
                     street: "",
                     default_shipping: true,
@@ -749,7 +720,7 @@ function Checkout(props) {
                     telephone: "",
                     postcode: "",
                     city: "",
-                    country_id: "AD",
+                    country_id: "",
                     region_id: 0,
                     street: "",
                     default_shipping: true,
@@ -768,6 +739,12 @@ function Checkout(props) {
         let error = {};
         let formIsValid = true;
 
+        if (typeof custAddForm.telephone !== "undefined") {
+            if (!(/^((?:[+?0?0?966]+)(?:\s?\d{2})(?:\s?\d{7}))$/.test(custAddForm.telephone))) {
+                formIsValid = false;
+                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+            }
+        }
         if (!custAddForm.telephone) {
             formIsValid = false;
             error['telephone'] = intl.formatMessage({ id: "phonereq" });
@@ -806,7 +783,12 @@ function Checkout(props) {
         let error = {};
         let formIsValid = true;
 
-
+        if (typeof billingAddressData.telephone !== "undefined") {
+            if (!(/^((?:[+?0?0?966]+)(?:\s?\d{2})(?:\s?\d{7}))$/.test(billingAddressData.telephone))) {
+                formIsValid = false;
+                error["telephone"] = intl.formatMessage({ id: "phoneinvalid" });
+            }
+        }
 
         if (!billingAddressData.telephone) {
             formIsValid = false;
@@ -909,7 +891,7 @@ function Checkout(props) {
             }
 
         }
-
+        // checking for payment method if myfatoorah is used then send to different function
         if (selectedPaymentMethod === 'myfatoorah_gateway') {
 
             const payment: any = await myFatoora(billAddress);
@@ -918,6 +900,9 @@ function Checkout(props) {
                 if (url) {
                     window.location.href = url;
                 }
+            } else {
+                setIsShow(false)
+                return notification("error", "", payment?.data[0]?.Message);
             }
 
         } else {
@@ -967,6 +952,7 @@ function Checkout(props) {
 
 
             }
+
             if (orderPlace && orderPlace.data && orderPlace.data !== undefined && orderPlace.data.message === undefined) {
                 setIsShow(false)
                 props.addToCartTask(true)
@@ -1044,9 +1030,6 @@ function Checkout(props) {
         detailsRequired['TransactionStatus'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].IsSuccess ? paymentStatus.data[0].IsSuccess : 0;
 
 
-        setPaymentDetails(detailsRequired)
-
-
         let customer_id = localToken?.cust_id;
         let orderPlace: any;
         if (customer_id) {
@@ -1080,6 +1063,9 @@ function Checkout(props) {
 
                     setOrderProcessing(false);
                     notification("error", "", "Error ocurred! If amount deducted please check your order status in my account section or call site admin");
+                    setTimeout(() => {
+                        history.push('/');
+                    }, 3000)
                 }
             } else {
                 notification("error", "", "Error ocurred! If amount deducted please check your order status in my account section or call site admin");
@@ -1244,7 +1230,7 @@ function Checkout(props) {
                                                 : ""}
                                             {props.guestShipp && (
 
-                                                <div className="row" >
+                                                <div className="row mb-4" >
                                                     <div className="col-md-7">
                                                         <div className="single-address">
                                                             <div>
@@ -1254,8 +1240,7 @@ function Checkout(props) {
                                                                 }) : ""}
                                                                 <p>{props.guestShipp.postcode}</p>
                                                                 <p>{props.guestShipp.city}</p>
-                                                                {props.guestShipp.region_id ? <p>{getRegionName(props.guestShipp.country_id, props.guestShipp.region_id)}</p> : ""}
-                                                                <p>{props.guestShipp.country_id ? getCountryName(props.guestShipp.country_id) : ""}</p>
+                                                                <p>{props.guestShipp.country_id ? "Saudi Arabia" : ""}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1266,19 +1251,16 @@ function Checkout(props) {
 
                                                     {itemsVal.address['addresses'].map((item, i) => {
                                                         return (
-                                                            <div className="row" key={i}>
+                                                            <div className="row mb-4" key={i}>
                                                                 <div className="col-md-7">
                                                                     <div className="single-address">
 
                                                                         <div>
                                                                             <p> {item.firstname} {item.lastname}</p>
-                                                                            {item && item.street && item.street.length > 0 && item.street.map((street, j) => {
-                                                                                <p key={j}>{street}</p>
-                                                                            })}
+                                                                            <p> {item?.street}</p>
                                                                             <p>{item.postcode}</p>
                                                                             <p>{item.city}</p>
-                                                                            {item.region_id ? <p>{getRegionName(item.country_id, item.region_id)}</p> : ""}
-                                                                            {item.country_id ? <p>{getCountryName(item.country_id)}</p> : ""}
+                                                                            <p>{item.country_id ? "Saudi Arabia" : ""}</p>
                                                                         </div>
                                                                         {item.id === parseInt(custForm.default_shipping) ?
                                                                             <p className="text-muted">
@@ -1382,6 +1364,7 @@ function Checkout(props) {
                                                                     autoComplete="off"
                                                                     placeholder="Address"
                                                                     value={custAddForm.street}
+                                                                    maxLength={50}
                                                                     onChange={handleAddChange} />
                                                                 <span className="error">{errors.errors["street"]}</span>
 
@@ -1409,27 +1392,11 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                                                                 <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
-                                                                    {COUNTRIES && COUNTRIES.map((opt, i) => {
-                                                                        return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                                                    })}
+                                                                    <option key="0" value="">{intl.formatMessage({ id: 'select' })}</option>
+                                                                    <option key="1" value="SA">{intl.formatMessage({ id: 'saudi' })}</option>
                                                                 </select>
                                                                 <span className="error">{errors.errors["country_id"]}</span>
                                                             </div>
-                                                            {changeCountryLoader && (
-                                                                <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
-                                                            )}
-                                                            {regions.length > 0 && <div className="width-100 mb-3 form-field">
-                                                                <label className="form-label">
-                                                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
-                                                                <select value={custAddForm.region_id} onChange={handleAddChange} id="region_id" className="form-select">
-
-                                                                    {regions && regions.map(opt => {
-                                                                        return (<option key={opt.id} value={opt.id} >
-                                                                            {opt.name}</option>);
-                                                                    })}
-                                                                </select>
-                                                                <span className="error">{errors.errors["region_id"]}</span>
-                                                            </div>}
                                                             <div className="width-100 mb-3 form-field">
                                                                 <div className="Frgt_paswd">
                                                                     <div className="save-btn">
@@ -1502,17 +1469,15 @@ function Checkout(props) {
                                         <div className="accordion-body">
                                             {props.guestBilling && (
 
-                                                <div className="row" >
+                                                <div className="row mb-5" >
                                                     <div className="col-md-7">
                                                         <div className="single-address">
                                                             <div>
                                                                 <p> {props.guestBilling.firstname} {props.guestBilling.lastname}</p>
-                                                                {props.guestBilling.street ? props.guestBilling.street.map((street, j) => {
-                                                                    <p key={j}>{street}</p>
-                                                                }) : ""}
+                                                                <p>{props?.guestBilling?.street}</p>
                                                                 <p>{props.guestBilling.postcode}</p>
                                                                 <p>{props.guestBilling.city}</p>
-                                                                <p>{props.guestBilling.country_id}</p>
+                                                                <p>{props.guestBilling.country_id ? "Saudi Arabia" : ""}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1526,19 +1491,16 @@ function Checkout(props) {
                                                     {itemsVal.address['addresses'].map((item, i) => {
 
                                                         return (
-                                                            <div className="row" key={i}>
+                                                            <div className="row mb-4" key={i}>
                                                                 <div className="col-md-7">
                                                                     <div className="single-address">
 
                                                                         <div>
-                                                                            <p> {item.firstname} {item.lastname}</p>
-                                                                            {item.street.length > 0 && item.street.map((street, j) => {
-                                                                                <p key={j}>{street}</p>
-                                                                            })}
-                                                                            <p>{item.postcode}</p>
-                                                                            <p>{item.city}</p>
-                                                                            {item.region_id ? <p>{getRegionName(item.country_id, item.region_id)}</p> : ""}
-                                                                            {item.country_id ? <p>{getCountryName(item.country_id)}</p> : ""}
+                                                                            <p> {item?.firstname} {item.lastname}</p>
+                                                                            <p>{item?.street}</p>
+                                                                            <p>{item?.postcode}</p>
+                                                                            <p>{item?.city}</p>
+                                                                            <p>{item?.country_id ? "Saudi Arabia" : ""}</p>
                                                                         </div>
                                                                         {item.id === parseInt(custForm.default_billing) ?
                                                                             <p className="text-muted">
@@ -1625,6 +1587,7 @@ function Checkout(props) {
                                                                 <input type="text" className="form-control" id="street"
                                                                     autoComplete="off"
                                                                     placeholder="Address"
+                                                                    maxLength={50}
                                                                     value={billingAddressData.street}
                                                                     onChange={handleBillingAddressChange} />
                                                                 <span className="error">{billingError.errors["street"]}</span>
@@ -1653,26 +1616,13 @@ function Checkout(props) {
                                                             <div className="width-100 mb-3 form-field">
                                                                 <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                                                                 <select value={billingAddressData.country_id} onChange={handleCountryChangeBilling} id="country_id" className="form-select">
-                                                                    {COUNTRIES && COUNTRIES.map((opt, i) => {
-                                                                        return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                                                    })}
+                                                                    <option key="0" value="">{intl.formatMessage({ id: 'select' })}</option>
+                                                                    <option key="1" value="SA">{intl.formatMessage({ id: 'saudi' })}</option>
                                                                 </select>
+
                                                                 <span className="error">{billingError.errors["country_id"]}</span>
                                                             </div>
-                                                            {changeCountryLoader && (
-                                                                <div> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></div>
-                                                            )}
-                                                            {regions.length > 0 && <div className="width-100 mb-3 form-field">
-                                                                <label className="form-label">
-                                                                    <IntlMessages id="myaccount.region" /><span className="maindatory">*</span></label>
-                                                                <select value={billingAddressData.region_id} onChange={handleBillingAddressChange} id="region_id" className="form-select">
-                                                                    {regions && regions.map(opt => {
-                                                                        return (<option key={opt.id} value={opt.id} >
-                                                                            {opt.name}</option>);
-                                                                    })}
-                                                                </select>
-                                                                <span className="error">{billingError.errors["region_id"]}</span>
-                                                            </div>}
+
                                                             <div className="width-100 mb-3 form-field">
                                                                 <div className="Frgt_paswd">
                                                                     <div className="save-btn">

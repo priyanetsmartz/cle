@@ -1,20 +1,19 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { searchOrders, getCountriesList, getorderReturnstatusapi, updateOrderAddress, checkIfReturnExists, getRegionsByCountryID } from '../../../redux/pages/customers';
+import { searchOrders, getorderReturnstatusapi, updateOrderAddress, checkIfReturnExists, getRegionsByCountryID } from '../../../redux/pages/customers';
 import moment from 'moment';
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-import { capitalize, formatprice, getCountryName, getRegionName } from '../../../components/utility/allutils';
+import { capitalize, formatprice, getCountryName } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import notification from '../../../components/notification';
 import { useIntl } from 'react-intl';
-import { COUNTRIES } from '../../../config/counties';
+import { Progress } from 'antd';
 
 function OrderDetails(props) {
     const intl = useIntl();
     const [custId, setCustid] = useState(props.token.cust_id);
-    const [countries, setCountries] = useState([]); // for countries dropdown
     const [orderId, setOrderId] = useState(props.match.params.orderId);
     const [maxItems, setMaxitems] = useState(10);
     const [orderProgress, setOrderProgress] = useState(0);
@@ -47,7 +46,6 @@ function OrderDetails(props) {
     useEffect(() => {
         setOrderId(props.match.params.orderId)
         getData();
-        getCountries();
 
     }, []);
 
@@ -71,6 +69,7 @@ function OrderDetails(props) {
         orderDetails['items'] = result.data.items[0] ? result.data.items[0].items : {};
         orderDetails['entity_id'] = result.data.items[0] ? result.data.items[0].entity_id : 0;
         orderDetails['returnStatus'] = getorderReturnstatus(orderDetails['entity_id'])
+        orderDetails['status'] = result?.data?.items?.[0]?.status
         setOrder(orderDetails);
 
         let checkreturn: any = await checkIfReturnExists(orderDetails['entity_id']);
@@ -85,9 +84,10 @@ function OrderDetails(props) {
         if (resultShow.length > 0) {
             setShowReturn(true);
         }
-
-        const p = result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'processing' ? 10 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'complete' ? 100 : result.data && result.data.items && result.data.items > 0 && result.data.items.status === 'pending' ? 25 : 10;
-        setOrderProgress(p)
+        console.log(result?.data?.items?.[0]?.status)
+        let percentage = result?.data?.items?.[0]?.status === 'pending' ? 10 : result?.data?.items?.[0]?.status === 'complete' ? 100 : result?.data?.items?.[0]?.status === 'processing' ? 50 : result?.data?.items?.[0]?.status === 'canceled' ? 100 : 10;
+        console.log(percentage)
+        setOrderProgress(percentage)
     }
 
     const getorderReturnstatus = async (id) => {
@@ -95,10 +95,7 @@ function OrderDetails(props) {
         return result?.data;
 
     }
-    const getCountries = async () => {
-        let result: any = await getCountriesList();
-        setCountries(result?.data);
-    }
+
 
     const toggleAddressModal = () => {
         setChangeAddressModal(!changeAddressModal);
@@ -218,19 +215,32 @@ function OrderDetails(props) {
                                 <p><strong>
                                     {order.status === 'complete' ? <IntlMessages id="order.itsDelivered" /> : order.status === 'pending' ?
                                         <IntlMessages id="order.itsPending" /> : order.status === 'processing' ? <IntlMessages id="order.itsProcessing" />
+                                            : order.status === 'canceled' ? <IntlMessages id="order.canceled" />
                                             : order.status}
                                 </strong></p>
                                 {order.status === 'complete' && <p><IntlMessages id="order.delivered" /> {order.shipping_amount}</p>}
                                 <div className="progress-bar-area">
-                                    <div className="progress">
-                                        <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                            aria-valuenow={orderProgress} aria-valuemin={0} aria-valuemax={100} style={{ width: `${orderProgress}%` }}></div>
-                                    </div>
+
+                                    {order.status === 'canceled' ? <Progress
+                                        strokeLinecap="square"
+                                        percent={orderProgress}
+                                        showInfo={false}
+                                        strokeWidth={15}
+                                        status="exception" />
+                                        :
+                                        <Progress
+                                            strokeColor={{
+                                                '0%': '#87d068',
+                                                '100%': '#108ee9',
+                                            }}
+                                            strokeLinecap="square"
+                                            percent={orderProgress}
+                                            showInfo={false}
+                                            strokeWidth={15}
+                                            status="active"
+                                        />
+                                    }
                                 </div>
-                                <p>
-                                    {order.status === 'complete' ? <IntlMessages id="order.yourParcelDelivered" /> : order.status === 'pending' ?
-                                        <IntlMessages id="order.yourParcelPending" /> : order.status === 'processing' ? <IntlMessages id="order.yourParcelProcessing" />
-                                            : order.status}</p>
                             </div>
                         </div>
                     </div>
@@ -247,8 +257,9 @@ function OrderDetails(props) {
                                     <p>{moment(order['created_at']).format('ddd, D MMMM YYYY')}</p>
                                 </div>
                                 <div className="col-md-3">
-                                    <p><strong><IntlMessages id="shipment.date" /></strong></p>            
-                                    <p>{moment(order['shipment_date']).format('ddd, D MMMM YYYY')}</p>                       
+                                    <p><strong><IntlMessages id="shipment.date" /></strong></p>
+
+                                    <p>{(order['shipment_date'] !== "N/A") ? moment(order['shipment_date']).format('ddd, D MMMM YYYY') : ""}</p>
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.paymentMethod" /></strong></p>
@@ -277,8 +288,7 @@ function OrderDetails(props) {
                                 {order['delivery_address']?.firstname + ' ' + order['delivery_address']?.lastname}<br />
                                 {order['delivery_address']?.street}<br />
                                 {order['delivery_address']?.postcode}<br />
-                                {order['delivery_address']?.city}<br />                     
-                                {order['delivery_address'] &&  order['delivery_address'].region ? getRegionName(order['delivery_address'].country_id,order['delivery_address'].region) : ""}<br/>
+                                {order['delivery_address']?.city}<br />
                                 {order['delivery_address'] ? getCountryName(order['delivery_address'].country_id) : ""}
                             </p>
                         </div>
@@ -306,10 +316,9 @@ function OrderDetails(props) {
                         <div className="col-md-12 return-complaint-btns">
                             {order.returnStatus && (
                                 <div className="float-start">
-                                    <Link to={`/customer/create-return/${order.increment_id}`}><IntlMessages id="order.returnProducts" /></Link>                                  
+                                    <Link to={`/customer/create-return/${order.increment_id}`}><IntlMessages id="order.returnProducts" /></Link>
                                 </div>
                             )}
-                            <div className="clearfix"></div>
                         </div>
                     )}
                 </div>
@@ -392,6 +401,7 @@ function OrderDetails(props) {
                             <label className="form-label">Address<span className="maindatory">*</span></label>
                             <input type="text" className="form-control" id="street"
                                 placeholder="Address"
+                                maxLength={50}
                                 value={custAddForm.street}
                                 onChange={handleAddChange} />
                             <span className="error">{errors.errors["address"]}</span>
@@ -418,9 +428,8 @@ function OrderDetails(props) {
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /><span className="maindatory">*</span></label>
                             <select value={custAddForm.country_id} onChange={handleCountryChange} id="country_id" className="form-select">
-                                {COUNTRIES && COUNTRIES.map((opt, i) => {
-                                    return (<option key={i} value={opt.id}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                })}
+                                <option key="0" value="">{intl.formatMessage({ id: 'select' })}</option>
+                                <option key="1" value="SA">{intl.formatMessage({ id: 'saudi' })}</option>
                             </select>
                             <span className="error">{errors.errors["country"]}</span>
                         </div>

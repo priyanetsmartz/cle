@@ -4,16 +4,17 @@ import { orderDetailbyId } from '../../../redux/cart/productApi';
 import IntlMessages from "../../../components/utility/intlMessages";
 import moment from 'moment';
 import { Link } from "react-router-dom";
-import { capitalize, getCountryName } from '../../../components/utility/allutils';
+import { checkCustomerLogin, getCountryName } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import Form from './order-form';
-
+import { useHistory } from "react-router";
 function OrderThankyou(props) {
+    let history = useHistory();
     const query = new URLSearchParams(props.location.search);
     const orderId = query.get('id')
     const [orderDetails, setOrderDetails] = useState({});
+
     useEffect(() => {
-        const localToken = props.token.token;
         if (orderId) {
             getOrderDetails(orderId);
         } else {
@@ -21,13 +22,18 @@ function OrderThankyou(props) {
         }
 
         return () => {
-            //
+            setOrderDetails({})
         }
     }, [props.token])
 
     async function getOrderDetails(orderId) {
         let results: any = await orderDetailbyId(orderId);
         let orderDetails = {};
+        orderDetails['user'] = results.data ? results.data.customer_email : "";
+        let user = await checkCustomerLogin();
+        if (orderDetails['user'] !== user?.token_email) {
+            history.push('/');
+        }
         orderDetails['increment_id'] = results.data ? results.data.increment_id : 0;
         orderDetails['created_at'] = results.data ? results.data.created_at : 0;
         orderDetails['shipment_date'] = results.data && results.data.extension_attributes && results.data.extension_attributes.shipment_date ? results.data.extension_attributes.shipment_date : 0;
@@ -41,7 +47,7 @@ function OrderThankyou(props) {
         orderDetails['base_tax_amount'] = results.data ? results.data.base_tax_amount : 0;
         orderDetails['grand_total'] = results.data ? results.data.grand_total : 0;
         orderDetails['items'] = results.data ? results.data.items : {};
-      
+       
         setOrderDetails(orderDetails);
     }
     return (
@@ -93,7 +99,7 @@ function OrderThankyou(props) {
                             <div className="order-delivery-address">
                                 <div className="Address-title">
                                     <span className="float-start"><IntlMessages id="order.deliveryAddress" /></span>
-                                 
+
                                     <div className="clearfix"></div>
                                 </div>
                                 <p>
@@ -128,7 +134,7 @@ function OrderThankyou(props) {
                     {orderDetails['items'] && orderDetails['items'].length > 0 && (
                         <ul className="order-pro-list">
                             {orderDetails['items'].map((item, i) => {
-                            
+
                                 return (<li key={i}>
                                     <div className="row">
                                         <div className="col-md-3">

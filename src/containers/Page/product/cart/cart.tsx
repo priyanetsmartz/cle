@@ -162,12 +162,12 @@ function CartItemPage(props) {
             deleteCartItem = await removeItemFromGuestCart(item_id);
         }
         if (deleteCartItem.data === true) {
-
+            callGetCartItems()
             props.addToCartTask(true);
             if (wishlistAction === 'whishlist') {
                 history.push("/customer/wishlist");
             } else {
-                callGetCartItems()
+
                 notification("success", "", intl.formatMessage({ id: "removedcart" }));
             }
 

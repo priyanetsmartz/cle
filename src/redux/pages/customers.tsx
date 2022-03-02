@@ -17,13 +17,13 @@ export function getRegionsByCountryID(countryId: string) {
 
 export async function getCustomerDetails() {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const custId = user.cust_id;
+    const custId = user?.cust_id;
     return adminApi.request(`rest/V1/customers/${custId}`, "", "GET", "");
 }
 
 export async function saveCustomerDetails(data) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const custId = user.cust_id;
+    const custId = user?.cust_id;
     return adminApi.request(`default/rest/all/V1/customers/${custId}`, data, "PUT", "");
 }
 
@@ -55,14 +55,14 @@ export function savePreference(data) {
 
 export async function getCustomerOrders(pageSize, page) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const custId = user.cust_id;
+    const custId = user?.cust_id;
     return adminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[sortOrders][0][field]=created_at&searchCriteria[sortOrders][0][direction]=DESC&searchCriteria[page_size]=${pageSize}&searchCriteria[currentPage]=${page}`, "", "GET", "");
 }
 
 export async function getCustomerReturn(pageSize, from_date: any, to_date: any, from_price: any, to_price: any, sortBy: any, sortOrders: any, search: any) {
 
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const custId = user.cust_id;
+    const custId = user?.cust_id;
 
     let queryString = "customerId=" + custId + "&pageSize=" + pageSize;
     if (from_date != null && from_date !== '')
@@ -85,19 +85,19 @@ export async function getCustomerReturn(pageSize, from_date: any, to_date: any, 
 
 export async function getCustomerOrdersByDate(fromDate, toDate, pageSize) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const custId = user.cust_id;
+    const custId = user?.cust_id;
     return adminApi.request(`/rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=created_at&searchCriteria[filterGroups][0][filters][0][value]=${fromDate}&searchCriteria[filterGroups][0][filters][0][conditionType]=from&searchCriteria[filter_groups][1][filters][0][field]=created_at&searchCriteria[filter_groups][1][filters][0][value]=${toDate}&searchCriteria[filter_groups][1][filters][0][condition_type]=to&searchCriteria[filter_groups][2][filters][0][field]=customer_id&searchCriteria[filter_groups][2][filters][0][value]=${custId}&searchCriteria[filter_groups][2][filters][0][condition_type]=eq`, "", "GET", "");
 }
 export async function getCustomerOrdersByPrice(priceFrom, priceTo, pageSize) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const custId = user.cust_id;
+    const custId = user?.cust_id;
     return adminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=grand_total&searchCriteria[filterGroups][0][filters][0][value]=${priceFrom}&searchCriteria[filterGroups][0][filters][0][conditionType]=from&searchCriteria[filter_groups][1][filters][0][field]=grand_total&searchCriteria[filter_groups][1][filters][0][value]=${priceTo}&searchCriteria[filter_groups][1][filters][0][condition_type]=to&searchCriteria[filter_groups][2][filters][0][field]=customer_id&searchCriteria[filter_groups][2][filters][0][value]=${custId}&searchCriteria[filter_groups][2][filters][0][condition_type]=eq`, "", "GET", "");
 
 }
 
 export async function sortCustomerOrders(sort, pageSize) {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const custId = user.cust_id;
+    const custId = user?.cust_id;
     if (sort === ""){
         return adminApi.request(`rest/V1/orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${custId}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq&searchCriteria[page_size]=${pageSize}`, "", "GET", "");
     } else {
@@ -120,7 +120,7 @@ export function updateOrderAddress(data) {
 
 export async function getWishList() {
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const custId = user.cust_id;
+    const custId = user?.cust_id;
     return Api.request(`rest/V1/wishlist/items?customerId=${custId}`, "", "GET", "");
 }
 
@@ -132,7 +132,7 @@ export function addItemToWishList(productId) {
 export async function wishListSearchSort(language, pageSize, sortOrder, sortBy, searchName) {
     const storeId = language === 'english' ? '3' : '2';
     let user = await sessionService.loadUser().then(user => { return user }).catch(err => console.log(''))
-    const localToken = user.cust_id;
+    const localToken = user?.cust_id;
 
     return adminApi.request(`rest/V1/wishlist/items?customerId=${localToken}&page_size=${pageSize}&sortBy=${sortOrder}&soryByValue=${sortBy}&name=${searchName}&storeId=${storeId}`, "", "GET", "");
 }
