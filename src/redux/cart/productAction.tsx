@@ -25,6 +25,7 @@ const actions = {
     SET_CATAEARCH: 'SET_CATAEARCH',
     SET_CATANAME: 'SET_CATANAME',
     OPEN_PREP_BOX: 'OPEN_PREP_BOX',
+    RETURN_DATA: 'RETURN_DATA',
     addToCart: (id: number) => ({
         type: actions.ADD_TO_CART,
         id
@@ -39,14 +40,6 @@ const actions = {
     }),
     removeItem: (id: number) => ({
         type: actions.REMOVE_ITEM,
-        id
-    }),
-    addQuantity: (id: number) => ({
-        type: actions.ADD_QUANTITY,
-        id
-    }),
-    subtractQuantity: (id: number) => ({
-        type: actions.SUB_QUANTITY,
         id
     }),
     productList: payload => ({
@@ -125,5 +118,9 @@ const actions = {
         type: actions.OPEN_PREP_BOX,
         isPrepOpen: isPrepOpen
     }),
+    saveReturnData: retrunData => ({
+        type: actions.RETURN_DATA,
+        retrunData: retrunData
+    })
 };
 export default actions;

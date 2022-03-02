@@ -701,5 +701,6 @@
   "alreadyunsubscribe":"لقد سبق لك إلغاء اشتراكك من القائمة البريدية لـ CLE",  
   "home":"اذهب إلى الصفحة الرئيسية",
   "saudi":"العربية السعودية",  
-  "order.canceled":"تم إلغاؤه"
+  "order.canceled":"تم إلغاؤه",  
+  "order.reason":"سبب عودة"
 }

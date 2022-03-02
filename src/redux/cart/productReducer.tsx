@@ -22,6 +22,7 @@ const initState = {
     pageeSize: 12,
     catIdd: 0,
     catname: 'women',
+    retrunData:{}
 }
 
 
@@ -70,6 +71,8 @@ const cartReducer = (state = initState, action) => {
             return { ...state, catname: action.catname };
         case actions.OPEN_PREP_BOX:
             return { ...state, isPrepOpen: action.isPrepOpen };
+        case actions.RETURN_DATA:
+            return { ...state, retrunData: action.retrunData };
         default:
             return state;
     }

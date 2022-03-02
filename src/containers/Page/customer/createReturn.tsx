@@ -1,27 +1,34 @@
 import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { checkIfReturnExists, createReturnRequest, getRegionsByCountryID, getReturnReasonList, searchOrders, updateOrderAddress } from '../../../redux/pages/customers';
+import { useHistory } from "react-router";
+import { checkIfReturnExists, getReturnReasonList, searchOrders, updateOrderAddress } from '../../../redux/pages/customers';
 import moment from 'moment';
+
 import IntlMessages from "../../../components/utility/intlMessages";
 import Modal from "react-bootstrap/Modal";
 import { Link, useParams } from "react-router-dom";
-import { capitalize, formatprice, getCountryName } from '../../../components/utility/allutils';
+import { capitalize, formatprice } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import ReturnFooter from './returnFooter';
 import { useIntl } from 'react-intl';
 import notification from '../../../components/notification';
+import cartAction from "../../../redux/cart/productAction";
+const { saveReturnData } = cartAction;
 
 function CreateReturn(props) {
     const intl = useIntl();
+    let history = useHistory();
     const { returnId }: any = useParams();
     const [custId, setCustid] = useState(props.token.cust_id);
     const [maxItems, setMaxitems] = useState(10);
+    const [total, setTotal] = useState(0);
     const [order, setOrder]: any = useState([]);
     const [loader, setLoader]: any = useState(false);
     const [issueList, setIssueList]: any = useState([]);
     const [changeAddressModal, setChangeAddressModal] = useState(false);
     const [returnOrExchange, setReturnOrExchange] = useState('');
     const [returnOrExchangeComment, setReturnOrExchangeComment] = useState('');
+    const [reasonObjectSent, setReasonObjectSent] = useState([]);
     const [reasonObject, setReasonObject] = useState([]);
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
@@ -48,6 +55,8 @@ function CreateReturn(props) {
     useEffect(() => {
         getData(returnId);
         getReturnReasonListFxn();
+        return () => {
+        }
     }, []);
 
     const getReturnReasonListFxn = async () => {
@@ -95,7 +104,7 @@ function CreateReturn(props) {
         return function (current) {
             return otherArray.filter(function (other) {
                 return parseInt(other.id) === current.item_id
-            }).length == 0;
+            }).length === 0;
         }
     }
     const toggleAddressModal = () => {
@@ -198,14 +207,23 @@ function CreateReturn(props) {
         };
     }
 
-    const handleProductSelect = (prodID) => {
-    }
+
     const selectReason = (event) => {
+        let reasonData = event.target.options[event.target.selectedIndex].text;
         let attribute_code = event.target.getAttribute("data-attribute");
-        setReasonObject(prevState => ({
+        let price = event.target.getAttribute("data-price");
+        let item = order?.items;
+        const filteredResult = item.find((e) => e.item_id === parseInt(attribute_code));
+        filteredResult.reason = event.target.value;
+        filteredResult.reasonData = reasonData
+        let amount = total + parseInt(price);
+        setTotal(amount)
+        setReasonObjectSent(prevState => ({
             ...prevState,
             [attribute_code]: event.target.value
         }))
+        setReasonObject(prevState => [...prevState, filteredResult]);
+
     }
     const handleChange = (e) => {
         setReturnOrExchangeComment(e.target.value);
@@ -216,6 +234,7 @@ function CreateReturn(props) {
     }
     const handleSubmitClick = async (e) => {
         setLoader(true)
+
         if (reasonObject.length === 0) {
             setLoader(false)
             notification("error", "", intl.formatMessage({ id: "selectreturnOrExchangeProducts" }));
@@ -226,29 +245,21 @@ function CreateReturn(props) {
             notification("error", "", intl.formatMessage({ id: "selectreturnOrExchange" }));
             return false;
         }
+
+
+
         let returnInfoData = {
-            returnInfo: {
-                orderId: order['entity_id'],
-                rma_reason: returnOrExchange,
-                comment_text: returnOrExchangeComment,
-                items: reasonObject
-            }
+            orderId: order['entity_id'],
+            rma_reason: returnOrExchange,
+            comment_text: returnOrExchangeComment,
+            items: reasonObject,
+            total: total,
+            dataSent : reasonObjectSent
         }
+        props.saveReturnData(returnInfoData);
+        let url = `/customer/return-summary/` + returnId;
+        history.push(url);
 
-        let result: any = await createReturnRequest(returnInfoData);
-
-        if (result?.data?.[0]?.status === true) {
-            let key = Object.keys(result?.data?.[0]?.rma);
-            let url = `/customer/return-details/${key[0]}`;
-            setLoader(false)
-            notification("success", "", "Return for your order has been created");
-            setTimeout(() => {
-                window.location.href = url;
-            }, 3000)
-        } else {
-            setLoader(false)
-            notification("error", "", result?.data?.[0]?.message);
-        }
 
     }
 
@@ -324,7 +335,7 @@ function CreateReturn(props) {
                     {order && order.items && order.items.slice(0, maxItems).map((item, i) => {
                         return (
                             <div key={i}>
-                                <li onClick={() => handleProductSelect(item.item_id)}>
+                                <li>
                                     <div className="row">
                                         <div className="col-md-3">
                                             <div className="product-image">
@@ -351,7 +362,7 @@ function CreateReturn(props) {
                                     </div>
                                 </li>
 
-                                <select className="form-select customfliter" aria-label="Default select example" data-attribute={item.item_id} onChange={selectReason} >
+                                <select className="form-select customfliter" aria-label="Default select example" data-attribute={item.item_id} data-price={item.price} onChange={selectReason} >
                                     <option value="">{intl.formatMessage({ id: "returnreason" })}</option>
                                     {issueList && issueList[0] && Object.keys(issueList[0]).map((item, i) => (
                                         <option key={i} value={item}>{issueList[0][item]}</option>
@@ -524,5 +535,6 @@ function mapStateToProps(state) {
     };
 };
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { saveReturnData }
 )(CreateReturn);

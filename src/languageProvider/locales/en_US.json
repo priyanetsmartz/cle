@@ -701,5 +701,6 @@
   "alreadyunsubscribe":"Your have already unsubscribed from the CLE mailing list",
   "home":"Go to Home",
   "saudi":"Saudi Arabia",
-  "order.canceled":"It's cancelled "
+  "order.canceled":"It's cancelled",
+  "order.reason":"Return reason"
 }

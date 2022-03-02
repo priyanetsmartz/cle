@@ -41,6 +41,7 @@ import VendorOrderDetails from './containers/Page/business/orderDetail';
 import MyPayoutDetails from './containers/Page/business/payoutDetails';
 import returnsDetails from './containers/Page/customer/returnsDetails';
 import CreateReturn from './containers/Page/customer/createReturn';
+import ReturnsSummary from './containers/Page/customer/ReturnsSummary';
 import ProductIntegration from './containers/Page/business/productIntegration';
 import ProductDetailsPrivate from './containers/Page/product/product-details/ProductDetailsPrivate';
 import BussinessResetEmail from './containers/Page/business/BussinessResetEmail';
@@ -81,6 +82,7 @@ const PublicRoutes = ({ history }) => {
             <LoggedInRoute exact path="/notifications" component={Notifications} />
             <LoggedInRoute exact path="/customer/:tab" component={Customer} />
             <LoggedInRoute exact path="/customer/return-details/:returnId" component={returnsDetails} />
+            <LoggedInRoute exact path="/customer/return-summary/:orderId" component={ReturnsSummary} />
             <LoggedInRoute exact path="/customer/create-return/:returnId" component={CreateReturn} />
             <ProductRoutes exact path="/unsubscribe" component={Unsubscribe} />
             <VendorRoute exact path="/vendor/:tab" component={BusinessSidebar} />
