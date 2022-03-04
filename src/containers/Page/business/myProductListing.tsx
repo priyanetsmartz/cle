@@ -19,7 +19,6 @@ function MyProductListing(props) {
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
     let venID = localToken && localToken?.vendor_id ? localToken?.vendor_id : 0;
-    const [pending, setPending] = useState(true)
     const [listingData, setListingData] = useState([])
     const [range, setRange] = useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState();
@@ -30,6 +29,7 @@ function MyProductListing(props) {
     const [deletePop, setDeletePop] = useState(false);
     const [deleteId, setDeleteID] = useState(0)
     const [isLoading, setIsLoading] = useState(true);
+    const [loader, setLoader] = useState(false);
 
 
     useEffect(() => {
@@ -43,7 +43,7 @@ function MyProductListing(props) {
     async function getVendorProductListing(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
         setIsLoading(true);
         let pageSize = props.pageData ? props.pageData : "";
-      
+
         let result: any = await searchProducts(props.languages, pageSize, status, from, to, term, dateFrom, dateTo, sortorder);
 
         let dataObj = result && result.data && result.data.length > 0 ? result.data : [];
@@ -62,8 +62,6 @@ function MyProductListing(props) {
         });
         setListingData(renObjData)
         setIsLoading(false);
-        setPending(false)
-
     }
 
     const getOrdersByStatus = async (e) => {
@@ -125,6 +123,7 @@ function MyProductListing(props) {
     }
 
     async function deleteProduct() {
+        setLoader(true)
         let payload = {
             "sku": deleteId,
             "status": 2,
@@ -133,6 +132,7 @@ function MyProductListing(props) {
         }
         await removeProduct(payload)
         getVendorProductListing();
+        setLoader(false)
         closePop();
     }
     const closePop = () => {
@@ -322,7 +322,11 @@ function MyProductListing(props) {
                         </div>
                         <div className="modal-footer justify-content-center">
                             <button type="button" className="btn btn-primary" onClick={closePop} data-dismiss="modal"><IntlMessages id="productEdit.cancel" /></button>
-                            <button type="button" className="btn btn-secondary" onClick={deleteProduct} ><IntlMessages id="productEdit.delete" /></button>
+                            <button type="button" className="btn btn-secondary" style={{ "display": !loader ? "inline-block" : "none" }} onClick={deleteProduct} ><IntlMessages id="productEdit.delete" /></button>
+                            <div className="spinner btn btn-secondary" style={{ "display": loader ? "inline-block" : "none" }}>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                <IntlMessages id="loading" />
+                            </div>
                         </div>
                     </div>
                 </Modal.Body>

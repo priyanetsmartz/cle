@@ -18,9 +18,9 @@ function VendorOrderDetail(props) {
     const [orderPurchaseDate, setOrderPurchaseDate] = useState('')
     const [orderPayment, setOrderPayment] = useState('')
     const [deliveryCost, setDeliveryCost] = useState('')
-    const [paymentStatus, setPaymentStatus] = useState('')
     const [statusOrder, selectStatusOrder] = useState('')
     const [orderStatus, setOrderStatus] = useState(0);
+    const [loader, setLoader] = useState(false);
     const [statusCode, setStatusCode] = useState("0");
     const [show, setShow] = useState(false)
     const [billingAddr, setBillingAddr] = useState({
@@ -53,9 +53,9 @@ function VendorOrderDetail(props) {
         getOrderDetailFxn(orderId)
     }, [props.languages])
 
-    async function getOrderDetailFxn(orderId,sort_order:any ='') {
-        sort_order = sort_order?sort_order:sortOrder;
-       
+    async function getOrderDetailFxn(orderId, sort_order: any = '') {
+        sort_order = sort_order ? sort_order : sortOrder;
+
         let results: any = await getOrderDetail(props.languages, orderId, sort_order);
 
         let data = [];
@@ -73,9 +73,8 @@ function VendorOrderDetail(props) {
             setTotal(data[0][0].order_total.grand_total)
             setCurrency(siteConfig.currency)
             setOrderStatus(data[0][0].udropship_statuslabel)
-            setPaymentStatus(data[0][0].invoice_data.invoice_status)
             setStatusCode(data[0][0].udropship_status)
-     
+
 
             if (data[0][0].billing_address.length > 0) {
                 let addr: any = data[0][0].billing_address[0]
@@ -137,13 +136,20 @@ function VendorOrderDetail(props) {
             notification("error", "", intl.formatMessage({ id: "selectreturnOrExchange" }));
             return false;
         }
+        if (statusOrder === "reject" && statusOrderComment === '') {
+            notification("error", "", intl.formatMessage({ id: "order.decline" }));
+            return false;
+        }
+        setLoader(true)
         let result: any = await changeOrderSatus(orderId, statusOrder, statusOrderComment);
         if (result?.data) {
+            setLoader(false)
             selectStatusOrder('')
             setstatusOrderComment('')
             getOrderDetailFxn(orderId)
             notification("success", "", intl.formatMessage({ id: "orderstatusupdate" }));
         } else {
+            setLoader(false)
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
 
@@ -168,29 +174,33 @@ function VendorOrderDetail(props) {
                                     </div>
                                     {statusCode === "0" && (
                                         <div className="col-sm-12">
-                                            
-											<div className="row my-3">
-											  <div className="col-md-3 mb-2">
-													<label className="form-label"><IntlMessages id = "status"></IntlMessages></label>
-													<select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
-														<option value="">{intl.formatMessage({ id: "select" })}</option>
-														<option value="accept">{intl.formatMessage({ id: "accept" })}</option>
-														<option value="reject">{intl.formatMessage({ id: "decline" })}</option>
-													</select>
-											  </div>
-											  <div className="col-md-3 align-self-end mb-2">
-												<label className="form-label"></label>
-												<Link to="#" className="btn btn-secondary m-0" onClick={handleSubmitClick} ><IntlMessages id="confirm.order" /></Link>
-											  </div>
-											  <div className="col-md-12 mb-2">
-												{show && (<div className='return-comment' >
-															<label className="form-label"><IntlMessages id="reasonofrejection" /></label>
-															<textarea className="form-control customfliter" rows={3} onChange={handleChange} value={statusOrderComment}>
-															</textarea>
-														</div>)}
-											  </div>
-											</div>
-											
+
+                                            <div className="row my-3">
+                                                <div className="col-md-3 mb-2">
+                                                    <label className="form-label"><IntlMessages id="status"></IntlMessages></label>
+                                                    <select className="form-select customfliter" aria-label="Default select example" onChange={selectStatus} >
+                                                        <option value="">{intl.formatMessage({ id: "select" })}</option>
+                                                        <option value="accept">{intl.formatMessage({ id: "accept" })}</option>
+                                                        <option value="reject">{intl.formatMessage({ id: "decline" })}</option>
+                                                    </select>
+                                                </div>
+                                                <div className="col-md-3 align-self-end mb-2">
+                                                    <label className="form-label"></label>
+                                                    <Link to="#" className="btn btn-secondary m-0" onClick={handleSubmitClick} style={{ "display": !loader ? "inline-block" : "none" }} ><IntlMessages id="confirm.order" /></Link>
+                                                    <div className="spinner btn btn-secondary m-0" style={{ "display": loader ? "inline-block" : "none" }}>
+                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                         <IntlMessages id="loading" />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-12 mb-2">
+                                                    {show && (<div className='return-comment' >
+                                                        <label className="form-label"><IntlMessages id="reasonofrejection" /></label>
+                                                        <textarea className="form-control customfliter" rows={3} onChange={handleChange} value={statusOrderComment}>
+                                                        </textarea>
+                                                    </div>)}
+                                                </div>
+                                            </div>
+
                                         </div>
                                     )}
 
@@ -219,11 +229,11 @@ function VendorOrderDetail(props) {
                                         <div className="return-user-info">
                                             <h5><IntlMessages id="checkout.billingAdd" /></h5>
                                             <address>
-                                                {billingAddr.name}<br />
-                                                {billingAddr.street}<br />
-                                                {billingAddr.city}<br />
-                                                {billingAddr.region}<br />
-                                                {billingAddr.country}
+                                                {billingAddr?.name}<br />
+                                                {billingAddr?.street}<br />
+                                                {billingAddr?.city}<br />
+                                                {billingAddr?.postalCode}<br />
+                                                {billingAddr?.country}
                                             </address>
                                         </div>
                                     </div>
@@ -234,7 +244,7 @@ function VendorOrderDetail(props) {
                                                 {shippingAddr.name}<br />
                                                 {shippingAddr.street}<br />
                                                 {shippingAddr.city}<br />
-                                                {shippingAddr.region}<br />
+                                                {shippingAddr.postalCode}<br />
                                                 {shippingAddr.country}
                                             </address>
                                         </div>
@@ -288,7 +298,7 @@ function VendorOrderDetail(props) {
                                             <p>{product['name']}</p>
                                             <br />
                                             <p>{product['configOptionValue']}</p>
-                                            <p><strong><IntlMessages id="order.productNo"/> {product['productId']}</strong></p>
+                                            <p><strong><IntlMessages id="order.productNo" /> {product['productId']}</strong></p>
                                         </div>
                                         <div className="col-md-2">
                                             <p><strong><IntlMessages id="price" /></strong></p>
@@ -296,7 +306,7 @@ function VendorOrderDetail(props) {
                                         </div>
                                         <div className="col-md-2">
                                             <p><strong><IntlMessages id="quantity" /></strong></p>
-                                            <p>{formatprice (product['qty_ordered'])}</p>
+                                            <p>{formatprice(product['qty_ordered'])}</p>
                                         </div>
                                         <div className="col-md-2">
                                             <p><strong><IntlMessages id="tax" /></strong></p>

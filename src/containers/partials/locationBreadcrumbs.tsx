@@ -68,9 +68,9 @@ function Breadcrumbs(props) {
                                 )
                             } else if (local === 'thankyou') {
                                 return (
-                                    <><li key={2} className="breadcrumb-item"><Link to="/customer/dashboard">My Account</Link></li>
-                                        <li key={3} className="breadcrumb-item"><Link to="/customer/orders-and-returns">My Orders and Return</Link></li>
-                                        <li key={4} className="breadcrumb-item active">Thank you</li>
+                                    <><li key={10} className="breadcrumb-item"><Link to="/customer/dashboard">My Account</Link></li>
+                                        <li key={11} className="breadcrumb-item"><Link to="/customer/orders-and-returns">My Orders and Return</Link></li>
+                                        <li key={12} className="breadcrumb-item active">Thank you</li>
                                     </>
                                 )
                             } else if (local === 'business-profile') {
@@ -131,7 +131,7 @@ function Breadcrumbs(props) {
                             }
 
                         } else {
-                            if (local === "" || local === "settings" || local === vendorIdprev) {
+                            if (local === "" || local === "settings" || local === vendorIdprev ) {
                                 return "";
                             } else {
                            
@@ -204,7 +204,11 @@ function Breadcrumbs(props) {
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={"/customer/orders-and-returns"}>My Orders and Returns</Link></li>
                                     )
-                                } else {
+                                }  else if (local === 'orderauth') {
+                                    return (
+                                        <li key={j} className="breadcrumb-item">Order Authentication</li>
+                                    )
+                                }else {
                                     let str = local.replace(/-/g, ' ');
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={local === 'product-details' ? '/products' : "/" + local}>{local === 'product-details' ? 'Products' : capitalize(str)}</Link></li>

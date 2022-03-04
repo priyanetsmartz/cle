@@ -20,7 +20,7 @@ import GiftMessage from './GiftMessage';
 import Login from '../../../../redux/auth/Login';
 import appAction from "../../../../redux/app/actions";
 import { useIntl } from 'react-intl';
-import { useLastLocation } from 'react-router-last-location';
+
 const loginApi = new Login();
 const { showSignin, showLoader } = appAction;
 const { addToCart, addToCartTask, openGiftBoxes, addToWishlistTask, recomendedProducts, getAttributeProducts, openSizeGuide } = cartAction;
@@ -49,23 +49,10 @@ function ProductDetails(props) {
     const [childrenProducts, seChildrenProducts] = useState([]);
     const [productSizeDetails, setProductSizeDetails] = useState({});
     const [measuringDetails, setMeasuringDetails] = useState({});
-    const [tagsState, setTagsState] = useState([]);
     const [slectedAttribute, setSlectedAttribute] = useState(0);
-    const [extensionAttributes, setExtensionAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
-    const [locationBread, setLocationBread] = useState([]);
-    const lastLocation = useLastLocation();
 
     useEffect(() => {
-
-        let path = lastLocation?.pathname;
-        const location_array = path?.split('/');
-
-        if (!location_array?.includes('search')) {
-            setLocationBread(location_array)
-        } else {
-            setLocationBread(undefined)
-        }
 
 
         setTimeout(() => {
@@ -277,12 +264,10 @@ function ProductDetails(props) {
         projectSingle['breadcrumbsArray'] = jsonBread;
         setOpacity(1)
         setProdId(projectSingle['id']);
-        setTagsState(tags)
 
         setProductImages(result?.data?.media_gallery_entries?.length > 0 ? result?.data?.media_gallery_entries : projectSingle['img'])
 
-        let qtyy = result?.data && result.data.extension_attributes ? result.data.extension_attributes.stock_item.qty : 0
-        setExtensionAttributes(qtyy);
+
         setproductDetails(projectSingle);
 
 
@@ -413,18 +398,20 @@ function ProductDetails(props) {
     }
     const getAnimalsContent = catsName => {
         let content = [];
-       
+
         for (let i = 0; i <= catsName?.length; i++) {
+
             if (i === 0)
-                content.push(<li className="breadcrumb-item" key={i}>{catsName[0]?.url_key ? <Link to={"/category/" + catsName[0].url_key}>{catsName[0].name}</Link> : catsName[0].name}</li>)
-            if (i === 1)
+                content.push(<><li className="breadcrumb-item" key={i}>{catsName[0]?.url_key ? <Link to={"/category/" + catsName[0].url_key}>{catsName[0].name}</Link> : catsName[0].name}</li></>)
+            else if (i === 1)
                 content.push(<li className="breadcrumb-item" key={i}>{catsName[1]?.url_key ? <Link to={"/products/" + catsName[0].url_key + "/" + catsName[1].url_key}>{catsName[1].name}</Link> : catsName[1].name}</li>)
-            if (i === 2)
+            else if (i === 2)
                 content.push(<li className="breadcrumb-item" key={i}>{catsName[2]?.url_key ? <Link to={"/products/" + catsName[0].url_key + "/" + catsName[1].url_key + "/" + catsName[2].url_key}>{catsName[2].name}</Link> : catsName[2].name}</li>)
-            if (i === 3)
+            else if (i === 3)
                 content.push(<li className="breadcrumb-item" key={i}>{catsName[3]?.url_key ? <Link to={"/products/" + catsName[0].url_key + "/" + catsName[1].url_key + "/" + catsName[2].url_key + "/" + catsName[3].url_key}>{catsName[3].name}</Link> : catsName[3].name}</li>)
 
         }
+        content.push(<li className="breadcrumb-item">{catsName[0].product_name}</li>)
         return content;
     };
     return (
@@ -440,7 +427,7 @@ function ProductDetails(props) {
                                         <>
                                             <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                             {getAnimalsContent(productDetails?.['breadcrumbsArray'])}
-                                            <li className="breadcrumb-item">{productDetails?.['name']}</li>
+
                                         </>
 
                                     )}

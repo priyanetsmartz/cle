@@ -1524,12 +1524,15 @@ p.promotion_alert {
     font: normal normal bold 18px/27px Lato;
     margin-bottom: 30px;
 }
+
 .single-address p {
     margin-bottom: 8px;
 }
+
 .progress-bar-area .ant-progress-inner {
     border-radius: 0;
 }
+
 .my_profile_sect h2+p {
     font: normal normal normal 16px/19px Lato;
 }
@@ -7270,6 +7273,11 @@ button:focus {
     text-overflow: ellipsis;
 }
 
+.serach-results-inner .nothing_found {
+    width: 188px;
+    text-align: center;
+}
+
 .serach-results-inner .minicartprodt_img {
     float: left;
     width: 25%;
@@ -9094,6 +9102,7 @@ p.sliderupper {
     content: "";
     border: none;
 }
+
 .analysis-demo input[type="radio"] {
     opacity: 0;
     position: absolute;
@@ -9592,7 +9601,27 @@ ul.vendor-menu {
     display: block;
     margin: 0 auto;
 }
-
+.cancelledorder {
+    top: 493px;
+    left: 0px;
+    width: 100%;
+    height: 65px;
+    background: #D9242C 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+.ordercancelledtext {
+    padding: 21px;
+    font: normal normal 600 18px/22px Lato;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+.track-btn {
+    background: #000000 0% 0% no-repeat padding-box;
+    opacity: 1;
+    width: 180px;
+    height: 43px;
+}
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */
@@ -9620,7 +9649,7 @@ ul.vendor-menu {
     .recommendations-section h1 {
         font-size: 14px;
     }
-    
+
 
     .product_description .list_accordon .logo_stampg {
         position: absolute;
@@ -9705,19 +9734,22 @@ ul.vendor-menu {
 
 @media only screen and (max-width: 767px) {
     .analysis-demo {
-       flex-wrap: wrap;
+        flex-wrap: wrap;
     }
-    .analysis-demo li:after{
+
+    .analysis-demo li:after {
         border: none;
     }
+
     .recharts-wrapper svg {
         width: 100%;
     }
-    
+
     .filter-tiles li {
-      
+
         width: 104px;
     }
+
     .order_tab_sec .nav-tabs .nav-link {
         font-size: 14px;
         font-family: 'Monument Extended';

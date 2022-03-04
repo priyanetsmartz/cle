@@ -117,7 +117,12 @@ function MyReturnsComplaints(props) {
 
     const sortOrdersHandler = async (e) => {
         setSortOrder(e.target.value);
-        getVendorReturnsData(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, e.target.value, 'grand_total')
+        if (e.target.value === "") { 
+            getVendorReturnsData(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, 'DESC', 'created_at')
+        } else {
+            getVendorReturnsData(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, e.target.value, 'grand_total')
+        }
+
     }
 
     const columns = [

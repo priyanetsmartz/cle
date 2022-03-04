@@ -18,7 +18,7 @@ import { formatprice } from '../../../components/utility/allutils';
 function MySalesOrders(props) {
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
-    const [sortOrder, setSortOrder] = useState('desc');
+    const [sortOrder, setSortOrder] = useState('');
     const [range, setRange] = useState({ low: 0, high: 20000 })
     const [status, setStatus] = useState();
     const [searchTerm, setSearchTerm] = useState('');

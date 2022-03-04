@@ -123,16 +123,16 @@ export function getProductsFilterRestCollectionProducts(category_id: number, lan
         let priceLow = price[0], priceHigh = price[1];
         data = '{products(' + selection + ' filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ':{from: "' + priceLow + '", to: "' + priceHigh + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     } else if (attribute === 'category_id') {
-        let sort = sorting.sortBy? '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}':"";
-        data = '{products(' + selection + ' filter:{category_id:{ eq: "' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' '+sort+' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+        let sort = sorting.sortBy ? '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}' : "";
+        data = '{products(' + selection + ' filter:{category_id:{ eq: "' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' ' + sort + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
-    else if (testing === 'test') {     
+    else if (testing === 'test') {
         data = '{products(search: "' + value + '", pageSize: ' + pageSize + ' ,currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
-    else if (category_id === undefined && branding) {      
+    else if (category_id === undefined && branding) {
         data = '{products(search: "' + branding + '", pageSize: ' + pageSize + ',currentPage: ' + currentPage + '  sort: {' + sorting.sortBy + ': ' + sorting.sortByValue + '}){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
-    else {       
+    else {
         data = '{products(' + selection + ' filter:{category_id:{ eq: "' + category_id + '" },' + attribute + ': { eq:"' + value + '" } }, pageSize: ' + pageSize + ',currentPage: ' + currentPage + ' ){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
 
@@ -178,8 +178,8 @@ export function getProductFilter(category_id: number) {
 }
 
 export function getProductDetails(sku: string, language: string) {
-    var storeId = language === 'arabic' ? 'ar' : 'en';
-    return APi.request(`rest/${storeId}/V1/products/${sku} `, "", "GET", "");
+    var storeId = language === 'arabic' ? '2' : '3';
+    return APi.request(`rest/V1/products/${sku}?storeId=${storeId}`, "", "GET", "");
 }
 
 export async function getProductExtras(productId: number, language: string) {
@@ -287,7 +287,7 @@ export function searchFields(search: string, category: number, page: number, lan
         if (sortBy !== '') {
             sortt = 'sort: {' + sortBy + ': ' + sortByValue + '}';
         }
-      
+
         if (search !== 'all') {
             searching = 'search: "' + search + '",';
         }

@@ -895,6 +895,7 @@ function Checkout(props) {
         if (selectedPaymentMethod === 'myfatoorah_gateway') {
 
             const payment: any = await myFatoora(billAddress);
+            console.log(payment);
             if (payment?.data?.length > 0 && payment?.data[0]?.IsSuccess) {
                 let url = payment?.data[0]?.Data.PaymentURL;
                 if (url) {
@@ -1022,7 +1023,7 @@ function Checkout(props) {
 
     const getPaymentStatusAPi = async (getPaymentStatusAPi) => {
         let paymentStatus: any = await getPaymentStatus(getPaymentStatusAPi);
-
+       
         let detailsRequired = [];
         detailsRequired['transactionId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId ? paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId : 0;
         detailsRequired['InvoiceId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceId ? paymentStatus.data[0].Data.InvoiceId : 0;
@@ -1074,7 +1075,6 @@ function Checkout(props) {
         } else {
             setIsShow(false)
         }
-        // }
     }
 
     const addPaymentDetailsToMagento = async (data) => {
@@ -1228,7 +1228,7 @@ function Checkout(props) {
                                             {(props?.guestShipp?.firstname !== undefined || itemsVal?.address['addresses']?.length > 0) ?
                                                 <b><IntlMessages id="order.deliveryAddress" /></b>
                                                 : ""}
-                                            {props.guestShipp && (
+                                            {props.guestShipp?.firstname && (
 
                                                 <div className="row mb-4" >
                                                     <div className="col-md-7">
@@ -1467,7 +1467,7 @@ function Checkout(props) {
                                     <div id="Checkoutfive" className="accordion-collapse collapse" aria-labelledby="CheckoutHfive"
                                         data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
-                                            {props.guestBilling && (
+                                            {props?.guestBilling?.firstname && (
 
                                                 <div className="row mb-5" >
                                                     <div className="col-md-7">

@@ -61,7 +61,7 @@ function VendorLogin(props) {
 
   const loginHadler = async () => {
     if (handleValidation()) {
-
+      setIsShow(true);
       const userInfo = {
         "type": "user",
         "username": loginForm.email,
@@ -70,7 +70,7 @@ function VendorLogin(props) {
       }
       const result: any = await vendorLogin(userInfo);
       if (result && result.data && result.data && result.data.length > 0 && result.data[0].success) {
-        setIsShow(true);
+       
         const vendorObj = {
           vendor_id: result?.data[0]?.vendorData?.vendor_id,
           vendor_name: result?.data[0]?.vendorData?.vendor_name,

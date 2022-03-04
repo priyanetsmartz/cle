@@ -1,5 +1,5 @@
 import { Checkbox } from 'antd';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import notification from '../../components/notification';
 import IntlMessages from "../../components/utility/intlMessages";
@@ -27,7 +27,7 @@ function SignIn(props) {
   const [errors, setError] = useState({
     errors: {}
   });
- 
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
@@ -133,7 +133,7 @@ function SignIn(props) {
         error["email"] = intl.formatMessage({ id: "emailvalidation" });
       }
     }
-    
+
     if (!state["email"]) {
       formIsValid = false;
       error["email"] = intl.formatMessage({ id: "emailrequired" });
@@ -211,8 +211,8 @@ function SignIn(props) {
                   </svg>
                 }
               </span>
-              
-              
+
+
             </div>
             <div className="form-group text-left">
               <div className="checkbox ">

@@ -10,11 +10,12 @@ import ReturnFooter from "./returnFooter";
 import { useHistory } from "react-router";
 import notification from '../../../components/notification';
 import DatePicker from "react-datepicker";
-
+import { useIntl } from 'react-intl';
 import "react-datepicker/dist/react-datepicker.css";
 
 function ReturnsSummary(props) {
     let history = useHistory();
+    const intl = useIntl();
     const { orderId }: any = useParams();
     const [order, setOrder]: any = useState([]);
     const [startDate, setStartDate] = useState(new Date());
@@ -97,7 +98,7 @@ function ReturnsSummary(props) {
             let key = Object.keys(result?.data?.[0]?.rma);
             let url = `/customer/return-details/${key[0]}`;
             setLoader(false)
-            notification("success", "", "Return for your order has been created");
+            notification("success", "", intl.formatMessage({ id: "return.success" }));
             setTimeout(() => {
                 history.push(url);
             }, 3000)
@@ -118,8 +119,8 @@ function ReturnsSummary(props) {
                     <div className="col-sm-12">
 
                         <div className="main-head">
-                            <h1>Return summary</h1>
-                            <h2>Here's your return summary. There is last chance to cancel the return .</h2>
+                            <h1><IntlMessages id="return.summary" /></h1>
+                            <h2><IntlMessages id="return.summarydata" /></h2>
                         </div>
 
                         <div className="return-det">
@@ -128,11 +129,11 @@ function ReturnsSummary(props) {
                                     <h5><IntlMessages id="order.orderNo" />: {orderId} </h5>
                                 </div>
                                 <div className="col-sm-3">
-                                    <h6>Returned created date</h6>
+                                    <h6><IntlMessages id="return.createddate" /></h6>
                                     <p>{moment().format('ddd, D MMMM YYYY')}</p>
                                 </div>
                                 <div className="col-sm-3">
-                                    <h6>Drop off date</h6>
+                                    <h6><IntlMessages id="return.dropoffdate" /></h6>
                                     <p></p>
                                 </div>
                                 <div className="col-sm-3">
@@ -150,14 +151,11 @@ function ReturnsSummary(props) {
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="next-conts">
-                                        <h4>What's next?</h4>
+                                        <h4><IntlMessages id="return.next" /></h4>
                                         <ul className="list-unstyled m-0">
-                                            <li><i className="fas fa-check"></i> There is last chance to cancel the return. Please check all chosen
-                                                products.</li>
-                                            <li><i className="fas fa-key"></i> Choose days and preferred hour then the courier will pick the parcel
-                                                up</li>
-                                            <li><i className="fas fa-print"></i> Print the returns label we have emailed you and attach it to the
-                                                outside of your parcel</li>
+                                            <li><i className="fas fa-check"></i> <IntlMessages id="return.lastchance" />.</li>
+                                            <li><i className="fas fa-key"></i> <IntlMessages id="return.choose" /></li>
+                                            <li><i className="fas fa-print"></i> <IntlMessages id="return.print" /></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -222,7 +220,7 @@ function ReturnsSummary(props) {
                                                     <button className="accordion-button" type="button" data-bs-toggle="collapse"
                                                         data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
                                                         aria-controls="panelsStayOpen-collapseOne">
-                                                        Pickup date
+                                                        <IntlMessages id="return.pickupdate" />
                                                     </button>
                                                 </h2>
                                                 <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show"
@@ -246,7 +244,7 @@ function ReturnsSummary(props) {
                                                     <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                         data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
                                                         aria-controls="panelsStayOpen-collapseTwo">
-                                                        Pickup time slot
+                                                        <IntlMessages id="return.pickupslot" />
                                                     </button>
                                                 </h2>
                                                 <div id="panelsStayOpen-collapseTwo" className="accordion-collapse collapse"
@@ -256,7 +254,7 @@ function ReturnsSummary(props) {
                                                             <div className="row">
                                                                 <div className="col-md-8">
                                                                     <span>8:00 a.m. 11:00 a.m.</span>
-                                                                    <p>The courier will arrive between 8:00 a.m., - 11:00 a.m. </p>
+                                                                    <p><IntlMessages id="return.arrive" /> 8:00 a.m., - 11:00 a.m. </p>
                                                                 </div>
                                                                 <div className="col-md-4">
                                                                     <div className="form-check">
@@ -273,7 +271,7 @@ function ReturnsSummary(props) {
                                                             <div className="row">
                                                                 <div className="col-md-8">
                                                                     <span>11:00 a.m. 3:00 p.m.</span>
-                                                                    <p>The courier will arrive between 11:00 a.m., - 3:00 p.m. </p>
+                                                                    <p><IntlMessages id="return.arrive" /> 11:00 a.m., - 3:00 p.m. </p>
                                                                 </div>
                                                                 <div className="col-md-4">
                                                                     <div className="form-check">
@@ -290,7 +288,7 @@ function ReturnsSummary(props) {
                                                             <div className="row">
                                                                 <div className="col-md-8">
                                                                     <span>3:00 p.m. 6:00 p.m.</span>
-                                                                    <p>The courier will arrive between 3:00 p.m., - 6:00 a.m. </p>
+                                                                    <p><IntlMessages id="return.arrive" /> 3:00 p.m., - 6:00 a.m. </p>
                                                                 </div>
                                                                 <div className="col-md-4">
                                                                     <div className="form-check">
@@ -324,19 +322,19 @@ function ReturnsSummary(props) {
                             <div className="return-det">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <h3>Summary</h3>
+                                        <h3><IntlMessages id="summary" /></h3>
                                     </div>
                                     <div className="col-sm-3">
-                                        <h6>Pickup date </h6>
+                                        <h6><IntlMessages id="return.pickupdate" /> </h6>
                                         {endDate && (<p>{moment(startDate).format('D')}- {moment(endDate).format('D MMM YYYY')}</p>
                                         )}
                                     </div>
                                     <div className="col-sm-3">
-                                        <h6>Pickup time slot</h6>
+                                        <h6><IntlMessages id="return.pickupslot" /></h6>
                                         {slot && (<p>{slot}</p>)}
                                     </div>
                                     <div className="col-sm-3">
-                                        <h6>Products</h6>
+                                        <h6><IntlMessages id="order.products" /></h6>
                                         <p>{props?.returnData?.items?.length}</p>
                                     </div>
                                 </div>
@@ -346,7 +344,7 @@ function ReturnsSummary(props) {
                                 <div className="row">
                                     <div className="col-sm-6">
                                         <div className="return-user-info">
-                                            <h5>User Information</h5>
+                                            <h5><IntlMessages id="userinformation" /></h5>
                                             <address>
                                                 {order['delivery_address']?.firstname + ' ' + order['delivery_address']?.lastname}<br />
                                                 {order['delivery_address']?.street}<br />
@@ -358,23 +356,23 @@ function ReturnsSummary(props) {
                                     </div>
                                     <div className="col-sm-6">
                                         <div className="return-user-total">
-                                            <h5>Return Total</h5>
+                                            <h5><IntlMessages id="return.total" /></h5>
                                             <table className="table table-borderless mb-0">
                                                 <tbody>
                                                     <tr>
-                                                        <td>Subtotal</td>
+                                                        <td><IntlMessages id="order.subTotal" /></td>
                                                         <th className="text-end">{siteConfig.currency} {props?.returnData?.total}</th>
                                                     </tr>
                                                     <tr>
-                                                        <td>Shipping</td>
+                                                        <td><IntlMessages id="order.shipping" /></td>
                                                         <th className="text-end">{siteConfig.currency} 0</th>
                                                     </tr>
                                                     <tr className="r-tax">
-                                                        <td>Vat</td>
+                                                        <td><IntlMessages id="order.tax" /></td>
                                                         <th className="text-end">{siteConfig.currency} 0</th>
                                                     </tr>
                                                     <tr className="tot-bor">
-                                                        <th>Total</th>
+                                                        <th><IntlMessages id="order.total" /></th>
                                                         <th className="text-end fin-p">{siteConfig.currency}  {props?.returnData?.total}</th>
                                                     </tr>
                                                 </tbody>

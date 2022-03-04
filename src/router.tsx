@@ -49,6 +49,7 @@ import CleXRoute from './components/all-route/CleXRoute';
 import SellProduct from './containers/Page/CLEX/sellProduct';
 import Howtosell from './containers/Page/CLEX/howtosell';
 import Unsubscribe from './containers/Page/customer/unsubscribe';
+import OrderAuth from './containers/Page/customer/OrderAuth';
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
@@ -57,8 +58,8 @@ const PublicRoutes = ({ history }) => {
           <Switch>
             <ProductRoutes exact path="/magazines/:magazinecategory" component={AllPosts} />
             <ProductRoutes exact path="/magazines" component={AllPosts} />
-            <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />           
-
+            <ProductRoutes exact path="/magazine/:slug" component={SinglePost} />
+            <ProductRoutes exact path="/orderauth/:orderId" component={OrderAuth} />
             <ProductRoutes exact path="/help-center/:url_key" component={FaqListing} page='faq' />
             <ProductRoutes exact path="/vendor/forgot-password" component={BussinessResetpassword} />
             <ProductRoutes exact path="/vendor/settings/email" component={BussinessResetEmail} />
@@ -93,7 +94,7 @@ const PublicRoutes = ({ history }) => {
             <ProductHome exact path="/" component={HomePage} />
             <ProductHome exact path="/:signup/:member" component={HomePage} />
             <ProductRoutes exact path="/return-order" component={ReturnPage} />
-
+            
 
 
             <ProductRoutes exact path="/help-us/thank-you" component={ThankYou} />

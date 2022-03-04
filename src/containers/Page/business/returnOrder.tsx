@@ -17,7 +17,7 @@ function RetunOrder(props) {
     const [statusReturnComment, setstatusReturnComment] = useState('')
     const [returnShow, setReturnShow] = useState(true)
     const [show, setShow] = useState(false)
-
+    const [loader, setLoader] = useState(false);
     const intl = useIntl();
     useEffect(() => {
         getReturnDetailFxn(returnId)
@@ -58,13 +58,20 @@ function RetunOrder(props) {
             notification("error", "", intl.formatMessage({ id: "selectreturnOrExchange" }));
             return false;
         }
+        if (statusReturn === "declined" && statusReturnComment === '') {
+            notification("error", "", intl.formatMessage({ id: "selectreturnOrExchange.message" }));
+            return false;
+        }
+        setLoader(true);
         let result: any = await returnProcessVendor(returnId, statusReturn, statusReturnComment);
         if (result?.data) {
+            setLoader(false);
             getReturnDetailFxn(returnId)
             selectStatusReturn('')
             setstatusReturnComment('')
             notification("success", "", result?.data);
         } else {
+            setLoader(false);
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
 
@@ -134,7 +141,7 @@ function RetunOrder(props) {
                                                     {returnDetails['address'].street}<br />
                                                     {returnDetails['address'].postcode}<br />
                                                     {returnDetails['address'].city}<br />
-                                                    {returnDetails['address'].region}<br />
+                                                    {returnDetails['address'].telephone}<br />
                                                     {returnDetails['address'].country_id ? getCountryName(returnDetails['address'].country_id) : ""}
 
                                                 </address>
@@ -143,24 +150,26 @@ function RetunOrder(props) {
                                     </div>
                                     <div className="col-sm-6">
                                         <div className="return-user-total">
-                                            <h5><IntlMessages id="returntotal" /></h5>
+                                            <h5><IntlMessages id="return.total" /></h5>
                                             <table className="table table-borderless mb-0">
-                                                <tr>
-                                                    <td><IntlMessages id="subtotal" /></td>
-                                                    <th className="text-end">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].subtotal : 0}</th>
-                                                </tr>
-                                                <tr>
-                                                    <td><IntlMessages id="order.shipping" /></td>
-                                                    <th className="text-end">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].shipping : 0}</th>
-                                                </tr>
-                                                <tr className="r-tax">
-                                                    <td><IntlMessages id="tax" /></td>
-                                                    <th className="text-end">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].tax : 0}</th>
-                                                </tr>
-                                                <tr className="tot-bor">
-                                                    <th><IntlMessages id="total" /></th>
-                                                    <th className="text-end fin-p">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].grand_total : 0}</th>
-                                                </tr>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><IntlMessages id="subtotal" /></td>
+                                                        <th className="text-end">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].subtotal : 0}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><IntlMessages id="order.shipping" /></td>
+                                                        <th className="text-end">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].shipping : 0}</th>
+                                                    </tr>
+                                                    <tr className="r-tax">
+                                                        <td><IntlMessages id="tax" /></td>
+                                                        <th className="text-end">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].tax : 0}</th>
+                                                    </tr>
+                                                    <tr className="tot-bor">
+                                                        <th><IntlMessages id="total" /></th>
+                                                        <th className="text-end fin-p">{siteConfig.currency} {returnDetails['return_total'] ? returnDetails['return_total'].grand_total : 0}</th>
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -171,7 +180,7 @@ function RetunOrder(props) {
                             {returnDetails['items'] && returnDetails['items'].length > 0 && (
                                 <ul className="order-pro-list">
                                     {returnDetails['items'].map((item, i) => {
-                         
+
                                         return (<li key={i}>
                                             <div className="row">
                                                 <div className="col-md-3">
@@ -222,7 +231,11 @@ function RetunOrder(props) {
 
                                         <div className="col-md-3 align-self-end mb-2">
                                             <label className="form-label"></label>
-                                            <Link to="#" className="btn btn-secondary" onClick={handleSubmitClick} ><IntlMessages id="confirm.return" /></Link>
+                                            <Link to="#" className="btn btn-secondary" onClick={handleSubmitClick} style={{ "display": !loader ? "inline-block" : "none" }} ><IntlMessages id="confirm.return" /></Link>
+                                            <div className="spinner btn btn-secondary m-0" style={{ "display": loader ? "inline-block" : "none" }}>
+                                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                <IntlMessages id="loading" />
+                                            </div>
                                         </div>
 
                                         <div className="col-md-12 mb-2">

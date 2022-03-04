@@ -84,9 +84,9 @@ function OrderDetails(props) {
         if (resultShow.length > 0) {
             setShowReturn(true);
         }
-        console.log(result?.data?.items?.[0]?.status)
+
         let percentage = result?.data?.items?.[0]?.status === 'pending' ? 10 : result?.data?.items?.[0]?.status === 'complete' ? 100 : result?.data?.items?.[0]?.status === 'processing' ? 50 : result?.data?.items?.[0]?.status === 'canceled' ? 100 : 10;
-        console.log(percentage)
+
         setOrderProgress(percentage)
     }
 
@@ -206,32 +206,47 @@ function OrderDetails(props) {
                     </div>
                 </div>
             </div>
-            <div className="delivery-bar">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-8 offset-md-2">
-                            <div className="order-detail-head">
-                                {/* change this after clarification */}
-                                <p><strong>
-                                    {order.status === 'complete' ? <IntlMessages id="order.itsDelivered" /> : order.status === 'pending' ?
-                                        <IntlMessages id="order.itsPending" /> : order.status === 'processing' ? <IntlMessages id="order.itsProcessing" />
-                                            : order.status === 'canceled' ? <IntlMessages id="order.canceled" />
-                                            : order.status}
-                                </strong></p>
-                                {order.status === 'complete' && <p><IntlMessages id="order.delivered" /> {order.shipping_amount}</p>}
-                                <div className="progress-bar-area">
-
-                                    {order.status === 'canceled' ? <Progress
-                                        strokeLinecap="square"
-                                        percent={orderProgress}
-                                        showInfo={false}
-                                        strokeWidth={15}
-                                        status="exception" />
-                                        :
+            {order.status === 'canceled' && (
+                <div className='cancelledorder mb-5'>
+                    <div className="container">
+                        <div className="row">
+                            <div className="ordercancelledtext text-center"><IntlMessages id="order.declinestatus" /></div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {order.status !== 'canceled' && (
+                <div className="delivery-bar">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-8 offset-md-2">
+                                <div className="order-detail-head">
+                                    {/* change this after clarification */}
+                                    <p><strong>
+                                        {order.status === 'complete' ?
+                                            <div className='messageStatus'>
+                                                <IntlMessages id="order.itsDelivered" />
+                                                <IntlMessages id="order.deliveredstatus" />
+                                            </div>
+                                            : order.status === 'pending' ?
+                                                <IntlMessages id="order.itsPending" />
+                                                : order.status === 'processing'
+                                                    ? <div className='messageStatus'>
+                                                        <IntlMessages id="order.itsProcessing" />
+                                                        <p className='text-message'><IntlMessages id="order.itsProcessingtime" /></p>
+                                                    </div>
+                                                    : order.status === 'canceled'
+                                                        ? <IntlMessages id="order.canceled" />
+                                                        : order.status}
+                                    </strong></p>
+                                    {order.status === 'complete' && <p><IntlMessages id="order.delivered" /> {order.shipping_amount}</p>}
+                                    <div className="progress-bar-area">
                                         <Progress
                                             strokeColor={{
-                                                '0%': '#87d068',
-                                                '100%': '#108ee9',
+                                                '10%': '#00CEA7',
+                                                '50%': "#00B6C4",
+                                                '75%': "#007DE2",
+                                                '100%': '#2E2BAA',
                                             }}
                                             strokeLinecap="square"
                                             percent={orderProgress}
@@ -239,13 +254,13 @@ function OrderDetails(props) {
                                             strokeWidth={15}
                                             status="active"
                                         />
-                                    }
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
             <div className="container">
                 <div className="row">
                     <div className="col-md-12">

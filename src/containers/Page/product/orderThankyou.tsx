@@ -4,7 +4,7 @@ import { orderDetailbyId } from '../../../redux/cart/productApi';
 import IntlMessages from "../../../components/utility/intlMessages";
 import moment from 'moment';
 import { Link } from "react-router-dom";
-import { checkCustomerLogin, getCountryName } from '../../../components/utility/allutils';
+import { checkVendorLoginWishlist, getCountryName } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import Form from './order-form';
 import { useHistory } from "react-router";
@@ -17,22 +17,24 @@ function OrderThankyou(props) {
     useEffect(() => {
         if (orderId) {
             getOrderDetails(orderId);
-        } else {
-            window.location.href = '/';
         }
 
         return () => {
             setOrderDetails({})
+            localStorage.setItem('orderEmail', '')
         }
     }, [props.token])
 
     async function getOrderDetails(orderId) {
         let results: any = await orderDetailbyId(orderId);
         let orderDetails = {};
-        orderDetails['user'] = results.data ? results.data.customer_email : "";
-        let user = await checkCustomerLogin();
-        if (orderDetails['user'] !== user?.token_email) {
-            history.push('/');
+        orderDetails['user'] = results?.data ? results?.data?.customer_email : "";
+        let user = await checkVendorLoginWishlist();
+        let localEmail = localStorage.getItem('orderEmail')
+       
+        if (((orderDetails['user'] !== localEmail) && (user?.token_email === undefined)) || (user?.token_email === undefined && user?.type === 'vendor')) {           
+            let url = `/orderauth/` + orderId;
+            history.push(url);
         }
         orderDetails['increment_id'] = results.data ? results.data.increment_id : 0;
         orderDetails['created_at'] = results.data ? results.data.created_at : 0;
@@ -47,7 +49,7 @@ function OrderThankyou(props) {
         orderDetails['base_tax_amount'] = results.data ? results.data.base_tax_amount : 0;
         orderDetails['grand_total'] = results.data ? results.data.grand_total : 0;
         orderDetails['items'] = results.data ? results.data.items : {};
-       
+
         setOrderDetails(orderDetails);
     }
     return (

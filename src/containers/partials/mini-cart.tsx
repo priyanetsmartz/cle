@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from 'react';
-import cartIcon from '../../image/carticon.svg';
 import { Link } from "react-router-dom";
 import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal } from '../../redux/cart/productApi';
 import { connect } from 'react-redux';
@@ -9,7 +8,6 @@ import { formatprice } from '../../components/utility/allutils';
 import { siteConfig } from '../../settings';
 const { addToCartTask, accountPopup, miniCartPopup } = cartAction;
 function MiniCart(props) {
-    const node = useRef(null);
     const [cartItemsVal, setCartItems] = useState({});
     const [cartTotal, setCartTotal] = useState(0);
 
@@ -24,7 +22,7 @@ function MiniCart(props) {
             props.addToCartTask(false);
             props.miniCartPopup(false)
         }
-    }, [props.languages, props.items, props.token])
+    }, [props.items])
 
     const callGetCartItems = async () => {
         let cartData = [], total = 0, cartItems: any, cartTotal: any;

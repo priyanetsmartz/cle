@@ -16,6 +16,7 @@ function SearchBar(props) {
     const [searchText, SetSearchText] = useState("");
     const [nothingFound, SetNothingFound] = useState("");
     const [categories, setCategories] = useState([]);
+    const [loader, setLoader] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState('');
     const node = useRef(null);
     const intl = useIntl();
@@ -54,24 +55,24 @@ function SearchBar(props) {
         if (results.data.items) {
             SetIsShow(true);
             SetNothingFound("")
-            SetSearchText("")
-            SetAutoSuggestions(results.data.items);
-
+            SetAutoSuggestions(results?.data?.items);
+            setLoader(false)
         } else {
-            SetIsShow(false);
-            SetNothingFound("Nothing Found!")
+            SetIsShow(true);
+            SetNothingFound("Nothing found")
+            SetAutoSuggestions([]);
+            setLoader(false)
         }
     }
 
     const updateInput = async (e) => {
         SetSearchText(e.target.value)
+        setLoader(true)
         if (e.target.value.length >= 3) {
+            SetIsShow(true);
             setTimeout(() => {
                 searchResultsApiCall(e.target.value)
             }, 3000)
-        } else {
-            SetIsShow(false);
-            SetNothingFound("")
         }
     }
 
@@ -117,8 +118,12 @@ function SearchBar(props) {
 
                     </div>
                     <div ref={node} className="serach-results" style={{ "display": isShow ? "block" : "none" }}>
-                        {(autoSuggestions && autoSuggestions.length) ? (
-                            <div className="serach-results-inner">
+                        <div className="serach-results-inner">
+                            {loader && (
+                                <ul> <li><div className="nothing_found"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span></div></li></ul>
+                            )}
+                            {(autoSuggestions && autoSuggestions.length) ? (
+
                                 <ul>
                                     {autoSuggestions.map((item, i) => {
                                         return (
@@ -138,7 +143,7 @@ function SearchBar(props) {
                                                     <span className="minicartprodt_name">
                                                         <h6 className="minicart_pname">{description}</h6>
                                                         <span className="minicart_prodt_tag">{item.name}</span>
-                                                       
+
                                                     </span>
                                                 </Link>
                                             </li>
@@ -146,22 +151,20 @@ function SearchBar(props) {
                                     }
                                     )}
                                 </ul>
-                            </div>
-                        ) : <div className="nothing_found">
-                            {nothingFound}
-                        </div>}
-                    </div>
-                    <div className="nothing_found">
-                        {nothingFound}
+
+                            ) :
+                                (nothingFound && !loader) && (<ul> <li><div className="nothing_found">{nothingFound} </div></li></ul>)
+                            }
+                        </div>
                     </div>
                 </div>
-            </ul>
-        </div>
+            </ul >
+        </div >
     )
 }
 
 const mapStateToProps = (state) => {
-   
+
     return {
         languages: state.LanguageSwitcher.language,
         categoryD: state.Cart.catIdd
