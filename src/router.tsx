@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Route, Switch } from 'react-router' // react-router v4/v5
 import { ConnectedRouter } from 'connected-react-router';
 import SinglePost from './containers/Page/singlePost';
@@ -49,6 +49,7 @@ import CleXRoute from './components/all-route/CleXRoute';
 import SellProduct from './containers/Page/CLEX/sellProduct';
 import Howtosell from './containers/Page/CLEX/howtosell';
 import Unsubscribe from './containers/Page/customer/unsubscribe';
+//const cart = React.lazy(()=>import ('./containers/Page/product/cart/cart'))
 const PublicRoutes = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
