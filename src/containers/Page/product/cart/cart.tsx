@@ -16,6 +16,7 @@ import { siteConfig } from '../../../../settings';
 import { checkVendorLoginWishlist, formatprice } from '../../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
 import { useLastLocation } from 'react-router-last-location';
+import Loader from '../../../../../src/image/CLE_LogoMotionGraphics.gif';
 
 
 const { openGiftBoxes, addToCartTask, addToWishlistTask } = cartAction;
@@ -43,6 +44,7 @@ function CartItemPage(props) {
 
     useEffect(() => {
         setShopPath(path);
+        if(document.getElementById("cartsidebar")){
         const header = document.getElementById("cartsidebar");
         const sticky = header.offsetTop;
         const scrollCallBack: any = window.addEventListener("scroll", () => {
@@ -55,6 +57,7 @@ function CartItemPage(props) {
         return () => {
             window.removeEventListener("scroll", scrollCallBack);
         };
+    }
     }, [])
 
     useEffect(() => {
@@ -275,7 +278,8 @@ function CartItemPage(props) {
     }
     return (
         <main>
-
+            {cartItemsVal['items']?
+            (<div>
             <section className="cart-main">
                 <div className="container">
                     <div className="row">
@@ -286,12 +290,14 @@ function CartItemPage(props) {
                             </div>
                             <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                 <h2><IntlMessages id="cart.Title" /></h2>
-                                {opacity === 0.3 && (
+                                {/* {opacity === 0.3 && (
                                     <div className="checkout-loading" >
                                         <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
                                     </div>
-                                )}
-                                {cartItemsVal['items'] && cartItemsVal['items'].length ?
+                                )} */}
+                                {/* <Suspense fallback = {<div>Loading...</div>}> */}
+                                
+                                { (cartItemsVal['items'] && cartItemsVal['items'].length )?
                                     (
                                         <ul className="cart-pro-list">
                                             {cartItemsVal['items'].map((item, i) => {
@@ -362,9 +368,11 @@ function CartItemPage(props) {
                                                     </div>
                                                 )
                                             })}
-                                        </ul>) : (
-                                        <p><IntlMessages id="cart.cartEmpty" /></p>
-                                    )}
+                                        </ul>
+                                        ) 
+                                        :<p><IntlMessages id="cart.cartEmpty" /></p>
+                                        } 
+                                    {/* </Suspense> */}
 
                                 {token && (<RelevantProducts cartItem={cartRelevants} />)}
                             </div>
@@ -405,6 +413,10 @@ function CartItemPage(props) {
                 </Modal.Header>
                 <GiftMessage />
             </Modal>
+            </div>)
+             :null}
+            {/* :<img src = {Loader} alt = "Loading..."/>} */}
+            
         </main >
     )
 }
