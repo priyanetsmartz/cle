@@ -16,7 +16,6 @@ import { siteConfig } from '../../../../settings';
 import { checkVendorLoginWishlist, formatprice } from '../../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
 import { useLastLocation } from 'react-router-last-location';
-import Loader from '../../../../../src/image/CLE_LogoMotionGraphics.gif';
 
 
 const { openGiftBoxes, addToCartTask, addToWishlistTask } = cartAction;
@@ -44,20 +43,20 @@ function CartItemPage(props) {
 
     useEffect(() => {
         setShopPath(path);
-        if(document.getElementById("cartsidebar")){
-        const header = document.getElementById("cartsidebar");
-        const sticky = header.offsetTop;
-        const scrollCallBack: any = window.addEventListener("scroll", () => {
-            if (window.pageYOffset > sticky) {
-                header.classList.add("sticky-sidebar-cart");
-            } else {
-                header.classList.remove("sticky-sidebar-cart");
-            }
-        });
-        return () => {
-            window.removeEventListener("scroll", scrollCallBack);
-        };
-    }
+        if (document.getElementById("cartsidebar")) {
+            const header = document.getElementById("cartsidebar");
+            const sticky = header.offsetTop;
+            const scrollCallBack: any = window.addEventListener("scroll", () => {
+                if (window.pageYOffset > sticky) {
+                    header.classList.add("sticky-sidebar-cart");
+                } else {
+                    header.classList.remove("sticky-sidebar-cart");
+                }
+            });
+            return () => {
+                window.removeEventListener("scroll", scrollCallBack);
+            };
+        }
     }, [])
 
     useEffect(() => {
@@ -278,145 +277,136 @@ function CartItemPage(props) {
     }
     return (
         <main>
-            {cartItemsVal['items']?
-            (<div>
-            <section className="cart-main">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-7 col-lg-8">
-                            <div className="back-block">
-                                <i className="fas fa-chevron-left back-icon"></i>
-                                <Link className="back-to-shop" to={shopPath} ><IntlMessages id="cart-back-link" /></Link>
-                            </div>
-                            <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
-                                <h2><IntlMessages id="cart.Title" /></h2>
-                                {/* {opacity === 0.3 && (
-                                    <div className="checkout-loading" >
-                                        <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+            {cartItemsVal['items'] ?
+                (<div>
+                    <section className="cart-main">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-7 col-lg-8">
+                                    <div className="back-block">
+                                        <i className="fas fa-chevron-left back-icon"></i>
+                                        <Link className="back-to-shop" to={shopPath} ><IntlMessages id="cart-back-link" /></Link>
                                     </div>
-                                )} */}
-                                {/* <Suspense fallback = {<div>Loading...</div>}> */}
-                                
-                                { (cartItemsVal['items'] && cartItemsVal['items'].length )?
-                                    (
-                                        <ul className="cart-pro-list">
-                                            {cartItemsVal['items'].map((item, i) => {
-                                                return (
-                                                    <div key={i}>
-                                                        <li>
-                                                            <div className="row">
-                                                                <div className="col-md-3">
-                                                                    <div className="product-image">
-                                                                        <Link to={'/product-details/' + item.sku}> <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} /></Link>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-md-9">
-                                                                    <div className="pro-name-tag">
-                                                                        <div className="cart-info-l">
-                                                                            {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand}>{item.extension_attributes.brand}</Link></div>
-                                                                            )}
-                                                                            <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                    <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
+                                        <h2><IntlMessages id="cart.Title" /></h2>
+
+                                        {(cartItemsVal['items'] && cartItemsVal['items'].length) ?
+                                            (
+                                                <ul className="cart-pro-list">
+                                                    {cartItemsVal['items'].map((item, i) => {
+                                                        return (
+                                                            <div key={i}>
+                                                                <li>
+                                                                    <div className="row">
+                                                                        <div className="col-md-3">
+                                                                            <div className="product-image">
+                                                                                <Link to={'/product-details/' + item.sku}> <img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} /></Link>
+                                                                            </div>
                                                                         </div>
-                                                                        <div className="cart-info-r">
-                                                                            <p>{item.desc}</p>
-                                                                            <span className="off bg-favorite">
-                                                                                {!item.wishlist_item_id && (
-                                                                                    <Link to="#" onClick={() => { handleWhishlist(item['sku'], item.item_id) }} className="float-end text-end">{isWishlist === item['sku'] ? "Adding....." : <IntlMessages id="cart.addWishlist" />}</Link>
-                                                                                )}
-                                                                                {item.wishlist_item_id && (
-                                                                                    <Link to="#" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} className="float-end text-end">{delWishlist === parseInt(item.wishlist_item_id) ? "Removing....." : <IntlMessages id="cart.removeWishlist" />}</Link>
-                                                                                )}
-                                                                            </span>
-                                                                        </div>
+                                                                        <div className="col-md-9">
+                                                                            <div className="pro-name-tag">
+                                                                                <div className="cart-info-l">
+                                                                                    {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand}>{item.extension_attributes.brand}</Link></div>
+                                                                                    )}
+                                                                                    <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
+                                                                                </div>
+                                                                                <div className="cart-info-r">
+                                                                                    <p>{item.desc}</p>
+                                                                                    <span className="off bg-favorite">
+                                                                                        {!item.wishlist_item_id && (
+                                                                                            <Link to="#" onClick={() => { handleWhishlist(item['sku'], item.item_id) }} className="float-end text-end">{isWishlist === item['sku'] ? "Adding....." : <IntlMessages id="cart.addWishlist" />}</Link>
+                                                                                        )}
+                                                                                        {item.wishlist_item_id && (
+                                                                                            <Link to="#" onClick={() => { handleDelWhishlist(parseInt(item.wishlist_item_id)) }} className="float-end text-end">{delWishlist === parseInt(item.wishlist_item_id) ? "Removing....." : <IntlMessages id="cart.removeWishlist" />}</Link>
+                                                                                        )}
+                                                                                    </span>
+                                                                                </div>
 
 
 
-                                                                        <div className="clearfix"></div>
-                                                                    </div>
-                                                                    <div className="qty-size">
-                                                                        <div className="row mb-3">
-                                                                            <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
-                                                                            <div className="col-sm-3 cartschanger">
-                                                                                <select defaultValue={value === item.item_id ? qty : item.qty} className="form-select" onChange={(e) => { handleChangeQty(e, item) }}>
-                                                                                    {Array.from(Array(item.qty + 10), (e, i) => {
-                                                                                        return <option value={i}
-                                                                                            key={i}>{i}</option>
-                                                                                    })}
+                                                                                <div className="clearfix"></div>
+                                                                            </div>
+                                                                            <div className="qty-size">
+                                                                                <div className="row mb-3">
+                                                                                    <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
+                                                                                    <div className="col-sm-3 cartschanger">
+                                                                                        <select defaultValue={value === item.item_id ? qty : item.qty} className="form-select" onChange={(e) => { handleChangeQty(e, item) }}>
+                                                                                            {Array.from(Array(item.qty + 10), (e, i) => {
+                                                                                                return <option value={i}
+                                                                                                    key={i}>{i}</option>
+                                                                                            })}
 
-                                                                                </select>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="cart-pro-price">{siteConfig.currency}{formatprice(item.price)} </div>
+                                                                            <div className="pro-remove-tag">
+                                                                                <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" >{isShow === item.item_id ? "Removing....." : <IntlMessages id="cart.remove" />}</Link>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="cart-pro-price">{siteConfig.currency}{formatprice(item.price)} </div>
-                                                                    <div className="pro-remove-tag">
-                                                                        <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" >{isShow === item.item_id ? "Removing....." : <IntlMessages id="cart.remove" />}</Link>
-                                                                    </div>
+                                                                </li>
+                                                                <div className="save-cart-btns">
+                                                                    {item.isGift ?
+                                                                        delGiftMsg === item.item_id ? <Link to="#" ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                                            <Link to="#" onClick={() => { handleGiftRemove(item.gift_message_id, item.item_id) }}  ><IntlMessages id="cart.removeGift" /></Link>
+
+                                                                        : <Link to="#" onClick={() => {
+                                                                            handleGiftMEssage(item.item_id);
+                                                                        }}><IntlMessages id="cart.addGift" /> </Link>}
+
+
                                                                 </div>
                                                             </div>
-                                                        </li>
-                                                        <div className="save-cart-btns">
-                                                            {item.isGift ?
-                                                                delGiftMsg === item.item_id ? <Link to="#" ><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
-                                                                    <Link to="#" onClick={() => { handleGiftRemove(item.gift_message_id, item.item_id) }}  ><IntlMessages id="cart.removeGift" /></Link>
+                                                        )
+                                                    })}
+                                                </ul>
+                                            )
+                                            : <p><IntlMessages id="cart.cartEmpty" /></p>
+                                        }
 
-                                                                : <Link to="#" onClick={() => {
-                                                                    handleGiftMEssage(item.item_id);
-                                                                }}><IntlMessages id="cart.addGift" /> </Link>}
-
-
-                                                        </div>
-                                                    </div>
-                                                )
-                                            })}
-                                        </ul>
-                                        ) 
-                                        :<p><IntlMessages id="cart.cartEmpty" /></p>
-                                        } 
-                                    {/* </Suspense> */}
-
-                                {token && (<RelevantProducts cartItem={cartRelevants} />)}
-                            </div>
-                        </div>
-                        <div className="col-md-5 col-lg-4" id="cartsidebar">
-                            <div className="sticky-cart">
-                                <div className="order-detail-sec">
-                                    <h5><IntlMessages id="orderDetail" /> </h5>
-
-                                    <div className="cart-total-price">
-                                        <p><IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{cartTotals['sub_total'] ? formatprice(cartTotals['sub_total']) : 0} </span></p>
-                                        <p><IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency} {cartTotals['shipping_charges'] ? formatprice(cartTotals['shipping_charges']) : 0}</span></p>
-                                        <p><IntlMessages id="tax" /><span className="text-end">{siteConfig.currency} {cartTotals['tax'] ? formatprice(cartTotals['tax']) : 0} </span></p>
-                                        <hr />
-                                        {cartItemsVal['items'] && cartItemsVal['items'].length ? (<Link to="/checkout"><IntlMessages id="checkout" /></Link>) : ''}
+                                        {token && (<RelevantProducts cartItem={cartRelevants} />)}
                                     </div>
-                                    <div className="we-accept">
-                                        <p><strong><IntlMessages id="we-accept" />:</strong></p>
-                                        <img src={cardPlaceholder} alt="cards" />
-                                        <p><IntlMessages id="coupontitle" /></p>
-                                    </div>
-
                                 </div>
-                                <div className="qus-contactUs">
-                                    <p><IntlMessages id="questionCart" /></p>
-                                    <Link to="/contact-us"><IntlMessages id="menu_contactnew" /> </Link>
+                                <div className="col-md-5 col-lg-4" id="cartsidebar">
+                                    <div className="sticky-cart">
+                                        <div className="order-detail-sec">
+                                            <h5><IntlMessages id="orderDetail" /> </h5>
+
+                                            <div className="cart-total-price">
+                                                <p><IntlMessages id="subTotal" /><span className="text-end">{siteConfig.currency}{cartTotals['sub_total'] ? formatprice(cartTotals['sub_total']) : 0} </span></p>
+                                                <p><IntlMessages id="shipping" /><span className="text-end"> {siteConfig.currency} {cartTotals['shipping_charges'] ? formatprice(cartTotals['shipping_charges']) : 0}</span></p>
+                                                <p><IntlMessages id="tax" /><span className="text-end">{siteConfig.currency} {cartTotals['tax'] ? formatprice(cartTotals['tax']) : 0} </span></p>
+                                                <hr />
+                                                {cartItemsVal['items'] && cartItemsVal['items'].length ? (<Link to="/checkout"><IntlMessages id="checkout" /></Link>) : ''}
+                                            </div>
+                                            <div className="we-accept">
+                                                <p><strong><IntlMessages id="we-accept" />:</strong></p>
+                                                <img src={cardPlaceholder} alt="cards" />
+                                                <p><IntlMessages id="coupontitle" /></p>
+                                            </div>
+
+                                        </div>
+                                        <div className="qus-contactUs">
+                                            <p><IntlMessages id="questionCart" /></p>
+                                            <Link to="/contact-us"><IntlMessages id="menu_contactnew" /> </Link>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
-            <Modal show={isGiftMessage} className="giftmessagebox" size="lg" data={prodId} onHide={hideGiftModalModal} >
-                <Modal.Header>
-                    <h5 className="modal-title"><IntlMessages id="gift.title" /></h5>
-                    <div><IntlMessages id="gift.subTitle" /> </div>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideGiftModalModal} aria-label="Close"></button>
-                </Modal.Header>
-                <GiftMessage />
-            </Modal>
-            </div>)
-             :null}
-            {/* :<img src = {Loader} alt = "Loading..."/>} */}
-            
+                    </section>
+                    <Modal show={isGiftMessage} className="giftmessagebox" size="lg" data={prodId} onHide={hideGiftModalModal} >
+                        <Modal.Header>
+                            <h5 className="modal-title"><IntlMessages id="gift.title" /></h5>
+                            <div><IntlMessages id="gift.subTitle" /> </div>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={hideGiftModalModal} aria-label="Close"></button>
+                        </Modal.Header>
+                        <GiftMessage />
+                    </Modal>
+                </div>)
+                : null}
         </main >
     )
 }
