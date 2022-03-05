@@ -722,5 +722,6 @@
   "order.deliveredstatus":"Your parcel has been delivered. We hope you love it!",
   "track":"Track parcel",
   "selectreturnOrExchange.message": "Please specify the reason for declining the return or exchange",
-  "return.itsPending": "The return is reailzed"
+  "return.itsPending": "The return is reailzed",
+  "backtoreturndetails": "Back to return details"
 }

@@ -17,7 +17,7 @@ import { useIntl } from 'react-intl';
 import MyAnalysisDataTiles from './myAnalysis/DataTiles';
 
 
-function Dashboard(props) {
+function Dashboard(props) { //Dashboard functional component 
     const intl = useIntl();
     const language = getCookie('currentLanguage');
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
@@ -61,17 +61,17 @@ function Dashboard(props) {
 
 
 
-    const goToNextPage = (e) => {
+    const goToNextPage = (e) => {// function to navigate between announcement pages : next page
         e.preventDefault();
         setCurrent((page) => page + 1);
 
     }
-    const goToPreviousPage = (e) => {
+    const goToPreviousPage = (e) => {// function to navigate between announcement pages : previous page
         e.preventDefault();
         setCurrent((page) => page - 1);
 
     }
-    async function getDataOfOrders() {
+    async function getDataOfOrders() {// function to get Sales Orders of vendor and setting the value of 'myOrders' to be displayed in data table of sales order
         setIsLoadingOrders(true)
         let result: any = await getVendorOrders(props.languages, siteConfig.pageSize, "", 0, 0, "", "", "", "");
         let dataObj = result && result.data && result.data.length > 0 ? result.data[0] : [];
@@ -95,7 +95,7 @@ function Dashboard(props) {
         setIsLoadingOrders(false)
 
     }
-    const columns = [
+    const columns = [ // react data table defining the columns of sales order
         {
             name: intl.formatMessage({ id: 'order' }),
             selector: row => row.increment_id,
@@ -132,7 +132,7 @@ function Dashboard(props) {
         },
     ];
 
-    const returnColumns = [
+    const returnColumns = [ // react data table defining the columns of return and complaints order
         {
             name: intl.formatMessage({ id: 'orderNumber' }),
             sortable: true,
@@ -167,7 +167,7 @@ function Dashboard(props) {
         },
     ];
 
-    const columnsPayouts = [
+    const columnsPayouts = [ // react data table defining the columns of my payouts
         {
             name: intl.formatMessage({ id: 'order.price' }),
             selector: row => row.price,
@@ -188,7 +188,7 @@ function Dashboard(props) {
                 <span className='green'>{(intl.formatMessage({ id: capitalize(row.status) }))}</span>
             ),
         },
-        { // To change column
+        { 
             name: <i className="fa fa-file-alt" aria-hidden="true"></i>,
             selector: row => row.data,
             cell: row => {
@@ -203,7 +203,7 @@ function Dashboard(props) {
         },
     ];
 
-    // vendor return 
+    // vendor return:  function to get My return Orders of vendor and setting the value of 'myReturn' to be displayed in data table of my returns
 
     async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
         setIsLoadingReturns(true)
@@ -229,6 +229,9 @@ function Dashboard(props) {
 
     }
 
+
+
+// function to get My payout Orders of vendor and setting the value of 'myPayouts' to be displayed in data table of my payouts
     async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order = 'asc') {
         let page_size = siteConfig.pageSize;
         setIsLoadingPayouts(true)
@@ -250,6 +253,8 @@ function Dashboard(props) {
         setIsLoadingPayouts(false)
 
     }
+
+    // function to get the announcements and setting the value of 'items' to be displayed in announcement section. This function is getting called in useEffect hook
     async function getDataOfCategory(languages, cat, page, sortBy = "published_at", sortByValue = "desc") {
         let result: any = await GetAnouncements(languages, cat, page, sortBy, sortByValue, 2);
         let paginationSize = result && result.data && result.data.length > 0 ? result.data[0].total_page : 0;
@@ -257,7 +262,7 @@ function Dashboard(props) {
         setItems(result?.data);
 
     }
-    async function openDashboardModal(oldDate, currentDate) {
+    async function openDashboardModal(oldDate, currentDate) { // function to toggle the value of 'myDashboardModal'. On the basis of this variable, modal is opened or closed.
         await closePopup(1);
         setCookie("popUp", localToken?.vendor_id)
         setMyDashboardModal(!myDashboardModal);
@@ -266,6 +271,7 @@ function Dashboard(props) {
         <div className="col-sm-9">
             <section className="my_profile_sect mb-4">
                 <div className="container">
+                    {/* Annuouncement section start */}
                     <div className="row mb-3">
                         <div className="col-sm-12">
                             <h2><IntlMessages id="seller.announcements" /></h2>
@@ -315,7 +321,7 @@ function Dashboard(props) {
                             </div>
                         </div>
                     </div>
-
+                    {/* Announcement section end */}
                     <HtmlContent identifier="startselling" />
 
                 </div >

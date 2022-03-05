@@ -28,8 +28,10 @@ function OrdersAndReturns(props) {
             data['status'] = results?.data?.[0]?.info?.rma_status
             data['trackInfo'] = results?.data?.[0]?.trackInfo
         }
-        console.log(results?.data?.[0].trackInfo)
+        
         setReturnDetails(data);
+        let percentage = results?.data?.[0]?.info?.rma_status === 'pending' ? 10 : results?.data?.[0]?.info?.rma_status === 'complete' ? 100 : results?.data?.[0]?.info?.rma_status === 'processing' ? 50 : results?.data?.[0]?.info?.rma_status === 'canceled' ? 100 : 10;
+        setOrderProgress(percentage)
     }
     return (
         <main>
@@ -38,6 +40,7 @@ function OrdersAndReturns(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-6">
+                        <Link to="/customer/orders-and-returns"> <IntlMessages id  = "backtoreturndetails"/></Link>
                             <div className="order-detail-head">
                                 <h2><IntlMessages id="myaccount.returnDetails" /></h2>
                                 <p><IntlMessages id="customer.return.description" /></p>

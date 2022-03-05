@@ -722,6 +722,6 @@
   "order.deliveredstatus":"تم تسليم الطرد الخاص بك. نأمل أن تحبه!",
   "track":"تتبع الطرد",  
   "selectreturnOrExchange.message": "يرجى تحديد سبب رفض الإرجاع أو الاستبدال",
-  "return.itsPending": "يتم إعادة صياغة العودة"
-
+  "return.itsPending": "يتم إعادة صياغة العودة",
+  "backtoreturndetails":"العودة إلى عودة التفاصيل"
 }
