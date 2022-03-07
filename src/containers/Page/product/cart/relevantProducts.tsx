@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { formatprice, handleCartFxn } from '../../../../components/utility/allutils';
+import appAction from "../../../../redux/app/actions";
+import { formatprice, handleCartFxn, logoutUser } from '../../../../components/utility/allutils';
 import { Link } from 'react-router-dom';
 import { getCookie } from '../../../../helpers/session';
 import cartAction from "../../../../redux/cart/productAction";
@@ -12,7 +13,7 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 import { siteConfig } from '../../../../settings';
 import { useIntl } from 'react-intl';
 import notification from "../../../../components/notification";
-
+const { showSignin } = appAction;
 const { addToCartTask } = cartAction;
 
 function RelevantProducts(props) {
@@ -82,7 +83,13 @@ function RelevantProducts(props) {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            if (cartResults.message) {
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
@@ -96,7 +103,7 @@ function RelevantProducts(props) {
                 <div className="also-like ">
                     <h2><IntlMessages id="youMayLike" /> </h2>
                     <div className="releveant-slider" >
-                        <Slider className="regular slider" {...settings}  dir="ltr">
+                        <Slider className="regular slider" {...settings} dir="ltr">
                             {relevs.slice(0, 8).map((product) => {
                                 return (
                                     <Link key={product.id} to={'/product-details/' + product.sku}>
@@ -105,7 +112,7 @@ function RelevantProducts(props) {
                                                 "width": "180px", "height": "192px"
                                             }} ><img src={product.img} className="image-fluid" style={{ "width": "100%" }} alt={product.name} /> </div>
                                             <div className="product_name"> {product.brand} </div>
-                                                <div className="product_vrity"> <Link to={'/product-details/' + product.sku}> {product.name}</Link> </div>
+                                            <div className="product_vrity"> <Link to={'/product-details/' + product.sku}> {product.name}</Link> </div>
                                             <div className="product_price">{siteConfig.currency} {formatprice(product.price)}</div>
                                             <div className="cart-button mt-3 px-2">
                                                 {isShow === product.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
@@ -138,5 +145,5 @@ function mapStateToProps(state) {
 };
 export default connect(
     mapStateToProps,
-    {addToCartTask}
+    { addToCartTask, showSignin }
 )(RelevantProducts);

@@ -11,7 +11,7 @@ import Recomendations from './product-details/recomendations';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Slider } from 'antd';
 import { useIntl } from 'react-intl';
-import { capitalize, checkVendorLoginWishlist, formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { capitalize, checkVendorLoginWishlist, formatprice, handleCartFxn, logoutUser } from '../../../components/utility/allutils';
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { siteConfig } from '../../../settings/index'
 import { getCategoryDetailsbyUrlPath } from '../../../redux/pages/customers';
@@ -276,7 +276,13 @@ function Products(props) {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            if (cartResults.message) {
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));

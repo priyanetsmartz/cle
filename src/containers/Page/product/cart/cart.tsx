@@ -42,6 +42,19 @@ function CartItemPage(props) {
     const [delGiftMsg, setDelGiftMsg] = useState(0);
 
     useEffect(() => {
+        const localToken = props.token.token;
+        setToken(localToken)
+        if (props.cart || !props.cart) {
+            callGetCartItems()
+        }
+        return () => {
+            props.addToCartTask(false);
+            props.openGiftBoxes(0);
+        }
+    }, [props.languages, props.cart, props.token])
+
+    
+    useEffect(() => {
         setShopPath(path);
         if (document.getElementById("cartsidebar")) {
             const header = document.getElementById("cartsidebar");
@@ -59,17 +72,7 @@ function CartItemPage(props) {
         }
     }, [])
 
-    useEffect(() => {
-        const localToken = props.token.token;
-        setToken(localToken)
-        if (props.cart || !props.cart) {
-            callGetCartItems()
-        }
-        return () => {
-            props.addToCartTask(false);
-            props.openGiftBoxes(0);
-        }
-    }, [props.languages, props.cart, props.token])
+  
 
     useEffect(() => {
         let giftBox = props.giftCart.Cart.openGiftBox === 0 ? false : true;

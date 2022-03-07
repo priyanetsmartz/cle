@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Slider from "react-slick";
-import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { formatprice, handleCartFxn, logoutUser } from '../../../components/utility/allutils';
 import { Link } from "react-router-dom";
 import IntlMessages from "../../../components/utility/intlMessages";
-import Login from '../../../redux/auth/Login';
 import cartAction from "../../../redux/cart/productAction";
 import notification from '../../../components/notification';
 import { siteConfig } from '../../../settings';
 import { useIntl } from 'react-intl';
+import appAction from "../../../redux/app/actions";
 const { addToCartTask } = cartAction;
+const { showSignin } = appAction;
 
-const loginApi = new Login();
 function NewIn(props) {
     const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
@@ -22,8 +22,8 @@ function NewIn(props) {
         return () => {
             //
         }
-    }, [props.newInProducts,props.currentCAT])
-    
+    }, [props.newInProducts, props.currentCAT])
+
     const settings = {
         dots: false,
         infinite: false,
@@ -78,7 +78,13 @@ function NewIn(props) {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            if (cartResults.message) {
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
@@ -106,7 +112,7 @@ function NewIn(props) {
                                 <div className="col-sm-12">
                                     <div className="new-in-slider product-listing">
                                         <div className="regular slider">
-                                            <Slider {...settings}  dir="ltr">
+                                            <Slider {...settings} dir="ltr">
                                                 {products && products.map(item => {
                                                     return (
                                                         <div className="productcalr product" key={item.id} >
@@ -119,7 +125,7 @@ function NewIn(props) {
                                                                 </div>
                                                             </Link>
                                                             <div className="product_name"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
-                                                            <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>                                                            
+                                                            <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                             <div className="product_price">{siteConfig.currency}{formatprice(item.price)} </div>
                                                             <div className="cart-button mt-3 px-2">
                                                                 {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
@@ -134,7 +140,7 @@ function NewIn(props) {
                                     </div>
                                 </div>
                             </div>
-                        </div>) :''}
+                        </div>) : ''}
             </section>
 
         </>
@@ -150,5 +156,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToCartTask }
+    { addToCartTask, showSignin }
 )(NewIn);

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import appAction from "../../../redux/app/actions";
 import { addWhishlist, getWhishlistItemsForUser, removeWhishlist } from '../../../redux/cart/productApi';
 import Slider from "react-slick";
-import { checkVendorLoginWishlist, formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice, handleCartFxn, logoutUser } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
@@ -73,7 +73,7 @@ function WeChooseForYou(props) {
     const getData = async () => {
         let customerId = props.token.cust_id
         let result: any = await getWeChooseForYou(props.languages, customerId);
-        if (result && result.data && result.data[0] && result.data[0].customerProducts.length > 0) {        
+        if (result && result.data && result.data[0] && result.data[0].customerProducts.length > 0) {
 
             let whishlist: any = await getgidtMessageCall();
             let products = result?.data[0]?.customerProducts;
@@ -106,11 +106,16 @@ function WeChooseForYou(props) {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            if (cartResults.message) {
-                getData();
+            getData();
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
-                getData();
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
             }
             setIsShow(0);

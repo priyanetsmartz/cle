@@ -3,14 +3,16 @@ import { connect } from "react-redux";
 import notification from '../../../components/notification';
 import { Link } from 'react-router-dom'
 import { wishListSearchSort } from '../../../redux/pages/customers';
-import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { formatprice, handleCartFxn, logoutUser } from '../../../components/utility/allutils';
 import { removeWhishlist } from '../../../redux/cart/productApi';
 import IconZoomIn from '../../../image/Icon_zoom_in.svg';
 import cartAction from "../../../redux/cart/productAction";
+import appAction from "../../../redux/app/actions";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings';
 const { addToWishlistTask, addToCartTask } = cartAction;
+const { showSignin } = appAction;
 
 function MyWishList(props) {
     const userGroup = props.token.token;
@@ -37,7 +39,7 @@ function MyWishList(props) {
             setSortOrder('')
             setDelWishlist(0)
         }
-    }, [props.languages, sortOrder,pageSize])
+    }, [props.languages, sortOrder, pageSize])
 
     const getData = async () => {
         setLoaderOrders(true)
@@ -125,14 +127,20 @@ function MyWishList(props) {
     async function handleCart(id: number, sku: string) {
         setIsShow(id);
         let cartResults: any = await handleCartFxn(id, sku);
-   
+
         if (cartResults.item_id) {
             props.addToCartTask(true);
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
 
-            if (cartResults.message) {
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
@@ -161,34 +169,34 @@ function MyWishList(props) {
                                 />
                             </div>
                         </div>
-						<div className="col-md-6"></div>
-					</div>
-					<div className="row">
-						<div className="col-sm-12 mt-4">
-							<div className="resltspage_sec">
-								<div className="paginatn_result">
-									<span><IntlMessages id="order.resultPerPage" /></span>
-									<ul>
-										<li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
-										<li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
-										<li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
-									</ul>
-								</div>
-								<div className="sort_by">
-									<div className="sortbyfilter">
-										<select className="form-select" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
-											<option value="">{intl.formatMessage({ id: "sorting" })}</option>
-											<option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
-											<option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
+                        <div className="col-md-6"></div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-12 mt-4">
+                            <div className="resltspage_sec">
+                                <div className="paginatn_result">
+                                    <span><IntlMessages id="order.resultPerPage" /></span>
+                                    <ul>
+                                        <li><Link to="#" className={pageSize === 12 ? "active" : ""} onClick={() => { handlePageSize(12) }} >12</Link></li>
+                                        <li><Link to="#" className={pageSize === 60 ? "active" : ""} onClick={() => { handlePageSize(60) }} >60</Link></li>
+                                        <li><Link to="#" className={pageSize === 120 ? "active" : ""} onClick={() => { handlePageSize(120) }}>120</Link></li>
+                                    </ul>
+                                </div>
+                                <div className="sort_by">
+                                    <div className="sortbyfilter">
+                                        <select className="form-select" aria-label="Default select example" defaultValue={sortOrder} onChange={filtterData} >
+                                            <option value="">{intl.formatMessage({ id: "sorting" })}</option>
+                                            <option value={1} key="1" >{intl.formatMessage({ id: "filterPriceDesc" })}</option>
+                                            <option value={2} key="2" >{intl.formatMessage({ id: "filterPriceAsc" })}</option>
 
-										</select>
-									</div>
-								</div>
+                                        </select>
+                                    </div>
+                                </div>
 
-							</div>
-						</div>
-					</div>
-                    
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div className="col-md-6"></div>
                 <div className="product-listing" style={{ 'opacity': opacity }} >
@@ -217,7 +225,7 @@ function MyWishList(props) {
                                                 </div>
                                                 <div className="wish text-left">
                                                     <h5><Link to={'/search/' + item.brand}>{item.brand}</Link></h5>
-                                                    <div className="tagname"><Link to={'/product-details/' + item.sku}>{item.name}</Link></div>                                                    
+                                                    <div className="tagname"><Link to={'/product-details/' + item.sku}>{item.name}</Link></div>
                                                     <div className="pricetag">{siteConfig.currency} {formatprice(item.price)} </div>
                                                 </div>
 
@@ -277,5 +285,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { addToWishlistTask, addToCartTask }
+    { addToWishlistTask, addToCartTask, showSignin }
 )(MyWishList);

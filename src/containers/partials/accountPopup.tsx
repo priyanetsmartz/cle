@@ -7,6 +7,7 @@ import { sessionService } from 'redux-react-session';
 import { connect } from 'react-redux'
 import appAction from "../../redux/app/actions";
 import cartAction from "../../redux/cart/productAction";
+import { logoutUser } from '../../components/utility/allutils';
 const { showSignin, openSignUp, userType } = appAction;
 const { accountPopup, addToCartTask } = cartAction;
 const { logout } = authAction;
@@ -27,11 +28,7 @@ function AccountPopup(props) {
             history.replace('/vendor-login');
             return;
         }
-        await sessionService.deleteSession();
-        await sessionService.deleteUser();
-
-        localStorage.removeItem('cartQuoteId');
-        localStorage.removeItem('cartQuoteToken');
+        logoutUser();
         props.logout();
         props.addToCartTask(true);
         window.location.href = '/';

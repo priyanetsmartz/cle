@@ -9,7 +9,7 @@ import notification from "../../components/notification";
 import { Slider } from 'antd';
 import { searchFields, addWhishlist, getWhishlistItemsForUser, removeWhishlist, getProductsFilterRestCollectionProducts } from '../../redux/cart/productApi';
 import { useIntl } from 'react-intl';
-import { capitalize, checkVendorLoginWishlist, formatprice, handleCartFxn } from '../../components/utility/allutils';
+import { capitalize, checkVendorLoginWishlist, formatprice, handleCartFxn, logoutUser } from '../../components/utility/allutils';
 import cartAction from "../../redux/cart/productAction";
 import appAction from "../../redux/app/actions";
 const { addToCartTask, productList, loaderProducts, addToWishlistTask } = cartAction;
@@ -123,12 +123,12 @@ function SearchResults(props) {
 
     async function handleWhishlist(id: number) {
         let token = props?.token?.token;
-        
+
         if (token) {
-           
+
             setIsWishlist(id)
             let result: any = await addWhishlist(id);
-     
+
             if (result?.data) {
                 setIsWishlist(0)
                 props.addToWishlistTask(true);
@@ -141,8 +141,8 @@ function SearchResults(props) {
                 getData(searchText)
             }
         } else {
-            let vendorCheck =  await checkVendorLoginWishlist();
-            if(vendorCheck?.type === 'vendor'){
+            let vendorCheck = await checkVendorLoginWishlist();
+            if (vendorCheck?.type === 'vendor') {
                 notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
                 return false;
             }
@@ -194,7 +194,13 @@ function SearchResults(props) {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            if (cartResults.message) {
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
@@ -253,7 +259,7 @@ function SearchResults(props) {
         setclearFilter(false)
         let attribute_code = e.target.getAttribute("data-remove");
         let value = attribute_code === 'price' ? e.target.getAttribute("data-access") : e.target.value;
-      
+
         let catt = catID;
         let catdata = [];
         catdata['id'] = e.target.value;
@@ -445,7 +451,7 @@ function SearchResults(props) {
                                                 </span>
 
                                                 <div className="text-center">
-                                                   
+
                                                     <Link to={'/product-details/' + item.sku}><img src={item.image.url} alt={item.name} width="200" /></Link>
                                                 </div>
                                                 <div className="about text-center">
@@ -453,16 +459,16 @@ function SearchResults(props) {
                                                     <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                     <div className="pricetag">{siteConfig.currency} {formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)}</div>
                                                 </div>
-                                               
+
                                                 <div className="cart-button mt-3 px-2">
                                                     {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                         <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
                                                 </div>
-                                               
+
 
                                             </div>
-                                           
+
                                         </div>
                                     )
                                 })}

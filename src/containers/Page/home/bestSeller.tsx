@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Slider from "react-slick";
 import cartAction from "../../../redux/cart/productAction";
 import appAction from "../../../redux/app/actions";
-import { checkVendorLoginWishlist, formatprice, getHomePageProductsFxn, handleCartFxn } from '../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice, getHomePageProductsFxn, handleCartFxn, logoutUser } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import notification from "../../../components/notification";
@@ -149,7 +149,13 @@ function BestSeller(props) {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            if (cartResults.message) {
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));

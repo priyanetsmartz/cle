@@ -2,18 +2,19 @@ import { useState, useEffect } from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { formatprice, handleCartFxn } from '../../../../components/utility/allutils';
+import { formatprice, handleCartFxn, logoutUser } from '../../../../components/utility/allutils';
 import { Link } from "react-router-dom";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { getProductDetails } from '../../../../redux/cart/productApi';
 import { connect } from 'react-redux';
 import notification from '../../../../components/notification';
 import cartAction from "../../../../redux/cart/productAction";
+import appAction from "../../../../redux/app/actions";
 import { getCookie } from "../../../../helpers/session";
 import { siteConfig } from '../../../../settings';
 import { useIntl } from 'react-intl';
 const { addToCartTask } = cartAction;
-
+const { showSignin } = appAction;
 
 const Recommendations = (props) => {
     const intl = useIntl();
@@ -23,7 +24,7 @@ const Recommendations = (props) => {
     const [slidetoshow, setSlidetoshow] = useState(4);
 
     useEffect(() => {
-   
+
         if (props.recomend && props.recomend.length > 0) {
             getAttributes(props.recomend);
         }
@@ -37,7 +38,7 @@ const Recommendations = (props) => {
 
     async function getAttributes(recomends) {
         let allProducts: any;
-   
+
         if (recomends && recomends.length > 0 && recomends[0].link_type) {
             var filteredItems = await recomends.filter(function (item) {
                 return item.link_type === 'related';
@@ -49,14 +50,14 @@ const Recommendations = (props) => {
             allProducts = recomends;
         }
 
- 
+
         let prods = allProducts.length > 8 ? allProducts.slice(0, 8) : allProducts;
         setSlidetoshow(prods.length)
         setRecomendedProducts(prods)
-   
+
     }
     async function getgidtMessageCall(items) {
-   
+
         const promises = [];
         items.forEach(async (i) => {
             promises.push(new Promise((resolve, reject) => {
@@ -71,9 +72,9 @@ const Recommendations = (props) => {
     async function someAPICall(product) {
         let lang = props.languages ? props.languages : language;
         let giftCall: any = await getProductDetails(product.linked_product_sku, lang);
-     
+
         return giftCall.data;
-        
+
     }
     const settings = {
         dots: false,
@@ -116,7 +117,13 @@ const Recommendations = (props) => {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            if (cartResults.message) {
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
@@ -165,7 +172,7 @@ const Recommendations = (props) => {
 }
 
 const mapStateToProps = (state) => {
-   
+
     let recomended = [], languages = '';
     if (state && state.Cart.recomended.length > 0) {
         recomended = state.Cart.recomended;
@@ -180,5 +187,5 @@ const mapStateToProps = (state) => {
 }
 export default connect(
     mapStateToProps,
-    { addToCartTask }
+    { addToCartTask, showSignin }
 )(Recommendations);

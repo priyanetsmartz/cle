@@ -277,7 +277,7 @@ export function applyPromoCodeGuest(couponCode, language) {
 
 
 export function searchFields(search: string, category: number, page: number, language: string, sortBy, sortByValue, currentPage = 1) {
-    var storeId = language === 'english' ? 3 : 2
+    var storeId = language === 'english' ? "en" : "ar";
     let data: any;
     if (category === 0) {
         return APi.request(`rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=visibility&

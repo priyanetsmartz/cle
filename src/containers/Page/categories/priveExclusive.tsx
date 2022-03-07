@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { getPriveExclusiveProducts } from '../../../redux/cart/productApi';
 import cartAction from "../../../redux/cart/productAction";
 import Slider from "react-slick";
-import { formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { formatprice, handleCartFxn, logoutUser } from '../../../components/utility/allutils';
 import { siteConfig } from '../../../settings';
 import IntlMessages from "../../../components/utility/intlMessages";
 import { getCookie } from '../../../helpers/session';
@@ -57,7 +57,13 @@ function PriveExclusive(props) {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            if (cartResults.message) {
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));

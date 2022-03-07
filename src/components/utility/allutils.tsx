@@ -202,3 +202,12 @@ export async function getLocatstorageUser() {
   let localData = localStorage.getItem('redux-react-session/USER_DATA');
   return JSON.parse((localData));
 }
+
+
+export async function logoutUser() {
+  await sessionService.deleteSession();
+  await sessionService.deleteUser();
+
+  localStorage.removeItem('cartQuoteId');
+  localStorage.removeItem('cartQuoteToken');
+}

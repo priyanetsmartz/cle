@@ -1,10 +1,10 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import { getCookie } from '../../helpers/session';
 import IconZoomIn from '../../image/Icon_zoom_in.svg';
 import { getCategoryList, searchFields } from '../../redux/cart/productApi';
-import { useHistory } from "react-router-dom";
+import debounce from "lodash.debounce";
 import { useIntl } from 'react-intl';
 
 function SearchBar(props) {
@@ -50,6 +50,7 @@ function SearchBar(props) {
 
 
     const searchResultsApiCall = async (value) => {
+        setLoader(true)
         let lang = props.languages ? props.languages : language;
         let results: any = await searchFields(value, 0, 3, lang, "created_at", "DESC");
         if (results.data.items) {
@@ -66,13 +67,16 @@ function SearchBar(props) {
     }
 
     const updateInput = async (e) => {
+        SetAutoSuggestions([])
         SetSearchText(e.target.value)
-        setLoader(true)
+
         if (e.target.value.length >= 3) {
+            setLoader(true)
             SetIsShow(true);
-            setTimeout(() => {
-                searchResultsApiCall(e.target.value)
-            }, 3000)
+            searchResultsApiCall(e.target.value)
+        }else{
+            setLoader(false)
+            SetIsShow(false); 
         }
     }
 
@@ -96,6 +100,8 @@ function SearchBar(props) {
             SetIsShow(false);
         }
     }
+    const debouncedChangeHandler = useCallback(debounce(updateInput, 300), []);
+
 
     return (
         <div className="navbar-collapse collapse mainmenu-bar" id="bdNavbar">
@@ -103,7 +109,7 @@ function SearchBar(props) {
             <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
                 <div className="search_input">
                     <div className="search_top"><img src={IconZoomIn} alt="searchIcon" className="me-1" />
-                        <input type="search" value={searchText} placeholder={intl.formatMessage({ id: "searchPlaceholder" })} onChange={updateInput} onKeyDown={handleKeyDown} className="form-control me-1" />
+                        <input type="search" placeholder={intl.formatMessage({ id: "searchPlaceholder" })} onChange={debouncedChangeHandler} onKeyDown={handleKeyDown} className="form-control me-1" />
                         {
                             categories.length > 0 && (
                                 <select className="form-select" onChange={searchwithCategory} aria-label="Default select example">

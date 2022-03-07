@@ -9,7 +9,7 @@ import WeChooseForYou from '../home/weChooseForYou';
 import { Link } from "react-router-dom";
 import appAction from "../../../redux/app/actions";
 import Slider from "react-slick";
-import { checkVendorLoginWishlist, formatprice, handleCartFxn } from '../../../components/utility/allutils';
+import { checkVendorLoginWishlist, formatprice, handleCartFxn, logoutUser } from '../../../components/utility/allutils';
 import IntlMessages from "../../../components/utility/intlMessages";
 import CommonFunctions from "../../../commonFunctions/CommonFunctions";
 import { useLocation } from 'react-router-dom';
@@ -155,7 +155,13 @@ function LatestProducts(props) {
             notification("success", "", intl.formatMessage({ id: "addedtocart" }));
             setIsShow(0);
         } else {
-            if (cartResults.message) {
+            if (cartResults?.message === "The consumer isn't authorized to access %resources.") {
+                notification("error", "", "Session expired!");
+                setTimeout(() => {
+                    logoutUser()
+                    props.showSignin(true)
+                }, 2000)
+            } else if (cartResults.message) {
                 notification("error", "", cartResults.message);
             } else {
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
@@ -182,7 +188,7 @@ function LatestProducts(props) {
                                     role="tab" aria-controls="D-maylike" aria-selected="false"><IntlMessages id="home.weChooseForYou" /></Link>
                             </li>
                         </ul>
-                        <div className="tab-content" id="DesignerTabContent" style={{ 'opacity': opacity }}>
+                        <div className="tab-content" id="DesignerTabContent" >
                             <div className="tab-pane fade show active" id="PD" role="tabpanel" aria-labelledby="PD-tab">
                                 {productsLatest.length > 0 ? (
                                     <div className="row">
