@@ -61,6 +61,10 @@ function ReturnsSummary(props) {
         setEndDate(end);
     };
 
+    const resetDate = () => {
+        setStartDate(new Date())
+        setEndDate(null)
+    }
     const slotCheck = async (e) => {
         let slotVal = e.target.value;
         let checked = e.target.checked;
@@ -117,7 +121,7 @@ function ReturnsSummary(props) {
             <div className="container">
                 <div className="row">
                     <div className="col-sm-12">
-
+                    <Link to="/customer/orders-and-returns"> <IntlMessages id  = "backtoreturndetails"/></Link>
                         <div className="main-head">
                             <h1><IntlMessages id="return.summary" /></h1>
                             <h2><IntlMessages id="return.summarydata" /></h2>
@@ -233,9 +237,9 @@ function ReturnsSummary(props) {
                                                             endDate={endDate}
                                                             selectsRange
                                                             inline
-                                                            isClearable
+                                                            isClearable 
                                                         />
-
+                                                        <button type="submit" onClick={resetDate}>Reset</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -265,6 +269,7 @@ function ReturnsSummary(props) {
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
+                                                                        {slot === "8:00a.m.-11:00a.m."? <p>Great!</p>:null}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -282,6 +287,7 @@ function ReturnsSummary(props) {
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
+                                                                        {slot === "11:00a.m.-3:00p.m."? <p>Great!</p>:null}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -299,6 +305,7 @@ function ReturnsSummary(props) {
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
+                                                                       {slot === "3:00p.m.-6:00p.m."? <p>Great!</p>:null}
                                                                     </div>
                                                                 </div>
                                                             </div>

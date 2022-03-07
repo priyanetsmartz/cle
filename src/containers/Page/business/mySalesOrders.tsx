@@ -15,7 +15,7 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 import { formatprice } from '../../../components/utility/allutils';
 
 
-function MySalesOrders(props) {
+function MySalesOrders(props) { //MySalesOrder functional component
     const intl = useIntl();
     const [myOrder, setMyOrders] = useState([])
     const [sortOrder, setSortOrder] = useState('');
@@ -32,9 +32,11 @@ function MySalesOrders(props) {
 
     }, [props.languages])
 
-    const paginationComponentOptions = {
+    const paginationComponentOptions = {// this variable is used for data table 
         noRowsPerPage: true,
     };
+
+    // function to get sales order of vendor and set the value of 'myOrder' in sales order data table
     async function getDataOfOrders(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
         setIsLoading(true);
         let pageSize = props.pageData ? props.pageData : "";
@@ -57,13 +59,13 @@ function MySalesOrders(props) {
 
     }
 
-    const getOrdersByStatus = async (e) => {
+    const getOrdersByStatus = async (e) => { // status filter is applied here and 'getDataOfOrders' function is called by changing the value of the status
         const { value } = e.target;
         setStatus(value)
         getDataOfOrders(value, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const datePickerCallback = async (start, end, label) => {
+    const datePickerCallback = async (start, end, label) => {// date filter is applied here and 'getDataOfOrders' function is called by changing the 'from' and 'to' date
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({
@@ -82,7 +84,7 @@ function MySalesOrders(props) {
         }
     }
 
-    const getOrdersByPrice = async (range) => {
+    const getOrdersByPrice = async (range) => {// price filter is applied here and 'getDataOfOrders' function is called by changing the 'from' and 'to' price
         let from = range[0];
         let to = range[1];
         setRange(prevState => ({
@@ -93,7 +95,7 @@ function MySalesOrders(props) {
         getDataOfOrders(status, from, to, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const getOrdersBySearchTerm = async (e) => {
+    const getOrdersBySearchTerm = async (e) => { // search filter is applied here and 'getDataOfOrders' function is called by changing the value of search term whose length is >=3
         if (e.target.value.length >= 3) {
             setTimeout(() => {
                 setSearchTerm(e.target.value)
