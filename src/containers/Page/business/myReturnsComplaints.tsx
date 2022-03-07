@@ -33,6 +33,8 @@ function MyReturnsComplaints(props) {
         )
     }, [])
 
+
+    // Function to get the return and set the data table of returs by setting the value of'myOrder'.
     async function getVendorReturnsData(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = 'DESC', sortBy = 'created_at') {
         setIsLoading(true);
         let pageSize = props.pageData ? props.pageData : "";
@@ -66,13 +68,13 @@ function MyReturnsComplaints(props) {
 
     }
 
-    const getOrdersByStatus = async (e) => {
+    const getOrdersByStatus = async (e) => {// Status filter applied by setting the value of status variable and calling 'getVendorReturnsData'
         const { value } = e.target;
         setStatus(value)
         getVendorReturnsData(value, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const datePickerCallback = async (start, end, label) => {
+    const datePickerCallback = async (start, end, label) => {// Date filter applied by setting the value of to and from dates  and calling 'getVendorReturnsData' function
         let from = moment(start).format("MM-DD-YYYY"), to = moment(end).format("MM-DD-YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({
@@ -92,7 +94,7 @@ function MyReturnsComplaints(props) {
         }
     }
 
-    const getOrdersByPrice = async (range) => {
+    const getOrdersByPrice = async (range) => {// Price filter applied by setting the value of to and from range of price  and calling 'getVendorReturnsData' function
         let from = range[0];
         let to = range[1];
         setRange(prevState => ({
@@ -103,7 +105,7 @@ function MyReturnsComplaints(props) {
         getVendorReturnsData(status, from, to, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const getOrdersBySearchTerm = async (e) => {
+    const getOrdersBySearchTerm = async (e) => {// Searching on the searchtext by setting the value of searchTerm (if length of search text is >=3)  and calling 'getVendorReturnsData' function
 
         if (e.target.value.length >= 3) {
             setTimeout(() => {
@@ -115,7 +117,7 @@ function MyReturnsComplaints(props) {
         getVendorReturnsData(status, range.low, range.high, e.target.value, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const sortOrdersHandler = async (e) => {
+    const sortOrdersHandler = async (e) => {// Sorting is applied by setting the value of sortorder  and calling 'getVendorReturnsData' function
         setSortOrder(e.target.value);
         if (e.target.value === "") { 
             getVendorReturnsData(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, 'DESC', 'created_at')
@@ -125,7 +127,7 @@ function MyReturnsComplaints(props) {
 
     }
 
-    const columns = [
+    const columns = [// Data Table columns of My returns defining columns.
         {
             name: intl.formatMessage({ id: 'orderNumber' }),
             sortable: true,

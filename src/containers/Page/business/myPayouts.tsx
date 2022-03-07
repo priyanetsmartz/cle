@@ -45,13 +45,13 @@ function MyPayouts(props) {
         let vendor: any = await checkVendorLogin();
         setVendorName(vendor.vendor_name);
     }
-    const getOrdersByStatus = (e) => {
+    const getOrdersByStatus = (e) => { //Status filter is applied by changing the value of status and calling getDataOfPayouts
         const { value } = e.target;
         setStatus(value)
         getDataOfPayouts(dateFilter.from, dateFilter.to, e.target.value, range.low, range.high, searchTerm, sortOrder)
     }
 
-    const getOrdersByDate = (start, end, label) => {
+    const getOrdersByDate = (start, end, label) => {//Date filter is applied by changing the value of to and from dates and calling getDataOfPayouts
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({
@@ -72,7 +72,7 @@ function MyPayouts(props) {
 
     }
 
-    const getOrdersByPrice = async (range) => {
+    const getOrdersByPrice = async (range) => {//Price filter is applied by changing the value of to and from price and calling getDataOfPayouts
         let from = range[0];
         let to = range[1];
         setRange(prevState => ({
@@ -83,11 +83,11 @@ function MyPayouts(props) {
         getDataOfPayouts(dateFilter.from, dateFilter.to, status, from, to, searchTerm, sortOrder)
     }
 
-    const setSort = async (e) => {
+    const setSort = async (e) => {//Sorting of orders is done by changing the value of sortOrder and calling getDataOfPayouts
         setSortOrder(e.target.value)
         getDataOfPayouts(dateFilter.from, dateFilter.to, status, range.low, range.high, searchTerm, e.target.value)
     }
-    const getOrdersBySearchTerm = async (e) => {
+    const getOrdersBySearchTerm = async (e) => {// Search is done on the basis of search text(if length of text is >=3) and calling getDataOfPayouts
         if (e.target.value.length >= 3) {
             setSearchTerm(e.target.value);
         }
@@ -97,7 +97,7 @@ function MyPayouts(props) {
         getDataOfPayouts(dateFilter.from, dateFilter.to, status, range.low, range.high, e.target.value, sortOrder)
     }
 
-    const columns = [
+    const columns = [//columns are defined here  data table  of my payouts
         {
             name: intl.formatMessage({ id: 'id' }),
             selector: row => row.payout_id,
@@ -141,7 +141,7 @@ function MyPayouts(props) {
                 </div>
             )
         },
-        { // To change column
+        {
             name: <i className="fa fa-file-alt" aria-hidden="true"></i>,
             selector: row => row.data,
             cell: row => {
@@ -160,7 +160,7 @@ function MyPayouts(props) {
     const paginationComponentOptions = {
         noRowsPerPage: true,
     };
-    const sortHandler = async (payoutId) => {
+    const sortHandler = async (payoutId) => {//calls method which is hitting API to get the invoice data from backend.
         let data: any = await getInvoice(payoutId);
 
         let response = []
@@ -174,7 +174,7 @@ function MyPayouts(props) {
         setShowRawPDF(true)
         printDocument();
     };
-    async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order: any = '') {
+    async function getDataOfPayouts(date_from: any = '', date_to: any = '', stat: any = '', frPrice: any = '', toPrice: any = '', term: any = '', sort_order: any = '') { // to get the detail of payouts so that we can set in data table and also other parameters like subtotal and commission on this page
         let page_size = siteConfig.pageSize;
         setIsLoading(true)
         let result: any = await getPayoutOrders(date_from, date_to, stat, frPrice, toPrice, page_size, sort_order, term)
@@ -206,7 +206,7 @@ function MyPayouts(props) {
 
 
     }
-    const printDocument = () => {
+    const printDocument = () => {// function to create pdf for invoice data coming from backend
         const input = document.getElementById('pdfdiv');
         html2canvas(input)
             .then((canvas: any) => {

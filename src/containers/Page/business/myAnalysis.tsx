@@ -13,6 +13,16 @@ import MyProductListing from './myProductListing';
 import MyReturnsComplaints from './myReturnsComplaints';
 import MySalesOrders from './mySalesOrders';
 function MyAnalysis(props) {
+//Various pages are called in this analysispage, which are mentioned below:
+//     MyAnalysisDataTiles
+//  MyAnalysisOrders 
+//  MyAnalysisPayouts 
+//  MyAnalysisProducts
+//  MyAnalysisReturn
+//  MyAnalysisCustomer
+//  MyProductListing
+//  MyReturnsComplaints
+//  MySalesOrders
     const [viewState, setViewState] = useState('all');
 
     useEffect(() => {
