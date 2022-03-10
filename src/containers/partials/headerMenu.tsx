@@ -16,7 +16,7 @@ import LanguageSwitcher from '../LanguageSwitcher';
 import AccountPopup from './accountPopup';
 const { showSignin, openSignUp, menuSetup, showLoader, userType } = appAction;
 const { accountPopup, miniCartPopup, addToCartTask, setCatSearch, setCurrentCat } = cartAction;
-function HeaderMenu(props) {  
+function HeaderMenu(props) {
 
     const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -56,11 +56,11 @@ function HeaderMenu(props) {
             SetMenuData([{ name: '', id: '', url_key: '', child: [{ name: '', id: '', url_key: '' }] }])
             SetActiveCat('');
         }
-    }, [props.languages, category])
+    }, [props.languages, category, props.token])
 
     useEffect(() => {
         let localToken: any = getLocatstorageUser();
-        let tokken = localToken ? localToken.token : undefined;     
+        let tokken = localToken ? localToken.token : undefined;
         if (signup === 'true' && member === 'prive' && tokken === undefined) {
             props.openSignUp(true);
             props.userType(4);

@@ -355,6 +355,9 @@ function OrderDetails(props) {
                                                 <p>{capitalize(item.product_type)}</p>
                                             </div>
                                             <Link to="#" className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{formatprice(item.price)}</Link>
+
+                                            {item?.extension_attributes?.traking_info && (
+                                                <Link to={{ pathname: item?.extension_attributes?.traking_info }} className="float-end text-end order-pro-price text-decoration-none" target="_blank">Track Parcel</Link>)}
                                             <div className="clearfix"></div>
                                         </div>
                                         <div className="pro-name-tag">

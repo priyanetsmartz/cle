@@ -612,7 +612,7 @@ function Products(props) {
                                     </div>
                                 </div>
                             </div>
-                            : <>{props.prodloader ? <p className='productloader'> <img className="loading-gif" src={orderprocessing} alt="loader" /></p> : <IntlMessages id="NotFound" />}</>}
+                            : <></>}
 
 
                     </div>

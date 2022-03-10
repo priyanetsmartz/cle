@@ -291,7 +291,7 @@ export function searchFields(search: string, category: number, page: number, lan
         if (search !== 'all') {
             searching = 'search: "' + search + '",';
         }
-        data = '{products(' + searching + ' filter:{   category_id:{ eq: "' + category + '" }  }, pageSize: ' + page + ',currentPage: ' + currentPage + '  ' + sortt + '){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
+        data = '{products(' + searching + ' filter:{   category_id:{ eq: "' + category + '" }  }, pageSize: ' + page + ',currentPage: ' + currentPage + '  ' + sortt + '){aggregations{attribute_code count label options{ count label value }}total_count  page_info {page_size  current_page} items { id brand name sku short_description {  html }  image { url } price_range {  minimum_price {  regular_price { value currency } final_price { value currency } fixed_product_taxes {  label amount {value  currency }}}maximum_price {  discount {  amount_off    percent_off } fixed_product_taxes { label amount { value currency } } } } }}}';
     }
     let query = {
         "query": data,

@@ -13,7 +13,7 @@ function MiniCart(props) {
 
 
 
-    useEffect(() => {
+    useEffect(() => {     
         if (props.items || !props.items) {
             callGetCartItems()
         }
@@ -22,12 +22,12 @@ function MiniCart(props) {
             props.addToCartTask(false);
             props.miniCartPopup(false)
         }
-    }, [props.items])
+    }, [props.items,props.token])
 
     const callGetCartItems = async () => {
         let cartData = [], total = 0, cartItems: any, cartTotal: any;
         let customer_id = props.token.cust_id;
-
+       
         const cartQuoteId = localStorage.getItem('cartQuoteId');
         const cartQuoteToken = localStorage.getItem('cartQuoteToken');
         if (customer_id && cartQuoteId) {
@@ -49,7 +49,7 @@ function MiniCart(props) {
 
             }
         }
-
+      
         let cartValues = {};
         cartValues['items'] = cartData;
         setCartItems(cartValues)
@@ -91,7 +91,7 @@ function MiniCart(props) {
                                         <Link to={'/product-details/' + item.sku}><span className="minicartprodt_img"><img src={item.extension_attributes ? item.extension_attributes.item_image : ""} alt={item.name} className="imge-fluid" /></span>
                                             <span className="minicartprodt_name">
                                                 <h6 className="minicart_pname">{item.extension_attributes.brand}</h6>
-                                                <span className="minicart_pname">{item.name}</span>                                              
+                                                <span className="minicart_pname">{item.name}</span>
                                             </span>
                                         </Link>
                                     </li>

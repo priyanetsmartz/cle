@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import IntlMessages from "../../components/utility/intlMessages";
 import { useHistory } from "react-router";
 import authAction from "../../redux/auth/actions";
-import { sessionService } from 'redux-react-session';
 import { connect } from 'react-redux'
 import appAction from "../../redux/app/actions";
 import cartAction from "../../redux/cart/productAction";

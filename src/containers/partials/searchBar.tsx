@@ -69,13 +69,13 @@ function SearchBar(props) {
     const updateInput = async (e) => {
         SetAutoSuggestions([])
         SetSearchText(e.target.value)
-
+        SetNothingFound("")
         if (e.target.value.length >= 3) {
             setLoader(true)
             SetIsShow(true);
             searchResultsApiCall(e.target.value)
         }else{
-            setLoader(false)
+            setLoader(false)           
             SetIsShow(false); 
         }
     }
@@ -100,7 +100,7 @@ function SearchBar(props) {
             SetIsShow(false);
         }
     }
-    const debouncedChangeHandler = useCallback(debounce(updateInput, 300), []);
+    const debouncedChangeHandler = useCallback(debounce(updateInput, 1000), []);
 
 
     return (

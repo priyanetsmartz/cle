@@ -42,19 +42,6 @@ function CartItemPage(props) {
     const [delGiftMsg, setDelGiftMsg] = useState(0);
 
     useEffect(() => {
-        const localToken = props.token.token;
-        setToken(localToken)
-        if (props.cart || !props.cart) {
-            callGetCartItems()
-        }
-        return () => {
-            props.addToCartTask(false);
-            props.openGiftBoxes(0);
-        }
-    }, [props.languages, props.cart, props.token])
-
-    
-    useEffect(() => {
         setShopPath(path);
         if (document.getElementById("cartsidebar")) {
             const header = document.getElementById("cartsidebar");
@@ -72,7 +59,17 @@ function CartItemPage(props) {
         }
     }, [])
 
-  
+    useEffect(() => {
+        const localToken = props.token.token;
+        setToken(localToken)
+        if (props.cart || !props.cart) {
+            callGetCartItems()
+        }
+        return () => {
+            props.addToCartTask(false);
+            props.openGiftBoxes(0);
+        }
+    }, [props.languages, props.cart, props.token])
 
     useEffect(() => {
         let giftBox = props.giftCart.Cart.openGiftBox === 0 ? false : true;
@@ -345,7 +342,11 @@ function CartItemPage(props) {
                                                                             </div>
                                                                             <div className="cart-pro-price">{siteConfig.currency}{formatprice(item.price)} </div>
                                                                             <div className="pro-remove-tag">
-                                                                                <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" >{isShow === item.item_id ? "Removing....." : <IntlMessages id="cart.remove" />}</Link>
+                                                                                {isShow === item.item_id ?
+                                                                                    <Link to="#" className="float-end text-end" >Removing.....</Link>
+                                                                                    :
+                                                                                    <Link to="#" onClick={() => { handleRemove(item.item_id) }} className="float-end text-end" ><IntlMessages id="cart.remove" /></Link>
+                                                                                }
                                                                             </div>
                                                                         </div>
                                                                     </div>
