@@ -40,7 +40,7 @@ function MyProductListing(props) {
         )
     }, [])
 
-    async function getVendorProductListing(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {
+    async function getVendorProductListing(status = '', from: any = '', to: any = '', term: any = "", dateFrom: any = '', dateTo: any = '', sortorder: any = '') {// function to get the product of vendor and this function is calling another fuction searchProducts which is calling to the api to get the products. 
         setIsLoading(true);
         let pageSize = props.pageData ? props.pageData : "";
 
@@ -64,13 +64,13 @@ function MyProductListing(props) {
         setIsLoading(false);
     }
 
-    const getOrdersByStatus = async (e) => {
+    const getOrdersByStatus = async (e) => {// applying the status filter on the vendor products by calling 'getVendorProductListing'
         const { value } = e.target;
         setStatus(value)
         getVendorProductListing(value, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const datePickerCallback = async (start, end, label) => {
+    const datePickerCallback = async (start, end, label) => {// applying the date filter by setting from and to date on the vendor products by calling 'getVendorProductListing'
         let from = moment(start).format("MM/DD/YYYY"), to = moment(end).format("MM/DD/YYYY");
         if (label === 'All') {
             setDateFilter(prevState => ({
@@ -89,7 +89,7 @@ function MyProductListing(props) {
         }
     }
 
-    const getOrdersByPrice = async (range) => {
+    const getOrdersByPrice = async (range) => {// applying the price filter by setting from and to price on the vendor products by calling 'getVendorProductListing'
         let from = range[0];
         let to = range[1];
         setRange(prevState => ({
@@ -100,7 +100,7 @@ function MyProductListing(props) {
         getVendorProductListing(status, from, to, searchTerm, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const getOrdersBySearchTerm = async (e) => {
+    const getOrdersBySearchTerm = async (e) => {// applying the search filter by setting search term (if length of term >=3) on the vendor products by calling 'getVendorProductListing'
 
         if (e.target.value.length >= 3) {
             setTimeout(() => {
@@ -112,17 +112,17 @@ function MyProductListing(props) {
         getVendorProductListing(status, range.low, range.high, e.target.value, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const sortOrdersHandler = async (e) => {
+    const sortOrdersHandler = async (e) => {// applying the sorting filter by setting sortOrder on the vendor products by calling 'getVendorProductListing'
         setSortOrder(e.target.value);
         getVendorProductListing(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, e.target.value)
     }
 
-    const handleDelete = (prodId) => {
+    const handleDelete = (prodId) => { //to set the id of the product to be deleted and also the pop up variable to true
         setDeleteID(prodId)
         setDeletePop(true);
     }
 
-    async function deleteProduct() {
+    async function deleteProduct() {// to delete the product by calling the api function
         setLoader(true)
         let payload = {
             "sku": deleteId,
@@ -135,10 +135,10 @@ function MyProductListing(props) {
         setLoader(false)
         closePop();
     }
-    const closePop = () => {
+    const closePop = () => {// to set the variable of delete product pop up to false.
         setDeletePop(false);
     }
-    const columns = [
+    const columns = [// to set the columns of the data table.
         {
             name: <i className="fa fa-camera" aria-hidden="true"></i>,
             selector: row => row.img,

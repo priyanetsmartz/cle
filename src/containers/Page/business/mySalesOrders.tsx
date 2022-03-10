@@ -106,12 +106,12 @@ function MySalesOrders(props) { //MySalesOrder functional component
         getDataOfOrders(status, range.low, range.high, e.target.value, dateFilter.from, dateFilter.to, sortOrder)
     }
 
-    const sortOrdersHandler = async (e) => {
+    const sortOrdersHandler = async (e) => {// To give the feature of sorting(ascending and descending order) by calling 'getDataOfOrders' 
         setSortOrder(e.target.value);
         getDataOfOrders(status, range.low, range.high, searchTerm, dateFilter.from, dateFilter.to, e.target.value)
     }
 
-    const columns = [
+    const columns = [// data table of sales order
         {
             name: intl.formatMessage({ id: 'order' }),
             selector: row => row.increment_id,
