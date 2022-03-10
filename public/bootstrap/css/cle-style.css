@@ -1285,6 +1285,7 @@ p.promotion_alert {
     width: 100%;
     float: left;
     font-size: 14px;
+    z-index: 999;
 }
 
 .miniaccount_details ul li a:hover, .myaccount_details ul li a:hover {
