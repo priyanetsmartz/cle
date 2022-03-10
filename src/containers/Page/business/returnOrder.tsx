@@ -23,7 +23,7 @@ function RetunOrder(props) {
         getReturnDetailFxn(returnId)
     }, [props.languages])
 
-    async function getReturnDetailFxn(orderId) {
+    async function getReturnDetailFxn(orderId) {// Function to details of return and setting the values in data table of return details
         let results: any = await getReturnDetail(orderId);
         let data = [];
         if (results && results.data && results.data.length > 0) {
@@ -52,7 +52,7 @@ function RetunOrder(props) {
     const handleChange = (e) => {
         setstatusReturnComment(e.target.value);
     }
-    const handleSubmitClick = async (e) => {
+    const handleSubmitClick = async (e) => {// if order is declined and reason is not provided, then error message will come. Otherwise will hit the api to change the status of return order
 
         if (statusReturn === "" || statusReturn === null) {
             notification("error", "", intl.formatMessage({ id: "selectreturnOrExchange" }));

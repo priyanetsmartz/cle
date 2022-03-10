@@ -30,7 +30,7 @@ function BusinessSidebar(props) {
 
     }, [key]);
 
-    const changeTab = (tab) => {
+    const changeTab = (tab) => {// for loading different pages from side bar, but on same page
         history.push(`/vendor/${tab}`);
         setActiveTab(tab);
     }

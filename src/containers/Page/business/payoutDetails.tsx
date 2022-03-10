@@ -42,7 +42,7 @@ function MyPayoutDetails(props) {
         getDetails()
     }, [props.languages]);
 
-    async function getDetails() {
+    async function getDetails() {// api to get details of payouts and specifying the values like payout orders, invoice details, order number, subtotal, commission etc., and also the values for data table are set
         setIsLoading(true)
         let result: any = await getPayoutDetails(payoutId)
         if (result && result?.data[0]) {
@@ -105,7 +105,7 @@ function MyPayoutDetails(props) {
     ]
 
 
-    const sortHandler = async (payoutId) => {
+    const sortHandler = async (payoutId) => {// sorting is applied by calling getDetails()
         let data: any = await getInvoice(payoutId);
 
         let response = []
@@ -119,7 +119,7 @@ function MyPayoutDetails(props) {
         setShowRawPDF(true)
         printDocument();
     };
-    const printDocument = () => {
+    const printDocument = () => {// Invoice details are converted into pdf in this function
         const input = document.getElementById('pdfdiv');
         html2canvas(input)
             .then((canvas: any) => {

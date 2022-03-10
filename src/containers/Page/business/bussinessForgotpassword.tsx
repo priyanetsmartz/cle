@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useIntl } from 'react-intl';
 import { vendorRestpassword } from '../../../redux/pages/vendorLogin';
 
-function BusinessForgottenPassword(props) {
+function BusinessForgottenPassword(props) {// to show the page to enter the email address so taht password changing instructions can be sent on that specified email,y
   let localData = localStorage.getItem('redux-react-session/USER_DATA');
   let localToken = JSON.parse((localData));
   const [showSuccess, setShowSuccess] = useState(false);
