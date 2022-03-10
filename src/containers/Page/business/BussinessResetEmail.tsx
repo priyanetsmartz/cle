@@ -29,7 +29,7 @@ function BusinessResetPassword(props) {
         }))
     }
 
-    const handleSubmitClick = async (e) => {
+    const handleSubmitClick = async (e) => {//function to validate email is called and post that api is hit to reset email. As per response, success/failure message is shown
         e.preventDefault();
         if (handleValidation()) {
             setIsShow(true);
@@ -63,7 +63,7 @@ function BusinessResetPassword(props) {
     }
 
 
-    const handleValidation = () => {
+    const handleValidation = () => {//validation of email is applied here
         let error = {};
         let formIsValid = true;
 

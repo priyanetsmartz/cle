@@ -53,7 +53,7 @@ function VendorOrderDetail(props) {
         getOrderDetailFxn(orderId)
     }, [props.languages])
 
-    async function getOrderDetailFxn(orderId, sort_order: any = '') {
+    async function getOrderDetailFxn(orderId, sort_order: any = '') {// api to get details of order and specifying the values like orderDetails, order number, purchase date, payment method, delivery cost, delivery method etc.
         sort_order = sort_order ? sort_order : sortOrder;
 
         let results: any = await getOrderDetail(props.languages, orderId, sort_order);
@@ -117,7 +117,7 @@ function VendorOrderDetail(props) {
 
     }
 
-    const selectStatus = (event) => {
+    const selectStatus = (event) => {// on the selection of reject, text box will open to enter the reason.
         selectStatusOrder(event.target.value)
         if (event.target.value === 'reject') {
             setShow(true)
@@ -130,7 +130,7 @@ function VendorOrderDetail(props) {
         setstatusOrderComment(e.target.value);
     }
 
-    const handleSubmitClick = async (e) => {
+    const handleSubmitClick = async (e) => {//if status selected is reject, and comment is not entered,it will decline. Otherwise, if everything is ok, then it will hit api and change the order status
 
         if (statusOrder === "" || statusOrder === null) {
             notification("error", "", intl.formatMessage({ id: "selectreturnOrExchange" }));

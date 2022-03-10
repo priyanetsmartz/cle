@@ -100,7 +100,7 @@ function BusinessProfile(props) {
         }
     }, []);
 
-    async function getVendor() {
+    async function getVendor() {//to be checked with priya
         let vendor = await sessionService.loadUser()
         if (vendor && vendor.type === "vendor") {
         } else {
@@ -108,7 +108,7 @@ function BusinessProfile(props) {
         }
     }
 
-    async function getData() {
+    async function getData() {// getting vendpr details and setting vendor details, i.e. vendor personal details, business details, bank details, billing and shipping address details.
         let lang = props.languages ? props.languages : language;
         let result: any = await getVendorDetails(lang);
 
@@ -127,7 +127,7 @@ function BusinessProfile(props) {
 
     }
     //change password starts here----------------------------------------->
-    const handlePassword = (e) => {
+    const handlePassword = (e) => { // setting the values for changing the password.
         const { id, value } = e.target
         setChangePass(prevState => ({
             ...prevState,
@@ -135,7 +135,7 @@ function BusinessProfile(props) {
         }))
     }
 
-    const handleChangePass = async () => {
+    const handleChangePass = async () => {// validation function is called here for validating email and password constraints. Post that APi is getting hit for changing the password.
         if (handleValidation()) {
             let data = {
                 email: props.token.email,
@@ -166,7 +166,7 @@ function BusinessProfile(props) {
         }
     }
 
-    const handleValidation = () => {
+    const handleValidation = () => {// function to validate email and password and confirm password as per constraints.
         let error = {};
         let formIsValid = true;
 
@@ -193,7 +193,7 @@ function BusinessProfile(props) {
     //change password ends here----------------------------------------->
 
 
-    const togglePasswordVisiblity = (id) => {
+    const togglePasswordVisiblity = (id) => {// function to show password what user has entered, or mask it.
         const val = !passMask[id];
         setPassMask(pre => ({
             ...pre,
@@ -204,7 +204,7 @@ function BusinessProfile(props) {
 
 
 
-    const handleForgetPopup = (e) => {
+    const handleForgetPopup = (e) => {// open the pop up of resetting password once user clicks on forgot password.
         e.preventDefault();
         setForgotPopup(true);
     }
