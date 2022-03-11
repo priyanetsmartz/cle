@@ -31,7 +31,7 @@ function OrderAuth(props) {
         errors: {}
     });
 
-    async function getOrderDetails(orderId) {
+    async function getOrderDetails(orderId) {// getting the order details by orderid
         let results: any = await orderDetailbyId(orderId);
         let email = results?.data ? results?.data?.customer_email : "";
         setUserEmail(email)
@@ -63,7 +63,7 @@ function OrderAuth(props) {
     }
 
 
-    const handleValidation = () => {
+    const handleValidation = () => {//email validation
         let error = {};
         let formIsValid = true;
 

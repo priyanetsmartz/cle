@@ -49,7 +49,7 @@ function OrderDetails(props) {
 
     }, []);
 
-    const getData = async () => {
+    const getData = async () => {// search ordes based on orderid and also to check if return exists based on entity_id of order
         let orderDetails = [];
         let result: any = await searchOrders(orderId);
 
@@ -90,7 +90,7 @@ function OrderDetails(props) {
         setOrderProgress(percentage)
     }
 
-    const getorderReturnstatus = async (id) => {
+    const getorderReturnstatus = async (id) => {// getting the return status of order
         let result: any = await getorderReturnstatusapi(id);
         return result?.data;
 
@@ -110,7 +110,7 @@ function OrderDetails(props) {
     }
 
     // for customer address popup window starts here
-    const saveCustAddress = async (e) => {
+    const saveCustAddress = async (e) => {// saving customer address after validation
         if (validateAddress()) {
             custAddForm.customer_id = custId;
             custAddForm.address_type = 'shipping';
@@ -129,7 +129,7 @@ function OrderDetails(props) {
         }
     }
 
-    const validateAddress = () => {
+    const validateAddress = () => {// validation of address fields
         let error = {};
         let formIsValid = true;
 
@@ -179,7 +179,7 @@ function OrderDetails(props) {
         getRegions(value);
     }
 
-    const getRegions = async (value, i?) => {
+    const getRegions = async (value, i?) => {// getting regions by country
         const res: any = await getRegionsByCountryID(value);
         if (res.data.available_regions === undefined) {
             setRegions([]);

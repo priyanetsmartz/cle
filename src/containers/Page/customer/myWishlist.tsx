@@ -41,7 +41,7 @@ function MyWishList(props) {
         }
     }, [props.languages, sortOrder, pageSize])
 
-    const getData = async () => {
+    const getData = async () => {// get details of wishlist orders
         setLoaderOrders(true)
         let result: any = await wishListSearchSort(props.languages, pageSize, sortValue.sortBy, sortValue.sortByValue, '');
         if (result && result.data) {
@@ -78,7 +78,7 @@ function MyWishList(props) {
     }
 
 
-    const filtterData = (event) => {
+    const filtterData = (event) => {// sorting by price
         let sortBy = "";
         let sortByValue = "";
         if (event.target.value === "1") {
@@ -108,7 +108,7 @@ function MyWishList(props) {
         e.preventDefault();
         setCurrent((page) => page - 1);
     }
-    async function handleDelWhishlist(id: number) {
+    async function handleDelWhishlist(id: number) {// removing from wishlist based on id
         setDelWishlist(id)
         let del: any = await removeWhishlist(id);
         if (del.data[0].message) {
@@ -124,7 +124,7 @@ function MyWishList(props) {
 
         }
     }
-    async function handleCart(id: number, sku: string) {
+    async function handleCart(id: number, sku: string) {// adding item to cart by hitting api
         setIsShow(id);
         let cartResults: any = await handleCartFxn(id, sku);
 
