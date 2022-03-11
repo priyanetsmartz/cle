@@ -35,7 +35,7 @@ function OrdersAndReturns(props) {
     }, [pageSize, props.languages, page]);
 
 
-    const getData = async (pageSize) => {
+    const getData = async (pageSize) => {// get all the customer orders from backend
         setLoaderOrders(true);
         let result: any = await getCustomerOrders(pageSize, page);
         if (result?.data?.items) {
@@ -48,7 +48,7 @@ function OrdersAndReturns(props) {
     }
 
 
-    const handleSearch = async (e) => {
+    const handleSearch = async (e) => {// search the orders on the basis of search text (i length of text is >=3)
         setLoaderOrders(true);
         const val = e.target.value;
         setOrderId(val);
@@ -68,7 +68,7 @@ function OrdersAndReturns(props) {
         }
     }
 
-    const handlePriceRange = async (range) => {
+    const handlePriceRange = async (range) => {// filter on the basis of price is applied.
         setLoaderOrders(true);
         setPrice(prevState => ({
             ...prevState,
@@ -88,7 +88,7 @@ function OrdersAndReturns(props) {
     }
 
 
-    const getOrdersByDate = async (e) => {
+    const getOrdersByDate = async (e) => {// filtering of orders based on date filter
         setLoaderOrders(true);
         const { value } = e.target;
         let filter = parseInt(value);
@@ -134,7 +134,7 @@ function OrdersAndReturns(props) {
 
     }
 
-    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = 'created_at', sortOrders: any = 'DESC', search: any = '') => {
+    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = 'created_at', sortOrders: any = 'DESC', search: any = '') => {// getting return orders in this function
         setLoaderReturns(true);
         let returns: any = await getCustomerReturn(pageSize, from_date, to_date, from_price, to_price, sortBy, sortOrders, search);
 
@@ -148,7 +148,7 @@ function OrdersAndReturns(props) {
         }
     }
 
-    const sortOrdersHandler = async (e) => {
+    const sortOrdersHandler = async (e) => {// sorting on the customer orders
         setLoaderOrders(true);
         setSortOrder(e.target.value);
         let result: any = await sortCustomerOrders(e.target.value, pageSize);
@@ -164,7 +164,7 @@ function OrdersAndReturns(props) {
     }
 
 
-    const goToNextPage = (e) => {
+    const goToNextPage = (e) => {// navigating between pages of orders
         e.preventDefault();
         setCurrent((page) => page + 1);
     }

@@ -30,7 +30,7 @@ function MyReturns(props) {
 
 
 
-    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = 'created_at', sortOrders: any = 'DESC', search: any = '') => {
+    const getReturnData = async (from_date: any = '', to_date: any = '', from_price: any = '', to_price: any = '', sortBy: any = 'created_at', sortOrders: any = 'DESC', search: any = '') => {// getting customer return orders by hitting api
         let returns: any = await getCustomerReturn(pageSize, from_date, to_date, from_price, to_price, sortBy, sortOrders, search);
 
         if (returns && returns.data && returns.data.length > 0 && returns.data[0]) {
@@ -47,18 +47,18 @@ function MyReturns(props) {
         setPageSize(page)
     }
 
-    const sortOrdersHandler = async (e) => {
+    const sortOrdersHandler = async (e) => {// sorting on return orders
         setLoaderReturns(true);
         setSortOrder(e.target.value);
         getReturnData(dateFilter.from, dateFilter.to, range.low, range.high, 'grand_total', e.target.value, searchTerm)
     }
 
-    const goToNextPage = (e) => {
+    const goToNextPage = (e) => {//navigation between pages of orders
         e.preventDefault();
         setCurrent((page) => page + 1);
     }
 
-    const goToPreviousPage = (e) => {
+    const goToPreviousPage = (e) => {//navigation between pages of orders
         e.preventDefault();
         setCurrent((page) => page - 1);
     }

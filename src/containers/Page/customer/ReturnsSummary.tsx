@@ -30,7 +30,7 @@ function ReturnsSummary(props) {
         }
     }, [props.returnData]);
 
-    const getData = async (orderId) => {
+    const getData = async (orderId) => {// search orders based on order id
         let orderDetails = [];
         let result: any = await searchOrders(orderId);
         if (Object.keys(props.returnData).length === 0) {
@@ -55,17 +55,17 @@ function ReturnsSummary(props) {
         orderDetails['grand_total'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.grand_total : 0;
         setOrder(orderDetails);
     }
-    const onChange = (dates) => {
+    const onChange = (dates) => {// changing and setting the start and end date
         const [start, end] = dates;
         setStartDate(start);
         setEndDate(end);
     };
 
-    const resetDate = () => {
+    const resetDate = () => {// resetting  the date in date picker
         setStartDate(new Date())
         setEndDate(null)
     }
-    const slotCheck = async (e) => {
+    const slotCheck = async (e) => {// checking the slot in pick up slot accordian
         let slotVal = e.target.value;
         let checked = e.target.checked;
         if (checked) {
@@ -73,7 +73,7 @@ function ReturnsSummary(props) {
         }
     }
 
-    const handleSubmitClick = async (e) => {
+    const handleSubmitClick = async (e) => {// creating the return request based on all field entered properly
 
         if (slot == null) {
             notification("success", "", "Please select pickup  time slot");

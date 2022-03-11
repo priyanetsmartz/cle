@@ -31,7 +31,7 @@ function MyPreferences(props) {
 
 
 
-    const getAttributes = async () => {
+    const getAttributes = async () => {//getting attributes for which preferences are set like 'mostly interested in', 'clothing size', 'shoe size', 'favourite categories'
 
         let result: any = props.preferences;
         let preference = result.data && result.data[0] ? result.data[0].preference : ""
@@ -90,7 +90,7 @@ function MyPreferences(props) {
         setAttributesAll(preference);
     }
 
-    const selectMostlyIntersted = (i) => {
+    const selectMostlyIntersted = (i) => {// function to select/unselect the  'mostly interested in'  while editing the preferences.
         setActiveIndex(i);
         attributes.mostly_intersted.forEach(el => {
             if (el.id === attributes.mostly_intersted[i].id) {
@@ -105,12 +105,12 @@ function MyPreferences(props) {
         }));
     }
 
-    const setActiveIndex = (index: number) => {
+    const setActiveIndex = (index: number) => {// setting the active index  in category and designer
         setActiveCategory(index)
         setActiveDesigner(index)
     }
 
-    const selectClothingSize = (i) => {
+    const selectClothingSize = (i) => {// function to select/unselect the  'clothing size'  while editing the preferences.
         attributes.clothing_size[i].isChecked = !attributes.clothing_size[i].isChecked;
         setAttributes(prevState => ({
             ...prevState,
@@ -118,7 +118,7 @@ function MyPreferences(props) {
         }));
     }
 
-    const removeAllCloth = () => {
+    const removeAllCloth = () => {// clear the clothing size in editing preferences.
         attributes.clothing_size.forEach(el => {
             el.isChecked = false;
         });
@@ -128,7 +128,7 @@ function MyPreferences(props) {
         }))
     }
 
-    const selectShoeSize = (i) => {
+    const selectShoeSize = (i) => {// function to select/unselect the  'shoe size'  while editing the preferences.
         attributes.shoes_size[i].isChecked = !attributes.shoes_size[i].isChecked;
         setAttributes(prevState => ({
             ...prevState,
@@ -136,7 +136,7 @@ function MyPreferences(props) {
         }));
     }
 
-    const removeAllShoe = () => {
+    const removeAllShoe = () => {//clear the shoe size in editing preferences.
         attributes.shoes_size.forEach(el => {
             el.isChecked = false;
         });
@@ -162,7 +162,7 @@ function MyPreferences(props) {
             sataa
         }));
     }
-    const removeSelectedCategories = (cat) => {
+    const removeSelectedCategories = (cat) => {// removing the selected favourite categories
         attributes.categories[activeCategory] = attributes.categories[activeCategory].map(el => (
             el.id === cat.id ? { ...el, isChecked: false } : el
         ))
@@ -175,7 +175,7 @@ function MyPreferences(props) {
 
 
     //remove all selected categores in my preference modal
-    const removeAllCat = () => {
+    const removeAllCat = () => {// removing the all categories 
         attributes.categories[activeCategory].forEach(el => {
             el.isChecked = false;
         });
@@ -198,7 +198,7 @@ function MyPreferences(props) {
         setFavCat(result);
     }
 
-    const saveMyPreferences = async () => {
+    const saveMyPreferences = async () => {// saving the preferences from edit preerences modal and saving them by hitting API.
         setIsShow(true);
         let data = {
             customerId: custId,

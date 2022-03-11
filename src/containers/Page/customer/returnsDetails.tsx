@@ -17,7 +17,7 @@ function OrdersAndReturns(props) {
         getReturnDetailFxn(returnId);
     }, []);
 
-    async function getReturnDetailFxn(returnId) {
+    async function getReturnDetailFxn(returnId) {// getting returns details based on return id, and also progress percentage is set in this.
         let results: any = await retrunDetails(returnId);
         let data = [];
         if (results && results.data && results.data.length > 0) {

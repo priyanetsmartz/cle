@@ -38,7 +38,7 @@ function MyAddress(props) {
     const openAddressModal = () => {
         setMyAddressModal(!myAddressModal);
     }
-    const deleteAdd = async (index) => {
+    const deleteAdd = async (index) => {// function to delete address
         if (!custForm.addresses[index]) return;
         let result: any = await deleteAddress(custForm.addresses[index].id);
         if (result) {
@@ -49,7 +49,7 @@ function MyAddress(props) {
         }
     }
 
-    const editAddress = (index, id) => {
+    const editAddress = (index, id) => {// function to update address
         delete custForm.addresses[index].region;
         setAddIndex(index);
         getData();
@@ -60,7 +60,7 @@ function MyAddress(props) {
 
     const [addIndex, setAddIndex] = useState(null);
 
-    const closePopAddress = () => {
+    const closePopAddress = () => { // closing the modal which is opened for editing purpose
         setCustAddForm({
             id: 0,
             customer_id: localToken?.cust_id,
@@ -84,13 +84,13 @@ function MyAddress(props) {
         }
     }, []);
 
-    const getData = async () => {
+    const getData = async () => {// function to hit api for getting customer dtails and set in customer form
         let result: any = await getCustomerDetails();
         setCustForm(result?.data);
     }
 
     // for customer address popup window starts here
-    const saveCustAddress = async (e) => {
+    const saveCustAddress = async (e) => {// firstly, all the fields in address are validated, and post that updated customer address is saved
         if (validateAddress()) {
             setIsShow(true);
             let obj: any = { ...custAddForm };
@@ -130,7 +130,7 @@ function MyAddress(props) {
         }
     }
 
-    const validateAddress = () => {
+    const validateAddress = () => {// validation constraints are checked under this function
         let error = {};
         let formIsValid = true;
         if (typeof custAddForm.telephone !== "undefined") {

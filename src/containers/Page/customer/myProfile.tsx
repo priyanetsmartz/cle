@@ -144,7 +144,7 @@ function MyProfile(props) {
         props.showForgot(false);
     }
 
-    async function getData() {
+    async function getData() {// unction to get customer details
         let lang = props.languages ? props.languages : language;
         let result: any = await getCustomerDetails();
         const d = result?.data?.dob ? result?.data?.dob?.split("-") : "";
@@ -306,7 +306,7 @@ function MyProfile(props) {
         }))
     }
 
-    const saveCustDetails = async (e) => {
+    const saveCustDetails = async (e) => {// saving the customer details after validation
         if (validateDetails()) {
             setSaveCustDetailsLoader(true)
             e.preventDefault();
@@ -349,7 +349,7 @@ function MyProfile(props) {
             }
         }
     }
-    const validateDetails = () => {
+    const validateDetails = () => {// Validation of customer details
         let error = {};
         let formIsValid = true;
 
@@ -402,7 +402,7 @@ function MyProfile(props) {
         }))
     }
 
-    const handleChangePass = async () => {
+    const handleChangePass = async () => {// function to change the password post validating the password fields
 
         if (handleValidation()) {
             setLoaderPassChange(true);
@@ -426,7 +426,7 @@ function MyProfile(props) {
         }
     }
 
-    const handleValidation = () => {
+    const handleValidation = () => {// validation of password to change
         let error = {};
         let formIsValid = true;
         if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#^])([A-Za-z\d$@$!%*?&#^]{8,})$/.test(changePass["newPassword"]))) {
@@ -464,7 +464,7 @@ function MyProfile(props) {
         }))
     }
 
-    const handleChangeEmail = async () => {
+    const handleChangeEmail = async () => {// api is hit to change email after validation
         if (handleValidationEmail()) {
             setloaderEmailChange(true)
             const req = {
@@ -494,7 +494,7 @@ function MyProfile(props) {
         }
     }
 
-    const handleValidationEmail = () => {
+    const handleValidationEmail = () => { // validation of email
         let error = {};
         let formIsValid = true;
 
@@ -534,7 +534,7 @@ function MyProfile(props) {
     }
     //change email ends here----------------------------------------->
 
-    const saveGiftingPrefer = async () => {
+    const saveGiftingPrefer = async () => {// saving giting preferences after editing modal
 
         if (handleValidationGifting()) {
             setIshowGifting(true);
@@ -580,7 +580,7 @@ function MyProfile(props) {
         }
     }
 
-    const handleValidationGifting = () => {
+    const handleValidationGifting = () => {// validation o gifting preferences fields
         let error = {};
         let formIsValid = true;
         if (!giftingPrefer['name']) {
@@ -648,14 +648,14 @@ function MyProfile(props) {
         }));
     }
 
-    const togglePasswordVisiblity = (id) => {
+    const togglePasswordVisiblity = (id) => {// masking/un-masking the password
         const val = !passMask[id];
         setPassMask(pre => ({
             ...pre,
             [id]: val
         }));
     }
-    const removeSeleted = async (i) => {
+    const removeSeleted = async (i) => { //removing the gifting preference
         let newObj = { ...customerPrefer }
 
         newObj.gifting_preferencees.splice(i)

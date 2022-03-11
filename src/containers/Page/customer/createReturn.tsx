@@ -60,12 +60,12 @@ function CreateReturn(props) {
         }
     }, []);
 
-    const getReturnReasonListFxn = async () => {
+    const getReturnReasonListFxn = async () => {// Get the list of return reasons and set in issueList
         let result: any = await getReturnReasonList()
         setIssueList(result.data);
     }
 
-    const getData = async (returnId) => {
+    const getData = async (returnId) => {//function to get the order details based on  return id. and set in orderDetails object, and also check if return exists based on the entity id of order.
         let orderDetails = [];
         let result: any = await searchOrders(returnId);
         orderDetails['entity_id'] = result?.data?.items?.[0] ? result?.data?.items?.[0]?.entity_id : 0;
@@ -121,7 +121,7 @@ function CreateReturn(props) {
     }
 
     // for customer address popup window starts here
-    const saveCustAddress = async (e) => {
+    const saveCustAddress = async (e) => {// saving the customer address after validation of the same.
         if (validateAddress()) {
             custAddForm.customer_id = custId;
             custAddForm.address_type = 'shipping';
@@ -141,7 +141,7 @@ function CreateReturn(props) {
         }
     }
 
-    const validateAddress = () => {
+    const validateAddress = () => {// validating the address field
         let error = {};
         let formIsValid = true;
         if (typeof custAddForm.telephone !== "undefined") {
@@ -185,7 +185,7 @@ function CreateReturn(props) {
     }
 
 
-    const sortHandler = (sortOrder) => {
+    const sortHandler = (sortOrder) => {// sorting the orders
         order.items.sort(compareValues(sortOrder))
         setOrder(order);
     }
