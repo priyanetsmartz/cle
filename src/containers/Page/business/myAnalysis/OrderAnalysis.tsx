@@ -273,7 +273,7 @@ function MyAnalysisOrders(props) {
                                         </linearGradient>
                                     </defs>
                                     <XAxis dataKey="created_at" height={50} dy="50" tick={CustomizedAxisTick} />
-                                    <YAxis dataKey="total_cost" domain={[0, 20000]} />
+                                    <YAxis dataKey="total_cost" domain={[0, 50000]} />
                                     <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
                                     <Tool content={CustomTooltip} animationDuration={0} position={{ x: 650, y: 0 }} />
                                     <Area type="monotone" activeDot={{r: 5, }} dataKey="total_cost" stroke={"rgb(75,73,182)"}

@@ -211,3 +211,8 @@ export async function logoutUser() {
   localStorage.removeItem('cartQuoteId');
   localStorage.removeItem('cartQuoteToken');
 }
+
+export function percentageOF(previous, current) {
+  let perc = parseInt((((current - previous) / current) * 100).toFixed(2))
+  return perc ? perc : 0;
+}

@@ -4,7 +4,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 import moment from 'moment';
 import { dataTiles } from '../../../../redux/pages/vendorLogin';
-import { formatprice, getCurrentMonth } from '../../../../components/utility/allutils';
+import { formatprice, getCurrentMonth, percentageOF } from '../../../../components/utility/allutils';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import { siteConfig } from '../../../../settings';
 
@@ -31,10 +31,8 @@ function MyAnalysisDataTiles(props) {
 
 
 
-    function percentageOF(previous, current) {
-        let perc = parseInt((((current - previous) / current) * 100).toFixed(2))
-        return perc ? perc : 0;
-    }
+ 
+
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
         if (results && results.data && results.data.length > 0) {
