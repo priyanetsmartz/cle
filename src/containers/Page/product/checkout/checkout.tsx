@@ -895,7 +895,7 @@ function Checkout(props) {
         if (selectedPaymentMethod === 'myfatoorah_gateway') {
 
             const payment: any = await myFatoora(billAddress);
-            console.log(payment);
+         //   console.log(payment);
             if (payment?.data?.length > 0 && payment?.data[0]?.IsSuccess) {
                 let url = payment?.data[0]?.Data.PaymentURL;
                 if (url) {

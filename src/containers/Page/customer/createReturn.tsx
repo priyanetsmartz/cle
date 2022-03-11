@@ -55,6 +55,7 @@ function CreateReturn(props) {
     useEffect(() => {
         getData(returnId);
         getReturnReasonListFxn();
+        window.scrollTo(0, 0);
         return () => {
         }
     }, []);

@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import { language } from '../../../settings';
 import MyPreferences from './myProfile/myPreferences';
 import { DROPDOWN } from '../../../config/constants';
-import { COUNTRIES } from '../../../config/counties';
 import moment from 'moment';
 import { capitalize } from '../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
@@ -73,7 +72,7 @@ function MyProfile(props) {
         lastname: "",
         gender: 0,
         dob: "",
-        country: 'Andorra',
+        country: '',
         phone: '',
         website_id: 1,
         addresses: [],
@@ -81,7 +80,7 @@ function MyProfile(props) {
     });
 
     const [customAttribute, setCustomAttribute] = useState({
-        country: 'Andorra',
+        country: '',
         mp_sms_telephone: '',
         is_social_login: ''
     });
@@ -322,7 +321,7 @@ function MyProfile(props) {
                 },
                 {
                     "attribute_code": "country",
-                    "value": customAttribute.country ? customAttribute.country : "Andorra"
+                    "value": customAttribute.country ? customAttribute.country : ""
                 },
                 {
                     "attribute_code": "is_social_login",
@@ -373,6 +372,12 @@ function MyProfile(props) {
         if (!dob.year) {
             formIsValid = false;
             error["dob"] = intl.formatMessage({ id: "dateofbirthrequired" });
+        }
+        if (typeof customAttribute.mp_sms_telephone !== "undefined") {
+            if (!(/^((?:[+?0?0?966]+)(?:\s?\d{2})(?:\s?\d{7}))$/.test(customAttribute.mp_sms_telephone))) {
+                formIsValid = false;
+                error['mp_sms_telephone'] = intl.formatMessage({ id: "phoneinvalid" });
+            }
         }
         if (!customAttribute.mp_sms_telephone) {
             formIsValid = false;
@@ -1060,12 +1065,14 @@ function MyProfile(props) {
                         </div>
                         <div className="width-100 mb-3 form-field">
                             <label className="form-label"><IntlMessages id="myaccount.country" /> <span className="maindatory">*</span></label>
+
                             <select value={customAttribute.country} onChange={handleChange} id="country" className="form-select" aria-label="Default select example">
-                                {COUNTRIES && COUNTRIES.map((opt, i) => {
-                                    return (<option key={i} value={opt.full_name_english}>{opt.full_name_english ? opt.full_name_english : opt.id}</option>);
-                                })}
+                                <option key="0" value="">{intl.formatMessage({ id: 'select' })}</option>
+                                <option key="1" value={intl.formatMessage({ id: 'saudi' })}>{intl.formatMessage({ id: 'saudi' })}</option>
                             </select>
                             <span className="error">{personalError.errors["country"]}</span>
+
+
                         </div>
                     </Modal.Body>
                     <Modal.Footer className="width-100 mb-3 form-field">

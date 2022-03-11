@@ -24,8 +24,8 @@ function ReturnsSummary(props) {
     const [loader, setLoader]: any = useState(false);
     const [maxItems, setMaxitems] = useState(10);
     useEffect(() => {
+        window.scrollTo(0, 0);
         getData(orderId);
-
         return () => {
         }
     }, [props.returnData]);
@@ -121,7 +121,11 @@ function ReturnsSummary(props) {
             <div className="container">
                 <div className="row">
                     <div className="col-sm-12">
-                    <Link to="/customer/orders-and-returns"> <IntlMessages id  = "backtoreturndetails"/></Link>
+                        <div className="back-block">
+                            <i className="fas fa-chevron-left back-icon"></i>
+                            <Link to={`/customer/create-return/${orderId}`} className="back-to-shop"> <IntlMessages id="backtoreturndetails" /></Link>
+                        </div>
+
                         <div className="main-head">
                             <h1><IntlMessages id="return.summary" /></h1>
                             <h2><IntlMessages id="return.summarydata" /></h2>
@@ -236,10 +240,10 @@ function ReturnsSummary(props) {
                                                             startDate={startDate}
                                                             endDate={endDate}
                                                             selectsRange
+                                                            isClearable={true}
                                                             inline
-                                                            isClearable 
                                                         />
-                                                        <button type="submit" onClick={resetDate}>Reset</button>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -269,7 +273,7 @@ function ReturnsSummary(props) {
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
-                                                                        {slot === "8:00a.m.-11:00a.m."? <p>Great!</p>:null}
+                                                                        {slot === "8:00a.m.-11:00a.m." ? <p>Great!</p> : null}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -287,7 +291,7 @@ function ReturnsSummary(props) {
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
-                                                                        {slot === "11:00a.m.-3:00p.m."? <p>Great!</p>:null}
+                                                                        {slot === "11:00a.m.-3:00p.m." ? <p>Great!</p> : null}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -305,7 +309,7 @@ function ReturnsSummary(props) {
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
-                                                                       {slot === "3:00p.m.-6:00p.m."? <p>Great!</p>:null}
+                                                                        {slot === "3:00p.m.-6:00p.m." ? <p>Great!</p> : null}
                                                                     </div>
                                                                 </div>
                                                             </div>

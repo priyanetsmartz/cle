@@ -44,8 +44,10 @@ function OrderDetails(props) {
     });
 
     useEffect(() => {
+        
         setOrderId(props.match.params.orderId)
         getData();
+        window.scrollTo(0, 0);
 
     }, []);
 
@@ -226,7 +228,7 @@ function OrderDetails(props) {
                                         {order.status === 'complete' ?
                                             <div className='messageStatus'>
                                                 <IntlMessages id="order.itsDelivered" />
-                                                <IntlMessages id="order.deliveredstatus" />
+                                                <p className='text-message'><IntlMessages id="order.deliveredstatus" /></p>
                                             </div>
                                             : order.status === 'pending' ?
                                                 <IntlMessages id="order.itsPending" />
@@ -239,7 +241,6 @@ function OrderDetails(props) {
                                                         ? <IntlMessages id="order.canceled" />
                                                         : order.status}
                                     </strong></p>
-                                    {order.status === 'complete' && <p><IntlMessages id="order.delivered" /> {order.shipping_amount}</p>}
                                     <div className="progress-bar-area">
                                         <Progress
                                             strokeColor={{
@@ -362,7 +363,7 @@ function OrderDetails(props) {
                                         <div className="pro-name-tag">
                                             <p className='float-start'><strong><IntlMessages id="order.productNo" /></strong> {item.sku}</p>
                                             {item?.extension_attributes?.traking_info && (
-                                                <Link to={{ pathname: item?.extension_attributes?.traking_info }} className="float-end text-end order-pro-price text-decoration-none" target="_blank">Track Parcel</Link>)}
+                                                <Link to={{ pathname: item?.extension_attributes?.traking_info }} className="float-end text-end order-pro-track text-decoration-none" target="_blank">Track Parcel</Link>)}
                                             <div className="clearfix"></div>
                                         </div>
                                     </div>

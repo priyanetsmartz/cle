@@ -6,24 +6,13 @@ function Breadcrumbs(props) {
     const location = useLocation()
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
     let localToken = JSON.parse((localData));
-    const { category, subcat, childcat, greatchildcat, cat, returnId, prodsku, vendorIdprev, sku }: any = useParams();
+    const { category, subcat, childcat, greatchildcat, cat, returnId, prodsku, vendorIdprev }: any = useParams();
     let stateBread = location.pathname.split('\/');
     const [breadcrumsState, setBreadcrumsState] = useState(stateBread);
     const [vendorName, SetVendorName] = useState(localToken?.vendor_id);
-    const [keyUl, setKey] = useState('');
-    useEffect(() => {
-        let urlPath = '';
-        if (category && subcat && childcat && greatchildcat) {
-            urlPath = category + "/" + subcat + "/" + childcat + '/' + greatchildcat;
-        } else if (category && subcat && childcat) {
-            urlPath = category + "/" + subcat + "/" + childcat;
-        } else if (category && subcat) {
-            urlPath = category + "/" + subcat;
-        } else {
-            urlPath = category;
-        }
 
-        setKey(urlPath)
+    useEffect(() => {
+
         let breads = location.pathname.split('\/');
         setBreadcrumsState(breads)
     }, [location]);
@@ -131,10 +120,10 @@ function Breadcrumbs(props) {
                             }
 
                         } else {
-                            if (local === "" || local === "settings" || local === vendorIdprev ) {
+                            if (local === "" || local === "settings" || local === vendorIdprev) {
                                 return "";
                             } else {
-                           
+
                                 if (local === 'product-details' || local === 'products' || local === 'product-details-preview') {
                                     return (
                                         ''
@@ -200,15 +189,15 @@ function Breadcrumbs(props) {
                                         }</Link></li>
 
                                     )
-                                } else if (local === 'create-return' || local === 'return-details') {
+                                } else if (local === 'create-return' || local === 'return-details'|| local === 'return-summary') {
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={"/customer/orders-and-returns"}>My Orders and Returns</Link></li>
                                     )
-                                }  else if (local === 'orderauth') {
+                                } else if (local === 'orderauth') {
                                     return (
                                         <li key={j} className="breadcrumb-item">Order Authentication</li>
                                     )
-                                }else {
+                                } else {
                                     let str = local.replace(/-/g, ' ');
                                     return (
                                         <li key={j} className="breadcrumb-item"><Link to={local === 'product-details' ? '/products' : "/" + local}>{local === 'product-details' ? 'Products' : capitalize(str)}</Link></li>

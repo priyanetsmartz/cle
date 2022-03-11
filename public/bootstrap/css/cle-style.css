@@ -1288,6 +1288,32 @@ p.promotion_alert {
     z-index: 999;
 }
 
+.order-pro-list .order-pro-track {
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    font-style: normal;
+    background: #2E2BAA !important;
+    text-align: center;
+    border-radius: 0;
+    font-size: 11px;
+    text-transform: capitalize !important;
+    border: 0;
+    color: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 42px;
+    line-height: 0;
+    padding: 7px 10px;
+    width: 160px;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
 .miniaccount_details ul li a:hover, .myaccount_details ul li a:hover {
     color: #2E2BAA;
 }
@@ -9602,6 +9628,7 @@ ul.vendor-menu {
     display: block;
     margin: 0 auto;
 }
+
 .cancelledorder {
     top: 493px;
     left: 0px;
@@ -9610,6 +9637,7 @@ ul.vendor-menu {
     background: #D9242C 0% 0% no-repeat padding-box;
     opacity: 1;
 }
+
 .ordercancelledtext {
     padding: 21px;
     font: normal normal 600 18px/22px Lato;
@@ -9617,12 +9645,22 @@ ul.vendor-menu {
     color: #FFFFFF;
     opacity: 1;
 }
+
 .track-btn {
     background: #000000 0% 0% no-repeat padding-box;
     opacity: 1;
     width: 180px;
     height: 43px;
 }
+
+.data-decrease .percentage, .data-decrease .fa.fa-caret-down {
+    color: #D9242C;
+}
+
+.data-increase .percentage, .data-increase .fa.fa-caret-up {
+    color: #00DABD;
+}
+
 /* All media screen below */
 
 /* ----------- Non-Retina Screens ----------- */

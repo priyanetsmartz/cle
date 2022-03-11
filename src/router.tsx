@@ -66,7 +66,7 @@ const PublicRoutes = ({ history }) => {
             <ProductRoutes exact path="/search/:searchText/:cat" component={Search} />
             <ProductRoutes exact path="/search/:brandname" component={Search} />
             <ProductRoutes exact path="/thankyou" component={orderThankyou} />
-            <ProductRoutes exact path="/order-details/:orderId" component={OrderDetails} />
+            <LoggedInRoute exact path="/order-details/:orderId" component={OrderDetails} />
             <ProductRoutes exact path="/products/:category/:subcat/:childcat/:greatchildcat/all" component={Product} />
             <ProductRoutes exact path="/products/:category/:subcat/:childcat/all" component={Product} />
             <ProductRoutes exact path="/products/:category/:subcat/all" component={Product} />

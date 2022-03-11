@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
@@ -28,10 +28,17 @@ function MyAnalysisDataTiles(props) {
             setDataTilesData([])
         }
     }, [])
+
+
+
+    function percentageOF(previous, current) {
+        let perc = parseInt((((current - previous) / current) * 100).toFixed(2))
+        return perc ? perc : 0;
+    }
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
         if (results && results.data && results.data.length > 0) {
-
+            console.log(results?.data[0])
             setDataTilesData(results?.data[0])
         } else {
 
@@ -223,21 +230,30 @@ function MyAnalysisDataTiles(props) {
                                     </OverlayTrigger></h5>
                                     <div className="stats">
                                         <h3>{dataTilesData['totalOrder'] ? dataTilesData['totalOrder'] : 0}</h3>
+                                        <div className="text-next">
+
+                                            <div className='arrowsdatatile'>
+                                                {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.totalOrder, dataTilesData['totalOrder']) > 0 ? <div className='data-increase'>
+                                                    <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.totalOrder, dataTilesData['totalOrder'])}%</div>
+                                                    <><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div> :
+                                                    <div className='data-decrease'>
+                                                        <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.totalOrder, dataTilesData['totalOrder'])}%</div><><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div>}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
                                     <h5><IntlMessages id="order.orders" /><OverlayTrigger
-                                            delay={{ hide: 450, show: 300 }}
-                                            overlay={(props) => (
-                                                <Tooltip id="" {...props} >
-                                                    <IntlMessages id="totalaveragescost" />
-                                                </Tooltip>
-                                            )}
-                                            placement="right"
-                                        ><i className="fas fa-info-circle" ></i>
-                                        </OverlayTrigger>
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                <IntlMessages id="totalaveragescost" />
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger>
                                     </h5>
                                     <div className="stats">
                                         <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
