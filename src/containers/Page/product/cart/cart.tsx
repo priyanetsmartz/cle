@@ -181,6 +181,7 @@ function CartItemPage(props) {
 
     async function handleChangeQty(e, data) {
         setValue(data.item_id);
+        let results: any;
         let value = parseInt(e.target.value);
         setQty(value);
         let customer_id = props.token.cust_id;
@@ -193,22 +194,30 @@ function CartItemPage(props) {
         }
         if (customer_id) {
             if (value === 0) {
-                await removeItemFromCart(data.item_id);
+                results = await removeItemFromCart(data.item_id);
 
             } else {
-                await updateCartItem(data.item_id, cartData);
+                results = await updateCartItem(data.item_id, cartData);
             }
         } else {
             if (value === 0) {
-                await removeItemFromGuestCart(data.item_id);
+                results = await removeItemFromGuestCart(data.item_id);
 
             } else {
-                await updateGuestCartItem(data.item_id, cartData);
+                results = await updateGuestCartItem(data.item_id, cartData);
             }
         }
-        callGetCartItems()
-        props.addToCartTask(true);
-        notification("success", "", intl.formatMessage({ id: "cartupdated" }));
+        
+        if (results?.data?.message) {
+            callGetCartItems()
+            props.addToCartTask(true);
+            notification("error", "", results?.data?.message);
+        } else {
+            callGetCartItems()
+            props.addToCartTask(true);
+            notification("success", "", intl.formatMessage({ id: "cartupdated" }));
+        }
+
     }
 
     async function handleWhishlist(sku: any, item_id) {
