@@ -261,55 +261,55 @@ function ReturnsSummary(props) {
                                                         <div className="timeslots">
                                                             <div className="row">
                                                                 <div className="col-md-8">
-                                                                    <span>8:00 a.m. 11:00 a.m.</span>
-                                                                    <p><IntlMessages id="return.arrive" /> 8:00 a.m., - 11:00 a.m. </p>
+                                                                    <span>8:00   11:00  </span>
+                                                                    <p><IntlMessages id="return.arrive" /> 8:00  , - 11:00   </p>
                                                                 </div>
                                                                 <div className="col-md-4">
                                                                     <div className="form-check">
                                                                         <input
                                                                             type="radio"
-                                                                            defaultValue="8:00a.m.-11:00a.m."
+                                                                            defaultValue="8:00 -11:00 "
                                                                             name="timeslot"
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
-                                                                        {slot === "8:00a.m.-11:00a.m." ? <p>Great!</p> : null}
+                                                                        {slot === "8:00 -11:00 " ? <p>Great!</p> : null}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col-md-8">
-                                                                    <span>11:00 a.m. 3:00 p.m.</span>
-                                                                    <p><IntlMessages id="return.arrive" /> 11:00 a.m., - 3:00 p.m. </p>
+                                                                    <span>11:00   15:00 </span>
+                                                                    <p><IntlMessages id="return.arrive" /> 11:00  , - 15:00 </p>
                                                                 </div>
                                                                 <div className="col-md-4">
                                                                     <div className="form-check">
                                                                         <input
                                                                             type="radio"
-                                                                            defaultValue="11:00a.m.-3:00p.m."
+                                                                            defaultValue="11:00 -15:00"
                                                                             name="timeslot"
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
-                                                                        {slot === "11:00a.m.-3:00p.m." ? <p>Great!</p> : null}
+                                                                        {slot === "11:00 -15:00" ? <p>Great!</p> : null}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col-md-8">
-                                                                    <span>3:00 p.m. 6:00 p.m.</span>
-                                                                    <p><IntlMessages id="return.arrive" /> 3:00 p.m., - 6:00 a.m. </p>
+                                                                    <span>15:00  18:00 </span>
+                                                                    <p><IntlMessages id="return.arrive" /> 15:00 , - 18:00   </p>
                                                                 </div>
                                                                 <div className="col-md-4">
                                                                     <div className="form-check">
                                                                         <input
                                                                             type="radio"
-                                                                            defaultValue="3:00p.m.-6:00p.m."
+                                                                            defaultValue="15:00-18:00"
                                                                             name="timeslot"
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
-                                                                        {slot === "3:00p.m.-6:00p.m." ? <p>Great!</p> : null}
+                                                                        {slot === "15:00-18:00" ? <p>Great!</p> : null}
                                                                     </div>
                                                                 </div>
                                                             </div>
