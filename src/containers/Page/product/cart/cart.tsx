@@ -286,8 +286,7 @@ function CartItemPage(props) {
     }
     return (
         <main>
-            {cartItemsVal['items'] ?
-                (<div>
+                <div>
                     <section className="cart-main">
                         <div className="container">
                             <div className="row">
@@ -422,8 +421,7 @@ function CartItemPage(props) {
                         </Modal.Header>
                         <GiftMessage />
                     </Modal>
-                </div>)
-                : null}
+                </div>
         </main >
     )
 }
