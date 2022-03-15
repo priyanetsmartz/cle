@@ -398,8 +398,7 @@ function ProductDetails(props) {
     }
     const getAnimalsContent = catsName => {
         let content = [];
-
-        for (let i = 0; i <= catsName?.length; i++) {
+        for (let i = 0; i < catsName?.length; i++) {
 
             if (i === 0)
                 content.push(<><li className="breadcrumb-item" key={i}>{catsName[0]?.url_key ? <Link to={"/category/" + catsName[0].url_key}>{catsName[0].name}</Link> : catsName[0].name}</li></>)
@@ -613,7 +612,7 @@ function ProductDetails(props) {
                                                     data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
                                                     <IntlMessages id="product.size" />
                                                 </button>
-                                            </h2>
+                                            </h2>                                    
                                             <div id="flush-collapseThree" className="accordion-collapse collapse" aria-labelledby="flush-headingThree"
                                                 data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">
