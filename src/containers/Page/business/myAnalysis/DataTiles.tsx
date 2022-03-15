@@ -31,7 +31,7 @@ function MyAnalysisDataTiles(props) {
 
 
 
- 
+
 
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
@@ -254,7 +254,16 @@ function MyAnalysisDataTiles(props) {
                                     </OverlayTrigger>
                                     </h5>
                                     <div className="stats">
-                                        <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['averageOrder']).toFixed(2)) : 0}</h3>
+                                        <h3>{dataTilesData['averageOrder'] ? dataTilesData['averageOrder'] : 0}</h3>
+                                        <div className="text-next">
+
+                                            <div className='arrowsdatatile'>
+                                                {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.averageOrder, dataTilesData['averageOrder']) > 0 ? <div className='data-increase'>
+                                                    <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.averageOrder, dataTilesData['averageOrder'])}%</div>
+                                                    <><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div> :
+                                                    <div className='data-decrease'>
+                                                        <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.averageOrder, dataTilesData['averageOrder'])}%</div><><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div>}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -271,7 +280,16 @@ function MyAnalysisDataTiles(props) {
                                     ><i className="fas fa-info-circle" ></i>
                                     </OverlayTrigger></h5>
                                     <div className="stats">
-                                        <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(parseFloat(dataTilesData['payoutAmount']).toFixed(2)) : 0}</h3>
+                                        <h3>{dataTilesData['payoutAmount'] ? siteConfig.currency + ' ' + formatprice(dataTilesData['payoutAmount']) : 0}</h3>
+                                        <div className="text-next">
+
+                                            <div className='arrowsdatatile'>
+                                                {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.payoutAmount, dataTilesData['payoutAmount']) > 0 ? <div className='data-increase'>
+                                                    <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.payoutAmount, dataTilesData['payoutAmount'])}%</div>
+                                                    <><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div> :
+                                                    <div className='data-decrease'>
+                                                        <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.payoutAmount, dataTilesData['payoutAmount'])}%</div><><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div>}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
