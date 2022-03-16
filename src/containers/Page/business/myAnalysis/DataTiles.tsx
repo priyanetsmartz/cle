@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";

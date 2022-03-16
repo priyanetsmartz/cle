@@ -44,7 +44,7 @@ function OrderDetails(props) {
     });
 
     useEffect(() => {
-        
+      
         setOrderId(props.match.params.orderId)
         getData();
         window.scrollTo(0, 0);
@@ -71,19 +71,20 @@ function OrderDetails(props) {
         orderDetails['items'] = result.data.items[0] ? result.data.items[0].items : {};
         orderDetails['entity_id'] = result.data.items[0] ? result.data.items[0].entity_id : 0;
         orderDetails['returnStatus'] = getorderReturnstatus(orderDetails['entity_id'])
-        orderDetails['status'] = result?.data?.items?.[0]?.status
+        orderDetails['status'] = result?.data?.items?.[0]?.status;
+        orderDetails['deliverydate'] = moment().format('dd/MMMM/YYYY')
         setOrder(orderDetails);
 
         let checkreturn: any = await checkIfReturnExists(orderDetails['entity_id']);
 
-
+       console.log(moment().isAfter(moment().format('dd/MMMM/YYYY')));
 
         let myObject = checkreturn?.data?.[0];
 
         let resultShow = myObject.filter(val => {
             return val.value === 'true';
         });
-        if (resultShow.length > 0) {
+        if (resultShow.length > 0 && moment().isBefore(moment().format('dd/MMMM/YYYY'))) {
             setShowReturn(true);
         }
 

@@ -15,6 +15,7 @@ const { addToWishlistTask, addToCartTask } = cartAction;
 const { showSignin } = appAction;
 
 function MyWishList(props) {
+    let stock = 0;
     const userGroup = props.token.token;
     const [isPriveUser, setIsPriveUser] = useState((userGroup && userGroup === '4') ? true : false);
     const intl = useIntl();
@@ -215,14 +216,27 @@ function MyWishList(props) {
                                             <div className="product p-4">
                                                 <div className="text-center">
                                                     <Link to={'/product-details/' + item.sku}><img src={item.img_src} alt={item.name} width="200" /></Link>
-
-
+                                                    {
+                                                        item.pending_inventory_source && item.pending_inventory_source.length > 0 && item.pending_inventory_source.map((attributes) => {
+                                                            if (attributes.stock_name === "Vendors Stock") {
+                                                                stock = attributes.qty;
+                                                            }
+                                                        })
+                                                    }
                                                 </div>
-                                                <div className="wish-cart cart-button">
-                                                    {isShow === parseInt(item.product_id) ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
-                                                        <Link to="#" onClick={() => { handleCart(parseInt(item.product_id), item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+                                                {stock > 0 && (
+                                                    <div className="wish-cart cart-button">
+                                                        {isShow === parseInt(item.product_id) ?
+                                                            <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                            <Link to="#" onClick={() => { handleCart(parseInt(item.product_id), item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
-                                                </div>
+                                                    </div>
+                                                )}
+                                                {stock <= 0 && (
+                                                    <div className="wish-cart cart-button">
+                                                        <Link to="#" className="btn btn-primary text-uppercase"><IntlMessages id="product.outofstock" /></Link>
+                                                    </div>
+                                                )}
                                                 <div className="wish text-left">
                                                     <h5><Link to={'/search/' + item.brand}>{item.brand}</Link></h5>
                                                     <div className="tagname"><Link to={'/product-details/' + item.sku}>{item.name}</Link></div>

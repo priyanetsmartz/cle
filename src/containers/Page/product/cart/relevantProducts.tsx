@@ -17,6 +17,7 @@ const { showSignin } = appAction;
 const { addToCartTask } = cartAction;
 
 function RelevantProducts(props) {
+    let stock = 0;
     const [relevs, setRelevs] = useState([]);
     const [isShow, setIsShow] = useState(0);
     const language = getCookie('currentLanguage');
@@ -108,17 +109,32 @@ function RelevantProducts(props) {
                                 return (
                                     <Link key={product.id} to={'/product-details/' + product.sku}>
                                         <div className="productcalr product" >
+                                            {
+                                                product.pending_inventory_source && product.pending_inventory_source.length > 0 && product.pending_inventory_source.map((attributes) => {
+                                                    if (attributes.stock_name === "Vendors Stock") {
+                                                        stock = attributes.qty;
+                                                    }
+                                                })
+                                            }
                                             <div className="product_img" style={{
                                                 "width": "180px", "height": "192px"
                                             }} ><img src={product.img} className="image-fluid" style={{ "width": "100%" }} alt={product.name} /> </div>
                                             <div className="product_name"> {product.brand} </div>
                                             <div className="product_vrity"> <Link to={'/product-details/' + product.sku}> {product.name}</Link> </div>
                                             <div className="product_price">{siteConfig.currency} {formatprice(product.price)}</div>
+                                            {stock > 0 && (
                                             <div className="cart-button mt-3 px-2">
                                                 {isShow === product.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                     <Link to="#" onClick={() => { handleCart(product.id, product.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
                                             </div>
+                                            )}
+                                            {stock <= 0 && (
+                                            <div className="cart-button mt-3 px-2">
+                                                <Link to="#"  className="btn btn-primary text-uppercase"><IntlMessages id="product.outofstock" /></Link>
+                                            </div>
+                                            )}
+
                                         </div>
                                     </Link>
                                 )

@@ -17,7 +17,7 @@ function PriveExclusive(props) {
     const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
     const location = useLocation()
-    let image = '', thumbnail = '';
+    let image = '', thumbnail = '', stock = 0;
     const language = getCookie('currentLanguage');
     const [products, setProducts] = useState({
         items: []
@@ -48,7 +48,7 @@ function PriveExclusive(props) {
             setProducts(result.data);
         }
     }
-    
+
     async function handleCart(id: number, sku: string) {
         setIsShow(id);
         let cartResults: any = await handleCartFxn(id, sku);
@@ -94,20 +94,35 @@ function PriveExclusive(props) {
                                                                 if (attributes.attribute_code === 'thumbnail') {
                                                                     thumbnail = attributes.value;
                                                                 }
+                                                                if (attributes.attribute_code === "pending_inventory_source") {
+                                                                    attributes.value.map((data, i) => {
+                                                                        if (data.stock_name === "Vendors Stock") {
+                                                                            stock = data.qty;
+                                                                        }
+                                                                    })
+                                                                }
                                                             })
                                                         }
-                                                      <Link to={'/product-details/' + item.sku}>  <img src={image} alt={item.name} /></Link>
+                                                        <Link to={'/product-details/' + item.sku}>  <img src={image} alt={item.name} /></Link>
                                                     </div>
                                                     <div className="col-md-6">
                                                         <div className="product-details-new">
-                                                        <Link to={'/product-details/' + item.sku}>  <img src={thumbnail} alt= {item.name} /></Link>
+                                                            <Link to={'/product-details/' + item.sku}>  <img src={thumbnail} alt={item.name} /></Link>
                                                             <div className="product_name"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
                                                             <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                             <div className="product_price">{siteConfig.currency} {formatprice(item.price)}</div>
-                                                            <div className="cart-button mt-3 px-2">
-                                                                {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
-                                                                    <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
-                                                            </div>
+
+                                                            {stock > 0 && (
+                                                                <div className="cart-button mt-3 px-2">
+                                                                    {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                                        <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+                                                                </div>
+                                                            )}
+                                                            {stock <= 0 && (
+                                                                <div className="cart-button mt-3 px-2">
+                                                                    <Link to="#" className="btn btn-primary text-uppercase"><IntlMessages id="product.outofstock" /></Link>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -115,7 +130,7 @@ function PriveExclusive(props) {
                                         )
                                     })}
                                 </Slider>
-                            </div>                           
+                            </div>
                         </div>
                     </div>
                 </div>

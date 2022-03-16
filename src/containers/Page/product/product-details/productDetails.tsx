@@ -206,7 +206,7 @@ function ProductDetails(props) {
             props.getAttributeProducts(attributes)
             seChildrenProducts(childProducts.data);
         }
-        let description = "", img = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [];
+        let description = "", img = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [], stock = 0;
         if (result?.data?.custom_attributes) {
             result.data.custom_attributes.map((attributes) => {
                 if (attributes.attribute_code === "description") {
@@ -242,6 +242,13 @@ function ProductDetails(props) {
                 if (attributes.attribute_code === "image") {
                     img = attributes.value;
                 }
+                if (attributes.attribute_code === "pending_inventory_source") {
+                    attributes.value.map((item, i) => {
+                        if (item.stock_name === "Vendors Stock") {
+                            stock = item.qty;
+                        }
+                    })
+                }
 
 
             })
@@ -258,8 +265,9 @@ function ProductDetails(props) {
         projectSingle['gift'] = gift;
         projectSingle['short_description'] = short;
         projectSingle['img'] = img;
+        
         projectSingle['shipping_and_returns'] = shipping_and_returns;
-        projectSingle['is_in_stock'] = result?.data && result.data.extension_attributes && result.data.extension_attributes.stock_item ? result.data.extension_attributes.stock_item.is_in_stock : "";
+        projectSingle['is_in_stock'] = stock;
         let jsonBread = result?.data?.extension_attributes?.category_path ? JSON.parse(result?.data?.extension_attributes?.category_path) : [];
         projectSingle['breadcrumbsArray'] = jsonBread;
         setOpacity(1)
@@ -522,13 +530,13 @@ function ProductDetails(props) {
 
                                     <div className="width-100 my-3">
                                         <div className="d-grid">
-                                            {productDetails['is_in_stock'] === true && (
+                                            {productDetails['is_in_stock'] > 0 && (
                                                 <>  <button type="button" style={{ "display": !isShow ? "flex" : "none" }} onClick={() => { handleCart(productDetails['id'], productDetails['sku']) }} className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
                                                     <IntlMessages id="product.addToCart" /></button>
                                                     <button style={{ "display": isShow ? "inline-block" : "none" }} className="btn btn-primary"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></button>
                                                 </>
                                             )}
-                                            {productDetails['is_in_stock'] === false && (
+                                            {productDetails['is_in_stock'] <= 0 && (
                                                 <button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
                                                     <IntlMessages id="product.outofstock" /></button>
                                             )}
@@ -612,7 +620,7 @@ function ProductDetails(props) {
                                                     data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
                                                     <IntlMessages id="product.size" />
                                                 </button>
-                                            </h2>                                    
+                                            </h2>
                                             <div id="flush-collapseThree" className="accordion-collapse collapse" aria-labelledby="flush-headingThree"
                                                 data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">

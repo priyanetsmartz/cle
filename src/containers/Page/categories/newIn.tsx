@@ -23,7 +23,7 @@ const { addToCart, productList, addToCartTask, addToWishlistTask } = cartAction;
 function NewIn(props) {
     const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
-    let imageD = '',  brand = '';
+    let imageD = '', brand = '', stock = 0;
     const [isWishlist, setIsWishlist] = useState(0);
     const [delWishlist, setDelWishlist] = useState(0);
     const [opacity, setOpacity] = useState(1);
@@ -173,6 +173,13 @@ function NewIn(props) {
                                                                 if (attributes.attribute_code === 'brand') {
                                                                     brand = attributes.value;
                                                                 }
+                                                                if (attributes.attribute_code === "pending_inventory_source") {
+                                                                    attributes.value.map((data, i) => {
+                                                                        if (data.stock_name === "Vendors Stock") {
+                                                                            stock = data.qty;
+                                                                        }
+                                                                    })
+                                                                }
                                                             })
                                                         }
                                                         {
@@ -186,11 +193,19 @@ function NewIn(props) {
                                                 <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                 <div className="pricetag"> {siteConfig.currency} {formatprice(item.price)}</div>
                                             </div>
-                                            <div className="cart-button mt-3 px-2">
-                                                {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
-                                                    <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+                                            {stock > 0 && (
+                                                <div className="cart-button mt-3 px-2">
+                                                    {isShow === item.id ?
+                                                        <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                        <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
-                                            </div>
+                                                </div>
+                                            )}
+                                             {stock <= 0 && (
+                                                <div className="cart-button mt-3 px-2">
+                                                   <Link to="#" className="btn btn-primary text-uppercase"><IntlMessages id="product.outofstock" /></Link>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 )

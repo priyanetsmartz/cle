@@ -13,6 +13,7 @@ const { addToCartTask } = cartAction;
 const { showSignin } = appAction;
 
 function NewIn(props) {
+    let stock = 0;
     const intl = useIntl();
     const [isShow, setIsShow] = useState(0);
     const [products, setProducts] = useState([])
@@ -120,18 +121,35 @@ function NewIn(props) {
                                                                 <div className="product_img" onMouseEnter={() => someHandler(item.id)}
                                                                     onMouseLeave={() => someOtherHandler(item.id)}>
                                                                     {
+                                                                        item.pending_inventory_source && item.pending_inventory_source.length > 0 && item.pending_inventory_source.map((attributes) => {
+                                                                            if (attributes.stock_name === "Vendors Stock") {
+                                                                                stock = attributes.qty;
+                                                                            }
+                                                                        })
+                                                                    }
+                                                                    {
                                                                         isHoverImage === parseInt(item.id) ? <img src={item.hover_image} className="image-fluid hover" alt={item.name} height="150" /> : <img src={item.img} className="image-fluid" alt={item.name} height="150" />
                                                                     }
                                                                 </div>
                                                             </Link>
                                                             <div className="product_name"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
                                                             <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
-                                                            <div className="product_price">{siteConfig.currency}{formatprice(item.price)} </div>
-                                                            <div className="cart-button mt-3 px-2">
-                                                                {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
-                                                                    <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
-                                                            </div>
+                                                            <div className="product_price">{siteConfig.currency}{formatprice(item.price)} </div>
+                                                           
+                                                            {stock > 0 && (
+                                                                <div className="cart-button mt-3 px-2">
+                                                                    {isShow === item.id ?
+                                                                        <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                                        <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
+                                                                </div>
+                                                            )}
+                                                            {stock <= 0 && (
+                                                                <div className="cart-button mt-3 px-2">
+                                                                    <Link to="#" className="btn btn-primary text-uppercase"><IntlMessages id="product.outofstock" /></Link>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     )
                                                 })}
