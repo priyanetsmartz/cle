@@ -56,20 +56,20 @@ function OrderDetails(props) {
         let result: any = await searchOrders(orderId);
 
 
-        orderDetails['increment_id'] = result.data.items[0] ? result.data.items[0].increment_id : 0;
-        orderDetails['created_at'] = result.data.items[0] ? result.data.items[0].created_at : 0;
-        orderDetails['shipment_date'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipment_date ? result.data.items[0].extension_attributes.shipment_date : 0;
-        orderDetails['payment-method'] = result.data.items[0] && result.data.items[0].payment.additional_information[0] ? capitalize(result.data.items[0].payment.additional_information[0]) : "-";
-        orderDetails['total_item_count'] = result.data.items[0] ? result.data.items[0].total_item_count : 0;
-        orderDetails['delivery_address'] = result.data.items[0] && result.data.items[0].extension_attributes && result.data.items[0].extension_attributes.shipping_assignments && result.data.items[0].extension_attributes.shipping_assignments[0].shipping ? result.data.items[0].extension_attributes.shipping_assignments[0].shipping.address : 0;
-        orderDetails['base_subtotal'] = result.data.items[0] ? result.data.items[0].base_subtotal : 0;
-        orderDetails['base_discount_amount'] = result.data.items[0] ? result.data.items[0].base_discount_amount : 0;
-        orderDetails['base_shipping_amount'] = result.data.items[0] ? result.data.items[0].base_shipping_amount : 0;
-        orderDetails['base_shipping_tax_amount'] = result.data.items[0] ? result.data.items[0].base_shipping_tax_amount : 0;
-        orderDetails['base_tax_amount'] = result.data.items[0] ? result.data.items[0].base_tax_amount : 0;
-        orderDetails['grand_total'] = result.data.items[0] ? result.data.items[0].grand_total : 0;
-        orderDetails['items'] = result.data.items[0] ? result.data.items[0].items : {};
-        orderDetails['entity_id'] = result.data.items[0] ? result.data.items[0].entity_id : 0;
+        orderDetails['increment_id'] = result?.data?.items?.[0] ? result?.data?.items?.[0].increment_id : 0;
+        orderDetails['created_at'] = result?.data?.items?.[0] ? result?.data?.items?.[0].created_at : 0;
+        orderDetails['shipment_date'] = result?.data?.items?.[0] && result?.data?.items?.[0].extension_attributes && result?.data?.items?.[0].extension_attributes.shipment_date ? result?.data?.items?.[0].extension_attributes.shipment_date : 0;
+        orderDetails['payment-method'] = result?.data?.items?.[0] && result?.data?.items?.[0].payment.additional_information[0] ? capitalize(result?.data?.items?.[0].payment.additional_information[0]) : "-";
+        orderDetails['total_item_count'] = result?.data?.items?.[0] ? result?.data?.items?.[0].total_item_count : 0;
+        orderDetails['delivery_address'] = result?.data?.items?.[0] && result?.data?.items?.[0].extension_attributes && result?.data?.items?.[0].extension_attributes.shipping_assignments && result?.data?.items?.[0].extension_attributes.shipping_assignments[0].shipping ? result?.data?.items?.[0].extension_attributes.shipping_assignments[0].shipping.address : 0;
+        orderDetails['base_subtotal'] = result?.data?.items?.[0] ? result?.data?.items?.[0].base_subtotal : 0;
+        orderDetails['base_discount_amount'] = result?.data?.items?.[0] ? result?.data?.items?.[0].base_discount_amount : 0;
+        orderDetails['base_shipping_amount'] = result?.data?.items?.[0] ? result?.data?.items?.[0].base_shipping_amount : 0;
+        orderDetails['base_shipping_tax_amount'] = result?.data?.items?.[0] ? result?.data?.items?.[0].base_shipping_tax_amount : 0;
+        orderDetails['base_tax_amount'] = result?.data?.items?.[0] ? result?.data?.items?.[0].base_tax_amount : 0;
+        orderDetails['grand_total'] = result?.data?.items?.[0] ? result?.data?.items?.[0].grand_total : 0;
+        orderDetails['items'] = result?.data?.items?.[0] ? result?.data?.items?.[0].items : {};
+        orderDetails['entity_id'] = result?.data?.items?.[0] ? result?.data?.items?.[0].entity_id : 0;
         orderDetails['returnStatus'] = getorderReturnstatus(orderDetails['entity_id'])
         orderDetails['status'] = result?.data?.items?.[0]?.status;
         orderDetails['deliverydate'] = moment().format('dd/MMMM/YYYY')
@@ -88,7 +88,7 @@ function OrderDetails(props) {
             setShowReturn(true);
         }
 
-        let percentage = result?.data?.items?.[0]?.status === 'pending' ? 10 : result?.data?.items?.[0]?.status === 'complete' ? 100 : result?.data?.items?.[0]?.status === 'processing' ? 50 : result?.data?.items?.[0]?.status === 'canceled' ? 100 : 10;
+        let percentage = result?.data?.items?.[0]?.status === 'pending' ? 10 : result?.data?.items?.[0]?.status === 'complete' ? 100 : result?.data?.items?.[0]?.status === 'processing' ? 50 : result?.data?.items?.[0]?.status === 'cancelled' ? 100 : 10;
 
         setOrderProgress(percentage)
     }
