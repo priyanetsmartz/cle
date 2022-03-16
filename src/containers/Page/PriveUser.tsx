@@ -17,7 +17,7 @@ function PriveUser(props) {
     async function fetchMyAPI() {
       let lang = props.languages ? props.languages : language;
       let result: any = await Pages('cle-prive', lang);
-      var jsonData = result.data.items[0];
+      var jsonData = result?.data?.items?.[0];
       SetPagesData(jsonData)
 
     }

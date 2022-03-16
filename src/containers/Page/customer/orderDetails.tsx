@@ -88,7 +88,7 @@ function OrderDetails(props) {
             setShowReturn(true);
         }
 
-        let percentage = result?.data?.items?.[0]?.status === 'pending' ? 10 : result?.data?.items?.[0]?.status === 'complete' ? 100 : result?.data?.items?.[0]?.status === 'processing' ? 50 : result?.data?.items?.[0]?.status === 'cancelled' ? 100 : 10;
+        let percentage = result?.data?.items?.[0]?.status === 'pending' ? 10 : result?.data?.items?.[0]?.status === 'complete' ? 100 : result?.data?.items?.[0]?.status === 'processing' ? 50 : result?.data?.items?.[0]?.status === 'canceled' ? 100 : 10;
 
         setOrderProgress(percentage)
     }
@@ -302,11 +302,11 @@ function OrderDetails(props) {
                                 <div className="clearfix"></div>
                             </div>
                             <p>
-                                {order['delivery_address']?.firstname + ' ' + order['delivery_address']?.lastname}<br />
-                                {order['delivery_address']?.street}<br />
-                                {order['delivery_address']?.postcode}<br />
-                                {order['delivery_address']?.city}<br />
-                                {order['delivery_address'] ? getCountryName(order['delivery_address'].country_id) : ""}
+                                {order && order['delivery_address'] && order['delivery_address'].firstname ? order?.['delivery_address']?.firstname + ' ' + order?.['delivery_address']?.lastname:""}<br />
+                                {order?.['delivery_address']?.street}<br />
+                                {order?.['delivery_address']?.postcode}<br />
+                                {order?.['delivery_address']?.city}<br />
+                                {order?.['delivery_address'] ? getCountryName(order['delivery_address'].country_id) : ""}
                             </p>
                         </div>
                     </div>
