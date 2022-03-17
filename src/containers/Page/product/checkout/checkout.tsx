@@ -895,7 +895,7 @@ function Checkout(props) {
         if (selectedPaymentMethod === 'myfatoorah_gateway') {
 
             const payment: any = await myFatoora(billAddress);
-         //   console.log(payment);
+            //   console.log(payment);
             if (payment?.data?.length > 0 && payment?.data[0]?.IsSuccess) {
                 let url = payment?.data[0]?.Data.PaymentURL;
                 if (url) {
@@ -1023,14 +1023,19 @@ function Checkout(props) {
 
     const getPaymentStatusAPi = async (getPaymentStatusAPi) => {
         let paymentStatus: any = await getPaymentStatus(getPaymentStatusAPi);
-       
+
         let detailsRequired = [];
         detailsRequired['transactionId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId ? paymentStatus.data[0].Data.InvoiceTransactions[0].TransactionId : 0;
         detailsRequired['InvoiceId'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceId ? paymentStatus.data[0].Data.InvoiceId : 0;
         detailsRequired['PaymentGateway'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions[0].PaymentGateway ? paymentStatus.data[0].Data.InvoiceTransactions[0].PaymentGateway : 0;
         detailsRequired['TransactionStatus'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].IsSuccess ? paymentStatus.data[0].IsSuccess : 0;
-
-
+        detailsRequired['status'] =paymentStatus?.data?.[0]?.Data?.InvoiceTransactions?.[0]?.TransactionStatus;
+        
+        if (detailsRequired['status'] === "Failed") {
+            setOrderProcessing(false);
+            notification("error", "", "Your order couldn't be placed due to failed Payment.");
+            return false;
+        }
         let customer_id = localToken?.cust_id;
         let orderPlace: any;
         if (customer_id) {

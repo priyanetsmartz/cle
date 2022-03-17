@@ -189,7 +189,7 @@ function VendorOrderDetail(props) {
                                                     <Link to="#" className="btn btn-secondary m-0" onClick={handleSubmitClick} style={{ "display": !loader ? "inline-block" : "none" }} ><IntlMessages id="confirm.order" /></Link>
                                                     <div className="spinner btn btn-secondary m-0" style={{ "display": loader ? "inline-block" : "none" }}>
                                                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
-                                                         <IntlMessages id="loading" />
+                                                        <IntlMessages id="loading" />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-12 mb-2">
@@ -315,6 +315,12 @@ function VendorOrderDetail(props) {
                                         <div className="col-md-2 high-col">
                                             <p><strong><IntlMessages id="total" /></strong></p>
                                             <p>{currency}{formatprice(product['rowTotal'])}</p>
+                                            <br />
+                                            {product['tracking_info'] !== 'N/A' && (
+                                                <div className='trackinglink'>
+                                                    <Link to={{ pathname: product['tracking_info'] }} className="text-end order-pro-track text-decoration-none" target="_blank">Track Parcel</Link>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

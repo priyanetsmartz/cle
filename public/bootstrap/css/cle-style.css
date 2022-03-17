@@ -1288,7 +1288,7 @@ p.promotion_alert {
     z-index: 999;
 }
 
-.order-pro-list .order-pro-track {
+.order-pro-list .order-pro-track , .trackinglink .order-pro-track{
     font-family: 'Monument Extended';
     font-weight: 500;
     font-style: normal;
