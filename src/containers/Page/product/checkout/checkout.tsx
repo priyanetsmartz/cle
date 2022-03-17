@@ -903,7 +903,7 @@ function Checkout(props) {
                 }
             } else {
                 setIsShow(false)
-                return notification("error", "", payment?.data?.message);
+                return notification("error", "", payment?.data[0]?.Message);
             }
 
         } else {
