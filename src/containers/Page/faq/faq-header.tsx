@@ -26,7 +26,7 @@ function FaqHeader(props) {
     }, [props.languages, location])
     async function getData() {
         let results: any = await getFaqListinglabels(props.languages, url_key);
-        setBread(results?.data?.[0]?.title)
+        setBread(results?.data?.[0]?.breadcrumbcategory)
     }
 
     const updateInput = async (e) => {
