@@ -241,7 +241,7 @@ function ReturnsSummary(props) {
                                                             endDate={endDate}
                                                             selectsRange
                                                             isClearable={true}
-                                                            inline
+                                                            
                                                             minDate={new Date()}
                                                         />                                                        
 

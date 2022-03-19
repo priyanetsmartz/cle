@@ -1374,9 +1374,9 @@ p.sliderupper {
 	right:unset;
 }
 
-.ant-notification-notice{
+/* .ant-notification-notice{
   padding:24px 30px 64px !important;
-}
+} */
 
 @media only screen and (min-width: 320px) and (max-width: 991px) {
   .cle-mobile-menu {

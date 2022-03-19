@@ -178,8 +178,9 @@ export function getProductFilter(category_id: number) {
 }
 
 export function getProductDetails(sku: string, language: string) {
+    var lang = language === 'arabic' ? 'ar':'en'
     var storeId = language === 'arabic' ? '2' : '3';
-    return APi.request(`rest/V1/products/${sku}?storeId=${storeId}`, "", "GET", "");
+    return APi.request(`rest/${lang}/V1/products/${sku}?storeId=${storeId}`, "", "GET", "");
 }
 
 export async function getProductExtras(productId: number, language: string) {

@@ -84,7 +84,7 @@ function OrderDetails(props) {
         let resultShow = myObject.filter(val => {
             return val.value === 'true';
         });
-        if (resultShow.length > 0 && moment().isBefore(moment().format('dd/MMMM/YYYY'))) {
+        if (resultShow.length > 0) {
             setShowReturn(true);
         }
 

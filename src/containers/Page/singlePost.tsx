@@ -20,7 +20,8 @@ function SinglePost(props) {
         published_at: "",
         short_content: "",
         category_name: "",
-        author_name: ""
+        author_name: "",
+        post_note:""
     });
 
     const [shareUrl, setShareUrl] = useState('');
@@ -61,7 +62,7 @@ function SinglePost(props) {
         let featuredResult: any = await RelatedList(lang, slug);
         const filteredItems = featuredResult?.data.filter(item => item.post_id !== slug)
         setRelated(filteredItems);
-        setBread(result?.data?.[0]?.title)
+        setBread(result?.data?.[0]?.breadcrumb_title)
         setPost(result?.data[0]);
         window.scrollTo(0, 0)
         setOpacity(1);
@@ -106,7 +107,7 @@ function SinglePost(props) {
                         <div className="col-md-12 text-center">
                             <ul className="newReleaseTitle">
                                 <li className="border-right">{post.category_name}</li>
-                                <li>{stats.text}</li>
+                                <li>{post.post_note}</li>
                             </ul>
                         </div>
                         <div className="col-md-12">

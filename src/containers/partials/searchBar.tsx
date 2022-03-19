@@ -93,7 +93,7 @@ function SearchBar(props) {
         }
     }
     const handleKeyDown = async (e) => {
-        if (e.key === 'Enter' && e.target.value) {
+        if (e.key === 'Enter' && e.target.value && e.target.value[0] !== '%' && e.target.value !== '%') {
             let serachVal = e.target.value;
             setSearchKeyword(serachVal)
             window.location.href = `/search/${serachVal}/all`;
