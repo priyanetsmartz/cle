@@ -297,6 +297,7 @@ function CreateReturn(props) {
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="shipment.date" /></strong></p>
+                                    <p>{(order['shipment_date'] !== "N/A") ? moment(order['shipment_date']).format('ddd, D MMMM YYYY') : ""}</p>
                                 </div>
                                 <div className="col-md-3">
                                     <p><strong><IntlMessages id="order.paymentMethod" /></strong></p>
