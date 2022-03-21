@@ -149,7 +149,7 @@ function MyPreferences(props) {
     //for selecting categories in the my prefernce modal
     const selectCategories = (i, cat) => {
         attributes.categories[activeCategory] = attributes.categories[activeCategory].map(el => (
-            el.id === cat.id ? { ...el, isChecked: true } : el
+            el.id === cat.id ? { ...el, isChecked: !cat.isChecked } : el
         ))
 
         setAttributes(prevState => ({
