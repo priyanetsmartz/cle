@@ -1681,7 +1681,7 @@ function Checkout(props) {
 
                             <div className="d-grid gap-2 col-8 mx-auto">
                                 {!isShow ?
-                                    <button className="btn btn-secondary" disabled={(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) ? true : false} onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> {itemsVal.shippingData['firstname'] }bhjbitemsVal.shippingData['postcode'] ml</button>
+                                    <button className="btn btn-secondary" disabled={(itemsVal.shippingData['firstname'] === null && itemsVal.shippingData['postcode'] === null) ? true : false} onClick={placeOrder} type="button"><IntlMessages id="place-Order" /> {itemsVal.shippingData['firstname'] }</button>
                                     : <div className="spinner"> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                                 }
                                 <p className='checkouttc'><IntlMessages id="tccheckout1" /><Link to={"/terms-and-conditions"} target="_blank"> <IntlMessages id="signup.terms_conditions" /></Link>, <Link to={"/privacy-policy"} target="_blank" ><IntlMessages id="signup.privacy_policy" /></Link><IntlMessages id="tccheckout2" /></p>
