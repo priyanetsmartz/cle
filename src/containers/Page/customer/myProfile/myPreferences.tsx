@@ -22,6 +22,7 @@ function MyPreferences(props) {
     const [activeDesigner, setActiveDesigner] = useState(0);
     const [activeCategory, setActiveCategory] = useState(0);
     const [isShow, setIsShow] = useState(false);
+    const [crossIcon, setCrossIcon] = useState(0);
     const intl = useIntl();
     useEffect(() => {
         getAttributes();
@@ -149,7 +150,7 @@ function MyPreferences(props) {
     //for selecting categories in the my prefernce modal
     const selectCategories = (i, cat) => {
         attributes.categories[activeCategory] = attributes.categories[activeCategory].map(el => (
-            el.id === cat.id ? { ...el, isChecked: !cat.isChecked } : el
+            el.id === cat.id ? { ...el, isChecked: true } : el
         ))
 
         setAttributes(prevState => ({
@@ -163,9 +164,8 @@ function MyPreferences(props) {
         }));
     }
     const removeSelectedCategories = (cat) => {// removing the selected favourite categories
-        console.log("mkmlkm")
         attributes.categories[activeCategory] = attributes.categories[activeCategory].map(el => (
-            el.id === cat.id ? { ...el, isChecked: !cat.isChecked } : el
+            el.id === cat.id ? { ...el, isChecked: false } : el
         ))
 
         setAttributes(prevState => ({
@@ -273,7 +273,6 @@ function MyPreferences(props) {
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
         }
     }
-
     return (
         <Modal.Body className="arabic-rtl-direction">
             <div className="Mosty_interested_in">
@@ -392,7 +391,7 @@ function MyPreferences(props) {
                                     {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length && attributes.categories[activeCategory].map((cat, i) => {
                                         return cat.isChecked &&
                                             (<li key={i} onMouseEnter={() => setIsShown(cat.id)} onMouseLeave={() => setIsShown(0)} ><Link to="#"  >
-                                                {isShown === parseInt(cat.id) ? <span className='textname' onClick={() => removeSelectedCategories(cat)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textname' onClick={() => removeSelectedCategories(cat)}> {cat.name}</span>
+                                                {isShown === cat.id ? <span className='textname' onClick={() => removeSelectedCategories(cat)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textname'>{cat.name}</span>
                                                 }</Link></li>)
                                     })}
                                 </ul>
