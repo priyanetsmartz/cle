@@ -724,5 +724,7 @@
   "selectreturnOrExchange.message": "Please specify the reason for declining the return or exchange",
   "return.itsPending": "The return is realized",
   "session.expired":"Session expired!",
-  "backtoreturndetails": "Back to return details"
+  "backtoreturndetails": "Back to return details",
+  "return.approved":"The return has been approved",
+  "products":"products"
 }

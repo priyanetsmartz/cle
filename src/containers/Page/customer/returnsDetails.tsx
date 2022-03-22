@@ -56,9 +56,9 @@ function OrdersAndReturns(props) {
                                     {/* change this after clarification */}
                                     <p className="col-md-8">
                                         <strong>
-                                            {returnDetails?.['status'] === 'complete' ? <IntlMessages id="order.itsDelivered" /> : returnDetails?.['status'] === 'pending' ?
-                                                <IntlMessages id="return.itsPending" /> : returnDetails?.['status'] === 'processing' ? <IntlMessages id="order.itsProcessing" />
-                                                    : returnDetails?.['status'] === 'canceled' ? <IntlMessages id="order.canceled" />
+                                            {returnDetails?.['status'] === 'complete' ? <IntlMessages id="order.itsDelivered" /> : returnDetails?.['status'] === 'pending' ? <IntlMessages id="return.itsPending" /> 
+                                            : returnDetails?.['status'] === 'processing' ? <IntlMessages id="order.itsProcessing" />
+                                            : returnDetails?.['status'] === 'canceled' ? <IntlMessages id="order.canceled" /> : returnDetails?.['status'] === 'approved' ? <IntlMessages id="return.approved" />
                                                         : returnDetails?.['status']}
                                         </strong>
                                     </p>
@@ -153,7 +153,7 @@ function OrdersAndReturns(props) {
                                                         <p><strong>{item.brand}</strong></p>
                                                         <p>{item.name}</p>
                                                     </div>
-                                                    <Link to="#" className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{item.price}</Link>
+                                                    <div className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{item.price}</div>
                                                     <div className="clearfix"></div>
                                                 </div>
                                                 <div className="pro-name-tag">

@@ -18,7 +18,7 @@ function ReturnsSummary(props) {
     const intl = useIntl();
     const { orderId }: any = useParams();
     const [order, setOrder]: any = useState([]);
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [slot, setSlot] = useState(null);
     const [loader, setLoader]: any = useState(false);
@@ -174,7 +174,7 @@ function ReturnsSummary(props) {
                             <div className="row">
                                 <div className="col-md-12 return-complaint-btns">
                                     <div className="float-start">
-                                        <p><IntlMessages id="create.return.details1" /><br /><IntlMessages id="create.return.details2" /></p>
+                                       <p> {order && order.items && order.items.length>0?order.items.length + " " + intl.formatMessage({ id: "products" }):""}</p>
                                     </div>
 
                                     <div className="clearfix"></div>
@@ -199,7 +199,7 @@ function ReturnsSummary(props) {
                                                                 <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                                 <p>{capitalize(item.product_type)}</p>
                                                             </div>
-                                                            <Link to="#" className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{formatprice(item.price)}</Link>
+                                                            <div className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{formatprice(item.price)}</div>
                                                             <div className="clearfix"></div>
                                                         </div>
                                                         <div className="pro-name-tag">
@@ -262,7 +262,7 @@ function ReturnsSummary(props) {
                                                         <div className="timeslots">
                                                             <div className="row">
                                                                 <div className="col-md-8">
-                                                                    <span>8:00   11:00  </span>
+                                                                    <span>8:00 - 11:00  </span>
                                                                     <p><IntlMessages id="return.arrive" /> 8:00  , - 11:00   </p>
                                                                 </div>
                                                                 <div className="col-md-4">
@@ -274,7 +274,7 @@ function ReturnsSummary(props) {
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
-                                                                        {slot === "8:00 -11:00 " ? <p>Great!</p> : null}
+                                                                        {slot === "8:00 -11:00 " ? <p style = {{color:"blue"}}>Great!</p> : null}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -292,7 +292,7 @@ function ReturnsSummary(props) {
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
-                                                                        {slot === "11:00 -15:00" ? <p>Great!</p> : null}
+                                                                        {slot === "11:00 -15:00" ? <p style = {{color:"blue"}}>Great!</p> : null}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -310,7 +310,7 @@ function ReturnsSummary(props) {
                                                                             className="form-check-input"
                                                                             onChange={slotCheck}
                                                                         />
-                                                                        {slot === "15:00-18:00" ? <p>Great!</p> : null}
+                                                                        {slot === "15:00-18:00" ? <p style = {{color:"blue"}}>Great!</p> : null}
                                                                     </div>
                                                                 </div>
                                                             </div>
