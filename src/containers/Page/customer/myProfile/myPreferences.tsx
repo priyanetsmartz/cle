@@ -163,8 +163,9 @@ function MyPreferences(props) {
         }));
     }
     const removeSelectedCategories = (cat) => {// removing the selected favourite categories
+        console.log("mkmlkm")
         attributes.categories[activeCategory] = attributes.categories[activeCategory].map(el => (
-            el.id === cat.id ? { ...el, isChecked: false } : el
+            el.id === cat.id ? { ...el, isChecked: !cat.isChecked } : el
         ))
 
         setAttributes(prevState => ({
@@ -391,7 +392,7 @@ function MyPreferences(props) {
                                     {attributes.categories && attributes.categories[activeCategory] && attributes.categories[activeCategory].length && attributes.categories[activeCategory].map((cat, i) => {
                                         return cat.isChecked &&
                                             (<li key={i} onMouseEnter={() => setIsShown(cat.id)} onMouseLeave={() => setIsShown(0)} ><Link to="#"  >
-                                                {isShown === parseInt(cat.id) ? <span className='textname' onClick={() => removeSelectedCategories(cat)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textname' > {cat.name}</span>
+                                                {isShown === parseInt(cat.id) ? <span className='textname' onClick={() => removeSelectedCategories(cat)} > <i className="fa fa-times" aria-hidden="true"></i></span> : <span className='textname' onClick={() => removeSelectedCategories(cat)}> {cat.name}</span>
                                                 }</Link></li>)
                                     })}
                                 </ul>
