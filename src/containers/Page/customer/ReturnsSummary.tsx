@@ -18,8 +18,8 @@ function ReturnsSummary(props) {
     const intl = useIntl();
     const { orderId }: any = useParams();
     const [order, setOrder]: any = useState([]);
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     const [slot, setSlot] = useState(null);
     const [loader, setLoader]: any = useState(false);
     const [maxItems, setMaxitems] = useState(10);
@@ -280,7 +280,7 @@ function ReturnsSummary(props) {
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col-md-8">
-                                                                    <span>11:00   15:00 </span>
+                                                                    <span>11:00 - 15:00 </span>
                                                                     <p><IntlMessages id="return.arrive" /> 11:00  , - 15:00 </p>
                                                                 </div>
                                                                 <div className="col-md-4">
@@ -298,7 +298,7 @@ function ReturnsSummary(props) {
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col-md-8">
-                                                                    <span>15:00  18:00 </span>
+                                                                    <span>15:00 - 18:00 </span>
                                                                     <p><IntlMessages id="return.arrive" /> 15:00 , - 18:00   </p>
                                                                 </div>
                                                                 <div className="col-md-4">
@@ -338,7 +338,7 @@ function ReturnsSummary(props) {
                                     </div>
                                     <div className="col-sm-3">
                                         <h6><IntlMessages id="return.pickupdate" /> </h6>
-                                        {endDate && (<p>{moment(startDate).format('D')}- {moment(endDate).format('D MMM YYYY')}</p>
+                                        {endDate && (<p>{moment(startDate).format('D MMM YYYY')}- {moment(endDate).format('D MMM YYYY')}</p>
                                         )}
                                     </div>
                                     <div className="col-sm-3">
