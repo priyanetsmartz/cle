@@ -5388,6 +5388,12 @@ left: auto; */
 
 .choose-method p {
     text-align: center;
+    margin: 10px auto;
+}
+
+
+.choose-method .btn-outline-dark{
+	width:100%;
 }
 
 #pills-promo .btn-primary,
@@ -7076,6 +7082,10 @@ height: auto;
     -ms-flex-align: center;
     align-items: center;
     padding: 3px 0;
+}
+
+.pdp-thumbnail-next{
+	margin-top: 9px;
 }
 
 
@@ -9761,6 +9771,10 @@ ul.vendor-menu {
         font-size: 12px;
         line-height: 19px;
     }
+	.social-login a svg {
+		margin-left: 15%;
+	}
+	
 }
 
 /* Portrait and Landscape */
@@ -9891,7 +9905,8 @@ ul.vendor-menu {
     }
 
     .stepwizard-row:before {
-        width: 50%;
+       width: 75%;
+    left: 5px;
     }
 
     .new-in-slider .product {
