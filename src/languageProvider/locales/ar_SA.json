@@ -724,5 +724,7 @@
   "selectreturnOrExchange.message": "يرجى تحديد سبب رفض الإرجاع أو الاستبدال",
   "return.itsPending": "يتم إعادة صياغة العودة",
   "session.expired": "انتهت الجلسة!",
-  "backtoreturndetails": "العودة إلى عودة التفاصيل"
+  "backtoreturndetails": "العودة إلى عودة التفاصيل",
+  "return.approved":"تمت الموافقة على العودة",
+  "products":"منتجات"
 }

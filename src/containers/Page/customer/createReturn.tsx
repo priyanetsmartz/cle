@@ -351,7 +351,7 @@ function CreateReturn(props) {
                                                     <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                     <p>{capitalize(item.product_type)}</p>
                                                 </div>
-                                                <Link to="#" className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{formatprice(item.price)}</Link>
+                                                <div className="float-end text-end order-pro-price text-decoration-none">{siteConfig.currency}{formatprice(item.price)}</div>
                                                 <div className="clearfix"></div>
                                             </div>
                                             <div className="pro-name-tag">
