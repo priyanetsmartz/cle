@@ -726,5 +726,6 @@
   "session.expired":"Session expired!",
   "backtoreturndetails": "Back to return details",
   "return.approved":"The return has been approved",
-  "products":"products"
+  "products":"products",
+  "magazine.latest":"Latest"
 }

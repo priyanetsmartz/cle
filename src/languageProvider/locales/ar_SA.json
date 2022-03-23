@@ -726,5 +726,6 @@
   "session.expired": "انتهت الجلسة!",
   "backtoreturndetails": "العودة إلى عودة التفاصيل",
   "return.approved":"تمت الموافقة على العودة",
-  "products":"منتجات"
+  "products":"منتجات",
+  "magazine.latest":"آخر"
 }

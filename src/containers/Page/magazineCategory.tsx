@@ -199,7 +199,7 @@ function MagazineCategory(props) {
                         <h3><IntlMessages id="magazine.title" /></h3>
                         {catMenu.length > 0 && (
                             <ul>
-                                <li key="0"><Link to="/magazines" className={!magazinecategory ? "active-menu" : ""}>Latest</Link></li>
+                                <li key="0"><Link to="/magazines" className={!magazinecategory ? "active-menu" : ""}><IntlMessages id = "magazine.latest"/></Link></li>
                                 {catMenu.map((item, i) => {
                                     let link = "/magazines/" + item.category_id;
                                     let classValue = item.category_id === magazinecategory ? "active-menu" : "";
