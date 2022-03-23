@@ -115,6 +115,8 @@ function VendorLogin(props) {
         setIsShow(false);
         if (result && result.data && result.data && result.data.length > 0 && result.data[0].success === false) {
           notification("warning", "", result.data[0].message);
+        }else if(result && result.data){
+          notification("warning", "", result.data)
         } else {
           notification("warning", "", intl.formatMessage({ id: "genralerror" }));
         }
