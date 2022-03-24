@@ -28,7 +28,7 @@ function BusinessResetPassword(props) {
         return () => {
           
         }
-    })
+    },[])
     const logout = async () => {
 
         await sessionService.deleteSession();

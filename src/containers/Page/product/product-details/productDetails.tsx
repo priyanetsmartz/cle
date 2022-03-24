@@ -20,6 +20,7 @@ import GiftMessage from './GiftMessage';
 import Login from '../../../../redux/auth/Login';
 import appAction from "../../../../redux/app/actions";
 import { useIntl } from 'react-intl';
+import Magazine from './../../home/magazine';
 
 const loginApi = new Login();
 const { showSignin, showLoader } = appAction;
@@ -291,7 +292,6 @@ function ProductDetails(props) {
         if (productDetails['type_id'] === 'configurable') {
             if (slectedAttribute === 0) {
                 setIsShow(false);
-                console.log("number1")
                 notification("error", "", intl.formatMessage({ id: "selectproductsize" }));
                 return false;
             }
@@ -354,10 +354,8 @@ function ProductDetails(props) {
             setIsShow(false);
         } else {
             if (cartSucces.data.message) {
-                console.log("number3")
                 notification("error", "", cartSucces.data.message);
             } else {
-                console.log("number4")
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
             }
             setIsShow(false);
@@ -380,14 +378,13 @@ function ProductDetails(props) {
             } else {
                 props.addToWishlistTask(true);
                 setIsWishlist(0)
-                console.log("number5")
                 notification("error", "", intl.formatMessage({ id: "genralerror" }));
                 getProductDetailsFxn(sku)
             }
         } else {
             let vendorCheck = await checkVendorLoginWishlist();
             if (vendorCheck?.type === 'vendor') {
-                console.log("number6")
+
                 notification("error", "", "You are  not allowed to add products to wishlist, kindly login as a valid customer!");
                 return false;
             }
@@ -406,7 +403,6 @@ function ProductDetails(props) {
         } else {
             props.addToWishlistTask(true);
             setDelWishlist(0)
-            console.log("number7")
             notification("error", "", intl.formatMessage({ id: "genralerror" }));
             getProductDetailsFxn(sku)
         }
@@ -662,7 +658,9 @@ function ProductDetails(props) {
                 {/* <section> */}
                 <Recomendations recomend={recomendationsData} />
                 {/* </section> */}
-
+                <div className="section">
+                <Magazine />
+            </div>
                 <section>
                     <ProductsMagazine posts={magezineData} />
                 </section>

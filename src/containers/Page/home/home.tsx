@@ -13,6 +13,7 @@ import Header from '../../../containers/partials/headerMenu';
 import appAction from "../../../redux/app/actions";
 import cartAction from "../../../redux/cart/productAction";
 import { getCategoryDetailsbyUrlKeyFxn, getHomePageProductsFxn } from '../../../components/utility/allutils';
+import Magazine from './magazine';
 const { showLoader } = appAction;
 const { setCatSearch } = cartAction;
 
@@ -71,6 +72,9 @@ function HomePage(props) {
             </div>
             <div className="section">
                 <BestSeller bestSeller={products['bestSeller']} />
+            </div>
+            <div className="section">
+                <Magazine />
             </div>
             <div className="section">
                 <BecomePartner />
