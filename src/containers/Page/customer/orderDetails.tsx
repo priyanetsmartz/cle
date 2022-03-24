@@ -229,7 +229,7 @@ function OrderDetails(props) {
                                         {order.status === 'complete' ?
                                             <div className='messageStatus'>
                                                 <IntlMessages id="order.itsDelivered" />
-                                                <p className='text-message'><IntlMessages id="order.deliveredstatus" /></p>
+                                                {/* <p className='text-message'>{order.status === 'complete'? <IntlMessages id="order.deliveredstatus" />:""}</p> */}
                                             </div>
                                             : order.status === 'pending' ?
                                                 <IntlMessages id="order.itsPending" />
@@ -257,6 +257,7 @@ function OrderDetails(props) {
                                             status="active"
                                         />
                                     </div>
+                                    <p className='text-message'>{order.status === 'complete'? <IntlMessages id="order.deliveredstatus" />:""}</p>
                                 </div>
                             </div>
                         </div>

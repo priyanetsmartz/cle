@@ -466,7 +466,19 @@ function SearchResults(props) {
                                                         <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
                                                 </div>
+                                                {/* {stock > 0 && (
+                                                <div className="cart-button mt-3 px-2">
+                                                    {isShow === item.id ?
+                                                        <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                                        <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
 
+                                                </div>
+                                            )}
+                                             {stock <= 0 && (
+                                                <div className="cart-button mt-3 px-2">
+                                                   <Link to="#" className="btn btn-primary text-uppercase"><IntlMessages id="product.outofstock" /></Link>
+                                                </div>
+                                            )} */}
 
                                             </div>
 
