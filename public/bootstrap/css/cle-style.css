@@ -10981,3 +10981,7 @@ ul.vendor-menu {
     }
 
 }
+
+.ant-notification-notice{
+    height:70px !important;
+}
