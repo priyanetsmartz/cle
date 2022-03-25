@@ -44,7 +44,7 @@ function GiftMessage(props) {
             let lang = getCookie('currentLanguage');
             let customer_id = props.token.cust_id;
             let cartQuoteIdLocal = localStorage.getItem('cartQuoteId');
-            if (cartQuoteIdLocal || customer_id) {
+            if (cartQuoteIdLocal && customer_id) {
                 let customerCart: any = await loginApi.genCartQuoteID(customer_id)
                 cartQuoteId = cartQuoteIdLocal
                 if (customerCart.data !== parseInt(cartQuoteIdLocal)) {

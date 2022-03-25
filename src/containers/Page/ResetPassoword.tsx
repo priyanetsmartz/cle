@@ -47,7 +47,7 @@ function ResetPassword(props) {
         return () => {
 
         }
-    })
+    },[])
 
     const logout = async () => {
 
