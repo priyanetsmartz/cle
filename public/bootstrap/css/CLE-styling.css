@@ -701,7 +701,8 @@ z-index: 99999 !important;
 .start-shopping p{font-size:18px; line-height:27px; font-weight:400; color:#fff;margin: 20px 0 30px;}
 
 
-.comment-section button.btn{font-size:12px;
+.comment-section button.btn,
+.comment-section .btn{font-size:12px;
     text-decoration: none;
     color: #fff;
 	font-family: 'Monument Extended';
@@ -714,7 +715,8 @@ z-index: 99999 !important;
 	text-align:center;
 	margin-right:10px;
 	}
-	.comment-section button.btn:hover{background:transparent;color:#2e2baa; border:1px solid #2e2baa;}
+	.comment-section button.btn:hover,
+	.comment-section .btn:hover{background:transparent;color:#fff; border:1px solid #2e2baa;}
 
 small.text-primary {
     color: #2e2baa !important;

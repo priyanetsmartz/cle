@@ -860,6 +860,7 @@ p.promotion_alert {
     width: 375px;
     max-width: 100%;
     margin-left: 20%;
+	margin-bottom: 20px;
     clear: both;
 }
 
@@ -1182,9 +1183,13 @@ p.promotion_alert {
     padding: 0
 }
 
+.single-top {
+    margin-bottom: 30px;
+}
+
 .magazine_article {
-   width: 100%;
-    margin: 20px 0;
+    width: 100%;
+    margin-bottom: 20px;
     clear: left;
 }
 

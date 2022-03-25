@@ -97,8 +97,8 @@ function PostComment(props) {
     return (
         <>
             <h2><IntlMessages id="postComments" /></h2>
-            {props.token.id_token && <div className="container mt-5">
-                <div className="d-flex justify-content-center row">
+            {props.token.id_token && <div className="container mt-3">
+                <div className="row">
                     <div className="col-md-8">
                         <div className="d-flex flex-column comment-section">
                             <div className="bg-light p-2">
@@ -109,7 +109,7 @@ function PostComment(props) {
                                 </div>
                                 <div className="mt-2 text-right">
                                     <button className="btn btn-primary btn-sm shadow-none" style={{ "display": !isShow ? "inline-block" : "none" }} type="button" onClick={handleSubmitClick}><IntlMessages id="postComment.CTA" /></button>
-                                    <div className="tn btn-primary btn-sm shadow-none" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
+                                    <div className="tn btn btn-primary btn-sm shadow-none" style={{ "display": isShow ? "inline-block" : "none" }}> <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" />.</div>
                                     <button className="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button" onClick={cancle}><IntlMessages id="postComment.cancel" /></button>
                                 </div>
                             </div>
@@ -120,8 +120,8 @@ function PostComment(props) {
 
             {/* comments listing starts from here */}
             {comments.length > 0 && (
-                <div className="container mt-5">
-                    <div className="row d-flex justify-content-center">
+                <div className="container mt-3">
+                    <div className="row">
                         <div className="col-md-8">
                             {comments.map((item, i) => {
                                 return (

@@ -80,13 +80,12 @@ function SinglePost(props) {
     };
     const stats = readingTime(post.full_content);
     return (
-        <div style={{ opacity: opacityVal }}>
-            {post?.post_thumbnail && (
-                <div className="main-banner">
-                    <img style={imgStyle} src={post.post_thumbnail} alt="post-thumbnail" />
-                </div>
-            )}
-            <section>
+       
+		
+
+	   <div style={{ opacity: opacityVal }}>
+	   
+			<section>
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
@@ -101,42 +100,57 @@ function SinglePost(props) {
                     </div>
                 </div>
             </section>
+			
+			<div className="single-top">
+				<div className="container">
+					<div className="row">
+						<div className="col-md-12 text-center">
+							<ul className="newReleaseTitle">
+								<li className="border-right">{post.category_name}</li>
+								<li>{post.post_note}</li>
+							</ul>
+						</div>
+						<div className="col-md-12">
+							<h1 className="detail-page-title my-4 text-center">{post.title}</h1>
+						</div>
+						<div className="col-md-12 text-center">
+							<ul className="date-social-link">
+								<li>{moment(post.published_at).format('LL')}</li>
+								<li>
+									<FacebookShareButton
+										url={shareUrl}
+										quote={post.title}>
+										<i className="fab fa-facebook"></i>
+									</FacebookShareButton>
+									<LinkedinShareButton
+										url={shareUrl}
+										title={post.title}>
+										<i className="fab fa-linkedin-in"></i>
+									</LinkedinShareButton>
+
+									<TwitterShareButton
+										url={shareUrl}
+										title={post.title}>
+										<i className="fab fa-twitter"></i>
+									</TwitterShareButton>
+
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+				
+            {post?.post_thumbnail && (
+                <div className="main-banner">
+                    <img style={imgStyle} src={post.post_thumbnail} alt="post-thumbnail" />
+                </div>
+            )}
+            
             <div className="detail-page mt-5" >
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-12 text-center">
-                            <ul className="newReleaseTitle">
-                                <li className="border-right">{post.category_name}</li>
-                                <li>{post.post_note}</li>
-                            </ul>
-                        </div>
-                        <div className="col-md-12">
-                            <h1 className="detail-page-title my-4 text-center">{post.title}</h1>
-                        </div>
-                        <div className="col-md-12 text-center">
-                            <ul className="date-social-link">
-                                <li>{moment(post.published_at).format('LL')}</li>
-                                <li>
-                                    <FacebookShareButton
-                                        url={shareUrl}
-                                        quote={post.title}>
-                                        <i className="fab fa-facebook"></i>
-                                    </FacebookShareButton>
-                                    <LinkedinShareButton
-                                        url={shareUrl}
-                                        title={post.title}>
-                                        <i className="fab fa-linkedin-in"></i>
-                                    </LinkedinShareButton>
-
-                                    <TwitterShareButton
-                                        url={shareUrl}
-                                        title={post.title}>
-                                        <i className="fab fa-twitter"></i>
-                                    </TwitterShareButton>
-
-                                </li>
-                            </ul>
-                        </div>
+                        
                         <div dangerouslySetInnerHTML={{ __html: post.full_content }} />
                         <div className="col-md-12">
                             <h6 className="author-name"><IntlMessages id="magazinepost.author" />: {post.author_name ? post.author_name : "Admin"}</h6>
