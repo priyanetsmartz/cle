@@ -252,7 +252,7 @@ function MyAnalysisPayouts(props) {
                             )}
                             {pieChart?.length > 0 && (
                                 <ResponsiveContainer width="100%" height={300}>
-                                    <PieChart height={250}>
+                                    <PieChart height={300}>
 
                                         <Pie
                                             data={pieChart}
