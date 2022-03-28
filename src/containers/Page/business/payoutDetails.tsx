@@ -13,6 +13,7 @@ import { capitalize, checkVendorLogin, formatprice } from '../../../components/u
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { useIntl } from 'react-intl';
+import LoaderGif from '../Loader';
 
 function MyPayoutDetails(props) {
 
@@ -371,6 +372,7 @@ function MyPayoutDetails(props) {
 
                             <DataTable
                                 progressPending={isLoading}
+                                progressComponent={<LoaderGif />}
                                 columns={columns}
                                 data={myPayoutDetails}
                             />

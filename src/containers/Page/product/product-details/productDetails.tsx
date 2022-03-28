@@ -323,8 +323,14 @@ function ProductDetails(props) {
             }
         } else {
             if (!cartQuoteIdLocal) {
+                if(localStorage.getItem('cartQuoteToken')===undefined && localStorage.getItem('cartQuoteToken')===null ){
                 let guestToken: any = await createGuestToken();
                 localStorage.setItem('cartQuoteToken', guestToken.data);
+                }
+                else{
+                    let guestToken:any;
+                    guestToken.data = localStorage.getItem('cartQuoteToken');
+                    }
                 let result: any = await getGuestCart(props.languages);
                 cartQuoteId = result?.data?.id
             } else {
@@ -470,7 +476,7 @@ function ProductDetails(props) {
                                         </div>}
                                     </div>
                                     <div className="product_details">
-                                        <h1><Link to={'/search/' + productDetails['brand'] + '/all'}>{productDetails['brand']}</Link></h1>
+                                        <h1><Link to={'/search/' + productDetails['brand']+'/all'}>{productDetails['brand']}</Link></h1>
                                         <h2>{productDetails['name']}</h2>
                                     </div>
                                     <div className="product-sale_off mt-4 mb-4">

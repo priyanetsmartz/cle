@@ -5,6 +5,7 @@ import moment from 'moment';
 import { dataTiles } from '../../../../redux/pages/vendorLogin';
 import { getCurrentMonth } from '../../../../components/utility/allutils';
 import CircularProgressBar from './CircularProgress';
+import LoaderGif from '../../Loader';
 
 
 function MyAnalysisCustomer(props) { 
@@ -235,7 +236,8 @@ function MyAnalysisCustomer(props) {
                         <DateChartFilters data="piechart" />
                         {loader && (
                             <div className="checkout-loading text-center" >
-                                <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
+                                <LoaderGif />
                             </div>
                         )}
                         {customerData?.['all'] > 0 && (

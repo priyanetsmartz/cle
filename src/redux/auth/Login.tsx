@@ -33,7 +33,7 @@ class Login {
         "websiteId": 1,
         "group_id": type,
         "extension_attributes": {
-          "is_subscribed": false
+          "is_subscribed": true
         },
         "custom_attributes":
           [{

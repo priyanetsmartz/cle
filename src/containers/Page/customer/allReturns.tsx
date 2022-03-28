@@ -7,6 +7,7 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings/index'
 import { formatprice, getAccordingDate } from '../../../components/utility/allutils';
+import LoaderGif from './../Loader';
 
 function MyReturns(props) {
     let pageSizeSetting = siteConfig.pageSize;
@@ -91,7 +92,8 @@ function MyReturns(props) {
             </div>
             {loaderReturns && (
                 <div className="checkout-loading" >
-                    <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                    {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
+                    <LoaderGif />
                 </div>
             )}
             {returs && returs.length > 0 ?

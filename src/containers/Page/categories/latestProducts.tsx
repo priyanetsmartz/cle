@@ -67,6 +67,7 @@ function LatestProducts(props) {
     };
 
     useEffect(() => {
+
         getProducts(props.ctId);
         return () => {
             // componentwillunmount in functional component.

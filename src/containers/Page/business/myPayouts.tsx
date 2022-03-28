@@ -14,6 +14,7 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Link } from "react-router-dom";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import LoaderGif from '../Loader';
 
 
 function MyPayouts(props) {
@@ -512,6 +513,7 @@ function MyPayouts(props) {
                             data={myOrder}
                             pagination={true}
                             progressPending={isLoading}
+                            progressComponent={<LoaderGif />}
                             paginationComponentOptions={paginationComponentOptions}
                         />
                     </div>

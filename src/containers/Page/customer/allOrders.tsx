@@ -11,6 +11,7 @@ import { siteConfig } from '../../../settings/index'
 import { capitalize, formatprice } from '../../../components/utility/allutils';
 import AllReturns from './allReturns';
 import { getAccordingDate } from '../../../components/utility/allutils'
+import LoaderGif from '../Loader';
 
 function OrdersAndReturns(props) {
     const userGroup = localStorage.getItem('token');
@@ -282,7 +283,8 @@ function OrdersAndReturns(props) {
                                 </div>
                                 {loaderOrders && (
                                     <div className="checkout-loading" >
-                                        <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                        {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
+                                        <LoaderGif />
                                     </div>
                                 )}
                                

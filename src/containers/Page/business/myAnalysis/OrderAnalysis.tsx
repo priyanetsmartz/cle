@@ -14,6 +14,7 @@ import {
     AreaChart
 } from 'recharts';
 import { siteConfig } from '../../../../settings';
+import LoaderGif from '../../Loader';
 
 function MyAnalysisOrders(props) {
     const intl = useIntl()
@@ -256,7 +257,8 @@ function MyAnalysisOrders(props) {
                         <div className="row mb-4" style={{ columnCount: 3 }}>
                             {loader && (
                                 <div className="checkout-loading text-center" >
-                                    <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                    {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
+                                    <LoaderGif />
                                 </div>
                             )}
                             {pdata?.length > 0 && (

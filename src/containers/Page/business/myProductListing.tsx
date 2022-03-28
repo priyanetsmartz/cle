@@ -13,6 +13,7 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import Modal from "react-bootstrap/Modal";
+import LoaderGif from '../Loader';
 
 function MyProductListing(props) {
     const intl = useIntl();
@@ -152,7 +153,7 @@ function MyProductListing(props) {
                     <p className='prodbrand'>{row.product.brand}</p>
                     <p className='prodname'>{row.product.name}</p>
                     <p className='prodId'><span><IntlMessages id="id" />:</span>{row.product.id}</p>
-                    <div className='data_value'><ul><li>{<Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blank" ><IntlMessages id="view" /></Link>}</li><li><Link to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
+                    <div className='data_value'><ul><li>{<Link to={'/product-details-preview/' + venID + '/' + row.product.sku} target="_blank" ><IntlMessages id="view" /></Link>}</li><li hidden = {row.status === "2"} ><Link  to="#" onClick={() => { handleDelete(row.product.sku) }} ><IntlMessages id="delete" /></Link></li></ul></div>
                 </div>
             ),
         },
@@ -295,6 +296,7 @@ function MyProductListing(props) {
                     <div className="product-listing">
                         <DataTable
                             progressPending={isLoading}
+                            progressComponent={<LoaderGif />}
                             columns={columns}
                             data={listingData}
                             pagination={true}
