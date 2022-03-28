@@ -544,7 +544,7 @@ p.promotion_alert {
     width: 100%;
     float: left;
     padding: 7px 10px;
-    max-width: 400px;
+    max-width: 350px;
     position: relative;
 }
 
@@ -10187,6 +10187,9 @@ ul.vendor-menu {
     .checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link {
         margin-right: 15px;
     }
+	.user_cart ul li{
+		padding: 12px 10px;
+	}
 
 }
 
