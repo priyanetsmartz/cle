@@ -727,5 +727,6 @@
   "backtoreturndetails": "العودة إلى عودة التفاصيل",
   "return.approved":"تمت الموافقة على العودة",
   "products":"منتجات",
-  "magazine.latest":"آخر"
+  "magazine.latest":"آخر",
+  "paymentfailed":"عملية الدفع فشلت"
 }

@@ -727,5 +727,6 @@
   "backtoreturndetails": "Back to return details",
   "return.approved":"The return has been approved",
   "products":"products",
-  "magazine.latest":"Latest"
+  "magazine.latest":"Latest",
+  "paymentfailed":"Payment Failed"
 }
