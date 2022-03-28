@@ -61,7 +61,6 @@ function CartItemPage(props) {
     }, [])
 
     useEffect(() => {
-        console.log("prop tokenee", props.token.token)
         const localToken = props.token.token;
         setToken(localToken)
         if (props.cart || !props.cart) {
@@ -182,6 +181,15 @@ function CartItemPage(props) {
     }
 
     async function handleChangeQty(e, data) {
+        let validQty =false ;
+        data && data.pending_inventory_source && data.pending_inventory_source.map(stock=>{
+            if(stock.stock_name==='Vendors Stock'){
+                if (e.target.value<=stock.qty){
+                    validQty = true;
+                }
+            }
+        })
+       if(validQty){
         setValue(data.item_id);
         let results: any;
         let value = parseInt(e.target.value);
@@ -219,7 +227,9 @@ function CartItemPage(props) {
             props.addToCartTask(true);
             notification("success", "", intl.formatMessage({ id: "cartupdated" }));
         }
-
+    }else{
+        notification("error", "", intl.formatMessage({ id: "increasedquantityerrormessage" }));
+    }
     }
 
     async function handleWhishlist(sku: any, item_id) {

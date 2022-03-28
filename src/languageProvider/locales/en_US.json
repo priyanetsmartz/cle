@@ -728,5 +728,6 @@
   "return.approved":"The return has been approved",
   "products":"products",
   "magazine.latest":"Latest",
-  "paymentfailed":"Payment Failed"
+  "paymentfailed":"Payment Failed",
+  "increasedquantityerrormessage":"Selected quantity of product is not available. Kindly re-select the quantity"
 }

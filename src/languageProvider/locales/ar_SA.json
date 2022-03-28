@@ -728,5 +728,6 @@
   "return.approved":"تمت الموافقة على العودة",
   "products":"منتجات",
   "magazine.latest":"آخر",
-  "paymentfailed":"عملية الدفع فشلت"
+  "paymentfailed":"عملية الدفع فشلت",
+  "increasedquantityerrormessage":"الكمية المحددة من المنتج غير متوفرة. يرجى إعادة تحديد الكمية"
 }
