@@ -58,7 +58,6 @@ function Checkout(props) {
     const [emailError, setEmailError] = useState({
         errors: {}
     });
-    const [payFailed, setPayFailed] = useState(false)
     const [custAddForm, setCustAddForm] = useState({
         id: 0,
         customer_id: custId ? custId : 0,
@@ -74,6 +73,7 @@ function Checkout(props) {
         default_billing: true,
     });
     const [failStatus, setFailStatus] = useState(false)
+    const [paymentFailureReason, setPaymentFailureReason] = useState("")
     const [billingAddressData, setBillingAddress] = useState({
         id: 0,
         customer_id: custId ? custId : 0,
@@ -132,9 +132,6 @@ function Checkout(props) {
         if (customer_id) {
             getCutomerDetails();
 
-        }
-        if(localStorage.getItem('paymentFailed') === "1"){
-            setPayFailed(true)
         }
         return () => {
 
@@ -1035,11 +1032,11 @@ function Checkout(props) {
         detailsRequired['PaymentGateway'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions && paymentStatus.data[0].Data.InvoiceTransactions.length > 0 && paymentStatus.data[0].Data.InvoiceTransactions[0].PaymentGateway ? paymentStatus.data[0].Data.InvoiceTransactions[0].PaymentGateway : 0;
         detailsRequired['TransactionStatus'] = paymentStatus.data && paymentStatus.data.length > 0 && paymentStatus.data[0].IsSuccess ? paymentStatus.data[0].IsSuccess : 0;
         detailsRequired['status'] =paymentStatus?.data?.[0]?.Data?.InvoiceTransactions?.[0]?.TransactionStatus;
+        detailsRequired['failureReason'] = paymentStatus?.data?.[0]?.Data?.InvoiceTransactions?.[0]?.Error;
         
         if (detailsRequired['status'] === "Failed") {
             setFailStatus(true);
-            localStorage.setItem('paymentFailed',"1")
-            setPayFailed(true)
+            detailsRequired['failureReason']?setPaymentFailureReason(detailsRequired['failureReason']):setPaymentFailureReason("")
             setOrderProcessing(false);
             notification("error", "", "Your order couldn't be placed due to failed Payment.");
             return false;
@@ -1097,7 +1094,7 @@ function Checkout(props) {
 
     }
     function retryPayment(){
-        localStorage.setItem('paymentFailed',"0")
+        window.location.href="/checkout" ;
     }
 
     return (
@@ -1749,11 +1746,15 @@ function Checkout(props) {
                 <div className="col-md-12 mb-2">
                                             <div className='return-comment' >
                                                 <label><IntlMessages id="paymentfailed" /></label>
-                                                <textarea className="form-control customfliter" onChange={handleChange} rows={3} >
-                                                </textarea>
+                                                {paymentFailureReason?(<textarea className="form-control customfliter" disabled >{paymentFailureReason}
+                                                </textarea>):""}
                                             </div>
-                                            <button type= "submit" onClick={retryPayment}>Retry payment</button>
                 </div>
+               </div>
+               <div className="row" style = {{
+
+               }}>
+                <div className="col-md-12 mb-2" style = {{float:'right'}}><button className="btn btn-primary" type= "submit" onClick={retryPayment}>Retry payment</button></div>
                 </div>
                 </div>)}
             </section >
