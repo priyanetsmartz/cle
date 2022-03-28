@@ -347,7 +347,7 @@ function CreateReturn(props) {
                                         <div className="col-md-9">
                                             <div className="pro-name-tag mb-5">
                                                 <div className="float-start">
-                                                    {item.extension_attributes.barnd && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.barnd}>{item.extension_attributes.barnd}</Link></div>)}
+                                                    {item.extension_attributes.barnd && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.barnd + '/all'}>{item.extension_attributes.barnd}</Link></div>)}
                                                     <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                     <p>{capitalize(item.product_type)}</p>
                                                 </div>

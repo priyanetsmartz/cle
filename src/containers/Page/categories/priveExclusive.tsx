@@ -108,7 +108,7 @@ function PriveExclusive(props) {
                                                     <div className="col-md-6">
                                                         <div className="product-details-new">
                                                             <Link to={'/product-details/' + item.sku}>  <img src={thumbnail} alt={item.name} /></Link>
-                                                            <div className="product_name"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
+                                                            <div className="product_name"><Link to={'/search/' + item.brand + '/all'}>{item.brand}</Link></div>
                                                             <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                             <div className="product_price">{siteConfig.currency} {formatprice(item.price)}</div>
 

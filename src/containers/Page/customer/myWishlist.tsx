@@ -240,7 +240,7 @@ function MyWishList(props) {
                                                     </div>
                                                 )}
                                                 <div className="wish text-left">
-                                                    <h5><Link to={'/search/' + item.brand}>{item.brand}</Link></h5>
+                                                    <h5><Link to={'/search/' + item.brand + '/all'}>{item.brand}</Link></h5>
                                                     <div className="tagname"><Link to={'/product-details/' + item.sku}>{item.name}</Link></div>
                                                     <div className="pricetag">{siteConfig.currency} {formatprice(item.price)} </div>
                                                 </div>

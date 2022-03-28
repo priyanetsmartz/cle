@@ -321,7 +321,7 @@ function CartItemPage(props) {
                                                                         <div className="col-md-9">
                                                                             <div className="pro-name-tag">
                                                                                 <div className="cart-info-l">
-                                                                                    {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand}>{item.extension_attributes.brand}</Link></div>
+                                                                                    {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand + '/all'}>{item.extension_attributes.brand}</Link></div>
                                                                                     )}
                                                                                     <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                                                 </div>

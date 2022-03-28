@@ -1713,7 +1713,7 @@ function Checkout(props) {
                                     </div>
                                     <div className="col-md-9">
                                         <div className="pro-name-tag">
-                                            {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand}>{item.extension_attributes.brand}</Link></div>
+                                            {item.extension_attributes.brand && (<div className="product_name"><Link to={'/search/' + item.extension_attributes.brand + '/all'}>{item.extension_attributes.brand}</Link></div>
                                             )}
                                             <div className="product_vrity"><Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                             <p className="check-tag"><IntlMessages id="cart.qty" /> {item.qty}</p>

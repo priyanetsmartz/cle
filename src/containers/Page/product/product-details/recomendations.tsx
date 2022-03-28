@@ -151,7 +151,7 @@ const Recommendations = (props) => {
                                                         <img src={item.img} className="image-fluid" alt={item.name} height="150" />
                                                     </div>
                                                 </Link>
-                                                <div className="product_name"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
+                                                <div className="product_name"><Link to={'/search/' + item.brand +'/all' }>{item.brand}</Link></div>
                                                 <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                 <div className="product_price">{siteConfig.currency}  {formatprice(item.price)}</div>
                                                 <div className="cart-button mt-3 px-2">

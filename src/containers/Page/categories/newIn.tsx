@@ -189,7 +189,7 @@ function NewIn(props) {
                                                 </Link>
                                             </div>
                                             <div className="about text-center">
-                                                <div className="product_name"><Link to={'/search/' + brand}>{brand}</Link></div>
+                                                <div className="product_name"><Link to={'/search/' + brand + '/all'}>{brand}</Link></div>
                                                 <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                 <div className="pricetag"> {siteConfig.currency} {formatprice(item.price)}</div>
                                             </div>
