@@ -40,7 +40,13 @@ function OrdersAndReturns(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-6">
-                        <Link to="/customer/orders-and-returns"> <IntlMessages id  = "backtoreturndetails"/></Link>
+                        
+						
+						<div className="back-block">
+                            <i className="fas fa-chevron-left back-icon"></i>
+                            <Link to="/customer/orders-and-returns" className="back-to-shop"> <IntlMessages id  = "backtoreturndetails"/></Link>
+                        </div>
+						
                             <div className="order-detail-head">
                                 <h2><IntlMessages id="myaccount.returnDetails" /></h2>
                                 <p><IntlMessages id="customer.return.description" /></p>

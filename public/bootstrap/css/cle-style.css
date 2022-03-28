@@ -1303,7 +1303,7 @@ p.promotion_alert {
     border-radius: 0;
     font-size: 11px;
     text-transform: capitalize !important;
-    border: 0;
+    border: 1px solid #2E2BAA;
     color: #fff;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1318,6 +1318,17 @@ p.promotion_alert {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
+	transition: all .3s ease;
+}
+
+.order-pro-list .order-pro-track:hover, 
+.trackinglink .order-pro-track:hover{
+	background: transparent !important;
+	color:#2E2BAA;
+}
+
+.return-complaint-btns {
+    margin-bottom: 15px;
 }
 
 .miniaccount_details ul li a:hover, .myaccount_details ul li a:hover {
@@ -3327,6 +3338,7 @@ left: auto; */
     width: 100%;
     float: left;
     text-align: right;
+	position: relative;
 }
 
 .order_tab_sec .viewall_btn a {
@@ -3335,6 +3347,34 @@ left: auto; */
     font-family: 'Monument Extended';
     font-style: normal;
     text-decoration: none;
+	position: absolute;
+    display: inline-block;
+    right: 0;
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
+
+.order_tab_sec .viewall_btn a:hover{
+	padding-top: 5px;
+    color: #2E2BAA;
+}
+
+.order_tab_sec .viewall_btn a:after{
+	content: "";
+    border-bottom: 1px solid transparent;
+    display: block;
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
+}
+
+.order_tab_sec .viewall_btn a:hover:after{
+	border-color: #2E2BAA;
+    bottom: 2px;
 }
 
 .order_tab_sec h3.order_numbr {
@@ -3410,6 +3450,7 @@ left: auto; */
     padding: 20px;
     text-align: center;
     position: relative;
+	margin-left: 10px;
 }
 
 .order_tab_sec .more_product img {
@@ -5880,6 +5921,7 @@ color: #017abb;
     color: #2e2baa;
     margin: 0 0 10px;
     font-size: 16px;
+	padding: 0 10px;
 }
 
 .show-more-btn {
@@ -6018,6 +6060,7 @@ color: #017abb;
 }
 
 /* return details */
+
 
 .black-bg-footer {
     display: -webkit-box;
@@ -8292,13 +8335,28 @@ p.sliderupper {
     margin-bottom: 40px;
 }
 
-.pick-date .accordion-button {
-    color: #000;
+.pick-date .accordion-button, .accordion-button:not(.collapsed) {
+    color: #000!important;
     font-size: 24px;
     font-family: 'Monument Extended';
     font-weight: 500;
     line-height: 24px;
     padding: 30px;
+    background-color: transparent!important;
+}
+
+.pick-date .accordion-button::after,
+.pick-date .accordion-button:not(.collapsed)::after{
+	background-image: url(images/arrow-close.svg)!important;
+}
+
+.pick-date .react-datepicker__close-icon::after {
+    background-color: #2E2BAA;
+}
+
+.pick-date input[type='text']{
+	border: 1px solid #ddd;
+    padding: 10px 20px;
 }
 
 .Check-help-center {
@@ -8315,6 +8373,20 @@ p.sliderupper {
     -ms-flex-pack: center;
     justify-content: center;
     text-align: center;
+}
+
+.order-detail-main .btn-primary{
+	font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    font-family: 'Monument Extended';
+	padding: 10px 20px;
+}
+
+.order-detail-main .btn-primary:hover{
+	color: #000;
+    background-color: transparent!important;
+    border-color: #000;
 }
 
 .help-content h3 {
@@ -9053,9 +9125,9 @@ p.sliderupper {
 
 .filter-tiles li {
     display: inline-block;
-    margin-right: 20px;
+    margin-right: 0;
     position: relative;
-    width: 20%;
+    width: 17%;
 	min-height: 40px;
 }
 
