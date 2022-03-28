@@ -6,6 +6,8 @@ import { dataTiles } from '../../../../redux/pages/vendorLogin';
 import { getCurrentMonth } from '../../../../components/utility/allutils';
 import CircularProgressBar from './CircularProgress';
 import LoaderGif from '../../Loader';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from "react-bootstrap/Tooltip";
 
 
 function MyAnalysisCustomer(props) { 
@@ -240,7 +242,7 @@ function MyAnalysisCustomer(props) {
                                 <LoaderGif />
                             </div>
                         )}
-                        {customerData?.['all'] > 0 && (
+                        {/* {customerData?.['all'] > 0 && (
                             <div className='row mb-4' style={{ columnCount: 3 }}>
                                 <div className='col-md-4'>
                                     <span><b>Total customers: {customerData?.['totalcustomer']}</b></span>
@@ -276,7 +278,69 @@ function MyAnalysisCustomer(props) {
                                 </div>
 
                             </div>
-                        )}
+                        )} */}
+                        <div className="row mb-4" style={{ columnCount: 3 }}>
+                            <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
+                                <div className="card-info">
+                                    <h5>Total customers<OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                Total customers</Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger></h5>
+                                    <div className="stats">
+                                        <h3>{customerData?.['totalcustomer']}</h3>
+                                        <div className="text-next">
+                                            <div className='arrowsdatatile'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
+                                <div className="card-info">
+                                    <h5>Repeat customer<OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                               Repeat customer
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger>
+                                    </h5>
+                                    <div className="stats">
+                                        <h3>{customerData?.['repeated_customer']}</h3>
+                                        <div className="text-next">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
+                                <div className="card-info">
+                                    <h5>New  customers<OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                               New  customers
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger></h5>
+                                    <div className="stats">
+                                        <h3>{customerData?.['one_time_customer']}</h3>
+                                        <div className="text-next">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                       {(customerData?.['all'] === 0 && !loader) ? <div className='text-center' >No data available</div> : ""}
                     </div>
                 </div>

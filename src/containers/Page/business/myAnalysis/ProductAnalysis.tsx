@@ -14,6 +14,8 @@ import {
 } from 'recharts';
 import { siteConfig } from '../../../../settings';
 import LoaderGif from '../../Loader';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from "react-bootstrap/Tooltip";
 
 function MyAnalysisProducts(props) {
     const intl = useIntl()
@@ -26,7 +28,7 @@ function MyAnalysisProducts(props) {
     const [currentMonthkey, setCurrentMonthKey] = useState(getCurrentMonth().num)
     const [currentMonth, setCurrentMonth] = useState(getCurrentMonth().name)
     const [quaterSlider, setQuaterSlider] = useState('')
-    const [barChartData, setBarChartData] = useState([]);
+    const [barChartData, setBarChartData]:any = useState({});
 
     const [currentYear, setCurrentYear] = useState(year);
     const [showStates, setShowStates] = useState({ showYears: false, sowQuaters: false, showMonth: true, active: 0 });
@@ -42,7 +44,8 @@ function MyAnalysisProducts(props) {
         setLoader(true)
         if (results && results.data && results.data.length > 0) {
             let tiles_information = results?.data[0]?.tiles_information;
-            setBarChartData([tiles_information?.product_information])
+            setBarChartData(tiles_information?.product_information)
+            // console.log("#############",tiles_information.product_information);
             setLoader(false)
         } else {
             setLoader(false)
@@ -273,14 +276,14 @@ function MyAnalysisProducts(props) {
                     <div className="col-sm-12">
                         <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
                         <p className='datap'>You can see your active product and total cost of products chart here.</p>
-                        <DateChartFilters data="product" />
+                        {/* <DateChartFilters data="product" /> */}
                         {loader && (
                             <div className="checkout-loading text-center" >
                                 {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
                                 <LoaderGif />
                             </div>
                         )}
-                        {(barChartData?.length > 0 && barChartData?.[0]?.total_product_count > 0) ? (
+                        {/* {(barChartData?.length > 0 && barChartData?.[0]?.total_product_count > 0) ? (
 
                             <PieChart width={730} height={250}>
                                 <Pie
@@ -306,7 +309,69 @@ function MyAnalysisProducts(props) {
                                 <Tool content={CustomTooltip} animationDuration={0} position={{ x: 600, y: 0 }} />
                             </PieChart>
 
-                        ) : loader ? "" : <div className='text-center' >No data available</div>}
+                        ) : loader ? "" : <div className='text-center' >No data available</div>} */}
+                         <div className="row mb-4" style={{ columnCount: 3 }}>
+                            <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
+                                <div className="card-info">
+                                    <h5>Active Products<OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                Number of active products</Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger></h5>
+                                    <div className="stats">
+                                        <h3>{barChartData?.active?.count}</h3>
+                                        <div className="text-next">
+                                            <div className='arrowsdatatile'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
+                                <div className="card-info">
+                                    <h5>Inactive Products<OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                                Number of inactive products
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger>
+                                    </h5>
+                                    <div className="stats">
+                                        <h3>{barChartData?.inactive?.count}</h3>
+                                        <div className="text-next">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
+                                <div className="card-info">
+                                    <h5>Total Products<OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip id="" {...props} >
+                                               Total number of products
+                                            </Tooltip>
+                                        )}
+                                        placement="right"
+                                    ><i className="fas fa-info-circle" ></i>
+                                    </OverlayTrigger></h5>
+                                    <div className="stats">
+                                        <h3>{barChartData?.total?.count}</h3>
+                                        <div className="text-next">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>

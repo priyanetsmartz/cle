@@ -217,11 +217,11 @@ function MyAnalysisDataTiles(props) {
                         <div className="row mb-4" style={{ columnCount: 3 }}>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
-                                    <h5><IntlMessages id="ordertotal" /><OverlayTrigger
+                                    <h5>Number of Sales<OverlayTrigger
                                         delay={{ hide: 450, show: 300 }}
                                         overlay={(props) => (
                                             <Tooltip id="" {...props} >
-                                                <IntlMessages id="totalordersplaces" />                               </Tooltip>
+                                                Number of Sales</Tooltip>
                                         )}
                                         placement="right"
                                     ><i className="fas fa-info-circle" ></i>
@@ -242,11 +242,11 @@ function MyAnalysisDataTiles(props) {
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
-                                    <h5><IntlMessages id="order.orders" /><OverlayTrigger
+                                    <h5>Number of Customers<OverlayTrigger
                                         delay={{ hide: 450, show: 300 }}
                                         overlay={(props) => (
                                             <Tooltip id="" {...props} >
-                                                <IntlMessages id="totalaveragescost" />
+                                                Number of Customers
                                             </Tooltip>
                                         )}
                                         placement="right"
@@ -254,26 +254,26 @@ function MyAnalysisDataTiles(props) {
                                     </OverlayTrigger>
                                     </h5>
                                     <div className="stats">
-                                        <h3>{dataTilesData['averageOrder'] ? dataTilesData['averageOrder'] : 0}</h3>
+                                        <h3>{dataTilesData['totalCustomer'] ? dataTilesData['totalCustomer'] : 0}</h3>
                                         <div className="text-next">
 
                                             <div className='arrowsdatatile'>
-                                                {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.averageOrder, dataTilesData['averageOrder']) > 0 ? <div className='data-increase'>
-                                                    <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.averageOrder, dataTilesData['averageOrder'])}%</div>
+                                                {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.totalCustomer, dataTilesData['totalCustomer']) > 0 ? <div className='data-increase'>
+                                                    <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.totalCustomer, dataTilesData['totalCustomer'])}%</div>
                                                     <><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div> :
                                                     <div className='data-decrease'>
-                                                        <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.averageOrder, dataTilesData['averageOrder'])}%</div><><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div>}</div>
+                                                        <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.totalCustomer, dataTilesData['totalCustomer'])}%</div><><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div>}</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
-                                    <h5><IntlMessages id="payments" /><OverlayTrigger
+                                    <h5>Sales KPI<OverlayTrigger
                                         delay={{ hide: 450, show: 300 }}
                                         overlay={(props) => (
                                             <Tooltip id="" {...props} >
-                                                <IntlMessages id="totalorderscost" />
+                                                Sales KPI
                                             </Tooltip>
                                         )}
                                         placement="right"
