@@ -15,6 +15,7 @@ import { siteConfig } from '../../../settings';
 import { capitalize, formatprice } from '../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
 import MyAnalysisDataTiles from './myAnalysis/DataTiles';
+import LoaderGif from '../Loader';
 
 
 function Dashboard(props) { //Dashboard functional component 
@@ -339,6 +340,7 @@ function Dashboard(props) { //Dashboard functional component
                             <div className="row">
                                 <DataTable
                                     progressPending={isLoadingOrders}
+                                    progressComponent={<LoaderGif />}
                                     columns={columns}
                                     data={myOrders}
                                     highlightOnHover
@@ -363,6 +365,7 @@ function Dashboard(props) { //Dashboard functional component
                             <div className="row">
                                 <DataTable
                                     progressPending={isLoadingReturns}
+                                    progressComponent={<LoaderGif />}
                                     columns={returnColumns}
                                     data={myReturn}
                                     highlightOnHover
@@ -388,6 +391,7 @@ function Dashboard(props) { //Dashboard functional component
                                 <div className="tbl-payout">
                                     <DataTable
                                         progressPending={isLoadingPayouts}
+                                        progressComponent={<LoaderGif />}
                                         columns={columnsPayouts}
                                         data={myPayouts}
                                         highlightOnHover
@@ -402,7 +406,7 @@ function Dashboard(props) { //Dashboard functional component
             </section>
 
             <section className="my_profile_sect profilemagazine mb-4">
-                <Magazine />
+                {/* <Magazine /> */}
             </section>
             <Modal show={myDashboardModal} className="cookie_popup_login">
                 <div className="CLE_pf_details">

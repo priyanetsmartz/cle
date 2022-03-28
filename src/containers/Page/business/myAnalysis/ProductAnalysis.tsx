@@ -13,6 +13,7 @@ import {
     Label
 } from 'recharts';
 import { siteConfig } from '../../../../settings';
+import LoaderGif from '../../Loader';
 
 function MyAnalysisProducts(props) {
     const intl = useIntl()
@@ -275,7 +276,8 @@ function MyAnalysisProducts(props) {
                         <DateChartFilters data="product" />
                         {loader && (
                             <div className="checkout-loading text-center" >
-                                <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
+                                <LoaderGif />
                             </div>
                         )}
                         {(barChartData?.length > 0 && barChartData?.[0]?.total_product_count > 0) ? (

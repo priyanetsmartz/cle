@@ -13,6 +13,7 @@ import {
     Bar,
     Cell
 } from 'recharts';
+import LoaderGif from '../../Loader';
 
 function MyAnalysisReturn(props) {
     let year = moment().year();
@@ -252,7 +253,8 @@ function MyAnalysisReturn(props) {
                         <DateChartFilters data="barchart" />
                         {loader && (
                             <div className="checkout-loading text-center" >
-                                <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
+                                <LoaderGif />
                             </div>
                         )}
                         {returnData?.length > 0 && (

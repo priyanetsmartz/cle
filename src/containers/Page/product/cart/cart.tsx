@@ -16,6 +16,7 @@ import { siteConfig } from '../../../../settings';
 import { checkVendorLoginWishlist, formatprice } from '../../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
 import { useLastLocation } from 'react-router-last-location';
+import LoaderGif from '../../Loader';
 
 
 const { openGiftBoxes, addToCartTask, addToWishlistTask } = cartAction;
@@ -60,6 +61,7 @@ function CartItemPage(props) {
     }, [])
 
     useEffect(() => {
+        console.log("prop tokenee", props.token.token)
         const localToken = props.token.token;
         setToken(localToken)
         if (props.cart || !props.cart) {
@@ -299,7 +301,8 @@ function CartItemPage(props) {
                                         <h2><IntlMessages id="cart.Title" /></h2>
                                         {opacity === 0.3 && (
                                             <div className="checkout-loading" >
-                                                <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                                {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
+                                                <LoaderGif />
                                             </div>
                                         )}
                                         {(cartItemsVal['items'] && cartItemsVal['items'].length) ?

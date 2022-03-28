@@ -11,6 +11,7 @@ import appAction from "../../../redux/app/actions";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { useIntl } from 'react-intl';
 import { siteConfig } from '../../../settings';
+import LoaderGif from '../Loader';
 const { addToWishlistTask, addToCartTask } = cartAction;
 const { showSignin } = appAction;
 
@@ -204,7 +205,8 @@ function MyWishList(props) {
                     <div className="row g-2">
                         {loaderOrders && (
                             <div className="checkout-loading" >
-                                <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
+                                <LoaderGif />
                             </div>
                         )}
                         {wishList.length > 0 ?

@@ -13,6 +13,7 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import { capitalize, formatprice } from '../../../components/utility/allutils';
+import LoaderGif from '../Loader';
 
 
 function MyReturnsComplaints(props) {
@@ -275,6 +276,7 @@ function MyReturnsComplaints(props) {
 
                     <DataTable
                         progressPending={isLoading}
+                        progressComponent={<LoaderGif />}
                         columns={columns}
                         data={myOrder}
                         pagination={true}

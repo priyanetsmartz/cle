@@ -13,6 +13,7 @@ import {
     Cell
 } from 'recharts';
 import { siteConfig } from '../../../../settings';
+import LoaderGif from '../../Loader';
 
 function MyAnalysisPayouts(props) {
     const intl = useIntl()
@@ -247,7 +248,8 @@ function MyAnalysisPayouts(props) {
                         <div className="row mb-4" style={{ columnCount: 3 }}>
                             {loader && (
                                 <div className="checkout-loading text-center" >
-                                    <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                                    {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
+                                    <LoaderGif />
                                 </div>
                             )}
                             {pieChart?.length > 0 && (
