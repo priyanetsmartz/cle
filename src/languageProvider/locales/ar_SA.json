@@ -729,5 +729,5 @@
   "products":"منتجات",
   "magazine.latest":"آخر",
   "paymentfailed":"عملية الدفع فشلت",
-  "increasedquantityerrormessage":"الكمية المحددة من المنتج غير متوفرة. يرجى إعادة تحديد الكمية"
+  "increasedquantityerrormessage":"الكمية المتاحة من المنتج المحدد هي "
 }

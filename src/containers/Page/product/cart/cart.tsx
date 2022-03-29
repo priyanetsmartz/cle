@@ -182,11 +182,13 @@ function CartItemPage(props) {
 
     async function handleChangeQty(e, data) {
         let validQty =false ;
+        let stockQty;
         data && data.pending_inventory_source && data.pending_inventory_source.map(stock=>{
             if(stock.stock_name==='Vendors Stock'){
                 if (e.target.value<=stock.qty){
                     validQty = true;
                 }
+                stockQty = stock.qty;
             }
         })
        if(validQty){
@@ -228,7 +230,7 @@ function CartItemPage(props) {
             notification("success", "", intl.formatMessage({ id: "cartupdated" }));
         }
     }else{
-        notification("error", "", intl.formatMessage({ id: "increasedquantityerrormessage" }));
+        notification("error", "", intl.formatMessage({ id: "increasedquantityerrormessage" }) + stockQty );
     }
     }
 

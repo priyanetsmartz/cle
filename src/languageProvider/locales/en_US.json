@@ -729,5 +729,5 @@
   "products":"products",
   "magazine.latest":"Latest",
   "paymentfailed":"Payment Failed",
-  "increasedquantityerrormessage":"Selected quantity of product is not available. Kindly re-select the quantity"
+  "increasedquantityerrormessage":"Available quantity of selected product is "
 }

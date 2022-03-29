@@ -52,6 +52,7 @@ function ProductDetails(props) {
     const [measuringDetails, setMeasuringDetails] = useState({});
     const [slectedAttribute, setSlectedAttribute] = useState(0);
     const [quantity, setQuantity] = useState(1);
+    const [stockQty, setStockQty] = useState(1);
 
     useEffect(() => {
 
@@ -247,6 +248,7 @@ function ProductDetails(props) {
                     attributes.value.map((item, i) => {
                         if (item.stock_name === "Vendors Stock") {
                             stock = item.qty;
+                            setStockQty(item.qty)
                         }
                     })
                 }
@@ -369,7 +371,12 @@ function ProductDetails(props) {
     }
 
     const handleQuantity = (event) => {
-        setQuantity(event.target.value)
+        if(event.target.value<=stockQty){
+            setQuantity(event.target.value)
+        }
+        else{
+            notification("error","",intl.formatMessage({ id: "increasedquantityerrormessage" }) + stockQty )
+        }
     }
 
     async function handleWhishlist(id: number) {
