@@ -302,11 +302,11 @@ function MyAnalysisCustomer(props) {
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
-                                    <h5>Repeat customer<OverlayTrigger
+                                    <h5>Repeat customers<OverlayTrigger
                                         delay={{ hide: 450, show: 300 }}
                                         overlay={(props) => (
                                             <Tooltip id="" {...props} >
-                                               Repeat customer
+                                               Repeat customers
                                             </Tooltip>
                                         )}
                                         placement="right"
