@@ -243,7 +243,7 @@ function MyAnalysisPayouts(props) {
                 <div className="row  mb-4">
                     <div className="col-sm-12">
                         <h2>{intl.formatMessage({ id: 'payoutInformation' })}</h2>
-                        <p className='datap'>You can see payout information chart here</p>
+                        <p className='datap'>Insights about the status of the payouts and sum of the payout amount issued. </p>
                         <DateChartFilters data="piechart" />
                         <div className="row mb-4" style={{ columnCount: 3 }}>
                             {loader && (

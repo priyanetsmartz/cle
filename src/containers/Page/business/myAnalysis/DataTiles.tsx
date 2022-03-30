@@ -210,7 +210,9 @@ function MyAnalysisDataTiles(props) {
             <div className="container">
                 <div className="row mb-4">
                     <div className="col-sm-12">
-                        <h2><IntlMessages id="datatiles" /></h2>
+                        {/* <h2><IntlMessages id="datatiles" /></h2> */}
+                        <h2>Sales summary</h2>
+                        <p>Sales performance data @ insights, grouped by month/quarter/year.</p>
                         <DateChartFilters data="datatiles" />
 
 
@@ -242,11 +244,11 @@ function MyAnalysisDataTiles(props) {
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
-                                    <h5>Number of Customers<OverlayTrigger
+                                    <h5>Average sale per order<OverlayTrigger
                                         delay={{ hide: 450, show: 300 }}
                                         overlay={(props) => (
                                             <Tooltip id="" {...props} >
-                                                Number of Customers
+                                                Average sale per order
                                             </Tooltip>
                                         )}
                                         placement="right"
@@ -269,11 +271,11 @@ function MyAnalysisDataTiles(props) {
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
-                                    <h5>Sales KPI<OverlayTrigger
+                                    <h5>Sales<OverlayTrigger
                                         delay={{ hide: 450, show: 300 }}
                                         overlay={(props) => (
                                             <Tooltip id="" {...props} >
-                                                Sales KPI
+                                                Sales
                                             </Tooltip>
                                         )}
                                         placement="right"

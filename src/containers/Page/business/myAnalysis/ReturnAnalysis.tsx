@@ -233,11 +233,11 @@ function MyAnalysisReturn(props) {
                         <span className="value-tooltip"><b>Return Date</b> <br />{payload[0].payload.created_at}</span>
                     </p>
                     <p className="desc-tooltip">
-                        <span className="value-tooltip"><b>Product Quantity</b> <br />{payload[0].payload.product_quantity}</span>
+                        <span className="value-tooltip"><b>Returned products</b> <br />{payload[0].payload.product_quantity}</span>
                     </p>
-                    <p className="desc-tooltip">
+                    {/* <p className="desc-tooltip">
                         <span className="value-tooltip"><b>Total Return</b> <br />{payload[0].payload.total_return}</span>
-                    </p>
+                    </p> */}
                 </div>
             );
         return null;
@@ -249,7 +249,7 @@ function MyAnalysisReturn(props) {
                 <div className="row  mb-4">
                     <div className="col-sm-12">
                         <h2>Return Information</h2>
-                        <p className='datap'>You can see return chart here.</p>
+                        <p className='datap'>Number of products that have been returned by CLE customers</p>
                         <DateChartFilters data="barchart" />
                         {loader && (
                             <div className="checkout-loading text-center" >
@@ -269,8 +269,8 @@ function MyAnalysisReturn(props) {
                                 <Tool content={CustomTooltipBar} animationDuration={0} position={{ x: 700, y: 0 }} />
                                 <Legend payload={
                                     [
-                                        { id: 'product_quantity', value: 'Product Quantity', type: 'square', color: '#0070dc' },
-                                        { id: 'total_return', value: 'Total Return', type: 'square', color: '#00c9ad' },
+                                        { id: 'product_quantity', value: 'Returned products', type: 'square', color: '#0070dc' },
+                                        // { id: 'total_return', value: 'Total Return', type: 'square', color: '#00c9ad' },
                                     ]
                                 } />
                                 <CartesianGrid stroke="rgba(0,0,0,0.1)" vertical={false} />
@@ -282,14 +282,14 @@ function MyAnalysisReturn(props) {
                                         <Cell key={index} fill="#0070dc" />
                                     ))}
                                 </Bar>
-                                <Bar
+                                {/* <Bar
                                     dataKey="total_return"
                                     barSize={50}
                                 >
                                     {returnData.map((entry, index) => (
                                         <Cell key={index} fill="#00c9ad" />
                                     ))}
-                                </Bar>
+                                </Bar> */}
                             </BarChart>
                         )}
 

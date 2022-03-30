@@ -46,8 +46,7 @@ function MyAnalysis(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <h1>My Analysis</h1>
-                            <p>You can see your analysis here. Lorem ipsum dolor sit amet<br />
-                                consectetur adipiscing elit.</p>
+                            <p>Welcome to your data & analytics page. Here you will find insights about your brand's activity and performance on CLE's platform</p>
                         </div>
                     </div>
 

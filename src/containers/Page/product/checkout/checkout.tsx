@@ -13,6 +13,7 @@ import { getCartItems, getCartTotal, getGuestCart, getGuestCartTotal, applyPromo
 import { getCustomerDetails, saveCustomerDetails } from '../../../../redux/pages/customers';
 import { formatprice } from '../../../../components/utility/allutils';
 import CheckoutBannerFooter from '../../customer/checkout-banner';
+import { stringify } from 'querystring';
 
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
 
@@ -856,17 +857,48 @@ function Checkout(props) {
 
     //PLACE ORDER CODE GOES HERE
     const placeOrder = async () => {
+        //console.log("i m here")
+        // if(failStatus === true){
+        //     localToken = localStorage.getItem('l')
+        // }
+        if(failStatus === true)
+        {
+           //let props2:any = localStorage.getItem('props')
+            localToken = localStorage.getItem('localToken')
+            //setState(eval(localStorage.getItem('stateEmail')))
+            //console.log(state,"state")
+            setSelectedPaymentMethod(localStorage.getItem('selectedPaymentMethod'))
+
+            if(props && props.token && state.email === ""){state.email = props.token.token_email}
+            //console.log(state,"ji")
+        }
+        else{
+           // localStorage.setItem('props',JSON.stringify(props))
+            localStorage.setItem('localToken',JSON.stringify(localToken))
+            localStorage.setItem('stateEmail',JSON.stringify(state))
+        }
         setIsShow(true);
         let customer_id = localToken?.cust_id;
         let orderPlace: any;
         let billAddress: any = {};
         if (customer_id) {
+            if(failStatus === true)
+            {
+                let itemValues:any = localStorage.getItem('itemsVal')
+                itemsVal.address=itemValues.address
+            setCartBilling(localStorage.getItem('cartBilling'))
+            }
+            else{
+                localStorage.setItem('itemsVal',JSON.stringify(itemsVal))
+                localStorage.setItem('cartBilling',JSON.stringify(cartBilling))
+            }
             const add: any = itemsVal.address;
             if (cartBilling) {
                 billAddress.street = cartBilling['street'][0];
                 billAddress.address = cartBilling['city'];
                 billAddress.phone = cartBilling['telephone'];
                 billAddress.name = cartBilling['firstname'] + ' ' + cartBilling['lastname'];
+                
             } else {
                 add.addresses.forEach(el => {
                     if (el.default_billing || el.default_shipping || add.addresses.length === 1) {
@@ -874,17 +906,31 @@ function Checkout(props) {
                         billAddress.address = el.city;
                         billAddress.phone = el.telephone;
                         billAddress.name = el.firstname + ' ' + el.lastname;
+                        // if(failStatus === true)
+                        // {
+                        //     billAddress = localStorage.getItem('billAddress')
+                        // }
+                        // else{
+                        //     localStorage.setItem('billAddress',JSON.stringify(billAddress))
+                        // }
                     }
                 })
             }
         } else {
-            if (state.email) {
+            if (state.email) {                
                 if (props.guestBilling) {
                     billAddress.CustomerEmail = state.email;
                     billAddress.street = props.guestBilling && props.guestBilling.street ? props.guestBilling.street[0] : '';
                     billAddress.address = props.guestBilling ? props.guestBilling.city : "";
                     billAddress.phone = props.guestBilling ? props.guestBilling.telephone : "";
                     billAddress.name = props.guestBilling ? props.guestBilling.firstname + ' ' + props.guestBilling.lastname : "";
+                    // if(failStatus === true)
+                    // {
+                    //     billAddress = localStorage.getItem('billAddress')
+                    // }
+                    // else{
+                    //     localStorage.setItem('billAddress',JSON.stringify(billAddress))
+                    // }
                 }
             } else {
                 setIsShow(false)
@@ -893,13 +939,22 @@ function Checkout(props) {
 
         }
         // checking for payment method if myfatoorah is used then send to different function
-        if (selectedPaymentMethod === 'myfatoorah_gateway') {
-
+        //localStorage.setItem('selectedPaymentMethod', selectedPaymentMethod)
+        if(failStatus === true)
+                        {
+                            billAddress = JSON.parse(localStorage.getItem('billAddress'))
+                            setSelectedPaymentMethod(localStorage.getItem('selectedPaymentMethod'))
+                        }
+                        else{
+                            localStorage.setItem('billAddress2',billAddress)
+                            localStorage.setItem('selectedPaymentMethod',selectedPaymentMethod)
+                        }
+                       // localStorage.setItem('billAddress2',billAddress)
+        if (selectedPaymentMethod === 'myfatoorah_gateway' || localStorage.getItem('selectedPaymentMethod') === 'myfatoorah_gateway') {
             const payment: any = await myFatoora(billAddress);
             
             if (payment?.data?.length > 0 && payment?.data[0]?.IsSuccess) {
                 let url = payment?.data[0]?.Data.PaymentURL;
-                console.log("urlrlrlr",url)
                 if (url) {
                     window.location.href = url;
                 }
@@ -910,6 +965,14 @@ function Checkout(props) {
 
         } else {
             if (customer_id) {
+                if(failStatus === true)
+                {
+                    setSelectedShippingMethod(localStorage.getItem('selectedShippingMethod'))
+                }
+                else{
+                    localStorage.setItem('selectedShippingMethod',selectedShippingMethod)
+                }
+                
                 if (selectedShippingMethod === '') {
                     setIsShow(false)
                     return notification("error", "", intl.formatMessage({ id: "shippingmodeerror" }));
@@ -955,7 +1018,7 @@ function Checkout(props) {
 
 
             }
-
+            //localStorage.setItem('orderPlace',stringify(orderPlace))
             if (orderPlace && orderPlace.data && orderPlace.data !== undefined && orderPlace.data.message === undefined) {
                 setIsShow(false)
                 props.addToCartTask(true)
@@ -1093,8 +1156,10 @@ function Checkout(props) {
         return result;
 
     }
-    function retryPayment(){
-        window.location.href="/checkout" ;
+    const retryPayment = async()=>{
+        //window.location.href="/checkout" ;
+        //console.log("props", props)
+        placeOrder();
     }
 
     return (
