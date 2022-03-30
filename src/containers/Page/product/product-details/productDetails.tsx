@@ -375,7 +375,14 @@ function ProductDetails(props) {
             setQuantity(event.target.value)
         }
         else{
-            notification("error","",intl.formatMessage({ id: "increasedquantityerrormessage" }) + stockQty )
+            let errorMsg=intl.formatMessage({id:"somethingwrong"});
+            if (stockQty !== null && stockQty !== undefined){
+                errorMsg = intl.formatMessage({ id: "increasedquantityerrormessage" }) + stockQty ;
+            }
+            else {
+                errorMsg = intl.formatMessage({id: "increasedquantityerrormessageGeneral"})
+            }
+            notification("error", "", errorMsg);
         }
     }
 

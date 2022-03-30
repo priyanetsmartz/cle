@@ -41,7 +41,8 @@ function CartItemPage(props) {
     const [cartRelevants, setCartRelevants] = useState({});
     const [isGiftMessage, setIsGiftMessage] = useState(false);
     const [delGiftMsg, setDelGiftMsg] = useState(0);
-
+    const [stockQty, setStockQty] = useState(0);
+    const [validQtyItem, setValidQty] = useState(0);
     useEffect(() => {
         setShopPath(path);
         if (document.getElementById("cartsidebar")) {
@@ -149,6 +150,26 @@ function CartItemPage(props) {
             setCartRelevants(cartRelevant);
             setCartItems(cartValues)
             setCartTotal(cartPrices);
+            // check if selected quantity is available
+            if(cartValues && cartValues['items']){
+                cartValues['items'].map(item=>{
+                    item['qtyErrorUI']="";
+                    setValidQty(item.qty)
+                    if(item.pending_inventory_source){
+                        item.pending_inventory_source.map(stock=>{
+                            if(stock.stock_name === "Vendors Stock"){
+                                if(item.qty>stock.qty){
+                                    setValidQty(stock.qty)
+                                    item.qty = stock.qty
+                                    item['qtyErrorUI']=(intl.formatMessage({id:"reducedquantityCart"}))
+                                }
+                                else{item['qtyErrorUI'] = ""}
+                            }
+                        })
+                    }
+
+                })
+            }
             setOpacity(1);
         } else {
             setOpacity(1);
@@ -182,55 +203,73 @@ function CartItemPage(props) {
 
     async function handleChangeQty(e, data) {
         let validQty =false ;
-        let stockQty;
-        data && data.pending_inventory_source && data.pending_inventory_source.map(stock=>{
-            if(stock.stock_name==='Vendors Stock'){
+        let avalQty;
+        if(data){
+            data['qtyErrorUI'] = ""
+        }
+        if(data && data.pending_inventory_source)
+        data.pending_inventory_source.map(stock=>{
+            if(stock.stock_name === "Vendors Stock"){
                 if (e.target.value<=stock.qty){
                     validQty = true;
                 }
-                stockQty = stock.qty;
+                avalQty = stock.qty
+                setStockQty(stock.qty);
             }
         })
        if(validQty){
-        setValue(data.item_id);
-        let results: any;
-        let value = parseInt(e.target.value);
-        setQty(value);
-        let customer_id = props.token.cust_id;
-        let cartData = {
-            "cartItem": {
-                "sku": data.sku,
-                "qty": value,
-                "quote_id": localStorage.getItem('cartQuoteId')
+        setValidQty(e.target.value)
+            setValue(data.item_id);
+            let results: any;
+            let value = parseInt(e.target.value);
+            setQty(value);
+            let customer_id = props.token.cust_id;
+            let cartData = {
+                "cartItem": {
+                    "sku": data.sku,
+                    "qty": value,
+                    "quote_id": localStorage.getItem('cartQuoteId')
+                }
             }
-        }
-        if (customer_id) {
-            if (value === 0) {
-                results = await removeItemFromCart(data.item_id);
+            if (customer_id) {
+                if (value === 0) {
+                    results = await removeItemFromCart(data.item_id);
 
+                } else {
+                    results = await updateCartItem(data.item_id, cartData);
+                }
             } else {
-                results = await updateCartItem(data.item_id, cartData);
-            }
-        } else {
-            if (value === 0) {
-                results = await removeItemFromGuestCart(data.item_id);
+                if (value === 0) {
+                    results = await removeItemFromGuestCart(data.item_id);
 
-            } else {
-                results = await updateGuestCartItem(data.item_id, cartData);
+                } else {
+                    results = await updateGuestCartItem(data.item_id, cartData);
+                }
             }
-        }
-        
-        if (results?.data?.message) {
-            callGetCartItems()
-            props.addToCartTask(true);
-            notification("error", "", results?.data?.message);
-        } else {
-            callGetCartItems()
-            props.addToCartTask(true);
-            notification("success", "", intl.formatMessage({ id: "cartupdated" }));
-        }
+            
+            if (results?.data?.message) {
+                callGetCartItems()
+                props.addToCartTask(true);
+                notification("error", "", results?.data?.message);
+            } else {
+                callGetCartItems()
+                props.addToCartTask(true);
+                notification("success", "", intl.formatMessage({ id: "cartupdated" }));
+            }
     }else{
-        notification("error", "", intl.formatMessage({ id: "increasedquantityerrormessage" }) + stockQty );
+        e.target.value = validQtyItem;
+        // if(data){
+        //     data.qty = validQtyItem
+        // }
+        let errorMsg=intl.formatMessage({id:"somethingwrong"});
+        if (avalQty !== null && avalQty !== undefined){
+            errorMsg = intl.formatMessage({ id: "increasedquantityerrormessage" }) + avalQty ;
+        }
+        else {
+            errorMsg = intl.formatMessage({id: "increasedquantityerrormessageGeneral"})
+        }
+        notification("error", "", errorMsg);
+        
     }
     }
 
@@ -358,13 +397,14 @@ function CartItemPage(props) {
                                                                                     <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
                                                                                     <div className="col-sm-3 cartschanger">
                                                                                         <select defaultValue={value === item.item_id ? qty : item.qty} className="form-select" onChange={(e) => { handleChangeQty(e, item) }}>
-                                                                                            {Array.from(Array(item.qty + 10), (e, i) => {
+                                                                                            {Array.from(Array(item.qty + 800), (e, i) => {
                                                                                                 return <option value={i}
                                                                                                     key={i}>{i}</option>
                                                                                             })}
 
                                                                                         </select>
                                                                                     </div>
+                                                                                    <div>{item['qtyErrorUI']}</div>
                                                                                 </div>
                                                                             </div>
                                                                             <div className="cart-pro-price">{siteConfig.currency}{formatprice(item.price)} </div>

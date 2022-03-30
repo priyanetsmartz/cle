@@ -729,5 +729,7 @@
   "products":"products",
   "magazine.latest":"Latest",
   "paymentfailed":"Payment Failed",
-  "increasedquantityerrormessage":"Available quantity of selected product is "
+  "increasedquantityerrormessage":"Available quantity of selected product is ",
+  "increasedquantityerrormessageGeneral":"Selected quantity of product is not available. kindly change the quantity",
+  "reducedquantityCart":"Selected quantity of stock is not available. So, we have reduced as per available stock"
 }

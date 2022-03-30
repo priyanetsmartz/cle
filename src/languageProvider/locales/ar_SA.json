@@ -729,5 +729,7 @@
   "products":"منتجات",
   "magazine.latest":"آخر",
   "paymentfailed":"عملية الدفع فشلت",
-  "increasedquantityerrormessage":"الكمية المتاحة من المنتج المحدد هي "
+  "increasedquantityerrormessage":"الكمية المتاحة من المنتج المحدد هي ",
+  "increasedquantityerrormessageGeneral":"الكمية المختارة من المنتج غير متوفرة. يرجى تغيير الكمية",
+  "reducedquantityCart":"الكمية المختارة من المخزون غير متوفرة. لذلك ، قمنا بالتخفيض حسب المخزون المتاح"
 }
