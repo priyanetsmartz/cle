@@ -10,7 +10,8 @@ import {
     PieChart,
     Pie,
     Tooltip as Tool,
-    Cell
+    Cell,
+    Legend
 } from 'recharts';
 import { siteConfig } from '../../../../settings';
 import LoaderGif from '../../Loader';
@@ -287,7 +288,7 @@ function MyAnalysisPayouts(props) {
                                                         dominantBaseline="central"
                                                     >
                                                         {`${(percent * 100).toFixed(0)}%`}
-                                                    </text>
+                                                </text>
                                                 );
                                             }}>
                                             {
@@ -295,6 +296,19 @@ function MyAnalysisPayouts(props) {
                                             }
                                         </Pie>
                                         <Tool content={CustomTooltip} animationDuration={0} position={{ x: 700, y: 0 }} />
+                                        {/* <Legend layout="horizontal" verticalAlign="top" align="center" />
+                                     */}
+                                     <Legend payload={
+    pieChart.map(
+      (item, index) => ({
+        id: item.payout_status,
+        type: "square",
+        value: `${item.payout_status}`,
+        color: COLORS[index % COLORS.length]
+      })
+    )
+  }
+  />
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}

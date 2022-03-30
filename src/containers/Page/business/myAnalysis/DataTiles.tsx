@@ -256,15 +256,15 @@ function MyAnalysisDataTiles(props) {
                                     </OverlayTrigger>
                                     </h5>
                                     <div className="stats">
-                                        <h3>{dataTilesData['totalCustomer'] ? dataTilesData['totalCustomer'] : 0}</h3>
+                                        <h3>{dataTilesData['averageOrder'] ? siteConfig.currency + dataTilesData['averageOrder'] : 0}</h3>
                                         <div className="text-next">
 
                                             <div className='arrowsdatatile'>
-                                                {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.totalCustomer, dataTilesData['totalCustomer']) > 0 ? <div className='data-increase'>
-                                                    <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.totalCustomer, dataTilesData['totalCustomer'])}%</div>
+                                                {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.averageOrder, dataTilesData['averageOrder']) > 0 ? <div className='data-increase'>
+                                                    <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.averageOrder, dataTilesData['averageOrder'])}%</div>
                                                     <><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div> :
                                                     <div className='data-decrease'>
-                                                        <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.totalCustomer, dataTilesData['totalCustomer'])}%</div><><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div>}</div>
+                                                        <div className='percentage'> {percentageOF(dataTilesData?.['tiles_information']?.previousData[0]?.averageOrder, dataTilesData['averageOrder'])}%</div><><i className="fa fa-caret-up" aria-hidden="true"></i><i className="fa fa-caret-down" aria-hidden="true"></i></></div>}</div>
                                         </div>
                                     </div>
                                 </div>

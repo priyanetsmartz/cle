@@ -275,7 +275,7 @@ function MyAnalysisProducts(props) {
                 <div className="row  mb-4">
                     <div className="col-sm-12">
                         <h2>{intl.formatMessage({ id: 'productInformation' })}</h2>
-                        <p className='datap'>Number of products grouped by month/date/year and status of the product</p>
+                        <p className='datap'>Number of products grouped by month/date/year and status of the product.</p>
                         {/* <DateChartFilters data="product" /> */}
                         {loader && (
                             <div className="checkout-loading text-center" >

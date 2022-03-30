@@ -252,7 +252,7 @@ function MyAnalysisOrders(props) {
                 <div className="row  mb-4">
                     <div className="col-sm-12">
                         <h2>{intl.formatMessage({ id: 'orderInformation' })}</h2>
-                        <p className='datap'>The chart below highlights more about the performance of your products over time</p>
+                        <p className='datap'>The chart below highlights more about the performance of your products over time.</p>
                         <DateChartFilters data="areachart" />
                         <div className="row mb-4" style={{ columnCount: 3 }}>
                             {loader && (

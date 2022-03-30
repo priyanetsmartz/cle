@@ -249,7 +249,7 @@ function MyAnalysisReturn(props) {
                 <div className="row  mb-4">
                     <div className="col-sm-12">
                         <h2>Return Information</h2>
-                        <p className='datap'>Number of products that have been returned by CLE customers</p>
+                        <p className='datap'>Number of products that have been returned by CLE customers.</p>
                         <DateChartFilters data="barchart" />
                         {loader && (
                             <div className="checkout-loading text-center" >

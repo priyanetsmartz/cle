@@ -234,7 +234,7 @@ function MyAnalysisCustomer(props) {
                 <div className="row">
                     <div className="col-sm-12">
                         <h2>Customer Information</h2>
-                        <p className='datap'>Customer data & insights grouped by month/date/year</p>
+                        <p className='datap'>Customer data & insights grouped by month/date/year.</p>
                         <DateChartFilters data="piechart" />
                         {loader && (
                             <div className="checkout-loading text-center" >
