@@ -35,7 +35,6 @@ function GiftMessage(props) {
 
     const handleSubmitClick = async (e) => {
         let result: any;
-
         e.preventDefault();
         if (handleValidation()) {
             setIsShow(true);
@@ -51,9 +50,11 @@ function GiftMessage(props) {
                     cartQuoteId = customerCart.data;
                 }
             } else {
-                // create customer token
-                let guestToken: any = await createGuestToken();
-                localStorage.setItem('cartQuoteToken', guestToken.data);
+                if(!localStorage.getItem('cartQuoteToken')){
+                    // create customer token
+                    let guestToken: any = await createGuestToken();
+                    localStorage.setItem('cartQuoteToken', guestToken.data);
+                }
                 let result: any = await getGuestCart(lang);
                 cartQuoteId = result?.data?.id;
             }

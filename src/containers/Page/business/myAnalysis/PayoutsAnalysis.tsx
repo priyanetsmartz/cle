@@ -3,7 +3,7 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 import { Link } from "react-router-dom";
 import moment from 'moment';
 import { dataTiles } from '../../../../redux/pages/vendorLogin';
-import { getCurrentMonth } from '../../../../components/utility/allutils';
+import { getCurrentMonth, capitalize } from '../../../../components/utility/allutils';
 import { useIntl } from 'react-intl';
 import {
     ResponsiveContainer,
@@ -182,7 +182,7 @@ function MyAnalysisPayouts(props) {
                         <span className="value-tooltip"><b>Total Amount</b> <br />{siteConfig.currency} {payload[0].payload.total_payout_amount}</span>
                     </p>
                     <p className="desc-tooltip">
-                        <span className="value-tooltip"><b>PO Date</b> <br /> {payload[0].payload.po_created_at}</span>
+                        <span className="value-tooltip"><b>Payout Date</b> <br /> {payload[0].payload.payout_created_at}</span>
                     </p>
                     <p className="desc-tooltip">
                         <span className="value-tooltip"><b>Discount Amount</b> <br />{siteConfig.currency} {payload[0].payload.discount_amount}</span>
@@ -303,7 +303,7 @@ function MyAnalysisPayouts(props) {
       (item, index) => ({
         id: item.payout_status,
         type: "square",
-        value: `${item.payout_status}`,
+        value: `${capitalize(item.payout_status)}`,
         color: COLORS[index % COLORS.length]
       })
     )
