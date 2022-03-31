@@ -184,12 +184,12 @@ function MyAnalysisPayouts(props) {
                     <p className="desc-tooltip">
                         <span className="value-tooltip"><b>Payout Date</b> <br /> {payload[0].payload.payout_created_at}</span>
                     </p>
-                    <p className="desc-tooltip">
+                    {/* <p className="desc-tooltip">
                         <span className="value-tooltip"><b>Discount Amount</b> <br />{siteConfig.currency} {payload[0].payload.discount_amount}</span>
                     </p>
                     <p className="desc-tooltip">
                         <span className="value-tooltip"><b>Tax Amount</b> <br />{siteConfig.currency} {payload[0].payload.tax_amount}</span>
-                    </p>
+                    </p> */}
                 </div>
             );
         return null;

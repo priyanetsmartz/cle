@@ -50,6 +50,7 @@ function GiftMessage(props) {
                     cartQuoteId = customerCart.data;
                 }
             } else {
+                console.log(localStorage.getItem('cartQuoteToken'));
                 if(!localStorage.getItem('cartQuoteToken')){
                     // create customer token
                     let guestToken: any = await createGuestToken();
