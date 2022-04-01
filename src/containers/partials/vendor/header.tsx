@@ -190,7 +190,8 @@ function Header(props) {
                     <Link to='#' className="cle-mobile-menu" onClick={(e) => { menuMObileclicK(); }}><i className="fa fa-align-justify"></i></Link>
 
                 </div>
-                <header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2">
+                {/* <header className="header-top navbar navbar-expand-md navbar-light main-navbr mb-2"> */}
+                <header id={isPriveUser?'topheaderrr':''}  className={isPriveUser?"prive-users header-top navbar navbar-expand-md navbar-light main-navbr mb-2":"header-top navbar navbar-expand-md navbar-light main-navbr mb-2"}>
                     <nav className="container-xxl flex-wrap flex-md-nowrap " aria-label="Main navigation">
                         <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
                             aria-controls="bdNavbar" aria-label="Toggle navigation">
