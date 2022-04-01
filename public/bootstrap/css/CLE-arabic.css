@@ -1441,4 +1441,8 @@ p.sliderupper {
   .accodian_descrpt {
     margin: 0;
   }
+  .sticky-cart{
+	  margin-right: 0;
+width: 100%;
+  }
 }

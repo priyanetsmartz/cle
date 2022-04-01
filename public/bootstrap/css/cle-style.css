@@ -3218,6 +3218,9 @@ left: auto; */
     margin-top: 10px;
 }
 
+.we-accept img {
+  width: 100%;
+}
 
 .user_show {
     font-size: 16px;
@@ -3273,6 +3276,8 @@ left: auto; */
 
 .range_slider .range_inner + .row{
 	clear: left;
+	float: left;
+    width: 100%;
 }
 
 .range_slider .range_inner .form-label {
