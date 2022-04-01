@@ -434,7 +434,6 @@ function SearchResults(props) {
                         {(autoSuggestions && autoSuggestions.length) ? (
                             <div className="row g-2">
                                 {autoSuggestions.map(item => {
-                                    console.log(item.brand)
                                     let url = parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus';
                                     return (
                                         <div className="col-md-4" key={item.id}>

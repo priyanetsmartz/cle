@@ -231,7 +231,7 @@ function WeChooseForYou(props) {
 
                                                             </div></Link>
                                                             
-                                                            <div className="product_name  mt-2"><Link to={'/search/' + item.brand}>{item.brand}</Link></div>
+                                                            <div className="product_name  mt-2"><Link to={'/search/' + item.brand +'/all'}>{item.brand}</Link></div>
                                                             <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                             <div className="product_price">{siteConfig.currency}{formatprice(item.price)} </div>
                                                             {stock > 0 && (

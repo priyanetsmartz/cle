@@ -327,7 +327,7 @@ function ProductDetailsPrivate(props) {
                                         </div>}
                                     </div>
                                     <div className="product_details">
-                                        <h1><Link to={'/search/' + productDetails['brand']}>{productDetails['brand']}</Link></h1>
+                                        <h1><Link to={'/search/' + productDetails['brand'] + '/all'}>{productDetails['brand']}</Link></h1>
                                         <h2>{productDetails['name']}</h2>
                                     </div>
                                     <div className="product-sale_off mt-4 mb-4">

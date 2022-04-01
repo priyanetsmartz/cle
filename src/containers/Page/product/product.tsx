@@ -490,7 +490,7 @@ function Products(props) {
                                     </Link></li>
                                     )}
 
-                                    {filterArray.brand['value'] && (<li onMouseEnter={() => setIsShown('brand')} onMouseLeave={() => setIsShown('')} ><Link to="#"  ><span className='textname'  > {filterArray.brand['value']}   {isShown === 'brand' ? <span className='cross' onClick={(e) => removeSelectedCategories('brand', filterArray.brand['id'])}   >  <i className="fa fa-times" aria-hidden="true"></i></span> : ""
+                                    {filterArray.brand['value'] && (<li onMouseEnter={() => setIsShown('')} onMouseLeave={() => setIsShown('')} ><Link to="#"  ><span className='textname'  > {filterArray.brand['value']}   {isShown === 'brand' ? <span className='cross' onClick={(e) => removeSelectedCategories('brand', filterArray.brand['id'])}   >  <i className="fa fa-times" aria-hidden="true"></i></span> : ""
                                     }</span>
                                     </Link></li>
                                     )}
@@ -561,7 +561,7 @@ function Products(props) {
                                                                     }</Link>
                                                             </div>
                                                             <div className="about text-center">
-                                                                <div className="product_name"><Link to={'/search/' + url}>{parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus'}</Link></div>
+                                                                <div className="product_name"><Link to={'/search/' + url +'/all'}>{parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus'}</Link></div>
                                                                 <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
 
                                                                 <div className="pricetag">{siteConfig.currency} {formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)} </div>
