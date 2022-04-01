@@ -3154,6 +3154,11 @@ left: auto; */
     color: #2E2BAA;
 }
 
+.isPriveUser .myorder_sidebar ul li a:hover,
+.isPriveUser .myorder_sidebar ul li.active a{
+	color:#017ABB!important;
+}
+
 .myorder_sidebar ul li.active a span {
     font-weight: 900;
 }
@@ -3264,6 +3269,10 @@ left: auto; */
 .range_slider .range_inner {
     width: 100%;
     float: left;
+}
+
+.range_slider .range_inner + .row{
+	clear: left;
 }
 
 .range_slider .range_inner .form-label {
@@ -8335,7 +8344,8 @@ p.sliderupper {
     margin-bottom: 40px;
 }
 
-.pick-date .accordion-button, .accordion-button:not(.collapsed) {
+.pick-date .accordion-button, 
+.pick-date .accordion-button:not(.collapsed) {
     color: #000!important;
     font-size: 24px;
     font-family: 'Monument Extended';
@@ -9880,10 +9890,11 @@ ul.vendor-menu {
     .recharts-wrapper svg {
         width: 100%;
     }
-
+	.filter-tiles li a{
+		font-size:16px;
+	}
     .filter-tiles li {
-
-        width: 104px;
+		width: 40%;
     }
 
     .order_tab_sec .nav-tabs .nav-link {
@@ -10261,6 +10272,10 @@ ul.vendor-menu {
     }
 	.user_cart ul li{
 		padding: 12px 10px;
+	}
+	.sticky-cart{
+		margin-left: 0;
+    width: 100%;
 	}
 
 }
