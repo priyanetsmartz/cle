@@ -1093,7 +1093,7 @@ function Checkout(props) {
             setFailStatus(true);
             detailsRequired['failureReason']?setPaymentFailureReason(detailsRequired['failureReason']):setPaymentFailureReason("")
             setOrderProcessing(false);
-            notification("error", "", "Your order couldn't be placed due to failed Payment.");
+            notification("error", "", intl.formatMessage({id:"ordernotplacederror"}));
             return false;
         }
         let customer_id = localToken?.cust_id;

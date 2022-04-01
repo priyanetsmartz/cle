@@ -207,7 +207,7 @@ function CartItemPage(props) {
         if(data){
             data['qtyErrorUI'] = ""
         }
-        if(data && data.pending_inventory_source)
+        if(data && data.pending_inventory_source){
         data.pending_inventory_source.map(stock=>{
             if(stock.stock_name === "Vendors Stock"){
                 if (e.target.value<=stock.qty){
@@ -216,7 +216,23 @@ function CartItemPage(props) {
                 avalQty = stock.qty
                 setStockQty(stock.qty);
             }
-        })
+        })}
+        else{
+            if(data.extension_attributes){
+                if(data.extension_attributes['vendor_stock'] && data.extension_attributes['vendor_stock'].length>0){
+                    data.extension_attributes['vendor_stock'].map(item=>{
+                        let stock = JSON.parse(item)
+                        if(stock.stock_name === "Vendors Stock"){
+                            if (e.target.value<=stock.qty){
+                                validQty = true;
+                            }
+                            avalQty = stock.qty;
+                            setStockQty(stock.qty)
+                        }
+                    })
+                }
+            }
+        }
        if(validQty){
         setValidQty(e.target.value)
             setValue(data.item_id);
