@@ -7361,12 +7361,12 @@ button:focus {
     font-weight: 400;
     font-family: 'Lato', sans-serif;
     text-decoration: none;
-    display: -webkit-box;
+    /* display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
     -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; */
 }
 
 .serach-results-inner .nothing_found {
