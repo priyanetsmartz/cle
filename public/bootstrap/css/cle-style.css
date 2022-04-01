@@ -3274,10 +3274,9 @@ left: auto; */
     float: left;
 }
 
-.range_slider .range_inner + .row{
+.range_slider .range_inner + .row,
+.my_profile_sect .product-listing + .row{
 	clear: left;
-	float: left;
-    width: 100%;
 }
 
 .range_slider .range_inner .form-label {

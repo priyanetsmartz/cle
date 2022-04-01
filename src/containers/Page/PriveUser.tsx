@@ -75,18 +75,27 @@ function PriveUser(props) {
             <div className="prive-benf-col">
               <img src={gem} alt="Privé Exclusives" />
               <p><IntlMessages id="prive.exclusives" /></p>
+			  <div className="prive-benf-hover">
+				<p>Shop alongside exclusive discounts and previews.</p>
+			  </div>
             </div>
           </div>
           <div className="col-md-4">
             <div className="prive-benf-col">
               <img src={clock} alt="Early access products" />
               <p><IntlMessages id="prive.early" /></p>
+			  <div className="prive-benf-hover">
+			  <p>No need to wait. Shop before the general public.</p>
+			  </div>
             </div>
           </div>
           <div className="col-md-4">
             <div className="prive-benf-col">
               <img src={gold} alt="The Birthday reward" />
               <p><IntlMessages id="prive.birthday" /></p>
+			  <div className="prive-benf-hover">
+			  <p>We’ll send you a reward to enjoy for your birthday</p>
+			  </div>
             </div>
           </div>
         </div>
