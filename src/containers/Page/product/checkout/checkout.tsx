@@ -1801,8 +1801,9 @@ function Checkout(props) {
 <div className="container">
                 <div className="row">
                 <div className="col-md-12 mb-2">
+                <h2><IntlMessages id="paymentfailed" /></h2>
                                             <div className='return-comment' >
-                                                <label><IntlMessages id="paymentfailed" /></label>
+                                                <label><IntlMessages id="reasonofpaymentfailure" /></label>
                                                 {paymentFailureReason?(<textarea className="form-control customfliter" disabled >{paymentFailureReason}
                                                 </textarea>):""}
                                             </div>
@@ -1811,7 +1812,7 @@ function Checkout(props) {
                <div className="row" style = {{
 
                }}>
-                <div className="col-md-12 mb-2" style = {{float:'right'}}><button className="btn btn-primary" type= "submit" onClick={retryPayment}>Retry payment</button></div>
+                <div className="col-md-12 mb-2" style = {{float:'right'}}><button className="btn btn-primary" type= "submit" onClick={retryPayment}><IntlMessages id ="retrypaymentmethod" /></button></div>
                 </div>
                 </div>)}
             </section >

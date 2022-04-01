@@ -455,7 +455,7 @@ function SearchResults(props) {
                                                     <Link to={'/product-details/' + item.sku}><img src={item.image.url} alt={item.name} width="200" /></Link>
                                                 </div>
                                                 <div className="about text-center">
-                                                    <div className="product_name"><Link to={'/search/' + url}>{url}</Link></div>
+                                                    <div className="product_name"><Link to={'/search/' + url + '/all'}>{url}</Link></div>
                                                     <div className="product_vrity"> <Link to={'/product-details/' + item.sku}> {item.name}</Link> </div>
                                                     <div className="pricetag">{siteConfig.currency} {formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)}</div>
                                                 </div>
