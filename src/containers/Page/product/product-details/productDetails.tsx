@@ -52,7 +52,7 @@ function ProductDetails(props) {
     const [measuringDetails, setMeasuringDetails] = useState({});
     const [slectedAttribute, setSlectedAttribute] = useState(0);
     const [quantity, setQuantity] = useState(1);
-    const [stockQty, setStockQty] = useState(1);
+    const [stockQty, setStockQty] = useState(-1);
 
     useEffect(() => {
 
@@ -371,8 +371,8 @@ function ProductDetails(props) {
     }
 
     const handleQuantity = (event) => {
-        if(event.target.value<=stockQty){
-            setQuantity(event.target.value)
+        if(stockQty === -1 || (parseInt(event.target.value))<=stockQty){
+            setQuantity(parseInt(event.target.value))
         }
         else{
             let errorMsg=intl.formatMessage({id:"somethingwrong"});

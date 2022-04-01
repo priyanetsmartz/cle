@@ -397,7 +397,7 @@ function CartItemPage(props) {
                                                                                     <label htmlFor="inputQty" className="col-sm-2 col-form-label"><IntlMessages id="cart.qty" /></label>
                                                                                     <div className="col-sm-3 cartschanger">
                                                                                         <select defaultValue={value === item.item_id ? qty : item.qty} className="form-select" onChange={(e) => { handleChangeQty(e, item) }}>
-                                                                                            {Array.from(Array(item.qty + 800), (e, i) => {
+                                                                                            {Array.from(Array(item.qty + 10), (e, i) => {
                                                                                                 return <option value={i}
                                                                                                     key={i}>{i}</option>
                                                                                             })}
