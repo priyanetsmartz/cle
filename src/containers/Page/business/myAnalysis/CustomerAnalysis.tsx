@@ -279,6 +279,7 @@ function MyAnalysisCustomer(props) {
 
                             </div>
                         )} */}
+                         {(customerData?.['all'] !== 0 && !loader) ? (
                         <div className="row mb-4" style={{ columnCount: 3 }}>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
@@ -341,6 +342,7 @@ function MyAnalysisCustomer(props) {
                             </div>
 
                         </div>
+                        ) : ""}
                       {(customerData?.['all'] === 0 && !loader) ? <div className='text-center' >No data available</div> : ""}
                     </div>
                 </div>

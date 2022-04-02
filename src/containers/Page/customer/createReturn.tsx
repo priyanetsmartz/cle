@@ -13,6 +13,7 @@ import ReturnFooter from './returnFooter';
 import { useIntl } from 'react-intl';
 import notification from '../../../components/notification';
 import cartAction from "../../../redux/cart/productAction";
+import LoaderGif from '../Loader';
 const { saveReturnData } = cartAction;
 
 function CreateReturn(props) {
@@ -425,7 +426,8 @@ function CreateReturn(props) {
                             <div className="col-md-3 align-self-end mb-2">
                                 <label className="form-label"></label>
 
-                                {loader ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                {/* {loader ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> : */}
+                                {loader ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <LoaderGif /></Link> :
                                     <Link to="#" className="btn btn-primary" onClick={handleSubmitClick} ><IntlMessages id="order.returnProducts" /></Link>
                                 }
                             </div>

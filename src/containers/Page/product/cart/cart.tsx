@@ -355,6 +355,7 @@ function CartItemPage(props) {
     }
     return (
         <main>
+           {cartItemsVal['items'] ?(
                 <div>
                     <section className="cart-main">
                         <div className="container">
@@ -493,6 +494,14 @@ function CartItemPage(props) {
                         <GiftMessage />
                     </Modal>
                 </div>
+            ):
+            (<div>
+                <section className="cart-main">
+                    <div className="container">
+                        <LoaderGif />
+                    </div>
+                </section>
+            </div>)}
         </main >
     )
 }

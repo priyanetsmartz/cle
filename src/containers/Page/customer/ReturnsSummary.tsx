@@ -12,6 +12,7 @@ import notification from '../../../components/notification';
 import DatePicker from "react-datepicker";
 import { useIntl } from 'react-intl';
 import "react-datepicker/dist/react-datepicker.css";
+import LoaderGif from "../Loader";
 
 function ReturnsSummary(props) {
     let history = useHistory();
@@ -393,7 +394,8 @@ function ReturnsSummary(props) {
                                     </div>
                                     <div className="col-sm-12 text-center">
 
-                                        {loader ? <Link to="#" className="btn btn-return"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
+                                        {/* {loader ? <Link to="#" className="btn btn-return"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> : */}
+                                        {loader ? <Link to="#" className="btn btn-return"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <LoaderGif /></Link> :
                                             <Link to="#" className="btn btn-return" onClick={handleSubmitClick} ><IntlMessages id="order.returnProducts" /></Link>
                                         }
                                     </div>

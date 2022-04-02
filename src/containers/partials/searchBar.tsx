@@ -6,6 +6,7 @@ import IconZoomIn from '../../image/Icon_zoom_in.svg';
 import { getCategoryList, searchFields } from '../../redux/cart/productApi';
 import debounce from "lodash.debounce";
 import { useIntl } from 'react-intl';
+import LoaderGif from '../Page/Loader';
 
 function SearchBar(props) {
     let imageD = '', description = '';
@@ -126,7 +127,10 @@ function SearchBar(props) {
                     <div ref={node} className="serach-results" style={{ "display": isShow ? "block" : "none" }}>
                         <div className="serach-results-inner">
                             {loader && (
-                                <ul> <li><div className="nothing_found"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span></div></li></ul>
+                                <ul> <li><div className="nothing_found">
+                                    {/* <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span> */}
+                                    <LoaderGif />
+                                    </div></li></ul>
                             )}
                             {(autoSuggestions && autoSuggestions.length) ? (
 
