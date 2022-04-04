@@ -371,10 +371,12 @@ function ProductDetails(props) {
     }
 
     const handleQuantity = (event) => {
+        let prevQuant =  quantity;
         if(stockQty === -1 || (parseInt(event.target.value))<=stockQty){
             setQuantity(parseInt(event.target.value))
         }
         else{
+            event.target.value = prevQuant
             let errorMsg=intl.formatMessage({id:"somethingwrong"});
             if (stockQty !== null && stockQty !== undefined){
                 errorMsg = intl.formatMessage({ id: "increasedquantityerrormessage" }) + stockQty ;

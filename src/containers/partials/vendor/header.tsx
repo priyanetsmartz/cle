@@ -34,7 +34,7 @@ function Header(props) {
     const [activeOne, SetActiveOne] = useState('');
 
     useEffect(() => {
-
+        setIsPriveUser((props.token.token && props.token.token === "4") ? true : false)
         props.showLoader(true)
         setTimeout(() => {
             window.scrollTo(0, 0)

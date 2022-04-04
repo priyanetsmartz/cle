@@ -20,7 +20,7 @@ function HeaderMenu(props) {
 
     const baseUrl = process.env.REACT_APP_API_URL;
 
-    const [isPriveUser, setIsPriveUser] = useState((props.token.token && props.token.token === '4') ? true : false);
+     const [isPriveUser, setIsPriveUser] = useState((props.token.token && props.token.token === "4") ? true : false);
 
     let customerName = props.token.token_name;
     const { category, subcat, childcat, greatchildcat, signup, member, categoryname } = useParams();
@@ -34,7 +34,8 @@ function HeaderMenu(props) {
     const [activeCat, SetActiveCat] = useState('women')
 
     useEffect(() => {
-
+        console.log(props, "props")
+        setIsPriveUser((props.token.token && props.token.token === "4") ? true : false)
         props.showLoader(true)
         setTimeout(() => {
             window.scrollTo(0, 0)

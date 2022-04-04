@@ -293,7 +293,7 @@ function MyAnalysisReturn(props) {
                             </BarChart>
                         )}
 
-                        {returnData?.length === 0 ? <div className='text-center' >No data available</div> : ""}
+                        {(returnData?.length === 0 && !loader)? <div className='text-center' >No data available</div> : ""}
 
                     </div>
                 </div>

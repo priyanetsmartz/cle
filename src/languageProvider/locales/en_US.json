@@ -733,5 +733,6 @@
   "retrypaymentmethod":"Retry payment method",
   "increasedquantityerrormessage":"Available quantity of selected product is ",
   "increasedquantityerrormessageGeneral":"Selected quantity of product is not available. kindly change the quantity",
-  "reducedquantityCart":"Selected quantity of stock is not available. So, we have reduced as per available stock"
+  "reducedquantityCart":"Selected quantity of stock is not available. So, we have reduced as per available stock",
+  "ordernotplacederror":"Your order could not be placed due to failed Payment."
 }
