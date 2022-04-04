@@ -3159,6 +3159,10 @@ left: auto; */
 	color:#017ABB!important;
 }
 
+.isPriveUser .myorder_sidebar ul li a i{
+	color:#017ABB!important;
+}
+
 .myorder_sidebar ul li.active a span {
     font-weight: 900;
 }
