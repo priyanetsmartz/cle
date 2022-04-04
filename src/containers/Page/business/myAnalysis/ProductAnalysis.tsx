@@ -45,7 +45,7 @@ function MyAnalysisProducts(props) {
         if (results && results.data && results.data.length > 0) {
             let tiles_information = results?.data[0]?.tiles_information;
             setBarChartData(tiles_information?.product_information)
-            // console.log("#############",tiles_information.product_information);
+            console.log("#############",tiles_information.product_information);
             setLoader(false)
         } else {
             setLoader(false)

@@ -7,6 +7,7 @@ import { dataTiles } from '../../../../redux/pages/vendorLogin';
 import { formatprice, getCurrentMonth, percentageOF } from '../../../../components/utility/allutils';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import { siteConfig } from '../../../../settings';
+import LoaderGif from '../../Loader';
 
 function MyAnalysisDataTiles(props) {
     let currentDate = moment().endOf('month').format('MM/DD/YYYY');
@@ -36,7 +37,6 @@ function MyAnalysisDataTiles(props) {
     async function getDataTiles(oldDate, currentDate) {
         let results: any = await dataTiles(oldDate, currentDate);
         if (results && results.data && results.data.length > 0) {
-            console.log(results?.data[0])
             setDataTilesData(results?.data[0])
         } else {
 
@@ -216,7 +216,7 @@ function MyAnalysisDataTiles(props) {
                         <DateChartFilters data="datatiles" />
 
 
-                        <div className="row mb-4" style={{ columnCount: 3 }}>
+                        {dataTilesData && dataTilesData["tiles_information"]?( <div className="row mb-4" style={{ columnCount: 3 }}>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
                                     <h5>Number of Sales<OverlayTrigger
@@ -296,7 +296,9 @@ function MyAnalysisDataTiles(props) {
                                 </div>
                             </div>
 
-                        </div>
+                        </div> ) :  <div className="checkout-loading text-center" >
+                                <LoaderGif />
+                            </div>}
                     </div>
                 </div>
 
