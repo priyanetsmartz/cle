@@ -368,7 +368,7 @@ function CartItemPage(props) {
                                     <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                         <h2><IntlMessages id="cart.Title" /></h2>
                                         {opacity === 0.3 && (
-                                            <div className="checkout-loading" >
+                                            <div className="checkout-loading text-center" >
                                                 {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
                                                 <LoaderGif />
                                             </div>
@@ -497,7 +497,7 @@ function CartItemPage(props) {
             ):
             (<div>
                 <section className="cart-main">
-                    <div className="container">
+                    <div className="container text-center">
                         <LoaderGif />
                     </div>
                 </section>
