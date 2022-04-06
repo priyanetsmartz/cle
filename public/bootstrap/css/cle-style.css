@@ -3223,7 +3223,17 @@ left: auto; */
 }
 
 .we-accept img {
-  width: 100%;
+  width: 250px;
+  max-width:100%;
+}
+
+.Checkout-create-account{
+	font: normal normal normal 16px/20px Monument Extended;
+	color: #2E2BAA;
+}
+
+.Checkout-create-account label {
+    padding: 5px 5px;
 }
 
 .user_show {
