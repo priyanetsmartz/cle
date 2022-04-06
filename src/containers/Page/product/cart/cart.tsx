@@ -367,13 +367,13 @@ function CartItemPage(props) {
                                     </div>
                                     <div className="my-cart-left-sec" style={{ 'opacity': opacity }}>
                                         <h2><IntlMessages id="cart.Title" /></h2>
-                                        {opacity === 0.3 && (
+                                        {opacity === 0.3 ? (
                                             <div className="checkout-loading text-center" >
                                                 {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
                                                 <LoaderGif />
                                             </div>
-                                        )}
-                                        {(cartItemsVal['items'] && cartItemsVal['items'].length) ?
+                                        ):
+                                        (cartItemsVal['items'] && cartItemsVal['items'].length) ?
                                             (
                                                 <ul className="cart-pro-list">
                                                     {cartItemsVal['items'].map((item, i) => {
