@@ -15,7 +15,8 @@ function Magazine(props) {
         async function getData() {
             let lang = props.languages ? props.languages : language;
             let result: any = await MagazineList(lang, 2);
-            setItems(result.data);
+            setItems(result.data)
+            console.log(result.data);
         }
         getData()
         return () => {

@@ -16,7 +16,6 @@ import CheckoutBannerFooter from '../../customer/checkout-banner';
 import { stringify } from 'querystring';
 
 const { addToCartTask, showPaymentMethods, shippingAddressState, billingAddressState, getCheckoutSideBar } = cartAction;
-
 function Checkout(props) {
     const intl = useIntl();
     let localData = localStorage.getItem('redux-react-session/USER_DATA');
@@ -25,6 +24,7 @@ function Checkout(props) {
     const [itemsVal, SetItems] = useState({
         checkData: {}, items: {}, address: {}, shippingAddress: 0, shippingData: {}
     });
+    const [createAccountFlag, setCreateAccountFlag]= useState(false)
     const [promoCode, setPromoCode] = useState('');
     const [state, setState] = useState({
         email: ""
@@ -225,6 +225,8 @@ function Checkout(props) {
             [id]: value
         }))
     }
+    const toggleCreateAccountFlag = (e)=>{setCreateAccountFlag(!createAccountFlag)}
+    
     const handleBlur = (e) => {
         let error = {};
         let formIsValid = true;
@@ -1005,7 +1007,7 @@ function Checkout(props) {
                     setIsShow(true)
                     localStorage.setItem('cartQuoteToken',localStorage.getItem('cartQuoteToken'));
                     let cartToken = localStorage.getItem('cartQuoteToken');
-                    orderPlace = await placeGuestOrder(props.languages, selectedPaymentMethod, cartToken);
+                    orderPlace = await placeGuestOrder(props.languages, selectedPaymentMethod, cartToken, createAccountFlag);
                 }
 
 
@@ -1105,7 +1107,8 @@ function Checkout(props) {
         } else {
             let cartToken = localStorage.getItem('cartQuoteToken');
 
-            orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway', cartToken);
+            orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway', cartToken,createAccountFlag);
+            
         }
         if (orderPlace && orderPlace.data) {
             let details = {
@@ -1743,10 +1746,10 @@ function Checkout(props) {
                 </div>
             </div>
         </div>
-		
+        
 		<div className="Checkout-create-account">
 			<div className="mb-3 form-check">
-				<input type="checkbox" className="form-check-input" />
+				<input type="checkbox" className="form-check-input" defaultChecked= {createAccountFlag} onChange={toggleCreateAccountFlag} /> 
 				<label className="form-check-label">Create an account</label>
 			</div>
 		</div>

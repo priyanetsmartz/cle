@@ -451,7 +451,7 @@ function CartItemPage(props) {
                                                     })}
                                                 </ul>
                                             )
-                                            : <p><IntlMessages id="cart.cartEmpty" /></p>
+                                            : (cartItemsVal['items'].length ===0 ? (<p><IntlMessages id="cart.cartEmpty" /></p>):"")
                                         }
 
                                         {token && (<RelevantProducts cartItem={cartRelevants} />)}
