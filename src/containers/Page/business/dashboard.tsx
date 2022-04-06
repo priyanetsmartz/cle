@@ -280,7 +280,7 @@ function Dashboard(props) { //Dashboard functional component
                     </div>
                     <div className="row">
                         <div id="page-wrapper" className="">
-                            {items.length > 0 && (
+                            {items.length > 0 ? (
                                 <div className="importance">
                                     {items.map((item, i) => {
                                         return (<div className="importance-card" key={i}>
@@ -297,7 +297,7 @@ function Dashboard(props) { //Dashboard functional component
                                         )
                                     })}
                                 </div>
-                            )}
+                            ) :<div className="checkout-loading text-center" ><LoaderGif/></div>}
                         </div>
 
 

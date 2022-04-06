@@ -45,7 +45,6 @@ function MyAnalysisProducts(props) {
         if (results && results.data && results.data.length > 0) {
             let tiles_information = results?.data[0]?.tiles_information;
             setBarChartData(tiles_information?.product_information)
-            // console.log("#############",tiles_information.product_information);
             setLoader(false)
         } else {
             setLoader(false)
@@ -310,7 +309,7 @@ function MyAnalysisProducts(props) {
                             </PieChart>
 
                         ) : loader ? "" : <div className='text-center' >No data available</div>} */}
-                         <div className="row mb-4" style={{ columnCount: 3 }}>
+                         {barChartData.total?<div className="row mb-4" style={{ columnCount: 3 }}>
                             <div className="col-sm-12 col-md-6 col-lg-4 mb-3">
                                 <div className="card-info">
                                     <h5>Active Products<OverlayTrigger
@@ -371,7 +370,7 @@ function MyAnalysisProducts(props) {
                                 </div>
                             </div>
 
-                        </div>
+                        </div> :<div className="checkout-loading text-center" ><LoaderGif/></div>}
                     </div>
                 </div>
             </div>

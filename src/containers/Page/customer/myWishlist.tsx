@@ -204,7 +204,7 @@ function MyWishList(props) {
                 <div className="product-listing" style={{ 'opacity': opacity }} >
                     <div className="row g-2">
                         {loaderOrders && (
-                            <div className="checkout-loading" >
+                            <div className="checkout-loading text-center" >
                                 {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
                                 <LoaderGif />
                             </div>

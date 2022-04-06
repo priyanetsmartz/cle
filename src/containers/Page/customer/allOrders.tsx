@@ -282,13 +282,13 @@ function OrdersAndReturns(props) {
                                     </div>
                                 </div>
                                 {loaderOrders && (
-                                    <div className="checkout-loading" >
+                                    <div className="checkout-loading text-center" >
                                         {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
                                         <LoaderGif />
                                     </div>
                                 )}
                                
-                                {orders && orders.length > 0 ?
+                                {orders && orders.length > 0 && !loaderOrders?
                                     <>
                                         {orders.map((items, i) => {
                                             return (

@@ -91,12 +91,12 @@ function MyReturns(props) {
                 </div>
             </div>
             {loaderReturns && (
-                <div className="checkout-loading" >
+                <div className="checkout-loading text-center" >
                     {/* <i className="fas fa-circle-notch fa-spin" aria-hidden="true"></i> */}
                     <LoaderGif />
                 </div>
             )}
-            {returs && returs.length > 0 ?
+            {returs && returs.length > 0 && !loaderReturns ?
                 <div>
                     {returs && (returs.map((items, i) => {
                         return (
