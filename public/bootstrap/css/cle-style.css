@@ -3110,6 +3110,37 @@ left: auto; */
 	transform:translateX(-30%);*/
 }
 
+.payment-scr h2 {
+    font: normal normal normal 36px/46px 'Monument Extended';
+    color: #000;
+    margin-bottom: 20px;
+}
+
+.payment-scr .return-comment label{
+	font: normal normal bold 16px/19px Lato;
+	color:#000;
+}
+
+.payment-scr .return-comment textarea {
+    font: normal normal normal 16px/24px Lato;
+    color: #000;
+    border: 1px solid #D9242C;
+    background: transparent;
+    height: 90px;
+}
+
+.payment-scr .btn-payment {
+    background-color: #808080!important;
+    border: 1px solid #808080!important;
+    color: #fff;
+	float: right;
+}
+
+.payment-scr .btn-payment:hover, .payment-scr .btn-payment:focus {
+    background-color: transparent!important;
+    color: #808080!important;
+}
+
 .myorder_sidebar {
     width: 100%;
     float: left;

@@ -1804,23 +1804,24 @@ function Checkout(props) {
         </div>
     </div>
 </div>
-</div>):(
-<div className="container">
-                <div className="row">
-                <div className="col-md-12 mb-2">
-                <h2><IntlMessages id="paymentfailed" /></h2>
-                                            <div className='return-comment' >
-                                                <label><IntlMessages id="reasonofpaymentfailure" /></label>
-                                                {paymentFailureReason?(<textarea className="form-control customfliter" disabled >{paymentFailureReason}
-                                                </textarea>):""}
-                                            </div>
-                </div>
-               </div>
-               <div className="row" style = {{
 
-               }}>
-                <div className="col-md-12 mb-2" style = {{float:'right'}}><button className="btn btn-primary" type= "submit" onClick={retryPayment}><IntlMessages id ="retrypaymentmethod" /></button></div>
-                </div>
+</div>):(
+				<div className="container payment-scr">
+					<div className="row">
+						<div className="col-md-12 mb-2">
+						<h2><IntlMessages id="paymentfailed" /></h2>
+						<div className='return-comment' >
+							<label><IntlMessages id="reasonofpaymentfailure" /></label>
+							{paymentFailureReason?(<textarea className="form-control customfliter" disabled >{paymentFailureReason}
+							</textarea>):""}
+						</div>
+						</div>
+				   </div>
+				   <div className="row" style = {{
+
+				   }}>
+					<div className="col-md-12 mb-2"><button className="btn btn-primary btn-payment" type= "submit" onClick={retryPayment}><IntlMessages id ="retrypaymentmethod" /></button></div>
+					</div>
                 </div>)}
             </section >
             <CheckoutBannerFooter />
