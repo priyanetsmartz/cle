@@ -225,7 +225,10 @@ function Checkout(props) {
             [id]: value
         }))
     }
-    const toggleCreateAccountFlag = (e)=>{setCreateAccountFlag(!createAccountFlag)}
+    const toggleCreateAccountFlag = (e)=>{ if(createAccountFlag ===false)       localStorage.setItem("createAccountFlag","1")
+    else localStorage.setItem("createAccountFlag","0")
+    setCreateAccountFlag(!createAccountFlag)
+}
     
     const handleBlur = (e) => {
         let error = {};
@@ -1007,7 +1010,10 @@ function Checkout(props) {
                     setIsShow(true)
                     localStorage.setItem('cartQuoteToken',localStorage.getItem('cartQuoteToken'));
                     let cartToken = localStorage.getItem('cartQuoteToken');
-                    orderPlace = await placeGuestOrder(props.languages, selectedPaymentMethod, cartToken, createAccountFlag);
+                    if (createAccountFlag || localStorage.getItem("createAccountFlag") === "1")
+                    orderPlace = await placeGuestOrder(props.languages, selectedPaymentMethod, cartToken,true);
+                    else
+                    orderPlace = await placeGuestOrder(props.languages, selectedPaymentMethod, cartToken,false)
                 }
 
 
@@ -1106,8 +1112,11 @@ function Checkout(props) {
             orderPlace = await placeUserOrder(props.languages, 'myfatoorah_gateway', cartToken);
         } else {
             let cartToken = localStorage.getItem('cartQuoteToken');
-
-            orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway', cartToken,createAccountFlag);
+            if (createAccountFlag || localStorage.getItem("createAccountFlag") === "1")
+            orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway', cartToken,true);
+            else
+            orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway', cartToken,false)
+            // orderPlace = await placeGuestOrder(props.languages, 'myfatoorah_gateway', cartToken,createAccountFlag);
             
         }
         if (orderPlace && orderPlace.data) {

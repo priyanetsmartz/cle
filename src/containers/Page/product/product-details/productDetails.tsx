@@ -570,7 +570,7 @@ function ProductDetails(props) {
 
                                     <div className="my-3">
                                         <div className="gap-2 justify-content-start">
-                                            {productDetails['gift'] === '1' && (
+                                            {(productDetails['is_in_stock']>0 && productDetails['gift'] === '1') && (
                                                 <button type="button" className="send-a-gift-btn" onClick={() => {
                                                     handleGiftMEssage();
                                                 }} > <IntlMessages id="product.sendAGift" /></button>
