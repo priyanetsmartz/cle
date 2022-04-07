@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import PostComment from './postComments';
 import { getCookie } from "../../helpers/session";
 const axios = require("axios");
-const readingTime = require('reading-time');
+// const readingTime = require('reading-time');
 
 function SinglePost(props) {
     const language = getCookie('currentLanguage');
@@ -78,7 +78,7 @@ function SinglePost(props) {
     const imgStyle = {
         width: "100%"
     };
-    const stats = readingTime(post.full_content);
+    // const stats = readingTime(post.full_content);
     return (
        
 		
@@ -169,8 +169,8 @@ function SinglePost(props) {
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="mt-5 py-5">
-                                    {related.length > 0 && <h2 className="pb-3 text-center want-read"><IntlMessages id="magazinepost.slogan" /> </h2>}
-                                    {related.length > 0 && (
+                                    {related && related.length > 0 && <h2 className="pb-3 text-center want-read"><IntlMessages id="magazinepost.slogan" /> </h2>}
+                                    {related && related.length > 0 && (
                                         <div className="">
                                             <div className="row my-3">
                                                 {related.map((item, i) => {

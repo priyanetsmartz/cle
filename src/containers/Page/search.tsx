@@ -69,7 +69,7 @@ function SearchResults(props) {
             aggregations = filter.data[0].data.products.aggregations;
             total = filter.data[0].data.products.total_count;
             items = filter.data[0].data.products.items;
-            let productResult = filter.data[0].data.products.items;
+            let productResult:any = filter.data[0].data.products.items;
             setPagination(Math.ceil(total / pageSize));
             if (customer_id) {
                 let whishlist: any = await getWhishlistItemsForUser();
@@ -86,6 +86,14 @@ function SearchResults(props) {
                 }
             }
             SetAutoSuggestions(productResult);
+            console.log(productResult, "abcdefghijkl")
+//             productResult.map(item =>({
+//                 item['pending_inventory_source'].map(prod=>({
+// if (prod['stock_name'] ==="Vendors Stock")
+// {
+//     item['stockQty']=prod['qty']
+// }                }))
+//             }))
         }
         setOpacity(1);
         setTotal(total)
@@ -232,7 +240,8 @@ function SearchResults(props) {
                     productResult = mergeById(products, WhishlistData);
                 }
             }
-            SetAutoSuggestions(productResult);
+            SetAutoSuggestions(productResult)
+            console.log (productResult, "abcdefghijklmnopqrstuvwxyz");
         }
         props.loaderProducts(false);
         setTotal(total)
@@ -463,6 +472,11 @@ function SearchResults(props) {
                                                 <div className="cart-button mt-3 px-2">
                                                     {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                         <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
+
+                                                        {/* {productDetails['is_in_stock'] <= 0 && (
+                                                <button type="button" className="btn btn-primary"><img src="images/carticon_btn.svg" alt="" className="pe-1" />
+                                                    <IntlMessages id="product.outofstock" /></button>
+                                            )} */}
 
                                                 </div>
                                                 {/* {stock > 0 && (

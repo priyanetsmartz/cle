@@ -342,12 +342,13 @@ export function setUserDeliveryAddress(data) {
     return APi.request(`rest/V1/carts/${cartQuoteId}/shipping-information`, data, "POST", "");
 }
 
-export function placeGuestOrder(language, method, cartQuoteToken) {
+export function placeGuestOrder(language, method, cartQuoteToken, createAccountFlag) {
     const lang = language === 'arabic' ? 'ar' : 'en';
     let data = {
         "paymentMethod": {
             "method": method
-        }
+        },
+        "createAccount": createAccountFlag
     }
     return APi.request(`rest/${lang}/V1/guest-carts/${cartQuoteToken}/order`, data, "PUT", "");
 }
