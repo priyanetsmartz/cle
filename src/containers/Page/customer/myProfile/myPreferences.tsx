@@ -38,7 +38,7 @@ function MyPreferences(props) {
         let preference = result.data && result.data[0] ? result.data[0].preference : ""
 
         if (preference && props.custData && props.custData.custom_attributes) {
-            props.custData.custom_attributes.forEach(el => {
+                     props.custData.custom_attributes.forEach(el => {
                 if (el.attribute_code === 'mostly_intersted_in') {
                     preference.mostly_intersted.forEach((intested, index) => {
                         el.value.split(',').forEach(element => {

@@ -12,6 +12,7 @@ import { useIntl } from 'react-intl';
 import { capitalize, checkVendorLoginWishlist, formatprice, handleCartFxn, logoutUser } from '../../components/utility/allutils';
 import cartAction from "../../redux/cart/productAction";
 import appAction from "../../redux/app/actions";
+import LoaderGif from './Loader';
 const { addToCartTask, productList, loaderProducts, addToWishlistTask } = cartAction;
 
 const { showSignin } = appAction;
@@ -69,7 +70,8 @@ function SearchResults(props) {
             aggregations = filter.data[0].data.products.aggregations;
             total = filter.data[0].data.products.total_count;
             items = filter.data[0].data.products.items;
-            let productResult:any = filter.data[0].data.products.items;
+            let productResult:any =[]
+            productResult = filter.data[0].data.products.items;
             setPagination(Math.ceil(total / pageSize));
             if (customer_id) {
                 let whishlist: any = await getWhishlistItemsForUser();
@@ -440,7 +442,7 @@ function SearchResults(props) {
                     </div>
                     )}
                     <div className="product-listing" style={{ 'opacity': opacity }}>
-                        {(autoSuggestions && autoSuggestions.length) ? (
+                        {(autoSuggestions && autoSuggestions.length) ?( autoSuggestions.length >0 ? (
                             <div className="row g-2">
                                 {autoSuggestions.map(item => {
                                     let url = parseInt(item.brand) === 107 ? 'Bosphorus Leather' : 'Horus';
@@ -499,7 +501,7 @@ function SearchResults(props) {
                                     )
                                 })}
                             </div>
-                        ) : <IntlMessages id="no_data" />}
+                        ) : <IntlMessages id="no_data" />) : <div className="checkout-loading text-center"> <LoaderGif/> </div>}
                     </div>
 
                     <div className="resltspage_sec footer-pagints">

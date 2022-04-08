@@ -208,7 +208,7 @@ function ProductDetails(props) {
             props.getAttributeProducts(attributes)
             seChildrenProducts(childProducts.data);
         }
-        let description = "", img = "", special_price: 0, short, brand, watch_color, gift, shipping_and_returns: "", tags = [], stock = 0;
+        let description = "", img = "", special_price: 0, short, brand, watch_color,watch_case_size, gift, shipping_and_returns: "", tags = [], stock = 0;
         if (result?.data?.custom_attributes) {
             result.data.custom_attributes.map((attributes) => {
                 if (attributes.attribute_code === "description") {
@@ -220,8 +220,11 @@ function ProductDetails(props) {
                 if (attributes.attribute_code === "brand") {
                     brand = attributes.value;
                 }
-                if (attributes.attribute_code === "watch_color") {
-                    watch_color = attributes.value;
+                if (attributes.attribute_code === "watch_case_size") {
+                    watch_case_size = attributes.value;
+                }
+                 if (attributes.attribute_code === "watch_color") {
+                     watch_color = attributes.value;
                 }
                 if (attributes.attribute_code === "gift_message_available") {
                     gift = attributes.value;
@@ -265,6 +268,7 @@ function ProductDetails(props) {
         projectSingle['description'] = description;
         projectSingle['saleprice'] = special_price ? special_price : 0;
         projectSingle['watch_color'] = watch_color;
+        projectSingle['watch_case_size']= watch_case_size;
         projectSingle['gift'] = gift;
         projectSingle['short_description'] = short;
         projectSingle['img'] = img;
@@ -650,6 +654,7 @@ function ProductDetails(props) {
                                                 data-bs-parent="#accordionFlushExample">
                                                 <div className="accordion-body">
                                                     <div className="details_product">
+                                                        {productDetails['watch_case_size']}
                                                     </div>
                                                 </div>
                                             </div>

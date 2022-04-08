@@ -1755,13 +1755,13 @@ function Checkout(props) {
                 </div>
             </div>
         </div>
-        
+        {(localToken && localToken.cust_id)?"":
 		<div className="Checkout-create-account">
 			<div className="mb-3 form-check">
 				<input type="checkbox" className="form-check-input" defaultChecked= {createAccountFlag} onChange={toggleCreateAccountFlag} /> 
 				<label className="form-check-label">Create an account</label>
 			</div>
-		</div>
+		</div>}
 
         <div className="d-grid gap-2 col-8 mx-auto">
             {!isShow ?

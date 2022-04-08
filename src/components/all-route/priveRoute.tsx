@@ -10,7 +10,7 @@ const PriveRoute = ({ component: Component, auth, tokenSession, ...rest }) => (
         {...rest}
         render={props =>
             ( (localToken && localToken.type === "user" && localToken.token === "4") || (tokenSession && tokenSession.type === "user" && tokenSession.token === "4")) ? (
-                <div className="sectiosn" id='topheaderrr'>
+                <div className="sectiosn prive-users isPriveUser" id='topheaderrr'>
                     <div className="section headerrr" id="headerrr" key='uniqueKey'>
                         <Header />
                     </div>
