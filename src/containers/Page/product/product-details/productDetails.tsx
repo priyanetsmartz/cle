@@ -103,7 +103,7 @@ function ProductDetails(props) {
         let projectSingle = {};
         let description = "", special_price: 0, short, shipping_and_returns: "", tags = [], img = "";
 
-
+        let stock= 0
         selectChild.custom_attributes.map((attributes) => {
             if (attributes.attribute_code === "description") {
                 description = attributes.value;
@@ -129,6 +129,16 @@ function ProductDetails(props) {
             if (attributes.attribute_code === "image") {
                 img = attributes.value;
             }
+            
+            if (attributes.attribute_code === "pending_inventory_source") {
+                attributes.value.map((item, i) => {
+                    if (item.stock_name === "Vendors Stock") {
+                        stock = item.qty;
+                       
+                        setStockQty(item.qty)
+                    }
+                })
+            }
 
 
         })
@@ -142,7 +152,7 @@ function ProductDetails(props) {
         projectSingle['saleprice'] = special_price ? special_price : 0;
         projectSingle['short_description'] = short;
         projectSingle['shipping_and_returns'] = shipping_and_returns;
-        projectSingle['is_in_stock'] = productDetails['is_in_stock']
+        projectSingle['is_in_stock'] = stock
         projectSingle['img'] = img;
         setproductDetails(projectSingle);
 
@@ -251,6 +261,7 @@ function ProductDetails(props) {
                     attributes.value.map((item, i) => {
                         if (item.stock_name === "Vendors Stock") {
                             stock = item.qty;
+                           
                             setStockQty(item.qty)
                         }
                     })

@@ -14,7 +14,6 @@ import cartAction from "../../redux/cart/productAction";
 import appAction from "../../redux/app/actions";
 import LoaderGif from './Loader';
 const { addToCartTask, productList, loaderProducts, addToWishlistTask } = cartAction;
-
 const { showSignin } = appAction;
 
 function SearchResults(props) {
@@ -87,13 +86,19 @@ function SearchResults(props) {
                     productResult = mergeById(products, WhishlistData);
                 }
             }
+            productResult.map(item =>{
+                item.pending_inventory_source.map(p=>{
+if (p.stock_name === "Vendors Stock")
+{
+    item.stockQty = p.qty
+}                })
+            })
             SetAutoSuggestions(productResult);
-            console.log(productResult, "abcdefghijkl")
 //             productResult.map(item =>({
-//                 item['pending_inventory_source'].map(prod=>({
-// if (prod['stock_name'] ==="Vendors Stock")
+//                 item.pending_inventory_source.map(prod=>({
+// if (prod.stock_name === "Vendors Stock")
 // {
-//     item['stockQty']=prod['qty']
+//     item.stockQty = prod.qty']
 // }                }))
 //             }))
         }
@@ -242,8 +247,15 @@ function SearchResults(props) {
                     productResult = mergeById(products, WhishlistData);
                 }
             }
+           productResult.map(item =>{
+                item.pending_inventory_source.map(p=>{
+if (p.stock_name === "Vendors Stock")
+{
+    item.stockQty = p.qty
+}                })
+            })
             SetAutoSuggestions(productResult)
-            console.log (productResult, "abcdefghijklmnopqrstuvwxyz");
+            
         }
         props.loaderProducts(false);
         setTotal(total)
@@ -471,6 +483,7 @@ function SearchResults(props) {
                                                     <div className="pricetag">{siteConfig.currency} {formatprice(item.price ? item.price : item.price_range.minimum_price.final_price.value ? item.price_range.minimum_price.final_price.value : 0)}</div>
                                                 </div>
 
+                                                {item.stockQty >0?
                                                 <div className="cart-button mt-3 px-2">
                                                     {isShow === item.id ? <Link to="#" className="btn btn-primary text-uppercase"><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>  <IntlMessages id="loading" /></Link> :
                                                         <Link to="#" onClick={() => { handleCart(item.id, item.sku) }} className="btn btn-primary text-uppercase"><IntlMessages id="product.addToCart" /></Link>}
@@ -480,7 +493,9 @@ function SearchResults(props) {
                                                     <IntlMessages id="product.outofstock" /></button>
                                             )} */}
 
-                                                </div>
+                                                </div>:(<div className="cart-button mt-3 px-2">
+                                                    {
+                                                        <Link to="#"  className="btn btn-primary text-uppercase"><IntlMessages id="product.outofstock" /></Link>}</div>)}
                                                 {/* {stock > 0 && (
                                                 <div className="cart-button mt-3 px-2">
                                                     {isShow === item.id ?
