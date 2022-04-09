@@ -9,7 +9,7 @@ import moment from 'moment';
 import searchIcon from '../../../image/Icon_zoom_in.svg';
 import { getInvoice, getPayoutOrders } from '../../../redux/pages/vendorLogin';
 import { siteConfig } from '../../../settings';
-import { capitalize, checkVendorLogin, formatprice } from '../../../components/utility/allutils';
+import { capitalize, checkVendorLogin, formatprice, lowercase } from '../../../components/utility/allutils';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Link } from "react-router-dom";
 import jsPDF from 'jspdf';
@@ -128,8 +128,8 @@ function MyPayouts(props) {
             name: intl.formatMessage({ id: 'status' }),
             selector: row => row.status,
             cell: row => (
-                <div>
-                    {row.status === "scheduled" ? <span className="scheduled">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
+                <div><span className={lowercase(row.status)}>{capitalize(row.status)}</span>
+                    {/* {row.status === "scheduled" ? <span className="scheduled">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
                     {row.status === "pending" ? <span className="pending">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
                     {row.status === "processing" ? <span className="processing">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
                     {row.status === "hold" ? <span className="hold">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
@@ -138,7 +138,7 @@ function MyPayouts(props) {
 
                     {row.status === "error" ? <span className="error">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
 
-                    {row.status === "canceled" ? <span className="canceled">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""}
+                    {row.status === "canceled" ? <span className="canceled">{intl.formatMessage({ id: capitalize(row.status) })}</span> : ""} */}
                 </div>
             )
         },

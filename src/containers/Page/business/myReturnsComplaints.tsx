@@ -12,7 +12,7 @@ import { siteConfig } from '../../../settings';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
-import { capitalize, formatprice } from '../../../components/utility/allutils';
+import { capitalize, formatprice, lowercase } from '../../../components/utility/allutils';
 import LoaderGif from '../Loader';
 
 
@@ -147,13 +147,13 @@ function MyReturnsComplaints(props) {
             selector: row => row.status,
             sortable: true,
             cell: row => (
-                <div>
-                    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
+                <div><span className={lowercase(row.status)}>{capitalize(row.status)}</span>
+                {/* <    {row.status === "declined" || row.status === "decline" ? <span className="decline">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
                     {row.status === "pending" ? <span className="pending">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
                     {row.status === "approved" ? <span className="approved">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
                     {row.status === "acknowledged" ? <span className="acknowledged">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
                     {row.status === "received" ? <span className="received">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
-                    {row.status === "accept" ? <span className="accept">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}
+                    {row.status === "accept" ? <span className="accept">{capitalize(intl.formatMessage({ id: row.status }))}</span> : ""}> */}
 
                 </div>
             )

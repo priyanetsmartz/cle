@@ -8735,6 +8735,8 @@ p.sliderupper {
 }
 
 .rdt_TableRow .pending,
+.rdt_TableRow .rejected,
+.rdt_TableRow .declined,
 .rdt_TableRow .canceled,
 .rdt_TableRow .ready-to-ship,
 .rdt_TableRow .shipped,
@@ -8752,6 +8754,16 @@ p.sliderupper {
 }
 
 .rdt_TableRow .pending {
+    border: 1px solid #FF7756;
+    color: #FF7756;
+}
+
+.rdt_TableRow .rejected {
+    border: 1px solid #FF7756;
+    color: #FF7756;
+}
+
+.rdt_TableRow .declined {
     border: 1px solid #FF7756;
     color: #FF7756;
 }
@@ -8788,6 +8800,8 @@ p.sliderupper {
 .product-status .accept,
 .product-status .acknowledged,
 .product-status .pending,
+.product-status .rejected,
+.product-status .declined,
 .product-status .canceled,
 .product-status .ready-to-ship,
 .product-status .shipped,
@@ -8835,6 +8849,16 @@ p.sliderupper {
 }
 
 .product-status .pending {
+    border: 1px solid #FF7756;
+    color: #FF7756;
+}
+
+.product-status .rejected {
+    border: 1px solid #FF7756;
+    color: #FF7756;
+}
+
+.product-status .declined {
     border: 1px solid #FF7756;
     color: #FF7756;
 }

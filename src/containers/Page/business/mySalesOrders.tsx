@@ -12,7 +12,7 @@ import { siteConfig } from '../../../settings';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
-import { formatprice } from '../../../components/utility/allutils';
+import { capitalize, formatprice, lowercase } from '../../../components/utility/allutils';
 import LoaderGif from '../Loader';
 
 
@@ -131,13 +131,13 @@ function MySalesOrders(props) { //MySalesOrder functional component
             selector: row => row.status,
             cell: row => (
 
-                <div>
-                    {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({ id: row.status })}</span> : ""}
+                <div><span  className={lowercase(row.status)}>{capitalize(row.status) }</span>
+                    {/* {row.status === "Ready to Ship" ? <span className="ready-to-ship">{intl.formatMessage({ id: row.status })}</span> : ""}
                     {row.status === "Canceled" ? <span className="canceled">{intl.formatMessage({ id: row.status })}</span> : ""}
                     {row.status === "Shipped" ? <span className="shipped">{intl.formatMessage({ id: row.status })}</span> : ""}
                     {row.status === "Pending" ? <span className="pending">{intl.formatMessage({ id: row.status })}</span> : ""}
                     {row.status === "Delivered" ? <span className="delivered">{intl.formatMessage({ id: row.status })}</span> : ""}
-                    {row.status === "Returned" ? <span className="returned">{intl.formatMessage({ id: row.status })}</span> : ""}
+                    {row.status === "Returned" ? <span className="returned">{intl.formatMessage({ id: row.status })}</span> : ""} */}
 
                 </div>
             )
