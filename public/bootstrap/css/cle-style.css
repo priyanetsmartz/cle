@@ -6953,6 +6953,193 @@ transition: all .3s ease;
     color: #017abb;
 }
 
+.isPriveUser .user_show{
+	color: #017ABB;
+}
+
+.isPriveUser .footer-links li.fl-title{
+	color: #017ABB;
+}
+
+.isPriveUser .order_tab_sec .nav-tabs .nav-item.show .nav-link, 
+.isPriveUser .order_tab_sec .nav-tabs .nav-link.active{
+	color: #017ABB;
+	border-bottom: 2px solid #017ABB;
+}
+
+.isPriveUser .form-group .ant-slider-track{
+	background-color: #017ABB!important;
+}
+
+.isPriveUser .order_tab_sec .viewall_btn a{
+	color: #017ABB;
+}
+
+.isPriveUser .order_tab_sec .viewall_btn a:hover:after{
+	border-color: #017ABB;
+}
+
+.isPriveUser .help-center{
+	background-color: #017ABB;
+}
+.isPriveUser .help-center .btn{
+	color: #017ABB;
+}
+
+.isPriveUser .select-wearing ul li a.line-through-active, 
+.isPriveUser .select-wearingg ul li a:hover{
+	color: #017ABB !important;
+}
+
+.isPriveUser .select-wearing ul li a:hover {
+    color: #017ABB!important;
+}
+
+.isPriveUser .menuactive .active_megamenu:hover>.nav-link{
+	color: #017ABB;
+}
+
+.megamenu_bar ul.megamenugrid h3, .megamenu_bar ul.megamenugrid h3 a{
+	color: #017ABB!important;
+}
+.isPriveUser .megamenu_bar ul.megamenugrid h3, .megamenu_bar ul.megamenugrid h3 a {
+    color: #017ABB!important;
+}
+
+.isPriveUser .mini-cart-btn a, 
+.isPriveUser .mini-cart-btn .btn-secondary{
+	background: #017ABB;
+	color: #fff !important;
+}
+
+.isPriveUser .mini-cart-btn a:hover, 
+.isPriveUser .mini-cart-btn .btn-secondary:hover{
+	color: #fff !important;
+}
+
+.isPriveUser .btn-secondary{
+	background-color: #017ABB !important;
+    border-color: #017ABB !important;
+}
+.isPriveUser .btn-secondary:hover{
+	color: #fff !important;
+}
+.isPriveUser .categoriy-list .card:hover a.cart,
+.isPriveUser .categoriy-list a.cart:hover{
+	background: #017ABB;
+	border-color: #017ABB;
+}
+.isPriveUser .choose-shopping button:hover{
+	background: #017ABB;
+	border-color: #017ABB;
+}
+
+.isPriveUser .categoriy-list a.btn.details{
+	color: #017ABB;
+	border-bottom: 1px solid #017ABB;
+}
+
+.isPriveUser .product .product_price{
+	color: #017ABB;
+}
+
+.isPriveUser .product-listing .cart-button a{
+	background: #017ABB !important;
+}
+
+.isPriveUser .choose-foryou-sec .white-text .btn{
+	background-color: #017ABB;
+    border: 1px solid #017ABB;
+}
+
+.isPriveUser .become-partner{
+	border: 2px solid #017ABB;
+	background: #017ABB;
+}
+
+.isPriveUser .form-check-input:checked {
+    background-color: #017ABB !important;
+    border-color: #017ABB !important;
+}
+
+.isPriveUser .newsletter-signup button.btn{
+	background-color: #017ABB !important;
+    border: 1px solid #017ABB !important;
+}
+
+.isPriveUser .resltspage_sec.bestseller-sec .sort_by .customfliter{
+	border: 1px solid #017ABB;
+	color: #017ABB;
+}
+
+
+.isPriveUser .DC-top-banner .DC-top-ban-inner a.ban-btn{
+	border: 1px solid #017ABB;
+	background-color: #017ABB;
+}
+.exclusive-tab ul.nav .nav-item .nav-link.active{
+	color: #017ABB;
+	border-bottom: 2px solid #017ABB;
+}
+.isPriveUser .exclusive-tab ul.nav .nav-item .nav-link:hover{
+	color: #017ABB;
+	border-bottom: 2px solid #017ABB;
+}
+
+.isPriveUser .product-listing .pricetag{
+	color: #017ABB;
+}
+
+.product-listing .product:hover .off i {
+    color: #017ABB;
+}
+
+.isPriveUser .plp-viewall{
+	background: #017ABB;
+}
+
+.isPriveUser .cart-pro-price{
+	color: #017ABB;
+}
+
+.isPriveUser .product_saleoff{
+	color: #017ABB;
+}
+
+.isPriveUser .releveant-slider .product .cart-button a{
+	background: #017ABB !important;
+}
+
+.isPriveUser .checkout-main .accordion .accordion-collapse .nav-pills .nav-item .nav-link.active{
+	border-bottom: 1px solid #017ABB;
+    color: #017ABB;
+}
+
+.isPriveUser #pills-promo .btn-primary, 
+.isPriveUser #pills-voucher .btn-primary{
+	background-color: #017ABB !important;
+    border-color: #017ABB !important;
+}
+
+.isPriveUser #pills-promo .btn-primary:focus, 
+.isPriveUser #pills-promo .btn-primary:hover, 
+.isPriveUser #pills-voucher .btn-primary:focus, 
+.isPriveUser #pills-voucher .btn-primary:hover{
+	color: #fff;
+}
+
+.isPriveUser .check-confirm{
+	color: #017ABB;
+}
+
+.isPriveUser .final-price span{
+	color: #017ABB;
+}
+
+.isPriveUser .add-address-btn i,
+.isPriveUser .add-address-btn .add-ad-btn{
+	color: #017ABB;
+}
 
 .share {
     display: -webkit-box;
