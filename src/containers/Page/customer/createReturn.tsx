@@ -419,7 +419,7 @@ function CreateReturn(props) {
                                     <select className="form-select customfliter" aria-label="Default select example" onChange={selectReturnOrExchange} >
                                         <option value="">{intl.formatMessage({ id: "select" })}</option>
                                         <option value="refund">{intl.formatMessage({ id: "return" })}</option>
-                                        <option value="exchange">{intl.formatMessage({ id: "exchange" })}</option>
+                                        {/* <option value="exchange">{intl.formatMessage({ id: "exchange" })}</option> */}
                                     </select>
                                 </div>
                             </div>

@@ -41,6 +41,7 @@ function SinglePost(props) {
     const getCategory = async () => {
         let result: any = await GetCategoryList(props.languages);
         setCatMenu(result?.data);
+        console.log(result, "abcdefghijklmnopqrstuvwxyz")
     }
 
     useEffect(() => {

@@ -405,7 +405,7 @@ function Products(props) {
             {/* <Promotion /> */}
             <HelmetProvider>
                 <Helmet >
-                    <title>{nameHeader ? nameHeader : 'header'}</title>
+                    <title>{nameHeader ? nameHeader : 'header'}abcdefghijk</title>
                     <meta name="description" content={metaData?.meta_description} />
                     <meta name="keywords" content={metaData?.meta_keywords} />
                     <meta property="og:title" content={metaData?.meta_title} />

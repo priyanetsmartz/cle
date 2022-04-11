@@ -120,11 +120,11 @@ function RetunOrder(props) {
                                         <p>{returnDetails['info'] ? returnDetails['info'].return_qty : ""}</p>
                                     </div>
                                     )}
-                                    {(returnDetails['info'] && returnDetails['info']?.rma_reason === 'exchange') && (<div className="col-sm-3 mb-3">
+                                    {/* {(returnDetails['info'] && returnDetails['info']?.rma_reason === 'exchange') && (<div className="col-sm-3 mb-3">
                                         <h6><IntlMessages id="exchanged.products" /></h6>
                                         <p>{returnDetails['info'] ? returnDetails['info'].return_qty : ""}</p>
                                     </div>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
 
