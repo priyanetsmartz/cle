@@ -7054,12 +7054,12 @@ transition: all .3s ease;
 	background: #017ABB;
 }
 
-.become-partner:hover .become-part-inner h1,
-.become-partner:hover .become-part-inner p {
+.isPriveUser .become-partner:hover .become-part-inner h1,
+.isPriveUser .become-partner:hover .become-part-inner p {
     color: #fff !important;
 }
 
-.become-partner:hover .become-part-inner a{
+.isPriveUser .become-partner:hover .become-part-inner a{
 	background-color: #017ABB;
 }
 
